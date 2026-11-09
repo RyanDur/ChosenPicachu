@@ -13,8 +13,6 @@ import {DataPath} from './DataPath';
 import '../../Recipe/Recipe.css';
 import {Term} from './Term';
 
-const blankLine = lines.plain(' ');
-
 const socketPlans: Record<World, string> = {
   react: 'One connection at page scope, so the stream survives every tab and dial below it.',
   vanilla: 'One connection for the document’s whole life.'
@@ -34,14 +32,14 @@ const foldSays: Record<World, ReactNode> = {
 const foldCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), blankLine,
+      ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), lines.blank,
       ...carve.unit(tradeTotalsSource, 'const aggregate = ')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), blankLine,
-      ...carve.unit(buildSrc, 'const reconciled = '), blankLine,
+      ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), lines.blank,
+      ...carve.unit(buildSrc, 'const reconciled = '), lines.blank,
       ...carve.unit(frameRows, 'const writeCells = ')
     ]}/>
   </Codes>
@@ -74,7 +72,7 @@ const FlowStory: FC<{world: World}> = ({world}) =>
             already delivered, and keeps everything in time order.</Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...carve.unit(hydrateSource, 'const load'), blankLine,
+              ...carve.unit(hydrateSource, 'const load'), lines.blank,
               ...carve.unit(hydrateSource, 'const hydrated')
             ]}/>
           </Codes>
@@ -94,7 +92,7 @@ const FlowStory: FC<{world: World}> = ({world}) =>
             the feed failed.</Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...carve.unit(exchangeSource, 'const stream = streaming('), blankLine,
+              ...carve.unit(exchangeSource, 'const stream = streaming('), lines.blank,
               ...carve.unit(marketSliceSource, 'const tradesReducer')
             ]}/>
           </Codes>

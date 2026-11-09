@@ -12,8 +12,6 @@ import crossingSource from '../DragAndDrop/crossing.ts?sample';
 import workspaceCss from './Workspace.css?sample';
 import '../Recipe/Recipe.css';
 
-const blankLine = lines.plain(' ');
-
 const WorkspaceStory: FC = () =>
   <Story param="graph" id="workspace"
     can="The trader can lay out the workspace"
@@ -45,8 +43,8 @@ const WorkspaceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(kindsSource, 'const is ='), blankLine,
-            ...carve.unit(deskSource, 'const dealt ='), blankLine,
+            ...carve.unit(kindsSource, 'const is ='), lines.blank,
+            ...carve.unit(deskSource, 'const dealt ='), lines.blank,
             ...carve.unit(deskSource, 'const added =')
           ]}/>
           <Snippet label="HTML" lines={[
@@ -89,9 +87,9 @@ const WorkspaceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(crossingSource, 'const strayedTo'), blankLine,
-            ...carve.unit(travelSource, 'const travel = (event'), blankLine,
-            ...carve.unit(travelSource, 'const swap = (held'), blankLine,
+            ...carve.unit(crossingSource, 'const strayedTo'), lines.blank,
+            ...carve.unit(travelSource, 'const travel = (event'), lines.blank,
+            ...carve.unit(travelSource, 'const swap = (held'), lines.blank,
             ...carve.span(chartTravelSource, "case 'swapped'", '};')
           ]}/>
           <AThirdFromThePointer/>
@@ -119,9 +117,9 @@ const WorkspaceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(travelSource, 'const keys'), blankLine,
-            ...carve.unit(deskSource, 'const atAfterRemoval ='), blankLine,
-            ...carve.unit(workspaceSource, 'const doorwayAt'), blankLine,
+            ...carve.unit(travelSource, 'const keys'), lines.blank,
+            ...carve.unit(deskSource, 'const atAfterRemoval ='), lines.blank,
+            ...carve.unit(workspaceSource, 'const doorwayAt'), lines.blank,
             ...carve.unit(workspaceSource, '  const removed')
           ]}/>
         </Codes>
@@ -133,7 +131,7 @@ const WorkspaceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(workspaceSource, 'const plural'), blankLine,
+            ...carve.unit(workspaceSource, 'const plural'), lines.blank,
             ...carve.unit(workspaceSource, 'const actions')
           ]}/>
         </Codes>

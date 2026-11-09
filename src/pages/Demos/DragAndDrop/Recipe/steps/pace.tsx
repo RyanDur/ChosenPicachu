@@ -4,8 +4,6 @@ import {Codes, Sample, Says, Snippet, Step, Words, carve, lines} from '../../../
 import {Term} from '../Term';
 import {sources} from './sources';
 
-const blankLine = lines.plain(' ');
-
 export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Commit inside the crossing" dial={<PaceDial name="native-pace"/>}>
     <Words want="You want the order to move as you drag; waiting for the drop hides the result until it is too late to change your mind.">
@@ -17,8 +15,8 @@ export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.unit(sources.crossing, 'const over'), blankLine,
-        ...carve.span(listSource, 'onDragOver={crossing.over(sort.held, sort.order)(item, index, homeward =>', 'dispatch(dragSortChange.crossed(index, homeward)))}'), blankLine,
+        ...carve.unit(sources.crossing, 'const over'), lines.blank,
+        ...carve.span(listSource, 'onDragOver={crossing.over(sort.held, sort.order)(item, index, homeward =>', 'dispatch(dragSortChange.crossed(index, homeward)))}'), lines.blank,
         ...carve.unit(sources.dragSort, 'const crossed')
       ]}/>
     </Codes>

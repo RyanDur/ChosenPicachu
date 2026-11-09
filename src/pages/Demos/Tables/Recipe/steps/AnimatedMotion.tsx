@@ -3,7 +3,6 @@ import {MotionDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {sources} from './sources';
-import {blankLine} from './blankLine';
 
 export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, cssSource, buildSrc}) =>
@@ -57,31 +56,31 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(tableActions.settled', 'onAnimationEnd={() => dispatch(tableActions.settled'), blankLine,
-              ...carve.span(sources.reducer, "case 'columnMovedBeside':", "return tableState.unsettle(shoved, {axis: 'column', held: action.name}"), blankLine,
-              ...carve.unit(sources.state, 'const shoveColumns'), blankLine,
+              ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(tableActions.settled', 'onAnimationEnd={() => dispatch(tableActions.settled'), lines.blank,
+              ...carve.span(sources.reducer, "case 'columnMovedBeside':", "return tableState.unsettle(shoved, {axis: 'column', held: action.name}"), lines.blank,
+              ...carve.unit(sources.state, 'const shoveColumns'), lines.blank,
               ...carve.unit(sources.state, 'const settle'),
               lines.aside('// the marks are state; the strike and the drop set them, the cells wear them, the style sheet moves them')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...carve.unit(buildSrc, 'const columnShoving = '), blankLine,
-              ...carve.unit(buildSrc, 'const columnTo = '), blankLine,
-              ...carve.unit(buildSrc, 'const drop = '), blankLine,
+              ...carve.unit(buildSrc, 'const columnShoving = '), lines.blank,
+              ...carve.unit(buildSrc, 'const columnTo = '), lines.blank,
+              ...carve.unit(buildSrc, 'const drop = '), lines.blank,
               ...carve.unit(sources.frameSettle, 'const untilSettled = '),
               lines.aside('// the marks set the cells’ classes; the style sheet moves them; the first cell’s animationend clears the column')
             ]}/>}
           <Snippet label="TS" lines={[
-            ...carve.unit(sources.survey, 'const displacedBetween'), blankLine,
+            ...carve.unit(sources.survey, 'const displacedBetween'), lines.blank,
             ...carve.unit(sources.survey, 'const columnLeft'),
             lines.aside('// who a move displaces, and where the moved column rests, from the survey the lift already took')
           ]}/>
           <Snippet label="CSS" lines={[
-            ...carve.unit(cssSource, '.sortable.animated .settling {'), blankLine,
-            ...carve.unit(cssSource, '.sortable.animated.hide .settling {'), blankLine,
-            ...carve.unit(cssSource, '.sortable.animated .shoved-start {'), blankLine,
-            ...carve.unit(cssSource, '@keyframes settle {'), blankLine,
-            ...carve.unit(cssSource, '@keyframes settle-from-pointer {'), blankLine,
-            ...carve.unit(cssSource, '@keyframes shoved-start {'), blankLine,
+            ...carve.unit(cssSource, '.sortable.animated .settling {'), lines.blank,
+            ...carve.unit(cssSource, '.sortable.animated.hide .settling {'), lines.blank,
+            ...carve.unit(cssSource, '.sortable.animated .shoved-start {'), lines.blank,
+            ...carve.unit(cssSource, '@keyframes settle {'), lines.blank,
+            ...carve.unit(cssSource, '@keyframes settle-from-pointer {'), lines.blank,
+            ...carve.unit(cssSource, '@keyframes shoved-start {'), lines.blank,
             ...carve.unit(cssSource, '.sortable.static :is(.settling, .shoved-start, .shoved-end, .shoved-up, .shoved-down) {'),
             lines.aside('/* the only motion code there is; the table wears the word animated, and hide chooses where the settle starts */')
           ]}/>

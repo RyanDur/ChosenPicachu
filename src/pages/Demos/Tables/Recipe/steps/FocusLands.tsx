@@ -2,7 +2,6 @@ import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {sources} from './sources';
-import {blankLine} from './blankLine';
 
 export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
   <Step title="Give focus a place to land">
@@ -35,7 +34,7 @@ export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, hea
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
-            ...carve.span(headerSource, 'tabIndex={travels', 'tabIndex={travels'), blankLine,
+            ...carve.span(headerSource, 'tabIndex={travels', 'tabIndex={travels'), lines.blank,
             ...carve.span(sources.grip, '<button', '</button>'),
             lines.aside('{/* the button was focusable all along; Safari’s Tab still wants it written */}')
           ]}/>
@@ -44,7 +43,7 @@ export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, hea
             lines.aside('// the button was focusable all along; Safari’s Tab still wants it written; JavaScript asks for the headers')
           ]}/>}
         <Snippet label="CSS" lines={[
-          ...carve.unit(sources.headerCss, '.sortable .header-cell {'), blankLine,
+          ...carve.unit(sources.headerCss, '.sortable .header-cell {'), lines.blank,
           ...carve.unit(sources.surfaceCss, '.focus-ringed {')
         ]}/>
       </Codes>

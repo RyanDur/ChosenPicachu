@@ -2,7 +2,6 @@ import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {sources} from './sources';
-import {blankLine} from './blankLine';
 
 export const ArrowsSpeak: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, buildSrc}) =>
@@ -28,7 +27,7 @@ export const ArrowsSpeak: FC<{world: World; headerSource: Sample; buildSrc: Samp
               ...carve.unit(buildSrc, "th.addEventListener('keydown'")
             ]}/>}
           <Snippet label="TS" lines={[
-            ...carve.unit(sources.survey, 'const nudgedColumn'), blankLine,
+            ...carve.unit(sources.survey, 'const nudgedColumn'), lines.blank,
             ...carve.unit(sources.survey, 'const nudgedRow'),
             lines.aside('// the anchors hold and the walk stops beside them; both worlds call the same walk')
           ]}/>

@@ -4,8 +4,6 @@ import {Codes, Mdn, Sample, Says, Snippet, Step, Words, carve, lines} from '../.
 import {Term} from '../Term';
 import {sources} from './sources';
 
-const blankLine = lines.plain(' ');
-
 export const StashLanding: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Stash the landing, settle after the drag" dial={<PaceDial name="native-pace"/>}>
     <Words want={<>You want the list to hold still while the platform drags. The drop lands while
@@ -19,8 +17,8 @@ export const StashLanding: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(listSource, 'onDragOver={() => dispatch(dragSortChange.hovered(index))}', 'onDragOver={() => dispatch(dragSortChange.hovered(index))}'), blankLine,
-        ...carve.span(listSource, 'onDragLeave={() => dispatch(dragSortChange.left())}', 'onDragLeave={() => dispatch(dragSortChange.left())}'), blankLine,
+        ...carve.span(listSource, 'onDragOver={() => dispatch(dragSortChange.hovered(index))}', 'onDragOver={() => dispatch(dragSortChange.hovered(index))}'), lines.blank,
+        ...carve.span(listSource, 'onDragLeave={() => dispatch(dragSortChange.left())}', 'onDragLeave={() => dispatch(dragSortChange.left())}'), lines.blank,
         ...carve.unit(sources.dragSort, 'const settled')
       ]}/>
     </Codes>

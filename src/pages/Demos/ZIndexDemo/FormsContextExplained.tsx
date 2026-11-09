@@ -7,8 +7,6 @@ import surfaceCss from '../../../styles/surface.css?sample';
 import tabsCss from '@navigation/Tabs/Tabs.css?sample';
 import '../Runs.css';
 
-const blankLine = lines.plain(' ');
-
 const mdn = 'https://developer.mozilla.org/en-US/docs/Web/CSS/';
 
 export const FormsContextExplained: FC = () =>
@@ -38,7 +36,7 @@ export const FormsContextExplained: FC = () =>
           the list’s start edge up with the button’s; the start edge is the side a line of text begins on. Nothing
           between the list and the card is positioned.</p>
         <Snippet label="CSS" lines={[
-          ...carve.unit(zIndexCss, '.old-way-card .button {'), blankLine,
+          ...carve.unit(zIndexCss, '.old-way-card .button {'), lines.blank,
           ...carve.unit(zIndexCss, '.sort-choices {\n        position-anchor')
         ]}/>
       </li>
@@ -84,7 +82,7 @@ export const FormsContextExplained: FC = () =>
           instead of as a side effect of opacity or a transform. I use it that way here: the tab’s content wears it, in
           Tabs.css, so no z-index inside a tab is ever compared with one outside it.</p>
         <Snippet label="CSS" lines={[
-          ...carve.unit(zIndexCss, '.isolated {'), blankLine,
+          ...carve.unit(zIndexCss, '.isolated {'), lines.blank,
           ...carve.unit(tabsCss, '.tabs ~ * {')
         ]}/>
       </li>

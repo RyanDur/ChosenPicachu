@@ -3,7 +3,6 @@ import {OriginDial} from '../../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {sources} from './sources';
-import {blankLine} from './blankLine';
 import {WhatACustomPropertyIs} from '../WhatACustomPropertyIs';
 import {SheetDeclaresSeatAndDrift} from './SheetDeclaresSeatAndDrift';
 import {carriedProperties} from './carriedProperties';
@@ -53,8 +52,8 @@ export const KeepOrigin: FC<{world: World; cssSource: Sample}> = ({world, cssSou
       <Codes>
         <Snippet label="CSS" lines={[
           ...carriedProperties(cssSource),
-          ...carve.unit(cssSource, '.sortable .carried {'), blankLine,
-          ...carve.unit(cssSource, '.sortable.hide .carried {'), blankLine,
+          ...carve.unit(cssSource, '.sortable .carried {'), lines.blank,
+          ...carve.unit(cssSource, '.sortable.hide .carried {'), lines.blank,
           ...carve.unit(sources.surfaceCss, '.paper-in-motion {'),
           lines.aside('/* the carried cell rises above its neighbors in every table; only under hide does it move */')
         ]}/>

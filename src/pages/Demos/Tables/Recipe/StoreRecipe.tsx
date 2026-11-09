@@ -19,8 +19,6 @@ import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?samp
 import buildSrc from '../Frame/builds/Eager.ts?sample';
 import bootSource from '../Frame/boot.ts?sample';
 
-const blankLine = lines.plain(' ');
-
 const OneState: FC<{world: World}> = ({world}) =>
   <Step title="Two states, two stores">
     <Words want="A live table is state before it is pixels, and two worlds have to agree on what that state is before either can render it.">
@@ -59,8 +57,8 @@ const OneState: FC<{world: World}> = ({world}) =>
           order.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
-          ...carve.unit(marketSliceSource, 'export type MarketState'), blankLine,
-          ...carve.unit(stateSource, 'export type TableState'), blankLine,
+          ...carve.unit(marketSliceSource, 'export type MarketState'), lines.blank,
+          ...carve.unit(stateSource, 'export type TableState'), lines.blank,
           ...carve.unit(storeSource, 'export type Store'),
           lines.aside('// a value, a dispatch, a subscribe; the whole store, and the page only names its state')
         ]}/>
@@ -69,7 +67,7 @@ const OneState: FC<{world: World}> = ({world}) =>
             ...carve.unit(marketStoreSource, 'export const marketStore')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.unit(buildSrc, 'export const dragSortable = '), blankLine,
+            ...carve.unit(buildSrc, 'export const dragSortable = '), lines.blank,
             ...carve.span(bootSource, 'const page = marketStore(', 'page.dispatch(marketActions.feedRequested());')
           ]}/>}
       </Codes>
@@ -115,15 +113,15 @@ const ActionsAreData: FC = () =>
       <Says>What the table shows is what it was given, and what the trader does to it comes back as an event.</Says>
       <Codes>
         <Snippet label="TS" lines={[
-          ...carve.span(arrangementSource, 'export type ArrangementAction', 'readonly keys: readonly string[]}'), blankLine,
-          ...carve.unit(arrangementSource, 'const columnMoved'), blankLine,
+          ...carve.span(arrangementSource, 'export type ArrangementAction', 'readonly keys: readonly string[]}'), lines.blank,
+          ...carve.unit(arrangementSource, 'const columnMoved'), lines.blank,
           ...carve.unit(actionsSource, 'const columnMovedBeside = '),
           lines.aside('// the record says what happened; the creator is named for the verb')
         ]}/>
         <Snippet label="TS" lines={[
-          ...carve.unit(marketSliceSource, 'export const marketSlice'), blankLine,
-          ...carve.unit(slicesSource, 'export type Slice'), blankLine,
-          ...carve.unit(arrangementSource, 'const answering = '), blankLine,
+          ...carve.unit(marketSliceSource, 'export const marketSlice'), lines.blank,
+          ...carve.unit(slicesSource, 'export type Slice'), lines.blank,
+          ...carve.unit(arrangementSource, 'const answering = '), lines.blank,
           ...carve.unit(reducerSource, 'export const tableReducer'),
           lines.aside('// three slices by key; the arrangement handles the drag and the menu; four table reducers match the type in turn')
         ]}/>
@@ -150,15 +148,15 @@ const NamedReads: FC<{world: World}> = ({world}) =>
           given, at the moment it needs an answer, so a listener never keeps a stale copy of either.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
-          ...carve.unit(useTableReadSource, 'export const useTableRead'), blankLine,
-          ...carve.unit(readsSource, 'const columnNamed'), blankLine,
-          ...carve.unit(readsSource, 'const positionOfRow'), blankLine,
+          ...carve.unit(useTableReadSource, 'export const useTableRead'), lines.blank,
+          ...carve.unit(readsSource, 'const columnNamed'), lines.blank,
+          ...carve.unit(readsSource, 'const positionOfRow'), lines.blank,
           ...carve.unit(readsSource, 'const columnTravels'),
           lines.aside('// the question is the name; the state stays in one file')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(headerSource, 'const {sorted, data} = useTableRead(tableReads.columnNamed', 'const carried = useTableRead(tableReads.columnHeld'), blankLine,
+            ...carve.span(headerSource, 'const {sorted, data} = useTableRead(tableReads.columnNamed', 'const carried = useTableRead(tableReads.columnHeld'), lines.blank,
             ...carve.span(headerSource, 'const travels = useTableRead(tableReads.columnTravels', 'const travels = useTableRead(tableReads.columnTravels')
           ]}/>
           : undefined}
@@ -200,7 +198,7 @@ const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
         </>}
       <Codes>
         <Snippet label="TS" lines={[
-          ...carve.unit(storeSource, 'export type Middleware'), blankLine,
+          ...carve.unit(storeSource, 'export type Middleware'), lines.blank,
           ...carve.unit(exchangeSource, 'export const exchange'),
           lines.aside('// the socket lives in the middleware; the page and the mount ask for it with an action')
         ]}/>
@@ -257,7 +255,7 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
             ...carve.unit(elementSource, 'export const useDragSortable')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.span(buildSrc, 'hand.subscribe(', 'hand.subscribe('), blankLine,
+            ...carve.span(buildSrc, 'hand.subscribe(', 'hand.subscribe('), lines.blank,
             ...carve.span(bootSource, "table.addEventListener('column-moved'", 'page.subscribe(previous =>')
           ]}/>}
       </Codes>

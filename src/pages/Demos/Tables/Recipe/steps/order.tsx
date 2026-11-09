@@ -3,7 +3,6 @@ import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '.
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
-import {blankLine} from './blankLine';
 import {elidedHeaders} from '../elidedHeaders';
 
 export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Sample}> =
@@ -43,19 +42,19 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
               ...carve.span(tableSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
             ]}/>
             <Snippet label="HTML" lines={[
-              ...elidedHeaders(carve.span(tableSource, '<Headers onColumnMoved', '</Headers>')), blankLine,
+              ...elidedHeaders(carve.span(tableSource, '<Headers onColumnMoved', '</Headers>')), lines.blank,
               ...carve.span(tableSource, '<Body onRowMoved', '</Body>')
             ]}/>
             <Snippet label="TS" lines={[
-              ...carve.unit(sources.headers, 'export const Headers'), blankLine,
-              ...carve.unit(sources.row, 'export const Row'), blankLine,
+              ...carve.unit(sources.headers, 'export const Headers'), lines.blank,
+              ...carve.unit(sources.row, 'export const Row'), lines.blank,
               ...carve.unit(sources.placing, 'export const placed')
             ]}/>
           </Codes>
           : <Codes>
             <Snippet label="TS" lines={[
-              ...carve.unit(sources.arrangement, 'export type Arrangement'), blankLine,
-              ...carve.span(buildSrc, 'order: () => columns().map', 'standing: () => rows().map'), blankLine,
+              ...carve.unit(sources.arrangement, 'export type Arrangement'), lines.blank,
+              ...carve.span(buildSrc, 'order: () => columns().map', 'standing: () => rows().map'), lines.blank,
               ...carve.unit(sources.boot, 'const fed = ')
             ]}/>
             <Snippet label="TS" lines={[

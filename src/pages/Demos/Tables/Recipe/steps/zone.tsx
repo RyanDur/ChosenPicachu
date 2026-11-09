@@ -1,9 +1,8 @@
 import {FC} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, carve} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, carve, lines} from '../../../Recipe';
 import {SlotsFigure} from '../SlotsFigure';
 import {Term} from '../Term';
 import {sources} from './sources';
-import {blankLine} from './blankLine';
 
 export const DeadZone: FC = () =>
   <Step title="Find the neighbor under the pointer, with a dead zone" id="step-dead-zone">
@@ -27,8 +26,8 @@ export const DeadZone: FC = () =>
       <SlotsFigure/>
       <Codes>
         <Snippet label="TS" lines={[
-          ...carve.unit(sources.survey, 'const deadZone = '), blankLine,
-          ...carve.unit(sources.survey, 'const struckPast = '), blankLine,
+          ...carve.unit(sources.survey, 'const deadZone = '), lines.blank,
+          ...carve.unit(sources.survey, 'const struckPast = '), lines.blank,
           ...carve.unit(sources.survey, 'const columnUnder')
         ]}/>
       </Codes>

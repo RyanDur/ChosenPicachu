@@ -19,8 +19,6 @@ import {sources, TheImplementation} from './steps';
 import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
 
-const blankLine = lines.plain(' ');
-
 type Build = {
   world: World;
   source: Sample;
@@ -63,7 +61,7 @@ const SortedDirectly: FC<Build> = ({world, menuSrc}) =>
             ...carve.span(menuSrc, 'export const SortMenu', '</>;')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.unit(frameMenus, 'const choosing = '), blankLine,
+            ...carve.unit(frameMenus, 'const choosing = '), lines.blank,
             ...carve.unit(frameMenus, 'const choose = ')
           ]}/>}
       </Codes>
@@ -124,7 +122,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...carve.span(menuSrc, 'className="menu-toggle', 'aria-label={`sort ${column}`}/>'), blankLine,
+                ...carve.span(menuSrc, 'className="menu-toggle', 'aria-label={`sort ${column}`}/>'), lines.blank,
                 ...carve.span(menuSrc, '<Menu id={`sort-${column}`}', '</Menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
@@ -170,9 +168,9 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             <Snippet label="CSS" lines={[
               ...carve.span(menuCss, 'inset: auto;', 'inset: auto;'),
-              lines.aside('/* centered is the browser’s default placement; this menu chooses the anchor */'), blankLine,
+              lines.aside('/* centered is the browser’s default placement; this menu chooses the anchor */'), lines.blank,
               ...carve.span(menuCss, 'position-area: block-end span-inline-start;', 'position-try-fallbacks: flip-block;'),
-              lines.aside('/* the invoker is the implicit anchor: below it, hanging leading; flips when cramped */'), blankLine,
+              lines.aside('/* the invoker is the implicit anchor: below it, hanging leading; flips when cramped */'), lines.blank,
               ...carve.unit(menuCss, '@supports not (position-area: block-end)'),
               lines.aside('/* no anchor positioning? centered: worse placement, same menu */')
             ]}/>
@@ -206,23 +204,23 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...carve.unit(arrangementSource, 'export type Arrangement'), blankLine,
+                ...carve.unit(arrangementSource, 'export type Arrangement'), lines.blank,
                 ...carve.unit(arrangedViewSource, '  columnsOf: arrangement =>')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...carve.unit(arrangementSource, 'export type Arrangement'), blankLine,
-                ...carve.unit(frameMenus, 'const announceChanged = '), blankLine,
+                ...carve.unit(arrangementSource, 'export type Arrangement'), lines.blank,
+                ...carve.unit(frameMenus, 'const announceChanged = '), lines.blank,
                 ...carve.unit(frameMenus, 'const announce = ')
               ]}/>}
             <Snippet label="CSS" lines={[
-              ...carve.unit(headerCss, '.sortable .header-cell .menu-toggle::before {'), blankLine,
-              ...carve.unit(headerCss, ".sortable [aria-sort='ascending'] .menu-toggle::before {"), blankLine,
+              ...carve.unit(headerCss, '.sortable .header-cell .menu-toggle::before {'), lines.blank,
+              ...carve.unit(headerCss, ".sortable [aria-sort='ascending'] .menu-toggle::before {"), lines.blank,
               ...carve.unit(headerCss, ".sortable [aria-sort='descending'] .menu-toggle::before {"),
               lines.aside('/* the glyph is CSS reading the one attribute; no world writes it */')
             ]}/>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...carve.span(source, 'const {sorted, data} = useTableRead(tableReads.columnNamed', '.orElse(tableReads.unknownColumn'), blankLine,
+                ...carve.span(source, 'const {sorted, data} = useTableRead(tableReads.columnNamed', '.orElse(tableReads.unknownColumn'), lines.blank,
                 ...carve.span(source, 'aria-sort={sorted}', 'aria-sort={sorted}')
               ]}/>
               : <Snippet label="HTML" lines={[
@@ -247,8 +245,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
             sorted.</Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...carve.unit(sortingSource, 'const ranked'), blankLine,
-              ...carve.unit(arrangementSource, 'const standingOf'), blankLine,
+              ...carve.unit(sortingSource, 'const ranked'), lines.blank,
+              ...carve.unit(arrangementSource, 'const standingOf'), lines.blank,
               ...carve.unit(arrangedViewSource, '  rowsOf: (arrangement, aggregates) =>'),
               lines.aside('// both worlds ask the arrangement the same question')
             ]}/>
@@ -270,13 +268,13 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...carve.unit(arrangementSource, 'const sortEnded'), blankLine,
-                ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), blankLine,
+                ...carve.unit(arrangementSource, 'const sortEnded'), lines.blank,
+                ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), lines.blank,
                 ...carve.unit(rowSrc, 'const beside = ')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...carve.unit(arrangementSource, 'const sortEnded'), blankLine,
-                ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), blankLine,
+                ...carve.unit(arrangementSource, 'const sortEnded'), lines.blank,
+                ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), lines.blank,
                 ...carve.unit(buildSrc, 'const rowBeside = '),
                 lines.aside('// the strike and the nudge each carry the standing in their own action; the sort ends as the row moves')
               ]}/>}
@@ -316,24 +314,24 @@ const RankStory: FC<{build: Build}> = ({build}) => {
                 lines.aside('// on the toggle and on the menu both')
               ]}/>
               : <Snippet label="TS" lines={[
-                ...carve.unit(frameMenus, 'const keepingTheColumnStill = '), blankLine,
+                ...carve.unit(frameMenus, 'const keepingTheColumnStill = '), lines.blank,
                 ...carve.span(frameMenus, "[menu, ...th.querySelectorAll('[data-sort-toggle]')]", "[menu, ...th.querySelectorAll('[data-sort-toggle]')]"),
                 lines.aside('// on the toggle and on the menu both')
               ]}/>}
             {world === 'react'
               ? <Snippet label="HTML" lines={[
                 ...carve.span(tableSrc, '<Column column="lookback"', '</Column>'),
-                ...carve.span(tableSrc, '<DraggableColumn column="trades"', '</DraggableColumn>'), blankLine,
+                ...carve.span(tableSrc, '<DraggableColumn column="trades"', '</DraggableColumn>'), lines.blank,
                 ...carve.unit(baseCss, '    &:has(.menu-toggle) {')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...carve.unit(frameColumns, 'const sortable = ')
               ]}/>}
             <Snippet label="CSS" lines={[
-              ...carve.unit(headerCss, '.sortable .header-cell .menu-toggle {'), blankLine,
-              ...carve.unit(sources.surfaceCss, '.borderless {'), blankLine,
-              ...carve.unit(sources.surfaceCss, '.unfilled {'), blankLine,
-              ...carve.unit(sources.surfaceCss, '.muted-ink {'), blankLine,
+              ...carve.unit(headerCss, '.sortable .header-cell .menu-toggle {'), lines.blank,
+              ...carve.unit(sources.surfaceCss, '.borderless {'), lines.blank,
+              ...carve.unit(sources.surfaceCss, '.unfilled {'), lines.blank,
+              ...carve.unit(sources.surfaceCss, '.muted-ink {'), lines.blank,
               ...carve.unit(sources.surfaceCss, '.attentive:where(')
             ]}/>
           </Codes>

@@ -7,8 +7,6 @@ import menuCss from '@components/Menu/Menu.css?sample';
 import itemSource from '@components/Menu/Item.tsx?sample';
 import '../Runs.css';
 
-const blankLine = lines.plain(' ');
-
 export const PopoverExplained: FC = () =>
   <section aria-labelledby={partHeadings.popoverWins} className="stacking-part">
     <h2 id={partHeadings.popoverWins} className="title bold">Why the popover wins</h2>
@@ -85,7 +83,7 @@ export const PopoverExplained: FC = () =>
             forms a stacking context</cite></a> names
           its own anchor.</p>
         <Snippet label="CSS" lines={[
-          ...carve.span(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'), blankLine,
+          ...carve.span(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'), lines.blank,
           ...carve.unit(menuCss, '@supports not (position-area: block-end) {')
         ]}/>
       </li>
