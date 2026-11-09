@@ -100,6 +100,27 @@ describe('the users page', () => {
     expect(userForm.addButton()).toHaveAttribute('aria-disabled', 'true');
   });
 
+  test('a request that could not reach the server leaves no such banner once the server takes control', async () => {
+    vi.useFakeTimers({toFake: ['setTimeout', 'clearTimeout'], shouldAdvanceTime: true});
+    onTestFinished(() => {
+      vi.useRealTimers();
+    });
+    usersUnreachable();
+    render(<TestApp at={Paths.users}/>);
+    await usersPage.says('the users server could not be reached');
+    await site.followRail('Practice');
+    const container = workersContainer();
+    lentToThePage(container);
+    setupUsersResponse([aUser()]);
+    await site.followRail('Users');
+    await vi.advanceTimersByTimeAsync(10_000);
+
+    container.takeControl();
+    await usersTable.roster();
+
+    expect(usersPage.alertIfAny()).not.toBeInTheDocument();
+  });
+
   test('a users server that cannot take control of the page says it could not be reached', async () => {
     lentToThePage(workersContainer({registering: Promise.reject(new Error('refused'))}));
     setupUsersResponse([aUser()]);

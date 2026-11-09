@@ -18,6 +18,7 @@ const reduce = (news: News, change: BannerChange): News => {
       banners: news.banners.map(banner => banner.id === change.id ? {...banner, leaving: true} : banner)
     };
     case 'lowered': return {...news, banners: news.banners.filter(({id}) => id !== change.id)};
+    case 'withdrawn': return {...news, banners: news.banners.filter(({message}) => message !== change.message)};
     case 'placed': return {...news, placement: change.placement};
     case 'unplaced': return {...news, placement: unplaced};
   }
