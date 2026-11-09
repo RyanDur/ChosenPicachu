@@ -129,6 +129,24 @@ describe('page error boundaries', () => {
     expect(site.frontDoor()).toHaveAttribute('href', Paths.home);
   });
 
+  test('a crash in the frame around every page is announced', async () => {
+    const feedbackThatCrashes: Environment = {
+      ...environment,
+      get feedbackToken(): string {
+        throw new Error('boom');
+      }
+    };
+    render(
+      <SiteProviders environment={feedbackThatCrashes}>
+        <RouterProvider router={createMemoryRouter([siteHolding([])])}/>
+      </SiteProviders>,
+      {onCaughtError: () => undefined}
+    );
+
+    await site.roomSays('This room is closed.');
+    expect(site.announced('This room is closed.')).toBeInTheDocument();
+  });
+
   test('a crash no page catches is reported and announced', async () => {
     const boom = new Error('boom');
     const Boom = () => {
