@@ -20,7 +20,7 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
 
   const disarm = () => dispatch(chartTravelChange.disarmed());
 
-  const dress = (at: number) => classNames('chart-slot', 'focal-ringed',
+  const dress = (at: number) => classNames('chart-place', 'focal-ringed',
     aloft.map(held => held === at).orElse(false) && 'hide',
     pushed[at] && 'chart-pushed',
     pushed[at] === 'up' && 'upward',
@@ -45,14 +45,14 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
   const travel = (event: DragEvent<HTMLElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
-    const slots = event.currentTarget.parentElement?.children;
-    aloft.map(held => boundsOf(slots?.item(held)).map(bounds => {
+    const places = event.currentTarget.parentElement?.children;
+    aloft.map(held => boundsOf(places?.item(held)).map(bounds => {
       const pointer = event.pageY;
       const to = crossing.strayedTo(pointer, pointerYAtLastSeat, bounds.height / 3, held);
       if (to === held || to < 0 || to >= seats) {
         return;
       }
-      if (resting(slots?.item(to))) {
+      if (resting(places?.item(to))) {
         swap(held, to, pointer);
       }
     }));

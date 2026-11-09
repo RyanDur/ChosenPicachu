@@ -217,10 +217,10 @@ describe('a list of charts', () => {
     const finger = chartsDesk.fingerOn('Price line');
 
     await finger.press();
-    expect(chartsDesk.slot('Price line')).toHaveAttribute('draggable', 'true');
+    expect(chartsDesk.place('Price line')).toHaveAttribute('draggable', 'true');
 
     await finger.lift();
-    expect(chartsDesk.slot('Price line')).not.toHaveAttribute('draggable', 'true');
+    expect(chartsDesk.place('Price line')).not.toHaveAttribute('draggable', 'true');
   });
 
   test('should open the workspace story under let’s build this feature', async () => {
