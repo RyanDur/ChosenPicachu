@@ -1,20 +1,21 @@
 import * as schema from 'schemawax';
-import {Result} from '@ryandur/sand';
+import {Maybe, maybe, Result} from '@ryandur/sand';
 import {decoded, http, HTTPError} from '@transport';
 import {Candle} from './candles';
 import {Period} from './Period';
 import {periods} from './periods';
 
-const HistoryRowsDecoder = schema.array(
-  schema.tuple(schema.number, schema.number, schema.number, schema.number, schema.number, schema.number)
-);
+const HistoryRowsDecoder = schema.array(schema.unknown);
 
-type HistoryRow = schema.Output<typeof HistoryRowsDecoder>[number];
+const HistoryRowDecoder =
+  schema.tuple(schema.number, schema.number, schema.number, schema.number, schema.number, schema.number);
 
-const toCandle = ([openedAt, low, high, open, close, volume]: HistoryRow): Candle =>
-  ({openedAt: openedAt * 1000, low, high, open, close, volume});
+const toCandle = (row: unknown): Maybe<Candle> =>
+  maybe(HistoryRowDecoder.decode(row)).map(([openedAt, low, high, open, close, volume]) =>
+    ({openedAt: openedAt * 1000, low, high, open, close, volume}));
 
-const toCandles = (rows: readonly HistoryRow[]): readonly Candle[] => rows.map(toCandle).reverse();
+const toCandles = (rows: readonly unknown[]): readonly Candle[] =>
+  rows.flatMap(row => toCandle(row).either(candle => [candle], () => [])).reverse();
 
 const periodQuery = (period: Period, now: Date): string => {
   const start = new Date(now.getTime() - periods.spanMilliseconds[period]);
