@@ -7,7 +7,7 @@ import {LazyRecipe} from './LazyRecipe';
 import '../../Recipe/Recipe.css';
 
 export const Recipe: FC = () => {
-  const {pace, origin, motion, world, track, change} = useControls();
+  const {pace, track, change} = useControls();
   const Chosen = pace === 'eager' ? EagerRecipe : LazyRecipe;
   return <section aria-label="build the drag sort yourself" className="build-steps">
     <Picks label="input track"
@@ -18,6 +18,6 @@ export const Recipe: FC = () => {
       ]}
       chosen={track}
       onPicked={next => change({track: next})}/>
-    <Stories><Chosen track={track} world={world} origin={origin} motion={motion}/></Stories>
+    <Stories><Chosen/></Stories>
   </section>;
 };

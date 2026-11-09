@@ -1,11 +1,12 @@
 import {FC} from 'react';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import {Term} from '../Term';
-import type {World} from '../../../Controls';
+import {useControls} from '../../../Controls';
 import {sources} from './sources';
 
-export const ListenersOnce: FC<{world: World; buildSource: Sample}> = ({world, buildSource}) =>
-  <Step title="Write each listener once, for both worlds">
+export const ListenersOnce: FC<{buildSource: Sample}> = ({buildSource}) => {
+  const {world} = useControls();
+  return <Step title="Write each listener once, for both worlds">
     <Words want={<>A pointer does not know which world it landed in: the lift, the <Term word="travel">travel</Term>,
       and the arrows should each be one function, written once and attached twice.</>}>
       <Says>The trap to check before sharing anything: a listener that closes over state
@@ -57,3 +58,4 @@ export const ListenersOnce: FC<{world: World; buildSource: Sample}> = ({world, b
       </Codes>
     </Reveal>
   </Step>;
+};

@@ -1,12 +1,13 @@
 import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
-import type {World} from '../../../Controls';
+import {useControls} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
 
-export const LiftOnce: FC<{world: World; headerSource: Sample; buildSource: Sample}> =
-  ({world, headerSource, buildSource}) =>
-    <Step title="Lift on pointer down, and measure the table once" id="step-lift">
+export const LiftOnce: FC<{headerSource: Sample; buildSource: Sample}> =
+  ({headerSource, buildSource}) => {
+    const {world} = useControls();
+    return <Step title="Lift on pointer down, and measure the table once" id="step-lift">
       <Words want="A carry must know the ground it stands on without asking the DOM again on every move.">
         <Says>Everything gets measured once, at the grab: the
           table’s <Mdn path="Web/API/Element/getBoundingClientRect">bounding rect</Mdn> and every
@@ -62,3 +63,4 @@ export const LiftOnce: FC<{world: World; headerSource: Sample; buildSource: Samp
         </Codes>
       </Reveal>
     </Step>;
+  };

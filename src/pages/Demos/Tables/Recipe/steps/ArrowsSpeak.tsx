@@ -1,11 +1,12 @@
 import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
-import type {World} from '../../../Controls';
+import {useControls} from '../../../Controls';
 import {sources} from './sources';
 
-export const ArrowsSpeak: FC<{world: World; headerSource: Sample; buildSource: Sample}> =
-  ({world, headerSource, buildSource}) =>
-    <Step title="The arrows give the direction">
+export const ArrowsSpeak: FC<{headerSource: Sample; buildSource: Sample}> =
+  ({headerSource, buildSource}) => {
+    const {world} = useControls();
+    return <Step title="The arrows give the direction">
       <Words want="The trader’s focus can reach a column, but the platform ships no verb for “swap left”; they need one.">
         <Says>A <Mdn path="Web/API/Element/keydown_event">keydown</Mdn> listener claims the verb.
           It takes the two arrows and nothing else: every other key falls through,
@@ -34,3 +35,4 @@ export const ArrowsSpeak: FC<{world: World; headerSource: Sample; buildSource: S
         </Codes>
       </Reveal>
     </Step>;
+  };

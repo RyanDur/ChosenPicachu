@@ -1,7 +1,6 @@
 import {FC} from 'react';
-import {Motion, Origin} from '../../Controls';
+import {useControls} from '../../Controls';
 import {Steps, Story} from '../../Recipe';
-import type {Track, World} from '../../Controls';
 import {
   AccessTrack,
   AgainstTheStream,
@@ -38,66 +37,67 @@ import rowSource from '../Builds/LazyTable/RowHeader.tsx?sample';
 import paceSource from '../Builds/LazyTable/lazyDrop.ts?sample';
 import cssSource from '@components/DragSortableTable/motion.css?sample';
 
-type Props = {track: Track; world: World; origin: Origin; motion: Motion};
-
-export const LazyRecipe: FC<Props> = ({track, world, origin, motion}) => track === 'pointer'
-  ? <>
-    <Story param="sort" id="column"
-      can="The trader can sort by column"
-      soThat="the measures they compare sit beside each other">
-      <NamesInTheCode/>
-      <TwoRoads/>
-      <TheImplementation world={world} react="Builds/LazyTable" vanilla="Frame/builds/Lazy.ts"/>
-      <TheWholeBuild world={world} tableSource={tableSource} buildSource={buildSource}/>
-      <AgainstTheStream/>
-      <OwnedPixels world={world}/>
-      <Promises pace="lazy" origin={origin} motion={motion}/>
-      <Steps>
-        <CssShare world={world}/>
-        <OrderInState world={world} tableSource={tableSource} buildSource={buildSource}/>
-        <ListenersOnce world={world} buildSource={buildSource}/>
-        <LiftOnce world={world} headerSource={headerSource} buildSource={buildSource}/>
-        <DragSurface world={world} headerSource={headerSource}/>
-        <DeadZone/>
-        <LazyPace world={world} headerSource={headerSource} paceSource={paceSource} buildSource={buildSource}/>
-        {origin === 'hide'
-          ? <HideOrigin world={world} headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
-          : <KeepOrigin world={world} cssSource={cssSource}/>}
-        {motion === 'animated'
-          ? <AnimatedMotion world={world} headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
-          : <StaticMotion world={world} cssSource={cssSource}/>}
-      </Steps>
-    </Story>
-    <Story param="sort" id="row"
-      can="The trader can sort by row"
-      soThat="the lookbacks they watch closest sit on top">
-      <TurnedVertical/>
-      <Steps>
-        <CarryVertical world={world} rowSource={rowSource} buildSource={buildSource}/>
-      </Steps>
-    </Story>
-  </>
-  : <>
-    <Story param="sort" id="column"
-      can="The trader can sort by column"
-      soThat="the measures they compare sit beside each other">
-      <NamesInTheCode/>
-      <AccessTrack/>
-      <TheImplementation world={world} react="Builds/LazyTable" vanilla="Frame/builds/Lazy.ts"/>
-      <QuietDials/>
-      <Steps>
-        <FocusLands world={world} headerSource={headerSource}/>
-        <ArrowsSpeak world={world} headerSource={headerSource} buildSource={buildSource}/>
-        {motion === 'animated'
-          ? <WalkSlides world={world} headerSource={headerSource} buildSource={buildSource}/>
-          : <CutKey world={world} headerSource={headerSource} buildSource={buildSource}/>}
-      </Steps>
-    </Story>
-    <Story param="sort" id="row"
-      can="The trader can sort by row"
-      soThat="the lookbacks they watch closest sit on top">
-      <Steps>
-        <GripArrows world={world} rowSource={rowSource} buildSource={buildSource}/>
-      </Steps>
-    </Story>
-  </>;
+export const LazyRecipe: FC = () => {
+  const {track, origin, motion} = useControls();
+  return track === 'pointer'
+    ? <>
+      <Story param="sort" id="column"
+        can="The trader can sort by column"
+        soThat="the measures they compare sit beside each other">
+        <NamesInTheCode/>
+        <TwoRoads/>
+        <TheImplementation react="Builds/LazyTable" vanilla="Frame/builds/Lazy.ts"/>
+        <TheWholeBuild tableSource={tableSource} buildSource={buildSource}/>
+        <AgainstTheStream/>
+        <OwnedPixels/>
+        <Promises/>
+        <Steps>
+          <CssShare/>
+          <OrderInState tableSource={tableSource} buildSource={buildSource}/>
+          <ListenersOnce buildSource={buildSource}/>
+          <LiftOnce headerSource={headerSource} buildSource={buildSource}/>
+          <DragSurface headerSource={headerSource}/>
+          <DeadZone/>
+          <LazyPace headerSource={headerSource} paceSource={paceSource} buildSource={buildSource}/>
+          {origin === 'hide'
+            ? <HideOrigin headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
+            : <KeepOrigin cssSource={cssSource}/>}
+          {motion === 'animated'
+            ? <AnimatedMotion headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
+            : <StaticMotion cssSource={cssSource}/>}
+        </Steps>
+      </Story>
+      <Story param="sort" id="row"
+        can="The trader can sort by row"
+        soThat="the lookbacks they watch closest sit on top">
+        <TurnedVertical/>
+        <Steps>
+          <CarryVertical rowSource={rowSource} buildSource={buildSource}/>
+        </Steps>
+      </Story>
+    </>
+    : <>
+      <Story param="sort" id="column"
+        can="The trader can sort by column"
+        soThat="the measures they compare sit beside each other">
+        <NamesInTheCode/>
+        <AccessTrack/>
+        <TheImplementation react="Builds/LazyTable" vanilla="Frame/builds/Lazy.ts"/>
+        <QuietDials/>
+        <Steps>
+          <FocusLands headerSource={headerSource}/>
+          <ArrowsSpeak headerSource={headerSource} buildSource={buildSource}/>
+          {motion === 'animated'
+            ? <WalkSlides headerSource={headerSource} buildSource={buildSource}/>
+            : <CutKey headerSource={headerSource} buildSource={buildSource}/>}
+        </Steps>
+      </Story>
+      <Story param="sort" id="row"
+        can="The trader can sort by row"
+        soThat="the lookbacks they watch closest sit on top">
+        <Steps>
+          <GripArrows rowSource={rowSource} buildSource={buildSource}/>
+        </Steps>
+      </Story>
+    </>;
+};

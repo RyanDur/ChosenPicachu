@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Motion, Origin, Pace} from '../../../Controls';
+import {Motion, Origin, Pace, useControls} from '../../../Controls';
 import {Tell} from '../../../Recipe';
 
 const paces: Record<Pace, string> = {
@@ -23,6 +23,8 @@ const motions: Record<Motion, Record<Pace, string>> = {
   }
 };
 
-export const Promises: FC<{pace: Pace; origin: Origin; motion: Motion}> = ({pace, origin, motion}) =>
-  <Tell>This particular list keeps three more
+export const Promises: FC = () => {
+  const {pace, origin, motion} = useControls();
+  return <Tell>This particular list keeps three more
     promises. {paces[pace]} {origins[origin]} {motions[motion][pace]}</Tell>;
+};
