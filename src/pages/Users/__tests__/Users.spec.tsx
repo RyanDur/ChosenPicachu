@@ -2,6 +2,7 @@ import {Paths} from '@navigation';
 import {TestApp} from '@__test_support/TestApp';
 import {site} from '@pages/__test_support';
 import {appAddress} from '@__test_support/address';
+import {holdTheClock} from '@__test_support/heldClock';
 import {render, waitFor} from '@testing-library/react';
 import {createSearchParams} from 'react-router';
 import {profile} from '../profile';
@@ -53,7 +54,7 @@ describe('the users page', () => {
   });
 
   test('a users server that takes control after the wait takes down the could-not-be-reached banner', async () => {
-    vi.useFakeTimers({toFake: ['setTimeout', 'clearTimeout'], shouldAdvanceTime: true});
+    holdTheClock();
     onTestFinished(() => {
       vi.useRealTimers();
     });
@@ -71,7 +72,7 @@ describe('the users page', () => {
   });
 
   test('a reader who leaves while the server is unreachable finds no such banner on coming back to it in control', async () => {
-    vi.useFakeTimers({toFake: ['setTimeout', 'clearTimeout'], shouldAdvanceTime: true});
+    holdTheClock();
     onTestFinished(() => {
       vi.useRealTimers();
     });
@@ -101,7 +102,7 @@ describe('the users page', () => {
   });
 
   test('a request that could not reach the server leaves no such banner once the server takes control', async () => {
-    vi.useFakeTimers({toFake: ['setTimeout', 'clearTimeout'], shouldAdvanceTime: true});
+    holdTheClock();
     onTestFinished(() => {
       vi.useRealTimers();
     });

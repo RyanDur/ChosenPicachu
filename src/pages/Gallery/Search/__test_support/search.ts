@@ -1,5 +1,5 @@
 import {gallerySettings} from '@pages/Gallery/__test_support';
-import {heldClockMoves} from '@__test_support/heldClock';
+import {heldClockMoves, holdTheClock} from '@__test_support/heldClock';
 import userEvent, {type UserEvent} from '@testing-library/user-event';
 
 const searchBarOf = (user: Pick<UserEvent, 'type' | 'click' | 'tab'>) => {
@@ -22,7 +22,7 @@ const searchBarOf = (user: Pick<UserEvent, 'type' | 'click' | 'tab'>) => {
 export const searchBar = searchBarOf(userEvent);
 
 export const heldSearch = () => {
-  vi.useFakeTimers({toFake: ['setTimeout', 'clearTimeout'], shouldAdvanceTime: true});
+  holdTheClock();
   return {
     ...searchBarOf(userEvent.setup({advanceTimers: vi.advanceTimersByTime})),
     pauseEnds: (): Promise<void> => heldClockMoves(60_000)
