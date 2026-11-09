@@ -185,15 +185,15 @@ describe('page error boundaries', () => {
     expect(site.announced('This room is closed.')).toBeInTheDocument();
   });
 
-  test('announces an unknown address again when the reader goes Back to it from another', async () => {
+  test('raises a new alert for an unknown address the reader goes Back to from another', async () => {
     render(<TestApp cameFrom="/nowhere/" at="/elsewhere/"/>);
     await site.roomSays('There is no room at this address.');
-    await site.dismissAnnouncement('There is no room at this address.');
+    const atElsewhere = site.announced('There is no room at this address.');
 
     await appAddress.back();
 
     await waitFor(() => expect(appAddress.path()).toHaveTextContent('/nowhere/'));
-    expect(site.announced('There is no room at this address.')).toBeInTheDocument();
+    expect(site.announced('There is no room at this address.')).not.toBe(atElsewhere);
   });
 
   test('an address the site does not know says so, inside the site', async () => {
