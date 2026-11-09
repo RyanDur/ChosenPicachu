@@ -8,8 +8,8 @@ import {WhatACustomPropertyIs} from '../WhatACustomPropertyIs';
 import {SheetDeclaresSeatAndDrift} from './SheetDeclaresSeatAndDrift';
 import {carriedProperties} from './carriedProperties';
 
-export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSrc: Sample}> =
-  ({world, headerSource, cssSource, buildSrc}) =>
+export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSource: Sample}> =
+  ({world, headerSource, cssSource, buildSource}) =>
     <Step title="Carry the real thing" dial={<OriginDial name="step-origin"/>}>
       <Words want="The trader wants the column they grabbed in their hand, buttons and all, and a gap where it came from that says where the drop will land.">
         <Says>Copying the column would go stale on the next trade, and a copy never has
@@ -72,7 +72,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
               ...carve.span(headerSource, "'--seat-x': looks.pixels(seat?.x)", "'--drift-x': looks.pixels(drift?.x)")
             ]}/>
             : <Snippet label="TS" lines={[
-              ...carve.unit(buildSrc, 'const moved = '), lines.blank,
+              ...carve.unit(buildSource, 'const moved = '), lines.blank,
               ...carve.unit(sources.frameCarry, 'const dress'), lines.blank,
               ...carve.span(sources.frameSettle, 'type Toward', 'const motions'), lines.blank,
               ...carve.unit(sources.frameSettle, 'const changeMotion'),

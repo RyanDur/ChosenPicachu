@@ -5,8 +5,8 @@ import {Term} from '../Term';
 import {sources} from './sources';
 import {elidedHeaders} from '../elidedHeaders';
 
-export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Sample}> =
-  ({world, tableSource, buildSrc}) =>
+export const OrderInState: FC<{world: World; tableSource: Sample; buildSource: Sample}> =
+  ({world, tableSource, buildSource}) =>
     <Step title="Keep the order in state, not in the data">
       <Words want="Every story runs against the stream: a reorder that rewrote the data would lose to the next trade, so order and data must never fight.">
         <Says>So the order is the page’s state, the columns and the rows as they stand, held beside
@@ -54,7 +54,7 @@ export const OrderInState: FC<{world: World; tableSource: Sample; buildSrc: Samp
           : <Codes>
             <Snippet label="TS" lines={[
               ...carve.unit(sources.arrangement, 'export type Arrangement'), lines.blank,
-              ...carve.span(buildSrc, 'order: () => columns().map', 'standing: () => rows().map'), lines.blank,
+              ...carve.span(buildSource, 'order: () => columns().map', 'standing: () => rows().map'), lines.blank,
               ...carve.unit(sources.boot, 'const fed = ')
             ]}/>
             <Snippet label="TS" lines={[

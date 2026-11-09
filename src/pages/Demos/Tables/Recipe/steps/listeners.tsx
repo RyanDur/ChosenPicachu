@@ -4,7 +4,7 @@ import {Term} from '../Term';
 import type {World} from '../../../Controls';
 import {sources} from './sources';
 
-export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buildSrc}) =>
+export const ListenersOnce: FC<{world: World; buildSource: Sample}> = ({world, buildSource}) =>
   <Step title="Write each listener once, for both worlds">
     <Words want={<>A pointer does not know which world it landed in: the lift, the <Term word="travel">travel</Term>,
       and the arrows should each be one function, written once and attached twice.</>}>
@@ -51,8 +51,8 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
             ...carve.unit(sources.element, 'export const useDragSortable')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.unit(buildSrc, 'export const dragSortable = '), lines.blank,
-            ...carve.span(buildSrc, 'hand.subscribe(', 'hand.subscribe(')
+            ...carve.unit(buildSource, 'export const dragSortable = '), lines.blank,
+            ...carve.span(buildSource, 'hand.subscribe(', 'hand.subscribe(')
           ]}/>}
       </Codes>
     </Reveal>

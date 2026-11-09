@@ -4,8 +4,8 @@ import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '.
 import type {World} from '../../../Controls';
 import {sources} from './sources';
 
-export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
-  ({world, headerSource, buildSrc}) =>
+export const WalkSlides: FC<{world: World; headerSource: Sample; buildSource: Sample}> =
+  ({world, headerSource, buildSource}) =>
     <Step title="Both parties slide" dial={<MotionDial name="step-motion"/>}>
       <Words want="A pointer swap explains itself with the column in hand; the trader’s keyboard swap has no pointer, and if only the neighbor slid, the walked column would simply jump.">
         <Says>Both parties should explain themselves: each starts where it was and slides to
@@ -29,7 +29,7 @@ export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sampl
             ]}/>
             : <Snippet label="TS" lines={[
               ...carve.unit(sources.arrows, 'const column: Arrows'), lines.blank,
-              ...carve.unit(buildSrc, 'const columnTo = '), lines.blank,
+              ...carve.unit(buildSource, 'const columnTo = '), lines.blank,
               ...carve.unit(sources.frameSettle, 'const untilSettled = '),
               lines.aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
             ]}/>}
