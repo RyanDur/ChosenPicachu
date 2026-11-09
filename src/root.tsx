@@ -35,7 +35,7 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
 
 export const ErrorBoundary: FC = () =>
   <BannerProvider>
-    <Page header={<Header title="Chosen Picachu" listed={names.closedRoom}/>} inView={false}>
+    <Page header={<Header title="Closed site" listed={names.closedSite}/>} inView={false}>
       <PageError>Part of the frame around every page broke, so no page can open right now.</PageError>
     </Page>
     <Banners/>
