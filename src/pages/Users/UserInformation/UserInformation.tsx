@@ -118,8 +118,7 @@ const Draft: FC<{className?: string}> = ({className}) => {
 
     <AddressFields name="home" title="Home Address" className="home-address" readOnly={readOnly} required={required}/>
 
-    <AddressFields name="work" title="Work Address" className="work-address" readOnly={readOnly}
-      disabled={draft.sameAsHome}>
+    <AddressFields name="work" title="Work Address" className="work-address" readOnly={readOnly}>
       {not(readOnly) && <label className="same-as-home paragraph pill-cornered attentive">
         <span>Same as Home</span>
         <input className="fancy-check raisable" type="checkbox" checked={draft.sameAsHome}
