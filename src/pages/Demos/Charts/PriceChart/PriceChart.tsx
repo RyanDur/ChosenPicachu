@@ -5,7 +5,7 @@ import {Loading} from '@components/Loading';
 import {classNames} from '@components';
 import {Candle, LiveTradesState, money, Period, periodHistory, Trade} from '../../Market';
 import {chartCaption} from '../chart-caption';
-import {usePeriodChart} from '../usePeriodChart';
+import {useShownCandles} from '../useShownCandles';
 import {periodDisplay} from '../period-display';
 import {PeriodMenu} from '../PeriodMenu';
 import {sparkline, TimedPrice} from '../sparkline';
@@ -47,7 +47,7 @@ type Props = Pick<LiveTradesState, 'trades'> & {
 };
 
 export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
-  const {id, history, bucketMilliseconds, shownCandles} = usePeriodChart({id: given, kind: 'price', period, trades});
+  const {id, history, bucketMilliseconds, shownCandles} = useShownCandles({id: given, kind: 'price', period, trades});
   const view = viewOf(shownCandles, trades[trades.length - 1]);
   const points =
     sparkline.points(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMilliseconds);
