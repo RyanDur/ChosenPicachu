@@ -159,8 +159,8 @@ export const StructurePractice: FC = () =>
       and the components.</p>
     <h3 className="paragraph bold">Components, one behavior each</h3>
     <p className="paragraph">A component is an element that does not exist yet. I write one to add a behavior the
-      platform has no element for: a table whose columns and rows can be dragged, a pill that glides between choices,
-      a stack of banners that any page can raise. React is good at exactly that, and so are Vue, Svelte and Angular.
+      platform has no element for: a table whose columns and rows can be dragged, or a stack of banners that
+      any page can raise. React is good at exactly that, and so are Vue, Svelte and Angular.
       A component in any of them writes a real element with its role and its keys, and attaches the behavior that is
       new. A component is not for wrapping an element the platform already has: that is the
       default. I keep a few wrappers that trade against it, where the trade is worth it:{' '}
