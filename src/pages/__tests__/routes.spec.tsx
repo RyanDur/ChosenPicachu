@@ -1,8 +1,9 @@
 import {TestApp} from '@__test_support/TestApp';
 import {renderCrashedFrame} from '@__test_support/crashedFrame';
+import {renderFallbackPage} from '@__test_support/fallbackPage';
 import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@navigation';
-import {createMemoryRouter, Route, RouterProvider} from 'react-router';
+import {Route} from 'react-router';
 import {scrolling} from '@components/__test_support/scrolling';
 import {site} from '../__test_support';
 import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
@@ -11,9 +12,6 @@ import {appAddress} from '@__test_support/address';
 import {homePage} from '@pages/Home/__test_support/home';
 import {ErrorBoundary as DemosLayoutBoundary, Room as DemosLayout} from '@pages/Demos/route';
 import {ErrorBoundary as PracticeBoundary} from '@pages/Practice/route';
-import {environment} from '@transport';
-import {SiteProviders} from '../../SiteProviders';
-import {FallbackPage} from '@page';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -244,11 +242,9 @@ describe('a room still loading', () => {
   });
 
   test('the fallback page the server draws leaves every page on the rail unmarked', async () => {
-    render(<SiteProviders environment={environment}>
-      <RouterProvider router={createMemoryRouter([{path: '*', Component: FallbackPage}], {initialEntries: [Paths.games]})}/>
-    </SiteProviders>);
+    renderFallbackPage();
 
-    expect((await site.railLinks()).filter(link => link.hasAttribute('aria-current'))).toEqual([]);
+    expect(await site.unmarkedRail()).toBe(true);
   });
 });
 
