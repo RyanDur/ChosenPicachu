@@ -1,5 +1,5 @@
 import {gallerySettings} from '@pages/Gallery/__test_support';
-import {heldClockMoves, holdTheClock} from '@__test_support/heldClock';
+import {heldClock} from '@__test_support/heldClock';
 import userEvent, {type UserEvent} from '@testing-library/user-event';
 
 const searchBarOf = (user: Pick<UserEvent, 'type' | 'click' | 'tab'>) => {
@@ -19,12 +19,13 @@ const searchBarOf = (user: Pick<UserEvent, 'type' | 'click' | 'tab'>) => {
   };
 };
 
-export const searchBar = searchBarOf(userEvent);
-
-export const heldSearch = () => {
-  holdTheClock();
-  return {
-    ...searchBarOf(userEvent.setup({advanceTimers: vi.advanceTimersByTime})),
-    pauseEnds: (): Promise<void> => heldClockMoves(60_000)
-  };
+export const searchPage = {
+  bar: searchBarOf(userEvent),
+  held: () => {
+    heldClock.hold();
+    return {
+      ...searchBarOf(userEvent.setup({advanceTimers: vi.advanceTimersByTime})),
+      pauseEnds: (): Promise<void> => heldClock.moves(60_000)
+    };
+  }
 };
