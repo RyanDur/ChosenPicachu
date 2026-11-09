@@ -1,3 +1,4 @@
+import {not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -24,7 +25,7 @@ export const site = {
   railHoldsTheNav: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pages and feedback'})).getByRole('navigation', {name: 'site'}),
   railHoldsFeedback: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pages and feedback'})).getByRole('button', {name: 'Feedback'}),
   unmarkedRail: async (): Promise<boolean> =>
-    within(await screen.findByRole('navigation', {name: 'site'})).queryAllByRole('link', {current: 'page'}).length === 0,
+    not(within(await screen.findByRole('navigation', {name: 'site'})).queryAllByRole('link', {current: 'page'}).length),
   railLink: (name: string): HTMLElement => within(screen.getByRole('navigation', {name: 'site'})).getByRole('link', {name}),
   followRail: async (name: string): Promise<void> => userEvent.click(within(await screen.findByRole('navigation', {name: 'site'})).getByRole('link', {name})),
   rail: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'pages and feedback'}),
