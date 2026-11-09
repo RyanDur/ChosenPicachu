@@ -152,7 +152,6 @@ test.describe('the fold measured by plain script', () => {
   });
 
   test('reached by its tab link, with its document assembled after the frame first loads, grows to its opened text', async ({page}) => {
-    await page.emulateMedia({reducedMotion: 'no-preference'});
     const assembly = Promise.withResolvers<void>();
     await page.route(/\/assemble-[^/]*\.js$/, async route => {
       await assembly.promise;
