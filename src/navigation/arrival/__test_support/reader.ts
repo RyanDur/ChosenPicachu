@@ -6,6 +6,7 @@ const aFrame = 16;
 type ArrivingReader = {
   readonly follows: (link: string) => Promise<void>;
   readonly goesBack: () => Promise<void>;
+  readonly presses: (key: string) => Promise<void>;
   readonly waits: (milliseconds: number) => Promise<void>;
   readonly sees: (heading: string) => Promise<void>;
   readonly heading: (name: string) => HTMLElement;
@@ -25,6 +26,7 @@ export const arrivingReader = (): ArrivingReader => {
   return {
     follows: link => user.click(screen.getByRole('link', {name: link})),
     goesBack: () => user.click(screen.getByRole('button', {name: 'back'})),
+    presses: key => user.keyboard(key),
     waits: async milliseconds => {
       for (let passed = 0; passed < milliseconds; passed += aFrame) await vi.advanceTimersByTimeAsync(aFrame);
     },
