@@ -92,3 +92,13 @@ test('a reload returns the reader to where they were on the page', async ({page}
 
   await expect.poll(() => documentScrollY(page)).toBe(where);
 });
+
+test('a shared link to a step inside an open story opens with the story open and the step focused', async ({page}) => {
+  await page.goto('demos/z-index/?news=many#step-slide-in');
+  const story = page.getByRole('group', {name: 'The user can have multiple banners'});
+  const step = story.getByRole('listitem').filter({has: page.getByRole('heading', {name: 'Slide in from off screen'})});
+
+  await expect(step.first()).toBeFocused();
+  await expect(story).toHaveAttribute('open');
+  await expect(page).toHaveURL(/\?news=many#step-slide-in$/);
+});
