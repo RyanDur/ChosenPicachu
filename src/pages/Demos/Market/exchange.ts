@@ -47,7 +47,7 @@ const candlesFor = (
   onTrouble: Trouble
 ): Closer => history.either(
   base => {
-    const fetching = coinbaseHistory.periodCandles(base, product, coinbaseHistory.periodQuery(period))
+    const fetching = coinbaseHistory.periodCandles(base, product, coinbaseHistory.periodQuery(period, new Date()))
       .onSuccess(candles => dispatch(marketActions.candlesArrived(period, candles)))
       .onFailure(cause => {
         dispatch(marketActions.candlesRefused(period));
