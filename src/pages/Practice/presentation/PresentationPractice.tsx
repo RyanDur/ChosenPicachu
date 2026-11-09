@@ -33,52 +33,42 @@ export const PresentationPractice: FC = () =>
     <p className="paragraph">So five things have to be true of the style sheets. Lints and the import list hold most of
       them, and I keep the naming myself.</p>
     <dl className="needs">
-      <div className="need">
-        <dt className="paragraph bold">Place</dt>
-        <dd className="paragraph">Structure beside the component, looks in the shared style sheets. The{' '}
-          <a className="signpost" href={stylelintConfig}>style sheet lint</a> holds it, refusing a look in a component
-          style sheet, and the <a className="signpost" href={classLint}>class lint</a> holds its other side, reading a
-          class only from a style sheet in the element’s own directory or one above it, or from the shared style sheets.
-          BEM’s{' '}
-          <a className="signpost" href={bemHistory.address}>folder per block</a>, from Yandex in 2009, is where the
-          first half comes from.</dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Value</dt>
-        <dd className="paragraph">Every value written once, as a token. The{' '}
-          <a className="signpost" href={stylelintConfig}>value lint</a> holds it with two rules: it refuses a number
-          where a token belongs, and a token nothing declares. Custom properties are the platform’s
-          token.</dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Name</dt>
-        <dd className="paragraph">A look is one word any element can wear, named for the need. The{' '}
-          <a className="signpost" href={classLint}>class lint</a> holds what a lint can, refusing a class no style sheet
-          reads and a class list that does not put the component’s own class first. The naming is mine to keep.
-          Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
-          where I agree, and Tailwind’s <a className="signpost" href={utilityFirst.address}>utility-first page</a> is
-          where I part.</dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Selector</dt>
-        <dd className="paragraph">Classes, never a tag, outside the reset. The{' '}
-          <a className="signpost" href={stylelintConfig}>selector lint</a> holds it. A browser matches a selector
-          from right to left: David Hyatt, writing for Mozilla’s own engineers in 2000, called the rightmost part the
-          key selector,{' '}
-          <a className="signpost" href={hyatt.address}>“the part that matches the element being matched, rather than its
-            ancestors”</a>.
-          So <code className="monospaced">nav a</code> starts from every link on the page, while{' '}
-          <code className="monospaced">.home .opening</code> starts from the few elements that carry the class. A
-          class also says more: <code className="monospaced">rail-path</code> says what a link is for, where{' '}
-          <code className="monospaced">nav a</code> says only where it is.</dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Order</dt>
-        <dd className="paragraph">The style sheets imported in one order, reset first. The{' '}
-          <a className="signpost" href={importList}>import list</a> itself holds it: when two rules tie, the cascade
-          takes the later one, so the list’s order decides. <a className="signpost" href={layer.address}>@layer</a> is
-          the platform’s own way to say that order in a rule.</dd>
-      </div>
+      <dt className="paragraph bold">Place</dt>
+      <dd className="paragraph">Structure beside the component, looks in the shared style sheets. The{' '}
+        <a className="signpost" href={stylelintConfig}>style sheet lint</a> holds it, refusing a look in a component
+        style sheet, and the <a className="signpost" href={classLint}>class lint</a> holds its other side, reading a
+        class only from a style sheet in the element’s own directory or one above it, or from the shared style sheets.
+        BEM’s{' '}
+        <a className="signpost" href={bemHistory.address}>folder per block</a>, from Yandex in 2009, is where the
+        first half comes from.</dd>
+      <dt className="paragraph bold">Value</dt>
+      <dd className="paragraph">Every value written once, as a token. The{' '}
+        <a className="signpost" href={stylelintConfig}>value lint</a> holds it with two rules: it refuses a number
+        where a token belongs, and a token nothing declares. Custom properties are the platform’s
+        token.</dd>
+      <dt className="paragraph bold">Name</dt>
+      <dd className="paragraph">A look is one word any element can wear, named for the need. The{' '}
+        <a className="signpost" href={classLint}>class lint</a> holds what a lint can, refusing a class no style sheet
+        reads and a class list that does not put the component’s own class first. The naming is mine to keep.
+        Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
+        where I agree, and Tailwind’s <a className="signpost" href={utilityFirst.address}>utility-first page</a> is
+        where I part.</dd>
+      <dt className="paragraph bold">Selector</dt>
+      <dd className="paragraph">Classes, never a tag, outside the reset. The{' '}
+        <a className="signpost" href={stylelintConfig}>selector lint</a> holds it. A browser matches a selector
+        from right to left: David Hyatt, writing for Mozilla’s own engineers in 2000, called the rightmost part the
+        key selector,{' '}
+        <a className="signpost" href={hyatt.address}>“the part that matches the element being matched, rather than its
+          ancestors”</a>.
+        So <code className="monospaced">nav a</code> starts from every link on the page, while{' '}
+        <code className="monospaced">.home .opening</code> starts from the few elements that carry the class. A
+        class also says more: <code className="monospaced">rail-path</code> says what a link is for, where{' '}
+        <code className="monospaced">nav a</code> says only where it is.</dd>
+      <dt className="paragraph bold">Order</dt>
+      <dd className="paragraph">The style sheets imported in one order, reset first. The{' '}
+        <a className="signpost" href={importList}>import list</a> itself holds it: when two rules tie, the cascade
+        takes the later one, so the list’s order decides. <a className="signpost" href={layer.address}>@layer</a> is
+        the platform’s own way to say that order in a rule.</dd>
     </dl>
     <p className="paragraph">CSS has one global scope, so every rule can reach every element. The field put the look in
       other places first, before the platform had a token, an order or a scope of its own. A reset put the defaults in
