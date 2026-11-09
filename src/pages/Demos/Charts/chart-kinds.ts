@@ -4,7 +4,7 @@ export type ChartKind = 'price' | 'candles' | 'pressure' | 'pie';
 
 const all: readonly ChartKind[] = ['price', 'candles', 'pressure', 'pie'];
 
-const is = (kind: string | undefined): kind is ChartKind =>
+const is = (kind?: string): kind is ChartKind =>
   all.some(candidate => candidate === kind);
 
 const match = matchOn([...all]);
