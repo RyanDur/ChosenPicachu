@@ -41,7 +41,7 @@
 
     &:has(:checked) { transition-delay: 115ms; }
 
-    @media (forced-colors: active) {
+    @media (forced-colors: active), (prefers-reduced-motion: reduce) {
       &,
       &::before { transition: none; }
     }
