@@ -10,9 +10,10 @@ import {appAddress} from '@__test_support/address';
 import {homePage} from '@pages/Home/__test_support/home';
 import {ErrorBoundary as DemosLayoutBoundary, Room as DemosLayout} from '@pages/Demos/route';
 import {ErrorBoundary as PracticeBoundary} from '@pages/Practice/route';
-import {environment} from '@transport';
+import {Environment, environment} from '@transport';
 import {SiteProviders} from '../../SiteProviders';
 import {FallbackPage} from '../../root';
+import {siteHolding} from '../../routes';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -107,6 +108,25 @@ describe('page error boundaries', () => {
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('Practice Structure');
+  });
+
+  test('a crash in the frame around every page still says the room is closed, under the site’s own name, with the way home', async () => {
+    const feedbackThatCrashes: Environment = {
+      ...environment,
+      get feedbackToken(): string {
+        throw new Error('boom');
+      }
+    };
+    render(
+      <SiteProviders environment={feedbackThatCrashes}>
+        <RouterProvider router={createMemoryRouter([siteHolding([])])}/>
+      </SiteProviders>,
+      {onCaughtError: () => undefined}
+    );
+
+    expect(await site.roomSays('This room is closed.')).toBeVisible();
+    expect(site.pageTitle()).toHaveTextContent('Chosen Picachu');
+    expect(site.frontDoor()).toHaveAttribute('href', Paths.home);
   });
 
   test('a crash no page catches is reported and announced', async () => {
