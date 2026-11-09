@@ -26,5 +26,10 @@ export const recipeFolds = {
     return story;
   },
   reveals: (root: HTMLElement): HTMLElement[] => within(root).getAllByRole('group', {name: 'how I built it'}),
+  revealed: async (step: HTMLElement): Promise<HTMLElement> => {
+    const reveal = within(step).getByRole('group', {name: 'how I built it'});
+    await userEvent.click(within(reveal).getByText('how I built it'));
+    return reveal;
+  },
   opened: (details: readonly HTMLElement[]): HTMLElement[] => details.filter(fold => fold.hasAttribute('open'))
 };

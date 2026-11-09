@@ -1,4 +1,4 @@
-import {render} from '@testing-library/react';
+import {render, within} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demoPage} from '@pages/Demos/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
@@ -148,6 +148,44 @@ describe('the drag sort recipe', () => {
     expect(column).toHaveAttribute('open');
     expect(row).toHaveAttribute('open');
     expect(demoPage.urlSearch()).toHaveTextContent('sort=column%2Crow');
+  });
+
+  test('at the lazy pace, carrying the real thing with motion shows the lazy build’s column', async () => {
+    render(<TestApp at="/?pace=lazy&origin=hide&motion=animated"><Recipe/></TestApp>);
+    const recipe = await tablesTab().recipe('drag sort');
+    await recipeFolds.press(recipe, 'The trader can sort by column');
+
+    const carry = await recipeFolds.revealed(recipeFolds.stepHeaded(recipe, 'Carry the real thing'));
+    const settle = await recipeFolds.revealed(recipeFolds.stepHeaded(recipe, 'Let the column settle'));
+
+    expect(within(carry).getByRole('link', {name: 'LazyTable/DraggableColumn.tsx on GitHub'})).toBeInTheDocument();
+    expect(within(settle).getByRole('link', {name: 'LazyTable/DraggableColumn.tsx on GitHub'})).toBeInTheDocument();
+  });
+
+  test('at the lazy pace in plain HTML, the drag steps show the lazy build', async () => {
+    render(<TestApp at="/?pace=lazy&world=vanilla"><Recipe/></TestApp>);
+    const recipe = await tablesTab().recipe('drag sort');
+    await recipeFolds.press(recipe, 'The trader can sort by column');
+    await recipeFolds.press(recipe, 'The trader can sort by row');
+
+    const release = await recipeFolds.revealed(recipeFolds.stepHeaded(recipe, 'Hold still, dispatch on release'));
+    const vertical = await recipeFolds.revealed(recipeFolds.stepHeaded(recipe, 'Turn the carry vertical'));
+
+    expect(within(release).getByRole('link', {name: 'Frame/builds/Lazy.ts on GitHub'})).toBeInTheDocument();
+    expect(within(vertical).getByRole('link', {name: 'Frame/builds/Lazy.ts on GitHub'})).toBeInTheDocument();
+  });
+
+  test('on the keyboard track at the lazy pace, the arrow steps show the lazy build', async () => {
+    render(<TestApp at="/?pace=lazy&track=keyboard"><Recipe/></TestApp>);
+    const recipe = await tablesTab().recipe('drag sort');
+    await recipeFolds.press(recipe, 'The trader can sort by column');
+    await recipeFolds.press(recipe, 'The trader can sort by row');
+
+    const slide = await recipeFolds.revealed(recipeFolds.stepHeaded(recipe, 'Both parties slide'));
+    const vertical = await recipeFolds.revealed(recipeFolds.stepHeaded(recipe, 'Turn the arrows vertical'));
+
+    expect(within(slide).getByRole('link', {name: 'LazyTable/DraggableColumn.tsx on GitHub'})).toBeInTheDocument();
+    expect(within(vertical).getByRole('link', {name: 'LazyTable/RowHeader.tsx on GitHub'})).toBeInTheDocument();
   });
 
   test('the sort tutorial stands on both tracks in the react world', async () => {
