@@ -13,6 +13,7 @@ import {ErrorBoundary as PracticeBoundary} from '@pages/Practice/route';
 import {Environment, environment} from '@transport';
 import {SiteProviders} from '../../SiteProviders';
 import {FallbackPage} from '@page';
+import {Room as NoRoomPage} from '@pages/NoRoom/route';
 import {siteHolding} from '../../routes';
 
 describe('page error boundaries', () => {
@@ -205,6 +206,21 @@ describe('page error boundaries', () => {
 
     await site.roomSays('This room is closed.');
     expect(site.announced('This room is closed.')).toBeInTheDocument();
+  });
+
+  test('announces a second unknown address when the reader goes straight to it from another', async () => {
+    render(
+      <TestApp at="/nowhere/">
+        <Route path="*" element={<NoRoomPage/>}/>
+      </TestApp>
+    );
+    await site.roomSays('There is no room at this address.');
+    await site.dismissAnnouncement('There is no room at this address.');
+
+    await site.followRail('Record');
+
+    await waitFor(() => expect(site.railLink('Record')).toHaveAttribute('aria-current', 'page'));
+    expect(site.announced('There is no room at this address.')).toBeInTheDocument();
   });
 
   test('an address the site does not know says so, inside the site', async () => {
