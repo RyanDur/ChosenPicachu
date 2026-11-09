@@ -32,7 +32,7 @@ const axisFact: Record<Axis, ReactNode> = {
     the <code className="monospaced">grid-template-rows</code> rule once for the two vertical stacks.</>
 };
 
-const gapFact: Record<Stack, string> = {
+const marginFact: Record<Stack, string> = {
   down: 'The gap is a margin below every banner but the bottom one, the last child when the stack grows downward. The margin is on the message, inside the track, so it opens as the track opens. The same rule carries the upward stack’s selector, where the bottom banner is the first child.',
   up: 'The gap is a margin below every banner but the bottom one, the first child when the stack grows upward. The margin is on the message, inside the track, so it opens as the track opens. The same rule carries the downward stack’s selector, where the bottom banner is the last child.',
   right: 'The gap is a margin to the right of every banner but the one at the right, the last child when the stack grows rightward. The margin is on the message, inside the track, so it opens as the track opens. The same rule carries the leftward stack’s selector, where the banner at the right is the first child.',
@@ -55,7 +55,7 @@ const axisSelector: Record<Axis, string> = {
   sideways: '&:where(.stack-left, .stack-right)'
 };
 
-const ownedGap: Record<Axis, string> = {
+const ownedMargin: Record<Axis, string> = {
   vertical: '&:where(.stack-down) .trouble:where(:not(:last-child)) .news,',
   sideways: '&:where(.stack-right) .trouble:where(:not(:last-child)) .news,'
 };
@@ -101,7 +101,7 @@ export const MultipleRecipe: FC = () => {
             starting style sets the track to 0fr and the banner’s own rule sets it to 1fr, so the transition opens the
             gap over 0.3 seconds.</Says>
           <Says>{axisFact[axisOf(stack)]}</Says>
-          <Says>{gapFact[stack]}</Says>
+          <Says>{marginFact[stack]}</Says>
           <Says>A track closes only as far as what is inside it can shrink. The paragraph that fills the track,{' '}
             <code className="monospaced">news-item</code>, has a minimum size of 0 in both directions. Its display is
             flow-root, which keeps the message’s margin inside it. A margin that passed out of the paragraph would sit
@@ -122,7 +122,7 @@ export const MultipleRecipe: FC = () => {
             ...carve.span(timingCss, '--slide-curve:', '--fold-duration:'), lines.blank,
             ...carve.unit(bannersCss, '.trouble {'), lines.blank,
             ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), lines.blank,
-            ...carve.span(bannersCss, ownedGap[axisOf(stack)], '}'), lines.blank,
+            ...carve.span(bannersCss, ownedMargin[axisOf(stack)], '}'), lines.blank,
             ...carve.unit(bannersCss, '.news-item {')
           ]}/>
         </Codes>
