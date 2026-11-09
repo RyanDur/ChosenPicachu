@@ -1,15 +1,8 @@
 import {Trade} from '../../Market';
-
-export type SideTotals = {
-  bought: number;
-  sold: number;
-};
+import {SideTotals, tally} from '../tally';
 
 const sideTotals = (trades: readonly Trade[]): SideTotals =>
-  trades.reduce((totals, trade) => ({
-    bought: totals.bought + (trade.takerSide === 'buy' ? trade.size : 0),
-    sold: totals.sold + (trade.takerSide === 'buy' ? 0 : trade.size)
-  }), {bought: 0, sold: 0});
+  trades.reduce(tally.add, {bought: 0, sold: 0});
 
 export type Slice = {
   share: number;

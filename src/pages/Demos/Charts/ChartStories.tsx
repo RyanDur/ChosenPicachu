@@ -23,6 +23,7 @@ import pressureCss from './Pressure/Pressure.css?sample';
 import pieSource from './Pie/pie-shapes.ts?sample';
 import pieComponent from './Pie/Pie.tsx?sample';
 import pieCss from './Pie/Pie.css?sample';
+import tallySource from './tally.ts?sample';
 import drawingCss from '../../../styles/drawing.css?sample';
 import moneySource from '@pages/Demos/Market/money.ts?sample';
 import bucketPlacesSource from './bucket-places.ts?sample';
@@ -347,6 +348,8 @@ const PressureStory: FC = () =>
             ...carve.unit(coinbaseSource, 'const tradeFields'), lines.blank,
             ...carve.unit(coinbaseSource, 'const MatchDecoder'), lines.blank,
             ...carve.unit(coinbaseSource, 'const takerSideOf'), lines.blank,
+            ...carve.unit(tallySource, 'const add'), lines.blank,
+            ...carve.unit(tallySource, 'const tally'), lines.blank,
             ...carve.unit(pressureShapesSource, 'const fold'), lines.blank,
             ...carve.unit(candleSeriesSource, 'const bucketOpening'), lines.blank,
             ...carve.unit(pressureShapesSource, 'const openedBy'), lines.blank,
@@ -429,13 +432,16 @@ const PieStory: FC = () =>
     <Steps>
       <Step title="Add up each side">
         <Words want="One number for each side. The pie asks nothing about time.">
-          <Says><code className="monospaced">sideTotals</code> goes through every trade and adds its size to one of two
-            sums, bought or sold, by its <code className="monospaced">takerSide</code>, which says whether a buyer or
-            a seller took the trade. There are no minutes and no buckets here: the pie is a pair of totals.</Says>
+          <Says><code className="monospaced">sideTotals</code> hands every trade
+            to <code className="monospaced">tally.add</code>, which puts the trade’s size into one of two sums, bought
+            or sold, by its <code className="monospaced">takerSide</code>: whether a buyer or a seller took the
+            trade. There are no minutes and no buckets here: the pie is a pair of totals.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(coinbaseSource, 'const takerSideOf'), lines.blank,
+            ...carve.unit(tallySource, 'const add'), lines.blank,
+            ...carve.unit(tallySource, 'const tally'), lines.blank,
             ...carve.unit(pieSource, 'const sideTotals =')
           ]}/>
         </Codes>

@@ -1,6 +1,7 @@
 import {empty, maybe} from '@ryandur/sand';
 import {candles, Trade} from '../../Market';
 import {bucketPlaces} from '../bucket-places';
+import {tally} from '../tally';
 
 export type Pressure = {
   openedAt: number;
@@ -17,11 +18,7 @@ export type PressureShape = {
   soldHeight: number;
 };
 
-const fold = (pressure: Pressure, trade: Trade): Pressure => ({
-  ...pressure,
-  bought: pressure.bought + (trade.takerSide === 'buy' ? trade.size : 0),
-  sold: pressure.sold + (trade.takerSide === 'buy' ? 0 : trade.size)
-});
+const fold = (pressure: Pressure, trade: Trade): Pressure => ({...pressure, ...tally.add(pressure, trade)});
 
 const openedBy = (trade: Trade, bucketMilliseconds: number): Pressure =>
   fold({openedAt: candles.bucketOpening(trade.tradedAt, bucketMilliseconds), bought: 0, sold: 0}, trade);
