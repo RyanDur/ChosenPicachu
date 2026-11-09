@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import {} from '../../Recipe/Drawing';
 import './Diagrams.css';
 
 export const WhatEachPromises: FC = () =>
