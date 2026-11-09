@@ -16,7 +16,7 @@ const PaceRow = () => {
   return <ul>
     <DialRow label="pace"
       name="pace"
-      options={[{display: 'Eager', value: 'eager'}, {display: 'Lazy', value: 'lazy'}]}
+      choices={[{words: 'Eager', value: 'eager'}, {words: 'Lazy', value: 'lazy'}]}
       chosen={pace}
       onChosen={setPace}
       reading={readings[pace]}/>

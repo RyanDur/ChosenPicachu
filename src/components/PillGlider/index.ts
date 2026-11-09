@@ -1,1 +1,1 @@
-export {PillGlider} from './PillGlider';
+export {type Choice, PillGlider} from './PillGlider';

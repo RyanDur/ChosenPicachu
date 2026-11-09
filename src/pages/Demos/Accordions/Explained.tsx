@@ -112,8 +112,8 @@ const gridRowAccordions: Record<FoldType, FC<AccordionProps>> = {
   inclusive: InclusiveCheckboxToggleAccordion,
   exclusive: ExclusiveRadioToggleAccordion
 };
-const foldTypes = [{display: 'Inclusive', value: 'inclusive'}, {display: 'Exclusive', value: 'exclusive'}] as const;
-const foldMotions = [{display: 'Reveal', value: 'reveal'}, {display: 'Drawer', value: 'drawer'}, {display: 'Static', value: 'static'}] as const;
+const foldTypes = [{words: 'Inclusive', value: 'inclusive'}, {words: 'Exclusive', value: 'exclusive'}] as const;
+const foldMotions = [{words: 'Reveal', value: 'reveal'}, {words: 'Drawer', value: 'drawer'}, {words: 'Static', value: 'static'}] as const;
 const typeReadings: Record<FoldType, string> = {
   inclusive: 'Any number of folds can be open at once.',
   exclusive: 'Opening one fold closes the others.'
@@ -200,8 +200,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         sets every element’s defaults, and it gives every details a slide, which only Chromium shows today. The first
         accordion turns that slide off, so a fold opens at once in every browser and you see what HTML alone does.</p>
       <DialGroup>
-        <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={chooseType} reading={typeReadings[type]}/>
-        <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={chooseMotion} reading={<>
+        <DialRow label="fold type" name="fold-type" choices={foldTypes} chosen={type} onChosen={chooseType} reading={typeReadings[type]}/>
+        <DialRow label="fold motion" name="fold-motion" choices={foldMotions} chosen={motion} onChosen={chooseMotion} reading={<>
           <span className="when-motion-allowed">{motionReadings[motion]}</span>{' '}
           <span className="when-less-motion">If your system asks for less motion, every fold here opens at once,
             whichever you choose.</span>

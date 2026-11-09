@@ -30,27 +30,27 @@ export const Controls: FC<PropsWithChildren<{copy: Copy}>> = ({copy, children}) 
       <DialGroup>
         <DialRow label="pace"
           name={`${copy.kind}-pace`}
-          options={[
-            {display: 'Eager', value: 'eager'},
-            {display: 'Lazy', value: 'lazy'}
+          choices={[
+            {words: 'Eager', value: 'eager'},
+            {words: 'Lazy', value: 'lazy'}
           ]}
           chosen={pace}
           onChosen={next => change({pace: next})}
           reading={copy.pace[pace]}/>
         <DialRow label="origin"
           name={`${copy.kind}-origin`}
-          options={[
-            {display: 'Keep', value: 'keep'},
-            {display: 'Hide', value: 'hide'}
+          choices={[
+            {words: 'Keep', value: 'keep'},
+            {words: 'Hide', value: 'hide'}
           ]}
           chosen={origin}
           onChosen={next => change({origin: next})}
           reading={copy.origin[origin]}/>
         <DialRow label="motion"
           name={`${copy.kind}-motion`}
-          options={[
-            {display: 'Animate', value: 'animated'},
-            {display: 'Static', value: 'static'}
+          choices={[
+            {words: 'Animate', value: 'animated'},
+            {words: 'Static', value: 'static'}
           ]}
           chosen={motion}
           onChosen={next => change({motion: next})}
