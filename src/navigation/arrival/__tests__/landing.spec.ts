@@ -34,3 +34,22 @@ describe('the landing on a fragment', () => {
     expect(after(restless)).toEqual('land');
   });
 });
+
+describe('the search for a target the page has not drawn yet', () => {
+  const lookedFor = (frames: number): Watch | 'given up' => Array.from({length: frames})
+    .reduce<Watch | 'given up'>(watch => watch === 'given up' ? watch : landing.lookedFor(watch), landing.watching);
+
+  test('should spend none of the frames the landing waits for the page to hold still', () => {
+    const looked = lookedFor(300);
+    const restless = Array.from({length: 120}, (_, frame) => at(4530, 1000 + frame));
+
+    expect(looked).not.toEqual('given up');
+    expect(restless.reduce<Watch | 'land'>((watch, frame) =>
+      watch === 'land' ? watch : landing.watched(watch, frame), looked === 'given up' ? landing.watching : looked)).not.toEqual('land');
+  });
+
+  test('should give up after 600 frames with no target drawn', () => {
+    expect(lookedFor(600)).not.toEqual('given up');
+    expect(lookedFor(601)).toEqual('given up');
+  });
+});

@@ -1,18 +1,22 @@
-import {FC, startTransition} from 'react';
+import {FC, startTransition, useEffect} from 'react';
 import {createRoot, hydrateRoot} from 'react-dom/client';
 import {DataRouter, RouterProvider} from 'react-router';
 import {Site} from './Site';
 
-const RoutedSite: FC<{router: DataRouter}> = ({router}) =>
-  <Site><RouterProvider router={router} onError={error => console.error(error)}/></Site>;
+type RoutedSiteProps = {router: DataRouter; onDrawn: () => void};
+
+const RoutedSite: FC<RoutedSiteProps> = ({router, onDrawn}) => {
+  useEffect(onDrawn, [onDrawn]);
+  return <Site><RouterProvider router={router} onError={error => console.error(error)}/></Site>;
+};
 
 export const hydrateTheSite = {
-  overTheBuiltPage: (router: DataRouter): void => {
+  overTheBuiltPage: (router: DataRouter, onDrawn: () => void): void => {
     startTransition(() => {
-      hydrateRoot(document, <RoutedSite router={router}/>);
+      hydrateRoot(document, <RoutedSite router={router} onDrawn={onDrawn}/>);
     });
   },
-  afresh: (router: DataRouter): void => {
-    createRoot(document).render(<RoutedSite router={router}/>);
+  afresh: (router: DataRouter, onDrawn: () => void): void => {
+    createRoot(document).render(<RoutedSite router={router} onDrawn={onDrawn}/>);
   }
 };

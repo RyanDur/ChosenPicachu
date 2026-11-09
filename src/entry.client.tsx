@@ -27,7 +27,6 @@ foldAll<void, void, Result.Async<void, RoomNotLoaded>>(
   loaded()
 ).onSuccess(() => {
   const router = createBrowserRouter([site], {basename, hydrationData: {}});
-  hydrateTheSite.overTheBuiltPage(router);
-  arrival.follow(router);
+  hydrateTheSite.overTheBuiltPage(router, () => arrival.follow(router));
 })
   .onFailure(({address, thrown}) => console.error(`the room at ${address} did not load`, thrown));
