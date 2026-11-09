@@ -99,7 +99,7 @@ export const exchange = (environment: Exchange, onTrouble: Trouble): MarketMiddl
         asked.clear();
         break;
       case 'candlesAsked':
-        asked.get(action.period)?.();
+        maybe(asked.get(action.period)).map(close => close());
         asked.set(action.period, candlesFor(market, action.period, api.dispatch, onTrouble));
         break;
       default:
