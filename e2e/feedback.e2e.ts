@@ -47,7 +47,7 @@ test('Cancel closes Feedback and gives focus back to it', ({page}) => closesFeed
 
 test('a click on the veil closes Feedback and gives focus back to it', ({page}) => closesFeedbackGivingFocusBack(page, () => page.mouse.click(5, 5)));
 
-test('Back closes Feedback', async ({page}) => {
+test('Back closes Feedback and gives focus back to it', async ({page}) => {
   await github(page);
   const feedback = feedbackOn(page);
   const site = siteFrame(page);
@@ -62,6 +62,7 @@ test('Back closes Feedback', async ({page}) => {
 
   await expect(page).toHaveURL(/demos\/accordions\/$/);
   await expect(feedback.dialog).toBeHidden();
+  await expect(feedback.open).toBeFocused();
 });
 
 test('a click inside the dialog’s edge keeps Feedback open', async ({page}) => {
