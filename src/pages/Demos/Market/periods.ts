@@ -11,19 +11,19 @@ const lengths: Record<Period, Lengths> = {
   [Period.week]: {granularitySeconds: 21600, spanMilliseconds: 604800000}
 };
 
-const each = (read: (period: Lengths) => number): Record<Period, number> => ({
-  [Period.hour]: read(lengths[Period.hour]),
-  [Period.day]: read(lengths[Period.day]),
-  [Period.week]: read(lengths[Period.week])
+const perPeriod = (valueOf: (lengths: Lengths) => number): Record<Period, number> => ({
+  [Period.hour]: valueOf(lengths[Period.hour]),
+  [Period.day]: valueOf(lengths[Period.day]),
+  [Period.week]: valueOf(lengths[Period.week])
 });
 
-const granularitySeconds = each(period => period.granularitySeconds);
+const granularitySeconds = perPeriod(lengths => lengths.granularitySeconds);
 
-const spanMilliseconds = each(period => period.spanMilliseconds);
+const spanMilliseconds = perPeriod(lengths => lengths.spanMilliseconds);
 
-const bucketMilliseconds = each(period => period.granularitySeconds * 1000);
+const bucketMilliseconds = perPeriod(lengths => lengths.granularitySeconds * 1000);
 
-const candleCap = each(period => period.spanMilliseconds / (period.granularitySeconds * 1000));
+const candleCap = perPeriod(lengths => lengths.spanMilliseconds / (lengths.granularitySeconds * 1000));
 
 type Periods = {
   granularitySeconds: Record<Period, number>;
