@@ -5,7 +5,7 @@ export type Word =
   | 'aloft' | 'survey' | 'drift'
   | 'strike' | 'settle' | 'landing' | 'seats' | 'share' | 'travel' | 'reconcile'
   | 'sort' | 'standing'
-  | 'store' | 'slice' | 'action' | 'reducer' | 'selector' | 'middleware'
+  | 'store' | 'slice' | 'action' | 'reducer' | 'read' | 'middleware'
   | 'provider' | 'hook' | 'effect' | 'hydrate' | 'ledger';
 
 const definitions: Record<Word, ReactNode> = {
@@ -25,7 +25,7 @@ const definitions: Record<Word, ReactNode> = {
   slice: 'a reducer together with the state it starts from. A store with more than one concern joins several slices, each under its own key and each seeing only its own part',
   action: 'a plain record of something that happened: a type that names it, and the facts about it. dispatch passes it to the reducer',
   reducer: 'the function that takes the state as it was and an action, and returns the state as it now is. It never changes the old state',
-  selector: 'a named function that takes the state and returns one answer from it. Its name says what is being asked',
+  read: 'a named function that takes the state and returns one answer from it. Its name says what is being asked. Redux and stores like it call this a selector.',
   middleware: 'code that sits between dispatch and the reducer. It sees every action first, passes it on or not, and can dispatch actions of its own',
   provider: 'a React component that makes one value, here the store’s state and its dispatch, available to every component inside it',
   hook: 'a function, named use and something, that a React component calls to get state or behavior from React',

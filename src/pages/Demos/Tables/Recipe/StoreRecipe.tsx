@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Steps, Story, Tell, Words, lines, carve} from '../../Recipe';
+import {carve, Codes, lines, Reveal, Says, Snippet, Step, Steps, Story, Tell, Words} from '../../Recipe';
 import type {World} from '../../Controls';
 import {Term} from './Term';
 import stateSource from '@components/DragSortableTable/model/table-state.ts?sample';
@@ -131,19 +131,19 @@ const ActionsAreData: FC = () =>
     </Reveal>
   </Step>;
 
-const SelectorsAnswer: FC<{world: World}> = ({world}) =>
-  <Step title="Selectors answer questions">
+const NamedReads: FC<{world: World}> = ({world}) =>
+  <Step title="Each question has a named read">
     <Words want="A component should ask for what it means, not search the state to find it.">
-      <Says>Every read is a named <Term word="selector">selector</Term>: columnNamed, positionOfRow, columnTravels,
-        neighbourOfColumn. The name carries the question, and the state’s shape is known in one
+      <Says>Each question is a named <Term word="read">read</Term>: columnNamed, positionOfRow, columnTravels,
+        neighborOfColumn. The name carries the question, and the state’s shape is known in one
         file.</Says>
     </Words>
     <Reveal>
       {world === 'react'
         ? <>
-          <Says>A header asks useTableSelector with a selector and gets the answer for the current state. When the
+          <Says>A header passes a read to useTableRead and gets the answer for the current state. When the
             state changes, it asks again.</Says>
-          <Says>Anything a component would derive from state is a selector instead, so the component holds no
+          <Says>Anything a component would derive from state is a read instead, so the component holds no
             arithmetic over the store.</Says>
         </>
         : <Says>The table reads the order and the standing from the page’s store, through the two functions it was
@@ -275,8 +275,8 @@ export const StoreStory: FC<{world: World}> = ({world}) =>
       code.</Tell>
     <Tell>One value holds the trades, the candles the charts ask for, and the
       arrangement. <Term word="action">Actions</Term> are
-      records of what happened, one <Term word="reducer">reducer</Term> reads
-      them, <Term word="selector">selectors</Term> are named,
+      records of what happened, one <Term word="reducer">reducer</Term> takes
+      them in, <Term word="read">reads</Term> are named,
       and the exchange comes in as <Term word="middleware">middleware</Term>.</Tell>
     <Tell>Both builds call the table’s store the hand. It holds the drag and the widths once measured. The React
       build keeps the marks a move leaves in it too; the vanilla build writes those marks onto the cells as classes.
@@ -286,7 +286,7 @@ export const StoreStory: FC<{world: World}> = ({world}) =>
     <Steps>
       <OneState world={world}/>
       <ActionsAreData/>
-      <SelectorsAnswer world={world}/>
+      <NamedReads world={world}/>
       <ExchangeIsMiddleware world={world}/>
       <WhoSubscribes world={world}/>
     </Steps>
