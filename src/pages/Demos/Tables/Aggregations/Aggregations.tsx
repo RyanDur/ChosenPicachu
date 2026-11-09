@@ -4,16 +4,16 @@ import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
 import {Dials, useControls} from '../../Controls';
 import {prefetch, TableFrame} from '../Frame';
-import {marketSelectors} from '../../Market';
-import {useMarketDispatch, useMarketSelector} from '../../Market/Trading';
+import {marketReads} from '../../Market';
+import {useMarketDispatch, useMarketRead} from '../../Market/Trading';
 import {arrangements} from '@components/DragSortableTable/model';
 import '../Aggregations.css';
 
 const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
   const Table = pace === 'eager' ? EagerTable : LazyTable;
   const dispatch = useMarketDispatch();
-  const columns = useMarketSelector(marketSelectors.columns);
-  const rows = useMarketSelector(marketSelectors.rows);
+  const columns = useMarketRead(marketReads.columns);
+  const rows = useMarketRead(marketReads.rows);
   return <Table caption="Live totals by lookback" origin={origin} motion={motion} columns={columns} rows={rows}
     onColumnMoved={({column, to}) => dispatch(arrangements.columnMoved(column, to))}
     onSorted={({column, direction}) => dispatch(arrangements.sorted(column, direction))}

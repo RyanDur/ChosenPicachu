@@ -6,8 +6,8 @@ import {Paths} from '@navigation';
 import {ChartKind, chartKinds} from './chart-kinds';
 import {feedStatus} from './feed-status';
 import {classNames} from '@components';
-import {marketSelectors} from '../Market';
-import {useMarketSelector} from '../Market/Trading';
+import {marketReads} from '../Market';
+import {useMarketRead} from '../Market/Trading';
 import {useDesk} from './useDesk';
 import {desk} from './desk';
 import {useChartTravel} from './useChartTravel';
@@ -38,8 +38,8 @@ type Props = {
 };
 
 export const Workspace: FC<Props> = ({product}) => {
-  const trades = useMarketSelector(marketSelectors.liveTrades);
-  const status = useMarketSelector(marketSelectors.feedStatus);
+  const trades = useMarketRead(marketReads.liveTrades);
+  const status = useMarketRead(marketReads.feedStatus);
   const {seats, absentKinds, add, remove, reorder, choosePeriod} = useDesk();
   const [report, setReport] = useState('');
   const nameAt = (at: number): string => chartNames[seats[at].kind];

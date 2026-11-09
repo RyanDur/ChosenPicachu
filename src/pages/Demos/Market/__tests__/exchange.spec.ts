@@ -6,7 +6,7 @@ import {tradeFrame} from '@pages/Demos/__test_support/feed';
 import {Period} from '../Period';
 import {periodHistory} from '../period-history';
 import {FeedTrouble} from '../exchange';
-import {exchange, marketActions, marketSelectors, marketStore} from '..';
+import {exchange, marketActions, marketReads, marketStore} from '..';
 
 const candles = `${HISTORY}/products/BTC-USD/candles`;
 const gate = (): {opened: Promise<void>; open: () => void} => {
@@ -37,12 +37,12 @@ describe('the exchange as middleware', () => {
       tradeHistory: '',
       tradeProduct: 'BTC-USD'
     }, () => undefined));
-    expect(marketSelectors.feedStatus(store.state)).toBe('connecting');
+    expect(marketReads.feedStatus(store.state)).toBe('connecting');
 
     store.dispatch(marketActions.feedRequested());
 
-    await vi.waitFor(() => expect(marketSelectors.feedStatus(store.state)).toBe('streaming'));
-    await vi.waitFor(() => expect(marketSelectors.liveTrades(store.state)).toHaveLength(1));
+    await vi.waitFor(() => expect(marketReads.feedStatus(store.state)).toBe('streaming'));
+    await vi.waitFor(() => expect(marketReads.liveTrades(store.state)).toHaveLength(1));
   });
 
   it('hangs up when the feed is released', async () => {
@@ -54,7 +54,7 @@ describe('the exchange as middleware', () => {
       tradeProduct: 'BTC-USD'
     }, () => undefined));
     store.dispatch(marketActions.feedRequested());
-    await vi.waitFor(() => expect(marketSelectors.feedStatus(store.state)).toBe('streaming'));
+    await vi.waitFor(() => expect(marketReads.feedStatus(store.state)).toBe('streaming'));
 
     store.dispatch(marketActions.feedReleased());
 
@@ -70,17 +70,17 @@ describe('the exchange as middleware', () => {
 
     store.dispatch({type: 'feedOpened'});
 
-    expect(marketSelectors.feedStatus(store.state)).toBe('streaming');
+    expect(marketReads.feedStatus(store.state)).toBe('streaming');
   });
 
   it('asking for a period fetches its candles into the store', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json([[1700000000, 1, 3, 2, 2.5, 1]])));
     const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, () => undefined));
-    expect(marketSelectors.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'loading'});
+    expect(marketReads.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'loading'});
 
     store.dispatch(marketActions.candlesAsked(Period.hour));
 
-    await vi.waitFor(() => expect(marketSelectors.periodHistoryOf(Period.hour)(store.state)).toEqual({
+    await vi.waitFor(() => expect(marketReads.periodHistoryOf(Period.hour)(store.state)).toEqual({
       state: 'arrived',
       candles: [{openedAt: 1700000000000, low: 1, high: 3, open: 2, close: 2.5, volume: 1}]
     }));
@@ -93,7 +93,7 @@ describe('the exchange as middleware', () => {
 
     store.dispatch(marketActions.candlesAsked(Period.day));
 
-    await vi.waitFor(() => expect(marketSelectors.periodHistoryOf(Period.day)(store.state)).toEqual({state: 'unavailable'}));
+    await vi.waitFor(() => expect(marketReads.periodHistoryOf(Period.day)(store.state)).toEqual({state: 'unavailable'}));
     expect(told.map(({type}) => type)).toEqual(['candlesRefused']);
   });
 
@@ -103,7 +103,7 @@ describe('the exchange as middleware', () => {
 
     store.dispatch(marketActions.candlesAsked(Period.hour));
 
-    expect(marketSelectors.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'unavailable'});
+    expect(marketReads.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'unavailable'});
     expect(told).toEqual([]);
   });
 
@@ -130,7 +130,7 @@ describe('the exchange as middleware', () => {
     answer.open();
     await vi.waitFor(() => expect(answered).toBe(true));
 
-    expect(marketSelectors.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'loading'});
+    expect(marketReads.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'loading'});
     expect(told).toEqual([]);
   });
 
@@ -154,7 +154,7 @@ describe('the exchange as middleware', () => {
     answers[0].open();
     await vi.waitFor(() => expect(answered).toEqual([2, 1]));
 
-    const shown = periodHistory.candlesOf(marketSelectors.periodHistoryOf(Period.hour)(store.state));
+    const shown = periodHistory.candlesOf(marketReads.periodHistoryOf(Period.hour)(store.state));
     expect(shown.map(({openedAt}) => openedAt)).toEqual([1700000002000]);
   });
 });

@@ -1,3 +1,3 @@
 export {Trading} from './Trading';
-export {useMarketSelector} from './useMarketSelector';
+export {useMarketRead} from './useMarketRead';
 export {useMarketDispatch} from './useMarketDispatch';
