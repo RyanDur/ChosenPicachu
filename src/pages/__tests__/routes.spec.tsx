@@ -217,6 +217,16 @@ describe('page error boundaries', () => {
     expect(site.announced('There is no room at this address.')).toBeInTheDocument();
   });
 
+  test('takes the missing room\'s banner down once the reader leaves the room by the rail', async () => {
+    render(<TestApp at="/nowhere/"/>);
+    await site.roomSays('There is no room at this address.');
+
+    await site.followRail('Home');
+
+    await waitFor(() => expect(site.railLink('Home')).toHaveAttribute('aria-current', 'page'));
+    expect(site.announcedIfAny('There is no room at this address.')).not.toBeInTheDocument();
+  });
+
   test('the old address of the game that was never built is no room, with Games still current', async () => {
     render(<TestApp at={`${Paths.games}colorGame`}/>);
 
