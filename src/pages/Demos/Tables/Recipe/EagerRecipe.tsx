@@ -1,7 +1,6 @@
 import {FC} from 'react';
-import {Motion, Origin} from '../../Controls';
+import {Motion, Origin, useControls} from '../../Controls';
 import {Steps, Story} from '../../Recipe';
-import type {Track} from '../../Controls';
 import {
   AccessTrack,
   AgainstTheStream,
@@ -38,66 +37,69 @@ import rowSource from '@components/DragSortableTable/RowHeader.tsx?sample';
 
 import cssSource from '@components/DragSortableTable/motion.css?sample';
 
-type Props = {track: Track; origin: Origin; motion: Motion};
+type Props = {origin: Origin; motion: Motion};
 
-export const EagerRecipe: FC<Props> = ({track, origin, motion}) => track === 'pointer'
-  ? <>
-    <Story param="sort" id="column"
-      can="The trader can sort by column"
-      soThat="the measures they compare sit beside each other">
-      <NamesInTheCode/>
-      <TwoRoads/>
-      <TheImplementation react="Builds/EagerTable" vanilla="Frame/builds/Eager.ts"/>
-      <TheWholeBuild tableSource={tableSource} buildSource={buildSource}/>
-      <AgainstTheStream/>
-      <OwnedPixels/>
-      <Promises pace="eager" origin={origin} motion={motion}/>
-      <Steps>
-        <CssShare/>
-        <OrderInState tableSource={tableSource} buildSource={buildSource}/>
-        <ListenersOnce buildSource={buildSource}/>
-        <LiftOnce headerSource={headerSource} buildSource={buildSource}/>
-        <DragSurface headerSource={headerSource}/>
-        <DeadZone/>
-        <EagerPace headerSource={headerSource} buildSource={buildSource}/>
-        {origin === 'hide'
-          ? <HideOrigin headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
-          : <KeepOrigin cssSource={cssSource}/>}
-        {motion === 'animated'
-          ? <AnimatedMotion headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
-          : <StaticMotion cssSource={cssSource}/>}
-      </Steps>
-    </Story>
-    <Story param="sort" id="row"
-      can="The trader can sort by row"
-      soThat="the lookbacks they watch closest sit on top">
-      <TurnedVertical/>
-      <Steps>
-        <CarryVertical rowSource={rowSource} buildSource={buildSource}/>
-      </Steps>
-    </Story>
-  </>
-  : <>
-    <Story param="sort" id="column"
-      can="The trader can sort by column"
-      soThat="the measures they compare sit beside each other">
-      <NamesInTheCode/>
-      <AccessTrack/>
-      <TheImplementation react="Builds/EagerTable" vanilla="Frame/builds/Eager.ts"/>
-      <QuietDials/>
-      <Steps>
-        <FocusLands headerSource={headerSource}/>
-        <ArrowsSpeak headerSource={headerSource} buildSource={buildSource}/>
-        {motion === 'animated'
-          ? <WalkSlides headerSource={headerSource} buildSource={buildSource}/>
-          : <CutKey headerSource={headerSource} buildSource={buildSource}/>}
-      </Steps>
-    </Story>
-    <Story param="sort" id="row"
-      can="The trader can sort by row"
-      soThat="the lookbacks they watch closest sit on top">
-      <Steps>
-        <GripArrows rowSource={rowSource} buildSource={buildSource}/>
-      </Steps>
-    </Story>
-  </>;
+export const EagerRecipe: FC<Props> = ({origin, motion}) => {
+  const {track} = useControls();
+  return track === 'pointer'
+    ? <>
+      <Story param="sort" id="column"
+        can="The trader can sort by column"
+        soThat="the measures they compare sit beside each other">
+        <NamesInTheCode/>
+        <TwoRoads/>
+        <TheImplementation react="Builds/EagerTable" vanilla="Frame/builds/Eager.ts"/>
+        <TheWholeBuild tableSource={tableSource} buildSource={buildSource}/>
+        <AgainstTheStream/>
+        <OwnedPixels/>
+        <Promises pace="eager" origin={origin} motion={motion}/>
+        <Steps>
+          <CssShare/>
+          <OrderInState tableSource={tableSource} buildSource={buildSource}/>
+          <ListenersOnce buildSource={buildSource}/>
+          <LiftOnce headerSource={headerSource} buildSource={buildSource}/>
+          <DragSurface headerSource={headerSource}/>
+          <DeadZone/>
+          <EagerPace headerSource={headerSource} buildSource={buildSource}/>
+          {origin === 'hide'
+            ? <HideOrigin headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
+            : <KeepOrigin cssSource={cssSource}/>}
+          {motion === 'animated'
+            ? <AnimatedMotion headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
+            : <StaticMotion cssSource={cssSource}/>}
+        </Steps>
+      </Story>
+      <Story param="sort" id="row"
+        can="The trader can sort by row"
+        soThat="the lookbacks they watch closest sit on top">
+        <TurnedVertical/>
+        <Steps>
+          <CarryVertical rowSource={rowSource} buildSource={buildSource}/>
+        </Steps>
+      </Story>
+    </>
+    : <>
+      <Story param="sort" id="column"
+        can="The trader can sort by column"
+        soThat="the measures they compare sit beside each other">
+        <NamesInTheCode/>
+        <AccessTrack/>
+        <TheImplementation react="Builds/EagerTable" vanilla="Frame/builds/Eager.ts"/>
+        <QuietDials/>
+        <Steps>
+          <FocusLands headerSource={headerSource}/>
+          <ArrowsSpeak headerSource={headerSource} buildSource={buildSource}/>
+          {motion === 'animated'
+            ? <WalkSlides headerSource={headerSource} buildSource={buildSource}/>
+            : <CutKey headerSource={headerSource} buildSource={buildSource}/>}
+        </Steps>
+      </Story>
+      <Story param="sort" id="row"
+        can="The trader can sort by row"
+        soThat="the lookbacks they watch closest sit on top">
+        <Steps>
+          <GripArrows rowSource={rowSource} buildSource={buildSource}/>
+        </Steps>
+      </Story>
+    </>;
+};
