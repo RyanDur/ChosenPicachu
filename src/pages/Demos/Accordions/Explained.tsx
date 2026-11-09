@@ -842,9 +842,10 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         <li className="run">
           <p className="paragraph">When a reader asks for{' '}
             <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn>, every fold opens with no slide. The
-            reset has a reduced-motion block with three rules. The first uses the universal selector, *, which
-            picks every element and reaches their before and after too. It sets each transition’s
-            duration to zero, cuts each animation to 0.01 milliseconds, plays each animation once,
+            reset, the style sheet that sets every element’s defaults, has a reduced-motion block with three rules.
+            The first uses the universal selector, *, which picks every element and reaches their before and after
+            too. It sets each transition’s duration to zero, cuts each animation to 0.01 milliseconds, plays each
+            animation once,
             and turns smooth scrolling into a jump. The second names ::details-content, the part a
             details hides, which the universal selector cannot reach. The third sets view
             transitions, the browser’s moves from one page state to the next, to no animation at all.</p>
