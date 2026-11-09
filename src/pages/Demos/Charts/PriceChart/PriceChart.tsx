@@ -1,4 +1,3 @@
-import {Entry, Item, Menu} from '@components/Menu';
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode} from 'react';
 import {Maybe, maybe, notEmpty} from '@ryandur/sand';
@@ -8,6 +7,7 @@ import {Candle, LiveTradesState, money, Period, periodHistory, Trade} from '../.
 import {chartCaption} from '../chart-caption';
 import {usePeriodChart} from '../usePeriodChart';
 import {periodDisplay} from '../period-display';
+import {PeriodMenu} from '../PeriodMenu';
 import {sparkline, TimedPrice} from '../sparkline';
 import {Axes, axisRange} from '../Axes';
 import '../chart-card.css';
@@ -60,21 +60,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
     <h3 id={`${id}-heading`} className="off-screen">live trades</h3>
     <header className="chart-header">
       {actions}
-      <button type="button" className="period-toggle rounded-corners field borderless attentive focus-ringed caption reachable"
-        popoverTarget={`${id}-period`}>
-        <span className="off-screen">price period</span>{' '}{period}
-      </button>
-      <Menu id={`${id}-period`} tabIndex={-1} popover="auto" className="card rounded-corners lifted"
-        aria-label="price period by">
-        {Object.values(Period).map(option =>
-          <Entry key={option}>
-            <Item className="sub-title"
-              popoverTarget={`${id}-period`} popoverTargetAction="hide"
-              aria-current={option === period ? 'true' : undefined}
-              onClick={() => onPeriodChosen(option)}>{option}</Item>
-          </Entry>
-        )}
-      </Menu>
+      <PeriodMenu id={`${id}-period`} chart="price" period={period} onPeriodChosen={onPeriodChosen}/>
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={view.mBind(({series, high, low}) => axisRange.of(series.map(timed => timed.at), high, low))}

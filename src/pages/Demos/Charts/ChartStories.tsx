@@ -11,6 +11,7 @@ import sparklineSource from './sparkline.ts?sample';
 import periodSource from '@pages/Demos/Market/periods.ts?sample';
 import candlesHook from './usePeriodCandles.ts?sample';
 import priceSource from './PriceChart/PriceChart.tsx?sample';
+import periodMenuSource from './PeriodMenu.tsx?sample';
 import candlesSource from './Candles/Candles.tsx?sample';
 import candlesCss from './Candles/Candles.css?sample';
 import barSource from './Bar.tsx?sample';
@@ -118,8 +119,9 @@ const PriceStory: FC = () =>
             of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. They write a menu, an li,
             which is one item of a list, and a button.</Says>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
-            sheet’s rules pick out. Item gives its button the site’s shared classes that set its look; the menu’s look
-            is the page’s to choose, so the page passes Menu those classes, as the sample shows.</Says>
+            sheet’s rules pick out. Item gives its button the site’s shared classes that set its look. Menu leaves its
+            own look to whatever draws it, so <code className="monospaced">PeriodMenu</code>, which the price and candle
+            charts share, passes Menu those classes, as the sample shows.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -130,7 +132,7 @@ const PriceStory: FC = () =>
             ...carve.unit(periodSource, 'const candleCap')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...carve.span(priceSource, '{actions}', '</Menu>')
+            ...carve.span(periodMenuSource, '<button', '</Menu>')
           ]}/>
         </Codes>
       </Step>
