@@ -155,7 +155,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         fold open at a time, and say which language each job needed and why. The first accordion below is HTML
         alone.</p>
     </header>
-    <section aria-labelledby="html-alone-heading" className="accordion-part snapping">
+    <section aria-labelledby="html-alone-heading" className="accordion-part">
       <h2 id="html-alone-heading" className="title bold">An accordion in HTML alone</h2>
       <ol className={runs}>
         <li className="run">

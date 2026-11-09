@@ -18,7 +18,3 @@
     padding-block-start: var(--base-x-4);
   }
 }
-
-.snapping ::details-content {
-  transition: none;
-}
