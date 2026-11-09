@@ -1,13 +1,13 @@
-import {Entry, Item, Menu} from '@components/Menu';
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode, useId} from 'react';
+import {FC, ReactNode} from 'react';
 import {Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components';
-import {Candle, candles, LiveTradesState, money, Period, periodHistory, periods, Trade} from '../../Market';
+import {Candle, LiveTradesState, money, Period, periodHistory, Trade} from '../../Market';
 import {chartCaption} from '../chart-caption';
-import {usePeriodCandles} from '../usePeriodCandles';
+import {usePeriodChart} from '../usePeriodChart';
 import {periodDisplay} from '../period-display';
+import {PeriodMenu} from '../PeriodMenu';
 import {sparkline, TimedPrice} from '../sparkline';
 import {Axes, axisRange} from '../Axes';
 import '../chart-card.css';
@@ -47,15 +47,7 @@ type Props = Pick<LiveTradesState, 'trades'> & {
 };
 
 export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
-  const generated = useId();
-  const id = given ?? `price${generated}`;
-  const history = usePeriodCandles(period);
-  const bucketMilliseconds = periods.bucketMilliseconds[period];
-  const shownCandles = candles.mergeLive(
-    periodHistory.candlesOf(history),
-    candles.bucketTrades(trades, bucketMilliseconds),
-    periods.candleCap[period]
-  );
+  const {id, history, bucketMilliseconds, shownCandles} = usePeriodChart({id: given, name: 'price', period, trades});
   const view = viewOf(shownCandles, trades[trades.length - 1]);
   const points =
     sparkline.points(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMilliseconds);
@@ -68,21 +60,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
     <h3 id={`${id}-heading`} className="off-screen">live trades</h3>
     <header className="chart-header">
       {actions}
-      <button type="button" className="period-toggle rounded-corners field borderless attentive focus-ringed caption reachable"
-        popoverTarget={`${id}-period`}>
-        <span className="off-screen">price period</span>{' '}{period}
-      </button>
-      <Menu id={`${id}-period`} tabIndex={-1} popover="auto" className="card rounded-corners lifted"
-        aria-label="price period by">
-        {Object.values(Period).map(option =>
-          <Entry key={option}>
-            <Item className="sub-title"
-              popoverTarget={`${id}-period`} popoverTargetAction="hide"
-              aria-current={option === period ? 'true' : undefined}
-              onClick={() => onPeriodChosen(option)}>{option}</Item>
-          </Entry>
-        )}
-      </Menu>
+      <PeriodMenu id={`${id}-period`} chart="price" period={period} onPeriodChosen={onPeriodChosen}/>
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={view.mBind(({series, high, low}) => axisRange.of(series.map(timed => timed.at), high, low))}

@@ -1,12 +1,12 @@
-import {Entry, Item, Menu} from '@components/Menu';
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode, useId} from 'react';
-import {candles, Period, periodHistory, periods, Trade} from '../../Market';
+import {FC, ReactNode} from 'react';
+import {Period, periodHistory, Trade} from '../../Market';
 import {candleShapes} from './candle-shapes';
 import {chartCaption} from '../chart-caption';
-import {usePeriodCandles} from '../usePeriodCandles';
+import {usePeriodChart} from '../usePeriodChart';
 import {Loading} from '@components/Loading';
 import {periodDisplay} from '../period-display';
+import {PeriodMenu} from '../PeriodMenu';
 import {Axes, axisRange} from '../Axes';
 import {Bar} from '../Bar';
 import {shapes} from '../shapes';
@@ -28,15 +28,7 @@ type Props = {
 };
 
 export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
-  const generated = useId();
-  const id = given ?? `candles${generated}`;
-  const history = usePeriodCandles(period);
-  const bucketMilliseconds = periods.bucketMilliseconds[period];
-  const shownCandles = candles.mergeLive(
-    periodHistory.candlesOf(history),
-    candles.bucketTrades(trades, bucketMilliseconds),
-    periods.candleCap[period]
-  );
+  const {id, history, bucketMilliseconds, shownCandles} = usePeriodChart({id: given, name: 'candles', period, trades});
   const bodies = candleShapes.drawn(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
   const bars = candleShapes.volumes(shownCandles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
   const extent = axisRange.of(
@@ -48,21 +40,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
     <h3 id={`${id}-heading`} className="off-screen">candles</h3>
     <header className="chart-header">
       {actions}
-      <button type="button" className="period-toggle rounded-corners field borderless attentive focus-ringed caption"
-        popoverTarget={`${id}-period`}>
-        <span className="off-screen">candle period</span>{' '}{period}
-      </button>
-      <Menu id={`${id}-period`} tabIndex={-1} popover="auto" className="card rounded-corners lifted"
-        aria-label="candle period by">
-        {Object.values(Period).map(option =>
-          <Entry key={option}>
-            <Item className="sub-title"
-              popoverTarget={`${id}-period`} popoverTargetAction="hide"
-              aria-current={option === period ? 'true' : undefined}
-              onClick={() => onPeriodChosen(option)}>{option}</Item>
-          </Entry>
-        )}
-      </Menu>
+      <PeriodMenu id={`${id}-period`} chart="candle" period={period} onPeriodChosen={onPeriodChosen}/>
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={extent}
