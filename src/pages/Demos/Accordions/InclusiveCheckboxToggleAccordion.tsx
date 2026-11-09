@@ -5,9 +5,8 @@ import './Accordions.css';
 
 export const InclusiveCheckboxToggleAccordion: FC<AccordionProps> = ({
   className,
-  folds,
-  motion
-}) => <article className={classNames('toggle-accordion', motion, className)}>
+  folds
+}) => <article className={classNames('toggle-accordion', className)}>
   <header>
     <h3 className="sub-title bold">Inclusive accordion using checkboxes</h3>
   </header>

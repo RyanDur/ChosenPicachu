@@ -7,11 +7,10 @@ import './OldWayMotion.css';
 
 export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
   className,
-  folds,
-  motion
+  folds
 }) => {
   const [open, setOpen] = useState<string>();
-  return <article className={classNames('exclusive-accordion', motion, className)}>
+  return <article className={classNames('exclusive-accordion', className)}>
     <hgroup>
       <h3 className="sub-title bold">Accordion using a radio group and a measured height</h3>
       <p>A few lines of script measure each fold’s height.</p>

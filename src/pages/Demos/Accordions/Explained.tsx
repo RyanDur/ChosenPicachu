@@ -1,5 +1,6 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
+import {classNames} from '@components';
 import {DemoTopics} from '../demo-topics';
 import {DialGroup, DialRow} from '../Controls';
 import {AccordionProps, Fold} from './accordion-props';
@@ -50,6 +51,7 @@ import {
 } from './Diagrams';
 import {FoldInput, FoldType} from './fold-type';
 import {FoldMotion} from './fold-motion';
+import {useFoldDials} from './useFoldDials';
 import '../Runs.css';
 import './Explained.css';
 
@@ -124,13 +126,11 @@ const motionReadings: Record<FoldMotion, string> = {
 
 type Props = {
   foldLists: FoldLists;
-  type: FoldType;
-  onTypeChosen: (type: FoldType) => void;
-  motion: FoldMotion;
-  onMotionChosen: (motion: FoldMotion) => void;
 };
 
-export const AccordionsExplained: FC<Props> = ({foldLists, type, onTypeChosen, motion, onMotionChosen}) => {
+export const AccordionsExplained: FC<Props> = ({foldLists}) => {
+  const {type, motion, chooseType, chooseMotion} = useFoldDials();
+  const exhibitMoving = classNames(exhibit, motion);
   const input = inputOf[type];
   const {Accordion: HtmlAlone, source: htmlAloneSource} = htmlAloneBuilds[type];
   const knownHeight = knownHeightBuilds[type];
@@ -200,8 +200,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists, type, onTypeChosen, m
         sets every element’s defaults, and it gives every details a slide, which only Chromium shows today. The first
         accordion turns that slide off, so a fold opens at once in every browser and you see what HTML alone does.</p>
       <DialGroup>
-        <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={onTypeChosen} reading={typeReadings[type]}/>
-        <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={onMotionChosen} reading={<>
+        <DialRow label="fold type" name="fold-type" options={foldTypes} chosen={type} onChosen={chooseType} reading={typeReadings[type]}/>
+        <DialRow label="fold motion" name="fold-motion" options={foldMotions} chosen={motion} onChosen={chooseMotion} reading={<>
           <span className="when-motion-allowed">{motionReadings[motion]}</span>{' '}
           <span className="when-less-motion">If your system asks for less motion, every fold here opens at once,
             whichever you choose.</span>
@@ -328,7 +328,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists, type, onTypeChosen, m
                 state are as they come. What changes is the shape. The plain script listens for the press; the React
                 build redraws the panel from what it holds, so the measuring runs in two steps React takes before the
                 browser paints: the first pins where the motion starts, and the second sets where it ends.</p>
-              <Measured className={exhibit} folds={foldLists.measured[type]} motion={motion}/>
+              <Measured className={exhibitMoving} folds={foldLists.measured[type]}/>
               <ol className="runs">
                 {type === 'exclusive' && <li className="run">
                   <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes
@@ -423,7 +423,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists, type, onTypeChosen, m
           </li>
         </ol>
       </section>
-      <KnownHeight className={exhibit} folds={foldLists.known[type]} motion={motion}/>
+      <KnownHeight className={exhibitMoving} folds={foldLists.known[type]}/>
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">This build is a disclosure: a bar you press to show the text under it.
@@ -616,7 +616,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists, type, onTypeChosen, m
     </section>
     <section aria-labelledby="platform-way-heading" className="accordion-part">
       <h2 id="platform-way-heading" className="title bold">What the platform gives now</h2>
-      <Platform className={exhibit} folds={foldLists.platform[type]} motion={motion}/>
+      <Platform className={exhibitMoving} folds={foldLists.platform[type]}/>
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">This build uses details and summary, the two elements from the first accordion. Each
@@ -709,7 +709,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists, type, onTypeChosen, m
     </section>
     <section aria-labelledby="together-heading" className="accordion-part">
       <h2 id="together-heading" className="title bold">A {input} and a grid row: the old control, the new slide</h2>
-      <GridRow className={exhibit} folds={foldLists.gridRow[type]} motion={motion}/>
+      <GridRow className={exhibitMoving} folds={foldLists.gridRow[type]}/>
       <ol className={runs}>
         {type === 'inclusive' && <li className="run">
           <p className="paragraph">The inclusive build keeps the checkbox from the old way, with no script, and takes
