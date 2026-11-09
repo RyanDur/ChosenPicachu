@@ -96,6 +96,22 @@ describe('a list of charts', () => {
     expect(chartsDesk.doorway('Price line')).toHaveFocus();
   });
 
+  test('ArrowUp moves a chart up one place and focus stays on it', async () => {
+    blurFocusOnMoves();
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await chartsDesk.findChart('live trades');
+
+    await chartsDesk.keys('Candles', 'ArrowUp');
+
+    const candles = chartsDesk.chart('candles');
+    expect(candles.compareDocumentPosition(chartsDesk.chart('live trades')))
+      .toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(chartsDesk.doorway('Candles')).toHaveFocus();
+  });
+
   test('a chart keeps the period chosen for it when the charts are reordered', async () => {
     const feed = await listeningFeed();
 
