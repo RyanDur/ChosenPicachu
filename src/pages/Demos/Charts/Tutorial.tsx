@@ -66,7 +66,7 @@ const WorkspaceStory: FC = () =>
             one’s height. A mark left on the chart would now be far from the pointer, and the two would swap straight
             back.</Says>
           <Says><code className="monospaced">travel</code> is the code that runs on each dragover. It takes the held chart’s height
-            from <code className="monospaced">boundsOf</code>, which measures the chart’s slot while the slot is on the page and gives nothing when
+            from <code className="monospaced">boundsOf</code>, which measures the chart’s place while that place is on the page and gives nothing when
             it isn’t. <code className="monospaced">boundsOf</code> answers with a Maybe, a value that may be missing, and <code className="monospaced">map</code> uses the value only when
             there is one. With nothing, <code className="monospaced">travel</code> neither compares the pointer with the mark
             nor swaps.</Says>

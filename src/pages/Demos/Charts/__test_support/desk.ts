@@ -23,7 +23,7 @@ const walkThrough = async (chart: string, recipe: string): Promise<HTMLElement> 
   return screen.findByRole('region', {name: recipe});
 };
 
-const slot = (chart: string): HTMLElement => {
+const place = (chart: string): HTMLElement => {
   const seat = screen.getAllByRole('listitem').find(item => is(within(item).queryByRole('link', {name: `${chart} tutorial`})));
   if (seat) {
     return seat;
@@ -31,7 +31,7 @@ const slot = (chart: string): HTMLElement => {
   throw new Error(`the ${chart} doorway sits in no seat`);
 };
 
-const grip = (chart: string): HTMLElement => within(slot(chart)).getByRole('button', {name: 'move chart', hidden: true});
+const grip = (chart: string): HTMLElement => within(place(chart)).getByRole('button', {name: 'move chart', hidden: true});
 
 type Finger = {
   readonly press: () => Promise<void>;
@@ -79,7 +79,7 @@ export const chartsDesk = {
   offered: (name: string): HTMLElement | null => within(theAddMenu()).queryByRole('button', {name, hidden: true}),
   doorway,
   walkThrough,
-  slot,
+  place,
   fingerOn,
   keys,
   open: async (chart: string): Promise<void> => userEvent.click(doorway(chart)),
