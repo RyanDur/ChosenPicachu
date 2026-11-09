@@ -16,7 +16,7 @@ const lateTargets = (): LateTargets => {
   return {
     draw: id => {
       drawn.add(id);
-      listeners.forEach(listener => listener());
+      queueMicrotask(() => listeners.forEach(listener => listener()));
     },
     drawn: id => drawn.has(id),
     subscribe: listener => {
@@ -85,6 +85,8 @@ describe('arrival', () => {
     await reader.waits(100);
 
     site.draws('late');
+
+    await reader.sees('late');
     await reader.waits(500);
 
     expect(reader.heading('late')).toHaveFocus();
@@ -111,6 +113,7 @@ describe('arrival', () => {
 
     await reader.follows('/story#here');
     site.draws('late');
+    await reader.sees('late');
     await reader.waits(500);
 
     expect(reader.headingsFocused()).toEqual(['here']);
@@ -124,6 +127,7 @@ describe('arrival', () => {
 
     await reader.follows('/story#here');
     site.draws('folded');
+    await reader.sees('folded');
     await reader.waits(500);
 
     expect(reader.fold()).not.toHaveAttribute('open');
@@ -139,6 +143,7 @@ describe('arrival', () => {
 
     await reader.goesBack();
     site.draws('late');
+    await reader.sees('late');
     await reader.waits(500);
 
     expect(reader.heading('late')).not.toHaveFocus();
@@ -152,6 +157,7 @@ describe('arrival', () => {
 
     site.stopFollowing();
     site.draws('late');
+    await reader.sees('late');
     await reader.waits(500);
 
     expect(reader.heading('late')).not.toHaveFocus();
