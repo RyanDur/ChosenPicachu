@@ -9,6 +9,7 @@ type ArrivingReader = {
   readonly presses: (key: string) => Promise<void>;
   readonly waits: (milliseconds: number) => Promise<void>;
   readonly sees: (heading: string) => Promise<void>;
+  readonly seesTheAddress: (address: string) => Promise<void>;
   readonly heading: (name: string) => HTMLElement;
   readonly fold: () => HTMLElement;
   readonly headingsFocused: () => readonly string[];
@@ -32,6 +33,9 @@ export const arrivingReader = (): ArrivingReader => {
     },
     sees: async heading => {
       await screen.findByRole('heading', {name: heading});
+    },
+    seesTheAddress: async address => {
+      await screen.findByText(`at ${address}`);
     },
     heading: name => screen.getByRole('heading', {name}),
     fold: () => screen.getByRole('group'),
