@@ -109,6 +109,20 @@ describe('arrival', () => {
     expect(screen.getByRole('group')).not.toHaveAttribute('open');
   });
 
+  test('a reader who goes back to the entry still being landed on is not moved', async () => {
+    const router = site();
+    followed(router);
+    await navigated(router, '/story#late');
+    await afterFrames(100);
+    await navigated(router, '/story#here');
+    await afterFrames(100);
+
+    await navigated(router, -1);
+    await afterFrames(drawnAfter + 1000);
+
+    expect(screen.getByRole('heading', {name: 'late'})).not.toHaveFocus();
+  });
+
   test('a landing stops when arrival stops following', async () => {
     const router = site();
     render(<RouterProvider router={router}/>);
