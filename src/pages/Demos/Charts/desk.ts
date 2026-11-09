@@ -4,11 +4,11 @@ import {Period} from '../Market';
 
 export type Seat = {readonly kind: ChartKind; readonly period: Period};
 
-const isPeriod = (period: string): period is Period => Object.values(Period).some(offered => offered === period);
+const periodNamed = (name?: string): Maybe<Period> => maybe(Object.values(Period).find(offered => offered === name));
 
 const seatOf = (entry: string): Maybe<Seat> => {
   const [kind, period] = entry.split(':');
-  return chartKinds.is(kind) ? some({kind, period: has(period) && isPeriod(period) ? period : Period.hour}) : nothing();
+  return chartKinds.is(kind) ? some({kind, period: periodNamed(period).orElse(Period.hour)}) : nothing();
 };
 
 const entryOf = ({kind, period}: Seat): string => period === Period.hour ? kind : `${kind}:${period}`;

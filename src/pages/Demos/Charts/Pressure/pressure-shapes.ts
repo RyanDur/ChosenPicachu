@@ -1,4 +1,4 @@
-import {empty, has} from '@ryandur/sand';
+import {empty, maybe} from '@ryandur/sand';
 import {Trade} from '../../Market';
 import {bucketPlaces} from '../bucket-places';
 
@@ -30,12 +30,10 @@ const openedBy = (trade: Trade, bucketMilliseconds: number): Pressure =>
   fold({openedAt: bucketOpening(trade.tradedAt, bucketMilliseconds), bought: 0, sold: 0}, trade);
 
 const buckets = (trades: readonly Trade[], bucketMilliseconds: number): readonly Pressure[] =>
-  trades.reduce<readonly Pressure[]>((pressures, trade) => {
-    const current = pressures[pressures.length - 1];
-    return has(current) && current.openedAt === bucketOpening(trade.tradedAt, bucketMilliseconds)
-      ? [...pressures.slice(0, -1), fold(current, trade)]
-      : [...pressures, openedBy(trade, bucketMilliseconds)];
-  }, []);
+  trades.reduce<readonly Pressure[]>((pressures, trade) =>
+    maybe(pressures.slice(-1).find(({openedAt}) => openedAt === bucketOpening(trade.tradedAt, bucketMilliseconds)))
+      .map(current => [...pressures.slice(0, -1), fold(current, trade)])
+      .orElse([...pressures, openedBy(trade, bucketMilliseconds)]), []);
 
 const heaviestSide = (pressures: readonly Pressure[]): number =>
   Math.max(0, ...pressures.flatMap(pressure => [pressure.bought, pressure.sold]));

@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren} from 'react';
-import {has, Maybe} from '@ryandur/sand';
+import {Maybe, maybe} from '@ryandur/sand';
 import {format} from 'date-fns';
 import {money} from '../../Market';
 import {AxisExtent} from './axis-range';
@@ -18,9 +18,7 @@ const firstMidLast = (times: readonly number[]): readonly number[] =>
     .map(index => times[index]);
 
 const chosenTicks = (times: readonly number[], tickEvery?: number): readonly number[] =>
-  has(tickEvery)
-    ? times.filter(at => at % tickEvery === 0)
-    : firstMidLast(times);
+  maybe(tickEvery).map(every => times.filter(at => at % every === 0)).orElse(firstMidLast(times));
 
 const placed = (
   times: readonly number[],
