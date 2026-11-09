@@ -41,6 +41,11 @@
 
     &:has(:checked) { transition-delay: 115ms; }
 
+    @media (forced-colors: active) {
+      &,
+      &::before { transition: none; }
+    }
+
     &:has(:checked)::before {
       opacity: 1;
     }
