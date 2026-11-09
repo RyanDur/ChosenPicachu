@@ -43,10 +43,17 @@ export const workersContainer = (
   };
 };
 
-// jsdom has no service workers, so a spec that needs the page's container lends navigator one until the test ends
-export const lentToThePage = ({workers}: WatchedWorkers): void => {
-  Object.defineProperty(navigator, 'serviceWorker', {configurable: true, value: workers});
+const forThisTest = (descriptor?: PropertyDescriptor): void => {
+  const standing = Object.getOwnPropertyDescriptor(navigator, 'serviceWorker');
+  Reflect.deleteProperty(navigator, 'serviceWorker');
+  if (descriptor) Object.defineProperty(navigator, 'serviceWorker', descriptor);
   onTestFinished(() => {
     Reflect.deleteProperty(navigator, 'serviceWorker');
+    if (standing) Object.defineProperty(navigator, 'serviceWorker', standing);
   });
 };
+
+export const lentToThePage = ({workers}: WatchedWorkers): void =>
+  forThisTest({configurable: true, value: workers});
+
+export const noWorkersOnThePage = (): void => forThisTest();

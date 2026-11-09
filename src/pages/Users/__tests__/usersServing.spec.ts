@@ -20,12 +20,12 @@ describe('reaching the users server', () => {
     vi.useRealTimers();
   });
 
-  test('a page without service workers reaches the server at once', () => {
+  test('a page without service workers cannot reach the server, which only a worker serves', () => {
     const {reaching, outcomes} = heard();
 
     usersServing.reach(nothing(), reaching);
 
-    expect(outcomes()).toEqual(['reached']);
+    expect(outcomes()).toEqual(['unreachable']);
   });
 
   test('a page the server already controls reaches it at once, without registering it again', () => {

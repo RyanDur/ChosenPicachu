@@ -1,4 +1,4 @@
-import {asyncResult, Maybe, maybe, nothing, some} from '@ryandur/sand';
+import {asyncResult, Maybe, maybe} from '@ryandur/sand';
 import {usersServer} from './usersServer';
 
 export type Workers = {
@@ -50,16 +50,19 @@ const watchedForControl = (workers: Workers, {reached, unreachable}: Reaching): 
   return stopWatching;
 };
 
-const uncontrolled = (workers: Workers): Maybe<Workers> =>
-  maybe(workers.controller).either(nothing, () => some(workers));
-
 const reachedAtOnce = ({reached}: Reaching): () => void => {
   reached();
   return unwatched;
 };
 
+const unreachableAtOnce = ({unreachable}: Reaching): () => void => {
+  unreachable();
+  return unwatched;
+};
+
 export const usersServing: UsersServing = {
-  reach: (workers, reaching) => workers
-    .mBind(uncontrolled)
-    .either(container => watchedForControl(container, reaching), () => reachedAtOnce(reaching))
+  reach: (workers, reaching) => workers.either(
+    container => maybe(container.controller)
+      .either(() => reachedAtOnce(reaching), () => watchedForControl(container, reaching)),
+    () => unreachableAtOnce(reaching))
 };

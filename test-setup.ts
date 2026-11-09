@@ -33,6 +33,8 @@ Element.prototype.scrollIntoView = () => undefined;
 window.scrollTo = () => undefined;
 Element.prototype.scrollTo = () => undefined;
 HTMLElement.prototype.hidePopover = () => undefined;
+// the users API is served only by a service worker, so every page starts in the usual case: that worker in control
+Object.defineProperty(navigator, 'serviceWorker', {configurable: true, value: {controller: {}}});
 globalThis.ResizeObserver = class {
   observe(): void {}
   unobserve(): void {}
