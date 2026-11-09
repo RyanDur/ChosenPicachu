@@ -39,6 +39,10 @@ describe('chosen/compositor-motion', () => {
     expect(await warningsFor('a { transition: width max(.3s, 1ms) 0s; }')).toHaveLength(1);
   });
 
+  it('should refuse a property whose duration nests a function in a function, even with a 0s delay', async () => {
+    expect(await warningsFor('a { transition: width calc(var(--d) * 2) 0s; }')).toHaveLength(1);
+  });
+
   it('should read a duration whose unit is in capitals', async () => {
     expect(await warningsFor('a { transition: width .3S 0s; }')).toHaveLength(1);
   });
