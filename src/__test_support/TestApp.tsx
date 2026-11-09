@@ -72,7 +72,7 @@ const routesAt = (at: string, children: ReactNode): RouteObject[] =>
       .map(({path, ErrorBoundary}): RouteObject[] => [{path, ErrorBoundary, element: children}])
       .orElse([{path: pathOf(at), element: children}]);
 
-export const TestApp: FC<Props> = ({at = '/', cameFrom, feed, environment: overrides, children}) => {
+export const TestApp: FC<Props> = ({at = '/', cameFrom, feed, environment: overrides = {}, children}) => {
   const backable = has(cameFrom);
   const [memory] = useState(() => createMemoryRouter([{
     id: 'probes',
@@ -86,7 +86,9 @@ export const TestApp: FC<Props> = ({at = '/', cameFrom, feed, environment: overr
 
   return <Reported.Provider value={reported}>
     <StrictMode>
-      <SiteProviders environment={{...environment, ...(has(feed) ? {tradeFeed: feed.url} : {}), ...overrides}}>
+      <SiteProviders environment={Object.defineProperties(
+        {...environment, ...(has(feed) ? {tradeFeed: feed.url} : {})},
+        Object.getOwnPropertyDescriptors(overrides))}>
         <RouterProvider router={memory} onError={report}/>
       </SiteProviders>
     </StrictMode>

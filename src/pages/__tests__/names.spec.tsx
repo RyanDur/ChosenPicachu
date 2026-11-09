@@ -1,13 +1,11 @@
 import {render, waitFor} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
+import {renderCrashedFrame} from '@__test_support/crashedFrame';
 import {chartPageAt, demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {chartPage} from '@pages/Demos/Charts/__test_support';
-import {createMemoryRouter, Route, RouterProvider} from 'react-router';
+import {Route} from 'react-router';
 import {Paths} from '@navigation';
 import names from '@navigation/names.json';
-import {Environment, environment} from '@transport';
-import {SiteProviders} from '../../SiteProviders';
-import {siteHolding} from '../../routes';
 import {recordPage} from '@pages/Record/__test_support/record';
 import {practiceAt} from '@pages/Practice/__test_support/practice';
 import {aicArtResponse, anAICPieceResponse} from '@pages/Gallery/__test_support/fixtures';
@@ -173,19 +171,7 @@ describe('each page is named where a search shows it', () => {
   });
 
   test('should name the closed site for what it is when the frame around every page breaks', async () => {
-    const feedbackThatCrashes: Environment = {
-      ...environment,
-      get feedbackToken(): string {
-        throw new Error('broken');
-      }
-    };
-
-    render(
-      <SiteProviders environment={feedbackThatCrashes}>
-        <RouterProvider router={createMemoryRouter([siteHolding([])])}/>
-      </SiteProviders>,
-      {onCaughtError: () => undefined}
-    );
+    renderCrashedFrame();
 
     await waitFor(() => expect(document.title).toBe(names.closedSite.title));
     expect(described()).toBe(names.closedSite.description);
