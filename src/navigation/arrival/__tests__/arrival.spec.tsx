@@ -64,13 +64,15 @@ const Frame: FC = () => {
 
 const site = (late: LateTargets, later: LaterPage, opened: string): DataRouter => createMemoryRouter([{
   element: <Frame/>,
-  hydrateFallbackElement: <p>loading</p>,
-  children: [
-    {path: '/', element: <p>home</p>},
-    {path: '/story', element: <Story late={late}/>},
-    {path: '/other', element: <p>other</p>},
-    {path: '/later', lazy: async () => later.loaded.then(() => ({element: <Story late={late}/>}))}
-  ]
+  children: [{
+    hydrateFallbackElement: <p>loading</p>,
+    children: [
+      {path: '/', element: <p>home</p>},
+      {path: '/story', element: <Story late={late}/>},
+      {path: '/other', element: <p>other</p>},
+      {path: '/later', lazy: async () => later.loaded.then(() => ({element: <Story late={late}/>}))}
+    ]
+  }]
 }], {initialEntries: [opened]});
 
 type FollowedSite = {

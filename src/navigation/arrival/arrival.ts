@@ -78,12 +78,13 @@ const follow = (router: DataRouter): (() => void) => {
     stopLanding();
     stopLanding = opening || historyAction !== NavigationType.Pop ? landWhereAsked(location.hash) : nothingToStop;
   };
-  const left = ({navigation}: RouterState): void => {
+  const routerMoved = ({initialized, location, navigation}: RouterState): void => {
     if (navigation.state !== 'idle') stopLanding();
+    else if (initialized && empty(followedKey)) arrivedAt(location);
   };
-  if (router.state.initialized) arrivedAt(router.state.location);
+  routerMoved(router.state);
   followers.add(arrivedAt);
-  const unsubscribe = router.subscribe(left);
+  const unsubscribe = router.subscribe(routerMoved);
   return () => {
     unsubscribe();
     followers.delete(arrivedAt);
