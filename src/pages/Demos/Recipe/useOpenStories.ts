@@ -1,6 +1,6 @@
 import {useLocation, useNavigate} from 'react-router';
 import {useSearchParamsOnceHydrated} from '@navigation/search-params';
-import {scrollPlace} from '@navigation/scroll-place';
+import {scrollPlace} from '@navigation';
 import {storyKeys} from './storyKeys';
 
 type OpenStories = {
