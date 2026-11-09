@@ -3,21 +3,21 @@ import {Candle, candles, Period, PeriodHistory, periodHistory, periods, Trade} f
 import {usePeriodCandles} from './usePeriodCandles';
 import {PeriodChartKind} from './chart-kinds';
 
-type Chart = {
+type CandlesAsked = {
   id?: string;
   kind: PeriodChartKind;
   period: Period;
   trades: readonly Trade[];
 };
 
-type PeriodChart = {
+type ShownCandles = {
   id: string;
   history: PeriodHistory;
   bucketMilliseconds: number;
   shownCandles: readonly Candle[];
 };
 
-export const usePeriodChart = ({id, kind, period, trades}: Chart): PeriodChart => {
+export const useShownCandles = ({id, kind, period, trades}: CandlesAsked): ShownCandles => {
   const generated = useId();
   const history = usePeriodCandles(period);
   const bucketMilliseconds = periods.bucketMilliseconds[period];
