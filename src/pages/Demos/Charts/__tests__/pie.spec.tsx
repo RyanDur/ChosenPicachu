@@ -1,7 +1,7 @@
-import {render, screen, within} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import {pieShapes} from '@pages/Demos/Charts/Pie/pie-shapes';
 import {Pie} from '@pages/Demos/Charts/Pie';
-import {bought, sold} from '@pages/Demos/Charts/__test_support';
+import {bought, chartsDesk, sold} from '@pages/Demos/Charts/__test_support';
 
 describe('the pie', () => {
   test('the session totals by side', () => {
@@ -49,14 +49,13 @@ describe('the pie', () => {
       sold(1, {id: 2})
     ]}/>);
 
-    const card = screen.getByRole('region', {name: 'pie'});
-    expect(within(within(card).getByRole('list')).getAllByRole('listitem').map(({textContent}) => textContent)).toEqual(['75% bought', '25% sold']);
+    expect(chartsDesk.pieShares()).toEqual(['75% bought', '25% sold']);
   });
 
   test('the card says it counts up to the last 1,500 trades', () => {
     render(<Pie trades={[bought(3)]}/>);
 
-    expect(screen.getByRole('region', {name: 'pie'})).toHaveTextContent('volume by side · up to the last 1,500 trades');
+    expect(chartsDesk.chart('pie')).toHaveTextContent('volume by side · up to the last 1,500 trades');
   });
 
   test('a one-sided session opens both gates fully', () => {
@@ -66,7 +65,7 @@ describe('the pie', () => {
   test('the card reads a one-sided session as all bought', () => {
     render(<Pie trades={[bought(2)]}/>);
 
-    const card = screen.getByRole('region', {name: 'pie'});
+    const card = chartsDesk.chart('pie');
     expect(card).toHaveTextContent('100% bought');
     expect(card).toHaveTextContent('0% sold');
   });
@@ -74,7 +73,7 @@ describe('the pie', () => {
   test('an empty stream leaves the card waiting, not broken', () => {
     render(<Pie trades={[]}/>);
 
-    const card = screen.getByRole('region', {name: 'pie'});
+    const card = chartsDesk.chart('pie');
     expect(card).not.toHaveTextContent('%');
     expect(card).toHaveTextContent('waiting for the first trade');
   });

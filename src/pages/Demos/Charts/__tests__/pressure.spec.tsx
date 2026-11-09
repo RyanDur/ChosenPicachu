@@ -1,8 +1,8 @@
-import {render, screen} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import {pressureShapes} from '@pages/Demos/Charts/Pressure/pressure-shapes';
 import {Pressure} from '@pages/Demos/Charts/Pressure';
 import {money} from '@pages/Demos/Market';
-import {bought, sold} from '@pages/Demos/Charts/__test_support';
+import {bought, chartsDesk, sold} from '@pages/Demos/Charts/__test_support';
 
 describe('pressure', () => {
   test('trades bucket by minute, split by side', () => {
@@ -36,7 +36,7 @@ describe('pressure', () => {
       sold(1, {id: 2, tradedAt: 1700000060000})
     ]}/>);
 
-    expect(screen.getByRole('region', {name: 'pressure'})).toHaveTextContent('2 minutes · up to the last 1,500 trades');
+    expect(chartsDesk.chart('pressure')).toHaveTextContent('2 minutes · up to the last 1,500 trades');
   });
 
   test('the card bars the sides around the midline', () => {
@@ -45,7 +45,7 @@ describe('pressure', () => {
       sold(1, {id: 2, tradedAt: 1700000001000})
     ]}/>);
 
-    const card = screen.getByRole('region', {name: 'pressure'});
+    const card = chartsDesk.chart('pressure');
     expect(card).toHaveTextContent('1 minute · up to the last 1,500 trades');
     expect(card).toHaveTextContent('2 BTC');
     expect(card).toHaveTextContent('-2 BTC');
@@ -63,7 +63,7 @@ describe('pressure', () => {
   test('an empty stream leaves the card waiting, not broken', () => {
     render(<Pressure trades={[]}/>);
 
-    const card = screen.getByRole('region', {name: 'pressure'});
+    const card = chartsDesk.chart('pressure');
     expect(card).not.toHaveTextContent('window');
     expect(card).toHaveTextContent('waiting for the first trade');
   });
@@ -71,6 +71,6 @@ describe('pressure', () => {
   test('an empty stream draws no scale beside the empty chart', () => {
     render(<Pressure trades={[]}/>);
 
-    expect(screen.getByRole('region', {name: 'pressure'})).not.toHaveTextContent('BTC');
+    expect(chartsDesk.chart('pressure')).not.toHaveTextContent('BTC');
   });
 });
