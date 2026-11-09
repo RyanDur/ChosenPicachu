@@ -91,6 +91,7 @@ const PriceStory: FC = () =>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(candleSeriesSource, 'const fold'), lines.blank,
+            ...carve.unit(candleSeriesSource, 'const bucketOpening'), lines.blank,
             ...carve.unit(candleSeriesSource, 'const bucketTrades')
           ]}/>
         </Codes>
@@ -192,6 +193,7 @@ const CandlesStory: FC = () =>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(candleSeriesSource, 'const fold'), lines.blank,
+            ...carve.unit(candleSeriesSource, 'const bucketOpening'), lines.blank,
             ...carve.unit(candleSeriesSource, 'const bucketTrades'), lines.blank,
             ...carve.unit(candleSeriesSource, 'const mergeLive')
           ]}/>
