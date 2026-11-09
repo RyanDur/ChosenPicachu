@@ -89,9 +89,8 @@ const ChartTutorial: FC<Props> = ({kind}) => {
         target="_blank"
         rel="noreferrer">user story</a>, a card, a conversation and a confirmation, which the{' '}
       <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks through: open it and you get the plan and the steps
-      that build it, with the real code from this site, so what you read is what runs. The
-      links go to MDN
-      if you want more.
+      that build it, with the real code from this site, so what you read is what runs. The links go to MDN, Mozilla’s
+      web reference, if you want more.
     </p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">{quote}</blockquote>
