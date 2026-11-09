@@ -84,7 +84,6 @@ jobs:
       # GitHub's resolveReviewThread refuses a token without contents: write ("Resource not accessible by integration").
       contents: write
       pull-requests: write
-      actions: write
     env:
       PULL: ${{ github.event.pull_request.number || inputs.pull }}
       FIRST: ${{ needs.answer.outputs.first }}
@@ -111,8 +110,23 @@ jobs:
             exit 1
           fi
           gh api graphql -f id="$thread" -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }' > /dev/null
+
+  rerun:
+    needs: [answer, settle]
+    if: fromJSON(needs.answer.outputs.answer).verdict == 'Agreed'
+    concurrency:
+      group: discuss-rerun-${{ github.event.pull_request.number || inputs.pull }}
+      cancel-in-progress: false
+    runs-on: ubuntu-26.04
+    permissions:
+      actions: write
+      pull-requests: read
+    env:
+      PULL: ${{ github.event.pull_request.number || inputs.pull }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+    steps:
       - name: Rerun the head's review job, so the review reads the agreement
-        if: fromJSON(env.ANSWER).verdict == 'Agreed'
         run: |
           head=$(gh pr view "$PULL" --json headRefOid -q .headRefOid)
           run=$(gh run list --workflow checks.yml --commit "$head" --limit 1 --json databaseId -q '.[0].databaseId // empty')
