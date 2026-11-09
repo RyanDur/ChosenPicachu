@@ -4,14 +4,14 @@ import {classNames} from '@components';
 import {stateAbbreviations} from './states';
 import {AddressName} from '../draftActions';
 import {useAddressDraft} from '../useAddressDraft';
+import {useOpened} from '../../useOpened';
+import {not} from '@ryandur/sand';
 import './AddressFields.css';
 
 type AddressFieldsAttributes = {
   title: string;
   className?: string;
   name: AddressName;
-  required?: boolean;
-  readOnly?: boolean;
 };
 
 export const AddressFields: FC<PropsWithChildren<AddressFieldsAttributes>> = (
@@ -19,12 +19,12 @@ export const AddressFields: FC<PropsWithChildren<AddressFieldsAttributes>> = (
     title,
     children,
     className,
-    name,
-    required,
-    readOnly
+    name
   }) => {
   const titleId = useId();
   const {address, followsHome, edit} = useAddressDraft(name);
+  const readOnly = useOpened().mode === 'viewing';
+  const required = name === 'home' && not(readOnly);
   return <fieldset name={name} className={classNames('address', 'shrinkable', className)} disabled={followsHome}
     aria-labelledby={titleId}>
     <legend className="address-title sub-title bold"><span id={titleId}>{title}</span>{children}</legend>
