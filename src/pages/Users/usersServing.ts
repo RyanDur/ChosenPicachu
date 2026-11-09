@@ -27,17 +27,21 @@ const askedToClaim = (workers: Workers): void => {
 
 const awaited = (workers: Workers, {reached, unreachable}: Reaching): () => void => {
   const watch = new AbortController();
-  const settled = (outcome: () => void) => (): void => {
-    if (watch.signal.aborted) return;
+  const waiting = setTimeout(unreachable, patience);
+  const stopped = (): void => {
+    clearTimeout(waiting);
     watch.abort();
+  };
+  const ended = (outcome: () => void) => (): void => {
+    if (watch.signal.aborted) return;
+    stopped();
     outcome();
   };
-  setTimeout(settled(unreachable), patience);
-  workers.addEventListener('controllerchange', settled(reached), {signal: watch.signal});
+  workers.addEventListener('controllerchange', ended(reached), {signal: watch.signal});
   asyncResult(workers.register(script))
-    .onSuccess(() => maybe(workers.controller).either(settled(reached), () => askedToClaim(workers)))
-    .onFailure(settled(unreachable));
-  return () => watch.abort();
+    .onSuccess(() => maybe(workers.controller).either(ended(reached), () => askedToClaim(workers)))
+    .onFailure(ended(unreachable));
+  return stopped;
 };
 
 const uncontrolled = (workers: Workers): Maybe<Workers> =>
