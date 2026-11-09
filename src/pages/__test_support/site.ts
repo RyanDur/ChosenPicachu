@@ -1,5 +1,4 @@
-import {fireEvent, screen, within} from '@testing-library/react';
-import {maybe} from '@ryandur/sand';
+import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 const room = (): HTMLElement => screen.getByRole('main');
@@ -31,11 +30,6 @@ export const site = {
   closedRoomIfAny: (): HTMLElement | null => screen.queryByText('This room is closed.'),
   frontDoor: (): HTMLElement => screen.getByRole('link', {name: 'Back to the front door'}),
   announced: (words: string): HTMLElement => within(screen.getByRole('alert')).getByText(words),
-  dismissAnnouncement: async (words: string): Promise<void> => {
-    const dismiss = await screen.findByRole('button', {name: `dismiss ${words}`});
-    await userEvent.click(dismiss);
-    maybe(dismiss.closest('li')).map(slot => fireEvent.transitionEnd(slot, {propertyName: 'grid-template-rows'}));
-  },
   announcedIfAny: (words: string): HTMLElement | null =>
     screen.queryAllByRole('alert').flatMap(alert => within(alert).queryAllByText(words))[0] ?? null
 };
