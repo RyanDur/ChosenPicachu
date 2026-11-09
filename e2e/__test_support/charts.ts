@@ -73,6 +73,7 @@ export const chartsPage = (page: Page) => {
   };
   return {
     seat,
+    doorway: (chart: string): Locator => page.getByRole('link', {name: `${chart} tutorial`, exact: true}),
     carryByTheGrip,
     fingerOnTheGrip,
     stillSliding: (): Promise<number> => page.getByRole('listitem').evaluateAll(charts => charts.flatMap(chart => chart.getAnimations()).length),
