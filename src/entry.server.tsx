@@ -3,7 +3,7 @@ import {renderToReadableStream} from 'react-dom/server';
 import {createStaticHandler, createStaticRouter, RouteObject, StaticRouterProvider} from 'react-router';
 import {Paths} from '@navigation';
 import names from '@navigation/names.json';
-import {FallbackPage} from './root';
+import {FallbackPage} from '@page';
 import {Site} from './Site';
 import {is, not} from '@ryandur/sand';
 import {lazily, siteOpenedBy} from './routes';
