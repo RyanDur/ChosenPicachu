@@ -116,7 +116,7 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(periodSource, 'const lengths'), lines.blank,
+            ...carve.unit(periodSource, 'const lengthsByPeriod'), lines.blank,
             ...carve.unit(periodSource, 'type Lengths'), lines.blank,
             ...carve.unit(periodSource, 'const perPeriod'), lines.blank,
             ...carve.unit(periodSource, 'const bucketMilliseconds'), lines.blank,
