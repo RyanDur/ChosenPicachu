@@ -16,7 +16,7 @@ export type RowShove = {
   readonly by: number;
 };
 
-export type Labelled = {
+export type Labeled = {
   readonly label: string;
 };
 
@@ -229,7 +229,7 @@ const settlingAt = (state: TableState, order: readonly string[], standing: reado
 
 export type TableView = {
   readonly state: TableState;
-  readonly columns: readonly TableColumn<Labelled>[];
+  readonly columns: readonly TableColumn<Labeled>[];
   readonly rows: readonly Seated[];
 };
 

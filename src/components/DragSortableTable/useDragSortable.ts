@@ -1,7 +1,7 @@
 import {useState, useSyncExternalStore} from 'react';
 import {classNames} from '../classNames';
 import {TableContext} from './tableContexts';
-import {Labelled, Seated, TableColumn, tableStore} from './model';
+import {Labeled, Seated, TableColumn, tableStore} from './model';
 import './Table.css';
 import './sortable.css';
 
@@ -17,7 +17,7 @@ export type Sortable = TableContext & {
   readonly className: string;
 };
 
-export const useDragSortable = <C extends Labelled>(
+export const useDragSortable = <C extends Labeled>(
   columns: readonly TableColumn<C>[],
   rows: readonly Seated[],
   {origin, motion}: Choices

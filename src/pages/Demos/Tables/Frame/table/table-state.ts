@@ -1,10 +1,10 @@
 import {maybe} from '@ryandur/sand';
-import {Labelled, Report, TableColumn, TableStore} from '@components/DragSortableTable/model';
+import {Labeled, Report, TableColumn, TableStore} from '@components/DragSortableTable/model';
 import {Measures} from '@pages/Demos/Market';
 
 export type MountedTable = {
   store: TableStore;
-  columns: () => readonly TableColumn<Labelled>[];
+  columns: () => readonly TableColumn<Labeled>[];
   rows: () => readonly Measures[];
   order: () => readonly string[];
   standing: () => readonly string[];
@@ -15,11 +15,11 @@ export type MountedTable = {
 };
 
 export type Given = {
-  readonly columns: () => readonly TableColumn<Labelled>[];
+  readonly columns: () => readonly TableColumn<Labeled>[];
   readonly rows: () => readonly Measures[];
 };
 
-export type Reconcile = (before: readonly TableColumn<Labelled>[]) => void;
+export type Reconcile = (before: readonly TableColumn<Labeled>[]) => void;
 
 const columnOfHeader = (th: Element): string => maybe(th.getAttribute('data-column')).either(
   column => column,

@@ -1,5 +1,5 @@
 import {has} from '@ryandur/sand';
-import {Labelled, Seated} from '@components/DragSortableTable/model';
+import {Labeled, Seated} from '@components/DragSortableTable/model';
 import {money} from './money';
 import {LookbackTotals, Traded} from './trade-totals';
 
@@ -22,7 +22,7 @@ const isMeasure = (name: string): name is MeasureName => measureNames.some(known
 
 export type Measures = Readonly<Record<MeasureName, Measure>>;
 
-export type Measured = Labelled;
+export type Measured = Labeled;
 
 const measures: readonly {name: MeasureName; data: Measured}[] =
   measureNames.map(name => ({name, data: {label: name}}));

@@ -1,8 +1,8 @@
 import {has} from '@ryandur/sand';
-import {Labelled, Seated} from '@components/DragSortableTable/model';
+import {Labeled, Seated} from '@components/DragSortableTable/model';
 import {User} from './profile';
 
-export type ColumnLabel = Labelled;
+export type ColumnLabel = Labeled;
 
 type UserColumns = {
   all: readonly {name: string; data: ColumnLabel}[];

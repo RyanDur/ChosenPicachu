@@ -1,5 +1,5 @@
 import {has, maybe, Maybe} from '@ryandur/sand';
-import {arrows, Grab, Labelled, Moving, PixelSizes, RowNudge, TableColumn, Carry, Report, TableState, tableStore, tableActions, tableState, survey, travel, lifting, tableReports} from '@components/DragSortableTable/model';
+import {arrows, Grab, Labeled, Moving, PixelSizes, RowNudge, TableColumn, Carry, Report, TableState, tableStore, tableActions, tableState, survey, travel, lifting, tableReports} from '@components/DragSortableTable/model';
 import {
   dressWidths,
   Given,
@@ -130,7 +130,7 @@ const withVerbs = (parts: MountedTable): TableContext => {
   return context;
 };
 
-const reconciled = (context: MountedTable, before: readonly TableColumn<Labelled>[]): void => {
+const reconciled = (context: MountedTable, before: readonly TableColumn<Labeled>[]): void => {
   frameColumns.arrange(context);
   frameRows.writeCells(context);
   frameRows.reseat(context);

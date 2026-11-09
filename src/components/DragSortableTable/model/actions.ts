@@ -91,17 +91,17 @@ const columnMovedBeside = (
   ({type: 'columnMovedBeside', name, neighbor, widths, order});
 const columnWalkedTo = (name: string, to: number, widths: PixelSizes, order: readonly string[]): Action =>
   ({type: 'columnWalkedTo', name, to, widths, order});
-type LabelledRow = {readonly row: string; readonly label: string};
+type LabeledRow = {readonly row: string; readonly label: string};
 
 const rowMovedBeside = (
-  {row, label}: LabelledRow,
+  {row, label}: LabeledRow,
   neighbor: string,
   heights: PixelSizes,
   standing: readonly string[]
 ): Action =>
   ({type: 'rowMovedBeside', row, label, neighbor, heights, standing});
 const rowWalkedTo = (
-  {row, label}: LabelledRow,
+  {row, label}: LabeledRow,
   to: number,
   heights: PixelSizes,
   standing: readonly string[]

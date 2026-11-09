@@ -18,7 +18,7 @@ export type {TableStore} from './store';
 export {tableStore} from './store';
 export type {PixelSizes, Survey} from './survey';
 export {survey} from './survey';
-export type {Carry, ColumnDrag, ColumnShove, Labelled, RowDrag, RowShove, Seated, Settling, TableColumn, TableState, TableView} from './table-state';
+export type {Carry, ColumnDrag, ColumnShove, Labeled, RowDrag, RowShove, Seated, Settling, TableColumn, TableState, TableView} from './table-state';
 export {tableState} from './table-state';
 export type {Moving} from './travel';
 export {travel} from './travel';
