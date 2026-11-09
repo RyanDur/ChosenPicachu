@@ -145,6 +145,21 @@ describe('the exchange as middleware', () => {
     expect(told).toEqual([]);
   });
 
+  it('a row whose fields are not all numbers is left out and the rest draw', async () => {
+    server.use(http.get(candles, () =>
+      HttpResponse.json([[1700000060, 1, 3, 2, 2.5, 1], [1700000000, 1, null, 2, 2.5, 1]])));
+    const told: FeedTrouble[] = [];
+    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, trouble => told.push(trouble)));
+
+    store.dispatch(marketActions.candlesAsked(Period.hour));
+
+    await vi.waitFor(() => expect(marketReads.periodHistoryOf(Period.hour)(store.state)).toEqual({
+      state: 'arrived',
+      candles: [{openedAt: 1700000060000, low: 1, high: 3, open: 2, close: 2.5, volume: 1}]
+    }));
+    expect(told).toEqual([]);
+  });
+
   it('a history whose every row is unreadable is unavailable, and the trouble is told', async () => {
     server.use(http.get(candles, () => HttpResponse.json([['1700000000', '1', '3', '2', '2.5', '1'], [1700000000, 1, 3]])));
     const told: FeedTrouble[] = [];
