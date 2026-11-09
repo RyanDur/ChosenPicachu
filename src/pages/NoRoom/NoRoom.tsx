@@ -1,13 +1,12 @@
-import {FC, useEffect} from 'react';
+import {FC} from 'react';
 import {Link} from 'react-router';
 import {Paths} from '@navigation';
-import {bannerChange, useBannerDispatch} from '@banners';
+import {useBannerWhileShown} from '@banners';
 
 const noRoom = 'There is no room at this address.';
 
 export const NoRoom: FC = () => {
-  const dispatchBanner = useBannerDispatch();
-  useEffect(() => dispatchBanner(bannerChange.raised(noRoom)), [dispatchBanner]);
+  useBannerWhileShown(noRoom);
 
   return <section className="prose" aria-labelledby="no-room">
     <h2 id="no-room" className="title bold">{noRoom}</h2>
