@@ -25,6 +25,7 @@ import historySource from '@pages/Demos/Market/coinbase-history.ts?sample';
 import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
 import liveTradesSource from '@pages/Demos/Market/live-trades.ts?sample';
 import axesSource from './Axes/Axes.tsx?sample';
+import axesCss from './Axes/Axes.css?sample';
 import '../Recipe/Recipe.css';
 
 const gap = lines.plain(' ');
@@ -143,7 +144,7 @@ const PriceStory: FC = () =>
       </Step>
       <Step title="Label the prices and the time">
         <Words want="A line with no labels is a shape, not a chart. The trader needs the high, the low and the time under it.">
-          <Says>Axes lays the body of any chart out on a grid, with a column at the side for the prices. At the side
+          <Says>Axes places its parts on the chart’s own grid, with a column at the side for the prices. At the side
             it labels the highest price, the lowest, and the one
             midway between them. Along the bottom it marks the time.</Says>
           <Says>How far apart the time marks sit comes from the period: every ten minutes on the hour chart, every hour
@@ -151,7 +152,11 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(axesSource, 'export const Axes')
+            ...carve.span(axesSource, 'export const Axes', '</>;')
+          ]}/>
+          <Snippet label="CSS" lines={[
+            ...carve.unit(axesCss, '.chart-stage:has(> .y-labels) {'), gap,
+            ...carve.unit(axesCss, ':where(.chart-stage:has(> .y-labels)) {')
           ]}/>
         </Codes>
       </Step>
