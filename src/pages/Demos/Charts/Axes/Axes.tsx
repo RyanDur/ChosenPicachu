@@ -10,7 +10,7 @@ type Props = PropsWithChildren<{
   timeFormat: string;
   tickEvery?: number;
   headroomMilliseconds?: number;
-  priceText?: (value: number) => string;
+  scaleText?: (value: number) => string;
 }>;
 
 const firstMidLast = (times: readonly number[]): readonly number[] =>
@@ -34,12 +34,12 @@ const placed = (
 
 export const Axes: FC<Props> = ({
   extent, timeFormat, tickEvery, headroomMilliseconds = 0,
-  priceText = value => money.dollars.format(value), children
+  scaleText = value => money.dollars.format(value), children
 }) => <>
   <p className="y-labels caption">{extent.map(({high, low}) => <>
-    <data value={high}>{priceText(high)}</data>
-    <data value={(high + low) / 2}>{priceText((high + low) / 2)}</data>
-    <data value={low}>{priceText(low)}</data>
+    <data value={high}>{scaleText(high)}</data>
+    <data value={(high + low) / 2}>{scaleText((high + low) / 2)}</data>
+    <data value={low}>{scaleText(low)}</data>
   </>).orNull()}</p>
   {children}
   <p className="x-labels caption">{extent.map(({times}) => placed(times, chosenTicks(times, tickEvery), headroomMilliseconds).map(tick =>
