@@ -23,7 +23,6 @@ jobs:
     permissions:
       contents: read
       pull-requests: read
-      id-token: write
     outputs:
       first: ${{ steps.thread.outputs.first }}
       answer: ${{ steps.answer.outputs.structured_output }}
