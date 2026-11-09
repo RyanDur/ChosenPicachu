@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Motion, Origin, Pace} from '../../../Controls';
+import {Motion, Origin, Pace, useControls} from '../../../Controls';
 import {Tell} from '../../../Recipe';
 
 const paces: Record<Pace, string> = {
@@ -17,7 +17,9 @@ const motions: Record<Motion, string> = {
   static: 'And the swap lands instantly, with no motion, so nothing competes with the pointer.'
 };
 
-export const Promises: FC<{pace: Pace; origin: Origin; motion: Motion}> = ({pace, origin, motion}) =>
-  <Tell>This particular table keeps three more
+export const Promises: FC<{pace: Pace; motion: Motion}> = ({pace, motion}) => {
+  const {origin} = useControls();
+  return <Tell>This particular table keeps three more
     promises. A dial’s promise is what the table guarantees under that
     setting. {paces[pace]} {origins[origin]} {motions[motion]}</Tell>;
+};
