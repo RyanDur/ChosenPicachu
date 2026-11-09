@@ -8,8 +8,13 @@
   grid-template-rows: [plot-start] auto [plot-end];
 
   > * {
-    grid-column: 2;
+    grid-column: 1 / -1;
     min-width: 0;
+  }
+
+  > .y-labels ~ :has(~ .x-labels),
+  > .x-labels {
+    grid-column: 2;
   }
 }
 
