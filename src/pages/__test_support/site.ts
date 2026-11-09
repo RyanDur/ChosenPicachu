@@ -23,7 +23,8 @@ export const site = {
     within(await screen.findByRole('navigation', {name: 'site'})).findByRole('link', {name, current: 'page'}),
   railHoldsTheNav: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pages and feedback'})).getByRole('navigation', {name: 'site'}),
   railHoldsFeedback: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pages and feedback'})).getByRole('button', {name: 'Feedback'}),
-  railLinks: async (): Promise<HTMLElement[]> => within(await screen.findByRole('navigation', {name: 'site'})).getAllByRole('link'),
+  unmarkedRail: async (): Promise<boolean> =>
+    within(await screen.findByRole('navigation', {name: 'site'})).queryAllByRole('link', {current: 'page'}).length === 0,
   railLink: (name: string): HTMLElement => within(screen.getByRole('navigation', {name: 'site'})).getByRole('link', {name}),
   followRail: async (name: string): Promise<void> => userEvent.click(within(await screen.findByRole('navigation', {name: 'site'})).getByRole('link', {name})),
   rail: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'pages and feedback'}),
