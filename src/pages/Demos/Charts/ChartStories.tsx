@@ -307,9 +307,10 @@ const PressureStory: FC = () =>
           <Says><code className="monospaced">pressureShapes.buckets</code> groups the trades into minutes and keeps two
             sums for each minute: the size buyers took and the size sellers took. The chart shows up to 60
             minutes.</Says>
-          <Says><code className="monospaced">bucketOpening</code> rounds a trade’s time down to the start of its
-            minute. For each trade, <code className="monospaced">buckets</code> looks at the last minute it has kept
-            and finds it only when it started at that same time. <code className="monospaced">maybe</code> turns
+          <Says><code className="monospaced">candles.bucketOpening</code> rounds a trade’s time down to the start of
+            its minute, the same way the candles find theirs. For each
+            trade, <code className="monospaced">buckets</code> looks at the last minute it has kept and finds it only
+            when it started at that same time. <code className="monospaced">maybe</code> turns
             that find, which may come back empty, into a <TabLink
             to={DemoTopics.charts}>Maybe</TabLink>, a value that may be missing. <code
             className="monospaced">map</code> adds the trade to the minute when there is one, and <code
@@ -321,7 +322,7 @@ const PressureStory: FC = () =>
             ...carve.unit(coinbaseSource, 'const MatchDecoder'), lines.blank,
             ...carve.unit(coinbaseSource, 'const takerSideOf'), lines.blank,
             ...carve.unit(pressureShapesSource, 'const fold'), lines.blank,
-            ...carve.unit(pressureShapesSource, 'const bucketOpening'), lines.blank,
+            ...carve.unit(candleSeriesSource, 'const bucketOpening'), lines.blank,
             ...carve.unit(pressureShapesSource, 'const openedBy'), lines.blank,
             ...carve.unit(pressureShapesSource, 'const buckets')
           ]}/>
