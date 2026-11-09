@@ -281,6 +281,17 @@
       'main   main';
   }
 
+  #root:not(:has(.rail)) {
+    grid-template-rows:
+      var(--header-block)
+      var(--filter-block)
+      1fr;
+    grid-template-areas:
+      'header header'
+      'filter filter'
+      'main   main';
+  }
+
   #root:has(.app-footer) .app-main {
     padding-block-end: var(--base-x-10);
   }
@@ -361,6 +372,10 @@
 
   #root:not(:has(.app-footer)) {
     grid-template-rows: auto auto auto 1fr;
+  }
+
+  #root:not(:has(.rail)) {
+    grid-template-rows: auto auto 1fr;
   }
 }
 
