@@ -1,16 +1,19 @@
 import * as schema from 'schemawax';
 import {attempt, Maybe, maybe, nothing} from '@ryandur/sand';
 
-const MatchDecoder = schema.object({
-  required: {
-    type: schema.literal('match'),
-    trade_id: schema.number,
-    price: schema.string,
-    size: schema.string,
-    side: schema.literalUnion('buy', 'sell'),
-    time: schema.string
-  }
-});
+const tradeFields = {
+  trade_id: schema.number,
+  price: schema.string,
+  size: schema.string,
+  side: schema.literalUnion('buy', 'sell'),
+  time: schema.string
+};
+
+const TradeDecoder = schema.object({required: tradeFields});
+
+const MatchDecoder = schema.object({required: {type: schema.literal('match'), ...tradeFields}});
+
+type TradeRow = schema.Output<typeof TradeDecoder>;
 
 type Side = 'buy' | 'sell';
 
@@ -30,13 +33,13 @@ const subscribeTo = (product: string): string => JSON.stringify({
   channels: [{name: 'matches', product_ids: [product]}]
 });
 
-const toTrade = (frame: schema.Output<typeof MatchDecoder>): Maybe<Trade> => {
-  const price = Number(frame.price);
-  const tradedAt = Date.parse(frame.time);
-  const size = Number(frame.size);
+const toTrade = (row: TradeRow): Maybe<Trade> => {
+  const price = Number(row.price);
+  const tradedAt = Date.parse(row.time);
+  const size = Number(row.size);
   return Number.isNaN(price) || Number.isNaN(tradedAt) || Number.isNaN(size)
     ? nothing()
-    : maybe({id: frame.trade_id, price, tradedAt, size, takerSide: takerSideOf(frame.side)});
+    : maybe({id: row.trade_id, price, tradedAt, size, takerSide: takerSideOf(row.side)});
 };
 
 const decodeTrade = (raw: unknown): Maybe<Trade> =>
@@ -45,9 +48,10 @@ const decodeTrade = (raw: unknown): Maybe<Trade> =>
     .mBind(toTrade);
 
 type Coinbase = {
-  takerSideOf: (mark: Side) => Side;
+  TradeDecoder: schema.Decoder<TradeRow>;
+  toTrade: (row: TradeRow) => Maybe<Trade>;
   subscribeTo: (product: string) => string;
   decodeTrade: (raw: unknown) => Maybe<Trade>;
 };
 
-export const coinbase: Coinbase = {takerSideOf, subscribeTo, decodeTrade};
+export const coinbase: Coinbase = {TradeDecoder, toTrade, subscribeTo, decodeTrade};
