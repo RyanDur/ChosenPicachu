@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren} from 'react';
-import {Maybe, maybe} from '@ryandur/sand';
+import {Maybe} from '@ryandur/sand';
 import {format} from 'date-fns';
 import {money} from '../../Market';
 import {AxisExtent} from './axis-range';
@@ -8,19 +8,13 @@ import './Axes.css';
 type Props = PropsWithChildren<{
   extent: Maybe<AxisExtent>;
   timeFormat: string;
-  tickEvery?: number;
+  tickEvery: number;
   headroomMilliseconds?: number;
   scaleText?: (value: number) => string;
 }>;
 
-const firstMidLast = (times: readonly number[]): readonly number[] =>
-  [...new Set([0, Math.floor((times.length - 1) / 2), times.length - 1])]
-    .map(index => times[index]);
-
-const chosenTicks = (times: readonly number[], tickEvery?: number): readonly number[] =>
-  maybe(tickEvery)
-    .map(spacingMilliseconds => times.filter(at => at % spacingMilliseconds === 0))
-    .orElse(firstMidLast(times));
+const chosenTicks = (times: readonly number[], tickEvery: number): readonly number[] =>
+  times.filter(at => at % tickEvery === 0);
 
 const placed = (
   times: readonly number[],
