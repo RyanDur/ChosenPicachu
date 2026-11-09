@@ -7,6 +7,7 @@ type ArrivingReader = {
   readonly follows: (link: string) => Promise<void>;
   readonly goesBack: () => Promise<void>;
   readonly waits: (milliseconds: number) => Promise<void>;
+  readonly sees: (heading: string) => Promise<void>;
   readonly heading: (name: string) => HTMLElement;
   readonly fold: () => HTMLElement;
   readonly headingsFocused: () => readonly string[];
@@ -26,6 +27,9 @@ export const arrivingReader = (): ArrivingReader => {
     goesBack: () => user.click(screen.getByRole('button', {name: 'back'})),
     waits: async milliseconds => {
       for (let passed = 0; passed < milliseconds; passed += aFrame) await vi.advanceTimersByTimeAsync(aFrame);
+    },
+    sees: async heading => {
+      await screen.findByRole('heading', {name: heading});
     },
     heading: name => screen.getByRole('heading', {name}),
     fold: () => screen.getByRole('group'),
