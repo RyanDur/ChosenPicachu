@@ -9,7 +9,7 @@ import {Loading} from '@components/Loading';
 import {periodDisplay} from '../period-display';
 import {Axes, axisRange} from '../Axes';
 import {Bar} from '../Bar';
-import {shapeAt} from '../shape-at';
+import {shapes} from '../shapes';
 import '../chart-card.css';
 import './Candles.css';
 import {classNames} from '@components';
@@ -72,7 +72,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
         <svg className="candlesticks" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
           {shownCandles.map((candle, at) => <g key={candle.openedAt} className={classNames('candle', sideOf[bodies[at].direction], bodies[at].direction)}>
             <Bar x={bodies[at].x} top={bodies[at].bodyTop} width={bodies[at].width} height={bodies[at].bodyHeight}>
-              <line className="wick shape drawn" y1={-1} y2={0} style={shapeAt({
+              <line className="wick shape drawn" y1={-1} y2={0} style={shapes.at({
                 x: bodies[at].center,
                 base: bodies[at].wickBottom,
                 width: 1,
