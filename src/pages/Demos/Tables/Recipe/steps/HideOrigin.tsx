@@ -22,7 +22,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
       <Reveal>
         <Says>The <Term word="drift">drift</Term> is a field of the drag, written by the dragging reducer’s drifted
           case. The drag holds the survey from the lift, the box the thing was grabbed in, and how far the
-          pointer has moved since. Every move dispatches the pointer. Two selectors turn the drag
+          pointer has moved since. Every move dispatches the pointer. Two reads turn the drag
           into two numbers, and every carried cell wears them as custom properties: <WhatACustomPropertyIs/>. The first
           is the seat, where the grab box sits against where the column rests in the order as it stands now. The second
           is the drift. That
@@ -35,7 +35,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
           yet stays in its place.</Says>
         {world === 'react'
           ? <>
-            <Says>There is no flag anywhere in the table: each cell asks the selectors whether its
+            <Says>There is no flag anywhere in the table: each cell asks the reads whether its
               column or its row is carried, and where its seat and its drift are, and sets the class
               and the properties from the answer. The table wears the word hide, and the style sheet reads
               it.</Says>
@@ -84,7 +84,7 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
             ...carve.unit(sources.state, 'const seatOffset'), gap,
             ...carve.unit(sources.reads, 'const seatOfColumn'), gap,
             ...carve.unit(sources.reads, 'const driftOfColumn'),
-            lines.aside('// the drift is carried in the drag; the seat is a selector over it and the order')
+            lines.aside('// the drift is carried in the drag; the seat is a read over it and the order')
           ]}/>
           <Snippet label="CSS" lines={[
             ...carriedProperties(cssSource),
