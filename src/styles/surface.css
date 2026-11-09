@@ -392,12 +392,7 @@
   }
 }
 
-.choice-inverted-words {
-  filter: brightness(1) invert(0);
-  transition: filter 0.2s 0.1s;
-
-  :has(:checked) > & { filter: brightness(0) invert(1); }
-}
+.ink-inverse-after::after { color: var(--ink-inverse); }
 
 .handle-raised:has(.handle:hover) { box-shadow: var(--raised); }
 

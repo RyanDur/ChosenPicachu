@@ -1,10 +1,9 @@
-import {ReactNode} from 'react';
 import {useHydrated} from '../useHydrated';
 import {not} from '@ryandur/sand';
 import './PillGlider.css';
 
 export type Choice<T extends string> = {
-  words: ReactNode;
+  words: string;
   value: T;
 };
 
@@ -21,9 +20,9 @@ export const PillGlider = <T extends string>({label, name, choices, chosen, onCh
   return <fieldset className="pill-glider rounded-corners ringed hover-veiled">
     <legend className="off-screen">{label}</legend>
     {choices.map(({words, value}) =>
-      <label className="pill rounded-corners reachable unfilled focus-haloed hover-inverse-ink field-inverse-before"
-        key={value}>
-        <span className="choice-inverted-words">{words}</span>
+      <label className="pill rounded-corners reachable unfilled focus-haloed hover-inverse-ink field-inverse-before ink-inverse-after"
+        key={value} data-words={words}>
+        <span className="pill-words">{words}</span>
         <input type="radio"
           className="off-screen"
           name={name}
