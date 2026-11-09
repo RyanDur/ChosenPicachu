@@ -16,8 +16,7 @@ const toCandle = ([openedAt, low, high, open, close, volume]: HistoryRow): Candl
 
 const toCandles = (rows: readonly HistoryRow[]): readonly Candle[] => rows.map(toCandle).reverse();
 
-const periodQuery = (period: Period): string => {
-  const now = new Date();
+const periodQuery = (period: Period, now: Date): string => {
   const start = new Date(now.getTime() - periods.spanMilliseconds[period]);
   return `granularity=${periods.granularitySeconds[period]}` +
     `&start=${encodeURIComponent(start.toISOString())}` +
@@ -34,7 +33,7 @@ const periodCandles = (
     .map(toCandles);
 
 type CoinbaseHistory = {
-  periodQuery: (period: Period) => string;
+  periodQuery: (period: Period, now: Date) => string;
   periodCandles: (base: string, product: string, query: string) => Result.Async<readonly Candle[], HTTPError>;
 };
 
