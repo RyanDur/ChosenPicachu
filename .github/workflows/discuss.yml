@@ -156,6 +156,7 @@ jobs:
               -q '.jobs[] | select(.name == "review") | "\(.databaseId) \(.status) \(.conclusion)"') || true
             if [ "$status" = completed ]; then
               case "$conclusion" in failure|cancelled) ;; *) exit 0;; esac
+              [ "$(gh pr view "$PULL" --json headRefOid -q .headRefOid)" = "$head" ] || exit 0
               if gh run rerun --job "$id"; then exit 0; fi
             fi
             sleep 30
