@@ -5,6 +5,8 @@ import {UsersAction} from './usersActions';
 import {userColumns} from './columns';
 import {Membership} from './memberships';
 
+export type RosterRequest = 'waiting' | 'arrived' | 'refused' | 'unreachable';
+
 export type FriendsReports = Readonly<Partial<Record<string, Membership>>>;
 
 export type UsersState = {
@@ -13,7 +15,7 @@ export type UsersState = {
   readonly friendsReports: FriendsReports;
   readonly confirmedAdds: number;
   readonly addInFlight: boolean;
-  readonly rosterAnswered: boolean;
+  readonly rosterRequest: RosterRequest;
 };
 
 const ids = (users: readonly User[]): readonly string[] => users.map(({id}) => id);
@@ -47,8 +49,18 @@ const awaitingAdd = (inFlight: boolean, action: UsersAction): boolean => {
   }
 };
 
-const answering = (answered: boolean, action: UsersAction): boolean =>
-  answered || action.type === 'usersArrived' || action.type === 'rosterRefused';
+const requesting = (request: RosterRequest, action: UsersAction): RosterRequest => {
+  switch (action.type) {
+    case 'usersArrived':
+      return 'arrived';
+    case 'rosterRefused':
+      return 'refused';
+    case 'serverUnreachable':
+      return 'unreachable';
+    default:
+      return request;
+  }
+};
 
 const seating = (arrangement: Arrangement, action: UsersAction): Arrangement =>
   arrangements.reducer(arrangement, action.type === 'usersArrived' ? arrangements.arrived(ids(action.users)) : action);
@@ -59,5 +71,5 @@ export const usersSlice: Slice<UsersState, UsersAction> = slices.combined<UsersS
   friendsReports: {initial: {}, reduce: reporting},
   confirmedAdds: {initial: 0, reduce: confirming},
   addInFlight: {initial: false, reduce: awaitingAdd},
-  rosterAnswered: {initial: false, reduce: answering}
+  rosterRequest: {initial: 'waiting', reduce: requesting}
 });
