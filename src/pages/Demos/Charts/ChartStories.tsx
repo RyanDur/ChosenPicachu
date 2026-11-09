@@ -83,10 +83,10 @@ const PriceStory: FC = () =>
       </Step>
       <Step title="Group the live trades into candles">
         <Words want="Raw trades arrive too fast to draw. The line needs one point for each bucket of time.">
-          <Says>bucketTrades goes through the live trades in order and makes one candle for each
-            bucket. <code className="monospaced">bucketOpening</code> finds a trade’s bucket by rounding its time down
-            to the start of the bucket. The first trade in a bucket opens the candle. Each later one raises its high or
-            lowers its low if it has to, becomes its close, and adds to its volume.</Says>
+          <Says><code className="monospaced">bucketTrades</code> goes through the live trades in order and makes one
+            candle for each bucket. <code className="monospaced">bucketOpening</code> finds a trade’s bucket by
+            rounding its time down to the start of the bucket. The first trade in a bucket opens the candle. Each
+            later one raises its high or lowers its low if it has to, becomes its close, and adds to its volume.</Says>
           <Says>One candle for each bucket is one point for each bucket, which is all a line needs.</Says>
         </Words>
         <Codes>
