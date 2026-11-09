@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Motion, Origin, useControls} from '../../Controls';
+import {Motion, useControls} from '../../Controls';
 import {Steps, Story} from '../../Recipe';
 import {
   AccessTrack,
@@ -37,10 +37,10 @@ import rowSource from '../Builds/LazyTable/RowHeader.tsx?sample';
 import paceSource from '../Builds/LazyTable/lazyDrop.ts?sample';
 import cssSource from '@components/DragSortableTable/motion.css?sample';
 
-type Props = {origin: Origin; motion: Motion};
+type Props = {motion: Motion};
 
-export const LazyRecipe: FC<Props> = ({origin, motion}) => {
-  const {track} = useControls();
+export const LazyRecipe: FC<Props> = ({motion}) => {
+  const {track, origin} = useControls();
   return track === 'pointer'
     ? <>
       <Story param="sort" id="column"
@@ -52,7 +52,7 @@ export const LazyRecipe: FC<Props> = ({origin, motion}) => {
         <TheWholeBuild tableSource={tableSource} buildSource={buildSource}/>
         <AgainstTheStream/>
         <OwnedPixels/>
-        <Promises pace="lazy" origin={origin} motion={motion}/>
+        <Promises pace="lazy" motion={motion}/>
         <Steps>
           <CssShare/>
           <OrderInState tableSource={tableSource} buildSource={buildSource}/>

@@ -21,7 +21,7 @@ export const LazyKeepStaticRecipe: FC = () => <>
     can="The user can arrange the list by hand"
     soThat="it reads in the order they mean">
     <PlatformCurrency/>
-    <Promises pace="lazy" origin="keep" motion="static"/>
+    <Promises pace="lazy" motion="static"/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
       <HoldTheAloft/>
