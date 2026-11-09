@@ -22,3 +22,10 @@ test('a tab on a page reached with a dial carries the dial along once the script
 
   await expect(page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'})).toHaveAttribute('href', /world=vanilla/);
 });
+
+test('a reader who opens a chart the site does not have lands on the Charts tab', async ({page}) => {
+  await page.goto('demos/charts/nope/');
+
+  await expect(page.getByRole('region', {name: 'Charts', exact: true})).toBeVisible();
+  await expect(page).toHaveURL(/\/demos\/charts\/$/);
+});
