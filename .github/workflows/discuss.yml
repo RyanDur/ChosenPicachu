@@ -77,15 +77,17 @@ jobs:
             --allowedTools "Read,Grep,Glob,Bash(git show:*),Bash(git log:*),Bash(git diff:*),Bash(git grep:*)"
             --json-schema '{"type":"object","required":["verdict","body"],"additionalProperties":false,"properties":{"verdict":{"enum":["Agreed","Not yet"]},"body":{"type":"string","description":"What settled it, or what still needs doing and why, in a sentence or two"}}}'
       - name: Read the verdict
-        if: steps.answer.outputs.structured_output
+        if: steps.thread.outputs.found
         id: verdict
         env:
           ANSWER: ${{ steps.answer.outputs.structured_output }}
-        run: echo "verdict=$(jq -r .verdict <<< "$ANSWER")" >> "$GITHUB_OUTPUT"
+        run: |
+          [ -n "$ANSWER" ] || { echo "::error::Claude Code ended without an answer"; exit 1; }
+          echo "verdict=$(jq -r .verdict <<< "$ANSWER")" >> "$GITHUB_OUTPUT"
 
   reply:
     needs: answer
-    if: needs.answer.outputs.verdict
+    if: needs.answer.outputs.first
     runs-on: ubuntu-26.04
     permissions:
       pull-requests: write
