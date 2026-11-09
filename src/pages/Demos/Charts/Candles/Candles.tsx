@@ -1,10 +1,10 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode, useId} from 'react';
-import {candles, Period, periodHistory, periods, Trade} from '../../Market';
+import {FC, ReactNode} from 'react';
+import {Period, periodHistory, Trade} from '../../Market';
 import {candleShapes} from './candle-shapes';
 import {chartCaption} from '../chart-caption';
-import {usePeriodCandles} from '../usePeriodCandles';
+import {usePeriodChart} from '../usePeriodChart';
 import {Loading} from '@components/Loading';
 import {periodDisplay} from '../period-display';
 import {Axes, axisRange} from '../Axes';
@@ -28,15 +28,7 @@ type Props = {
 };
 
 export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
-  const generated = useId();
-  const id = given ?? `candles${generated}`;
-  const history = usePeriodCandles(period);
-  const bucketMilliseconds = periods.bucketMilliseconds[period];
-  const shownCandles = candles.mergeLive(
-    periodHistory.candlesOf(history),
-    candles.bucketTrades(trades, bucketMilliseconds),
-    periods.candleCap[period]
-  );
+  const {id, history, bucketMilliseconds, shownCandles} = usePeriodChart({id: given, name: 'candles', period, trades});
   const bodies = candleShapes.drawn(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
   const bars = candleShapes.volumes(shownCandles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
   const extent = axisRange.of(

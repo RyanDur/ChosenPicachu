@@ -1,12 +1,12 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode, useId} from 'react';
+import {FC, ReactNode} from 'react';
 import {Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components';
-import {Candle, candles, LiveTradesState, money, Period, periodHistory, periods, Trade} from '../../Market';
+import {Candle, LiveTradesState, money, Period, periodHistory, Trade} from '../../Market';
 import {chartCaption} from '../chart-caption';
-import {usePeriodCandles} from '../usePeriodCandles';
+import {usePeriodChart} from '../usePeriodChart';
 import {periodDisplay} from '../period-display';
 import {sparkline, TimedPrice} from '../sparkline';
 import {Axes, axisRange} from '../Axes';
@@ -47,15 +47,7 @@ type Props = Pick<LiveTradesState, 'trades'> & {
 };
 
 export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
-  const generated = useId();
-  const id = given ?? `price${generated}`;
-  const history = usePeriodCandles(period);
-  const bucketMilliseconds = periods.bucketMilliseconds[period];
-  const shownCandles = candles.mergeLive(
-    periodHistory.candlesOf(history),
-    candles.bucketTrades(trades, bucketMilliseconds),
-    periods.candleCap[period]
-  );
+  const {id, history, bucketMilliseconds, shownCandles} = usePeriodChart({id: given, name: 'price', period, trades});
   const view = viewOf(shownCandles, trades[trades.length - 1]);
   const points =
     sparkline.points(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMilliseconds);
