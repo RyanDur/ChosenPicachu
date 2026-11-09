@@ -6,7 +6,7 @@ import {chartKinds} from './chart-kinds';
 import {Trading} from '../Market/Trading';
 import {ChartPage} from './ChartPage';
 
-const ChartsHeader = () => {
+const ChartsHeader: FC = () => {
   const {kind} = useParams();
   return <Header title="Demos Charts" listed={chartKinds.is(kind) ? names.charts[kind] : names.demos.charts}/>;
 };
