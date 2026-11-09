@@ -83,6 +83,7 @@ type FollowedSite = {
   readonly draws: (id: string) => void;
   readonly loadsTheLaterPage: () => void;
   readonly rewritesTheAddress: () => void;
+  readonly goesBackByTheBrowser: () => void;
   readonly stopFollowing: () => void;
 };
 
@@ -101,6 +102,9 @@ const siteFollowed = (opened = '/'): FollowedSite => {
       const {location} = router.state;
       void router.navigate({search: '?rewritten', hash: location.hash},
         {replace: true, state: scrollPlace.keptFrom(location)});
+    }),
+    goesBackByTheBrowser: () => queueMicrotask(() => {
+      void router.navigate(-1);
     }),
     stopFollowing
   };
@@ -226,6 +230,23 @@ describe('arrival', () => {
     await reader.waits(500);
 
     expect(reader.heading('late')).toHaveFocus();
+  });
+
+  test('a reader the browser takes back to an address the page rewrote is not moved by the landing they left', async () => {
+    const site = siteFollowed('/story');
+    const reader = arrivingReader();
+    site.rewritesTheAddress();
+    await reader.seesTheAddress('/story?rewritten');
+    await reader.follows('/story#late');
+    await reader.waits(100);
+
+    site.goesBackByTheBrowser();
+    await reader.seesTheAddress('/story?rewritten');
+    site.draws('late');
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).not.toHaveFocus();
   });
 
   test('a reader who opens an address whose page loads later lands on its fragment', async () => {
