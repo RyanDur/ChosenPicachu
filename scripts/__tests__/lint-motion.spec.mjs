@@ -23,6 +23,14 @@ describe('chosen/compositor-motion', () => {
     expect(await warningsFor('a { transition-property: grid-template-rows, content-visibility; }')).toEqual([]);
   });
 
+  it('should accept a flip of any property, whose 0s duration draws no frame between', async () => {
+    expect(await warningsFor('a { transition: color 0s 65ms, background-color 0ms; }')).toEqual([]);
+  });
+
+  it('should refuse a property that changes over time after a flip', async () => {
+    expect(await warningsFor('a { transition: color 0s 65ms, background-color .3s; }')).toHaveLength(1);
+  });
+
   it('should refuse a height', async () => {
     expect(await warningsFor('a { transition: block-size .3s; }')).toHaveLength(1);
   });

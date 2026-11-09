@@ -17,12 +17,13 @@
   .pill {
     position: relative;
     isolation: isolate;
-    display: grid;
-    place-items: center;
+    align-content: center;
+    text-align: center;
     height: var(--base-x-5);
     padding: 0 var(--base-x-2);
     white-space: nowrap;
     cursor: pointer;
+    transition: color 0s 65ms;
 
     @media (width < 390px) {
       padding: 0 var(--base-x-0_75);
@@ -38,29 +39,10 @@
       transition: opacity 0.3s;
     }
 
+    &:has(:checked) { transition-delay: 115ms; }
+
     &:has(:checked)::before {
       opacity: 1;
-    }
-
-    .pill-words,
-    &::after {
-      grid-area: 1 / 1;
-      transition: opacity 0s 65ms;
-    }
-
-    &::after {
-      content: attr(data-words) / "";
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    &:has(:checked) {
-      .pill-words,
-      &::after { transition-delay: 115ms; }
-
-      .pill-words { opacity: 0; }
-
-      &::after { opacity: 1; }
     }
   }
 }
