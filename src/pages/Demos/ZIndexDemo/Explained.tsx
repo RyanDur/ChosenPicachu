@@ -9,8 +9,6 @@ import naturalSource from './NaturalZIndex.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 
-const blankLine = lines.plain(' ');
-
 export const StackingExplained: FC = () =>
   <section aria-labelledby="third-on-top-heading" className="stacking-part">
     <h2 id="third-on-top-heading" className="title bold">Why Third is on top</h2>
@@ -28,7 +26,7 @@ export const StackingExplained: FC = () =>
           top.</p>
         <Snippet label="HTML" lines={carve.span(naturalSource, '<ol id="z-index-pile"', '</ol>')}/>
         <Snippet label="CSS" lines={[
-          ...carve.unit(zIndexCss, '.pile-card {'), blankLine,
+          ...carve.unit(zIndexCss, '.pile-card {'), lines.blank,
           ...carve.unit(zIndexCss, '.closed {')
         ]}/>
         <PileFromTheSide/>
