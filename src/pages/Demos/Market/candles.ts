@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {Trade} from './coinbase';
 
 export type Candle = {
@@ -32,7 +32,7 @@ const mergeLive = (
   streamed: readonly Candle[],
   cap: number
 ): readonly Candle[] => {
-  const cut = streamed[0]?.openedAt ?? Number.POSITIVE_INFINITY;
+  const cut = maybe(streamed[0]).map(({openedAt}) => openedAt).orElse(Number.POSITIVE_INFINITY);
   return [...seed.filter(candle => candle.openedAt < cut), ...streamed].slice(-cap);
 };
 
