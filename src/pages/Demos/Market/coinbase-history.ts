@@ -1,5 +1,5 @@
 import * as schema from 'schemawax';
-import {is, not, Result} from '@ryandur/sand';
+import {is, maybe, not, Result} from '@ryandur/sand';
 import {decoded, http, HTTPError} from '@transport';
 import {Candle} from './candles';
 import {Period} from './Period';
@@ -18,7 +18,7 @@ const HistoryRowDecoder = schema.array(schema.unknown).andThen(row => {
 type HistoryRow = schema.Output<typeof HistoryRowDecoder>;
 
 const HistoryRowsDecoder = schema.array(schema.unknown).andThen(rows => {
-  const readable = rows.filter(HistoryRowDecoder.is);
+  const readable = rows.flatMap(row => maybe(HistoryRowDecoder.decode(row)).map(built => [built]).orElse([]));
   if (is(rows.length) && not(readable.length)) {
     throw new schema.DecoderError('No row of this history is six numbers');
   }
