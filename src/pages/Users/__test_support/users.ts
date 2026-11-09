@@ -13,6 +13,15 @@ const rosterAnswers = (people: readonly User[]) => http.get(usersDomain, () => H
 export const setupUsersResponse = (people: readonly User[]) =>
   server.use(rosterAnswers(people));
 
+export const rosterAsksHeard = (people: readonly User[], controlled: () => boolean): () => readonly boolean[] => {
+  const asked: boolean[] = [];
+  server.use(http.get(usersDomain, () => {
+    asked.push(controlled());
+    return HttpResponse.json(people);
+  }));
+  return () => asked;
+};
+
 export const setupUsersAnswering = (body: JsonBodyType) =>
   server.use(http.get(usersDomain, () => HttpResponse.json(body)));
 

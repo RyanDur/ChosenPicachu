@@ -1,5 +1,6 @@
 export {anAddress, aUser, someUsers} from './people';
 export {
+  rosterAsksHeard,
   setupUserAddedResponse,
   setupUserRemovedResponse,
   setupUsersAnswering,
