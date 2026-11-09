@@ -56,6 +56,15 @@ describe('the chart periods', () => {
     expect(await chartsDesk.findOnPriceCard('+$15.00')).toBeVisible();
   });
 
+  test('the hour chart draws at most 60 candles when the history holds more', async () => {
+    const seventyMinutes = Array.from({length: 70}, (_, minute) =>
+      [HOUR_ALIGNED + minute * 60, 49990, 50010, 50000, 50005, 1]).reverse();
+    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(seventyMinutes)));
+    render(<TestApp at={demosAt('charts', '?charts=candles')}/>);
+
+    expect(await chartsDesk.findOnChart('candles', '60 candles · 1m each')).toBeVisible();
+  });
+
   test('a period with one candle names it in the singular', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(rowsSpaced(60).slice(0, 1))));
     render(<TestApp at={demosAt('charts', '?charts=candles')}/>);
