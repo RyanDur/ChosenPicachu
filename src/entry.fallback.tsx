@@ -4,5 +4,4 @@ import {hydrateTheSite} from './hydrateTheSite';
 import {arrival} from '@navigation/arrival';
 
 const router = createBrowserRouter([siteOpenedBy(lazily())], {basename: import.meta.env.BASE_URL});
-hydrateTheSite.afresh(router);
-arrival.follow(router);
+hydrateTheSite.afresh(router, () => arrival.follow(router));
