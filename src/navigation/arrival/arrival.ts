@@ -1,6 +1,6 @@
 import {DataRouter, Location, NavigationType, RouterState} from 'react-router';
 import {empty, Maybe, maybe, notEmpty} from '@ryandur/sand';
-import {scrollPlace} from '@navigation/scroll-place';
+import {scrollPlace} from '@navigation';
 import {landing, Measured, Watch} from './landing';
 
 export type Page =
