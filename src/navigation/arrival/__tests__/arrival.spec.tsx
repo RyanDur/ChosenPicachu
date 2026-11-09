@@ -195,6 +195,33 @@ describe('arrival', () => {
     expect(reader.heading('late')).not.toHaveFocus();
   });
 
+  test('a reader who presses a key while the page is still settling stays where they are', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
+
+    await reader.presses('{ArrowDown}');
+    site.draws('late');
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).not.toHaveFocus();
+  });
+
+  test('a reader still reading three seconds after the page was drawn is not pulled to a target drawn after', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(3100);
+
+    site.draws('late');
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).not.toHaveFocus();
+  });
+
   test('a landing stops when arrival stops following', async () => {
     const site = siteFollowed();
     const reader = arrivingReader();
