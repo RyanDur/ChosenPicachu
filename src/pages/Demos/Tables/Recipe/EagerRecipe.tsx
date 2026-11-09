@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Motion, useControls} from '../../Controls';
+import {useControls} from '../../Controls';
 import {Steps, Story} from '../../Recipe';
 import {
   AccessTrack,
@@ -37,10 +37,8 @@ import rowSource from '@components/DragSortableTable/RowHeader.tsx?sample';
 
 import cssSource from '@components/DragSortableTable/motion.css?sample';
 
-type Props = {motion: Motion};
-
-export const EagerRecipe: FC<Props> = ({motion}) => {
-  const {track, origin} = useControls();
+export const EagerRecipe: FC = () => {
+  const {track, origin, motion} = useControls();
   return track === 'pointer'
     ? <>
       <Story param="sort" id="column"
@@ -52,7 +50,7 @@ export const EagerRecipe: FC<Props> = ({motion}) => {
         <TheWholeBuild tableSource={tableSource} buildSource={buildSource}/>
         <AgainstTheStream/>
         <OwnedPixels/>
-        <Promises pace="eager" motion={motion}/>
+        <Promises pace="eager"/>
         <Steps>
           <CssShare/>
           <OrderInState tableSource={tableSource} buildSource={buildSource}/>
