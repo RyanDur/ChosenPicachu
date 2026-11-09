@@ -78,6 +78,7 @@ describe('reaching the users server', () => {
     await vi.advanceTimersByTimeAsync(12_000);
 
     container.takeControl();
+    await vi.advanceTimersByTimeAsync(0);
 
     expect(outcomes()).toEqual(['unreachable', 'reached']);
   });
