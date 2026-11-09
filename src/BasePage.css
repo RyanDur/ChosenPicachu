@@ -122,6 +122,11 @@
   }
 }
 
+.frame-note {
+  grid-row: -1;
+  grid-column: 1 / -1;
+}
+
 #root:not(:has(.feedback-item)) .side-nav {
   grid-row: 1 / -1;
 }
