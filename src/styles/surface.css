@@ -403,6 +403,7 @@
   .choice-inverse-ink:has(:checked) {
     forced-color-adjust: none;
     color: var(--highlight-ink);
+    outline-color: var(--canvas-ink);
   }
 }
 
