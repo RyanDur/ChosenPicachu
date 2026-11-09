@@ -42,8 +42,8 @@ const OneState: FC<{world: World}> = ({world}) =>
         subscribes. That is the last step of this story.</Says>
       {world === 'react'
         ? <>
-          <Says>The page creates its store once, with the exchange as its middleware, and passes it to
-            a <Term word="provider">provider</Term>. The charts and the tables below the provider read the same trades
+          <Says>The page’s <Term word="provider">provider</Term>, Trading, creates its store once, with the exchange
+            as its middleware, and subscribes to it. The charts and the tables below the provider read the same trades
             and the same arrangement.</Says>
           <Says><code className="monospaced">useDragSortable</code> creates the table’s own store once, empty, and every
             part inside <code className="monospaced">DragSortable</code>,
