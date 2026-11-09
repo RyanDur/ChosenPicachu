@@ -22,7 +22,7 @@ export const EagerHideStaticRecipe: FC = () => <>
     can="The user can arrange the list by hand"
     soThat="it reads in the order they mean">
     <PlatformCurrency/>
-    <Promises pace="eager" origin="hide" motion="static"/>
+    <Promises pace="eager" motion="static"/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
       <HoldTheAloft/>
