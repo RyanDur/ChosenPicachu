@@ -32,5 +32,5 @@ export const usersSelectors: UsersSelectors = {
   friendsReportOf: userId => ({friendsReports}) => maybe(friendsReports[userId]),
   confirmedAdds: ({confirmedAdds}) => confirmedAdds,
   addInFlight: ({addInFlight}) => addInFlight,
-  addWaits: ({addInFlight, rosterArrived}) => addInFlight || not(rosterArrived)
+  addWaits: ({addInFlight, rosterAnswered}) => addInFlight || not(rosterAnswered)
 };

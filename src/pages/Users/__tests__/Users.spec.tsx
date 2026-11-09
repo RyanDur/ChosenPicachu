@@ -21,6 +21,7 @@ import {
   usersUnreachable,
   lentToThePage,
   rosterAsksHeard,
+  rosterRefused,
   workersContainer
 } from '@pages/Users/__test_support';
 import {userForm} from '../UserInformation/__test_support';
@@ -162,6 +163,17 @@ describe('the users page', () => {
       await usersTable.roster();
 
       expect(adds()).toEqual([]);
+    });
+
+    it('an Add pressed after the roster was refused is sent', async () => {
+      rosterRefused();
+      const adds = userAddsHeard();
+      render(<TestApp at={Paths.users}/>);
+      await usersPage.says('the users server is having trouble');
+
+      await userForm.addWhoWorksFromHome(aUser({work: 'home'}));
+
+      await waitFor(() => expect(adds()).toHaveLength(1));
     });
 
     it('an edit address for someone not in the roster opens the form to add, not to update', async () => {

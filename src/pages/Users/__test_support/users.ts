@@ -31,6 +31,8 @@ export const usersUnreachable = () =>
     http.all(`${usersDomain}/*`, () => HttpResponse.error())
   );
 
+export const rosterRefused = () => server.use(http.get(usersDomain, troubled));
+
 export const userAddRefused = () => server.use(http.post(usersDomain, troubled));
 
 export const userRemovalRefused = (id: string) => server.use(http.delete(`${usersDomain}/${id}`, troubled));

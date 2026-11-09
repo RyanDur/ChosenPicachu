@@ -6,6 +6,7 @@ export type UsersAction =
   | {readonly type: 'opened'}
   | {readonly type: 'serverUnreachable'}
   | {readonly type: 'usersArrived'; readonly users: readonly User[]}
+  | {readonly type: 'rosterRefused'}
   | {readonly type: 'userAdded'; readonly user: NewUser}
   | {readonly type: 'userAddConfirmed'}
   | {readonly type: 'userAddRefused'}
@@ -18,6 +19,7 @@ type UsersActions = {
   opened: () => UsersAction;
   serverUnreachable: () => UsersAction;
   usersArrived: (users: readonly User[]) => UsersAction;
+  rosterRefused: () => UsersAction;
   userAdded: (user: NewUser) => UsersAction;
   userAddConfirmed: () => UsersAction;
   userAddRefused: () => UsersAction;
@@ -31,6 +33,7 @@ export const usersActions: UsersActions = {
   opened: () => ({type: 'opened'}),
   serverUnreachable: () => ({type: 'serverUnreachable'}),
   usersArrived: users => ({type: 'usersArrived', users}),
+  rosterRefused: () => ({type: 'rosterRefused'}),
   userAdded: user => ({type: 'userAdded', user}),
   userAddConfirmed: () => ({type: 'userAddConfirmed'}),
   userAddRefused: () => ({type: 'userAddRefused'}),

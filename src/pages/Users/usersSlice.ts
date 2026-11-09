@@ -13,7 +13,7 @@ export type UsersState = {
   readonly friendsReports: FriendsReports;
   readonly confirmedAdds: number;
   readonly addInFlight: boolean;
-  readonly rosterArrived: boolean;
+  readonly rosterAnswered: boolean;
 };
 
 const ids = (users: readonly User[]): readonly string[] => users.map(({id}) => id);
@@ -47,7 +47,8 @@ const awaitingAdd = (inFlight: boolean, action: UsersAction): boolean => {
   }
 };
 
-const arriving = (arrived: boolean, action: UsersAction): boolean => arrived || action.type === 'usersArrived';
+const answering = (answered: boolean, action: UsersAction): boolean =>
+  answered || action.type === 'usersArrived' || action.type === 'rosterRefused';
 
 const seating = (arrangement: Arrangement, action: UsersAction): Arrangement =>
   arrangements.reducer(arrangement, action.type === 'usersArrived' ? arrangements.arrived(ids(action.users)) : action);
@@ -58,5 +59,5 @@ export const usersSlice: Slice<UsersState, UsersAction> = slices.combined<UsersS
   friendsReports: {initial: {}, reduce: reporting},
   confirmedAdds: {initial: 0, reduce: confirming},
   addInFlight: {initial: false, reduce: awaitingAdd},
-  rosterArrived: {initial: false, reduce: arriving}
+  rosterAnswered: {initial: false, reduce: answering}
 });
