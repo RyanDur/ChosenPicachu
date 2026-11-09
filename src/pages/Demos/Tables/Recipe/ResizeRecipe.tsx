@@ -8,8 +8,8 @@ import resizeSource from '@components/DragSortableTable/ResizeHandle.tsx?sample'
 import stateSource from '@components/DragSortableTable/model/table-state.ts?sample';
 import baseCss from '@components/DragSortableTable/Table.css?sample';
 import surfaceCss from '../../../../styles/surface.css?sample';
-import tableSource from '../Frame/table.html?sample';
-import buildSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
+import frameTable from '../Frame/table.html?sample';
+import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import looksSource from '@components/DragSortableTable/model/looks.ts?sample';
 import frameResize from '../Frame/table/resize.ts?sample';
 import frameHandle from '../Frame/table/handle.ts?sample';
@@ -26,8 +26,8 @@ const ledgerCodes: Record<World, ReactNode> = {
       ...carve.unit(looksSource, 'const headerNeeds')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...carve.span(buildSource, 'className={classNames(', '...looks.headerNeeds(travels, width)'), lines.blank,
-      ...carve.span(buildSource, "'--share': shares.width(width)", "'--share': shares.width(width)")
+      ...carve.span(headerSource, 'className={classNames(', '...looks.headerNeeds(travels, width)'), lines.blank,
+      ...carve.span(headerSource, "'--share': shares.width(width)", "'--share': shares.width(width)")
     ]}/>
     <Snippet label="CSS" lines={[
       ...carve.unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), lines.blank,
@@ -51,11 +51,11 @@ const ledgerCodes: Record<World, ReactNode> = {
 
 const edgeMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...carve.span(buildSource, 'return <th {...th}', '{children}')
+    ...carve.span(headerSource, 'return <th {...th}', '{children}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...carve.span(tableSource, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>'), lines.blank,
-    ...carve.span(tableSource, '</menu>', '</th>')
+    ...carve.span(frameTable, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>'), lines.blank,
+    ...carve.span(frameTable, '</menu>', '</th>')
   ]}/>
 };
 
@@ -69,7 +69,7 @@ const handleMarkup: Record<World, ReactNode> = {
     ...carve.span(resizeSource, '<button type="button"', 'aria-label={shares.resizeLabel(column, namedShare)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...carve.span(tableSource, '<button type="button" tabindex="0" data-resize-handle', 'aria-label="resize lookback"></button>')
+    ...carve.span(frameTable, '<button type="button" tabindex="0" data-resize-handle', 'aria-label="resize lookback"></button>')
   ]}/>
 };
 

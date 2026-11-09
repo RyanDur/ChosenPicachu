@@ -9,7 +9,7 @@ import dealSource from '../Builds/EagerTable/EagerTable.tsx?sample';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import cellSource from '@components/DragSortableTable/Cell.tsx?sample';
 import widthsSource from '@pages/Demos/Tables/Aggregations.css?sample';
-import tableSource from '../Frame/table.html?sample';
+import frameTable from '../Frame/table.html?sample';
 import '../../Recipe/Recipe.css';
 import {Term} from './Term';
 import {elidedHeaders} from './elidedHeaders';
@@ -111,8 +111,8 @@ const dealCodes: Record<World, ReactNode> = {
   </Codes>,
   vanilla: <Codes>
     <Snippet label="HTML" lines={[
-      ...carve.span(tableSource, '<table class="fancy-table', '</th>'), lines.blank,
-      ...carve.span(tableSource, '<tbody class="body">', '</tr>')
+      ...carve.span(frameTable, '<table class="fancy-table', '</th>'), lines.blank,
+      ...carve.span(frameTable, '<tbody class="body">', '</tr>')
     ]}/>
     <Snippet label="CSS" lines={[
       ...carve.unit(widthsSource, '.aggregations {')
