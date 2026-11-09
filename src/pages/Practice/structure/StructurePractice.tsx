@@ -32,38 +32,28 @@ export const StructurePractice: FC = () =>
     <p className="paragraph">So five things have to be true of the markup, and I check four of them against WCAG, the
       W3C’s accessibility guidelines, because it names them.</p>
     <dl className="needs">
-      <div className="need">
-        <dt className="paragraph bold">Meaning</dt>
-        <dd className="paragraph">What each thing is, carried by the markup and not by the look
-          (<a className="signpost" href={understanding('info-and-relationships')}>1.3.1, Info and Relationships</a>).
-        </dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Order</dt>
-        <dd className="paragraph">What comes before what, so a reader can work out the reading sequence from the markup
-          (<a className="signpost" href={understanding('meaningful-sequence')}>1.3.2, Meaningful Sequence</a>).
-        </dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Names</dt>
-        <dd className="paragraph">The name each region and control carries
-          (<a className="signpost" href={understanding('headings-and-labels')}>2.4.6, Headings and Labels</a>), with
-          a way past what repeats on every page
-          (<a className="signpost" href={understanding('bypass-blocks')}>2.4.1, Bypass Blocks</a>).
-        </dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Behavior</dt>
-        <dd className="paragraph">What presses, opens and submits, with its name, role and state known to the tools
-          (<a className="signpost" href={understanding('name-role-value')}>4.1.2, Name, Role, Value</a>).
-        </dd>
-      </div>
-      <div className="need">
-        <dt className="paragraph bold">Identity</dt>
-        <dd className="paragraph">How the next developer and the script find one thing. No criterion
-          covers it.
-        </dd>
-      </div>
+      <dt className="paragraph bold">Meaning</dt>
+      <dd className="paragraph">What each thing is, carried by the markup and not by the look
+        (<a className="signpost" href={understanding('info-and-relationships')}>1.3.1, Info and Relationships</a>).
+      </dd>
+      <dt className="paragraph bold">Order</dt>
+      <dd className="paragraph">What comes before what, so a reader can work out the reading sequence from the markup
+        (<a className="signpost" href={understanding('meaningful-sequence')}>1.3.2, Meaningful Sequence</a>).
+      </dd>
+      <dt className="paragraph bold">Names</dt>
+      <dd className="paragraph">The name each region and control carries
+        (<a className="signpost" href={understanding('headings-and-labels')}>2.4.6, Headings and Labels</a>), with
+        a way past what repeats on every page
+        (<a className="signpost" href={understanding('bypass-blocks')}>2.4.1, Bypass Blocks</a>).
+      </dd>
+      <dt className="paragraph bold">Behavior</dt>
+      <dd className="paragraph">What presses, opens and submits, with its name, role and state known to the tools
+        (<a className="signpost" href={understanding('name-role-value')}>4.1.2, Name, Role, Value</a>).
+      </dd>
+      <dt className="paragraph bold">Identity</dt>
+      <dd className="paragraph">How the next developer and the script find one thing. No criterion
+        covers it.
+      </dd>
     </dl>
     <p className="paragraph">The rest of this tab takes each of the five in turn.</p>
     <h3 className="paragraph bold">The skeleton, and a name where a landmark repeats</h3>
