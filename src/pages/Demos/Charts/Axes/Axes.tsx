@@ -41,7 +41,7 @@ export const Axes: FC<Props> = ({
     <data value={(high + low) / 2}>{label((high + low) / 2)}</data>
     <data value={low}>{label(low)}</data>
   </>).orNull()}</p>
-  <div className="chart-area">{children}</div>
+  {children}
   <p className="x-labels caption">{extent.map(({times}) => placed(times, chosenTicks(times, tickEvery), headroomMilliseconds).map(tick =>
     <time key={tick.at}
       className="tick"

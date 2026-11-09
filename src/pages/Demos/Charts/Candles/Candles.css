@@ -23,6 +23,9 @@
 }
 
 .candles {
+  .chart-stage {
+    grid-template-rows: [plot-start] auto auto [plot-end];
+  }
 
   .body,
   .wall,
