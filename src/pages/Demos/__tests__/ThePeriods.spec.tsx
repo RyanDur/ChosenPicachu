@@ -23,6 +23,10 @@ const rowsSpaced = (stepSeconds: number): number[][] =>
       [HOUR_ALIGNED + index * stepSeconds, low, high, open, close, volume])
     .reverse();
 
+const flatRows = (count: number, stepSeconds: number): number[][] =>
+  Array.from({length: count}, (_, index) => [HOUR_ALIGNED + index * stepSeconds, 49990, 50010, 50000, 50005, 1])
+    .reverse();
+
 const chartsWithHistory = async (stepSeconds: number): Promise<void> => {
   server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(rowsSpaced(stepSeconds))));
   render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
@@ -57,12 +61,24 @@ describe('the chart periods', () => {
   });
 
   test('the hour chart draws at most 60 candles when the history holds more', async () => {
-    const seventyMinutes = Array.from({length: 70}, (_, minute) =>
-      [HOUR_ALIGNED + minute * 60, 49990, 50010, 50000, 50005, 1]).reverse();
-    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(seventyMinutes)));
+    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(flatRows(70, 60))));
     render(<TestApp at={demosAt('charts', '?charts=candles')}/>);
 
     expect(await chartsDesk.findOnChart('candles', '60 candles · 1m each')).toBeVisible();
+  });
+
+  test('the day chart draws at most 24 candles when the history holds more', async () => {
+    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(flatRows(30, 3600))));
+    render(<TestApp at={demosAt('charts', '?charts=candles:day')}/>);
+
+    expect(await chartsDesk.findOnChart('candles', '24 candles · 1h each')).toBeVisible();
+  });
+
+  test('the week chart draws at most 28 candles when the history holds more', async () => {
+    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(flatRows(35, 21600))));
+    render(<TestApp at={demosAt('charts', '?charts=candles:week')}/>);
+
+    expect(await chartsDesk.findOnChart('candles', '28 candles · 6h each')).toBeVisible();
   });
 
   test('a period with one candle names it in the singular', async () => {
