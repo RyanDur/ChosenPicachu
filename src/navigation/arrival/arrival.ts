@@ -28,8 +28,6 @@ const landedOn = (target: Element): void => {
 
 const readerMoves = ['pointerdown', 'wheel', 'touchmove', 'keydown'] as const;
 
-// a page can draw its target after the page itself, and a fold opening grows the page for a few frames after, so the
-// landing looks for its target each frame and waits for it to hold still
 const landOnceItHoldsStill = (id: string): (() => void) => {
   let frameRequest = 0;
   const readerMoved = new AbortController();
