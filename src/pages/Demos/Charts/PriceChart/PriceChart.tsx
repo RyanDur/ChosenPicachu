@@ -3,11 +3,12 @@ import {FC, ReactNode} from 'react';
 import {Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components';
-import {Candle, LiveTradesState, money, Period, periodHistory, Trade} from '../../Market';
+import {Candle, LiveTradesState, money, periodHistory, Trade} from '../../Market';
 import {chartCaption} from '../chart-caption';
 import {useShownCandles} from '../useShownCandles';
 import {periodDisplay} from '../period-display';
 import {PeriodMenu} from '../PeriodMenu';
+import {useDesk} from '../useDesk';
 import {sparkline, TimedPrice} from '../sparkline';
 import {Axes, axisRange} from '../Axes';
 import '../chart-card.css';
@@ -42,11 +43,10 @@ const trendOf = ({first, last}: PriceView): 'rising' | 'falling' => last >= firs
 type Props = Pick<LiveTradesState, 'trades'> & {
   id?: string;
   actions?: ReactNode;
-  period: Period;
-  onPeriodChosen: (period: Period) => void;
 };
 
-export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
+export const PriceChart: FC<Props> = ({trades, id: given, actions}) => {
+  const period = useDesk().periodOf('price');
   const {id, history, bucketMilliseconds, shownCandles} = useShownCandles({id: given, kind: 'price', period, trades});
   const view = viewOf(shownCandles, trades[trades.length - 1]);
   const points =
@@ -60,7 +60,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
     <h3 id={`${id}-heading`} className="off-screen">live trades</h3>
     <header className="chart-header">
       {actions}
-      <PeriodMenu id={`${id}-period`} kind="price" period={period} onPeriodChosen={onPeriodChosen}/>
+      <PeriodMenu id={`${id}-period`} kind="price"/>
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={view.mBind(({series, high, low}) => axisRange.of(series.map(timed => timed.at), high, low))}
