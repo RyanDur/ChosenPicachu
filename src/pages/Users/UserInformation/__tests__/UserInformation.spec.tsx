@@ -149,6 +149,14 @@ describe('a user form', () => {
         expect(userForm.sameAsHomeInWorkAddress()).toBeInTheDocument();
       });
 
+      test('a new user needs a home address, and the work address is left to them', () => {
+        const {form} = added();
+        render(form);
+
+        expect(userForm.addressField('home', 'Street')).toBeRequired();
+        expect(userForm.addressField('work', 'Street')).not.toBeRequired();
+      });
+
       test('should allow the user to auto copy the home address', async () => {
         const {form, adds} = added();
         render(form);

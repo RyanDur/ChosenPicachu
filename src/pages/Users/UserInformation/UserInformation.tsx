@@ -116,9 +116,9 @@ const Draft: FC<{className?: string}> = ({className}) => {
     <output className="off-screen"
       aria-label="avatar report">{drafts.avatarReport(draft)}</output>
 
-    <AddressFields name="home" title="Home Address" className="home-address" readOnly={readOnly} required={required}/>
+    <AddressFields name="home" title="Home Address" className="home-address"/>
 
-    <AddressFields name="work" title="Work Address" className="work-address" readOnly={readOnly}>
+    <AddressFields name="work" title="Work Address" className="work-address">
       {not(readOnly) && <label className="same-as-home paragraph pill-cornered attentive">
         <span>Same as Home</span>
         <input className="fancy-check raisable" type="checkbox" checked={draft.sameAsHome}
