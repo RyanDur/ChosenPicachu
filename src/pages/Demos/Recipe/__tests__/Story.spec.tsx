@@ -1,4 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
+import {appAddress} from '@__test_support/address';
 import {render, waitFor} from '@testing-library/react';
 import {Step, Steps, Stories, Story} from '@pages/Demos/Recipe';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
@@ -54,5 +55,18 @@ describe('a story card', () => {
     await recipeFolds.press(document.body, 'The reader can arrive at a step');
 
     expect(card('The reader can arrive at a step')).not.toHaveAttribute('open');
+  });
+
+  test('a reader sent to a step inside a closed story lands on the step and keeps its fragment', async () => {
+    render(<TestApp at="/#told-first"><Stories>
+      <Story param="tale" id="told" can="The reader can arrive at a step" soThat="a link can point inside a story">
+        <Steps>
+          <Step title="First" id="told-first">one</Step>
+        </Steps>
+      </Story>
+    </Stories></TestApp>);
+
+    await waitFor(() => expect(recipeFolds.stepHeaded(document.body, 'First')).toHaveFocus());
+    expect(appAddress.fragment()).toBe('#told-first');
   });
 });
