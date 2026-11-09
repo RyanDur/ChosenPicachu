@@ -1,6 +1,6 @@
 import {has, not} from '@ryandur/sand';
 import {array} from '@components/arrays';
-import {Direction, Value, sorting} from './sorting';
+import {Direction, SortKey, sorting} from './sorting';
 import {Sort} from './table-state';
 
 export type Arrangement = {
@@ -31,9 +31,9 @@ const movedTo = (list: readonly string[], item: string, to: number): readonly st
 
 const standingOf = (
   {rows, sort}: Arrangement,
-  valueOf: (row: string, column: string) => Value | undefined
+  sortKeyOf: (row: string, column: string) => SortKey | undefined
 ): readonly string[] =>
-  has(sort) ? sorting.ranked(rows, row => valueOf(row, sort.column), sort.direction) : rows;
+  has(sort) ? sorting.ranked(rows, row => sortKeyOf(row, sort.column), sort.direction) : rows;
 
 const unsorted = ({sort: _sort, ...arrangement}: Arrangement): Arrangement => arrangement;
 
