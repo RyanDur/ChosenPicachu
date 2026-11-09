@@ -24,11 +24,9 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <script src={`${base}env.js`}/>
     </head>
-    <body>
-      <div id="root" className="backdrop">
-        <SiteProviders environment={environment}>{children}</SiteProviders>
-      </div>
-      <noscript>
+    <body id="root" className="backdrop">
+      <SiteProviders environment={environment}>{children}</SiteProviders>
+      <noscript className="frame-note">
         <p>
           Found a mistake, or a better way? Say so on the
           site’s <a href="https://github.com/RyanDur/ChosenPicachu/discussions">Discussions page on GitHub</a>.
