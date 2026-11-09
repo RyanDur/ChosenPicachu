@@ -2,7 +2,11 @@
 # GitHub Actions sets CI, and its runners, where claude-code-action runs this hook, have no direnv.
 [ -n "$CLAUDE_ENV_FILE" ] && [ -z "$CI" ] || exit 0
 tell() {
-  jq -n --arg m "$1" '{systemMessage: $m, hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $m}}'
+  if command -v jq >/dev/null; then
+    jq -n --arg m "$1" '{systemMessage: $m, hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $m}}'
+  else
+    printf '%s\n' "$1"
+  fi
   exit 0
 }
 command -v direnv >/dev/null || tell "direnv not found, so Node is not pinned to .nvmrc. Install direnv, or run commands as direnv exec . <command>."
