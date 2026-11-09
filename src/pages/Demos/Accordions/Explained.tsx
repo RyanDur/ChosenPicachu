@@ -196,8 +196,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         selector, which names the elements it applies to. It also has properties. A property is one aspect of a look,
         like a height or a color, given a value.</p>
       <p className="paragraph">The fold motion does not reach the accordion above. The reset is the style sheet that
-        sets every element’s defaults, and it gives every details a slide, which only Chromium shows today. The first
-        accordion turns that slide off, so a fold opens at once in every browser and you see what HTML alone does.</p>
+        sets every element’s defaults, and it opens every details at once. The first accordion keeps that, so you see
+        what HTML alone does.</p>
       <DialGroup>
         <DialRow label="fold type" name="fold-type" choices={foldTypes} chosen={type} onChosen={chooseType} reading={typeReadings[type]}/>
         <DialRow label="fold motion" name="fold-motion" choices={foldMotions} chosen={motion} onChosen={chooseMotion} reading={<>
@@ -411,17 +411,6 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     ...carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={title} onChange={() => setOpen(title)}>', '<MeasuredPanel open={open === title}')
                   ]}/>
                 </li>}
-                <li className="run">
-                  <p className="paragraph">Moving to auto means a transition that ends at the
-                    keyword <code className="monospaced">auto</code> rather than at a number. The site’s own folds, such
-                    as the “How … works” folds on this tab, do that: the reset
-                    sets <Mdn path="Web/CSS/interpolate-size"><code className="monospaced">interpolate-size:
-                      allow-keywords</code></Mdn>, which lets a size move to <code className="monospaced">auto</code> in
-                    a browser that supports it. This build turns that off
-                    with <code className="monospaced">interpolate-size: numeric-only</code>, because the trick was for
-                    browsers that could only move between numbers.</p>
-                  <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-measured {')}/>
-                </li>
               </ol>
             </details>
           </li>
@@ -678,8 +667,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   1fr is exactly as tall as its content needs, and a row of 0fr has no height. The row is 0fr while
                   the fold is closed and 1fr while it is open. A row in fr is a number, so 0fr to 1fr is a number
                   growing, which a transition can move. The row always ends at the text’s own height, so nothing is
-                  guessed, measured or fixed. The reset gives every details’ hidden part a height of 0 while it is
-                  closed, so this one keeps its height at auto and leaves the closing to the row.
+                  guessed, measured or fixed.
                 {{
                   reveal: ' With reveal, the row moves over 300 milliseconds with ease-in-out, and the text shows from its top down. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide.',
                   drawer: ' With the drawer, the row moves on the same 300 milliseconds and sets the text at its bottom, so the text’s bottom edge stays on the fold’s edge as it slides down from under the bar. Content-visibility hides the closed content and has no values between on and off; allow-discrete lets it switch at the end of a close and at the start of an open, which keeps the text visible for the whole slide.',
