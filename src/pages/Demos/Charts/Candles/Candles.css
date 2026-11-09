@@ -1,39 +1,4 @@
-@property --shape-x {
-    syntax: '<length>';
-    inherits: false;
-    initial-value: 0px;
-}
-
-@property --shape-base {
-    syntax: '<length>';
-    inherits: false;
-    initial-value: 0px;
-}
-
-@property --shape-width {
-    syntax: '<number>';
-    inherits: false;
-    initial-value: 1;
-}
-
-@property --shape-height {
-    syntax: '<number>';
-    inherits: false;
-    initial-value: 0;
-}
-
 .candles {
-  .body,
-  .wall,
-  .wick,
-  .volume,
-  .volume-wall {
-    transform-box: fill-box;
-    transform-origin: 0 100%;
-    transform: translate(var(--shape-x), var(--shape-base)) scale(var(--shape-width), var(--shape-height));
-    transition: transform 300ms ease-out;
-  }
-
   .candlesticks {
     display: block;
     width: 100%;

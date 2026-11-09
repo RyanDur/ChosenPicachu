@@ -3,6 +3,7 @@ import {FC, ReactNode, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {liveTrades, money, Period, periods, Trade} from '../../Market';
 import {Axes, axisRange} from '../Axes';
+import {Bar} from '../Bar';
 import {periodDisplay} from '../period-display';
 import {pressureShapes} from './pressure-shapes';
 import '../chart-card.css';
@@ -12,8 +13,6 @@ const CHART_WIDTH = 240;
 const CHART_HEIGHT = 104;
 const BUCKET_MILLISECONDS = periods.bucketMilliseconds[Period.hour];
 const MOST_BUCKETS_SHOWN = 60;
-const DEPTH_X = 1;
-const DEPTH_Y = 1.5;
 
 type Props = {
   trades: readonly Trade[];
@@ -38,30 +37,10 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
         <svg className="pressures" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}>
           <line className="midline drawn" x1={0} y1={CHART_HEIGHT / 2} x2={CHART_WIDTH} y2={CHART_HEIGHT / 2}/>
           {pressures.map((pressure, at) => <g key={pressure.openedAt}>
-            <rect className="bought-wall buy-side side-wall" y={-1} width={1} height={1} style={{
-              '--shape-x': `${bars[at].x + DEPTH_X}px`,
-              '--shape-base': `${bars[at].boughtTop + bars[at].boughtHeight + DEPTH_Y}px`,
-              '--shape-width': bars[at].width,
-              '--shape-height': bars[at].boughtHeight
-            }}/>
-            <rect className="sold-wall sell-side side-wall" y={-1} width={1} height={1} style={{
-              '--shape-x': `${bars[at].x + DEPTH_X}px`,
-              '--shape-base': `${bars[at].soldTop + bars[at].soldHeight + DEPTH_Y}px`,
-              '--shape-width': bars[at].width,
-              '--shape-height': bars[at].soldHeight
-            }}/>
-            <rect className="bought buy-side side-face" y={-1} width={1} height={1} style={{
-              '--shape-x': `${bars[at].x}px`,
-              '--shape-base': `${bars[at].boughtTop + bars[at].boughtHeight}px`,
-              '--shape-width': bars[at].width,
-              '--shape-height': bars[at].boughtHeight
-            }}/>
-            <rect className="sold sell-side side-face" y={-1} width={1} height={1} style={{
-              '--shape-x': `${bars[at].x}px`,
-              '--shape-base': `${bars[at].soldTop + bars[at].soldHeight}px`,
-              '--shape-width': bars[at].width,
-              '--shape-height': bars[at].soldHeight
-            }}/>
+            <Bar className="buy-side"
+              x={bars[at].x} top={bars[at].boughtTop} width={bars[at].width} height={bars[at].boughtHeight}/>
+            <Bar className="sell-side"
+              x={bars[at].x} top={bars[at].soldTop} width={bars[at].width} height={bars[at].soldHeight}/>
           </g>)}
         </svg>
       </Axes>
