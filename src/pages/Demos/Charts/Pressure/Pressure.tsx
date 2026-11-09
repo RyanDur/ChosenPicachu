@@ -1,17 +1,17 @@
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
-import {liveTrades, money, Trade} from '../../Market';
+import {liveTrades, money, Period, periods, Trade} from '../../Market';
 import {Axes, axisRange} from '../Axes';
+import {periodDisplay} from '../period-display';
 import {pressureShapes} from './pressure-shapes';
 import '../chart-card.css';
 import './Pressure.css';
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 104;
-const BUCKET_MILLISECONDS = 60000;
+const BUCKET_MILLISECONDS = periods.bucketMilliseconds[Period.hour];
 const MOST_BUCKETS_SHOWN = 60;
-const TICK_EVERY_MILLISECONDS = 600000;
 const DEPTH_X = 1;
 const DEPTH_Y = 1.5;
 
@@ -32,8 +32,8 @@ export const Pressure: FC<Props> = ({trades, actions}) => {
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={axisRange.of(pressures.map(pressure => pressure.openedAt), peak, -peak)} scaleText={money.bitcoin}
-        timeFormat="HH:mm"
-        tickEvery={TICK_EVERY_MILLISECONDS}
+        timeFormat={periodDisplay.timePattern[Period.hour]}
+        tickEvery={periodDisplay.tickEveryMilliseconds[Period.hour]}
         headroomMilliseconds={2 * BUCKET_MILLISECONDS}>
         <svg className="pressures" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}>
           <line className="midline drawn" x1={0} y1={CHART_HEIGHT / 2} x2={CHART_WIDTH} y2={CHART_HEIGHT / 2}/>
