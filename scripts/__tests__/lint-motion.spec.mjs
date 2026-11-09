@@ -35,6 +35,14 @@ describe('chosen/compositor-motion', () => {
     expect(await warningsFor('a { transition: color var(--fade) 0s; }')).toHaveLength(1);
   });
 
+  it('should refuse a property whose duration is a math function, even with a 0s delay', async () => {
+    expect(await warningsFor('a { transition: width max(.3s, 1ms) 0s; }')).toHaveLength(1);
+  });
+
+  it('should read a duration whose unit is in capitals', async () => {
+    expect(await warningsFor('a { transition: width .3S 0s; }')).toHaveLength(1);
+  });
+
   it('should read a flip only from the shorthand, so a flip written as longhands is refused', async () => {
     expect(await warningsFor('a { transition-property: color; transition-duration: 0s; }')).toHaveLength(1);
   });
