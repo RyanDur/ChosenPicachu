@@ -18,7 +18,9 @@ const firstMidLast = (times: readonly number[]): readonly number[] =>
     .map(index => times[index]);
 
 const chosenTicks = (times: readonly number[], tickEvery?: number): readonly number[] =>
-  maybe(tickEvery).map(every => times.filter(at => at % every === 0)).orElse(firstMidLast(times));
+  maybe(tickEvery)
+    .map(spacingMilliseconds => times.filter(at => at % spacingMilliseconds === 0))
+    .orElse(firstMidLast(times));
 
 const placed = (
   times: readonly number[],
