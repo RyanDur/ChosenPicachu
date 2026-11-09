@@ -71,7 +71,7 @@ describe('the chart periods', () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(flatRows(70, 60))));
     render(<TestApp at={demosAt('charts', '?charts=price')}/>);
 
-    expect(await chartsDesk.findOnPriceCard('60 candles · 1m each')).toBeVisible();
+    await waitFor(() => expect(chartsDesk.drawnPoints()).toBe(60));
   });
 
   test('the day chart draws at most 24 candles when the history holds more', async () => {
