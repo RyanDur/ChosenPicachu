@@ -32,7 +32,7 @@ const toCandles = (rows: readonly HistoryRow[]): readonly Candle[] => rows.map(t
 
 const periodQuery = (period: Period, now: Date): string => {
   const start = new Date(now.getTime() - periods.lengthMilliseconds[period]);
-  return `granularity=${periods.granularitySeconds[period]}` +
+  return `granularity=${periods.bucketSeconds[period]}` +
     `&start=${encodeURIComponent(start.toISOString())}` +
     `&end=${encodeURIComponent(now.toISOString())}`;
 };
