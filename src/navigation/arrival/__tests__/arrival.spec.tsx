@@ -1,26 +1,40 @@
-import {FC, useEffect, useState} from 'react';
+import {FC, useSyncExternalStore} from 'react';
 import {render} from '@testing-library/react';
 import {createMemoryRouter, DataRouter, Link, Outlet, RouterProvider, useNavigate} from 'react-router';
 import {arrival} from '../arrival';
 import {arrivingReader} from '../__test_support/reader';
 
-const drawnAfter = 3000;
-
-const DrawnLater: FC<{id: string}> = ({id}) => {
-  const [drawn, setDrawn] = useState(false);
-  useEffect(() => {
-    const drawing = setTimeout(() => setDrawn(true), drawnAfter);
-    return () => clearTimeout(drawing);
-  }, []);
-  return drawn && <h2 id={id} tabIndex={-1}>{id}</h2>;
+type LateTargets = {
+  readonly draw: (id: string) => void;
+  readonly drawn: (id: string) => boolean;
+  readonly subscribe: (listener: () => void) => () => void;
 };
 
-const Story: FC = () => <>
+const lateTargets = (): LateTargets => {
+  const drawn = new Set<string>();
+  const listeners = new Set<() => void>();
+  return {
+    draw: id => {
+      drawn.add(id);
+      listeners.forEach(listener => listener());
+    },
+    drawn: id => drawn.has(id),
+    subscribe: listener => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    }
+  };
+};
+
+const DrawnLater: FC<{id: string; late: LateTargets}> = ({id, late}) =>
+  useSyncExternalStore(late.subscribe, () => late.drawn(id)) && <h2 id={id} tabIndex={-1}>{id}</h2>;
+
+const Story: FC<{late: LateTargets}> = ({late}) => <>
   <h2 id="here" tabIndex={-1}>here</h2>
-  <DrawnLater id="late"/>
+  <DrawnLater id="late" late={late}/>
   <details>
     <summary>fold</summary>
-    <DrawnLater id="folded"/>
+    <DrawnLater id="folded" late={late}/>
   </details>
 </>;
 
@@ -32,26 +46,32 @@ const Links: FC = () => {
   </nav>;
 };
 
-const site = (): DataRouter => createMemoryRouter([{
+const site = (late: LateTargets): DataRouter => createMemoryRouter([{
   element: <><Links/><Outlet/></>,
   children: [
     {path: '/', element: <p>home</p>},
-    {path: '/story', element: <Story/>},
+    {path: '/story', element: <Story late={late}/>},
     {path: '/other', element: <p>other</p>}
   ]
 }]);
 
-const siteFollowed = (): (() => void) => {
-  const router = site();
+type FollowedSite = {
+  readonly draws: (id: string) => void;
+  readonly stopFollowing: () => void;
+};
+
+const siteFollowed = (): FollowedSite => {
+  const late = lateTargets();
+  const router = site(late);
   render(<RouterProvider router={router}/>);
   const stopFollowing = arrival.follow(router);
   onTestFinished(stopFollowing);
-  return stopFollowing;
+  return {draws: late.draw, stopFollowing};
 };
 
 describe('arrival', () => {
   beforeEach(() => {
-    vi.useFakeTimers({toFake: ['setTimeout', 'clearTimeout', 'requestAnimationFrame', 'cancelAnimationFrame'], shouldAdvanceTime: true});
+    vi.useFakeTimers({toFake: ['requestAnimationFrame', 'cancelAnimationFrame']});
   });
 
   afterEach(() => {
@@ -59,11 +79,13 @@ describe('arrival', () => {
   });
 
   test('a reader sent to a fragment the page draws later lands on it', async () => {
-    siteFollowed();
+    const site = siteFollowed();
     const reader = arrivingReader();
-
     await reader.follows('/story#late');
-    await reader.waits(drawnAfter + 1000);
+    await reader.waits(100);
+
+    site.draws('late');
+    await reader.waits(500);
 
     expect(reader.heading('late')).toHaveFocus();
   });
@@ -82,31 +104,33 @@ describe('arrival', () => {
   });
 
   test('a reader who follows a second link before the first lands ends up only at the second', async () => {
-    siteFollowed();
+    const site = siteFollowed();
     const reader = arrivingReader();
-
     await reader.follows('/story#late');
     await reader.waits(100);
+
     await reader.follows('/story#here');
-    await reader.waits(drawnAfter + 1000);
+    site.draws('late');
+    await reader.waits(500);
 
     expect(reader.headingsFocused()).toEqual(['here']);
   });
 
   test('a reader who follows a second link before the first lands leaves the first one’s fold shut', async () => {
-    siteFollowed();
+    const site = siteFollowed();
     const reader = arrivingReader();
-
     await reader.follows('/story#folded');
     await reader.waits(100);
+
     await reader.follows('/story#here');
-    await reader.waits(drawnAfter + 1000);
+    site.draws('folded');
+    await reader.waits(500);
 
     expect(reader.fold()).not.toHaveAttribute('open');
   });
 
   test('a reader who goes back to the entry still being landed on is not moved', async () => {
-    siteFollowed();
+    const site = siteFollowed();
     const reader = arrivingReader();
     await reader.follows('/story#late');
     await reader.waits(100);
@@ -114,19 +138,21 @@ describe('arrival', () => {
     await reader.waits(100);
 
     await reader.goesBack();
-    await reader.waits(drawnAfter + 1000);
+    site.draws('late');
+    await reader.waits(500);
 
     expect(reader.heading('late')).not.toHaveFocus();
   });
 
   test('a landing stops when arrival stops following', async () => {
-    const stopFollowing = siteFollowed();
+    const site = siteFollowed();
     const reader = arrivingReader();
     await reader.follows('/story#late');
     await reader.waits(100);
 
-    stopFollowing();
-    await reader.waits(drawnAfter + 1000);
+    site.stopFollowing();
+    site.draws('late');
+    await reader.waits(500);
 
     expect(reader.heading('late')).not.toHaveFocus();
   });
