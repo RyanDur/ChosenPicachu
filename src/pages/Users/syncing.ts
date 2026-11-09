@@ -9,7 +9,10 @@ export const syncing = (usersApi: UsersAPI, saved: () => void, refused: (error: 
   (previous, current, dispatch, action) => {
     switch (action.type) {
       case 'opened':
-        usersApi.getAll().onSuccess(arrived => dispatch(usersActions.usersArrived(arrived))).onFailure(refused);
+        usersApi.getAll()
+          .onSuccess(arrived => dispatch(usersActions.usersArrived(arrived)))
+          .onFailure(() => dispatch(usersActions.rosterRefused()))
+          .onFailure(refused);
         return;
       case 'serverUnreachable':
         refused(HTTPError.NETWORK_ERROR);

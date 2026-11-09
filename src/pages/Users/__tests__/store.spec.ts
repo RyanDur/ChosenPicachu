@@ -46,6 +46,22 @@ describe('the users store', () => {
     expect(usersSelectors.addWaits(store.state)).toBe(false);
   });
 
+  it('an add can go once the roster has been refused', () => {
+    const store = usersStore();
+
+    store.dispatch(usersActions.rosterRefused());
+
+    expect(usersSelectors.addWaits(store.state)).toBe(false);
+  });
+
+  it('an add still waits when the users server could not be reached', () => {
+    const store = usersStore();
+
+    store.dispatch(usersActions.serverUnreachable());
+
+    expect(usersSelectors.addWaits(store.state)).toBe(true);
+  });
+
   it('an add waits while another is in flight', () => {
     const store = usersStore();
     store.dispatch(usersActions.usersArrived([]));
