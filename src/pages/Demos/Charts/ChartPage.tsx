@@ -70,49 +70,49 @@ const features: Record<ChartKind, Feature> = {
   }
 };
 
+type Props = {kind: ChartKind};
+
+const ChartTutorial: FC<Props> = ({kind}) => {
+  const {name, reference, quote, chart: Chart} = features[kind];
+  return <article aria-labelledby={`tutorial-${kind}`} className="chart-page tutorials">
+    <h2 id={`tutorial-${kind}`} className="off-screen">{`${name} tutorial`}</h2>
+    <Chart/>
+    <h3 className="title">let’s build this feature</h3>
+    <p className="overview paragraph">
+      We are going to build the <a
+        className="signpost"
+        href={reference}
+        target="_blank"
+        rel="noreferrer">{name}</a> above. The card below tells it as a <a
+        className="signpost"
+        href="https://initialcapacity.io/insights/user-story"
+        target="_blank"
+        rel="noreferrer">user story</a>, a card, a conversation and a confirmation, which the{' '}
+      <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks through: open it and you get the plan and the steps
+      that build it, with the real code from this site, so what you read is what runs. The
+      links go to MDN
+      if you want more.
+    </p>
+    <figure className="feedback">
+      <blockquote className="quote paragraph italic trim-bar-beside">{quote}</blockquote>
+      <figcaption className="attribution caption muted-ink">a trader</figcaption>
+    </figure>
+    <p className="overview paragraph">
+      If you want the exercise, stop here and build the story yourself first. The chart
+      above is my interpretation of that; the card below tells how I built it. Open it
+      to see the steps, or to compare them with yours.
+    </p>
+    <section aria-label={`build the ${name} yourself`} className="build-steps">
+      <StoryDepth.Provider value={4}>
+        <ChartStories kind={kind}/>
+      </StoryDepth.Provider>
+    </section>
+  </article>;
+};
+
 export const ChartPage: FC = () => {
   const {kind} = useParams();
-  const page = (dealt: ChartKind) => () => {
-    const {name, reference, quote, chart: Chart} = features[dealt];
-    return <article aria-labelledby={`tutorial-${dealt}`} className="chart-page tutorials">
-      <h2 id={`tutorial-${dealt}`} className="off-screen">{`${name} tutorial`}</h2>
-      <Chart/>
-      <h3 className="title">let’s build this feature</h3>
-      <p className="overview paragraph">
-        We are going to build the <a
-          className="signpost"
-          href={reference}
-          target="_blank"
-          rel="noreferrer">{name}</a> above. The card below tells it as a <a
-          className="signpost"
-          href="https://initialcapacity.io/insights/user-story"
-          target="_blank"
-          rel="noreferrer">user story</a>, a card, a conversation and a confirmation, which the{' '}
-        <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks through: open it and you get the plan and the steps
-        that build it, with the real code from this site, so what you read is what runs. The
-        links go to MDN
-        if you want more.
-      </p>
-      <figure className="feedback">
-        <blockquote className="quote paragraph italic trim-bar-beside">{quote}</blockquote>
-        <figcaption className="attribution caption muted-ink">a trader</figcaption>
-      </figure>
-      <p className="overview paragraph">
-        If you want the exercise, stop here and build the story yourself first. The chart
-        above is my interpretation of that; the card below tells how I built it. Open it
-        to see the steps, or to compare them with yours.
-      </p>
-      <section aria-label={`build the ${name} yourself`} className="build-steps">
-        <StoryDepth.Provider value={4}>
-          <ChartStories kind={dealt}/>
-        </StoryDepth.Provider>
-      </section>
-    </article>;
-  };
-  return chartKinds.match(chartKinds.is(kind) ? kind : undefined, {
-    price: page('price'),
-    candles: page('candles'),
-    pressure: page('pressure'),
-    pie: page('pie')
-  }).orElse(<Navigate to={demoTab.address(DemoTopics.charts)} replace/>);
+  return chartKinds.is(kind)
+    ? <ChartTutorial kind={kind}/>
+    : <Navigate to={demoTab.address(DemoTopics.charts)} replace/>;
 };
