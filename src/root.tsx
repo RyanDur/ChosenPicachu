@@ -1,6 +1,6 @@
 import {BannerProvider, Banners} from '@banners';
 import {Location, Outlet, ScrollRestoration} from 'react-router';
-import {FC, PropsWithChildren, ReactNode} from 'react';
+import {FC, PropsWithChildren} from 'react';
 import './index.css';
 import './BasePage.css';
 import {FeedbackProvider} from '@feedback';
@@ -38,10 +38,10 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
 // the router keys every entry opened by its address 'default', so those entries would all share one scroll place
 const placeOf = ({key, pathname, search}: Location): string => key === 'default' ? pathname + search : key;
 
-const Frame: FC<{room: ReactNode; pageUnknown?: boolean}> = ({room, pageUnknown = false}) =>
+const Frame: FC<PropsWithChildren<{pageUnknown?: boolean}>> = ({children, pageUnknown = false}) =>
   <BannerProvider><PageNameProvider><FeedbackProvider><PageUnknown.Provider value={pageUnknown}>
     <Rail/>
-    {room}
+    {children}
     <Banners/>
     <ScrollRestoration getKey={placeOf}/>
   </PageUnknown.Provider></FeedbackProvider></PageNameProvider></BannerProvider>;
@@ -67,6 +67,6 @@ export const WaitingRoom: FC = () =>
     </noscript>
   </Page>;
 
-export const FallbackPage: FC = () => <Frame pageUnknown room={<WaitingRoom/>}/>;
+export const FallbackPage: FC = () => <Frame pageUnknown><WaitingRoom/></Frame>;
 
-export const Root: FC = () => <Frame room={<Outlet/>}/>;
+export const Root: FC = () => <Frame><Outlet/></Frame>;
