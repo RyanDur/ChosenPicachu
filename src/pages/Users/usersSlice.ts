@@ -39,7 +39,7 @@ const confirming = (count: number, action: UsersAction): number =>
 
 const awaitingAdd = (inFlight: boolean, action: UsersAction): boolean => {
   switch (action.type) {
-    case 'userAdded':
+    case 'userAddSent':
       return true;
     case 'userAddConfirmed':
     case 'userAddRefused':
