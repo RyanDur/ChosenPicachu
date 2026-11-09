@@ -92,6 +92,17 @@ describe('reaching the users server', () => {
     expect(outcomes()).toEqual(['unreachable']);
   });
 
+  test('a server whose registering fails after the wait is unreachable, once', async () => {
+    const failsLate = new Promise((_, reject) => setTimeout(() => reject(new Error('refused')), 12_000));
+    const container = workersContainer({registering: failsLate});
+    const {reaching, outcomes} = heard();
+
+    usersServing.reach(some(container.workers), reaching);
+    await vi.advanceTimersByTimeAsync(12_000);
+
+    expect(outcomes()).toEqual(['unreachable']);
+  });
+
   test('a wait that is stopped reports nothing', async () => {
     const container = workersContainer();
     const {reaching, outcomes} = heard();

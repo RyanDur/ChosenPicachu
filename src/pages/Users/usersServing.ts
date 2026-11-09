@@ -27,7 +27,13 @@ const askedToClaim = (workers: Workers): void => {
 
 const watchedForControl = (workers: Workers, {reached, unreachable}: Reaching): () => void => {
   const watch = new AbortController();
-  const waiting = setTimeout(unreachable, patience);
+  const reported = new AbortController();
+  const unreachableOnce = (): void => {
+    if (reported.signal.aborted) return;
+    reported.abort();
+    unreachable();
+  };
+  const waiting = setTimeout(unreachableOnce, patience);
   const stopWatching = (): void => {
     clearTimeout(waiting);
     watch.abort();
@@ -40,7 +46,7 @@ const watchedForControl = (workers: Workers, {reached, unreachable}: Reaching): 
   workers.addEventListener('controllerchange', ended(reached), {signal: watch.signal});
   asyncResult(workers.register(script))
     .onSuccess(() => maybe(workers.controller).either(ended(reached), () => askedToClaim(workers)))
-    .onFailure(ended(unreachable));
+    .onFailure(ended(unreachableOnce));
   return stopWatching;
 };
 
