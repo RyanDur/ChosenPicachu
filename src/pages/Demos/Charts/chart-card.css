@@ -18,7 +18,6 @@
   }
 
   .chart-caption {
-    grid-column: 1 / -1;
     width: fit-content;
     min-height: var(--base-x-2);
     margin: var(--base-x-0_5) auto 0;
@@ -35,7 +34,6 @@
   }
 
   .chart-loading {
-    grid-column: 1 / -1;
     position: absolute;
     inset: 0;
     margin: auto;
