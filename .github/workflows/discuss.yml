@@ -78,7 +78,7 @@ jobs:
 
   settle:
     needs: answer
-    if: needs.answer.outputs.answer
+    if: needs.answer.outputs.first
     runs-on: ubuntu-26.04
     permissions:
       # GitHub's resolveReviewThread refuses a token without contents: write ("Resource not accessible by integration").
