@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {render} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {Step, Steps, Stories, Story} from '@pages/Demos/Recipe';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 
@@ -39,5 +39,20 @@ describe('a story card', () => {
     </Stories></TestApp>);
 
     expect(recipeFolds.tallyOf(card('The reader can read prose alone'))).toBeUndefined();
+  });
+
+  test('a story that arrival opened closes on one press', async () => {
+    render(<TestApp at="/#told-first"><Stories>
+      <Story param="tale" id="told" can="The reader can arrive at a step" soThat="a link can point inside a story">
+        <Steps>
+          <Step title="First" id="told-first">one</Step>
+        </Steps>
+      </Story>
+    </Stories></TestApp>);
+    await waitFor(() => expect(card('The reader can arrive at a step')).toHaveAttribute('open'));
+
+    await recipeFolds.press(document.body, 'The reader can arrive at a step');
+
+    expect(card('The reader can arrive at a step')).not.toHaveAttribute('open');
   });
 });
