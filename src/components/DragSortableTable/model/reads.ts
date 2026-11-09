@@ -49,14 +49,14 @@ const report = ({state}: TableView): Maybe<Report> => maybe(state.report);
 
 const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 
-const selectSeatOffset = (view: TableView): Drift | undefined =>
+const seatOffset = (view: TableView): Drift | undefined =>
   tableState.seatOffset(view.state, order(view), standing(view));
 
 const seatOfColumn = (name: string) => (view: TableView): Drift | undefined =>
-  columnHeld(name)(view) ? selectSeatOffset(view) : undefined;
+  columnHeld(name)(view) ? seatOffset(view) : undefined;
 
 const seatOfRow = (key: string) => (view: TableView): Drift | undefined =>
-  rowHeld(key)(view) ? selectSeatOffset(view) : undefined;
+  rowHeld(key)(view) ? seatOffset(view) : undefined;
 
 const driftOfColumn = (name: string) => (view: TableView): Drift | undefined => columnDrag(name)(view)?.drift;
 
