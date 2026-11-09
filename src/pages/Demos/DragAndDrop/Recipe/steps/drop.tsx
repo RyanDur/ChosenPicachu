@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, Words, carve, Sample, lines} from '../../../Recipe';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 export const AcceptTheDrop: FC<{listSource: Sample; itemSource: Sample}> = ({listSource, itemSource}) =>
   <Step title="Accept the drop, or the platform takes it back">
@@ -21,7 +21,7 @@ export const AcceptTheDrop: FC<{listSource: Sample; itemSource: Sample}> = ({lis
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(listSource, '<ol aria-label="sortable list"', 'onDrop={event => event.preventDefault()}'), gap,
+        ...carve.span(listSource, '<ol aria-label="sortable list"', 'onDrop={event => event.preventDefault()}'), blankLine,
         ...carve.span(itemSource, 'onDragOver={event => {', '}}')
       ]}/>
     </Codes>

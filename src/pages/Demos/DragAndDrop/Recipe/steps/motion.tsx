@@ -5,7 +5,7 @@ import {MotionDial} from '../../../Controls';
 import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
 import {sources} from './sources';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 export const SlideCrossed: FC = () =>
   <Step title="Slide the crossed item into place" dial={<MotionDial name="native-motion"/>}>
@@ -31,14 +31,14 @@ export const SlideCrossed: FC = () =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.unit(sources.slideStarts, 'const afterCrossing'), gap,
+        ...carve.unit(sources.slideStarts, 'const afterCrossing'), blankLine,
         ...carve.unit(sources.dragSort, 'const crossed')
       ]}/>
       <Snippet label="CSS" lines={[
-        ...carve.unit(sources.sortableListCss, '.sliding-in {'), gap,
-        ...carve.unit(sources.sortableListCss, '.sliding-in-again {'), gap,
-        ...carve.unit(sources.sortableListCss, '&.eager-paced :is(.sliding-in, .sliding-in-again) {'), gap,
-        ...carve.unit(sources.sortableListCss, '@keyframes slide-in {'), gap,
+        ...carve.unit(sources.sortableListCss, '.sliding-in {'), blankLine,
+        ...carve.unit(sources.sortableListCss, '.sliding-in-again {'), blankLine,
+        ...carve.unit(sources.sortableListCss, '&.eager-paced :is(.sliding-in, .sliding-in-again) {'), blankLine,
+        ...carve.unit(sources.sortableListCss, '@keyframes slide-in {'), blankLine,
         ...carve.unit(sources.sortableListCss, '@keyframes slide-in-again {')
       ]}/>
     </Codes>

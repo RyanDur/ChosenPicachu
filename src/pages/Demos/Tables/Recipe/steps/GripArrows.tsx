@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {sources} from './sources';
-import {gap} from './gap';
+import {blankLine} from './blankLine';
 
 export const GripArrows: FC<{world: World; rowSource: Sample; buildSrc: Sample}> = ({world, rowSource, buildSrc}) =>
   <Step title="Turn the arrows vertical">
@@ -24,7 +24,7 @@ export const GripArrows: FC<{world: World; rowSource: Sample; buildSrc: Sample}>
             lines.aside('// the grip handles its own arrows; the walk is shared')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.unit(sources.frameGrip, "grip.addEventListener('keydown'"), gap,
+            ...carve.unit(sources.frameGrip, "grip.addEventListener('keydown'"), blankLine,
             ...carve.unit(buildSrc, 'const rowTo = '),
             lines.aside('// the grip handles its own arrows; the walk is shared')
           ]}/>}

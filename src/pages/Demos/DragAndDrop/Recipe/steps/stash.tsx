@@ -4,7 +4,7 @@ import {Codes, Mdn, Sample, Says, Snippet, Step, Words, carve, lines} from '../.
 import {Term} from '../Term';
 import {sources} from './sources';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 export const StashLanding: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Stash the landing, settle after the drag" dial={<PaceDial name="native-pace"/>}>
@@ -19,8 +19,8 @@ export const StashLanding: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(listSource, 'onDragOver={() => dispatch(dragSortChange.hovered(index))}', 'onDragOver={() => dispatch(dragSortChange.hovered(index))}'), gap,
-        ...carve.span(listSource, 'onDragLeave={() => dispatch(dragSortChange.left())}', 'onDragLeave={() => dispatch(dragSortChange.left())}'), gap,
+        ...carve.span(listSource, 'onDragOver={() => dispatch(dragSortChange.hovered(index))}', 'onDragOver={() => dispatch(dragSortChange.hovered(index))}'), blankLine,
+        ...carve.span(listSource, 'onDragLeave={() => dispatch(dragSortChange.left())}', 'onDragLeave={() => dispatch(dragSortChange.left())}'), blankLine,
         ...carve.unit(sources.dragSort, 'const settled')
       ]}/>
     </Codes>

@@ -3,7 +3,7 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../.
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
-import {gap} from './gap';
+import {blankLine} from './blankLine';
 
 const shareMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
@@ -45,7 +45,7 @@ export const CssShare: FC<{world: World}> = ({world}) =>
       <Codes>
         {shareMarkup[world]}
         <Snippet label="CSS" lines={[
-          ...carve.unit(sources.sortableCss, '.grabbable {'), gap,
+          ...carve.unit(sources.sortableCss, '.grabbable {'), blankLine,
           ...carve.unit(sources.sortableCss, '.sortable {')
         ]}/>
       </Codes>

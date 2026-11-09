@@ -3,7 +3,7 @@ import {MotionDial} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
 import type {World} from '../../../Controls';
 import {sources} from './sources';
-import {gap} from './gap';
+import {blankLine} from './blankLine';
 
 export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, buildSrc}) =>
@@ -23,14 +23,14 @@ export const WalkSlides: FC<{world: World; headerSource: Sample; buildSrc: Sampl
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...carve.unit(sources.arrows, 'const column: Arrows'), gap,
-              ...carve.unit(headerSource, 'const walkedTo = '), gap,
+              ...carve.unit(sources.arrows, 'const column: Arrows'), blankLine,
+              ...carve.unit(headerSource, 'const walkedTo = '), blankLine,
               ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(tableActions.settled', 'onAnimationEnd={() => dispatch(tableActions.settled'),
               lines.aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...carve.unit(sources.arrows, 'const column: Arrows'), gap,
-              ...carve.unit(buildSrc, 'const columnTo = '), gap,
+              ...carve.unit(sources.arrows, 'const column: Arrows'), blankLine,
+              ...carve.unit(buildSrc, 'const columnTo = '), blankLine,
               ...carve.unit(sources.frameSettle, 'const untilSettled = '),
               lines.aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
             ]}/>}

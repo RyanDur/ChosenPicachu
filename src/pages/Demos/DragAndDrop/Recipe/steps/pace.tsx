@@ -4,7 +4,7 @@ import {Codes, Sample, Says, Snippet, Step, Words, carve, lines} from '../../../
 import {Term} from '../Term';
 import {sources} from './sources';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
   <Step title="Commit inside the crossing" dial={<PaceDial name="native-pace"/>}>
@@ -17,8 +17,8 @@ export const CommitCrossing: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.unit(sources.crossing, 'const over'), gap,
-        ...carve.span(listSource, 'onDragOver={crossing.over(sort.held, sort.order)(item, index, homeward =>', 'dispatch(dragSortChange.crossed(index, homeward)))}'), gap,
+        ...carve.unit(sources.crossing, 'const over'), blankLine,
+        ...carve.span(listSource, 'onDragOver={crossing.over(sort.held, sort.order)(item, index, homeward =>', 'dispatch(dragSortChange.crossed(index, homeward)))}'), blankLine,
         ...carve.unit(sources.dragSort, 'const crossed')
       ]}/>
     </Codes>

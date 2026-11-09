@@ -13,7 +13,7 @@ import {DataPath} from './DataPath';
 import '../../Recipe/Recipe.css';
 import {Term} from './Term';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 const socketPlans: Record<World, string> = {
   react: 'One connection at page scope, so the stream survives every tab and dial below it.',
@@ -34,14 +34,14 @@ const foldSays: Record<World, ReactNode> = {
 const foldCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), gap,
+      ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), blankLine,
       ...carve.unit(tradeTotalsSource, 'const aggregate = ')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), gap,
-      ...carve.unit(buildSrc, 'const reconciled = '), gap,
+      ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), blankLine,
+      ...carve.unit(buildSrc, 'const reconciled = '), blankLine,
       ...carve.unit(frameRows, 'const writeCells = ')
     ]}/>
   </Codes>
@@ -74,7 +74,7 @@ const FlowStory: FC<{world: World}> = ({world}) =>
             already delivered, and keeps everything in time order.</Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...carve.unit(hydrateSource, 'const load'), gap,
+              ...carve.unit(hydrateSource, 'const load'), blankLine,
               ...carve.unit(hydrateSource, 'const hydrated')
             ]}/>
           </Codes>
@@ -94,7 +94,7 @@ const FlowStory: FC<{world: World}> = ({world}) =>
             the feed failed.</Says>
           <Codes>
             <Snippet label="TS" lines={[
-              ...carve.unit(exchangeSource, 'const stream = streaming('), gap,
+              ...carve.unit(exchangeSource, 'const stream = streaming('), blankLine,
               ...carve.unit(marketSliceSource, 'const tradesReducer')
             ]}/>
           </Codes>

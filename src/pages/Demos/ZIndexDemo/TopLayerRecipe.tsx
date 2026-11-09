@@ -12,7 +12,7 @@ import surfaceCss from '../../../styles/surface.css?sample';
 import typographyCss from '../../../styles/typography.css?sample';
 import '../Recipe/Recipe.css';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 const sideFact: Record<Side, string> = {
   top: 'top sets the margin above the panel and leaves the one below at auto.',
@@ -75,7 +75,7 @@ export const TopLayerRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(providerSource, 'export const BannerProvider'), gap,
+            ...carve.unit(providerSource, 'export const BannerProvider'), blankLine,
             ...carve.span(bannersSource, 'return has(banners)', "className={classNames('banners'")
           ]}/>
         </Codes>
@@ -98,8 +98,8 @@ export const TopLayerRecipe: FC = () => {
         <Codes>
           <Snippet label="HTML" lines={carve.span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
           <Snippet label="CSS" lines={[
-            ...carve.span(bannersCss, '.banners {', 'z-index: 3;'), gap,
-            ...carve.unit(bannersCss, `.${side} {`), gap,
+            ...carve.span(bannersCss, '.banners {', 'z-index: 3;'), blankLine,
+            ...carve.unit(bannersCss, `.${side} {`), blankLine,
             ...carve.unit(alignSheet[align], `.${align} {`)
           ]}/>
         </Codes>
@@ -115,16 +115,16 @@ export const TopLayerRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...carve.unit(bannersCss, '.news {'), gap,
-            ...carve.unit(surfaceCss, '.field {'), gap,
-            ...carve.unit(surfaceCss, '.rounded-corners {'), gap,
-            ...carve.unit(surfaceCss, '.floating {'), gap,
-            ...carve.unit(surfaceCss, '.alarm-ink {'), gap,
-            ...carve.unit(surfaceCss, '.hairline-outline {'), gap,
-            ...carve.unit(bannersCss, '.dismiss {'), gap,
-            ...carve.unit(surfaceCss, '.borderless {'), gap,
-            ...carve.unit(surfaceCss, '.unfilled {'), gap,
-            ...carve.unit(typographyCss, '.glyph-icon {'), gap,
+            ...carve.unit(bannersCss, '.news {'), blankLine,
+            ...carve.unit(surfaceCss, '.field {'), blankLine,
+            ...carve.unit(surfaceCss, '.rounded-corners {'), blankLine,
+            ...carve.unit(surfaceCss, '.floating {'), blankLine,
+            ...carve.unit(surfaceCss, '.alarm-ink {'), blankLine,
+            ...carve.unit(surfaceCss, '.hairline-outline {'), blankLine,
+            ...carve.unit(bannersCss, '.dismiss {'), blankLine,
+            ...carve.unit(surfaceCss, '.borderless {'), blankLine,
+            ...carve.unit(surfaceCss, '.unfilled {'), blankLine,
+            ...carve.unit(typographyCss, '.glyph-icon {'), blankLine,
             ...carve.unit(surfaceCss, '.muted-ink {')
           ]}/>
         </Codes>

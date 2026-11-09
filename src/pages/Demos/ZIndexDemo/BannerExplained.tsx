@@ -11,7 +11,7 @@ import bannersSource from '@banners/Banners.tsx?sample';
 import bannersCss from '@banners/Banners.css?sample';
 import '../Runs.css';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 export const BannerExplained: FC = () => {
   const [searchParams] = useSearchParamsOnceHydrated();
@@ -27,7 +27,7 @@ export const BannerExplained: FC = () => {
           two, later in the code with its own z-index of 1, passes over it. It is the old menu again, at the window’s
           edge.</p>
         <Snippet label="CSS" lines={[
-          ...carve.unit(zIndexCss, '.old-banner {'), gap,
+          ...carve.unit(zIndexCss, '.old-banner {'), blankLine,
           ...carve.unit(zIndexCss, '.forms-context {')
         ]}/>
       </li>

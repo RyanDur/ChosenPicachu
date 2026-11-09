@@ -4,7 +4,7 @@ import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '.
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
-import {gap} from './gap';
+import {blankLine} from './blankLine';
 
 export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sample; buildSrc: Sample}> =
   ({world, headerSource, paceSource, buildSrc}) =>
@@ -32,13 +32,13 @@ export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sampl
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...carve.unit(headerSource, 'const moved = '), gap,
-              ...carve.unit(headerSource, 'const release = '), gap,
-              ...carve.unit(paceSource, 'const column'), gap,
+              ...carve.unit(headerSource, 'const moved = '), blankLine,
+              ...carve.unit(headerSource, 'const release = '), blankLine,
+              ...carve.unit(paceSource, 'const column'), blankLine,
               ...carve.unit(paceSource, 'const released')
             ]}/>
             : <Snippet label="TS" lines={[
-              ...carve.unit(buildSrc, 'const moved = '), gap,
+              ...carve.unit(buildSrc, 'const moved = '), blankLine,
               ...carve.unit(buildSrc, 'const landed = ')
             ]}/>}
           <Snippet label="TS" lines={[

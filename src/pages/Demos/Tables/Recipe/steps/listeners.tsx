@@ -3,7 +3,7 @@ import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '.
 import {Term} from '../Term';
 import type {World} from '../../../Controls';
 import {sources} from './sources';
-import {gap} from './gap';
+import {blankLine} from './blankLine';
 
 export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buildSrc}) =>
   <Step title="Write each listener once, for both worlds">
@@ -43,7 +43,7 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
         where the moved column or row now sits.</Says>
       <Codes>
         <Snippet label="TS" lines={[
-          ...carve.unit(sources.store, 'export type Store'), gap,
+          ...carve.unit(sources.store, 'export type Store'), blankLine,
           ...carve.span(sources.lift, 'const column = (', ') => (event: GrabEvent): void => {'),
           lines.aside('// the order is a question the event asks, not a value the listener keeps')
         ]}/>
@@ -52,7 +52,7 @@ export const ListenersOnce: FC<{world: World; buildSrc: Sample}> = ({world, buil
             ...carve.unit(sources.element, 'export const useDragSortable')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.unit(buildSrc, 'export const dragSortable = '), gap,
+            ...carve.unit(buildSrc, 'export const dragSortable = '), blankLine,
             ...carve.span(buildSrc, 'hand.subscribe(', 'hand.subscribe(')
           ]}/>}
       </Codes>
