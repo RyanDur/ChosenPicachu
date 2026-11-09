@@ -1,12 +1,12 @@
 import {Address, NewUser, User} from '../profile';
+import {AddressName} from './drafts';
 
 export type DraftAction =
   | {readonly type: 'firstNameEdited'; readonly firstName: string}
   | {readonly type: 'lastNameEdited'; readonly lastName: string}
   | {readonly type: 'emailEdited'; readonly email: string}
   | {readonly type: 'dateOfBirthEdited'; readonly dateOfBirth?: Date}
-  | {readonly type: 'homeAddressEdited'; readonly homeAddress: Address}
-  | {readonly type: 'workAddressEdited'; readonly workAddress: Address}
+  | {readonly type: 'addressEdited'; readonly name: AddressName; readonly address: Address}
   | {readonly type: 'detailsEdited'; readonly details: string}
   | {readonly type: 'avatarDrawn'; readonly avatar: string}
   | {readonly type: 'sameAsHomeChosen'; readonly sameAsHome: boolean}
@@ -18,8 +18,7 @@ type DraftActions = {
   lastNameEdited: (lastName: string) => DraftAction;
   emailEdited: (email: string) => DraftAction;
   dateOfBirthEdited: (dateOfBirth?: Date) => DraftAction;
-  homeAddressEdited: (homeAddress: Address) => DraftAction;
-  workAddressEdited: (workAddress: Address) => DraftAction;
+  addressEdited: (name: AddressName, address: Address) => DraftAction;
   detailsEdited: (details: string) => DraftAction;
   avatarDrawn: (avatar: string) => DraftAction;
   sameAsHomeChosen: (sameAsHome: boolean) => DraftAction;
@@ -32,8 +31,7 @@ export const draftActions: DraftActions = {
   lastNameEdited: lastName => ({type: 'lastNameEdited', lastName}),
   emailEdited: email => ({type: 'emailEdited', email}),
   dateOfBirthEdited: dateOfBirth => ({type: 'dateOfBirthEdited', dateOfBirth}),
-  homeAddressEdited: homeAddress => ({type: 'homeAddressEdited', homeAddress}),
-  workAddressEdited: workAddress => ({type: 'workAddressEdited', workAddress}),
+  addressEdited: (name, address) => ({type: 'addressEdited', name, address}),
   detailsEdited: details => ({type: 'detailsEdited', details}),
   avatarDrawn: avatar => ({type: 'avatarDrawn', avatar}),
   sameAsHomeChosen: sameAsHome => ({type: 'sameAsHomeChosen', sameAsHome}),
