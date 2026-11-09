@@ -21,9 +21,14 @@ const items = value => {
 /** @param {string} item */
 const propertyIn = item => item.split(/\s+/).find(word => not(notAProperty.test(word))) ?? 'all';
 
-/** @param {string} item a transition's item, whose first time, var() or calc() is its duration */
-const flips = item => maybe(item.split(/\s+/).find(word => /^([\d.]+m?s|(var|calc)\(\))$/.test(word)))
-  .map(duration => /^[\d.]+m?s$/.test(duration) && Number.parseFloat(duration) === 0)
+const time = /^[\d.]+m?s$/i;
+const easing = /^(cubic-bezier|steps|linear)\(\)$/;
+/** @param {string} word */
+const measures = word => time.test(word) || (/^[a-z-]+\(\)$/.test(word) && not(easing.test(word)));
+
+/** @param {string} item a transition's item, whose first time or non-easing function is its duration */
+const flips = item => maybe(item.split(/\s+/).find(measures))
+  .map(duration => time.test(duration) && Number.parseFloat(duration) === 0)
   .orElse(false);
 
 /** @param {string} property */
