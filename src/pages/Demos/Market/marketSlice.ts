@@ -12,7 +12,7 @@ export type TradesState = LiveTradesState & {
   readonly history: readonly Trade[];
 };
 
-export type CandlesState = Readonly<Partial<Record<Period, PeriodHistory>>>;
+export type CandlesState = Readonly<Record<Period, PeriodHistory>>;
 
 export type MarketState = {
   readonly trades: TradesState;
@@ -32,9 +32,15 @@ const tradesReducer = (trades: TradesState, action: MarketAction): TradesState =
   }
 };
 
+const unaskedCandles: CandlesState = {
+  [Period.hour]: periodHistory.unasked,
+  [Period.day]: periodHistory.unasked,
+  [Period.week]: periodHistory.unasked
+};
+
 const candlesReducer = (candles: CandlesState, action: MarketAction): CandlesState => {
   switch (action.type) {
-    case 'candlesAsked': return candles[action.period]?.state === 'arrived'
+    case 'candlesAsked': return candles[action.period].state === 'arrived'
       ? candles
       : {...candles, [action.period]: periodHistory.loading};
     case 'candlesArrived': return {...candles, [action.period]: {state: 'arrived', candles: action.candles}};
@@ -50,6 +56,6 @@ const arranged = arrangements.of(
 
 export const marketSlice = slices.combined<MarketState, MarketAction>({
   trades: {initial: noTrades, reduce: tradesReducer},
-  candles: {initial: {}, reduce: candlesReducer},
+  candles: {initial: unaskedCandles, reduce: candlesReducer},
   arrangement: {initial: arranged, reduce: arrangements.reducer}
 });

@@ -35,6 +35,21 @@ describe('the market store', () => {
     expect(marketReads.liveTrades(store.state)[0].id).toBe(2);
   });
 
+  it('a period nothing has asked for is unasked', () => {
+    const store = marketStore();
+
+    expect(Object.values(Period).map(period => marketReads.periodHistoryOf(period)(store.state)))
+      .toEqual(Object.values(Period).map(() => ({state: 'unasked'})));
+  });
+
+  it('asking for a period loads it until its candles come', () => {
+    const store = marketStore();
+
+    store.dispatch(marketActions.candlesAsked(Period.day));
+
+    expect(marketReads.periodHistoryOf(Period.day)(store.state)).toEqual({state: 'loading'});
+  });
+
   it('asking again for a period that has arrived keeps its candles while the new ones are on their way', () => {
     const store = marketStore();
     const candle = {openedAt: 1700000000000, low: 1, high: 3, open: 2, close: 2.5, volume: 1};

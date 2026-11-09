@@ -108,7 +108,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
           </g>)}
         </svg>
       </Axes>
-      {history.state === 'loading' && <Loading className="chart-loading"/>}
+      {periodHistory.stillComing(history) && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">{chartCaption.of(history, shownCandles.length, period)}</figcaption>
     </figure>
     <Explainer>

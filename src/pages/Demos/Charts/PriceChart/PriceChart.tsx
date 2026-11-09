@@ -103,7 +103,7 @@ export const PriceChart: FC<Props> = ({trades, id: given, actions, period, onPer
         <data className="title bold ink" value={last}>{money.cents.format(last)}</data>
         <data className="side-ink" value={last - first}>{money.deltaLabel(first, last)}</data>
       </>).orNull()}</p>
-      {history.state === 'loading' && <Loading className="chart-loading"/>}
+      {periodHistory.stillComing(history) && <Loading className="chart-loading"/>}
       <figcaption className="chart-caption caption">{chartCaption.of(history, shownCandles.length, period)}</figcaption>
     </figure>
     <Explainer>
