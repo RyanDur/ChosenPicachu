@@ -55,7 +55,7 @@ export const ClosedRoom: FC = () =>
 
 export const ErrorBoundary: FC = () =>
   <Page header={<Header title="Chosen Picachu" listed={names.closedRoom}/>} inView={false}>
-    <PageError/>
+    <PageError>Part of the frame around every page broke, so no page can open right now.</PageError>
   </Page>;
 
 export const WaitingRoom: FC = () =>
