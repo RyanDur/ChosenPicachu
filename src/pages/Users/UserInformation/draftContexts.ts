@@ -8,5 +8,5 @@ type DraftContext = {
 };
 
 export const draftContexts = {
-  Draft: createContext<DraftContext>({draft: drafts.of(drafts.newUser('')), dispatch: () => undefined})
+  State: createContext<DraftContext>({draft: drafts.of(drafts.newUser('')), dispatch: () => undefined})
 };
