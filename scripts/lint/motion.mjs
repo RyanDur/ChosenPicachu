@@ -21,9 +21,9 @@ const items = value => {
 /** @param {string} item */
 const propertyIn = item => item.split(/\s+/).find(word => not(notAProperty.test(word))) ?? 'all';
 
-/** @param {string} item a transition's item, whose first time is its duration */
-const flips = item => maybe(item.split(/\s+/).find(word => /^[\d.]+m?s$/.test(word)))
-  .map(duration => Number.parseFloat(duration) === 0)
+/** @param {string} item a transition's item, whose first time, var() or calc() is its duration */
+const flips = item => maybe(item.split(/\s+/).find(word => /^([\d.]+m?s|(var|calc)\(\))$/.test(word)))
+  .map(duration => /^[\d.]+m?s$/.test(duration) && Number.parseFloat(duration) === 0)
   .orElse(false);
 
 /** @param {string} property */
