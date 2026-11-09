@@ -79,12 +79,10 @@ const ChartKindTutorial: FC<Props> = ({kind}) => {
     <Chart/>
     <h3 className="title">let’s build this feature</h3>
     <p className="overview paragraph">
-      We are going to build the <a
-        className="signpost"
+      We are going to build the <a className="signpost"
         href={reference}
         target="_blank"
-        rel="noreferrer">{name}</a> above. The card below tells it as a <a
-        className="signpost"
+        rel="noreferrer">{name}</a> above. The card below tells it as a <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
         rel="noreferrer">user story</a>, a card, a conversation and a confirmation, which the{' '}
