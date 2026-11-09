@@ -20,7 +20,6 @@ const structure = [
 const motionWithAReason = ['src/pages/Demos/Accordions/OldWayMotion.css'];
 
 const stillMoveOnTheMainThread = [
-  'src/components/PillGlider/PillGlider.css',
   'src/styles/reset.css'
 ];
 
