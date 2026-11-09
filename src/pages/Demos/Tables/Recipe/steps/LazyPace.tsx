@@ -1,13 +1,13 @@
 import {FC} from 'react';
-import {PaceDial} from '../../../Controls';
+import {PaceDial, useControls} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
-import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
 
-export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sample; buildSource: Sample}> =
-  ({world, headerSource, paceSource, buildSource}) =>
-    <Step title="Hold still, dispatch on release" dial={<PaceDial name="step-pace"/>}>
+export const LazyPace: FC<{headerSource: Sample; paceSource: Sample; buildSource: Sample}> =
+  ({headerSource, paceSource, buildSource}) => {
+    const {world} = useControls();
+    return <Step title="Hold still, dispatch on release" dial={<PaceDial name="step-pace"/>}>
       <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
         <Says>Instead of dispatching the order, a <Term word="strike">strike</Term> only remembers
           a <Term word="landing">landing</Term>, and the
@@ -47,3 +47,4 @@ export const LazyPace: FC<{world: World; headerSource: Sample; paceSource: Sampl
         </Codes>
       </Reveal>
     </Step>;
+  };

@@ -158,12 +158,13 @@ const gestureCodes: Record<World, ReactNode> = {
   </Codes>
 };
 
-const WidenStory: FC<{world: World}> = ({world}) =>
-  <Story param="resize" id="widen"
+const WidenStory: FC = () => {
+  const {world} = useControls();
+  return <Story param="resize" id="widen"
     can="The trader can widen a column"
     soThat="what they read most gets the room, and the table keeps its shape">
     <Tell>The ledger is the table’s record of each column’s share of the width.</Tell>
-    <TheImplementation world={world} react="Builds" vanilla="Frame/table/resize.ts"/>
+    <TheImplementation react="Builds" vanilla="Frame/table/resize.ts"/>
     <Tell>I could resize with absolute pixel widths, but one drag would break the
       table’s guarantee to fill its container. So widths are shares of a hundred, measured from the rendered headers
       at the first touch, and every resize is a trade
@@ -306,10 +307,8 @@ const WidenStory: FC<{world: World}> = ({world}) =>
       </Step>
     </Steps>
   </Story>;
-
-export const ResizeRecipe: FC = () => {
-  const {world} = useControls();
-  return <section aria-label="build the drag resize yourself" className="build-steps">
-    <Stories><WidenStory world={world}/></Stories>
-  </section>;
 };
+
+export const ResizeRecipe: FC = () => <section aria-label="build the drag resize yourself" className="build-steps">
+  <Stories><WidenStory/></Stories>
+</section>;

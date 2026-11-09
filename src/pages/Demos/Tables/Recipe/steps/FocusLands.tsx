@@ -1,10 +1,11 @@
 import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
-import type {World} from '../../../Controls';
+import {useControls} from '../../../Controls';
 import {sources} from './sources';
 
-export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
-  <Step title="Give focus a place to land">
+export const FocusLands: FC<{headerSource: Sample}> = ({headerSource}) => {
+  const {world} = useControls();
+  return <Step title="Give focus a place to land">
     <Words want="The trader without a pointer expects the same reorders. First, focus needs a place to land; a plain header holds none.">
       <Says>HTML already does most of this: a button is focusable by birth,
         and a header can ask with
@@ -49,3 +50,4 @@ export const FocusLands: FC<{world: World; headerSource: Sample}> = ({world, hea
       </Codes>
     </Reveal>
   </Step>;
+};

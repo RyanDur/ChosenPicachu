@@ -1,12 +1,12 @@
 import {FC} from 'react';
-import {MotionDial} from '../../../Controls';
+import {MotionDial, useControls} from '../../../Controls';
 import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
-import type {World} from '../../../Controls';
 import {sources} from './sources';
 
-export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSource: Sample}> =
-  ({world, headerSource, cssSource, buildSource}) =>
-    <Step title="Let the column settle" dial={<MotionDial name="step-motion"/>} id="step-motion">
+export const AnimatedMotion: FC<{headerSource: Sample; cssSource: Sample; buildSource: Sample}> =
+  ({headerSource, cssSource, buildSource}) => {
+    const {world} = useControls();
+    return <Step title="Let the column settle" dial={<MotionDial name="step-motion"/>} id="step-motion">
       <Words want="The trader must see where the column went and what it pushed aside. A column that snaps back to where it started on release, over a neighbor that has already jumped, leaves the reader to work out both.">
         <Says>The reorder has to land instantly for the drag arithmetic to stay true, and the pointer
           carries nothing the moment you let go. What should move is the real thing, from where it is: the
@@ -87,3 +87,4 @@ export const AnimatedMotion: FC<{world: World; headerSource: Sample; cssSource: 
         </Codes>
       </Reveal>
     </Step>;
+  };

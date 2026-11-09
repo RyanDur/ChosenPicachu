@@ -1,16 +1,16 @@
 import {FC} from 'react';
-import {OriginDial} from '../../../Controls';
+import {OriginDial, useControls} from '../../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
-import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
 import {WhatACustomPropertyIs} from '../WhatACustomPropertyIs';
 import {SheetDeclaresSeatAndDrift} from './SheetDeclaresSeatAndDrift';
 import {carriedProperties} from './carriedProperties';
 
-export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Sample; buildSource: Sample}> =
-  ({world, headerSource, cssSource, buildSource}) =>
-    <Step title="Carry the real thing" dial={<OriginDial name="step-origin"/>}>
+export const HideOrigin: FC<{headerSource: Sample; cssSource: Sample; buildSource: Sample}> =
+  ({headerSource, cssSource, buildSource}) => {
+    const {world} = useControls();
+    return <Step title="Carry the real thing" dial={<OriginDial name="step-origin"/>}>
       <Words want="The trader wants the column they grabbed in their hand, buttons and all, and a gap where it came from that says where the drop will land.">
         <Says>Copying the column would go stale on the next trade, and a copy never has
           the real buttons in it. So nothing is copied: the carried cells themselves move with the
@@ -95,3 +95,4 @@ export const HideOrigin: FC<{world: World; headerSource: Sample; cssSource: Samp
         </Codes>
       </Reveal>
     </Step>;
+  };
