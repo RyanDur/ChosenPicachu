@@ -6,10 +6,10 @@ export const AlignDial: FC<{name: string}> = ({name}) => {
   const {align, change} = useControls();
   return <PillGlider label="align"
     name={name}
-    options={[
-      {display: 'Left', value: 'left'},
-      {display: 'Center', value: 'center'},
-      {display: 'Right', value: 'right'}
+    choices={[
+      {words: 'Left', value: 'left'},
+      {words: 'Center', value: 'center'},
+      {words: 'Right', value: 'right'}
     ]}
     chosen={align}
     onChosen={next => change({align: next})}/>;

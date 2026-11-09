@@ -53,31 +53,31 @@ export const BannerControls: FC<BannerControlsProps> = ({
     <DialGroup>
       <DialRow label="side"
         name="banner-side"
-        options={[
-          {display: 'Top', value: 'top'},
-          {display: 'Middle', value: 'middle'},
-          {display: 'Bottom', value: 'bottom'}
+        choices={[
+          {words: 'Top', value: 'top'},
+          {words: 'Middle', value: 'middle'},
+          {words: 'Bottom', value: 'bottom'}
         ]}
         chosen={side}
         onChosen={onSideChosen}
         reading={copy.side[side]}/>
       <DialRow label="align"
         name="banner-align"
-        options={[
-          {display: 'Left', value: 'left'},
-          {display: 'Center', value: 'center'},
-          {display: 'Right', value: 'right'}
+        choices={[
+          {words: 'Left', value: 'left'},
+          {words: 'Center', value: 'center'},
+          {words: 'Right', value: 'right'}
         ]}
         chosen={align}
         onChosen={onAlignChosen}
         reading={copy.align[align]}/>
       <DialRow label="entrance"
         name="banner-entrance"
-        options={[
-          {display: 'Above', value: 'above'},
-          {display: 'Below', value: 'below'},
-          {display: 'Left', value: 'left'},
-          {display: 'Right', value: 'right'}
+        choices={[
+          {words: 'Above', value: 'above'},
+          {words: 'Below', value: 'below'},
+          {words: 'Left', value: 'left'},
+          {words: 'Right', value: 'right'}
         ]}
         chosen={enter}
         onChosen={onEnterChosen}
@@ -88,11 +88,11 @@ export const BannerControls: FC<BannerControlsProps> = ({
         </>}/>
       <DialRow label="stack"
         name="banner-stack"
-        options={[
-          {display: 'Down', value: 'down'},
-          {display: 'Up', value: 'up'},
-          {display: 'Left', value: 'left'},
-          {display: 'Right', value: 'right'}
+        choices={[
+          {words: 'Down', value: 'down'},
+          {words: 'Up', value: 'up'},
+          {words: 'Left', value: 'left'},
+          {words: 'Right', value: 'right'}
         ]}
         chosen={stack}
         onChosen={onStackChosen}

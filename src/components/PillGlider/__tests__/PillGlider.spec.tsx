@@ -4,20 +4,20 @@ import {PillGlider} from '../index';
 import {pillGlider} from '../__test_support/glider';
 
 const styles = [
-  {display: 'Eager', value: 'eager'},
-  {display: 'Lazy', value: 'lazy'},
-  {display: 'Hide Eager', value: 'hide-eager'},
-  {display: 'Hide Lazy', value: 'hide-lazy'}
+  {words: 'Eager', value: 'eager'},
+  {words: 'Lazy', value: 'lazy'},
+  {words: 'Hide Eager', value: 'hide-eager'},
+  {words: 'Hide Lazy', value: 'hide-lazy'}
 ];
 
 const Choosing: FC = () => {
   const [chosen, choose] = useState('eager');
-  return <PillGlider label="drag style" name="drag-style" options={styles} chosen={chosen} onChosen={choose}/>;
+  return <PillGlider label="drag style" name="drag-style" choices={styles} chosen={chosen} onChosen={choose}/>;
 };
 
 describe('the pill glider', () => {
   test('offers every style as a radio in a named group, the chosen one checked', () => {
-    render(<PillGlider label="drag style" name="drag-style" options={styles}
+    render(<PillGlider label="drag style" name="drag-style" choices={styles}
       chosen="eager" onChosen={() => undefined}/>);
 
     expect(pillGlider.group('drag style')).toBeVisible();

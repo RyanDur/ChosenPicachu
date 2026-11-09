@@ -6,9 +6,9 @@ export const OriginDial: FC<{name: string}> = ({name}) => {
   const {origin, change} = useControls();
   return <PillGlider label="origin"
     name={name}
-    options={[
-      {display: 'Keep', value: 'keep'},
-      {display: 'Hide', value: 'hide'}
+    choices={[
+      {words: 'Keep', value: 'keep'},
+      {words: 'Hide', value: 'hide'}
     ]}
     chosen={origin}
     onChosen={next => change({origin: next})}/>;

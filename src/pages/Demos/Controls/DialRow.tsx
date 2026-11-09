@@ -1,11 +1,11 @@
 import {ReactNode} from 'react';
-import {PillGlider} from '@components/PillGlider';
+import {Choice, PillGlider} from '@components/PillGlider';
 import './DialRow.css';
 
 type Props<T extends string> = {
   label: string;
   name: string;
-  options: readonly {display: ReactNode; value: T}[];
+  choices: readonly Choice<T>[];
   chosen: T;
   onChosen: (value: T) => void;
   reading: ReactNode;
