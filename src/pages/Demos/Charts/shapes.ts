@@ -9,7 +9,7 @@ type Place = {
 
 const placed = ({x, foot, width, height}: Place): CSSProperties => ({
   '--shape-x': `${x}px`,
-  '--shape-base': `${foot}px`,
+  '--shape-foot': `${foot}px`,
   '--shape-width': width,
   '--shape-height': height
 });
