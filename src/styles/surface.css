@@ -392,7 +392,7 @@
   }
 }
 
-.ink-inverse-after::after { color: var(--ink-inverse); }
+.choice-inverse-ink:has(:checked) { color: var(--ink-inverse); }
 
 @media (forced-colors: active) {
   .field-inverse-before::before {
@@ -400,7 +400,7 @@
     background: var(--highlight);
   }
 
-  .ink-inverse-after::after {
+  .choice-inverse-ink:has(:checked) {
     forced-color-adjust: none;
     color: var(--highlight-ink);
   }

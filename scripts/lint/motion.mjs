@@ -1,4 +1,4 @@
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import stylelint from 'stylelint';
 
 const name = 'chosen/compositor-motion';
@@ -21,6 +21,11 @@ const items = value => {
 /** @param {string} item */
 const propertyIn = item => item.split(/\s+/).find(word => not(notAProperty.test(word))) ?? 'all';
 
+/** @param {string} item a transition's item, whose first time is its duration */
+const flips = item => maybe(item.split(/\s+/).find(word => /^[\d.]+m?s$/.test(word)))
+  .map(duration => Number.parseFloat(duration) === 0)
+  .orElse(false);
+
 /** @param {string} property */
 const allowed = property => property === 'none' || composited.has(property) || discrete.has(property) || tracks.has(property);
 
@@ -34,6 +39,7 @@ const rule = primary => (root, result) => {
   const report = (node, property) =>
     stylelint.utils.report({ruleName: name, result, node, message: messages.moves(property)});
   root.walkDecls(/^transition(-property)?$/, declaration => items(declaration.value)
+    .filter(item => declaration.prop === 'transition-property' || not(flips(item)))
     .map(item => declaration.prop === 'transition' && item !== 'none' ? propertyIn(item) : item)
     .filter(property => not(allowed(property)))
     .forEach(property => report(declaration, property)));
