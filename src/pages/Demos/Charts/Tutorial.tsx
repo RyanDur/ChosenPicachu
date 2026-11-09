@@ -150,8 +150,7 @@ export const ChartsTutorial: FC = () => {
         target="_blank"
         rel="noreferrer">user story</a>. Each chart above opens its own story: click it, or press Enter on it. Open one
       and you get the plan for that feature and the steps that build it, with the real code from this site, so what
-      you read is what runs. The links go to MDN, Mozilla’s
-      web reference, if you want more.
+      you read is what runs. The links in the steps go to MDN, Mozilla’s web reference, if you want more.
     </p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">
