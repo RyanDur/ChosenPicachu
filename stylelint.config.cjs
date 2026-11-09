@@ -20,7 +20,7 @@ const structure = [
 const stillMoveOnTheMainThread = [
   'src/components/PillGlider/PillGlider.css',
   'src/pages/Demos/Accordions/Accordions.css',
-  'src/styles/drawing.css', 'src/styles/reset.css'
+  'src/styles/reset.css'
 ];
 
 module.exports = {
