@@ -17,6 +17,10 @@ const DrawnLater: FC<{id: string}> = ({id}) => {
 const Story: FC = () => <>
   <h2 id="here" tabIndex={-1}>here</h2>
   <DrawnLater id="late"/>
+  <details>
+    <summary>fold</summary>
+    <DrawnLater id="folded"/>
+  </details>
 </>;
 
 const site = () => createMemoryRouter([
@@ -91,6 +95,18 @@ describe('arrival', () => {
     await afterFrames(drawnAfter + 1000);
 
     expect(landedOn).toEqual(['here']);
+  });
+
+  test('a reader who follows a second link before the first lands leaves the first one’s fold shut', async () => {
+    const router = site();
+    followed(router);
+
+    await navigated(router, '/story#folded');
+    await afterFrames(100);
+    await navigated(router, '/story#here');
+    await afterFrames(drawnAfter + 1000);
+
+    expect(screen.getByRole('group')).not.toHaveAttribute('open');
   });
 
   test('a landing stops when arrival stops following', async () => {
