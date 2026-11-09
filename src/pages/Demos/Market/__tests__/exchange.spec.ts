@@ -1,4 +1,4 @@
-import {describe, expect, it, vi} from 'vitest';
+import {describe, expect, it, onTestFinished, vi} from 'vitest';
 import {http, HttpResponse, ws} from 'msw';
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
 import {HISTORY, server} from '@__test_support/server';
@@ -84,6 +84,25 @@ describe('the exchange as middleware', () => {
       state: 'arrived',
       candles: [{openedAt: 1700000000000, low: 1, high: 3, open: 2, close: 2.5, volume: 1}]
     }));
+  });
+
+  it('asking for a period asks for the span that ends now', async () => {
+    vi.setSystemTime(new Date('2026-11-08T12:00:00.000Z'));
+    onTestFinished(() => {
+      vi.useRealTimers();
+    });
+    const asked: string[] = [];
+    server.use(http.get(candles, ({request}) => {
+      asked.push(new URL(request.url).search);
+      return HttpResponse.json([]);
+    }));
+    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, () => undefined));
+
+    store.dispatch(marketActions.candlesAsked(Period.hour));
+
+    await vi.waitFor(() => expect(asked).toEqual([
+      '?granularity=60&start=2026-11-08T11%3A00%3A00.000Z&end=2026-11-08T12%3A00%3A00.000Z'
+    ]));
   });
 
   it('a period whose history is refused is unavailable, and the trouble is told', async () => {
