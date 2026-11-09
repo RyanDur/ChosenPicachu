@@ -265,10 +265,11 @@ const CandlesStory: FC = () =>
             it.</Says>
           <Says>The bars are a second SVG under the candles, in the same places, so each bar sits under its
             candle.</Says>
-          <Says>The volume bars wear volume-side with side-face and side-wall. A side’s colors are custom
-            properties, values a style sheet names once and other rules read, and a side class sets them. volume-side
-            sets leather for the bar and drab for its edge, and the bars read both through side-face and
-            side-wall.</Says>
+          <Says>Each volume bar is the same <code className="monospaced">Bar</code> the candles use, and the step
+            before shows it in full: its face wears side-face and its wall side-wall. The SVG around the bars wears
+            volume-side. A side’s colors are custom properties, values a style sheet names once and other rules read,
+            and a side class sets them. volume-side sets leather for the bar and drab for its edge, and the bars read
+            both through side-face and side-wall.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
