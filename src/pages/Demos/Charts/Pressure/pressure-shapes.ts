@@ -1,5 +1,5 @@
 import {empty, maybe} from '@ryandur/sand';
-import {Trade} from '../../Market';
+import {candles, Trade} from '../../Market';
 import {bucketPlaces} from '../bucket-places';
 
 export type Pressure = {
@@ -23,15 +23,13 @@ const fold = (pressure: Pressure, trade: Trade): Pressure => ({
   sold: pressure.sold + (trade.takerSide === 'buy' ? 0 : trade.size)
 });
 
-const bucketOpening = (tradedAt: number, bucketMilliseconds: number): number =>
-  Math.floor(tradedAt / bucketMilliseconds) * bucketMilliseconds;
-
 const openedBy = (trade: Trade, bucketMilliseconds: number): Pressure =>
-  fold({openedAt: bucketOpening(trade.tradedAt, bucketMilliseconds), bought: 0, sold: 0}, trade);
+  fold({openedAt: candles.bucketOpening(trade.tradedAt, bucketMilliseconds), bought: 0, sold: 0}, trade);
 
 const buckets = (trades: readonly Trade[], bucketMilliseconds: number): readonly Pressure[] =>
   trades.reduce<readonly Pressure[]>((pressures, trade) =>
-    maybe(pressures.slice(-1).find(({openedAt}) => openedAt === bucketOpening(trade.tradedAt, bucketMilliseconds)))
+    maybe(pressures.slice(-1)
+      .find(({openedAt}) => openedAt === candles.bucketOpening(trade.tradedAt, bucketMilliseconds)))
       .map(current => [...pressures.slice(0, -1), fold(current, trade)])
       .orElse([...pressures, openedBy(trade, bucketMilliseconds)]), []);
 

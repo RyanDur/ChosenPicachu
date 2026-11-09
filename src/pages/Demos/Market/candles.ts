@@ -18,8 +18,11 @@ const fold = (candle: Candle, trade: Trade): Candle => ({
   volume: candle.volume + trade.size
 });
 
+const bucketOpening = (tradedAt: number, bucketMilliseconds: number): number =>
+  Math.floor(tradedAt / bucketMilliseconds) * bucketMilliseconds;
+
 const openedBy = (trade: Trade, bucketMilliseconds: number): Candle => ({
-  openedAt: Math.floor(trade.tradedAt / bucketMilliseconds) * bucketMilliseconds,
+  openedAt: bucketOpening(trade.tradedAt, bucketMilliseconds),
   open: trade.price,
   high: trade.price,
   low: trade.price,
@@ -39,15 +42,16 @@ const mergeLive = (
 const bucketTrades = (trades: readonly Trade[], bucketMilliseconds: number): readonly Candle[] =>
   trades.reduce<readonly Candle[]>((candles, trade) => {
     const current = candles[candles.length - 1];
-    const bucket = Math.floor(trade.tradedAt / bucketMilliseconds) * bucketMilliseconds;
+    const bucket = bucketOpening(trade.tradedAt, bucketMilliseconds);
     return has(current) && current.openedAt === bucket
       ? [...candles.slice(0, -1), fold(current, trade)]
       : [...candles, openedBy(trade, bucketMilliseconds)];
   }, []);
 
 type Candles = {
+  bucketOpening: (tradedAt: number, bucketMilliseconds: number) => number;
   mergeLive: (seed: readonly Candle[], streamed: readonly Candle[], cap: number) => readonly Candle[];
   bucketTrades: (trades: readonly Trade[], bucketMilliseconds: number) => readonly Candle[];
 };
 
-export const candles: Candles = {mergeLive, bucketTrades};
+export const candles: Candles = {bucketOpening, mergeLive, bucketTrades};
