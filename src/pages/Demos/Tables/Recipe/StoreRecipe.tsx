@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {carve, Codes, lines, Reveal, Says, Snippet, Step, Steps, Story, Tell, Words} from '../../Recipe';
-import type {World} from '../../Controls';
+import {useControls} from '../../Controls';
 import {Term} from './Term';
 import stateSource from '@components/DragSortableTable/model/table-state.ts?sample';
 import arrangementSource from '@components/DragSortableTable/model/arrangement.ts?sample';
@@ -19,8 +19,9 @@ import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?samp
 import buildSource from '../Frame/builds/Eager.ts?sample';
 import bootSource from '../Frame/boot.ts?sample';
 
-const OneState: FC<{world: World}> = ({world}) =>
-  <Step title="Two states, two stores">
+const OneState: FC = () => {
+  const {world} = useControls();
+  return <Step title="Two states, two stores">
     <Words want="A live table is state before it is pixels, and two worlds have to agree on what that state is before either can render it.">
       <Says>The page’s state is the trades it holds, the candles the charts have asked for, and the arrangement
         it shows the trades in: the columns and the rows, each in the order they stand, and the sort while one
@@ -73,6 +74,7 @@ const OneState: FC<{world: World}> = ({world}) =>
       </Codes>
     </Reveal>
   </Step>;
+};
 
 const ActionsAreData: FC = () =>
   <Step title="Actions are data, and one reducer takes them in">
@@ -129,8 +131,9 @@ const ActionsAreData: FC = () =>
     </Reveal>
   </Step>;
 
-const NamedReads: FC<{world: World}> = ({world}) =>
-  <Step title="Each question has a named read">
+const NamedReads: FC = () => {
+  const {world} = useControls();
+  return <Step title="Each question has a named read">
     <Words want="A component should ask for what it means, not search the state to find it.">
       <Says>Each question is a named <Term word="read">read</Term>: columnNamed, positionOfRow, columnTravels,
         neighborOfColumn. The name carries the question, and the state’s shape is known in one
@@ -163,9 +166,11 @@ const NamedReads: FC<{world: World}> = ({world}) =>
       </Codes>
     </Reveal>
   </Step>;
+};
 
-const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
-  <Step title="The exchange is middleware">
+const ExchangeIsMiddleware: FC = () => {
+  const {world} = useControls();
+  return <Step title="The exchange is middleware">
     <Words want="Trades must reach the store without any chart or table knowing where they come from.">
       <Says><Term word="middleware">Middleware</Term> has that same shape. A layer is given a view of the store, its
         state and its dispatch, then the next dispatch, and it returns the dispatch for its place in the chain.</Says>
@@ -212,9 +217,11 @@ const ExchangeIsMiddleware: FC<{world: World}> = ({world}) =>
       </Codes>
     </Reveal>
   </Step>;
+};
 
-const WhoSubscribes: FC<{world: World}> = ({world}) =>
-  <Step title="Who subscribes">
+const WhoSubscribes: FC = () => {
+  const {world} = useControls();
+  return <Step title="Who subscribes">
     <Words want="The page must follow the state, and each world has its own way to follow.">
       <Says>The store gives out one subscribe and never learns who took it.</Says>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
@@ -261,8 +268,9 @@ const WhoSubscribes: FC<{world: World}> = ({world}) =>
       </Codes>
     </Reveal>
   </Step>;
+};
 
-export const StoreStory: FC<{world: World}> = ({world}) =>
+export const StoreStory: FC = () =>
   <Story param="living" id="store"
     can="The page is a store, and so is the table"
     soThat="the charts and the tables read one stream, the page owns the order it shows, and both worlds write them one way">
@@ -282,10 +290,10 @@ export const StoreStory: FC<{world: World}> = ({world}) =>
       page.</Tell>
     <Tell>The stores are the same objects in both worlds. Only the subscriber differs.</Tell>
     <Steps>
-      <OneState world={world}/>
+      <OneState/>
       <ActionsAreData/>
-      <NamedReads world={world}/>
-      <ExchangeIsMiddleware world={world}/>
-      <WhoSubscribes world={world}/>
+      <NamedReads/>
+      <ExchangeIsMiddleware/>
+      <WhoSubscribes/>
     </Steps>
   </Story>;

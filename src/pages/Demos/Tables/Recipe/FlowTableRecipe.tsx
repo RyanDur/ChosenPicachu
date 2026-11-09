@@ -50,8 +50,9 @@ const refolds: Record<World, string> = {
   vanilla: 'Then every arrival refolds every trade the page holds into the lookbacks, and the page calls reconcile, which writes what changed.'
 };
 
-const FlowStory: FC<{world: World}> = ({world}) =>
-  <Story param="living" id="flow"
+const FlowStory: FC = () => {
+  const {world} = useControls();
+  return <Story param="living" id="flow"
     can="The trader can watch the market live, one lookback beside another"
     soThat="the numbers stay current without a single refresh">
     <Tell>The still becomes a stream. The trader arrives mid-session, so the page starts with
@@ -110,10 +111,8 @@ const FlowStory: FC<{world: World}> = ({world}) =>
       </Step>
     </Steps>
   </Story>;
-
-export const FlowTableRecipe: FC = () => {
-  const {world} = useControls();
-  return <section aria-label="the living table" className="build-steps">
-    <Stories><FlowStory world={world}/><StoreStory world={world}/></Stories>
-  </section>;
 };
+
+export const FlowTableRecipe: FC = () => <section aria-label="the living table" className="build-steps">
+  <Stories><FlowStory/><StoreStory/></Stories>
+</section>;

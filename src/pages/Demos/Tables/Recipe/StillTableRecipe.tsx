@@ -120,11 +120,12 @@ const dealCodes: Record<World, ReactNode> = {
   </Codes>
 };
 
-const StillStory: FC<{world: World}> = ({world}) =>
-  <Story param="living" id="still"
+const StillStory: FC = () => {
+  const {world} = useControls();
+  return <Story param="living" id="still"
     can="The trader can read the market in a table"
     soThat="the shape is right before anything moves">
-    <TheImplementation world={world} react="Aggregations" vanilla="Frame/frame.main.ts"/>
+    <TheImplementation react="Aggregations" vanilla="Frame/frame.main.ts"/>
     <Tell>The shape comes from the design, in the element the clues pointed at: a few measures
       across a few lookbacks, numbers on two axes. That is what a table is for. I build it first as a still, from
       whatever trades the page holds: headers on both axes, and the
@@ -157,10 +158,8 @@ const StillStory: FC<{world: World}> = ({world}) =>
       </Step>
     </Steps>
   </Story>;
-
-export const StillTableRecipe: FC = () => {
-  const {world} = useControls();
-  return <section aria-label="the still table" className="build-steps">
-    <Stories><StillStory world={world}/></Stories>
-  </section>;
 };
+
+export const StillTableRecipe: FC = () => <section aria-label="the still table" className="build-steps">
+  <Stories><StillStory/></Stories>
+</section>;
