@@ -35,7 +35,7 @@ export const workersContainer = (
     takeControl: () => {
       inControl = true;
       workers.controller = {};
-      events.dispatchEvent(new Event('controllerchange'));
+      setTimeout(() => events.dispatchEvent(new Event('controllerchange')));
     },
     posted: () => posted,
     registered: () => registered,
