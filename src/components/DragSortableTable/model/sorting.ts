@@ -20,10 +20,10 @@ const ranked = <Seat>(
   [...seats].sort((left, right) => {
     const first = valueOf(left);
     const second = valueOf(right);
-    const gap = typeof first === 'string' || typeof second === 'string'
+    const difference = typeof first === 'string' || typeof second === 'string'
       ? String(first ?? '').localeCompare(String(second ?? ''))
       : (first ?? Number.NEGATIVE_INFINITY) - (second ?? Number.NEGATIVE_INFINITY);
-    return direction === 'ascending' ? gap : -gap;
+    return direction === 'ascending' ? difference : -difference;
   });
 
 export const sorting = {
