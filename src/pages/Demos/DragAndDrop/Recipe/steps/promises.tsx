@@ -23,8 +23,8 @@ const motions: Record<Motion, Record<Pace, string>> = {
   }
 };
 
-export const Promises: FC<{pace: Pace}> = ({pace}) => {
-  const {origin, motion} = useControls();
+export const Promises: FC = () => {
+  const {pace, origin, motion} = useControls();
   return <Tell>This particular list keeps three more
     promises. {paces[pace]} {origins[origin]} {motions[motion][pace]}</Tell>;
 };
