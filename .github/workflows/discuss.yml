@@ -148,7 +148,7 @@ jobs:
       - name: Rerun the head's review job, so the review reads the agreement
         run: |
           head=$(gh pr view "$PULL" --json headRefOid -q .headRefOid)
-          run=$(gh run list --workflow checks.yml --commit "$head" --limit 1 --json databaseId -q '.[0].databaseId // empty')
+          run=$(gh run list --workflow checks.yml --event pull_request --commit "$head" --limit 1 --json databaseId -q '.[0].databaseId // empty')
           if [ -z "$run" ]; then exit 0; fi
           for try in 1 2 3; do
             gh run watch "$run" --interval 30 > /dev/null
