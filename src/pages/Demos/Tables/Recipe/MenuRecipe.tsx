@@ -2,7 +2,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../../demo-topics';
 import {FC} from 'react';
 import {useControls} from '../../Controls';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve, Sample} from '../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../../Recipe';
 import {Term} from './Term';
 import menuCss from '@components/Menu/Menu.css?sample';
 import headerCss from '@components/DragSortableTable/Header.css?sample';
@@ -18,17 +18,9 @@ import {sources, TheImplementation} from './steps';
 import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
 
-type Build = {
-  headerSource: Sample;
-  menuSource: Sample;
-  tableSource: Sample;
-  rowSource: Sample;
-  buildSource: Sample;
-};
-
-const SortedDirectly: FC<Build> = ({menuSource}) => {
+const SortedDirectly: FC = () => {
   const {world} = useControls();
-  return   <Step title="Sort directly">
+  return <Step title="Sort directly">
     <Words want="A sort reorders everything at once, and no one move explains it.">
       <Says>The answer is the sort alone. The page dispatches it to its own store as an action, a record that
         a column asked for an order. The rows then cut to their ranked seats. Motion in these tables explains one
@@ -57,7 +49,7 @@ const SortedDirectly: FC<Build> = ({menuSource}) => {
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(menuSource, 'export const SortMenu', '</>;')
+            ...carve.span(sources.menu, 'export const SortMenu', '</>;')
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.unit(frameMenus, 'const choosing = '), lines.blank,
@@ -68,9 +60,13 @@ const SortedDirectly: FC<Build> = ({menuSource}) => {
   </Step>;
 };
 
-const RankStory: FC<{build: Build}> = ({build}) => {
-  const {world} = useControls();
-  const {headerSource, menuSource, tableSource, rowSource, buildSource} = build;
+const RankStory: FC = () => {
+  const {world, pace} = useControls();
+  const headerSource = paceSources.header[pace];
+  const menuSource = sources.menu;
+  const tableSource = paceSources.table[pace];
+  const rowSource = paceSources.row[pace];
+  const buildSource = buildSources[pace];
   return <Story param="menu" id="rank"
     can="The trader can sort the lookbacks by any measure, or take the order back"
     soThat="the table ranks itself, and the trader still outranks it">
@@ -254,7 +250,7 @@ const RankStory: FC<{build: Build}> = ({build}) => {
           </Codes>
         </Reveal>
       </Step>
-      <SortedDirectly {...build}/>
+      <SortedDirectly/>
       <Step title="A move ends the sort">
         <Words want="Manual order and sorted order cannot both own the table. The moment you drag a row, whose order is it?">
           <Says>The trader should win: the moment the trader moves a row, the sorted order must become
@@ -342,16 +338,6 @@ const RankStory: FC<{build: Build}> = ({build}) => {
   </Story>;
 };
 
-export const MenuRecipe: FC = () => {
-  const {pace} = useControls();
-  const build: Build = {
-    headerSource: paceSources.header[pace],
-    menuSource: sources.menu,
-    tableSource: paceSources.table[pace],
-    rowSource: paceSources.row[pace],
-    buildSource: buildSources[pace]
-  };
-  return <section aria-label="build the sort menu yourself" className="build-steps">
-    <Stories><RankStory build={build}/></Stories>
-  </section>;
-};
+export const MenuRecipe: FC = () => <section aria-label="build the sort menu yourself" className="build-steps">
+  <Stories><RankStory/></Stories>
+</section>;
