@@ -27,7 +27,7 @@ const site = () => createMemoryRouter([
 
 const followed = (router: DataRouter): HTMLElement => {
   const {container} = render(<RouterProvider router={router}/>);
-  arrival.follow(router);
+  onTestFinished(arrival.follow(router));
   return container;
 };
 
@@ -91,5 +91,18 @@ describe('arrival', () => {
     await afterFrames(drawnAfter + 1000);
 
     expect(landedOn).toEqual(['here']);
+  });
+
+  test('a landing stops when arrival stops following', async () => {
+    const router = site();
+    render(<RouterProvider router={router}/>);
+    const stopFollowing = arrival.follow(router);
+    await navigated(router, '/story#late');
+    await afterFrames(100);
+
+    stopFollowing();
+    await afterFrames(drawnAfter + 1000);
+
+    expect(screen.getByRole('heading', {name: 'late'})).not.toHaveFocus();
   });
 });
