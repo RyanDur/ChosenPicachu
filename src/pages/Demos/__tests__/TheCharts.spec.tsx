@@ -855,6 +855,7 @@ describe('the links to other tabs', () => {
 
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
       ['z-index tab', `${Paths.demos}z-index/`],
+      ['Maybe', `${Paths.demos}charts/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
