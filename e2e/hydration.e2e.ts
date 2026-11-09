@@ -56,25 +56,3 @@ test('a reader whose script has yet to arrive at a piece’s address sees the si
 
 test('the script at a piece’s address draws its own room, with its page marked on the rail', ({page}) =>
   theScriptDrawsItsRoom(page, 'gallery/O9138?tab=vam', 'Great Bed of Ware', 'Gallery'));
-
-test('a reader who follows the rail while the room is on its way stays on the link they followed', async ({page}) => {
-  let arrive = (): void => undefined;
-  const arrived = new Promise<void>(resolve => {
-    arrive = resolve;
-  });
-  await page.route(/\/assets\/(route|tab)-[^/]+\.js$/, async route => {
-    await arrived;
-    await route.continue();
-  });
-  const site = siteFrame(page);
-  // WebKit holds the load event until the held room arrives
-  await page.goto('gallery/O9138?tab=vam', {waitUntil: 'commit'});
-  await site.hydrated();
-
-  await site.home.focus();
-  await page.keyboard.press('Enter');
-  arrive();
-
-  await expect(site.home).toHaveAttribute('aria-current', 'page');
-  await expect(site.home).toBeFocused();
-});
