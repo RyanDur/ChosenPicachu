@@ -147,6 +147,16 @@ const PriceStory: FC = () =>
           <Says>Axes places its parts on the chart’s own grid, with a column at the side for the prices. At the side
             it labels the highest price, the lowest, and the one
             midway between them. Along the bottom it marks the time.</Says>
+          <Says>The stage becomes a grid only when it holds price labels: <code
+            className="monospaced">{'.chart-stage:has(> .y-labels)'}</code>. <Mdn path="Web/CSS/:has"><code
+            className="monospaced">:has()</code></Mdn>, as the <TabLink to={DemoTopics.accordions}>accordions
+              tab</TabLink> says, picks an element by what it contains. The <code className="monospaced">{'>'}</code> is
+            the <Mdn path="Web/CSS/Child_combinator">child combinator</Mdn>, which keeps the match to the stage’s own
+            children. Every part starts across both columns. The price labels then take the first column. The time
+            marks take the second, and so does every part between the price labels and the time marks: <code
+            className="monospaced">.y-labels ~ :has(~ .x-labels)</code> picks each part that comes after the price
+            labels and has the time marks still after it. The <code className="monospaced">~</code> is the combinator
+            the accordions tab explains, which picks the siblings that come later.</Says>
           <Says>How far apart the time marks sit comes from the period: every ten minutes on the hour chart, every hour
             on the day chart, every day on the week chart.</Says>
         </Words>
