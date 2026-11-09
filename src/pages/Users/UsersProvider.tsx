@@ -24,10 +24,9 @@ export const UsersProvider: FC<PropsWithChildren> = ({children}) => {
 
   useEffect(() => {
     const unreachableBanner = bannerChange.raised(trouble.with('the users server')(HTTPError.NETWORK_ERROR));
-    const lowerUnreachable = () => dispatchBanner(bannerChange.lowered(unreachableBanner.banner.id));
     const stopWatching = usersServing.reach(maybe(navigator.serviceWorker), {
       reached: () => {
-        lowerUnreachable();
+        dispatchBanner(bannerChange.withdrawn(unreachableBanner.banner.message));
         store.dispatch(usersActions.opened());
       },
       unreachable: () => {
@@ -37,7 +36,7 @@ export const UsersProvider: FC<PropsWithChildren> = ({children}) => {
     });
     return () => {
       stopWatching();
-      lowerUnreachable();
+      dispatchBanner(bannerChange.lowered(unreachableBanner.banner.id));
     };
   }, [store, dispatchBanner]);
 
