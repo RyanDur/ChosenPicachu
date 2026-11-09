@@ -42,7 +42,6 @@
       opacity: 1;
     }
 
-    /* the words cut over where the fading fill gives ink and white the same contrast, which the fill reaches sooner leaving than arriving */
     .pill-words,
     &::after {
       grid-area: 1 / 1;
