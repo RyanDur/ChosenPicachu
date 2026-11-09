@@ -1,11 +1,12 @@
 import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
-import type {World} from '../../../Controls';
+import {useControls} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
 
-export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, headerSource}) =>
-  <Step title="Hold the pointer from the lift">
+export const DragSurface: FC<{headerSource: Sample}> = ({headerSource}) => {
+  const {world} = useControls();
+  return <Step title="Hold the pointer from the lift">
     <Words want="The carry outruns the header it grabbed: the pointer leaves the element mid-drag, and the release can land anywhere, even outside the window.">
       <Says>So nothing can wait for the pointer to come back. Whoever lifts
         takes <Mdn path="Web/API/Element/setPointerCapture">pointer capture</Mdn> on the
@@ -54,3 +55,4 @@ export const DragSurface: FC<{world: World; headerSource: Sample}> = ({world, he
       </Codes>
     </Reveal>
   </Step>;
+};

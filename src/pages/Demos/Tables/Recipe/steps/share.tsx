@@ -1,5 +1,6 @@
 import {FC, ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {useControls} from '../../../Controls';
 import type {World} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
@@ -17,8 +18,9 @@ const shareMarkup: Record<World, ReactNode> = {
   ]}/>
 };
 
-export const CssShare: FC<{world: World}> = ({world}) =>
-  <Step title="Let CSS carry its share">
+export const CssShare: FC = () => {
+  const {world} = useControls();
+  return <Step title="Let CSS carry its share">
     <Words want="Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behavior comes first, and most of it is a declaration in the style sheet, not code.">
       <Says>Your first pass writes no behavior: the style sheet already covers most of
         this. <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the open hand and the closed
@@ -50,3 +52,4 @@ export const CssShare: FC<{world: World}> = ({world}) =>
       </Codes>
     </Reveal>
   </Step>;
+};

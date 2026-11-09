@@ -3,7 +3,6 @@ import {DemoTopics} from '../../demo-topics';
 import {FC} from 'react';
 import {useControls} from '../../Controls';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve, Sample} from '../../Recipe';
-import type {World} from '../../Controls';
 import {Term} from './Term';
 import menuCss from '@components/Menu/Menu.css?sample';
 import headerCss from '@components/DragSortableTable/Header.css?sample';
@@ -20,7 +19,6 @@ import baseCss from '@components/DragSortableTable/Table.css?sample';
 import '../../Recipe/Recipe.css';
 
 type Build = {
-  world: World;
   headerSource: Sample;
   menuSource: Sample;
   tableSource: Sample;
@@ -28,8 +26,9 @@ type Build = {
   buildSource: Sample;
 };
 
-const SortedDirectly: FC<Build> = ({world, menuSource}) =>
-  <Step title="Sort directly">
+const SortedDirectly: FC<Build> = ({menuSource}) => {
+  const {world} = useControls();
+  return   <Step title="Sort directly">
     <Words want="A sort reorders everything at once, and no one move explains it.">
       <Says>The answer is the sort alone. The page dispatches it to its own store as an action, a record that
         a column asked for an order. The rows then cut to their ranked seats. Motion in these tables explains one
@@ -67,13 +66,15 @@ const SortedDirectly: FC<Build> = ({world, menuSource}) =>
       </Codes>
     </Reveal>
   </Step>;
+};
 
 const RankStory: FC<{build: Build}> = ({build}) => {
-  const {world, headerSource, menuSource, tableSource, rowSource, buildSource} = build;
+  const {world} = useControls();
+  const {headerSource, menuSource, tableSource, rowSource, buildSource} = build;
   return <Story param="menu" id="rank"
     can="The trader can sort the lookbacks by any measure, or take the order back"
     soThat="the table ranks itself, and the trader still outranks it">
-    <TheImplementation world={world} react="Builds" vanilla="Frame/table/menus.ts"/>
+    <TheImplementation react="Builds" vanilla="Frame/table/menus.ts"/>
     <Tell>I could build the popup from divs, but then I would have to build focus, dismissal and
       stacking myself. So the chooser uses the platform’s popover, and the first steps below collect what that
       decision gives. Sorting state has its own trap: the glyph, the attribute and the
@@ -342,9 +343,8 @@ const RankStory: FC<{build: Build}> = ({build}) => {
 };
 
 export const MenuRecipe: FC = () => {
-  const {pace, world} = useControls();
+  const {pace} = useControls();
   const build: Build = {
-    world,
     headerSource: paceSources.header[pace],
     menuSource: sources.menu,
     tableSource: paceSources.table[pace],

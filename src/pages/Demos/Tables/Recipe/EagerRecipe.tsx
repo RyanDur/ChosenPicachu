@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Motion, Origin} from '../../Controls';
 import {Steps, Story} from '../../Recipe';
-import type {Track, World} from '../../Controls';
+import type {Track} from '../../Controls';
 import {
   AccessTrack,
   AgainstTheStream,
@@ -38,34 +38,34 @@ import rowSource from '@components/DragSortableTable/RowHeader.tsx?sample';
 
 import cssSource from '@components/DragSortableTable/motion.css?sample';
 
-type Props = {track: Track; world: World; origin: Origin; motion: Motion};
+type Props = {track: Track; origin: Origin; motion: Motion};
 
-export const EagerRecipe: FC<Props> = ({track, world, origin, motion}) => track === 'pointer'
+export const EagerRecipe: FC<Props> = ({track, origin, motion}) => track === 'pointer'
   ? <>
     <Story param="sort" id="column"
       can="The trader can sort by column"
       soThat="the measures they compare sit beside each other">
       <NamesInTheCode/>
       <TwoRoads/>
-      <TheImplementation world={world} react="Builds/EagerTable" vanilla="Frame/builds/Eager.ts"/>
-      <TheWholeBuild world={world} tableSource={tableSource} buildSource={buildSource}/>
+      <TheImplementation react="Builds/EagerTable" vanilla="Frame/builds/Eager.ts"/>
+      <TheWholeBuild tableSource={tableSource} buildSource={buildSource}/>
       <AgainstTheStream/>
-      <OwnedPixels world={world}/>
+      <OwnedPixels/>
       <Promises pace="eager" origin={origin} motion={motion}/>
       <Steps>
-        <CssShare world={world}/>
-        <OrderInState world={world} tableSource={tableSource} buildSource={buildSource}/>
-        <ListenersOnce world={world} buildSource={buildSource}/>
-        <LiftOnce world={world} headerSource={headerSource} buildSource={buildSource}/>
-        <DragSurface world={world} headerSource={headerSource}/>
+        <CssShare/>
+        <OrderInState tableSource={tableSource} buildSource={buildSource}/>
+        <ListenersOnce buildSource={buildSource}/>
+        <LiftOnce headerSource={headerSource} buildSource={buildSource}/>
+        <DragSurface headerSource={headerSource}/>
         <DeadZone/>
-        <EagerPace world={world} headerSource={headerSource} buildSource={buildSource}/>
+        <EagerPace headerSource={headerSource} buildSource={buildSource}/>
         {origin === 'hide'
-          ? <HideOrigin world={world} headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
-          : <KeepOrigin world={world} cssSource={cssSource}/>}
+          ? <HideOrigin headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
+          : <KeepOrigin cssSource={cssSource}/>}
         {motion === 'animated'
-          ? <AnimatedMotion world={world} headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
-          : <StaticMotion world={world} cssSource={cssSource}/>}
+          ? <AnimatedMotion headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
+          : <StaticMotion cssSource={cssSource}/>}
       </Steps>
     </Story>
     <Story param="sort" id="row"
@@ -73,7 +73,7 @@ export const EagerRecipe: FC<Props> = ({track, world, origin, motion}) => track 
       soThat="the lookbacks they watch closest sit on top">
       <TurnedVertical/>
       <Steps>
-        <CarryVertical world={world} rowSource={rowSource} buildSource={buildSource}/>
+        <CarryVertical rowSource={rowSource} buildSource={buildSource}/>
       </Steps>
     </Story>
   </>
@@ -83,21 +83,21 @@ export const EagerRecipe: FC<Props> = ({track, world, origin, motion}) => track 
       soThat="the measures they compare sit beside each other">
       <NamesInTheCode/>
       <AccessTrack/>
-      <TheImplementation world={world} react="Builds/EagerTable" vanilla="Frame/builds/Eager.ts"/>
+      <TheImplementation react="Builds/EagerTable" vanilla="Frame/builds/Eager.ts"/>
       <QuietDials/>
       <Steps>
-        <FocusLands world={world} headerSource={headerSource}/>
-        <ArrowsSpeak world={world} headerSource={headerSource} buildSource={buildSource}/>
+        <FocusLands headerSource={headerSource}/>
+        <ArrowsSpeak headerSource={headerSource} buildSource={buildSource}/>
         {motion === 'animated'
-          ? <WalkSlides world={world} headerSource={headerSource} buildSource={buildSource}/>
-          : <CutKey world={world} headerSource={headerSource} buildSource={buildSource}/>}
+          ? <WalkSlides headerSource={headerSource} buildSource={buildSource}/>
+          : <CutKey headerSource={headerSource} buildSource={buildSource}/>}
       </Steps>
     </Story>
     <Story param="sort" id="row"
       can="The trader can sort by row"
       soThat="the lookbacks they watch closest sit on top">
       <Steps>
-        <GripArrows world={world} rowSource={rowSource} buildSource={buildSource}/>
+        <GripArrows rowSource={rowSource} buildSource={buildSource}/>
       </Steps>
     </Story>
   </>;
