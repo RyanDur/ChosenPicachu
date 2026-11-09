@@ -28,40 +28,46 @@ const landedOn = (target: Element): void => {
 
 // the router changes the address before React draws the page it leads to, and a fold opening grows the page for a
 // few frames after, so the landing looks for its target each frame and waits for it to hold still
-const landOnceItHoldsStill = (router: DataRouter, hash: string, id: string): void => {
+const landOnceItHoldsStill = (id: string): (() => void) => {
+  let frame = 0;
   const watched = (watch: Watch, foldsOpened: boolean): void => {
-    requestAnimationFrame(() => {
+    frame = requestAnimationFrame(() => {
       const target = targetNamedBy(id);
       const opened = foldsOpened || target.map(found => {
         openFoldsAround(found);
         return true;
       }).orElse(false);
       const next = target.map(found => landing.watched(watch, measured(found))).orElse(landing.lookedFor(watch));
-      if (next === 'land') {
-        if (router.state.location.hash === hash) target.map(landedOn);
-      } else if (next !== 'given up') {
-        watched(next, opened);
-      }
+      if (next === 'land') target.map(landedOn);
+      else if (next !== 'given up') watched(next, opened);
     });
   };
   watched(landing.watching, false);
+  return () => cancelAnimationFrame(frame);
 };
 
-const landWhereAsked = (router: DataRouter, hash: string): void => {
-  maybe(hash.slice(1), notEmpty).map(id => landOnceItHoldsStill(router, hash, id));
-};
+const nothingToStop = (): void => undefined;
+
+const landWhereAsked = (hash: string): (() => void) =>
+  maybe(hash.slice(1), notEmpty).map(landOnceItHoldsStill).orElse(nothingToStop);
 
 // the browser resolves a fragment before the page has drawn it, and restores back and forward by itself
 const follow = (router: DataRouter): (() => void) => {
   let followedKey = '';
+  let stopLanding = nothingToStop;
   const arrived = ({initialized, location, historyAction, navigation}: RouterState): void => {
     if (not(initialized) || navigation.state !== 'idle' || location.key === followedKey) return;
     const opening = empty(followedKey);
     followedKey = location.key;
-    if (opening || historyAction !== NavigationType.Pop) landWhereAsked(router, location.hash);
+    stopLanding();
+    stopLanding = opening || historyAction !== NavigationType.Pop ? landWhereAsked(location.hash) : nothingToStop;
   };
   arrived(router.state);
-  return router.subscribe(arrived);
+  const unsubscribe = router.subscribe(arrived);
+  return () => {
+    unsubscribe();
+    stopLanding();
+  };
 };
 
 export const arrival = {follow};
