@@ -1,4 +1,5 @@
-import {render} from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
+import {format} from 'date-fns';
 import {pressureShapes} from '@pages/Demos/Charts/Pressure/pressure-shapes';
 import {Pressure} from '@pages/Demos/Charts/Pressure';
 import {money} from '@pages/Demos/Market';
@@ -71,5 +72,17 @@ describe('pressure', () => {
     render(<Pressure trades={[]}/>);
 
     expect(chartsDesk.chart('pressure')).not.toHaveTextContent('BTC');
+  });
+
+  test('the hour chart marks the time every ten minutes', () => {
+    const onTheTen = 1700000400000;
+    const minute = 60000;
+    render(<Pressure trades={Array.from({length: 21}, (_, step) =>
+      bought(1, {id: step + 1, tradedAt: onTheTen + step * minute}))}/>);
+
+    const marked = within(screen.getByRole('region', {name: 'pressure'})).getAllByRole('time');
+
+    expect(marked.map(time => time.textContent))
+      .toEqual([0, 10, 20].map(minutes => format(onTheTen + minutes * minute, 'HH:mm')));
   });
 });
