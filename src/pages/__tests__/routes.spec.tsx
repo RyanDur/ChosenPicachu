@@ -1,4 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
+import {renderCrashedFrame} from '@__test_support/crashedFrame';
 import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@navigation';
 import {createMemoryRouter, Route, RouterProvider} from 'react-router';
@@ -10,10 +11,9 @@ import {appAddress} from '@__test_support/address';
 import {homePage} from '@pages/Home/__test_support/home';
 import {ErrorBoundary as DemosLayoutBoundary, Room as DemosLayout} from '@pages/Demos/route';
 import {ErrorBoundary as PracticeBoundary} from '@pages/Practice/route';
-import {Environment, environment} from '@transport';
+import {environment} from '@transport';
 import {SiteProviders} from '../../SiteProviders';
 import {FallbackPage} from '@page';
-import {siteHolding} from '../../routes';
 
 describe('page error boundaries', () => {
   test('a crashing page shows the closed room inside the site, even with no boundary of its own', async () => {
@@ -111,18 +111,7 @@ describe('page error boundaries', () => {
   });
 
   test('a crash in the frame around every page still says the room is closed, on a page named the closed site, with the way home', async () => {
-    const feedbackThatCrashes: Environment = {
-      ...environment,
-      get feedbackToken(): string {
-        throw new Error('boom');
-      }
-    };
-    render(
-      <SiteProviders environment={feedbackThatCrashes}>
-        <RouterProvider router={createMemoryRouter([siteHolding([])])}/>
-      </SiteProviders>,
-      {onCaughtError: () => undefined}
-    );
+    renderCrashedFrame();
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
     expect(site.pageTitle()).toHaveTextContent('Closed site');
@@ -130,18 +119,7 @@ describe('page error boundaries', () => {
   });
 
   test('a crash in the frame around every page is announced', async () => {
-    const feedbackThatCrashes: Environment = {
-      ...environment,
-      get feedbackToken(): string {
-        throw new Error('boom');
-      }
-    };
-    render(
-      <SiteProviders environment={feedbackThatCrashes}>
-        <RouterProvider router={createMemoryRouter([siteHolding([])])}/>
-      </SiteProviders>,
-      {onCaughtError: () => undefined}
-    );
+    renderCrashedFrame();
 
     await site.roomSays('This room is closed.');
     expect(site.announced('This room is closed.')).toBeInTheDocument();
