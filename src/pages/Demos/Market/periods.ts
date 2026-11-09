@@ -19,7 +19,7 @@ const perPeriod = (fromLengths: (lengths: Lengths) => number): Record<Period, nu
 
 const granularitySeconds = perPeriod(lengths => lengths.bucketSeconds);
 
-const spanMilliseconds = perPeriod(lengths => lengths.lengthMilliseconds);
+const lengthMilliseconds = perPeriod(lengths => lengths.lengthMilliseconds);
 
 const bucketMilliseconds = perPeriod(lengths => lengths.bucketSeconds * 1000);
 
@@ -27,9 +27,9 @@ const candleCap = perPeriod(lengths => lengths.lengthMilliseconds / (lengths.buc
 
 type Periods = {
   granularitySeconds: Record<Period, number>;
-  spanMilliseconds: Record<Period, number>;
+  lengthMilliseconds: Record<Period, number>;
   bucketMilliseconds: Record<Period, number>;
   candleCap: Record<Period, number>;
 };
 
-export const periods: Periods = {granularitySeconds, spanMilliseconds, bucketMilliseconds, candleCap};
+export const periods: Periods = {granularitySeconds, lengthMilliseconds, bucketMilliseconds, candleCap};

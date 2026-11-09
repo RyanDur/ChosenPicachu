@@ -31,7 +31,7 @@ const toCandle = ([openedAt, low, high, open, close, volume]: HistoryRow): Candl
 const toCandles = (rows: readonly HistoryRow[]): readonly Candle[] => rows.map(toCandle).reverse();
 
 const periodQuery = (period: Period, now: Date): string => {
-  const start = new Date(now.getTime() - periods.spanMilliseconds[period]);
+  const start = new Date(now.getTime() - periods.lengthMilliseconds[period]);
   return `granularity=${periods.granularitySeconds[period]}` +
     `&start=${encodeURIComponent(start.toISOString())}` +
     `&end=${encodeURIComponent(now.toISOString())}`;
