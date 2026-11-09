@@ -18,7 +18,7 @@ const dedented = (lines: string[], from: Sample, firstLine: number): Line[] => {
 
 const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>): boolean =>
   maybe(source.slice(at + 1).match(/\S/)).map(([ahead]) => {
-    if (ahead === '.') {
+    if ('.&'.includes(ahead)) {
       return closer !== ')';
     }
     if (ahead === ':') {

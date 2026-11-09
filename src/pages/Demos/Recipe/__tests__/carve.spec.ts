@@ -219,6 +219,26 @@ describe('carving examples out of the source they teach', () => {
     ]);
   });
 
+  test('a css selector carries on past a pseudo-class paren into a nesting selector', () => {
+    const sheet = aSample(':is(.reveal, .drawer) &::details-content {\n    transition: none;\n}\n', 'src/example.css');
+
+    expect(carve.unit(sheet, ':is(.reveal, .drawer) &::details-content {').map(({text}) => text)).toEqual([
+      ':is(.reveal, .drawer) &::details-content {',
+      '    transition: none;',
+      '}'
+    ]);
+  });
+
+  test('a nested css rule ends at its brace, even when the next rule starts with a nesting selector', () => {
+    const sheet = aSample('&::details-content {\n    display: grid;\n}\n\n&[open]::details-content {\n    display: block;\n}\n', 'src/example.css');
+
+    expect(carve.unit(sheet, '&::details-content {').map(({text}) => text)).toEqual([
+      '&::details-content {',
+      '    display: grid;',
+      '}'
+    ]);
+  });
+
   test('a css block ends at its brace, even when the next selector starts with a colon', () => {
     const sheet = aSample('@media (hover: hover) {\n    .bar {\n        color: red;\n    }\n}\n\n:root {\n    gap: 0;\n}\n', 'src/example.css');
 
