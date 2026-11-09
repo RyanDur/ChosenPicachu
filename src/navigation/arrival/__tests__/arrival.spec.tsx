@@ -1,7 +1,8 @@
 import {FC, useEffect, useState} from 'react';
-import {act, render, screen} from '@testing-library/react';
-import {createMemoryRouter, DataRouter, RouterProvider} from 'react-router';
+import {render} from '@testing-library/react';
+import {createMemoryRouter, DataRouter, Link, Outlet, RouterProvider, useNavigate} from 'react-router';
 import {arrival} from '../arrival';
+import {arrivingReader} from '../__test_support/reader';
 
 const drawnAfter = 3000;
 
@@ -23,35 +24,34 @@ const Story: FC = () => <>
   </details>
 </>;
 
-const site = () => createMemoryRouter([
-  {path: '/', element: <p>home</p>},
-  {path: '/story', element: <Story/>},
-  {path: '/other', element: <p>other</p>}
-]);
-
-const followed = (router: DataRouter): HTMLElement => {
-  const {container} = render(<RouterProvider router={router}/>);
-  onTestFinished(arrival.follow(router));
-  return container;
+const Links: FC = () => {
+  const navigate = useNavigate();
+  return <nav>
+    {['/story#late', '/story#here', '/story#folded', '/other'].map(to => <Link key={to} to={to}>{to}</Link>)}
+    <button type="button" onClick={() => navigate(-1)}>back</button>
+  </nav>;
 };
 
-const aFrame = 16;
+const site = (): DataRouter => createMemoryRouter([{
+  element: <><Links/><Outlet/></>,
+  children: [
+    {path: '/', element: <p>home</p>},
+    {path: '/story', element: <Story/>},
+    {path: '/other', element: <p>other</p>}
+  ]
+}]);
 
-// act holds React's rendering until it returns, so each frame gets its own act for a later frame to find what it drew
-const afterFrames = async (milliseconds: number): Promise<void> => {
-  for (let passed = 0; passed < milliseconds; passed += aFrame) {
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(aFrame);
-    });
-  }
+const siteFollowed = (): (() => void) => {
+  const router = site();
+  render(<RouterProvider router={router}/>);
+  const stopFollowing = arrival.follow(router);
+  onTestFinished(stopFollowing);
+  return stopFollowing;
 };
-
-const navigated = (router: DataRouter, to: string | number): Promise<void> =>
-  act(() => typeof to === 'number' ? router.navigate(to) : router.navigate(to));
 
 describe('arrival', () => {
   beforeEach(() => {
-    vi.useFakeTimers({toFake: ['setTimeout', 'clearTimeout', 'requestAnimationFrame', 'cancelAnimationFrame']});
+    vi.useFakeTimers({toFake: ['setTimeout', 'clearTimeout', 'requestAnimationFrame', 'cancelAnimationFrame'], shouldAdvanceTime: true});
   });
 
   afterEach(() => {
@@ -59,80 +59,75 @@ describe('arrival', () => {
   });
 
   test('a reader sent to a fragment the page draws later lands on it', async () => {
-    const router = site();
-    followed(router);
+    siteFollowed();
+    const reader = arrivingReader();
 
-    await navigated(router, '/story#late');
-    await afterFrames(drawnAfter + 1000);
+    await reader.follows('/story#late');
+    await reader.waits(drawnAfter + 1000);
 
-    expect(screen.getByRole('heading', {name: 'late'})).toHaveFocus();
+    expect(reader.heading('late')).toHaveFocus();
   });
 
   test('a reader who goes back is not moved by arrival', async () => {
-    const router = site();
-    followed(router);
-    await navigated(router, '/story#here');
-    await afterFrames(500);
-    await navigated(router, '/other');
+    siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#here');
+    await reader.waits(500);
+    await reader.follows('/other');
 
-    await navigated(router, -1);
-    await afterFrames(500);
+    await reader.goesBack();
+    await reader.waits(500);
 
-    expect(screen.getByRole('heading', {name: 'here'})).not.toHaveFocus();
+    expect(reader.heading('here')).not.toHaveFocus();
   });
 
   test('a reader who follows a second link before the first lands ends up only at the second', async () => {
-    const router = site();
-    const page = followed(router);
-    const landedOn: string[] = [];
-    page.addEventListener('focusin', ({target}) => {
-      if (target instanceof HTMLElement) landedOn.push(target.id);
-    });
+    siteFollowed();
+    const reader = arrivingReader();
 
-    await navigated(router, '/story#late');
-    await afterFrames(100);
-    await navigated(router, '/story#here');
-    await afterFrames(drawnAfter + 1000);
+    await reader.follows('/story#late');
+    await reader.waits(100);
+    await reader.follows('/story#here');
+    await reader.waits(drawnAfter + 1000);
 
-    expect(landedOn).toEqual(['here']);
+    expect(reader.headingsFocused()).toEqual(['here']);
   });
 
   test('a reader who follows a second link before the first lands leaves the first one’s fold shut', async () => {
-    const router = site();
-    followed(router);
+    siteFollowed();
+    const reader = arrivingReader();
 
-    await navigated(router, '/story#folded');
-    await afterFrames(100);
-    await navigated(router, '/story#here');
-    await afterFrames(drawnAfter + 1000);
+    await reader.follows('/story#folded');
+    await reader.waits(100);
+    await reader.follows('/story#here');
+    await reader.waits(drawnAfter + 1000);
 
-    expect(screen.getByRole('group')).not.toHaveAttribute('open');
+    expect(reader.fold()).not.toHaveAttribute('open');
   });
 
   test('a reader who goes back to the entry still being landed on is not moved', async () => {
-    const router = site();
-    followed(router);
-    await navigated(router, '/story#late');
-    await afterFrames(100);
-    await navigated(router, '/story#here');
-    await afterFrames(100);
+    siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
+    await reader.follows('/story#here');
+    await reader.waits(100);
 
-    await navigated(router, -1);
-    await afterFrames(drawnAfter + 1000);
+    await reader.goesBack();
+    await reader.waits(drawnAfter + 1000);
 
-    expect(screen.getByRole('heading', {name: 'late'})).not.toHaveFocus();
+    expect(reader.heading('late')).not.toHaveFocus();
   });
 
   test('a landing stops when arrival stops following', async () => {
-    const router = site();
-    render(<RouterProvider router={router}/>);
-    const stopFollowing = arrival.follow(router);
-    await navigated(router, '/story#late');
-    await afterFrames(100);
+    const stopFollowing = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
 
     stopFollowing();
-    await afterFrames(drawnAfter + 1000);
+    await reader.waits(drawnAfter + 1000);
 
-    expect(screen.getByRole('heading', {name: 'late'})).not.toHaveFocus();
+    expect(reader.heading('late')).not.toHaveFocus();
   });
 });
