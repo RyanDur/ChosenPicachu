@@ -9,7 +9,6 @@ import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {Pressure} from './Pressure';
 import {Pie} from './Pie';
-import {useDesk} from './useDesk';
 import {ChartKind, chartKinds} from './chart-kinds';
 import {StoryDepth} from '../Recipe';
 import {ChartStories} from './ChartStories';
@@ -24,16 +23,8 @@ type Feature = {
   chart: FC;
 };
 
-const LivePrice: FC = () => {
-  const {periodOf, choosePeriod} = useDesk();
-  return <PriceChart trades={useMarketRead(marketReads.liveTrades)}
-    period={periodOf('price')} onPeriodChosen={period => choosePeriod('price', period)}/>;
-};
-const LiveCandles: FC = () => {
-  const {periodOf, choosePeriod} = useDesk();
-  return <Candles trades={useMarketRead(marketReads.liveTrades)}
-    period={periodOf('candles')} onPeriodChosen={period => choosePeriod('candles', period)}/>;
-};
+const LivePrice: FC = () => <PriceChart trades={useMarketRead(marketReads.liveTrades)}/>;
+const LiveCandles: FC = () => <Candles trades={useMarketRead(marketReads.liveTrades)}/>;
 const LivePressure: FC = () => <Pressure trades={useMarketRead(marketReads.liveTrades)}/>;
 const LivePie: FC = () => <Pie trades={useMarketRead(marketReads.liveTrades)}/>;
 

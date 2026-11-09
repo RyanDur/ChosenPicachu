@@ -1,12 +1,13 @@
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode} from 'react';
-import {Period, periodHistory, Trade} from '../../Market';
+import {periodHistory, Trade} from '../../Market';
 import {candleShapes} from './candle-shapes';
 import {chartCaption} from '../chart-caption';
 import {useShownCandles} from '../useShownCandles';
 import {Loading} from '@components/Loading';
 import {periodDisplay} from '../period-display';
 import {PeriodMenu} from '../PeriodMenu';
+import {useDesk} from '../useDesk';
 import {Axes, axisRange} from '../Axes';
 import {Bar} from '../Bar';
 import {shapes} from '../shapes';
@@ -23,11 +24,10 @@ type Props = {
   trades: readonly Trade[];
   id?: string;
   actions?: ReactNode;
-  period: Period;
-  onPeriodChosen: (period: Period) => void;
 };
 
-export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriodChosen}) => {
+export const Candles: FC<Props> = ({trades, id: given, actions}) => {
+  const period = useDesk().periodOf('candles');
   const {id, history, bucketMilliseconds, shownCandles} = useShownCandles({id: given, kind: 'candles', period, trades});
   const bodies = candleShapes.drawn(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
   const bars = candleShapes.volumes(shownCandles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
@@ -40,7 +40,7 @@ export const Candles: FC<Props> = ({trades, id: given, actions, period, onPeriod
     <h3 id={`${id}-heading`} className="off-screen">candles</h3>
     <header className="chart-header">
       {actions}
-      <PeriodMenu id={`${id}-period`} kind="candles" period={period} onPeriodChosen={onPeriodChosen}/>
+      <PeriodMenu id={`${id}-period`} kind="candles"/>
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={extent}
