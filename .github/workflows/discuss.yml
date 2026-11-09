@@ -67,7 +67,7 @@ jobs:
             discussion.json holds one review thread on pull request #${{ env.PULL }}, oldest comment first. The first comment is a finding by ${{ steps.thread.outputs.author }}; the last is a reply to it.
 
             1. Read the code the finding is about at the pull request's head, the branch `pr-head`: `git show pr-head:<path>`, `git grep <pattern> pr-head`, and any commit the replies name (`git show <sha>`). The checkout is the default branch, so the files on disk are not the pull request's.
-            2. If the finding cites a rule, read it in AGENTS.md or the rubric under its Reviewers section. If it cites none, as Copilot's do not, judge it by its own claim against the code.
+            2. If the finding cites a rule, read it on disk, which is the default branch: AGENTS.md, or the rubric file the finding names or AGENTS.md's Reviewers section lists. If it cites none, as Copilot's do not, judge it by its own claim against the code.
             3. Answer the last reply. The verdict is "Agreed" if the reply names a fix and the code shows it, or its argument holds; otherwise "Not yet". The body says in a sentence or two what settled it, or what still needs doing and why, citing the code or the rule, written as scripts/review/plain.md asks.
             Change no file.
           claude_args: |
