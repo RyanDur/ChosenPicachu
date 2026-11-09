@@ -12,7 +12,7 @@ import {
   useLayoutEffect,
   useState
 } from 'react';
-import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, useLocation} from 'react-router';
+import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, useLocation, useNavigate} from 'react-router';
 import {SiteProviders} from '../SiteProviders';
 import {Opener, RoomModule, roomsOpenedBy, siteHolding} from '../routes';
 import {Environment, environment} from '@transport';
@@ -20,14 +20,16 @@ import {Feed} from '@pages/Demos/__test_support/feed';
 
 type Props = PropsWithChildren<{
   readonly at?: string;
+  readonly cameFrom?: string;
   readonly feed?: Feed;
   readonly environment?: Partial<Environment>;
 }>;
 
 const Reported = createContext<readonly string[]>([]);
 
-const Probes: FC = () => {
+const Probes: FC<{backable: boolean}> = ({backable}) => {
   const {pathname, search, hash} = useLocation();
+  const navigate = useNavigate();
   const errors = useContext(Reported);
   useLayoutEffect(() => window.location.replace(`${pathname}${search}${hash}`), [pathname, search, hash]);
 
@@ -37,6 +39,7 @@ const Probes: FC = () => {
     <output aria-label="url search">{search}</output>
     <output aria-label="url fragment">{hash}</output>
     <ul aria-label="errors reported">{errors.map((error, at) => <li key={`${at} ${error}`}>{error}</li>)}</ul>
+    {backable && <button type="button" onClick={() => navigate(-1)}>browser back</button>}
   </>;
 };
 
@@ -69,13 +72,14 @@ const routesAt = (at: string, children: ReactNode): RouteObject[] =>
       .map(({path, ErrorBoundary}): RouteObject[] => [{path, ErrorBoundary, element: children}])
       .orElse([{path: pathOf(at), element: children}]);
 
-export const TestApp: FC<Props> = ({at = '/', feed, environment: overrides, children}) => {
+export const TestApp: FC<Props> = ({at = '/', cameFrom, feed, environment: overrides, children}) => {
+  const backable = has(cameFrom);
   const [memory] = useState(() => createMemoryRouter([{
     id: 'probes',
-    element: <Probes/>,
-    errorElement: <Probes/>,
+    element: <Probes backable={backable}/>,
+    errorElement: <Probes backable={backable}/>,
     children: [siteHolding(has(children) ? [...routesAt(at, children), {path: '*', element: null}] : siteRooms)]
-  }], {initialEntries: [at], hydrationData: {}}));
+  }], {initialEntries: maybe(cameFrom).map(from => [from, at]).orElse([at]), hydrationData: {}}));
   const [reported, setReported] = useState<readonly string[]>([]);
   const report = (error: unknown): void =>
     startTransition(() => setReported(errors => [...errors, described(error)]));

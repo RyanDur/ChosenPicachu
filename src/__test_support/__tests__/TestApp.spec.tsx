@@ -33,6 +33,14 @@ describe('the test app', () => {
     await waitFor(() => expect(window.location).toBeAt('/somewhere?tab=second'));
   });
 
+  test('Back returns to the address the reader came from', async () => {
+    render(<TestApp cameFrom="/before" at="/somewhere"><Doors/></TestApp>);
+
+    await userEvent.click(screen.getByRole('button', {name: 'browser back'}));
+
+    await waitFor(() => expect(window.location).toBeAt('/before'));
+  });
+
   test('the probes outlive an error no page catches', async () => {
     const boom = new Error('boom');
     const Boom = () => {
