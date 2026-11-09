@@ -61,7 +61,7 @@ describe('the users page', () => {
     lentToThePage(container);
     setupUsersResponse([aUser()]);
     render(<TestApp at={Paths.users}/>);
-    await vi.advanceTimersByTimeAsync(10_000);
+    await usersPage.waitsOut(10_000);
     await usersPage.says('the users server could not be reached');
 
     container.takeControl();
@@ -79,7 +79,7 @@ describe('the users page', () => {
     lentToThePage(container);
     setupUsersResponse([aUser()]);
     render(<TestApp at={Paths.users}/>);
-    await vi.advanceTimersByTimeAsync(10_000);
+    await usersPage.waitsOut(10_000);
     await usersPage.says('the users server could not be reached');
     await site.followRail('Practice');
     container.takeControl();
@@ -113,7 +113,7 @@ describe('the users page', () => {
     lentToThePage(container);
     setupUsersResponse([aUser()]);
     await site.followRail('Users');
-    await vi.advanceTimersByTimeAsync(10_000);
+    await usersPage.waitsOut(10_000);
 
     container.takeControl();
     await usersTable.roster();
