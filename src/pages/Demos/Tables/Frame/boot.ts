@@ -1,7 +1,8 @@
+import {maybe} from '@ryandur/sand';
 import {unconfigured} from '@transport';
 import {arrangements} from '@components/DragSortableTable/model';
 import type {Dials, Pace} from '../../Controls';
-import {exchange, marketActions, marketReads, marketStore} from '@pages/Demos/Market';
+import {exchange, marketActions, marketReads, marketStore, Measures} from '@pages/Demos/Market';
 import {builds} from './builds';
 
 declare global {
@@ -14,6 +15,9 @@ declare global {
 
 const pace = (): Pace => window.__frame?.pace ?? 'eager';
 
+const keyOfLookbackNamed = (rows: readonly Measures[]) => (name: string): string =>
+  maybe(rows.find(({lookback}) => lookback.display === name)).map(({lookback}) => lookback.key).orElse(name);
+
 const fed = (table: HTMLTableElement, told: Pace): void => {
   const page = marketStore(exchange({...unconfigured, ...window.__environment}, () => undefined));
   const reconcile = builds[told](table, {
@@ -21,7 +25,10 @@ const fed = (table: HTMLTableElement, told: Pace): void => {
     rows: () => marketReads.rows(page.state)
   });
   table.addEventListener('column-moved', ({detail: {column, to}}) => page.dispatch(arrangements.columnMoved(column, to)));
-  table.addEventListener('row-moved', ({detail: {row, to, standing}}) => page.dispatch(arrangements.rowMoved(row, to, standing)));
+  table.addEventListener('row-moved', ({detail: {row, to, standing}}) => {
+    const keyOf = keyOfLookbackNamed(marketReads.rows(page.state));
+    page.dispatch(arrangements.rowMoved(keyOf(row), to, standing.map(keyOf)));
+  });
   table.addEventListener('sorted', ({detail: {column, direction}}) => page.dispatch(arrangements.sorted(column, direction)));
   page.subscribe(previous => reconcile(marketReads.columns(previous)));
   reconcile([]);

@@ -43,7 +43,10 @@ const candlesReducer = (candles: CandlesState, action: MarketAction): CandlesSta
   }
 };
 
-const arranged = arrangements.of(cells.measures.map(({name}) => name), tradeTotals.lookbacks.map(({label}) => label));
+const arranged = arrangements.of(
+  cells.measures.map(({name}) => name),
+  tradeTotals.lookbacks.map(({lookback}) => lookback)
+);
 
 export const marketSlice = slices.combined<MarketState, MarketAction>({
   trades: {initial: noTrades, reduce: tradesReducer},

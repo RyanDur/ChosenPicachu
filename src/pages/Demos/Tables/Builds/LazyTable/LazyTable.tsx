@@ -51,9 +51,9 @@ export const LazyTable: FC<Props> = ({caption, origin, motion, columns, rows, on
       </thead>
       <Body onRowMoved={onRowMoved}>
         {rows.map(row => {
-          const lookback = row.lookback.display;
+          const lookback = row.lookback.key;
           return <Row key={lookback}>
-            <RowHeader column="lookback" row={lookback} label={lookback}/>
+            <RowHeader column="lookback" row={lookback} label={row.lookback.display}/>
             <Cell column="trades" row={lookback}>{row.trades.display}</Cell>
             <Cell column="buys" row={lookback}>{row.buys.display}</Cell>
             <Cell column="sells" row={lookback}>{row.sells.display}</Cell>

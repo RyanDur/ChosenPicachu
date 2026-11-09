@@ -1,7 +1,7 @@
 import {has} from '@ryandur/sand';
 import {Labeled, Seated} from '@components/DragSortableTable/model';
 import {money} from './money';
-import {LookbackTotals, Traded} from './trade-totals';
+import {Lookback, LookbackTotals, Traded} from './trade-totals';
 
 const moved = (traded?: Traded): Measure =>
   has(traded) ? {display: money.deltaLabel(traded.opened, traded.closed), value: traded.closed - traded.opened} : {display: '—'};
@@ -20,7 +20,9 @@ export type MeasureName = typeof measureNames[number];
 
 const isMeasure = (name: string): name is MeasureName => measureNames.some(known => known === name);
 
-export type Measures = Readonly<Record<MeasureName, Measure>>;
+export type LookbackMeasure = Measure & {key: Lookback};
+
+export type Measures = Readonly<{lookback: LookbackMeasure} & Record<Exclude<MeasureName, 'lookback'>, Measure>>;
 
 export type Measured = Labeled;
 
@@ -29,12 +31,12 @@ const measures: readonly {name: MeasureName; data: Measured}[] =
 
 const seated = (rows: readonly Measures[]): readonly Seated[] =>
   rows.map(row => ({
-    key: row.lookback.display,
+    key: row.lookback.key,
     values: Object.fromEntries(measureNames.map(name => [name, row[name].value]))
   }));
 
 const from = (aggregate: LookbackTotals): Measures => ({
-  lookback: {display: aggregate.label},
+  lookback: {display: aggregate.name, key: aggregate.lookback},
   trades: {display: String(aggregate.trades), value: aggregate.trades},
   buys: {display: String(aggregate.buys), value: aggregate.buys},
   sells: {display: String(aggregate.sells), value: aggregate.sells},

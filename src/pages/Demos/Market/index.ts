@@ -5,6 +5,7 @@ export {marketReads} from './marketReads';
 export {marketStore} from './marketStore';
 export {arrangedView} from './arrangedView';
 export type {Measured, Measures} from './cells';
+export type {Lookback} from './trade-totals';
 export {cells} from './cells';
 export type {Trade} from './coinbase';
 export {Period} from './Period';

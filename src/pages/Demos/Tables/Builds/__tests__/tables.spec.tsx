@@ -1,6 +1,6 @@
 import {FC, useReducer} from 'react';
 import {render} from '@testing-library/react';
-import {Measured, Measures, cells} from '@pages/Demos/Market';
+import {Lookback, Measured, Measures, cells} from '@pages/Demos/Market';
 import {measuresFor} from '../../Aggregations/__test_support';
 import {BodyEvents, Column, DragSortable, HeaderEvents, Motion, Origin, useDragSortable} from '@components/DragSortableTable';
 import {TableColumn, arrangements} from '@components/DragSortableTable/model';
@@ -20,9 +20,11 @@ type Table = FC<HeaderEvents & BodyEvents & Dials & {
 
 const lookbacks = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
-const startingRows = [3, 9, 5, 7, 1].map((trades, at) => measuresFor(lookbacks[at], trades));
+const keys: readonly Lookback[] = ['minute', 'five-minutes', 'fifteen-minutes', 'hour', 'session'];
 
-const lookbackOf = (row: Measures): string => row.lookback.display;
+const startingRows = [3, 9, 5, 7, 1].map((trades, at) => measuresFor(keys[at], lookbacks[at], trades));
+
+const lookbackOf = (row: Measures): string => row.lookback.key;
 
 const Page: FC<{Table: Table; rows: readonly Measures[]; dials: Dials}> = ({Table, rows, dials}) => {
   const [arrangement, dispatch] = useReducer(
@@ -186,7 +188,7 @@ describe('rows by hand', () => {
 });
 
 describe('sort criteria menus', () => {
-  const retraded = (thisMinute: number): Measures[] => [measuresFor('this minute', thisMinute), ...startingRows.slice(1)];
+  const retraded = (thisMinute: number): Measures[] => [measuresFor('minute', 'this minute', thisMinute), ...startingRows.slice(1)];
 
   test('a direction chosen from the column menu sorts the rows', async () => {
     seat(EagerTable, {origin: 'keep', motion: 'static'});
