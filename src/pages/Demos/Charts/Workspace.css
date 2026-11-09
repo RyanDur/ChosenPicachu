@@ -86,8 +86,8 @@
   &.hide {
     opacity: 0.1%;
     /* the browser draws the copy under the pointer from the chart as it is when the drag begins, so the fade waits a moment;
-       a delay, not a duration, so asking for less motion does not cut it; here alone, so a dropped chart shows at once */
-    transition: opacity 0s 50ms;
+       a timer, not motion, so it outranks the reset that zeroes delays for less motion; here alone, so a dropped chart shows at once */
+    transition: opacity 0s 50ms !important;
   }
 
   &.chart-pushed {
