@@ -9,7 +9,7 @@ import naturalSource from './NaturalZIndex.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 
-const gap = lines.plain(' ');
+const blankLine = lines.plain(' ');
 
 export const StackingExplained: FC = () =>
   <section aria-labelledby="third-on-top-heading" className="stacking-part">
@@ -28,7 +28,7 @@ export const StackingExplained: FC = () =>
           top.</p>
         <Snippet label="HTML" lines={carve.span(naturalSource, '<ol id="z-index-pile"', '</ol>')}/>
         <Snippet label="CSS" lines={[
-          ...carve.unit(zIndexCss, '.pile-card {'), gap,
+          ...carve.unit(zIndexCss, '.pile-card {'), blankLine,
           ...carve.unit(zIndexCss, '.closed {')
         ]}/>
         <PileFromTheSide/>
