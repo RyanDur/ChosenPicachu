@@ -88,7 +88,8 @@ const ChartKindTutorial: FC<Props> = ({kind}) => {
         rel="noreferrer">user story</a>, a card, a conversation and a confirmation, which the{' '}
       <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks through: open it and you get the plan and the steps
       that build it, with the real code from this site, so what you read is what runs. The steps link to
-      earlier tabs and to MDN, Mozilla’s web reference, if you want more.
+      the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>,
+      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> and MDN, Mozilla’s web reference, if you want more.
     </p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">{quote}</blockquote>
