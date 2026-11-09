@@ -313,6 +313,7 @@ const PressureStory: FC = () =>
             ...carve.unit(coinbaseSource, 'const MatchDecoder'), lines.blank,
             ...carve.unit(coinbaseSource, 'const takerSideOf'), lines.blank,
             ...carve.unit(pressureShapesSource, 'const fold'), lines.blank,
+            ...carve.unit(pressureShapesSource, 'const bucketOpening'), lines.blank,
             ...carve.unit(pressureShapesSource, 'const buckets')
           ]}/>
         </Codes>
