@@ -1,7 +1,6 @@
 import {FC, useId} from 'react';
 import {Clues, Design, Slices} from '../Recipe';
 import {DialNote, Exercise, Station} from '../Recipe';
-import {useArrival} from '@navigation/arrival';
 import {ListControls} from './ListControls';
 import {NativeRecipe} from './NativeRecipe';
 import '../Tutorials.css';
@@ -30,7 +29,6 @@ const unanswered = [
 ];
 
 export const ListTutorials: FC = () => {
-  useArrival();
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
     <h2 id={titled} className="title">let’s build this feature</h2>

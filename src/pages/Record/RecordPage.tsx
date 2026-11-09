@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import {useArrival} from '@navigation/arrival';
 import {Quotation} from '@components/Quotation';
 import {Timeline} from './Timeline';
 import {Stories} from './stories';
@@ -8,9 +7,8 @@ import {Bibliography} from './Bibliography';
 import {RecordFooter} from './RecordFooter';
 import './Record.css';
 
-export const RecordPage: FC = () => {
-  useArrival();
-  return <article className="record-page">
+export const RecordPage: FC = () =>
+  <article className="record-page">
     <Quotation voice="sub-title" source={<>Tim Berners-Lee and Robert Cailliau,{' '}
       <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">proposing
         the WorldWideWeb, 1990</a></>}>
@@ -36,4 +34,3 @@ export const RecordPage: FC = () => {
       <Bibliography/>
     </RecordFooter>
   </article>;
-};

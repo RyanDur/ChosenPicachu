@@ -3,7 +3,6 @@ import {Link} from 'react-router';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {DesignAsk, FlowTableRecipe, LayerMap, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
 import {Exercise, Station} from '../Recipe';
-import {useArrival} from '@navigation/arrival';
 import {tableTutorials} from './tutorial-pages';
 import {WorldGlider, WorldNote} from './World';
 import '../Tutorials.css';
@@ -11,7 +10,6 @@ import './Tutorials.css';
 
 export const Tutorials: FC = () => {
   const {searchFromShown} = useSearchParamsObject({});
-  useArrival();
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
     <header className="tutorials-header">
