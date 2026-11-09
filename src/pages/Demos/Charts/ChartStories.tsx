@@ -220,19 +220,22 @@ const CandlesStory: FC = () =>
             lower gets down.</Says>
           <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that
             lives in the site’s shared style sheet and that an element wears by name; the chart’s own style sheet keeps
-            what is not a look: the chart’s size, the wick’s hairline width and how the shapes move.</Says>
+            what is not a look: the chart’s size and the wick’s hairline width.</Says>
           <Says>Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down
             wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall,
             so the shared style sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.</Says>
-          <Says>The body and the wall each start as a square one unit on a side, and the wick as a line one unit tall.
-            The markup gives every shape four custom properties: where the shape starts across, where its foot sits, how
-            wide it is and how tall. A custom property is a value set by name on an element and read back in the style
-            sheet with <code className="monospaced">var()</code>, as
-            the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains. The chart’s style sheet reads all
-            four in one transform that moves the shape into place and stretches it to size. I move things only by
-            transform and opacity, which spare the browser a new layout on every frame, so a shape takes its size from
-            the stretch, not from its width and height. When a candle’s prices change, the four numbers change, and its
-            body, wall and wick move to them together over 300 milliseconds.</Says>
+          <Says><code className="monospaced">Bar</code> draws the wall first, then what the candle puts inside it,
+            here the wick, then the body on top, so the wick shows over the wall. The body and the wall each start as a
+            square one unit on a side, and the wick as a line one unit
+            tall. <code className="monospaced">shapeAt</code> gives every shape four custom properties: where the
+            shape starts across, where its foot sits, how wide it is and how tall. A custom property is a value set by
+            name on an element and read back in the style sheet with <code className="monospaced">var()</code>, as
+            the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains. The charts share a style
+            sheet, <code className="monospaced">shape.css</code>, and it reads all four in one transform that moves the
+            shape into place and stretches it to size. I move things only by transform and opacity, which spare the
+            browser a new layout on every frame, so a shape takes its size from the stretch, not from its width and
+            height. When a candle’s prices change, the four numbers change, and its body, wall and wick move to them
+            together over 300 milliseconds.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -366,12 +369,12 @@ const PressureStory: FC = () =>
             values a style sheet names once and other rules read. side-face reads the face color for the bar. side-wall
             reads the wall color for the second rectangle set just behind it, which gives it an edge. The middle line
             wears drawn, which gives it its charcoal stroke.</Says>
-          <Says>Each bar and the wall behind it start as a square one unit on a side. The markup gives each one four
-            custom properties of its own: where it starts across, where its foot sits, how wide it is and how tall. The
-            chart’s style sheet reads all four in one <Mdn path="Web/CSS/transform">transform</Mdn> that moves the
-            square into place and stretches it to size. I move things only by transform and opacity, which spare the
-            browser a new layout on every frame. When a minute’s sums change, its bars grow to their new size over 300
-            milliseconds.</Says>
+          <Says>Each bar and the wall behind it are the same <code className="monospaced">Bar</code> the candles use:
+            each starts as a square one unit on a side, takes its four custom properties
+            from <code className="monospaced">shapeAt</code>, and moves by
+            the <Mdn path="Web/CSS/transform">transform</Mdn> in <code className="monospaced">shape.css</code>. I move
+            things only by transform and opacity, which spare the browser a new layout on every frame. When a minute’s
+            sums change, its bars grow to their new size over 300 milliseconds.</Says>
           <Says>Axes takes a function for its labels on this chart, so the scale reads in bitcoin instead of dollars.
             The caption says how many minutes are on show, up to the last 1,500 trades.</Says>
         </Words>
