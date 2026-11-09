@@ -6,6 +6,7 @@ export type WatchedWorkers = {
   readonly takeControl: () => void;
   readonly posted: () => readonly string[];
   readonly registered: () => number;
+  readonly controlled: () => boolean;
 };
 
 type Container = {
@@ -19,8 +20,9 @@ export const workersContainer = (
   const events = new EventTarget();
   const posted: string[] = [];
   let registered = 0;
+  let inControl = controlled;
   const workers = {
-    controller: controlled ? {} : null,
+    controller: inControl ? {} : null,
     register: () => {
       registered += 1;
       return registering;
@@ -31,11 +33,13 @@ export const workersContainer = (
   return {
     workers,
     takeControl: () => {
+      inControl = true;
       workers.controller = {};
       events.dispatchEvent(new Event('controllerchange'));
     },
     posted: () => posted,
-    registered: () => registered
+    registered: () => registered,
+    controlled: () => inControl
   };
 };
 

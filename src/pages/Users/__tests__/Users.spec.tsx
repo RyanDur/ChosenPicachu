@@ -20,6 +20,7 @@ import {
   userUpdateRefused,
   usersUnreachable,
   lentToThePage,
+  rosterAsksHeard,
   workersContainer
 } from '@pages/Users/__test_support';
 import {userForm} from '../UserInformation/__test_support';
@@ -39,14 +40,14 @@ describe('the users page', () => {
   test('the roster is asked for only once the users server takes control of the page', async () => {
     const container = workersContainer();
     lentToThePage(container);
-    setupUsersResponse([aUser()]);
+    const asks = rosterAsksHeard([aUser()], container.controlled);
     render(<TestApp at={Paths.users}/>);
     await waitFor(() => expect(container.registered()).toBe(1));
-    expect(usersTable.rows()).toEqual([]);
 
     container.takeControl();
+    await usersTable.roster();
 
-    expect(await usersTable.roster()).toHaveLength(1);
+    expect(asks()).toEqual([true]);
   });
 
   test('a users server that cannot take control of the page says it could not be reached', async () => {
