@@ -241,11 +241,11 @@ const CandlesStory: FC = () =>
           <Snippet label="TS" lines={[
             ...carve.span(bucketPlacesSource, 'const of = (', 'export const bucketPlaces = {of};'), lines.blank,
             ...carve.unit(candleShapesSource, 'const drawn'), lines.blank,
-            ...carve.unit(shapeAtSource, 'export const shapeAt')
+            ...carve.unit(shapeAtSource, 'export const shapeAt'), lines.blank,
+            ...carve.span(barSource, 'export const Bar', '</g>;')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...carve.span(candlesSource, '<svg className="candlesticks"', '</svg>'), lines.blank,
-            ...carve.unit(barSource, 'export const Bar')
+            ...carve.span(candlesSource, '<svg className="candlesticks"', '</svg>')
           ]}/>
           <Snippet label="CSS" lines={[
             ...carve.unit(candlesCss, '.wick {'), lines.blank,
