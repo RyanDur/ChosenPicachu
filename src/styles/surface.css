@@ -6,11 +6,6 @@
 
 .rounded-corners { border-radius: var(--radius); }
 
-.black-rounded-before::before {
-  border-radius: var(--radius);
-  background: var(--black);
-}
-
 .lifted { box-shadow: var(--light-box-shadow); }
 
 .floating { box-shadow: var(--raised); }
@@ -316,6 +311,11 @@
 
 .field-inverse { background: var(--field-inverse); }
 
+.field-inverse-before::before {
+  border-radius: inherit;
+  background: var(--field-inverse);
+}
+
 .faded-mint { background: var(--faded-mint); }
 
 .field-ink { color: var(--field); }
@@ -392,9 +392,11 @@
   }
 }
 
-.choice-inverse-filled:has(:checked) {
-  color: var(--ink-inverse);
-  background: var(--field-inverse);
+.choice-inverted-words {
+  filter: brightness(1) invert(0);
+  transition: filter 0.2s 0.1s;
+
+  :has(:checked) > & { filter: brightness(0) invert(1); }
 }
 
 .handle-raised:has(.handle:hover) { box-shadow: var(--raised); }
