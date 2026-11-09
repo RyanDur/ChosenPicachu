@@ -7,7 +7,7 @@ The map was first made from the code on `main` at 82efb32b and is redrawn as the
 ## Contexts and their subdomains
 
 - **Frame**: what surrounds every page, at `src`'s root: `root.tsx`, `routes.ts`, `Site.tsx`, `SiteProviders.tsx`, `hydrateTheSite.tsx` and the entries.
-  - *Page*: the room's shell. `src/page` (`Header`, `Page`, `PageError`, `SideNav`, `PageUnknown`) and `pages/NoRoom`, and `Rail`, the Frame's part: the side nav and Feedback, rendered once beside every room.
+  - *Page*: the room's shell. `src/page` (`Header`, `Page`, `PageError`, `SideNav`, `PageUnknown`, and the rooms the router opens on its own: `ClosedRoom`, `WaitingRoom` and `FallbackPage`) and `pages/NoRoom`, and `Frame` with its `Rail`, the Frame's part: the side nav and Feedback, rendered once beside every room.
   - *Page name*: the name a page gives itself, in `src/page-name`.
   - *Environment*: the React side of the server settings, in `src/environment`: its provider, its context and `useEnvironment`. The values themselves are Transport's.
   - *Navigation*: addresses and arriving at them, in `src/navigation`: `Paths.ts`, `names.json`, `repository.ts`, `arrival` (the opening fragment and the landing), `search-params` and `Tabs`.

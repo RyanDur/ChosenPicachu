@@ -1,12 +1,10 @@
 import {BannerProvider, Banners} from '@banners';
-import {Location, Outlet, ScrollRestoration} from 'react-router';
+import {Outlet} from 'react-router';
 import {FC, PropsWithChildren} from 'react';
 import './index.css';
 import './BasePage.css';
-import {FeedbackProvider} from '@feedback';
 import {environment} from '@transport';
-import {Header, Page, PageError, PageUnknown, Rail} from '@page';
-import {PageNameProvider} from '@page-name';
+import {Frame, Header, Page, PageError} from '@page';
 import names from '@navigation/names.json';
 import {SiteProviders} from './SiteProviders';
 
@@ -35,22 +33,6 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
     </body>
   </html>;
 
-// the router keys every entry opened by its address 'default', so those entries would all share one scroll place
-const placeOf = ({key, pathname, search}: Location): string => key === 'default' ? pathname + search : key;
-
-const Frame: FC<PropsWithChildren<{pageUnknown?: boolean}>> = ({children, pageUnknown = false}) =>
-  <BannerProvider><PageNameProvider><FeedbackProvider><PageUnknown.Provider value={pageUnknown}>
-    <Rail/>
-    {children}
-    <Banners/>
-    <ScrollRestoration getKey={placeOf}/>
-  </PageUnknown.Provider></FeedbackProvider></PageNameProvider></BannerProvider>;
-
-export const ClosedRoom: FC = () =>
-  <Page header={<Header title="Closed room" listed={names.closedRoom}/>} inView={false}>
-    <PageError/>
-  </Page>;
-
 export const ErrorBoundary: FC = () =>
   <BannerProvider>
     <Page header={<Header title="Chosen Picachu" listed={names.closedRoom}/>} inView={false}>
@@ -58,15 +40,5 @@ export const ErrorBoundary: FC = () =>
     </Page>
     <Banners/>
   </BannerProvider>;
-
-export const WaitingRoom: FC = () =>
-  <Page header={<Header title="Chosen Picachu" listed={names.home}/>} inView={false}>
-    <noscript>
-      <p className="paragraph prose">The script draws this page, and it is off. The pages the rail lists are here
-        without it.</p>
-    </noscript>
-  </Page>;
-
-export const FallbackPage: FC = () => <Frame pageUnknown><WaitingRoom/></Frame>;
 
 export const Root: FC = () => <Frame><Outlet/></Frame>;

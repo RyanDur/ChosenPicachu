@@ -3,7 +3,8 @@ import {NonIndexRouteObject, RouteObject} from 'react-router';
 import {Paths} from '@navigation';
 import names from '@navigation/names.json';
 import {GalleryPaths} from '@pages/Gallery';
-import {ClosedRoom, ErrorBoundary, Root, WaitingRoom} from './root';
+import {ErrorBoundary, Root} from './root';
+import {ClosedRoom, WaitingRoom} from '@page';
 
 export type RoomModule = {readonly Room: FC; readonly ErrorBoundary?: FC};
 

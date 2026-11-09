@@ -12,7 +12,7 @@ import {ErrorBoundary as DemosLayoutBoundary, Room as DemosLayout} from '@pages/
 import {ErrorBoundary as PracticeBoundary} from '@pages/Practice/route';
 import {Environment, environment} from '@transport';
 import {SiteProviders} from '../../SiteProviders';
-import {FallbackPage} from '../../root';
+import {FallbackPage} from '@page';
 import {siteHolding} from '../../routes';
 
 describe('page error boundaries', () => {
