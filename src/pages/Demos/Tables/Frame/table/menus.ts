@@ -1,5 +1,5 @@
 import {has, maybe} from '@ryandur/sand';
-import {Direction, Labelled, TableColumn, sorting} from '@components/DragSortableTable/model';
+import {Direction, Labeled, TableColumn, sorting} from '@components/DragSortableTable/model';
 import {MountedTable, mountedTable} from './table-state';
 import {tell} from './events';
 
@@ -13,10 +13,10 @@ const announce = (table: ParentNode, column: string, sorted?: Direction): void =
   });
 };
 
-const sortOf = (columns: readonly TableColumn<Labelled>[]): string =>
+const sortOf = (columns: readonly TableColumn<Labeled>[]): string =>
   columns.map(({name, sorted}) => has(sorted) ? `${name} ${sorted}` : '').join('');
 
-const announceChanged = ({table, columns}: Pick<MountedTable, 'table' | 'columns'>, before: readonly TableColumn<Labelled>[]): void => {
+const announceChanged = ({table, columns}: Pick<MountedTable, 'table' | 'columns'>, before: readonly TableColumn<Labeled>[]): void => {
   if (sortOf(before) !== sortOf(columns())) {
     columns().forEach(({name, sorted}) => announce(table, name, sorted));
   }

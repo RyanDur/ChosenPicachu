@@ -1,18 +1,18 @@
 import {Report} from './report';
 import {has, maybe, Maybe, not} from '@ryandur/sand';
 import {shares} from './shares';
-import {TableColumn, ColumnDrag, ColumnShove, Labelled, Marks, RowDrag, RowShove, Settling, TableView, tableState} from './table-state';
+import {TableColumn, ColumnDrag, ColumnShove, Labeled, Marks, RowDrag, RowShove, Settling, TableView, tableState} from './table-state';
 import {survey} from './survey';
 import {Drift} from './travel';
 
 const order = ({columns}: TableView): readonly string[] => columns.map(({name}) => name);
 const standing = ({rows}: TableView): readonly string[] => rows.map(({key}) => key);
-const columns = ({columns}: TableView): readonly TableColumn<Labelled>[] => columns;
+const columns = ({columns}: TableView): readonly TableColumn<Labeled>[] => columns;
 
-const columnNamed = (name: string) => ({columns}: TableView): Maybe<TableColumn<Labelled>> =>
+const columnNamed = (name: string) => ({columns}: TableView): Maybe<TableColumn<Labeled>> =>
   maybe(columns.find(column => column.name === name));
 
-const unknownColumn = (name: string): TableColumn<Labelled> => ({name, data: {label: name}});
+const unknownColumn = (name: string): TableColumn<Labeled> => ({name, data: {label: name}});
 
 const widthOfColumn = (name: string) => ({state}: TableView): number | undefined => state.widths?.[name];
 
