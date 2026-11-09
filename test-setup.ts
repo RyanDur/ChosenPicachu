@@ -22,7 +22,7 @@ beforeEach(() => {
   return () => {
     const written = errorsWritten.mock.calls.length;
     errorsWritten.mockRestore();
-    if (written) throw new Error('the test wrote to console.error; its stderr shows what');
+    if (written) throw new Error('the test, or work an earlier test left running, wrote to console.error; its stderr shows what');
   };
 });
 
