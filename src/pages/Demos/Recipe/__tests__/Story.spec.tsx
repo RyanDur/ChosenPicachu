@@ -51,6 +51,7 @@ describe('a story card', () => {
       </Story>
     </Stories></TestApp>);
     await waitFor(() => expect(card('The reader can arrive at a step')).toHaveAttribute('open'));
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent('tale=told'));
 
     await recipeFolds.press(document.body, 'The reader can arrive at a step');
 
