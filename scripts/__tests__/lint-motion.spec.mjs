@@ -31,6 +31,10 @@ describe('chosen/compositor-motion', () => {
     expect(await warningsFor('a { transition: color 0s 65ms, background-color .3s; }')).toHaveLength(1);
   });
 
+  it('should refuse a property whose duration is a custom property, even with a 0s delay', async () => {
+    expect(await warningsFor('a { transition: color var(--fade) 0s; }')).toHaveLength(1);
+  });
+
   it('should read a flip only from the shorthand, so a flip written as longhands is refused', async () => {
     expect(await warningsFor('a { transition-property: color; transition-duration: 0s; }')).toHaveLength(1);
   });
