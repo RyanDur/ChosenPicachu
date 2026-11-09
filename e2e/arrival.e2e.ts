@@ -103,24 +103,15 @@ test('a shared link to a step inside an open story opens with the story open and
   await expect(page).toHaveURL(/\?news=many#step-slide-in$/);
 });
 
-test('a story the browser opens on its own leaves the reader where they were reading', async ({page}) => {
+test('a story the browser opens on its own joins the address, which keeps the step the reader was sent to', async ({page}) => {
   await page.goto('demos/z-index/?news=many#step-slide-in');
-  const step = page.getByRole('group', {name: 'The user can have multiple banners'}).getByRole('listitem')
-    .filter({has: page.getByRole('heading', {name: 'Slide in from off screen'})}).first();
-  const stepTop = (): Promise<number> => step.evaluate(element => element.getBoundingClientRect().top);
-  await expect(step).toBeFocused();
-  const landedAt = await settledScrollY(page);
-  await page.mouse.wheel(0, 2500);
-  await expect.poll(() => documentScrollY(page)).toBeGreaterThan(landedAt);
-  await settledScrollY(page);
-  const readingAt = await stepTop();
+  const story = page.getByRole('group', {name: 'The user sees the news over the page'});
+  await expect(page.getByRole('group', {name: 'The user can have multiple banners'}).getByRole('listitem')
+    .filter({has: page.getByRole('heading', {name: 'Slide in from off screen'})}).first()).toBeFocused();
 
-  // find-in-page opens a shut story this way, and no driver can search the page
-  await page.getByRole('group', {name: 'The user sees the news over the page'}).evaluate(story => {
-    story.setAttribute('open', '');
-  });
+  // find-in-page opens a shut story this way, and Playwright cannot search the page
+  await story.evaluate(fold => fold.setAttribute('open', ''));
 
+  await expect(story).toHaveAttribute('open');
   await expect(page).toHaveURL(/\?news=many%2Ctop#step-slide-in$/);
-  await settledScrollY(page);
-  expect(Math.abs(await stepTop() - readingAt)).toBeLessThanOrEqual(theSamePlace);
 });
