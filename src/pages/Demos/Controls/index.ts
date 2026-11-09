@@ -1,5 +1,5 @@
 export type {Copy, Dials} from './Controls';
-export type {Motion, Origin, Pace, Track, World} from './useControls';
+export type {Motion, Origin, Pace, World} from './useControls';
 export {Controls} from './Controls';
 export {useControls} from './useControls';
 export {DialGroup} from './DialGroup';

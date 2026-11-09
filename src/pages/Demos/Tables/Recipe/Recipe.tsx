@@ -18,6 +18,6 @@ export const Recipe: FC = () => {
       ]}
       chosen={track}
       onPicked={next => change({track: next})}/>
-    <Stories><Chosen track={track} origin={origin} motion={motion}/></Stories>
+    <Stories><Chosen origin={origin} motion={motion}/></Stories>
   </section>;
 };
