@@ -1,0 +1,318 @@
+import {FC, useSyncExternalStore} from 'react';
+import {render} from '@testing-library/react';
+import {createMemoryRouter, DataRouter, Link, Outlet, RouterProvider, useLocation, useNavigate} from 'react-router';
+import {scrollPlace} from '@navigation';
+import {arrival} from '../arrival';
+import {ArrivalDrawn} from '../ArrivalDrawn';
+import {useArrivalDrawn} from '../useArrivalDrawn';
+import {arrivingReader} from '../__test_support/reader';
+
+type LateTargets = {
+  readonly draw: (id: string) => void;
+  readonly drawn: (id: string) => boolean;
+  readonly subscribe: (listener: () => void) => () => void;
+};
+
+const lateTargets = (): LateTargets => {
+  const drawn = new Set<string>();
+  const listeners = new Set<() => void>();
+  return {
+    draw: id => {
+      drawn.add(id);
+      queueMicrotask(() => listeners.forEach(listener => listener()));
+    },
+    drawn: id => drawn.has(id),
+    subscribe: listener => {
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    }
+  };
+};
+
+const DrawnLater: FC<{id: string; late: LateTargets}> = ({id, late}) =>
+  useSyncExternalStore(late.subscribe, () => late.drawn(id)) && <h2 id={id} tabIndex={-1}>{id}</h2>;
+
+const Story: FC<{late: LateTargets}> = ({late}) => <>
+  <h2 id="here" tabIndex={-1}>here</h2>
+  <DrawnLater id="late" late={late}/>
+  <details>
+    <summary>fold</summary>
+    <DrawnLater id="folded" late={late}/>
+  </details>
+</>;
+
+const Links: FC = () => {
+  const navigate = useNavigate();
+  const {pathname, search} = useLocation();
+  return <nav>
+    {['/story#late', '/story#here', '/story#folded', '/other', '/later'].map(to => <Link key={to} to={to}>{to}</Link>)}
+    <button type="button" onClick={() => navigate(-1)}>back</button>
+    <p>at {pathname}{search}</p>
+  </nav>;
+};
+
+type LaterPage = {readonly loaded: Promise<void>; readonly loads: () => void};
+
+const laterPage = (): LaterPage => {
+  let loads = (): void => undefined;
+  const loaded = new Promise<void>(resolve => {
+    loads = resolve;
+  });
+  return {loaded, loads};
+};
+
+const Frame: FC = () => {
+  useArrivalDrawn();
+  return <><Links/><Outlet/></>;
+};
+
+const site = (late: LateTargets, later: LaterPage, opened: string): DataRouter => createMemoryRouter([{
+  element: <Frame/>,
+  children: [{
+    hydrateFallbackElement: <p>loading</p>,
+    children: [
+      {path: '/', element: <p>home</p>},
+      {path: '/story', element: <Story late={late}/>},
+      {path: '/other', element: <p>other</p>},
+      {path: '/later', lazy: async () => later.loaded.then(() => ({element: <Story late={late}/>}))}
+    ]
+  }]
+}], {initialEntries: [opened]});
+
+type FollowedSite = {
+  readonly draws: (id: string) => void;
+  readonly loadsTheLaterPage: () => void;
+  readonly rewritesTheAddress: () => void;
+  readonly goesBackByTheBrowser: () => void;
+  readonly stopFollowing: () => void;
+};
+
+const siteFollowed = (opened = '/'): FollowedSite => {
+  const late = lateTargets();
+  const later = laterPage();
+  const router = site(late, later, opened);
+  const arrived = arrival(window);
+  render(<ArrivalDrawn.Provider value={arrived.drawn}><RouterProvider router={router}/></ArrivalDrawn.Provider>);
+  const stopFollowing = arrived.follow(router);
+  onTestFinished(stopFollowing);
+  return {
+    draws: late.draw,
+    loadsTheLaterPage: later.loads,
+    rewritesTheAddress: () => queueMicrotask(() => {
+      const {location} = router.state;
+      void router.navigate({search: '?rewritten', hash: location.hash},
+        {replace: true, state: scrollPlace.keptFrom(location)});
+    }),
+    goesBackByTheBrowser: () => queueMicrotask(() => {
+      void router.navigate(-1);
+    }),
+    stopFollowing
+  };
+};
+
+describe('arrival', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({toFake: ['requestAnimationFrame', 'cancelAnimationFrame']});
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  test('a reader sent to a fragment the page draws later lands on it', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
+
+    site.draws('late');
+
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).toHaveFocus();
+  });
+
+  test('a reader who goes back is not moved by arrival', async () => {
+    siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#here');
+    await reader.waits(500);
+    await reader.follows('/other');
+
+    await reader.goesBack();
+    await reader.waits(500);
+
+    expect(reader.heading('here')).not.toHaveFocus();
+  });
+
+  test('a reader who follows a second link before the first lands ends up only at the second', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
+
+    await reader.follows('/story#here');
+    site.draws('late');
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.headingsFocused()).toEqual(['here']);
+  });
+
+  test('a reader who follows a second link before the first lands leaves the first one’s fold shut', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#folded');
+    await reader.waits(100);
+
+    await reader.follows('/story#here');
+    site.draws('folded');
+    await reader.sees('folded');
+    await reader.waits(500);
+
+    expect(reader.fold()).not.toHaveAttribute('open');
+  });
+
+  test('a reader who goes back to the entry still being landed on is not moved', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
+    await reader.follows('/story#here');
+    await reader.waits(100);
+
+    await reader.goesBack();
+    site.draws('late');
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).not.toHaveFocus();
+  });
+
+  test('a reader whose address the page rewrites under them is not moved', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#here');
+    await reader.waits(500);
+    await reader.presses('{Tab}');
+
+    site.rewritesTheAddress();
+    await reader.seesTheAddress('/story?rewritten');
+    await reader.waits(500);
+
+    expect(reader.headingsFocused()).toEqual(['here']);
+  });
+
+  test('a reader who follows the link to the address they are on lands on it again', async () => {
+    siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#here');
+    await reader.waits(500);
+    await reader.presses('{Tab}');
+
+    await reader.follows('/story#here');
+    await reader.waits(500);
+
+    expect(reader.headingsFocused()).toEqual(['here', 'here']);
+  });
+
+  test('a reader whose address the page rewrites while it is still landing lands on it', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
+
+    site.rewritesTheAddress();
+    await reader.seesTheAddress('/story?rewritten');
+    site.draws('late');
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).toHaveFocus();
+  });
+
+  test('a reader the browser takes back to an address the page rewrote is not moved by the landing they left', async () => {
+    const site = siteFollowed('/story');
+    const reader = arrivingReader();
+    site.rewritesTheAddress();
+    await reader.seesTheAddress('/story?rewritten');
+    await reader.follows('/story#late');
+    await reader.waits(100);
+
+    site.goesBackByTheBrowser();
+    await reader.seesTheAddress('/story?rewritten');
+    site.draws('late');
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).not.toHaveFocus();
+  });
+
+  test('a reader who opens an address whose page loads later lands on its fragment', async () => {
+    const site = siteFollowed('/later#here');
+    const reader = arrivingReader();
+    await reader.waits(11000);
+
+    site.loadsTheLaterPage();
+    await reader.sees('here');
+    await reader.waits(500);
+
+    expect(reader.heading('here')).toHaveFocus();
+  });
+
+  test('a reader who leaves for a page that loads later is not moved on the page they left', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
+    site.draws('late');
+    await reader.sees('late');
+
+    await reader.follows('/later');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).not.toHaveFocus();
+  });
+
+  test('a reader who presses a key while the page is still settling stays where they are', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
+
+    await reader.presses('{ArrowDown}');
+    site.draws('late');
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).not.toHaveFocus();
+  });
+
+  test('a reader still reading three seconds after the page was drawn is not pulled to a target drawn after', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(3100);
+
+    site.draws('late');
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).not.toHaveFocus();
+  });
+
+  test('a landing stops when arrival stops following', async () => {
+    const site = siteFollowed();
+    const reader = arrivingReader();
+    await reader.follows('/story#late');
+    await reader.waits(100);
+
+    site.stopFollowing();
+    site.draws('late');
+    await reader.sees('late');
+    await reader.waits(500);
+
+    expect(reader.heading('late')).not.toHaveFocus();
+  });
+});

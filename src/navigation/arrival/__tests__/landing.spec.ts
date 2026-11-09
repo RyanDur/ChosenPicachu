@@ -2,8 +2,8 @@ import {landing, Measured, Watch} from '../landing';
 
 const at = (top: number, pageHeight: number, visible = true): Measured => ({top, pageHeight, visible});
 
-const after = (frames: readonly Measured[]): Watch | 'land' =>
-  frames.reduce<Watch | 'land'>((watch, frame) => watch === 'land' ? watch : landing.watched(watch, frame), landing.watching);
+const after = (frames: readonly Measured[], from: Watch = landing.watching(0)): Watch | 'land' =>
+  frames.reduce<Watch | 'land'>((watch, frame) => watch === 'land' ? watch : landing.watched(watch, frame), from);
 
 describe('the landing on a fragment', () => {
   test('should land once the target has held its place on the page for two frames', () => {
@@ -32,5 +32,24 @@ describe('the landing on a fragment', () => {
 
     expect(after(restless.slice(0, 120))).not.toEqual('land');
     expect(after(restless)).toEqual('land');
+  });
+});
+
+describe('the search for a target the page has not drawn yet', () => {
+  const stillLooking = (now: number): Watch => {
+    const looked = landing.lookedFor(landing.watching(0), now);
+    if (looked === 'given up') throw new Error(`gave up by ${now} ms`);
+    return looked;
+  };
+
+  test('should spend none of the frames the landing waits for the page to hold still', () => {
+    const restless = Array.from({length: 120}, (_, frame) => at(4530, 1000 + frame));
+
+    expect(after(restless, stillLooking(2999))).not.toEqual('land');
+  });
+
+  test('should give up three seconds after it started looking', () => {
+    expect(landing.lookedFor(landing.watching(0), 2999)).not.toEqual('given up');
+    expect(landing.lookedFor(landing.watching(0), 3000)).toEqual('given up');
   });
 });

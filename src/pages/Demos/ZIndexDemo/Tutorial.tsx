@@ -3,7 +3,6 @@ import {DemoTopics} from '../demo-topics';
 import {FC, useId} from 'react';
 import {Stories} from '../Recipe';
 import {useControls} from '../Controls';
-import {useArrival} from '@navigation/arrival';
 import {BannerControls} from './BannerControls';
 import {TopLayerRecipe} from './TopLayerRecipe';
 import {MultipleRecipe} from './MultipleRecipe';
@@ -11,7 +10,6 @@ import '../Recipe/Recipe.css';
 
 export const TopLayerTutorial: FC = () => {
   const {side, align, enter, stack, change} = useControls();
-  useArrival();
 
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">

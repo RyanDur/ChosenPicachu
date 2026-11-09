@@ -1,4 +1,4 @@
-import {Children, FC, MouseEvent, PropsWithChildren, ReactNode, isValidElement} from 'react';
+import {Children, FC, MouseEvent, PropsWithChildren, ReactNode, SyntheticEvent, isValidElement} from 'react';
 import {storyKeys} from './storyKeys';
 import {useOpenStories} from './useOpenStories';
 import {useRanks} from './useRanks';
@@ -29,8 +29,12 @@ export const Story: FC<Props> = ({param, id, can, soThat, children}) => {
     event.preventDefault();
     stories.toggle(id);
   };
+  const matchAddressToFold = ({currentTarget}: SyntheticEvent<HTMLDetailsElement>) => {
+    stories.setOpen(id, currentTarget.open);
+  };
   return <li tabIndex={-1}>
-    <details className="arc" open={stories.isOpen(id)} aria-labelledby={storyKeys.anchorOf({param, id})}>
+    <details className="arc" open={stories.isOpen(id)} aria-labelledby={storyKeys.anchorOf({param, id})}
+      onToggle={matchAddressToFold}>
       <summary className="opener sub-title-glyph-before" onClick={toggled}>
         <hgroup className="story card rounded-corners lifted">
           <Can className="can paragraph bold" id={storyKeys.anchorOf({param, id})}>{can}</Can>
