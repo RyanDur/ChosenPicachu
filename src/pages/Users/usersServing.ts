@@ -25,23 +25,23 @@ const askedToClaim = (workers: Workers): void => {
   asyncResult(workers.ready).onSuccess(({active}) => active?.postMessage(usersServer.loadedUncontrolled));
 };
 
-const awaited = (workers: Workers, {reached, unreachable}: Reaching): () => void => {
+const watchedForControl = (workers: Workers, {reached, unreachable}: Reaching): () => void => {
   const watch = new AbortController();
   const waiting = setTimeout(unreachable, patience);
-  const stopped = (): void => {
+  const stopWatching = (): void => {
     clearTimeout(waiting);
     watch.abort();
   };
   const ended = (outcome: () => void) => (): void => {
     if (watch.signal.aborted) return;
-    stopped();
+    stopWatching();
     outcome();
   };
   workers.addEventListener('controllerchange', ended(reached), {signal: watch.signal});
   asyncResult(workers.register(script))
     .onSuccess(() => maybe(workers.controller).either(ended(reached), () => askedToClaim(workers)))
     .onFailure(ended(unreachable));
-  return stopped;
+  return stopWatching;
 };
 
 const uncontrolled = (workers: Workers): Maybe<Workers> =>
@@ -55,5 +55,5 @@ const reachedAtOnce = ({reached}: Reaching): () => void => {
 export const usersServing: UsersServing = {
   reach: (workers, reaching) => workers
     .mBind(uncontrolled)
-    .either(container => awaited(container, reaching), () => reachedAtOnce(reaching))
+    .either(container => watchedForControl(container, reaching), () => reachedAtOnce(reaching))
 };
