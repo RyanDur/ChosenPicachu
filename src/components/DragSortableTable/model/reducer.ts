@@ -28,7 +28,7 @@ const motion = (state: TableState, action: TableAction): TableState => {
     case 'columnWalkedTo': {
       const {order} = action;
       const from = order.indexOf(action.name);
-      const to = action.type === 'columnWalkedTo' ? action.to : survey.interior(order.indexOf(action.neighbour), order.length);
+      const to = action.type === 'columnWalkedTo' ? action.to : survey.interior(order.indexOf(action.neighbor), order.length);
       const told = action.type !== 'columnWalkedTo' || to === from ? state : {...state, report: {about: 'column' as const, name: action.name, position: to, of: order.length}};
       const shoved = tableState.shoveColumns(told, survey.displacedBetween(order, from, to), {toward: to > from ? 'start' : 'end', by: action.widths[action.name] ?? 0});
       if (action.type !== 'columnWalkedTo') {
@@ -41,7 +41,7 @@ const motion = (state: TableState, action: TableAction): TableState => {
     case 'rowWalkedTo': {
       const {standing} = action;
       const from = standing.indexOf(action.row);
-      const to = action.type === 'rowWalkedTo' ? action.to : standing.indexOf(action.neighbour);
+      const to = action.type === 'rowWalkedTo' ? action.to : standing.indexOf(action.neighbor);
       const told = action.type !== 'rowWalkedTo' || to === from ? state : {...state, report: {about: 'row' as const, name: action.label, position: to, of: standing.length}};
       const shoved = tableState.shoveRows(told, survey.displacedBetween(standing, from, to), {toward: to > from ? 'up' : 'down', by: action.heights[action.row] ?? 0});
       if (action.type !== 'rowWalkedTo') {
@@ -58,8 +58,8 @@ const dragging = (state: TableState, action: TableAction): TableState => {
   switch (action.type) {
     case 'lifted': return tableState.lift(state, action.carry, action.grab);
     case 'drifted': return tableState.drift(state, action.moving);
-    case 'columnLandingFound': return tableState.landColumn(state, action.neighbour);
-    case 'rowLandingFound': return tableState.landRow(state, action.neighbour);
+    case 'columnLandingFound': return tableState.landColumn(state, action.neighbor);
+    case 'rowLandingFound': return tableState.landRow(state, action.neighbor);
     case 'released':
     case 'dropped': return tableState.ground(state);
     default: return state;
@@ -70,11 +70,11 @@ const widths = (state: TableState, action: TableAction): TableState => {
   switch (action.type) {
     case 'measured': return tableState.measure(state, action.widths, action.floors);
     case 'awoken': return tableState.awaken(state, action.widths, action.floors);
-    case 'tradedBy': return tableState.tradeBy(state, action.column, action.neighbour, action.delta);
+    case 'tradedBy': return tableState.tradeBy(state, action.column, action.neighbor, action.delta);
     case 'arrowLifted': return tableState.endKeyedSizingOf(state, action.column);
     case 'handleLeft': return tableState.endSizingOf(state, action.column);
     case 'gripped': return tableState.grip(state, action.column, action.grip);
-    case 'handleDragged': return tableState.dragHandle(state, action.column, action.neighbour, action.clientX);
+    case 'handleDragged': return tableState.dragHandle(state, action.column, action.neighbor, action.clientX);
     case 'handleReleased': return tableState.ungripOf(state, action.column);
     default: return state;
   }

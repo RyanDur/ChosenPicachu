@@ -13,7 +13,7 @@ import elementSource from '@components/DragSortableTable/useDragSortable.ts?samp
 import storeSource from '@components/store/store.ts?sample';
 import frameSettle from '../../Frame/table/settle.ts?sample';
 import frameCarry from '../../Frame/table/carry.ts?sample';
-import selectorsSource from '@components/DragSortableTable/model/selectors.ts?sample';
+import readsSource from '@components/DragSortableTable/model/reads.ts?sample';
 import menuSource from '@components/DragSortableTable/SortMenu.tsx?sample';
 import rowSource from '@components/DragSortableTable/Row.tsx?sample';
 import headersSource from '@components/DragSortableTable/Headers.tsx?sample';
@@ -36,7 +36,7 @@ export const sources = {
   surfaceCss,
   state: stateSource,
   reducer: reducerSource,
-  selectors: selectorsSource,
+  reads: readsSource,
   frameCarry,
   frameSettle,
   travel: travelSource,

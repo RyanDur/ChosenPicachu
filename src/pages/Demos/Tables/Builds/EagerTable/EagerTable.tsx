@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Body, BodyEvents, Cell, Column, DraggableColumn, DragSortable, HeaderEvents, Headers, Motion, Origin, ResizeHandle, Row, RowHeader, SortMenu, useDragSortable} from '@components/DragSortableTable';
 import {Measured, Measures, cells} from '../../../Market';
-import {TableColumn, tableReports, tableSelectors} from '@components/DragSortableTable/model';
+import {TableColumn, tableReports, tableReads} from '@components/DragSortableTable/model';
 
 type Props = HeaderEvents & BodyEvents & {
   caption: string;
@@ -64,6 +64,6 @@ export const EagerTable: FC<Props> = ({
         })}
       </Body>
     </table>
-    <output className="off-screen" htmlFor="live-aggregations" aria-label="move report">{tableReports.of(tableSelectors.report(sortable))}</output>
+    <output className="off-screen" htmlFor="live-aggregations" aria-label="move report">{tableReports.of(tableReads.report(sortable))}</output>
   </DragSortable>;
 };

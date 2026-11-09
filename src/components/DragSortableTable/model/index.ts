@@ -10,7 +10,7 @@ export {lifting} from './lift';
 export {looks} from './looks';
 export type {Report} from './report';
 export {tableReports} from './report';
-export {tableSelectors} from './selectors';
+export {tableReads} from './reads';
 export {shares} from './shares';
 export type {Direction} from './sorting';
 export {sorting} from './sorting';

@@ -1,18 +1,18 @@
 import {ComponentProps, FC} from 'react';
 import {classNames} from '../classNames';
-import {useTableSelector} from './useTableSelector';
-import {tableSelectors, looks} from './model';
+import {useTableRead} from './useTableRead';
+import {tableReads, looks} from './model';
 import './motion.css';
 
 export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({column, row, className, children, ...td}) => {
-  const {settlingFrom: columnFrom, shoved: columnShove} = useTableSelector(tableSelectors.columnMarks(column));
-  const {settlingFrom: rowFrom, shoved: rowShove} = useTableSelector(tableSelectors.rowMarks(row));
-  const columnCarried = useTableSelector(tableSelectors.columnHeld(column));
-  const rowCarried = useTableSelector(tableSelectors.rowHeld(row));
-  const columnSeat = useTableSelector(tableSelectors.seatOfColumn(column));
-  const rowSeat = useTableSelector(tableSelectors.seatOfRow(row));
-  const columnDrift = useTableSelector(tableSelectors.driftOfColumn(column));
-  const rowDrift = useTableSelector(tableSelectors.driftOfRow(row));
+  const {settlingFrom: columnFrom, shoved: columnShove} = useTableRead(tableReads.columnMarks(column));
+  const {settlingFrom: rowFrom, shoved: rowShove} = useTableRead(tableReads.rowMarks(row));
+  const columnCarried = useTableRead(tableReads.columnHeld(column));
+  const rowCarried = useTableRead(tableReads.rowHeld(row));
+  const columnSeat = useTableRead(tableReads.seatOfColumn(column));
+  const rowSeat = useTableRead(tableReads.seatOfRow(row));
+  const columnDrift = useTableRead(tableReads.driftOfColumn(column));
+  const rowDrift = useTableRead(tableReads.driftOfRow(row));
   const seat = columnSeat ?? rowSeat;
   const drift = columnDrift ?? rowDrift;
   const from = columnFrom ?? rowFrom;

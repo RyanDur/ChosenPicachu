@@ -8,8 +8,8 @@ import actionsSource from '@components/DragSortableTable/model/actions.ts?sample
 import reducerSource from '@components/DragSortableTable/model/reducer.ts?sample';
 import storeSource from '@components/store/store.ts?sample';
 import slicesSource from '@components/store/slices.ts?sample';
-import useTableSelectorSource from '@components/DragSortableTable/useTableSelector.ts?sample';
-import selectorsSource from '@components/DragSortableTable/model/selectors.ts?sample';
+import useTableReadSource from '@components/DragSortableTable/useTableRead.ts?sample';
+import readsSource from '@components/DragSortableTable/model/reads.ts?sample';
 import elementSource from '@components/DragSortableTable/useDragSortable.ts?sample';
 import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
 import marketStoreSource from '@pages/Demos/Market/marketStore.ts?sample';
@@ -150,16 +150,16 @@ const SelectorsAnswer: FC<{world: World}> = ({world}) =>
           given, at the moment it needs an answer, so a listener never keeps a stale copy of either.</Says>}
       <Codes>
         <Snippet label="TS" lines={[
-          ...carve.unit(useTableSelectorSource, 'export const useTableSelector'), gap,
-          ...carve.unit(selectorsSource, 'const columnNamed'), gap,
-          ...carve.unit(selectorsSource, 'const positionOfRow'), gap,
-          ...carve.unit(selectorsSource, 'const columnTravels'),
+          ...carve.unit(useTableReadSource, 'export const useTableRead'), gap,
+          ...carve.unit(readsSource, 'const columnNamed'), gap,
+          ...carve.unit(readsSource, 'const positionOfRow'), gap,
+          ...carve.unit(readsSource, 'const columnTravels'),
           lines.aside('// the question is the name; the state stays in one file')
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(headerSource, 'const {sorted, data} = useTableSelector(tableSelectors.columnNamed', 'const carried = useTableSelector(tableSelectors.columnHeld'), gap,
-            ...carve.span(headerSource, 'const travels = useTableSelector(tableSelectors.columnTravels', 'const travels = useTableSelector(tableSelectors.columnTravels')
+            ...carve.span(headerSource, 'const {sorted, data} = useTableRead(tableReads.columnNamed', 'const carried = useTableRead(tableReads.columnHeld'), gap,
+            ...carve.span(headerSource, 'const travels = useTableRead(tableReads.columnTravels', 'const travels = useTableRead(tableReads.columnTravels')
           ]}/>
           : undefined}
       </Codes>

@@ -1,35 +1,35 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components';
-import {RowGrip, useBodyEvents, useTableDispatch, useTableSelector} from '@components/DragSortableTable';
-import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableSelectors, looks, travel, arrangements, lifting} from '@components/DragSortableTable/model';
+import {RowGrip, useBodyEvents, useTableDispatch, useTableRead} from '@components/DragSortableTable';
+import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableReads, looks, travel, arrangements, lifting} from '@components/DragSortableTable/model';
 import {lazyDrop} from './lazyDrop';
 import '@components/DragSortableTable/motion.css';
 
 export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; label: string}> = ({column, row, label, className, ...th}) => {
   const dispatch = useTableDispatch();
   const {onRowMoved} = useBodyEvents();
-  const order = useTableSelector(tableSelectors.order);
-  const columnCarried = useTableSelector(tableSelectors.columnHeld(column));
-  const carried = useTableSelector(tableSelectors.rowHeld(row));
-  const {settlingFrom, shoved} = useTableSelector(tableSelectors.rowMarks(row));
-  const standing = useTableSelector(tableSelectors.standing);
-  const position = useTableSelector(tableSelectors.positionOfRow(row));
-  const drag = useTableSelector(tableSelectors.rowDrag(row));
-  const columnSeat = useTableSelector(tableSelectors.seatOfColumn(column));
-  const rowSeat = useTableSelector(tableSelectors.seatOfRow(row));
-  const columnDrift = useTableSelector(tableSelectors.driftOfColumn(column));
-  const rowDrift = useTableSelector(tableSelectors.driftOfRow(row));
-  const view = useTableSelector(whole => whole);
+  const order = useTableRead(tableReads.order);
+  const columnCarried = useTableRead(tableReads.columnHeld(column));
+  const carried = useTableRead(tableReads.rowHeld(row));
+  const {settlingFrom, shoved} = useTableRead(tableReads.rowMarks(row));
+  const standing = useTableRead(tableReads.standing);
+  const position = useTableRead(tableReads.positionOfRow(row));
+  const drag = useTableRead(tableReads.rowDrag(row));
+  const columnSeat = useTableRead(tableReads.seatOfColumn(column));
+  const rowSeat = useTableRead(tableReads.seatOfRow(row));
+  const columnDrift = useTableRead(tableReads.driftOfColumn(column));
+  const rowDrift = useTableRead(tableReads.driftOfRow(row));
+  const view = useTableRead(whole => whole);
   const seat = columnSeat ?? rowSeat;
   const drift = columnDrift ?? rowDrift;
 
   const nudged = (to: number, heights: PixelSizes): void =>
     dispatch(tableActions.rowWalkedTo({row, label}, to, heights, standing));
   const arrived = (to: number): void => onRowMoved?.({row, to, standing});
-  const beside = (neighbour: string, bounds: Survey): void => {
-    const to = standing.indexOf(neighbour);
-    dispatch(tableActions.rowMovedBeside({row, label}, neighbour, bounds.rowHeights, standing));
+  const beside = (neighbor: string, bounds: Survey): void => {
+    const to = standing.indexOf(neighbor);
+    dispatch(tableActions.rowMovedBeside({row, label}, neighbor, bounds.rowHeights, standing));
     onRowMoved?.({row, to, standing});
   };
 
@@ -41,8 +41,8 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const release = (): void => {
     if (has(drag)) {
       const to = has(drag.landing) ? standing.indexOf(drag.landing) : standing.indexOf(row);
-      const settling = tableSelectors.settlingOfRowIn(row, arrangements.movedTo(standing, row, to))(view);
-      lazyDrop.released(drag, neighbour => beside(neighbour, drag.survey));
+      const settling = tableReads.settlingOfRowIn(row, arrangements.movedTo(standing, row, to))(view);
+      lazyDrop.released(drag, neighbor => beside(neighbor, drag.survey));
       if (has(settling)) {
         dispatch(tableActions.dropped({axis: 'row', held: row}, settling, {name: label, order: arrangements.movedTo(standing, row, to)}));
       }

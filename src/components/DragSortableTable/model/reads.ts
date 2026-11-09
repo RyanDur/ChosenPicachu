@@ -33,7 +33,7 @@ const rowCount = ({rows}: TableView): number => rows.length;
 const columnTravels = (name: string) => (view: TableView): boolean =>
   not(survey.anchored(positionOfColumn(name)(view), columnCount(view)));
 
-const neighbourOfColumn = (name: string) => (view: TableView): string => shares.neighborOf(order(view), name);
+const neighborOfColumn = (name: string) => (view: TableView): string => shares.neighborOf(order(view), name);
 
 const columnDrag = (name: string) => ({state}: TableView): ColumnDrag | undefined =>
   state.drag?.axis === 'column' && state.drag.held === name ? state.drag : undefined;
@@ -68,7 +68,7 @@ const settlingOfColumnIn = (name: string, order: readonly string[]) => (view: Ta
 const settlingOfRowIn = (key: string, standing: readonly string[]) => (view: TableView): Settling | undefined =>
   rowHeld(key)(view) ? tableState.settlingAt(view.state, order(view), standing) : undefined;
 
-export const tableSelectors = {
+export const tableReads = {
   order,
   standing,
   columns,
@@ -82,7 +82,7 @@ export const tableSelectors = {
   columnCount,
   rowCount,
   columnTravels,
-  neighbourOfColumn,
+  neighborOfColumn,
   columnDrag,
   rowDrag,
   columnHeld,
