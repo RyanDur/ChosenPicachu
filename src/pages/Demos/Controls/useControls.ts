@@ -9,6 +9,9 @@ export type World = 'react' | 'vanilla';
 export type Track = 'pointer' | 'keyboard';
 export type FoldType = 'inclusive' | 'exclusive';
 export type FoldMotion = 'reveal' | 'drawer' | 'static';
+export type RaisedCard = 'none' | 'first' | 'second' | 'third';
+export type CardOne = 'contained' | 'free';
+export type Worn = 'nothing' | 'position' | 'outline' | 'z-index' | 'opacity' | 'transform' | 'isolation';
 
 export type Settings = Placement & {
   pace: Pace;
@@ -18,12 +21,19 @@ export type Settings = Placement & {
   track: Track;
   foldType: FoldType;
   foldMotion: FoldMotion;
+  raised: RaisedCard;
+  cardOne: CardOne;
+  wears: Worn;
 };
 
 export type Controls = Settings & {change: (next: Partial<Settings>) => void};
 
 // links saved before the fold settings had their own names carry them as type and style
-type Address = Omit<Settings, 'foldType' | 'foldMotion'> & {type: FoldType; style: FoldMotion};
+type Address = Omit<Settings, 'foldType' | 'foldMotion' | 'cardOne'> & {
+  type: FoldType;
+  style: FoldMotion;
+  'card-one': CardOne;
+};
 
 const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
   pace: schema.literalUnion('eager', 'lazy'),
@@ -36,7 +46,10 @@ const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
   side: schema.literalUnion('top', 'middle', 'bottom'),
   align: schema.literalUnion('left', 'center', 'right'),
   enter: schema.literalUnion('above', 'below', 'left', 'right'),
-  stack: schema.literalUnion('down', 'up', 'left', 'right')
+  stack: schema.literalUnion('down', 'up', 'left', 'right'),
+  raised: schema.literalUnion('none', 'first', 'second', 'third'),
+  'card-one': schema.literalUnion('contained', 'free'),
+  wears: schema.literalUnion('nothing', 'position', 'outline', 'z-index', 'opacity', 'transform', 'isolation')
 };
 
 const defaults: Address = {
@@ -47,15 +60,20 @@ const defaults: Address = {
   track: 'pointer',
   type: 'exclusive',
   style: 'reveal',
+  raised: 'none',
+  'card-one': 'contained',
+  wears: 'nothing',
   ...unplaced
 };
 
 export const useControls = (): Controls => {
-  const {type, style, ...found} = useSearchParamsObject(decoders, defaults);
+  const {type, style, 'card-one': cardOne, ...found} = useSearchParamsObject(decoders, defaults);
   return {
     ...found,
     foldType: type,
     foldMotion: style,
-    change: ({foldType, foldMotion, ...next}) => found.updateSearchParams({...next, type: foldType, style: foldMotion})
+    cardOne,
+    change: ({foldType, foldMotion, cardOne: nextCardOne, ...next}) =>
+      found.updateSearchParams({...next, type: foldType, style: foldMotion, 'card-one': nextCardOne})
   };
 };

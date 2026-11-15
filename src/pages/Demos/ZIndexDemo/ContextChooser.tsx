@@ -3,8 +3,7 @@ import {useHydrated} from '@components';
 import {Maybe, nothing, some, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
-import {useSearchParamsObject} from '@navigation/search-params';
-import {Worn, wornParam} from './worn';
+import {useControls, Worn} from '../Controls';
 
 const inOrder: readonly Worn[] = ['nothing', 'position', 'outline', 'z-index', 'opacity', 'transform', 'isolation'];
 
@@ -38,7 +37,7 @@ const whatItFormed: Record<Worn, string> = {
 };
 
 export const ContextChooser: FC = () => {
-  const {wears: worn, updateSearchParams} = useSearchParamsObject({wears: wornParam}, {wears: 'nothing'});
+  const {wears: worn, change} = useControls();
   const hydrated = useHydrated();
   const [opened, updateOpened] = useState<Maybe<Worn>>(nothing());
   const openedAsWorn = opened.mBind(wearing => wearing === worn ? some(wearing) : nothing());
@@ -56,7 +55,7 @@ export const ContextChooser: FC = () => {
           <input type="radio" name="card-one-wears" checked={worn === choice} disabled={not(hydrated)}
             onChange={() => {
               updateOpened(nothing());
-              updateSearchParams({wears: choice});
+              change({wears: choice});
             }}/>
           {choice === 'nothing' ? property[choice] : <code className="monospaced">{property[choice]}</code>}
         </label>)}

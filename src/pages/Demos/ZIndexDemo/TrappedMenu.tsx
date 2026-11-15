@@ -4,8 +4,7 @@ import {Maybe, nothing, some, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
 import {TopLayerMenu} from './TopLayerMenu';
-import {useSearchParamsObject} from '@navigation/search-params';
-import {CardOne, cardOneParam} from './card-one';
+import {CardOne, useControls} from '../Controls';
 
 type Opened = CardOne | 'top layer';
 
@@ -16,7 +15,7 @@ const whereItOpened: Record<Opened, string> = {
 };
 
 export const TrappedMenu: FC = () => {
-  const {'card-one': cardOne, updateSearchParams} = useSearchParamsObject({'card-one': cardOneParam}, {'card-one': 'contained'});
+  const {cardOne, change} = useControls();
   const hydrated = useHydrated();
   const [opened, updateOpened] = useState<Maybe<Opened>>(nothing());
   const openedAsTheCardsAre = opened.mBind(place => place === 'top layer' || place === cardOne ? some(place) : nothing());
@@ -33,7 +32,7 @@ export const TrappedMenu: FC = () => {
           <input type="checkbox" checked={cardOne === 'contained'} disabled={not(hydrated)}
             onChange={({currentTarget}) => {
               updateOpened(nothing());
-              updateSearchParams({'card-one': currentTarget.checked ? 'contained' : 'free'});
+              change({cardOne: currentTarget.checked ? 'contained' : 'free'});
             }}/>
           Card one has z-index: 1
         </label>
