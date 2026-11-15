@@ -361,6 +361,7 @@
     }
 
     .side-nav {
+      min-width: 0;
       flex-wrap: wrap;
       padding-inline-start: var(--base);
     }
