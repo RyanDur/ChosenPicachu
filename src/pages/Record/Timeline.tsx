@@ -4,7 +4,7 @@ import {
   Need, StructureArrives, PresentationLeavesHome, BehaviorBorn, NeedOutrunsStandards, BrowsersAgree, ZenGarden,
   BrowsersTakePen, PageBecomesApplication, SomeoneNeedsComponents, Html5SaysIt, OneDirection, DocumentComesBack,
   WebGoesPublic, HtmlTwo, CssOne, WiredRedesign, CssTwoOne, EcmaScript, EsFive, DefaultsAgree, ConstantsNeedHome,
-  ElementsArrive, Frameworks, ConcernsInTheYear, spelled
+  ElementsArrive, Frameworks, ConcernsInTheYear, spelled, MomentSummary, FullerStory
 } from './moments';
 import {MomentKey, moments, SharedYear} from './calendar';
 import {concerns} from './concerns';
@@ -69,16 +69,15 @@ const Year: FC<{year: string; momentsInTheYear: readonly MomentKey[]; sharedYear
   <li className="moment trim-rail-along">
     <time dateTime={year} className="year caption bold">{year}</time>
     <h3 className="moment-title sub-title void-dot-before">{joinedTitle(momentsInTheYear.map(key => moments.headings[key].title))}</h3>
-    <p className="moment-summary paragraph muted-ink hyphenated">{summary}</p>
-    <details className="fuller-story" name="record">
-      <summary className="prompt caption">the fuller story</summary>
+    <MomentSummary>{summary}</MomentSummary>
+    <FullerStory>
       <ol className="moments-of-a-year timeline" aria-label={year}>
         {momentsInTheYear.map(key =>
           <ConcernsInTheYear.Provider key={key} value={some(concerns.ofMoment(key))}>
             <TimelineMoment moment={key}/>
           </ConcernsInTheYear.Provider>)}
       </ol>
-    </details>
+    </FullerStory>
   </li>;
 
 export const Timeline: FC = () =>
