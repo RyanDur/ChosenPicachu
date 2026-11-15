@@ -7,13 +7,9 @@ type Motion = {kind: 'resting'} | {kind: 'pinned'; height: number} | {kind: 'mov
 
 type Panel = {shown: boolean; motion: Motion};
 
-type Pressed = {
-  readonly type: 'pressed';
-  readonly open: boolean;
-  readonly moves: boolean;
-  readonly text: number;
-  readonly stands: number;
-};
+type Heights = {readonly text: number; readonly stands: number};
+
+type Pressed = {readonly type: 'pressed'; readonly open: boolean; readonly heights?: Heights};
 type Pinned = {readonly type: 'pinned'; readonly end: number};
 type Settled = {readonly type: 'settled'};
 type PanelChange = Pressed | Pinned | Settled;
@@ -34,8 +30,7 @@ const motionOnPress = (now: Motion, open: boolean, text: number, stands: number)
   : movingTo(stands, open ? text : 0);
 
 const panelChange = {
-  pressed: (open: boolean, panel: HTMLElement): Pressed =>
-    ({type: 'pressed', open, moves: moves(panel), text: textHeight(panel), stands: standing(panel)}),
+  pressed: (open: boolean, heights?: Heights): Pressed => ({type: 'pressed', open, heights}),
   pinned: (end: number): Pinned => ({type: 'pinned', end}),
   settled: (): Settled => ({type: 'settled'})
 };
@@ -45,7 +40,9 @@ const nextPanel = (panel: Panel, change: PanelChange): Panel => {
     case 'pressed':
       return {
         shown: change.open,
-        motion: change.moves ? motionOnPress(panel.motion, change.open, change.text, change.stands) : panel.motion
+        motion: maybe(change.heights)
+          .map(({text, stands}) => motionOnPress(panel.motion, change.open, text, stands))
+          .orElse(panel.motion)
       };
     case 'pinned':
       return panel.motion.kind === 'pinned' ? {...panel, motion: movingTo(panel.motion.height, change.end)} : panel;
@@ -62,7 +59,9 @@ export const MeasuredPanel: FC<PropsWithChildren<{namedBy: string}>> = ({namedBy
   useLayoutEffect(() => {
     const measured = panel.current;
     if (open !== shown && measured) {
-      dispatch(panelChange.pressed(open, measured));
+      dispatch(moves(measured)
+        ? panelChange.pressed(open, {text: textHeight(measured), stands: standing(measured)})
+        : panelChange.pressed(open));
     }
   }, [open, shown]);
 
