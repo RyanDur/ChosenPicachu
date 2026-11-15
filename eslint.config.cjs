@@ -8,6 +8,7 @@ const {bareInlineCode} = require('./scripts/lint/inline-code.mjs');
 const {wrap} = require('./scripts/lint/wrap.mjs');
 const {page} = require('./scripts/lint/page.mjs');
 const {components} = require('./scripts/lint/components.mjs');
+const {prose} = require('./scripts/lint/prose.mjs');
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -131,8 +132,8 @@ module.exports = [
       ecmaVersion: 'latest',
       sourceType: 'module'
     },
-    plugins: {'@stylistic': stylistic, wrap},
-    rules: {...shape, ...markup}
+    plugins: {'@stylistic': stylistic, wrap, prose},
+    rules: {...shape, ...markup, 'prose/breaks-between-words': 'error'}
   },
   {
     files: ['src/**/*.ts', 'scripts/**/*.{js,mjs,cjs}', 'e2e/**/*.ts'],

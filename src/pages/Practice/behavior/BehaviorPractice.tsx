@@ -54,8 +54,7 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">The table’s reducer is small reducers combined, and it ignores any event that is not the
       table’s:</p>
     <TableReducerCarve/>
-    <p className="paragraph">The market store holds the column order in its{' '}
-      <code className="monospaced">arrangement</code>. <code className="monospaced">marketReads.columns</code> works out the
+    <p className="paragraph">The market store holds the column order in its <code className="monospaced">arrangement</code>. <code className="monospaced">marketReads.columns</code> works out the
       columns on screen from it, so nothing stores them twice.</p>
     <p className="paragraph">AngularJS, in the <MomentLink to="frameworks">2010 moment</MomentLink>, bound model and
       view both ways. I keep one direction, the <MomentLink to="oneDirection">July 2014 moment</MomentLink>’s
@@ -74,17 +73,12 @@ export const BehaviorPractice: FC = () =>
       words, <code className="monospaced">'ascending' | 'descending'</code>, and a misspelled direction is an error
       before the page runs. Every field of the table’s state is <code className="monospaced">readonly</code>, so the
       type checker refuses an edit to an old state, and the reducer has to return a new one. The report is missing
-      before anything has moved, and the selector that reads it returns sand’s{' '}
-    <code className="monospaced">Maybe</code>.</p>
-    <p className="paragraph">Scott Wlaschin calls this using the type system to{' '}
-      <a className="signpost" href={illegalStates}>“make illegal states unrepresentable”</a>, a phrase he credits to
+      before anything has moved, and the selector that reads it returns sand’s <code className="monospaced">Maybe</code>.</p>
+    <p className="paragraph">Scott Wlaschin calls this using the type system to <a className="signpost" href={illegalStates}>“make illegal states unrepresentable”</a>, a phrase he credits to
       Yaron Minsky.</p>
     <p className="paragraph">Names and types like these let the code read as sentences to the next reader, who was not
       there when I wrote it. I wrote small functions so a condition reads in
-      words: <code className="monospaced">has</code>,{' '}
-    <code className="monospaced">not</code>, <code className="monospaced">is</code> and{' '}
-    <code className="monospaced">notEmpty</code>, from my own library,{' '}
-    <a className="signpost" href="https://github.com/RyanDur/sand">sand</a>. Each is a line or two:</p>
+      words: <code className="monospaced">has</code>, <code className="monospaced">not</code>, <code className="monospaced">is</code> and <code className="monospaced">notEmpty</code>, from my own library, <a className="signpost" href="https://github.com/RyanDur/sand">sand</a>. Each is a line or two:</p>
     <PreludeCarve/>
     <p className="paragraph">Here the table asks, in words I would say aloud, whether a drag is under way and a column
       is settling:</p>
@@ -94,8 +88,7 @@ export const BehaviorPractice: FC = () =>
       whether an element holds something, <code className="monospaced">:not()</code> turns a question round,
       and <code className="monospaced">:is()</code> asks whether any of a list is true:</p>
     <SheetQuestionsCarve/>
-    <p className="paragraph">I would rather the next reader meet a word than work out what a{' '}
-      <code className="monospaced">!</code> asks. The cost is that they learn sand’s words first.</p>
+    <p className="paragraph">I would rather the next reader meet a word than work out what a <code className="monospaced">!</code> asks. The cost is that they learn sand’s words first.</p>
     <h3 className="paragraph bold">Where the world comes in</h3>
     <p className="paragraph">Not every event starts at the pointer. A reply from a server or a price
       arriving over a socket is an event like any other: it says what happened somewhere else, and the state still
@@ -115,16 +108,13 @@ export const BehaviorPractice: FC = () =>
     <h3 className="paragraph bold">Trusted at the boundary</h3>
     <p className="paragraph">I like to trust my boundaries. A value from a socket or a fetch is unknown until a decoder
       checks it, so I check it once, where it enters, and the code after that takes it at its type.</p>
-    <p className="paragraph"><a className="signpost" href={schemawax}>schemawax</a>,{' '}
-      <a className="signpost" href={schemawax}>“Tiny typed data decoder”</a>, lets me write the shape once. The decoder
+    <p className="paragraph"><a className="signpost" href={schemawax}>schemawax</a>, <a className="signpost" href={schemawax}>“Tiny typed data decoder”</a>, lets me write the shape once. The decoder
       checks a value against that shape, and the type of whatever passes comes from the decoder, so the check and the
       type cannot drift apart. Here is the decoder for a trade as Coinbase’s feed sends it:</p>
     <TradeDecoderCarve/>
     <p className="paragraph">A trade passes three gates on its way in. The text has to parse, the parsed value has to
       match the decoder, and its price, size and time, which the feed sends as text, have to read as numbers. The last
-      gate, <code className="monospaced">toTrade</code>, turns what passed into the page’s own{' '}
-    <code className="monospaced">Trade</code>. <code className="monospaced">decodeTrade</code> returns a{' '}
-    <code className="monospaced">Maybe</code>, a trade or nothing, and it is nothing when any gate fails, so the
+      gate, <code className="monospaced">toTrade</code>, turns what passed into the page’s own <code className="monospaced">Trade</code>. <code className="monospaced">decodeTrade</code> returns a <code className="monospaced">Maybe</code>, a trade or nothing, and it is nothing when any gate fails, so the
       reducer only ever sees a trade:</p>
     <DecodeTradeCarve/>
     <p className="paragraph">The one place this boundary can throw is <code className="monospaced">JSON.parse</code>,
@@ -134,16 +124,14 @@ export const BehaviorPractice: FC = () =>
     <h3 className="paragraph bold">When something fails</h3>
     <p className="paragraph">A fetch can fail, and I don’t want every step after it to check.
       sand’s <code className="monospaced">Result</code> is either a success or a failure, and its README says the
-      failure <a className="signpost" href={sand}>“rides along untouched until you decide what to do with it”</a>.{' '}
-    <code className="monospaced">map</code> and <code className="monospaced">mBind</code> work on a success and let
+      failure <a className="signpost" href={sand}>“rides along untouched until you decide what to do with it”</a>. <code className="monospaced">map</code> and <code className="monospaced">mBind</code> work on a success and let
       a failure pass.</p>
     <TwoTracks/>
     <p className="paragraph">Here is <code className="monospaced">recentTrades.load</code>, the request for recent
       trades. It runs three steps: fetch the response, check it against a decoder, turn it into trades. If a step
       fails, the steps after it do not run:</p>
     <RecentTradesCarve/>
-    <p className="paragraph">The exchange takes the result that <code className="monospaced">recentTrades.load</code>{' '}
-      returns. A success goes to the reducer as <code className="monospaced">historyArrived</code>. A failure goes to
+    <p className="paragraph">The exchange takes the result that <code className="monospaced">recentTrades.load</code> returns. A success goes to the reducer as <code className="monospaced">historyArrived</code>. A failure goes to
       the edge, the code that decides what the page says:</p>
     <HistoryCarve/>
     <p className="paragraph">In the React build, the edge turns the failure into a sentence and shows it in a banner.
@@ -168,8 +156,7 @@ export const BehaviorPractice: FC = () =>
       both:</p>
     <BuildsCarve/>
     <p className="paragraph">The plain-script build finds its tables by their data attribute and listens for the
-      table’s own events, each named for what happened. A{' '}
-    <a className="signpost" href={customEvent}>CustomEvent</a> is how a page names one:</p>
+      table’s own events, each named for what happened. A <a className="signpost" href={customEvent}>CustomEvent</a> is how a page names one:</p>
     <TableEventsCarve/>
     <h3 className="paragraph bold">The platform first</h3>
     <p className="paragraph">The platform comes first here too. The Structure tab’s
@@ -180,18 +167,15 @@ export const BehaviorPractice: FC = () =>
       right a second time, and the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> lists what that
       cost when pages rebuilt the back button and scroll restoration by hand.</p>
     <p className="paragraph">Where the platform is new, I write a small fallback and run it only where a browser lacks
-      the feature. The site has one, in the feedback dialog: its <code className="monospaced">closedby</code>{' '}
-      attribute closes it on a click outside, and where a browser lacks that, a click handler closes it too. Its
+      the feature. The site has one, in the feedback dialog: its <code className="monospaced">closedby</code> attribute closes it on a click outside, and where a browser lacks that, a click handler closes it too. Its
       buttons open and close it with invoker commands, which every major browser has shipped since December 2025. I
       write for the browsers that have them, so they get no fallback.</p>
     <p className="paragraph">Any other behavior the platform lacks, I attach with script. The plain-script build finds
-      the element that needs it by a data attribute, like the tables demo’s{' '}
-    <code className="monospaced">data-drag-sortable</code>, and React uses a component.</p>
+      the element that needs it by a data attribute, like the tables demo’s <code className="monospaced">data-drag-sortable</code>, and React uses a component.</p>
     <h3 className="paragraph bold">Every gesture has a key</h3>
     <p className="paragraph">Every pointer action has a keyboard equivalent: what a pointer can drag, the
-      arrow keys can move, or the feature is not finished. WCAG requires that all functionality is{' '}
-    <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a
-      keyboard interface”</a>.</p>
+      arrow keys can move, or the feature is not finished. WCAG requires that all functionality is <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a
+        keyboard interface”</a>.</p>
     <p className="paragraph">On the tables demo, an arrow key walks a column or a row: each press moves it one place.
       The table names each walk for what happened:</p>
     <WalksCarve/>
@@ -199,11 +183,9 @@ export const BehaviorPractice: FC = () =>
       a pointer move the other columns by the same rule:</p>
     <WalkCaseCarve/>
     <p className="paragraph">The focus stays on the column or row being walked, so the next key press reaches it
-      again. WCAG 2.4.3 asks that focus moves{' '}
-    <a className="signpost" href={focusOrder}>“in an order that preserves meaning and operability”</a>.</p>
+      again. WCAG 2.4.3 asks that focus moves <a className="signpost" href={focusOrder}>“in an order that preserves meaning and operability”</a>.</p>
     <p className="paragraph">The page also says what moved. A sighted reader watches the order change, and a screen
-      reader user hears where the column or row went. The report is a type, and{' '}
-    <code className="monospaced">tableReports.move</code> turns it into words:</p>
+      reader user hears where the column or row went. The report is a type, and <code className="monospaced">tableReports.move</code> turns it into words:</p>
     <MoveReportCarve/>
     <p className="paragraph">Both builds write those words into an <code className="monospaced">output</code> named
       move report. An output is a status, and MDN says a screen reader announces what is posted in
@@ -220,29 +202,22 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">Nobody checks the state test by eye. Three gates hold the site to it, and ESLint holds one
       more rule.</p>
     <ul className="practice-list">
-      <li className="paragraph">The specs test the core as functions, because it is functions.{' '}
-        <a className="signpost" href={repository.directory('src/components/DragSortableTable/model/__tests__')}>Four
-          specs</a> call the table’s code with no page at all: <code className="monospaced">sorting</code>,{' '}
-        <code className="monospaced">shares</code>, <code className="monospaced">survey</code> and{' '}
-        <code className="monospaced">tableStore</code>. They run on every pull request that changes code, before it can merge.
+      <li className="paragraph">The specs test the core as functions, because it is functions. <a className="signpost" href={repository.directory('src/components/DragSortableTable/model/__tests__')}>Four
+        specs</a> call the table’s code with no page at all: <code className="monospaced">sorting</code>, <code className="monospaced">shares</code>, <code className="monospaced">survey</code> and <code className="monospaced">tableStore</code>. They run on every pull request that changes code, before it can merge.
       </li>
       <li className="paragraph">The journeys test the shell, because it touches the world. They drive the tables by
         pointer and by key in three browsers, and check the order a reader sees and the move report a screen reader
-        hears. AGENTS.md sets one rule for them:{' '}
-      <a className="signpost" href={repository.file('AGENTS.md')}>“Journeys run as a reader who asks for less
-        motion, and none is retried or skipped.”</a>
+        hears. AGENTS.md sets one rule for them: <a className="signpost" href={repository.file('AGENTS.md')}>“Journeys run as a reader who asks for less
+          motion, and none is retried or skipped.”</a>
       </li>
-      <li className="paragraph">Every pull request that changes code runs <code className="monospaced">tsc -b</code>{' '}
-        <a className="signpost" href={repository.file('.github/workflows/checks.yml')}>before it can merge</a>, and the
+      <li className="paragraph">Every pull request that changes code runs <code className="monospaced">tsc -b</code> <a className="signpost" href={repository.file('.github/workflows/checks.yml')}>before it can merge</a>, and the
         check fails on one that lets a forbidden state into a type.
       </li>
     </ul>
-    <p className="paragraph">ESLint refuses <code className="monospaced">useRef</code>,{' '}
-      <code className="monospaced">createRef</code> and <code className="monospaced">forwardRef</code> in any file that
+    <p className="paragraph">ESLint refuses <code className="monospaced">useRef</code>, <code className="monospaced">createRef</code> and <code className="monospaced">forwardRef</code> in any file that
       is not on <a className="signpost" href={repository.file('eslint.config.cjs')}>a list in its configuration</a>.
       A ref keeps a value outside the state, where no reducer sees it and no test reads it. A file joins the list for
-      one of the two reasons AGENTS.md gives:{' '}
-      <a className="signpost" href={repository.file('AGENTS.md')}>“A <code className="monospaced">useRef</code> is
+      one of the two reasons AGENTS.md gives: <a className="signpost" href={repository.file('AGENTS.md')}>“A <code className="monospaced">useRef</code> is
         allowed only (1) to hold a <code className="monospaced">dialog</code> the component shows as a modal
         with <code className="monospaced">showModal()</code>, or (2) to read the element’s own details, such as its
         measured size, when nothing else gives them, such as an event.”</a> Two files are on the list today, both for

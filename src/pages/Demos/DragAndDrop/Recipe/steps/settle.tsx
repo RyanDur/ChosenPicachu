@@ -8,10 +8,8 @@ export const SlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
     <Words want="A lazy settle happens all at once on release, so every item whose place changed has to travel, and the reader should see them all go together.">
       <Says>The list takes its new order at once. Each item whose place changed gets a slide
         class, <code className="monospaced">sliding-in</code> or <code className="monospaced">sliding-in-again</code>,
-        whichever it didn’t wear last, and its own{' '}
-      <code className="monospaced">--starts-places-right</code>, its old place minus its new one, so an item that moved
-        three places left starts three places to the right. The class runs <code className="monospaced">slide-in</code> or{' '}
-      <code className="monospaced">slide-in-again</code>, a keyframe animation that names only the state the item
+        whichever it didn’t wear last, and its own <code className="monospaced">--starts-places-right</code>, its old place minus its new one, so an item that moved
+        three places left starts three places to the right. The class runs <code className="monospaced">slide-in</code> or <code className="monospaced">slide-in-again</code>, a keyframe animation that names only the state the item
         starts in, and the browser draws the frames from there to
         its place. Every moved item slides home together, and the item the reader let go of slides from the place it was
         lifted from.</Says>

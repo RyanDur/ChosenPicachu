@@ -32,8 +32,7 @@ export const DragSurface: FC<{headerSource: Sample}> = ({headerSource}) => {
           listeners when nothing is held. Every move retakes the capture. Treat a cancel
           or a move with no buttons pressed as the drop, because a pointerup does not always arrive. Losing the capture
           is not the drop. When the reconcile moves the cell in the DOM, the browser drops the capture with it and
-          fires{' '}
-        <code className="monospaced">lostpointercapture</code> at the next move, with that move’s coordinates on the
+          fires <code className="monospaced">lostpointercapture</code> at the next move, with that move’s coordinates on the
           event. So the handler treats the loss as the move it is, and retakes the pointer in the same handler. In the
           vanilla build that is one function, <code className="monospaced">carry.follow</code>. It listens on a header or a
           grip for the move, the release, the cancel and the capture loss.</Says>}

@@ -25,8 +25,7 @@ const dealPlans: Record<World, ReactNode> = {
       With <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed the header widths govern their whole columns, so
       the table always fills its container and the columns hold still while the values change.</Says>
     <Says>No JavaScript knows these widths, because nothing needs the size until you touch something. The first
-      press or focus of a resize handle measures the headers as they stand and creates the{' '}
-    <Term word="ledger">ledger</Term> from them; the drag measures them at the lift. A value that changes at
+      press or focus of a resize handle measures the headers as they stand and creates the <Term word="ledger">ledger</Term> from them; the drag measures them at the lift. A value that changes at
       runtime is state, and until then nothing has changed.</Says>
   </>,
   vanilla: <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style

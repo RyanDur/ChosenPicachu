@@ -13,7 +13,6 @@ export const WhereARuleLives: FC = () =>
         width={stacked.width} height={stacked.height}/>
       <img className="drawing" src={wideFrame} width={wide.width} height={wide.height} alt=""/>
     </picture>
-    <figcaption className="caption"><strong className="bold">Where a rule lives.</strong> The shared words live in{' '}
-      <code className="monospaced">src/styles</code>, by concern. A component’s structure lives beside the component.
+    <figcaption className="caption"><strong className="bold">Where a rule lives.</strong> The shared words live in <code className="monospaced">src/styles</code>, by concern. A component’s structure lives beside the component.
     </figcaption>
   </figure>;

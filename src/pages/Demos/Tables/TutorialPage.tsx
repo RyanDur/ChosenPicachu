@@ -38,15 +38,14 @@ export const TutorialPage: FC = () => {
       <WorldGlider/>
       <WorldNote/>
       <p className="paragraph">
-        This tutorial builds on the live table above. It starts where{' '}
-        <Link className="signpost" to={{
+        This tutorial builds on the live table above. It starts where <Link className="signpost" to={{
           pathname: demoTab.address(DemoTopics.tables),
           search: searchFromShown({}),
           hash: stations.idOf(tableTutorials.startingStation)
         }}>
           station {tableTutorials.startingStation} of the tables tab
-        </Link>{' '}
-        ends, with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
+        </Link> ends,
+        with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
         those are new to you, read that station first.
       </p>
       <Body/>

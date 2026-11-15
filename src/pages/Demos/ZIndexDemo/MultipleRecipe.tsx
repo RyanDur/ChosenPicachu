@@ -78,8 +78,7 @@ export const MultipleRecipe: FC = () => {
     <Steps>
       <Step title="Skip a message that is already up">
         <Words want="The same message twice tells me nothing new.">
-          <Says>A page raises a banner by dispatching <code className="monospaced">bannerChange.raised(message)</code>.{' '}
-            <code className="monospaced">bannerChange.raised</code> is an action creator, a function that builds the
+          <Says>A page raises a banner by dispatching <code className="monospaced">bannerChange.raised(message)</code>. <code className="monospaced">bannerChange.raised</code> is an action creator, a function that builds the
             action, and it gives the new banner its id. The site’s news is the banners that are up and where they sit.
             The reducer is the function that takes the news and an action and returns the news that follows. The
             reducer looks for the message among the banners and returns the news unchanged when it finds one. Otherwise
@@ -102,8 +101,7 @@ export const MultipleRecipe: FC = () => {
             gap over 0.3 seconds.</Says>
           <Says>{axisFact[axisOf(stack)]}</Says>
           <Says>{marginFact[stack]}</Says>
-          <Says>A track closes only as far as what is inside it can shrink. The paragraph that fills the track,{' '}
-            <code className="monospaced">news-item</code>, has a minimum size of 0 in both directions. Its display is
+          <Says>A track closes only as far as what is inside it can shrink. The paragraph that fills the track, <code className="monospaced">news-item</code>, has a minimum size of 0 in both directions. Its display is
             flow-root, which keeps the message’s margin inside it. A margin that passed out of the paragraph would sit
             outside the track and hold the gap open.</Says>
           <Says>The banner has one transition list, written once for all four stacks: both track sizes over 0.3 seconds,
@@ -111,9 +109,7 @@ export const MultipleRecipe: FC = () => {
             second transition declaration on the same element replaces the list; it does not add to it. So the arriving
             banner’s transitions are all in this one list, and the leaving rule in step 4 writes a whole list of its
             own.</Says>
-          <Says>timing.css names the three values the banner moves by: <code className="monospaced">--slide-curve</code>,{' '}
-            <code className="monospaced">--slide-duration</code> at 0.6 seconds and{' '}
-            <code className="monospaced">--fold-duration</code> at 0.3. The slide follows the curve, a cubic-bezier,
+          <Says>timing.css names the three values the banner moves by: <code className="monospaced">--slide-curve</code>, <code className="monospaced">--slide-duration</code> at 0.6 seconds and <code className="monospaced">--fold-duration</code> at 0.3. The slide follows the curve, a cubic-bezier,
             which sets how a move speeds up and slows down. This one starts slowly and eases into place at the
             end.</Says>
         </Words>
@@ -129,9 +125,7 @@ export const MultipleRecipe: FC = () => {
       </Step>
       <Step title="Slide in from off screen" id={slideInStep} dial={<EntranceDial name="journey-entrance"/>}>
         <Words want="A banner that slides in from just beside its place looks like it popped up. The slide has to start off screen.">
-          <Says>{enterFact[enter]} The distance is a{' '}
-            <TabLink to={DemoTopics.accordions}>custom property</TabLink>, here{' '}
-            <code className="monospaced">--arrive</code>: a value named once in the style sheet and read back
+          <Says>{enterFact[enter]} The distance is a <TabLink to={DemoTopics.accordions}>custom property</TabLink>, here <code className="monospaced">--arrive</code>: a value named once in the style sheet and read back
             with <code className="monospaced">var()</code> wherever it is needed. The starting style reads it to place
             the banner before the slide, and the leaving rule reads it again to send the banner back.</Says>
         </Words>

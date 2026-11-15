@@ -21,8 +21,7 @@ export const FoldMotionDial: FC = () => {
     chosen={foldMotion}
     onChosen={next => change({foldMotion: next})}
     reading={<>
-      <span className="when-motion-allowed">{readings[foldMotion]}</span>{' '}
-      <span className="when-less-motion">If your system asks for less motion, every fold here opens at once,
+      <span className="when-motion-allowed">{readings[foldMotion]}</span> <span className="when-less-motion">If your system asks for less motion, every fold here opens at once,
         whichever you choose.</span>
     </>}/>;
 };

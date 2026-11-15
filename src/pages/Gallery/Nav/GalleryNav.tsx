@@ -31,24 +31,19 @@ export const GalleryNav: FC<Props> = ({id}) => {
       <Link to={`${path}${searchFromShown({page: firstPage})}`}
         className="page first field attentive bold">
         FIRST
-      </Link>{' '}
-      <Link to={`${path}${searchFromShown({page: prevPage})}`}
+      </Link> <Link to={`${path}${searchFromShown({page: prevPage})}`}
         className="page prev field attentive bold">
         PREV
-      </Link>{' '}
-    </>}
+      </Link> </>}
     {counted.map(({first, last, total}) =>
       <output className="info field" key="count">
-        <span>{first} - {last}</span>{' '}
-        <span>of</span>{' '}
-        <span>{total}</span>
+        <span>{first} - {last}</span> <span>of</span> <span>{total}</span>
       </output>).orNull()}
     {hasNextPage && <>
       {' '}<Link to={`${path}${searchFromShown({page: nextPage})}`}
         className="page next field attentive bold">
         NEXT
-      </Link>{' '}
-      <Link to={`${path}${searchFromShown({page: lastPage})}`}
+      </Link> <Link to={`${path}${searchFromShown({page: lastPage})}`}
         className="page last field attentive bold">
         LAST
       </Link>
