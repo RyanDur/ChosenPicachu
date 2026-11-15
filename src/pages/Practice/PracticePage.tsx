@@ -5,6 +5,7 @@ import {practiceAddress} from './practiceAddress';
 import {StructurePractice} from './structure';
 import {PresentationPractice} from './presentation';
 import {BehaviorPractice} from './behavior';
+import {WhereThePageIsMade} from './WhereThePageIsMade';
 import './Practice.css';
 
 const appContinuum = 'https://www.appcontinuum.io/';
@@ -36,6 +37,7 @@ export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
         plainly: <a className="signpost" href={appContinuum}>“Naming, organizing, and reducing circular dependencies are
           the three most important things you’ll ever do as a programmer”</a>.</p>
     </header>
+    <WhereThePageIsMade/>
     <Tabs label="practice" current={concerns.idOf(concern)}
       values={concerns.inOrder.map(shown => ({
         display: shown, param: concerns.idOf(shown), to: practiceAddress.of(shown)
