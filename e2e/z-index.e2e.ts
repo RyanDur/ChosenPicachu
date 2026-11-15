@@ -65,5 +65,5 @@ test('the reader asks for the answer to which card is on top from the keyboard, 
   await asking.askFromTheKeyboard();
 
   await expect(asking.answer).toBeVisible();
-  expect(await asking.readInOrder()).toEqual(['question', 'answer', 'drawing']);
+  await expect.poll(asking.readInOrder).toEqual(['question', 'answer', 'drawing']);
 });
