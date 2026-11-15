@@ -1,12 +1,12 @@
 import {FC, Fragment} from 'react';
 import {Arrow, Box, Kind, Label} from '../Recipe/Drawing';
 
-export type Layer = {kind: Kind; says: string};
+export type Card = {kind: Kind; says: string};
 
-export const SeenFromTheSide: FC<{layers: [Layer, Layer, Layer]; under: string}> = ({layers, under}) => <>
+export const SeenFromTheSide: FC<{cards: [Card, Card, Card]; under: string}> = ({cards, under}) => <>
   <Label x={60} y={14}>the reader</Label>
   <Arrow through={[{x: 60, y: 22}, {x: 60, y: 50}]}/>
-  {layers.map(({kind, says}, at) => <Fragment key={says}>
+  {cards.map(({kind, says}, at) => <Fragment key={says}>
     <Box kind={kind} x={20} y={60 + at * 28} width={180} height={16}/>
     <Label x={210} y={72 + at * 28} anchor="start">{says}</Label>
   </Fragment>)}
