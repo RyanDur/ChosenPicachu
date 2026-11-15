@@ -1,4 +1,5 @@
 import {FC, PropsWithChildren, useId} from 'react';
+import './Reveal.css';
 
 export const Reveal: FC<PropsWithChildren<{summary?: string}>> = ({summary = 'how I built it', children}) => {
   const opener = `reveal${useId()}`;

@@ -1,0 +1,30 @@
+.step-reveal {
+  &::details-content {
+    margin-top: var(--base-x-2);
+  }
+
+  /* WebKit keeps the grid's gaps between a shut fold's hidden paragraphs, so the fold is a grid only while open */
+  &[open]::details-content {
+    display: grid;
+    gap: var(--base-x-2);
+  }
+
+  > .opener {
+    display: flex;
+    align-items: center;
+    gap: var(--base);
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::before {
+      content: "▸";
+      transition: rotate 0.2s;
+    }
+  }
+
+  &[open] > .opener::before {
+    rotate: 90deg;
+  }
+}
