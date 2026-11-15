@@ -16,6 +16,16 @@ describe('the table controls', () => {
     expect(await tableControls.radio('Animate')).toBeChecked();
   });
 
+  test('say each dial’s name once, as the legend of its pills', async () => {
+    render(<TestApp at="/"><TableControls/></TestApp>);
+
+    await tableControls.pressSettings();
+
+    expect(await tableControls.timesSaid('pace')).toBe(1);
+    expect(await tableControls.timesSaid('origin')).toBe(1);
+    expect(await tableControls.timesSaid('motion')).toBe(1);
+  });
+
   test('start folded behind their readout, and a press opens them', async () => {
     render(<TestApp at="/"><TableControls/></TestApp>);
     expect(await tableControls.settings()).not.toHaveAttribute('open');
