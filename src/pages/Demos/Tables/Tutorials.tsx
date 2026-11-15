@@ -1,7 +1,7 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsObject} from '@navigation/search-params';
-import {DesignAsk, FlowTableRecipe, LayerMap, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
+import {DesignAsk, FlowTableRecipe, FeatureMap, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
 import {Exercise, Station} from '../Recipe';
 import {tableTutorials} from './tutorial-pages';
 import {WorldGlider, WorldNote} from './World';
@@ -36,9 +36,9 @@ export const Tutorials: FC = () => {
       </Station>
       <Station at={6}>
         <h3 className="phase-title title">Layer on functionality, in the order it was asked for</h3>
-        <LayerMap/>
+        <FeatureMap/>
         <p className="paragraph">
-          Drag sort builds the first two layers, moving a column and moving a row. Sort menu builds the third,
+          Drag sort builds the first two features, moving a column and moving a row. Sort menu builds the third,
           ranking by a measure, and Drag resize builds the fourth, widening a column.
         </p>
         <ol className="tutorial-links" aria-label="the tutorials">
