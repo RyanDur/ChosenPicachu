@@ -2,6 +2,7 @@ import * as schema from 'schemawax';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {Motion, Origin} from '@components/DragSortableTable';
 import {Placement, unplaced} from '@banners';
+import {inOrder} from './inOrder';
 
 export type {Motion, Origin};
 export type Pace = 'eager' | 'lazy';
@@ -9,9 +10,9 @@ export type World = 'react' | 'vanilla';
 export type Track = 'pointer' | 'keyboard';
 export type FoldType = 'inclusive' | 'exclusive';
 export type FoldMotion = 'reveal' | 'drawer' | 'static';
-export type RaisedCard = 'none' | 'first' | 'second' | 'third';
+export type RaisedCard = typeof inOrder.raisedCards[number];
 export type CardOne = 'contained' | 'free';
-export type Worn = 'nothing' | 'position' | 'outline' | 'z-index' | 'opacity' | 'transform' | 'isolation';
+export type Worn = typeof inOrder.worn[number];
 
 export type Settings = Placement & {
   pace: Pace;
@@ -47,9 +48,9 @@ const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
   align: schema.literalUnion('left', 'center', 'right'),
   enter: schema.literalUnion('above', 'below', 'left', 'right'),
   stack: schema.literalUnion('down', 'up', 'left', 'right'),
-  raised: schema.literalUnion('none', 'first', 'second', 'third'),
+  raised: schema.literalUnion(...inOrder.raisedCards),
   'card-one': schema.literalUnion('contained', 'free'),
-  wears: schema.literalUnion('nothing', 'position', 'outline', 'z-index', 'opacity', 'transform', 'isolation')
+  wears: schema.literalUnion(...inOrder.worn)
 };
 
 const defaults: Address = {

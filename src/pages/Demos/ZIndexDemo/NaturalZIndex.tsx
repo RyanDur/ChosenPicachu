@@ -3,15 +3,11 @@ import {not} from '@ryandur/sand';
 import {PillGlider} from '@components/PillGlider';
 import {PropsWithClassName} from '../props-with-class-name';
 import {classNames} from '@components';
-import {RaisedCard, useControls} from '../Controls';
+import {inOrder, RaisedCard, useControls} from '../Controls';
 import './ZIndexDemo.css';
 
-const cardsToRaise = [
-  {words: 'None', value: 'none'},
-  {words: 'First', value: 'first'},
-  {words: 'Second', value: 'second'},
-  {words: 'Third', value: 'third'}
-] as const;
+const words: Record<RaisedCard, string> = {none: 'None', first: 'First', second: 'Second', third: 'Third'};
+const cardsToRaise = inOrder.raisedCards.map(value => ({words: words[value], value}));
 
 export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
   const {raised, change} = useControls();
