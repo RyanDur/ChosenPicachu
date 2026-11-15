@@ -6,11 +6,11 @@ type Intent = ReturnType<typeof setTimeout>;
 const definitionOf = (term: HTMLButtonElement): Maybe<HTMLElement> =>
   maybe(term.popoverTargetElement).mBind(target => maybe(target instanceof HTMLElement ? target : undefined));
 
-const revealed = (term: HTMLButtonElement): void => {
+const showDefinitionOf = (term: HTMLButtonElement): void => {
   definitionOf(term).map(definition => not(definition.matches(':popover-open')) && definition.showPopover());
 };
 
-const concealed = (term: HTMLButtonElement): void => {
+const hideDefinitionOf = (term: HTMLButtonElement): void => {
   definitionOf(term).map(definition => definition.matches(':popover-open') && definition.hidePopover());
 };
 
@@ -25,18 +25,18 @@ export const Defined: FC<PropsWithChildren<{term: string; definition: ReactNode}
       popoverTargetAction="show"
       style={{'--term-anchor': anchor}}
       onPointerEnter={({pointerType, currentTarget}) => {
-        if (pointerType === 'mouse') setIntent(setTimeout(() => revealed(currentTarget), 120));
+        if (pointerType === 'mouse') setIntent(setTimeout(() => showDefinitionOf(currentTarget), 120));
       }}
       onPointerLeave={({pointerType, currentTarget}) => {
         if (pointerType !== 'mouse') return;
         clearTimeout(intent);
-        concealed(currentTarget);
+        hideDefinitionOf(currentTarget);
       }}
       onFocus={({currentTarget}) => {
         clearTimeout(intent);
-        revealed(currentTarget);
+        showDefinitionOf(currentTarget);
       }}
-      onBlur={({currentTarget}) => concealed(currentTarget)}>{children}</button>
+      onBlur={({currentTarget}) => hideDefinitionOf(currentTarget)}>{children}</button>
     <span id={id}
       role="definition"
       aria-label={term}
