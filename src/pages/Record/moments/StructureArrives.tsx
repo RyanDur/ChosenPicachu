@@ -12,8 +12,7 @@ const nexusHistory = 'https://worldwideweb.cern.ch/history/';
 
 export const StructureArrives: FC = () =>
   <Moment heading={moments.headings.structureArrives}>
-    <MomentSummary>In November 1990 Tim Berners-Lee and Robert Cailliau proposed{' '}
-      <a className="signpost" href={worldWideWebProposal}>“WorldWideWeb (or W3)”</a>, and Berners-Lee wrote the server and the
+    <MomentSummary>In November 1990 Tim Berners-Lee and Robert Cailliau proposed <a className="signpost" href={worldWideWebProposal}>“WorldWideWeb (or W3)”</a>, and Berners-Lee wrote the server and the
       browser. HTML’s tags came from CERN’s guide to SGML, the markup standard publishers and technical writers already
       used, so they would recognize them. The one tag of his own was <a className="signpost" href={htmlTags}>the anchor</a>,
       an idea hypertext already had; the new thing was what his could carry, the address of a document on another
@@ -36,22 +35,16 @@ export const StructureArrives: FC = () =>
           facilities such as sound and video”</a>. Neither this proposal nor the 1989 one mentions a
         language running in the page.</p>
       <p className="paragraph muted-ink hyphenated">Links inside a document were already for sale; the proposal budgets
-        licenses for Guide and KMS, two commercial hypertext systems. The new thing fits in one line:{' '}
-      <a className="signpost" href={worldWideWebProposal}>“Nodes do not need to be on the same machine: links may point across
-        machine boundaries.”</a> A link is an address a browser knows how to fetch, so each server serves its own
-        documents and nothing more; the proposal says the server{' '}
-      <a className="signpost" href={worldWideWebProposal}>“has nothing to know about other servers or other webs and can be kept
-        simple”</a>. That is the 1989 requirement, no central control, carried into the design. The anchor as first
+        licenses for Guide and KMS, two commercial hypertext systems. The new thing fits in one line: <a className="signpost" href={worldWideWebProposal}>“Nodes do not need to be on the same machine: links may point across
+          machine boundaries.”</a> A link is an address a browser knows how to fetch, so each server serves its own
+        documents and nothing more; the proposal says the server <a className="signpost" href={worldWideWebProposal}>“has nothing to know about other servers or other webs and can be kept
+          simple”</a>. That is the 1989 requirement, no central control, carried into the design. The anchor as first
         written had three attributes: HREF, NAME, and a TYPE for the relationship a link describes, the job rel does
         today, whose values were to be <a className="signpost" href={htmlTags}>“registered by the W3 team”</a>.</p>
-      <p className="paragraph muted-ink hyphenated">The protocol was almost nothing. A client sent{' '}
-        <a className="signpost" href={httpAsImplemented}>“a line of ASCII characters terminated by a CR LF”</a>, which{' '}
-        <a className="signpost" href={httpAsImplemented}>“consists of the word "GET", a space, the document address”</a>, and the
-        server answered with the document;{' '}
-        <a className="signpost" href={httpAsImplemented}>“the message is terminated by the closing of the connection by the
-          server.”</a> There was no status line, so an error came back as another page; the specification says{' '}
-        <a className="signpost" href={httpAsImplemented}>“there is no way to distinguish an error response from a satisfactory response
-          except for the content of the text.”</a> The page that preserves it calls this HTTP 0.9.</p>
+      <p className="paragraph muted-ink hyphenated">The protocol was almost nothing. A client sent <a className="signpost" href={httpAsImplemented}>“a line of ASCII characters terminated by a CR LF”</a>, which <a className="signpost" href={httpAsImplemented}>“consists of the word "GET", a space, the document address”</a>, and the
+        server answered with the document; <a className="signpost" href={httpAsImplemented}>“the message is terminated by the closing of the connection by the
+          server.”</a> There was no status line, so an error came back as another page; the specification says <a className="signpost" href={httpAsImplemented}>“there is no way to distinguish an error response from a satisfactory response
+            except for the content of the text.”</a> The page that preserves it calls this HTTP 0.9.</p>
       <p className="paragraph muted-ink hyphenated">The earliest surviving list of tags is short. It has a title, the
         anchor, the paragraph, six levels of heading, an address, a glossary and three kinds of list, with tags for an
         index node, plain text and example sections, and two more, a base address and highlighting, marked not currently
