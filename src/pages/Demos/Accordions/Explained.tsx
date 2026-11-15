@@ -2,7 +2,9 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
 import {classNames} from '@components';
 import {DemoTopics} from '../demo-topics';
-import {DialGroup, DialRow, FoldMotion, FoldType, useControls} from '../Controls';
+import {DialGroup, FoldType, useControls} from '../Controls';
+import {FoldMotionDial} from './FoldMotionDial';
+import {FoldTypeDial} from './FoldTypeDial';
 import {AccordionProps, Fold} from './accordion-props';
 import {ExclusiveAccordion} from './ExclusiveAccordion';
 import {ExclusiveMeasuredAccordion} from './ExclusiveMeasuredAccordion';
@@ -109,33 +111,21 @@ const gridRowAccordions: Record<FoldType, FC<AccordionProps>> = {
   inclusive: InclusiveCheckboxToggleAccordion,
   exclusive: ExclusiveRadioToggleAccordion
 };
-const foldTypes = [{words: 'Inclusive', value: 'inclusive'}, {words: 'Exclusive', value: 'exclusive'}] as const;
-const foldMotions = [{words: 'Reveal', value: 'reveal'}, {words: 'Drawer', value: 'drawer'}, {words: 'Static', value: 'static'}] as const;
-const typeReadings: Record<FoldType, string> = {
-  inclusive: 'Any number of folds can be open at once.',
-  exclusive: 'Opening one fold closes the others.'
-};
-const motionReadings: Record<FoldMotion, string> = {
-  reveal: 'The text is uncovered from its first line down.',
-  drawer: 'The text slides down from under its bar.',
-  static: 'The fold opens at once, with nothing moving.'
-};
-
 type Props = {
   foldLists: FoldLists;
 };
 
 export const AccordionsExplained: FC<Props> = ({foldLists}) => {
-  const {type, style: motion, change} = useControls();
-  const exhibitMoving = classNames(exhibit, motion);
-  const input = inputOf[type];
-  const {Accordion: HtmlAlone, source: htmlAloneSource} = htmlAloneBuilds[type];
-  const knownHeight = knownHeightBuilds[type];
-  const platform = platformBuilds[type];
+  const {foldType, foldMotion} = useControls();
+  const exhibitMoving = classNames(exhibit, foldMotion);
+  const input = inputOf[foldType];
+  const {Accordion: HtmlAlone, source: htmlAloneSource} = htmlAloneBuilds[foldType];
+  const knownHeight = knownHeightBuilds[foldType];
+  const platform = platformBuilds[foldType];
   const {Accordion: KnownHeight} = knownHeight;
   const {Accordion: Platform} = platform;
-  const Measured = measuredAccordions[type];
-  const GridRow = gridRowAccordions[type];
+  const Measured = measuredAccordions[foldType];
+  const GridRow = gridRowAccordions[foldType];
   return <>
     <header className="tab-introduction">
       <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
@@ -171,7 +161,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
             a <Mdn path="Web/HTML/Element/summary">summary</Mdn> and the content it hides. The summary is the bar. Press
             it and the browser shows the rest. Press it again and the browser hides it.</p>
         </li>
-        {type === 'exclusive' && <li className="run">
+        {foldType === 'exclusive' && <li className="run">
           <p className="paragraph">Each of these details carries
             a <Mdn path="Web/HTML/Element/details#name">name</Mdn> attribute, a setting written inside the element’s
             opening tag, and details that share a name close one another: open one and the browser shuts the rest. It
@@ -196,12 +186,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
       <p className="paragraph">The fold motion does not reach the accordion above. A browser opens a details at once
         on its own, and the first accordion leaves it that way, so you see what HTML alone does.</p>
       <DialGroup>
-        <DialRow label="fold type" name="fold-type" choices={foldTypes} chosen={type} onChosen={next => change({type: next})} reading={typeReadings[type]}/>
-        <DialRow label="fold motion" name="fold-motion" choices={foldMotions} chosen={motion} onChosen={next => change({style: next})} reading={<>
-          <span className="when-motion-allowed">{motionReadings[motion]}</span>{' '}
-          <span className="when-less-motion">If your system asks for less motion, every fold here opens at once,
-            whichever you choose.</span>
-        </>}/>
+        <FoldTypeDial/>
+        <FoldMotionDial/>
       </DialGroup>
     </section>
     <section aria-labelledby="old-way-heading" className="accordion-part">
@@ -211,7 +197,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
           it</h3>
         <ol className="runs">
           <li className="run">
-            {type === 'inclusive'
+            {foldType === 'inclusive'
               ? <p className="paragraph">To open and close a fold, something has to remember which way it is.
                 A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> remembers: it is either
                 checked or not, and pressing it switches between the two. So each fold is a list item
@@ -229,7 +215,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 other element on the page shares. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute
                 names the radio’s id. That link makes a press anywhere on the label press the radio. Each id
                 includes the fold’s place in the list, so no two radios share one.</p>}
-            <Snippet label="HTML" lines={type === 'inclusive' ? carve.span(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
+            <Snippet label="HTML" lines={foldType === 'inclusive' ? carve.span(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
           </li>
           <li className="run">
             <p className="paragraph">Now a rule has to match on whether the {input} is checked.{' '}
@@ -324,9 +310,9 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 state are as they come. What changes is the shape. The plain script listens for the press; the React
                 build redraws the panel from what it holds, so the measuring runs in two steps React takes before the
                 browser paints: the first pins where the motion starts, and the second sets where it ends.</p>
-              <Measured className={exhibitMoving} folds={foldLists.measured[type]}/>
+              <Measured className={exhibitMoving} folds={foldLists.measured[foldType]}/>
               <ol className="runs">
-                {type === 'exclusive' && <li className="run">
+                {foldType === 'exclusive' && <li className="run">
                   <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes
                     whichever is open.</p>
                 </li>}
@@ -379,7 +365,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 <li className="run">
                   <p className="paragraph">Closing runs the other way: the script sets the open height as the start and
                     0 as the end, and the transition moves between them. The change event is the one the browser sends
-                    to the {input} a press has just {type === 'exclusive' ? 'checked' : 'checked or unchecked'}, and to
+                    to the {input} a press has just {foldType === 'exclusive' ? 'checked' : 'checked or unchecked'}, and to
                     no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style.
                     So the script pins the start first, with <code className="monospaced">unmoving</code>, as the plain
                     script does.</p>
@@ -398,7 +384,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     ...carve.unit(panelSource, 'const movingTo')
                   ]}/>
                 </li>
-                {type === 'exclusive' && <li className="run">
+                {foldType === 'exclusive' && <li className="run">
                   <p className="paragraph">A radio that loses its check gets no event at all. The change event the
                     pressed radio gets rises from it through the elements around it, which is called bubbling. The list
                     item around the radio handles it by recording its own title in React state as the open one, and the
@@ -413,7 +399,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
           </li>
         </ol>
       </section>
-      <KnownHeight className={exhibitMoving} folds={foldLists.known[type]}/>
+      <KnownHeight className={exhibitMoving} folds={foldLists.known[foldType]}/>
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">This build is a disclosure: a bar you press to show the text under it.
@@ -476,7 +462,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   combinator picks the label after it, and the corner turns to 135 degrees and points down. The turn
                   is a transition, and a transform: a transform moves pixels the browser has already painted without
                   laying the page out again, so it is cheap.
-                {motion === 'static'
+                {foldMotion === 'static'
                   ? ' With static the turn has no transition, so the corner turns at once.'
                   : ' With reveal and the drawer, a transition sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}</p>
                 <Snippet label="CSS" lines={[
@@ -488,7 +474,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     reveal: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')],
                     drawer: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')],
                     static: []
-                  }[motion]
+                  }[foldMotion]
                 ]}/>
                 <TwoBordersTurned/>
               </li>
@@ -517,7 +503,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   reveal: ' With reveal, the panel’s height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, opening and closing.',
                   drawer: ' With the drawer, the height moves over 300 milliseconds with ease-in-out, which starts slowly, speeds up and slows to a stop, and the text slides down from under the bar.',
                   static: ' With static, nothing moves: the panel is at its full height or at 0, at once.'
-                }[motion]}</p>
+                }[foldMotion]}</p>
                 <Snippet label="CSS" lines={[
                   ...carve.unit(accordionsCss, '.info,\n    .info-text {'), lines.blank,
                   ...carve.unit(accordionsCss, '.info {\n      overflow: hidden;'), lines.blank,
@@ -526,7 +512,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     reveal: [lines.blank, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
                     drawer: [lines.blank, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
                     static: []
-                  }[motion]
+                  }[foldMotion]
                 ]}/>
               </li>
               <li className="run">
@@ -539,7 +525,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   reveal: ' With reveal, the section sits at the panel’s top, so the text is uncovered from its first line down.',
                   drawer: ' With the drawer, the panel lays the section out as a column set at its end, so the section’s bottom stays on the fold’s edge.',
                   static: ''
-                }[motion]}</p>
+                }[foldMotion]}</p>
                 <Snippet label="CSS" lines={[
                   ...carve.unit(accordionsCss, '.info-text {\n      overflow-y'), lines.blank,
                   ...carve.unit(accordionsCss, '.info-paragraph {'), lines.blank,
@@ -551,7 +537,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                       ...carve.unit(accordionsCss, '.drawer & .info-text {')
                     ],
                     static: []
-                  }[motion]
+                  }[foldMotion]
                 ]}/>
               </li>
               <li className="run">
@@ -564,29 +550,29 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   reveal: ' With reveal, visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut.',
                   drawer: ' With the drawer, visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut.',
                   static: ''
-                }[motion]}</p>
+                }[foldMotion]}</p>
                 <Snippet label="CSS" lines={[
                   ...carve.unit(surfaceCss, '.focus-ringed {'),
                   ...{
                     reveal: [lines.blank, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
                     drawer: [lines.blank, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
                     static: []
-                  }[motion]
+                  }[foldMotion]
                 ]}/>
               </li>
-              {type === 'exclusive' && <li className="run">
+              {foldType === 'exclusive' && <li className="run">
                 <p className="paragraph">Every radio in the build has the name group, so checking a fold unchecks the
                   last one, and the rule that collapses unchecked text closes it. The arrow keys move the
                   choice within a group, so a keyboard opens each fold it passes.</p>
                 <OneNameOneChoice/>
               </li>}
-              {type === 'exclusive' && <li className="run">
+              {foldType === 'exclusive' && <li className="run">
                 <p className="paragraph">A checked radio stays checked when you press it again, so a fold cannot close
                   itself. So the list starts with a Close radio, checked at first, and choosing it unchecks
                   whichever fold was open.</p>
                 <Snippet label="HTML" lines={carve.span(exclusiveAccordionSource, '<li className="fold close field-inverse">', '</li>')}/>
               </li>}
-              {type === 'exclusive' && <li className="run">
+              {foldType === 'exclusive' && <li className="run">
                 <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
                   gets its own rule: a flex row that centers its one word. Its label fills the whole bar,
                   so a press anywhere on the bar counts. Its ground
@@ -601,7 +587,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
               </li>}
               <li className="run">
                 <p className="paragraph">A screen reader announces each fold as what its markup says it is:
-                  {type === 'inclusive' ? ' a checkbox, checked or not checked.' : ' a radio, one of six.'}</p>
+                  {foldType === 'inclusive' ? ' a checkbox, checked or not checked.' : ' a radio, one of six.'}</p>
               </li>
             </ol>
           </details>
@@ -610,7 +596,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
     </section>
     <section aria-labelledby="platform-way-heading" className="accordion-part">
       <h2 id="platform-way-heading" className="title bold">What the platform gives now</h2>
-      <Platform className={exhibitMoving} folds={foldLists.platform[type]}/>
+      <Platform className={exhibitMoving} folds={foldLists.platform[foldType]}/>
       <ol className={runs}>
         <li className="run">
           <p className="paragraph">This build uses details and summary, the two elements from the first accordion. Each
@@ -619,8 +605,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
             hidden {input}. Details remembers whether it is open, so there is no {input} to hide and no rule that reads
             it. The keyboard comes with it, and a screen reader announces the bar as a disclosure, collapsed or
             expanded.
-          {type === 'inclusive' && ' With nothing more, each fold opens and closes on its own, as the checkbox build’s folds do.'}
-          {type === 'exclusive' && ' Every details here shares a name, as the first accordion’s details do above. Pressing the open one closes it, so the list needs no Close bar.'} This build replaces the
+          {foldType === 'inclusive' && ' With nothing more, each fold opens and closes on its own, as the checkbox build’s folds do.'}
+          {foldType === 'exclusive' && ' Every details here shares a name, as the first accordion’s details do above. Pressing the open one closes it, so the list needs no Close bar.'} This build replaces the
             three old ways: the max-height guess, the height measured by script, and the known height.</p>
           <Snippet label="TS" lines={platform.sample}/>
           <OneJobTwoWays input={input}/>
@@ -673,7 +659,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   reveal: ' With reveal, the row moves over 300 milliseconds with ease-in-out, and the text shows from its top down. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide.',
                   drawer: ' With the drawer, the row moves on the same 300 milliseconds and sets the text at its bottom, so the text’s bottom edge stays on the fold’s edge as it slides down from under the bar. Content-visibility hides the closed content and has no values between on and off; allow-discrete lets it switch at the end of a close and at the start of an open, which keeps the text visible for the whole slide.',
                   static: ' With static, the part a details hides has no transition, so the fold opens at once, in every browser.'
-                }[motion]}</p>
+                }[foldMotion]}</p>
                 <Snippet label="CSS" lines={[
                   ...carve.unit(accordionsCss, '&::details-content {'), lines.blank,
                   ...carve.unit(accordionsCss, '&[open]::details-content {'),
@@ -681,8 +667,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     reveal: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {')],
                     drawer: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {')],
                     static: []
-                  }[motion],
-                  ...(motion === 'drawer' ? [lines.blank, ...carve.unit(accordionsCss, '.drawer &::details-content {')] : [])
+                  }[foldMotion],
+                  ...(foldMotion === 'drawer' ? [lines.blank, ...carve.unit(accordionsCss, '.drawer &::details-content {')] : [])
                 ]}/>
                 <SizedToTheText/>
               </li>
@@ -706,9 +692,9 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
     </section>
     <section aria-labelledby="together-heading" className="accordion-part">
       <h2 id="together-heading" className="title bold">A {input} and a grid row: the old control, the new slide</h2>
-      <GridRow className={exhibitMoving} folds={foldLists.gridRow[type]}/>
+      <GridRow className={exhibitMoving} folds={foldLists.gridRow[foldType]}/>
       <ol className={runs}>
-        {type === 'inclusive' && <li className="run">
+        {foldType === 'inclusive' && <li className="run">
           <p className="paragraph">The inclusive build keeps the checkbox from the old way, with no script, and takes
             its slide from the grid row. Each bar holds the fold’s name and,
             at its end, an Open or Close control, and the checkbox remembers whether the fold is open, as it did in the
@@ -716,7 +702,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
             is new is the way the text opens, below.</p>
           <Snippet label="HTML" lines={carve.span(inclusiveCheckboxToggleAccordionSource, '<fieldset>\n    <legend className="off-screen">folds</legend>\n    <ul className="new-accordion">', '</header>')}/>
         </li>}
-        {type === 'exclusive' && <li className="run">
+        {foldType === 'exclusive' && <li className="run">
           <p className="paragraph">The exclusive build keeps the radio group from the old way and takes its slide from
             the grid row. Each bar holds the fold’s name and, at its
             end, an Open or Close control; the name is only a name, and only the control works the fold.</p>
@@ -776,14 +762,14 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   ...carve.unit(surfaceCss, '.field-pressed:active {')
                 ]}/>
               </li>
-              {type === 'exclusive' && <li className="run">
+              {foldType === 'exclusive' && <li className="run">
                 <p className="paragraph">The space bar is the keyboard’s press, but on a checked radio most browsers do
                   nothing with it, so no press reaches the list. So a handler on the list for keydown, the event a key
                   press sends, catches the space bar too, and closes the fold when the key lands on the open radio.</p>
                 <Snippet label="TS" lines={carve.unit(exclusiveRadioToggleAccordionSource, 'const spacePressed')}/>
               </li>}
               <li className="run">
-                {type === 'inclusive'
+                {foldType === 'inclusive'
                   ? <p className="paragraph">This build has no script to lose.</p>
                   : <p className="paragraph">Without the list’s script, the build still works as a radio group: it keeps
                     one fold open. Only the second press that closes a fold is lost.</p>}
@@ -807,10 +793,10 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   reveal: ' Reveal moves the row on a transition, 300 milliseconds of ease-in-out. The text shows from its top down as the row grows.',
                   drawer: ' Drawer moves the row on the same transition, 300 milliseconds of ease-in-out, and sets the text at the row’s bottom, as the next run explains.',
                   static: ' Static matches neither class in the rule for the transition, so the build has none, and the row changes at once.'
-                }[motion]}</p>
+                }[foldMotion]}</p>
                 <Snippet label="CSS" lines={carve.unit(accordionsCss, '&:is(.reveal, .drawer) .grid-fold .fold-clip {')}/>
               </li>
-              {motion === 'drawer' && <li className="run">
+              {foldMotion === 'drawer' && <li className="run">
                 <p className="paragraph">With the drawer, the text slides down from under its bar. Its paragraph grows
                   from 0fr to 1fr, as above. Between the two, the row is shorter than the paragraph
                   around it, so <code className="monospaced">align-content: end</code> sets the row at the paragraph’s
