@@ -3,9 +3,7 @@ import {useHydrated} from '@components';
 import {Maybe, nothing, some, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
-import {useControls, Worn} from '../Controls';
-
-const inOrder: readonly Worn[] = ['nothing', 'position', 'outline', 'z-index', 'opacity', 'transform', 'isolation'];
+import {inOrder, useControls, Worn} from '../Controls';
 
 const property: Record<Worn, string> = {
   nothing: 'nothing',
@@ -50,7 +48,7 @@ export const ContextChooser: FC = () => {
     </ol>
     <fieldset className="wears">
       <legend className="paragraph">What card one wears</legend>
-      {inOrder.map(choice =>
+      {inOrder.worn.map(choice =>
         <label key={choice} className="context-choice reachable">
           <input type="radio" name="card-one-wears" checked={worn === choice} disabled={not(hydrated)}
             onChange={() => {
