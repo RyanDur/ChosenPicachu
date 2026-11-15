@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -14,9 +14,9 @@ const scopeAtRule = 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope';
 
 export const ElementsArrive: FC = () =>
   <Moment heading={moments.headings.elementsArrive}>
-    <MomentSummary>For years a page that wanted a fold, a modal dialog or a menu over its content had no element for it.
+    <MomentInBrief>For years a page that wanted a fold, a modal dialog or a menu over its content had no element for it.
       One at a time the platform gave each an element or an attribute, and by December 2025 a button could open the
-      dialog or the menu with no script.</MomentSummary>
+      dialog or the menu with no script.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">The fold came first.
         The <a className="signpost" href={detailsElement}>details</a> element opens and shuts its contents with no script, and

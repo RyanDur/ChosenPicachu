@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -11,9 +11,9 @@ const lieProposal = 'https://www.w3.org/People/howcome/p/cascade.html';
 
 export const ZenGarden: FC = () =>
   <Moment heading={moments.headings.zenGarden}>
-    <MomentSummary>Dave Shea published <a className="signpost" href={cssZenGarden}>one HTML document</a> and invited the world to
+    <MomentInBrief>Dave Shea published <a className="signpost" href={cssZenGarden}>one HTML document</a> and invited the world to
       restyle it. Hundreds of designs followed, and not one change to the markup: the same structure under any
-      presentation.</MomentSummary>
+      presentation.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">Shea’s own account starts with the state of things. By 2003 the
         industry had <a className="signpost" href={aboutCssZenGarden}>“hunkered down and kept using the hacky table layouts and font

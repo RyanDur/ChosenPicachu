@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -16,10 +16,10 @@ const eichPopularity = 'https://brendaneich.com/2008/04/popularity/';
 
 export const EsFive: FC = () =>
   <Moment heading={moments.headings.esFive}>
-    <MomentSummary>Ten years after the third edition, the language’s standard moved. The fourth edition was never
+    <MomentInBrief>Ten years after the third edition, the language’s standard moved. The fourth edition was never
       published as a standard; a draft of it had already shipped in Flash as ActionScript 3, and the committee set it
       aside in 2008. The fifth, published on 3 December 2009, was the smaller step: strict mode, JSON, accessor
-      properties. From 2015 an edition has come every year.</MomentSummary>
+      properties. From 2015 an edition has come every year.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">Ecma never published a fourth edition. Its own page records that the
         number <a className="signpost" href={ecma262Editions}>“was reserved but not used in the Ecma publication process”</a>,

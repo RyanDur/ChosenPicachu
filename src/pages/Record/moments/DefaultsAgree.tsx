@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 import {presentation} from '../sources';
@@ -10,9 +10,9 @@ const {resetReasoning, resetReloaded, resetCss, aboutNormalizeCss, normalizeTags
 
 export const DefaultsAgree: FC = () =>
   <Moment heading={moments.headings.defaultsAgree}>
-    <MomentSummary>Every browser shipped its own defaults for margins, line heights and headings, and no two agreed, so
+    <MomentInBrief>Every browser shipped its own defaults for margins, line heights and headings, and no two agreed, so
       the same style sheet drew a different page in each. Authors answered with a reset, a style sheet that zeroed the
-      defaults before their own began; the platform answered later, with tests of its own.</MomentSummary>
+      defaults before their own began; the platform answered later, with tests of its own.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">Eric Meyer gave the reason in April
         2007: <a className="signpost" href={resetReasoning.address}>“The basic reason is that all browsers have

@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -11,11 +11,11 @@ const whatwgFaq = 'https://whatwg.org/faq';
 
 export const BrowsersTakePen: FC = () =>
   <Moment heading={moments.headings.browsersTakePen}>
-    <MomentSummary>Mozilla and Opera <a className="signpost" href={whatwgPositionPaper}>put a counter-proposal in writing</a>: evolve HTML,
+    <MomentInBrief>Mozilla and Opera <a className="signpost" href={whatwgPositionPaper}>put a counter-proposal in writing</a>: evolve HTML,
       backwards compatible. A straw poll at the W3C’s workshop went against it and the W3C said it did not intend to put
       any resources into it, so the browser makers founded the WHATWG, their own working group, and wrote the
       specification they were implementing. The people writing the specification were the people shipping it, and their
-      second principle was that the two must match.</MomentSummary>
+      second principle was that the two must match.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">The Standard’s own history says how HTML had stopped. In
         1998 <a className="signpost" href={whatwgHtmlIntroduction}>“the W3C membership decided to stop evolving HTML and instead begin

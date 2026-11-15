@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -13,10 +13,10 @@ const mediaQueries = 'https://www.w3.org/TR/2012/REC-css3-mediaqueries-20120619/
 
 export const CssTwoOne: FC = () =>
   <Moment heading={moments.headings.cssTwoOne}>
-    <MomentSummary>CSS 2.1, the correction of 1998’s CSS 2, became a Recommendation on 7 June 2011, with more than nine
+    <MomentInBrief>CSS 2.1, the correction of 1998’s CSS 2, became a Recommendation on 7 June 2011, with more than nine
       thousand tests behind it, after what the W3C called <a className="signpost" href={cssInteroperability}>“many years for
         implementations and the specification to converge”</a>. From then on CSS has grown by modules, each advancing at
-      its own pace.</MomentSummary>
+      its own pace.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">W3C’s announcement of 7 June 2011 is
         headed <a className="signpost" href={cssInteroperability}>“Cascading Style Sheets Standard Boasts Unprecedented

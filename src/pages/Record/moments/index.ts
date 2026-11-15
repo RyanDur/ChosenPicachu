@@ -13,7 +13,7 @@ export {Frameworks} from './Frameworks';
 export {FullerStory} from './FullerStory';
 export {Html5SaysIt} from './Html5SaysIt';
 export {HtmlTwo} from './HtmlTwo';
-export {MomentSummary} from './MomentSummary';
+export {MomentInBrief} from './MomentInBrief';
 export {Need} from './Need';
 export {NeedOutrunsStandards} from './NeedOutrunsStandards';
 export {OneDirection} from './OneDirection';

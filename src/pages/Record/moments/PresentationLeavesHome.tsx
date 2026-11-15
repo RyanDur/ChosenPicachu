@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {PeriodSample} from './PeriodSample';
 import {moments} from '../calendar';
@@ -13,11 +13,11 @@ const w3cHistory = 'https://www.w3.org/History.html';
 
 export const PresentationLeavesHome: FC = () =>
   <Moment heading={moments.headings.presentationLeavesHome}>
-    <MomentSummary>Håkon Wium Lie <a className="signpost" href={lieProposal}>drafted Cascading HTML Style Sheets</a> in October
+    <MomentInBrief>Håkon Wium Lie <a className="signpost" href={lieProposal}>drafted Cascading HTML Style Sheets</a> in October
       1994, encouraged by Dave Raggett, who had realized HTML should <a className="signpost" href={cssSaga}>never become a
         page-description language</a>. The draft gave the author and the reader the same notation and a share of
       influence each. At the “Mosaic and the Web” conference in Chicago, some argued style needed a full programming
-      language; CSS went the other way, a simple declarative format on purpose.</MomentSummary>
+      language; CSS went the other way, a simple declarative format on purpose.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">Style sheets were older than CSS. Berners-Lee’s NeXT browser took its
         look from a simple style sheet, but he did not publish the

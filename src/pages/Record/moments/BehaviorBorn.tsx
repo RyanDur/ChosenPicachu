@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {moments} from '../calendar';
 
 const computerworldInterview = 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
@@ -10,10 +10,10 @@ const hamToHamster = 'https://adactio.com/journal/1595';
 
 export const BehaviorBorn: FC = () =>
   <Moment heading={moments.headings.behaviorBorn}>
-    <MomentSummary>Brendan Eich <a className="signpost" href={computerworldInterview}>wrote the interpreter in about ten days</a> in May
+    <MomentInBrief>Brendan Eich <a className="signpost" href={computerworldInterview}>wrote the interpreter in about ten days</a> in May
       1995, for a scripting language that could <a className="signpost" href={computerworldInterview}>“touch elements of the page,
         change their properties, and respond to events”</a>: a <a className="signpost" href={computerworldInterview}>glue
-          language</a> for web designers and part-time programmers, beside Java for the components.</MomentSummary>
+          language</a> for web designers and part-time programmers, beside Java for the components.</MomentInBrief>
     <p className="paragraph muted-ink hyphenated">Eich states the need in one
       sentence: <a className="signpost" href={computerworldInterview}>“The lack of programmability of Web pages made them static,
         text-heavy, with at best images in tables or floating on the right or left.”</a> With a language that could

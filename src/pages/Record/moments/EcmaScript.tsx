@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -13,10 +13,10 @@ const computerworldInterview = 'https://web.archive.org/web/20191215100745/https
 
 export const EcmaScript: FC = () =>
   <Moment heading={moments.headings.ecmaScript}>
-    <MomentSummary>Microsoft shipped its own JavaScript, JScript, in Internet Explorer 3 in August 1996, and the two
+    <MomentInBrief>Microsoft shipped its own JavaScript, JScript, in Internet Explorer 3 in August 1996, and the two
       dialects differed enough that pages worked in one browser and not the other. Netscape took the language to Ecma,
       the European standards body, that November. The first edition of the standard, named ECMAScript, was adopted in
-      June 1997.</MomentSummary>
+      June 1997.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">JavaScript had shipped in Navigator 2.0, and Microsoft answered in
         kind: <a className="signpost" href={jScriptDialect}>“JScript was first supported in the Internet Explorer 3.0 browser

@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -13,9 +13,9 @@ const angularFramework = 'https://en.wikipedia.org/wiki/Angular_(web_framework)'
 
 export const Frameworks: FC = () =>
   <Moment heading={moments.headings.frameworks}>
-    <MomentSummary>After Ajax and jQuery the page was an application, and an application needs a shape. AngularJS,
+    <MomentInBrief>After Ajax and jQuery the page was an application, and an application needs a shape. AngularJS,
       released in October 2010 and maintained by Google, bound the model and the view to each other in both directions.
-      React, Vue and Angular followed, each with a different answer to the same need.</MomentSummary>
+      React, Vue and Angular followed, each with a different answer to the same need.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">AngularJS states the need on its own
         page: <a className="signpost" href={whyAngularJs}>“HTML is great for declaring static documents, but it falters

@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -13,10 +13,10 @@ const ieForMac = 'https://en.wikipedia.org/wiki/Internet_Explorer_for_Mac';
 
 export const BrowsersAgree: FC = () =>
   <Moment heading={moments.headings.browsersAgree}>
-    <MomentSummary>In 1998 the standards were ahead of every browser. Todd Fahrner wrote a
+    <MomentInBrief>In 1998 the standards were ahead of every browser. Todd Fahrner wrote a
       page, <a className="signpost" href={boxAcidTest}>The Box Acid Test</a>, that a correct CSS1 browser renders to the pixel,
       and no browser that year did. The browsers took a decade to catch up, pushed by tests, hacks and failures named
-      in public.</MomentSummary>
+      in public.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">The specifications were ahead of every browser. CSS2 became a
         Recommendation on 12 May 1998, edited by Bos and Lie. Its abstract lists what it

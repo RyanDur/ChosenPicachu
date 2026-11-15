@@ -4,7 +4,7 @@ import {
   Need, StructureArrives, PresentationLeavesHome, BehaviorBorn, NeedOutrunsStandards, BrowsersAgree, ZenGarden,
   BrowsersTakePen, PageBecomesApplication, SomeoneNeedsComponents, Html5SaysIt, OneDirection, DocumentComesBack,
   WebGoesPublic, HtmlTwo, CssOne, WiredRedesign, CssTwoOne, EcmaScript, EsFive, DefaultsAgree, ConstantsNeedHome,
-  ElementsArrive, Frameworks, ConcernsInTheYear, spelled, MomentSummary, FullerStory
+  ElementsArrive, Frameworks, ConcernsInTheYear, spelled, MomentInBrief, FullerStory
 } from './moments';
 import {MomentKey, moments, SharedYear} from './calendar';
 import {concerns} from './concerns';
@@ -69,7 +69,7 @@ const Year: FC<{year: string; momentsInTheYear: readonly MomentKey[]; sharedYear
   <li className="moment trim-rail-along">
     <time dateTime={year} className="year caption bold">{year}</time>
     <h3 className="moment-title sub-title void-dot-before">{joinedTitle(momentsInTheYear.map(key => moments.headings[key].title))}</h3>
-    <MomentSummary>{summary}</MomentSummary>
+    <MomentInBrief>{summary}</MomentInBrief>
     <FullerStory>
       <ol className="moments-of-a-year timeline" aria-label={year}>
         {momentsInTheYear.map(key =>
