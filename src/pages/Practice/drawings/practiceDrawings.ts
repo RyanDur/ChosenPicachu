@@ -142,8 +142,8 @@ const landmarkMap = ((): Drawing => {
 
   const wide: Box[] = [
     {label: 'section · pages and feedback', look: landmark, x: 6, y: 6, width: 180, height: 324},
-    {label: 'nav · site', look: landmark, x: 18, y: 33, width: 156, height: 120},
-    {label: 'feedback', look: secondary, x: 18, y: 165, width: 156, height: 54},
+    {label: 'nav · site', look: landmark, x: 18, y: 33, width: 156, height: 219},
+    {label: 'feedback', look: secondary, x: 18, y: 264, width: 156, height: 54},
     {label: 'header', look: landmark, x: 195, y: 6, width: 279, height: 42},
     {label: 'main', look: landmark, x: 195, y: 57, width: 279, height: 225},
     {label: 'nav · tabs', look: secondary, x: 207, y: 96, width: 255, height: 30, note: 'only where a page has tabs'},
