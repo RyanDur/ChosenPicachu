@@ -8,7 +8,7 @@ export {TheKnownHeight} from './TheKnownHeight';
 export {OneNameOneChoice} from './OneNameOneChoice';
 export {ThreeBecomeTwo} from './ThreeBecomeTwo';
 export {SizedToTheText} from './SizedToTheText';
-export {WhatEachPromises} from './WhatEachPromises';
+export {WhatEachElementDoes} from './WhatEachElementDoes';
 export {RowToItsContent} from './RowToItsContent';
 export {PaddingInsideTheClip} from './PaddingInsideTheClip';
 export {RidesTheEdge} from './RidesTheEdge';
