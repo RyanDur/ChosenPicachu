@@ -17,6 +17,8 @@ import {InclusiveToggleAccordion} from './InclusiveToggleAccordion';
 import {carve, Line, lines, Mdn, Sample, Snippet} from '../Recipe';
 import exclusiveAccordionSource from './ExclusiveAccordion.tsx?sample';
 import exclusiveMeasuredAccordionSource from './ExclusiveMeasuredAccordion.tsx?sample';
+import inclusiveMeasuredAccordionSource from './InclusiveMeasuredAccordion.tsx?sample';
+import openFoldsSource from './open-folds.ts?sample';
 import exclusiveRadioToggleAccordionSource from './ExclusiveRadioToggleAccordion.tsx?sample';
 import exclusiveToggleAccordionSource from './ExclusiveToggleAccordion.tsx?sample';
 import inclusiveAccordionSource from './InclusiveAccordion.tsx?sample';
@@ -102,9 +104,12 @@ const platformBuilds: Record<FoldType, Build> = {
   exclusive: {Accordion: ExclusiveToggleAccordion, sample: carve.span(exclusiveToggleAccordionSource, '<details className="fold" name=', '</details>')}
 };
 
-const measuredAccordions: Record<FoldType, FC<AccordionProps>> = {
-  inclusive: InclusiveMeasuredAccordion,
-  exclusive: ExclusiveMeasuredAccordion
+const sharedOpenFolds = (source: Sample): Line[] =>
+  carve.elided(carve.span(source, 'const [open, dispatch] = useReducer(', '</OpenFolds.Provider>;'), '<article', '</OpenFolds.Provider>;', '{/* …the folds */}');
+
+const measuredBuilds: Record<FoldType, Build> = {
+  inclusive: {Accordion: InclusiveMeasuredAccordion, sample: sharedOpenFolds(inclusiveMeasuredAccordionSource)},
+  exclusive: {Accordion: ExclusiveMeasuredAccordion, sample: sharedOpenFolds(exclusiveMeasuredAccordionSource)}
 };
 
 const gridRowAccordions: Record<FoldType, FC<AccordionProps>> = {
@@ -124,7 +129,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
   const platform = platformBuilds[foldType];
   const {Accordion: KnownHeight} = knownHeight;
   const {Accordion: Platform} = platform;
-  const Measured = measuredAccordions[foldType];
+  const measured = measuredBuilds[foldType];
+  const {Accordion: Measured} = measured;
   const GridRow = gridRowAccordions[foldType];
   return <>
     <header className="tab-introduction">
@@ -317,16 +323,21 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     whichever is open.</p>
                 </li>}
                 <li className="run">
-                  <p className="paragraph">React, the library this site’s script is written in, keeps what it knows in
-                    state. State is a value React keeps between draws and draws the page from. Which folds are open is
-                    the accordion’s state. The accordion holds it and hands it to every panel inside through a context,
-                    a value a component makes readable to everything it contains, and each panel reads from there
-                    whether its own fold is open. A panel also holds state of its own: whether it is shown, and, while
-                    it moves, the height the motion starts from, the height it ends at, and whether it has started. Both
-                    are kept with a reducer, a function that takes the state and a named change, called an action, and
-                    returns the next state. A component sends an action
-                    with <code className="monospaced">dispatch</code> and never sets the state itself.
-                    The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says more about state.</p>
+                  <p className="paragraph">React, the library this site’s script is written in, keeps which folds are
+                    open as the accordion’s state: a value React keeps between draws and draws the page from. The
+                    accordion hands that state to every panel inside through a context, and each panel reads from it
+                    whether its own fold is open. The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains
+                    state and context in full.</p>
+                  <Snippet label="TS" lines={[
+                    ...measured.sample, lines.blank,
+                    ...carve.unit(openFoldsSource, 'export const openFolds')
+                  ]}/>
+                </li>
+                <li className="run">
+                  <p className="paragraph">A panel keeps state of its own too: whether it is shown and, while it moves,
+                    the height the motion starts from, the height it ends at, and whether it has started. It changes
+                    that state through a reducer, sending each change with <code className="monospaced">dispatch</code>,
+                    as the z-index tab shows.</p>
                   <Snippet label="TS" lines={[
                     ...carve.unit(panelSource, 'type Motion ='), lines.blank,
                     ...carve.unit(panelSource, 'type Panel ='), lines.blank,
