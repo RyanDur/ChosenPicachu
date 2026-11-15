@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {moments} from '../calendar';
 
 const cssSaga = 'https://www.w3.org/Style/LieBos2e/history/Overview.html';
@@ -8,9 +8,9 @@ const css1 = 'https://www.w3.org/TR/REC-CSS1-961217';
 
 export const CssOne: FC = () =>
   <Moment heading={moments.headings.cssOne}>
-    <MomentSummary>Two years after Lie’s draft, CSS level 1 became a W3C Recommendation on 17 December 1996. The first
+    <MomentInBrief>Two years after Lie’s draft, CSS level 1 became a W3C Recommendation on 17 December 1996. The first
       browser to support it had shipped in August with most of the text properties and little of the box model. The
-      standard was ahead of every browser, and would stay ahead for years.</MomentSummary>
+      standard was ahead of every browser, and would stay ahead for years.</MomentInBrief>
     <p className="paragraph muted-ink hyphenated">Between the draft and the standard lay two years of argument. At the
       third web conference, at Darmstadt in April 1995, Lie and Bos <a className="signpost" href={cssSaga}>met in
         person</a> for the first time and each showed an implementation, Bos’s Argo and Dave Raggett’s Arena, and the

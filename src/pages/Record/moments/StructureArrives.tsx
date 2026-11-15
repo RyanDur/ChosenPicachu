@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -12,11 +12,11 @@ const nexusHistory = 'https://worldwideweb.cern.ch/history/';
 
 export const StructureArrives: FC = () =>
   <Moment heading={moments.headings.structureArrives}>
-    <MomentSummary>In November 1990 Tim Berners-Lee and Robert Cailliau proposed <a className="signpost" href={worldWideWebProposal}>“WorldWideWeb (or W3)”</a>, and Berners-Lee wrote the server and the
+    <MomentInBrief>In November 1990 Tim Berners-Lee and Robert Cailliau proposed <a className="signpost" href={worldWideWebProposal}>“WorldWideWeb (or W3)”</a>, and Berners-Lee wrote the server and the
       browser. HTML’s tags came from CERN’s guide to SGML, the markup standard publishers and technical writers already
       used, so they would recognize them. The one tag of his own was <a className="signpost" href={htmlTags}>the anchor</a>,
       an idea hypertext already had; the new thing was what his could carry, the address of a document on another
-      machine.</MomentSummary>
+      machine.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">The second proposal came in November 1990, twenty months after the
         first, and Robert Cailliau wrote it with him. It names the need from the reader’s side: CERN’s information sat

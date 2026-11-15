@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -8,10 +8,10 @@ const informationManagementProposal = 'https://www.w3.org/History/1989/proposal.
 
 export const Need: FC = () =>
   <Moment heading={moments.headings.need}>
-    <MomentSummary>Several thousand people at CERN, two-year stays, and what one project learned <a className="signpost" href={informationManagementProposal}>“sometimes lost forever, or only recovered after a detective
+    <MomentInBrief>Several thousand people at CERN, two-year stays, and what one project learned <a className="signpost" href={informationManagementProposal}>“sometimes lost forever, or only recovered after a detective
       investigation in an emergency”</a>. Tim Berners-Lee{' '}
     <a className="signpost" href={informationManagementProposal}>proposed a web of notes with links between them</a>, shaped like
-      the organization that would use it.</MomentSummary>
+      the organization that would use it.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">Berners-Lee wrote the proposal in March 1989 to answer a practical
         question: how several thousand people at CERN, spread across institutes and experiments and staying about two

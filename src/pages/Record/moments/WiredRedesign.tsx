@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -11,9 +11,9 @@ const cssLookBack = 'https://thehistoryoftheweb.com/look-back-history-css/';
 
 export const WiredRedesign: FC = () =>
   <Moment heading={moments.headings.wiredRedesign}>
-    <MomentSummary>On 11 October 2002 Wired News relaunched on XHTML and CSS with no tables for layout. Douglas Bowman
+    <MomentInBrief>On 11 October 2002 Wired News relaunched on XHTML and CSS with no tables for layout. Douglas Bowman
       designed it. A large daily publisher had bet its pages on the standards, and the bet held. Seven months later the
-      Zen Garden made the same point as art.</MomentSummary>
+      Zen Garden made the same point as art.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">Eric Meyer wrote it up the day it launched: Wired
         News <a className="signpost" href={wiredWithStandards}>“has redesigned their site, and not just the front end, either”</a>, and

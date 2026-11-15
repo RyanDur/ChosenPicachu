@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -10,10 +10,10 @@ const w3cHistory = 'https://www.w3.org/History.html';
 
 export const WebGoesPublic: FC = () =>
   <Moment heading={moments.headings.webGoesPublic}>
-    <MomentSummary>On 6 August 1991 Berners-Lee answered a question on the alt.hypertext newsgroup, and an hour later
+    <MomentInBrief>On 6 August 1991 Berners-Lee answered a question on the alt.hypertext newsgroup, and an hour later
       posted a summary of the project. Both gave the address of info.cern.ch, where the browser, the editor, the server
       and the documentation sat for anyone to fetch. HTML left the lab before it had a specification, as a list of tags
-      and a working program.</MomentSummary>
+      and a working program.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">Someone had asked the group whether anyone knew of work on hypertext
         links that could retrieve from many different sources. Berners-Lee’s reply is the web’s answer. The

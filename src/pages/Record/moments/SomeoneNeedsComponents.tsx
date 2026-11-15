@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -14,10 +14,10 @@ const scopeAtRule = 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope';
 
 export const SomeoneNeedsComponents: FC = () =>
   <Moment heading={moments.headings.someoneNeedsComponents}>
-    <MomentSummary>Interfaces had grown into applications, and their builders needed components:
+    <MomentInBrief>Interfaces had grown into applications, and their builders needed components:
       self-contained pieces that carry structure, style, and behavior together, and styles
       that stay where they are put. The platform did not have them yet, so JavaScript built
-      them first.</MomentSummary>
+      them first.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">Script built the components first, and React said what a component
         was. Pete Hunt’s post of June 2013, <a className="signpost" href={whyReact}>“Why did we build React?”</a>, opens with

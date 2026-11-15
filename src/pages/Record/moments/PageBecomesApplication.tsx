@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
@@ -15,9 +15,9 @@ const prototypeArticle = 'https://en.wikipedia.org/wiki/Prototype_JavaScript_Fra
 
 export const PageBecomesApplication: FC = () =>
   <Moment heading={moments.headings.pageBecomesApplication}>
-    <MomentSummary>Ajax let a page fetch data and rewrite itself without reloading. Garrett named the approach and
+    <MomentInBrief>Ajax let a page fetch data and rewrite itself without reloading. Garrett named the approach and
       pointed at Google’s newest products as its highest-profile examples. Prototype and jQuery smoothed over the
-      differences between the browsers, and then the frameworks came.</MomentSummary>
+      differences between the browsers, and then the frameworks came.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">Garrett opens with the gap. Desktop
         applications <a className="signpost" href={garrettAjaxEssay}>“have a richness and responsiveness that has seemed out of reach

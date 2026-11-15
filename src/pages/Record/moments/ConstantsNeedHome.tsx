@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Moment} from './Moment';
-import {MomentSummary} from './MomentSummary';
+import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 import {presentation} from '../sources';
@@ -10,9 +10,9 @@ const {sassVariables, usingCssCustomProperties, wathan, tailwindTheme} = present
 
 export const ConstantsNeedHome: FC = () =>
   <Moment heading={moments.headings.constantsNeedHome}>
-    <MomentSummary>A design’s constants, its colors, sizes and fonts, lived outside the style sheet, in a preprocessor’s
+    <MomentInBrief>A design’s constants, its colors, sizes and fonts, lived outside the style sheet, in a preprocessor’s
       variables. CSS could not yet name a value. In 2017 it could, in every engine, and the same year Adam Wathan made
-      the case for a fixed set of single-purpose classes.</MomentSummary>
+      the case for a fixed set of single-purpose classes.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">Sass had given authors a variable since 2006: in its documentation’s
         words, <a className="signpost" href={sassVariables.address}>“you assign a value to a name that begins with $, and
