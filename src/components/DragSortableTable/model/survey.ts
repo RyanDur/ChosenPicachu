@@ -48,12 +48,12 @@ type Slot<Identity> = {holds: Identity; at: number; size: number; start: number;
 const struckPast = <Identity>(
   slots: readonly Slot<Identity>[],
   home: number,
-  position: number
+  pointerAt: number
 ): Identity | undefined => {
-  const struck = slots.find(({end}) => position < end);
+  const struck = slots.find(({end}) => pointerAt < end);
   if (has(struck) && struck.at !== home) {
     const held = deadZone(struck.size, slots[home]?.size ?? 0);
-    return (struck.at < home ? position < struck.end - held : position > struck.start + held)
+    return (struck.at < home ? pointerAt < struck.end - held : pointerAt > struck.start + held)
       ? struck.holds
       : undefined;
   }
