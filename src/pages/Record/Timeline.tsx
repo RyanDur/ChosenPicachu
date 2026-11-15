@@ -64,12 +64,12 @@ const lowercased = (title: string): string => `${title.charAt(0).toLowerCase()}$
 const joinedTitle = ([first, ...rest]: readonly string[]): string => [first, ...rest.map(lowercased)].join(', and ');
 
 const Year: FC<{year: string; momentsInTheYear: readonly MomentKey[]; sharedYear: SharedYear}> = ({
-  year, momentsInTheYear, sharedYear: {summary}
+  year, momentsInTheYear, sharedYear: {inBrief}
 }) =>
   <li className="moment trim-rail-along">
     <time dateTime={year} className="year caption bold">{year}</time>
     <h3 className="moment-title sub-title void-dot-before">{joinedTitle(momentsInTheYear.map(key => moments.headings[key].title))}</h3>
-    <MomentInBrief>{summary}</MomentInBrief>
+    <MomentInBrief>{inBrief}</MomentInBrief>
     <FullerStory>
       <ol className="moments-of-a-year timeline" aria-label={year}>
         {momentsInTheYear.map(key =>
