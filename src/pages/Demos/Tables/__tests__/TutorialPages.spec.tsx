@@ -122,3 +122,28 @@ describe('the table tutorials, each on its own page', () => {
     expect(await demoTabs.current()).toEqual(['Tables']);
   });
 });
+
+describe('a link saved to an old tables tutorial address', () => {
+  test('should open the tutorial it names at that tutorial’s own address', async () => {
+    const old = demosAt('tables', '?tut=menu');
+    render(<TestApp at={old}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/menu'));
+    expect(await tablesTab().recipe('sort menu')).toBeVisible();
+  });
+
+  test('should open the tutorial in the build the address carries', async () => {
+    const old = demosAt('tables', '?tut=resize&world=vanilla');
+    render(<TestApp at={old}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize', '?world=vanilla'));
+  });
+
+  test('should stay on the tables tab and its list when it names no tutorial', async () => {
+    const old = demosAt('tables', '?tut=scroll');
+    render(<TestApp at={old}/>);
+
+    expect(await tablesTab().tutorialsListed()).toEqual(['Drag sort', 'Sort menu', 'Drag resize']);
+    expect(appAddress.shown()).toBe(old);
+  });
+});
