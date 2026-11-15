@@ -1,8 +1,8 @@
-.slots {
+.dead-zone {
   --drawn-width: 480px;
   --widest-drawing: var(--base-x-60);
 
-  .slot {
+  .seat {
     stroke-width: var(--hairline);
     vector-effect: non-scaling-stroke;
   }
