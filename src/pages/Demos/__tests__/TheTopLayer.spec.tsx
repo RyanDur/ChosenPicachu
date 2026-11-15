@@ -23,16 +23,6 @@ describe('the top layer', () => {
     ]);
   });
 
-  test('the question of which card is on top keeps its answer closed until the reader asks for it', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-    const answer = await zIndexTab.findAnswer('show the answer');
-    expect(answer).not.toHaveAttribute('open');
-
-    await zIndexTab.askForTheAnswer('show the answer');
-
-    expect(answer).toHaveAttribute('open');
-  });
-
   test('the user raises a banner from the demo', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');

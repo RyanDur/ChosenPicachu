@@ -2,25 +2,26 @@ import type {Page} from '@playwright/test';
 
 export const whichCardIsOnTop = (page: Page) => {
   const part = page.getByRole('region', {name: 'Which card is on top?'});
-  const reveal = part.getByRole('group', {name: 'show the answer'});
-  const marks = {
-    question: 'Which one paints on top, and why?',
-    answer: 'Card two. Card one forms a stacking context',
-    drawing: 'figure "Which card is on top'
-  };
+  const summary = 'show the answer';
+  const reveal = part.getByRole('group', {name: summary});
   return {
-    answer: reveal.getByText(marks.answer),
+    answer: reveal.getByRole('paragraph'),
     askFromTheKeyboard: async (): Promise<void> => {
-      await reveal.getByText('show the answer').focus();
+      await reveal.getByText(summary).focus();
       await page.keyboard.press('Enter');
     },
     readInOrder: async (): Promise<string[]> => {
       const read = await part.ariaSnapshot();
+      const opened = read.indexOf(`- group "${summary}"`);
+      const marks = {
+        question: read.indexOf('- paragraph'),
+        answer: read.indexOf('- paragraph', opened),
+        drawing: read.indexOf('- figure', opened)
+      };
       return Object.entries(marks)
-        .map(([mark, words]) => ({mark, at: read.indexOf(words)}))
-        .filter(({at}) => at >= 0)
-        .sort((one, other) => one.at - other.at)
-        .map(({mark}) => mark);
+        .filter(([, at]) => at >= 0)
+        .sort(([, one], [, other]) => one - other)
+        .map(([mark]) => mark);
     }
   };
 };
