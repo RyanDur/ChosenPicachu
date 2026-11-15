@@ -1,17 +1,17 @@
 import {FC} from 'react';
 import {Figure} from '../../Recipe';
-import './SlotsFigure.css';
+import './DeadZoneFigure.css';
 
-export const SlotsFigure: FC = () =>
-  <Figure className="slots" viewBox="0 -20 480 150" title="Where a switch counts" says={<>
+export const DeadZoneFigure: FC = () =>
+  <Figure className="dead-zone" viewBox="0 -20 480 150" title="Where a switch counts" says={<>
     The carried column is moving right. A dead zone at the near edge of its neighbor holds still: a quarter of the
     neighbor’s width, or more when the neighbor is much the wider. Past it, the two switch. Coming back the other way,
     the dead zone is at the other edge.
   </>}>
-    <rect className="slot paper-filled drawn" x="10" y="20" width="110" height="70"/>
-    <rect className="slot paper-filled drawn" x="120" y="20" width="160" height="70"/>
-    <rect className="slot paper-filled drawn" x="280" y="20" width="90" height="70"/>
-    <rect className="slot paper-filled drawn" x="370" y="20" width="100" height="70"/>
+    <rect className="seat paper-filled drawn" x="10" y="20" width="110" height="70"/>
+    <rect className="seat paper-filled drawn" x="120" y="20" width="160" height="70"/>
+    <rect className="seat paper-filled drawn" x="280" y="20" width="90" height="70"/>
+    <rect className="seat paper-filled drawn" x="370" y="20" width="100" height="70"/>
     <rect className="faded-leather-filled" x="120" y="20" width="40" height="70"/>
     <rect className="faded-mint-filled" x="160" y="20" width="120" height="70"/>
     <text className="drawn-caption" x="65" y="60" textAnchor="middle">carried</text>

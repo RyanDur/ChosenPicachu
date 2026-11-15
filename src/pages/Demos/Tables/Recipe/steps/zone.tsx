@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, carve, lines} from '../../../Recipe';
-import {SlotsFigure} from '../SlotsFigure';
+import {DeadZoneFigure} from '../DeadZoneFigure';
 import {Term} from '../Term';
 import {sources} from './sources';
 
@@ -23,7 +23,7 @@ export const DeadZone: FC = () =>
         the neighbor’s dead zone again.</Says>
       <Says>The decision is in struckPast, one function that doesn’t know which axis it is on. The step for rows uses it
         unchanged.</Says>
-      <SlotsFigure/>
+      <DeadZoneFigure/>
       <Codes>
         <Snippet label="TS" lines={[
           ...carve.unit(sources.survey, 'const deadZone = '), lines.blank,
