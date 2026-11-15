@@ -1,16 +1,18 @@
 import {FC} from 'react';
-import {Navigate, useSearchParams} from 'react-router';
+import {Navigate, useLocation, useSearchParams} from 'react-router';
 import {maybe} from '@ryandur/sand';
 import {useHydrated} from '@components';
 import {tableTutorials} from './tutorial-pages';
 
 export const ToTutorialNamed: FC = () => {
   const [params] = useSearchParams();
-  const {tut, ...dials} = Object.fromEntries(params);
-  const query = new URLSearchParams(dials).toString();
+  const {hash} = useLocation();
   const hydrated = useHydrated();
-  return maybe(tableTutorials.all().find(tutorial => tutorial === tut))
+  const dials = new URLSearchParams(params);
+  dials.delete('tut');
+  return maybe(tableTutorials.all().find(tutorial => tutorial === params.get('tut')))
     .either(
-      tutorial => hydrated && <Navigate replace to={`${tableTutorials.addressOf(tutorial)}${query ? `?${query}` : ''}`}/>,
+      tutorial => hydrated &&
+        <Navigate replace to={{pathname: tableTutorials.addressOf(tutorial), search: dials.toString(), hash}}/>,
       () => null);
 };

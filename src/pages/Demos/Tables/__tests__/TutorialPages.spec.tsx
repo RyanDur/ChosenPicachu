@@ -146,6 +146,21 @@ describe('a link saved to an old tables tutorial address', () => {
     expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize', '?note=a%26b'));
   });
 
+  test('should keep every value of a key the address repeats', async () => {
+    const old = demosAt('tables', '?tut=resize&col=a&col=b');
+    render(<TestApp at={old}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize', '?col=a&col=b'));
+  });
+
+  test('should keep the place in the page the address points to', async () => {
+    const old = demosAt('tables', '?tut=resize#station-3');
+    render(<TestApp at={old}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize'));
+    expect(appAddress.fragment()).toBe('#station-3');
+  });
+
   test('should stay on the tables tab and its list when it names no tutorial', async () => {
     const old = demosAt('tables', '?tut=scroll');
     render(<TestApp at={old}/>);
