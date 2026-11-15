@@ -26,9 +26,9 @@ describe('the table tutorials', () => {
     const clues = tablesTab().table('the clues');
     expect(clues.columns).toHaveLength(2);
     expect(clues.rows).toHaveLength(5);
-    const layers = tablesTab().table('the layers');
-    expect(layers.columns).toHaveLength(4);
-    expect(layers.rows).toHaveLength(4);
+    const features = tablesTab().table('the features');
+    expect(features.columns).toHaveLength(4);
+    expect(features.rows).toHaveLength(4);
     expect(tablesTab().columnsIn('Sketch a design from the need')).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     const sketch = tablesTab().headersIn('Sketch a design from the need');
     expect(sketch.rows).toHaveLength(5);
@@ -43,7 +43,7 @@ describe('the table tutorials', () => {
     expect(demoPage.sliceLinksLandingNowhere()).toEqual([]);
   });
 
-  test('should head the layers with both their axes', async () => {
+  test('should head the features with both their axes', async () => {
     render(<TestApp at="/"><Tutorials/></TestApp>);
     await demoPage.findTitle('let’s build this feature');
 
