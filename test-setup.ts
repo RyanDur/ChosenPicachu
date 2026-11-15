@@ -43,8 +43,6 @@ Element.prototype.scrollIntoView = () => undefined;
 window.scrollTo = () => undefined;
 Element.prototype.scrollTo = () => undefined;
 HTMLElement.prototype.hidePopover = () => undefined;
-// jsdom has no service worker container, so every page gets one its worker already controls
-Object.defineProperty(navigator, 'serviceWorker', {configurable: true, value: {controller: {}}});
 globalThis.ResizeObserver = class {
   observe(): void {}
   unobserve(): void {}

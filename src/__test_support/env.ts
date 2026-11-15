@@ -14,4 +14,8 @@ window.__environment = {
   feedbackEndpoint: 'https://api.github.com/graphql'
 };
 
+// jsdom has no service worker container; every page gets one its worker already controls, set before the environment
+// reads it at load
+Object.defineProperty(navigator, 'serviceWorker', {configurable: true, value: {controller: {}}});
+
 export {};

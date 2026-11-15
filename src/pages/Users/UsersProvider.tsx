@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router';
 import {Paths} from '@navigation';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {HTTPError, trouble} from '@transport';
+import {useEnvironment} from '@environment';
 import {maybe} from '@ryandur/sand';
 import {usersApi} from './usersApi';
 import {syncing} from './syncing';
@@ -15,6 +16,7 @@ import {usersServing} from './usersServing';
 export const UsersProvider: FC<PropsWithChildren> = ({children}) => {
   const navigate = useNavigate();
   const dispatchBanner = useBannerDispatch();
+  const {workers} = useEnvironment();
   const [store] = useState(() => usersStore(syncing(
     usersApi,
     () => navigate(Paths.users),
@@ -24,7 +26,7 @@ export const UsersProvider: FC<PropsWithChildren> = ({children}) => {
 
   useEffect(() => {
     const unreachableBanner = bannerChange.raised(trouble.with('the users server')(HTTPError.NETWORK_ERROR));
-    const stopWatching = usersServing.reach(maybe(navigator.serviceWorker), {
+    const stopWatching = usersServing.reach(maybe(workers), {
       reached: () => {
         dispatchBanner(bannerChange.withdrawn(unreachableBanner.banner.message));
         store.dispatch(usersActions.opened());
@@ -38,7 +40,7 @@ export const UsersProvider: FC<PropsWithChildren> = ({children}) => {
       stopWatching();
       dispatchBanner(bannerChange.lowered(unreachableBanner.banner.id));
     };
-  }, [store, dispatchBanner]);
+  }, [store, dispatchBanner, workers]);
 
   return <usersContexts.State.Provider value={{state, dispatch: store.dispatch}}>
     {children}
