@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Outlet, useLocation} from 'react-router';
 import {Maybe, maybe} from '@ryandur/sand';
-import {Header, Listing, Page, PageError} from '@page';
+import {Header, Listing, Main, PageError} from '@page';
 import {Room as NoSuchRoom} from '@pages/NoRoom';
 import names from '@navigation/names.json';
 import {DemoTopics} from './demo-topics';
@@ -27,8 +27,8 @@ const DemoHeader: FC = () => useShownDemo().either(
   ({title, listed}) => <Header title={title} listed={listed}/>,
   () => null);
 
-export const ErrorBoundary: FC = () => <Page header={<DemoHeader/>}><PageError/></Page>;
+export const ErrorBoundary: FC = () => <><DemoHeader/><Main><PageError/></Main></>;
 
 export const Room: FC = () => useShownDemo().either(
-  ({topic}) => <Page header={<DemoHeader/>}><Trading><DemosPage topic={topic}><Outlet/></DemosPage></Trading></Page>,
+  ({topic}) => <><DemoHeader/><Main><Trading><DemosPage topic={topic}><Outlet/></DemosPage></Trading></Main></>,
   () => <NoSuchRoom/>);

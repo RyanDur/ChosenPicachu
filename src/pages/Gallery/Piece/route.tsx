@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {maybe} from '@ryandur/sand';
 import {Paths} from '@navigation';
-import {Header, Listing, Page} from '@page';
+import {Header, Listing, Main} from '@page';
 import {useArtPiece} from '@pages/Gallery/ArtPiece/Context';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {Search} from '@pages/Gallery/Search';
@@ -29,5 +29,6 @@ export const ErrorBoundary = GalleryError;
 
 export const Room: FC = () =>
   <GalleryProviders gallery={Paths.artGallery}>
-    <Page header={<PieceHeader/>}><ArtGalleryPiecePage/></Page>
+    <PieceHeader/>
+    <Main><ArtGalleryPiecePage/></Main>
   </GalleryProviders>;

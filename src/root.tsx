@@ -4,7 +4,7 @@ import {FC, PropsWithChildren} from 'react';
 import './index.css';
 import './BasePage.css';
 import {environment} from '@transport';
-import {Frame, Header, Page, PageError} from '@page';
+import {CenteredMain, Frame, Header, PageError} from '@page';
 import names from '@navigation/names.json';
 import {SiteProviders} from './SiteProviders';
 
@@ -35,9 +35,10 @@ export const Layout: FC<PropsWithChildren> = ({children}) =>
 
 export const ErrorBoundary: FC = () =>
   <BannerProvider>
-    <Page header={<Header title="Closed site" listed={names.closedSite}/>} inView={false}>
+    <Header title="Closed site" listed={names.closedSite}/>
+    <CenteredMain>
       <PageError>Part of the frame around every page broke, so no page can open right now.</PageError>
-    </Page>
+    </CenteredMain>
     <Banners/>
   </BannerProvider>;
 

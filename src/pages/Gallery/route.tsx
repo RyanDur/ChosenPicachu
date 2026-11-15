@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Paths} from '@navigation';
-import {Page} from '@page';
+import {Footer, Main} from '@page';
 import {GalleryProviders} from '@pages/Gallery/Providers';
 import {GalleryAside} from '@pages/Gallery/Settings';
 import {GalleryNav} from '@pages/Gallery/Nav';
@@ -12,7 +12,8 @@ export const ErrorBoundary = GalleryError;
 
 export const Room: FC = () =>
   <GalleryProviders gallery={Paths.artGallery}>
-    <Page header={<GalleryHeader/>} filters={<GalleryAside/>} footer={<GalleryNav id="gallery-nav"/>}>
-      <ArtGalleryPage/>
-    </Page>
+    <GalleryHeader/>
+    <GalleryAside/>
+    <Main><ArtGalleryPage/></Main>
+    <Footer><GalleryNav id="gallery-nav"/></Footer>
   </GalleryProviders>;

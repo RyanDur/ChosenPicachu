@@ -1,10 +1,10 @@
 import {FC} from 'react';
-import {Header, Page, PageError} from '@page';
+import {CenteredMain, Header, PageError} from '@page';
 import {UsersPage} from './UsersPage';
 import names from '@navigation/names.json';
 
 const header = <Header title="Users" listed={names.users}/>;
 
-export const ErrorBoundary: FC = () => <Page header={header} inView={false}><PageError/></Page>;
+export const ErrorBoundary: FC = () => <>{header}<CenteredMain><PageError/></CenteredMain></>;
 
-export const Room: FC = () => <Page header={header} inView={false}><UsersPage/></Page>;
+export const Room: FC = () => <>{header}<CenteredMain><UsersPage/></CenteredMain></>;

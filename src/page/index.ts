@@ -1,7 +1,9 @@
+export {CenteredMain} from './CenteredMain';
 export {ClosedRoom} from './ClosedRoom';
 export {FallbackPage} from './FallbackPage';
+export {Footer} from './Footer';
 export {Frame} from './Frame';
 export {Header, type Listing} from './Header';
-export {Page} from './Page';
+export {Main} from './Main';
 export {PageError} from './PageError';
 export {WaitingRoom} from './WaitingRoom';
