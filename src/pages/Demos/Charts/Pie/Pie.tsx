@@ -1,6 +1,6 @@
 import {has} from '@ryandur/sand';
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode, useId} from 'react';
+import {FC, PropsWithChildren, useId} from 'react';
 import {classNames} from '@components';
 import {liveTrades, marketReads} from '../../Market';
 import {useMarketRead} from '../../Market/Trading';
@@ -18,11 +18,7 @@ const HALF = `M 0 0 L 0 ${-RADIUS} A ${RADIUS} ${RADIUS} 0 0 1 0 ${RADIUS} Z`;
 
 const sides = ['bought', 'sold'] as const;
 
-type Props = {
-  actions?: ReactNode;
-};
-
-export const Pie: FC<Props> = ({actions}) => {
+export const Pie: FC<PropsWithChildren> = ({children}) => {
   const trades = useMarketRead(marketReads.liveTrades);
   const heading = `heading${useId()}`;
   const totals = pieShapes.sideTotals(trades);
@@ -30,7 +26,7 @@ export const Pie: FC<Props> = ({actions}) => {
   return <section aria-labelledby={heading} className="pie chart card rounded-corners lifted padded">
     <h3 id={heading} className="off-screen">pie</h3>
     <header className="chart-header">
-      {actions}
+      {children}
     </header>
     <figure className="chart-stage paper-veiled-before">
       <svg className="split" aria-hidden="true" viewBox={`0 0 ${SIZE} ${SIZE + DEPTH}`}>

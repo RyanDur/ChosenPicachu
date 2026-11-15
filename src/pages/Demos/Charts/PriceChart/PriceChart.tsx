@@ -1,5 +1,5 @@
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode, useId} from 'react';
+import {FC, PropsWithChildren, useId} from 'react';
 import {Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components';
@@ -42,10 +42,9 @@ const trendOf = ({first, last}: PriceView): 'rising' | 'falling' => last >= firs
 
 type Props = {
   id?: string;
-  actions?: ReactNode;
 };
 
-export const PriceChart: FC<Props> = ({id: given, actions}) => {
+export const PriceChart: FC<PropsWithChildren<Props>> = ({id: given, children}) => {
   const trades = useMarketRead(marketReads.liveTrades);
   const generated = useId();
   const id = given ?? `price${generated}`;
@@ -61,7 +60,7 @@ export const PriceChart: FC<Props> = ({id: given, actions}) => {
     className={classNames('price-chart chart card rounded-corners lifted padded', side, trend)}>
     <h3 id={`${id}-heading`} className="off-screen">live trades</h3>
     <header className="chart-header">
-      {actions}
+      {children}
       <PeriodMenu id={`${id}-period`} kind="price"/>
     </header>
     <figure className="chart-stage paper-veiled-before">

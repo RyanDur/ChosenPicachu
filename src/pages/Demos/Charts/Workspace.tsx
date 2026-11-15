@@ -83,9 +83,8 @@ export const Workspace: FC<Props> = ({product}) => {
             </Menu>
           </>}
     </header>
-    <ol className="chart-list" aria-label="charts">{seats.map(({kind}, at) => {
-      const actions = plural ? <Dismissal onRemoved={pressed => removed(at, pressed)}/> : undefined;
-      return <li key={kind}
+    <ol className="chart-list" aria-label="charts">{seats.map(({kind}, at) =>
+      <li key={kind}
         className={dress(at)}
         onAnimationEnd={settled}
         draggable={isArmed(at)}
@@ -98,13 +97,12 @@ export const Workspace: FC<Props> = ({product}) => {
         </Link>
         {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
         {chartKinds.match(kind, {
-          price: () => <PriceChart id={`chart-${kind}`} actions={actions}/>,
-          candles: () => <Candles id={`chart-${kind}`} actions={actions}/>,
-          pressure: () => <Pressure actions={actions}/>,
-          pie: () => <Pie actions={actions}/>
+          price: () => <PriceChart id={`chart-${kind}`}>{plural && <Dismissal onRemoved={pressed => removed(at, pressed)}/>}</PriceChart>,
+          candles: () => <Candles id={`chart-${kind}`}>{plural && <Dismissal onRemoved={pressed => removed(at, pressed)}/>}</Candles>,
+          pressure: () => <Pressure>{plural && <Dismissal onRemoved={pressed => removed(at, pressed)}/>}</Pressure>,
+          pie: () => <Pie>{plural && <Dismissal onRemoved={pressed => removed(at, pressed)}/>}</Pie>
         }).orNull()}
-      </li>;
-    })}
+      </li>)}
     </ol>
   </>;
 };

@@ -1,6 +1,6 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC, useId} from 'react';
-import {DemoTopics} from '../demo-topics';
+import {DemoTopics} from '@pages/Demos';
 import {Codes, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../Recipe';
 import {AThirdFromThePointer} from './Diagrams';
 import workspaceSource from './Workspace.tsx?sample';
@@ -134,7 +134,7 @@ const WorkspaceStory: FC = () =>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(workspaceSource, 'const plural'), lines.blank,
-            ...carve.unit(workspaceSource, 'const actions')
+            ...carve.span(workspaceSource, '{chartKinds.match(kind, {', '}).orNull()}')
           ]}/>
         </Codes>
       </Step>
