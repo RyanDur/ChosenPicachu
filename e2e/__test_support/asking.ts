@@ -13,8 +13,8 @@ export const whichCardIsOnTop = (page: Page) => {
     readInOrder: async (): Promise<string[]> => {
       const read = await part.ariaSnapshot();
       const opened = read.indexOf(`- group "${summary}"`);
-      const marks = {
-        question: read.indexOf('- paragraph'),
+      const marks = opened < 0 ? {} : {
+        question: read.lastIndexOf('- paragraph', opened),
         answer: read.indexOf('- paragraph', opened),
         drawing: read.indexOf('- figure', opened)
       };
