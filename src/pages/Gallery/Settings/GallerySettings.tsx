@@ -19,7 +19,7 @@ const Readout: FC = () => {
 export const GallerySettings: FC = () => <>
   <Search className="header-settings settings-standing"/>
   <details className="header-settings settings-fold disclosure" aria-label="gallery settings">
-    <summary className="prompt"><Readout/></summary>
+    <summary className="opener"><Readout/></summary>
     <Search/>
     <PageControl/>
   </details>
