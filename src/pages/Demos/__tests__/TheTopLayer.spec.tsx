@@ -11,14 +11,26 @@ import {siteBanners, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 beforeEach(() => seed('top-layer'));
 
 describe('the top layer', () => {
-  test('the z-index tab opens on its five parts, in order, in the heading outline', async () => {
+  test('the z-index tab opens on its six parts, in order, in the heading outline', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');
 
     const tab = await demoTabs.arrivedOn('Z-index');
 
-    expect(explanation.partTitles(tab).slice(0, 5))
-      .toEqual(['Why Third is on top', 'Why 9999 still loses', 'What else forms a stacking context', 'Why the popover wins', 'Why a fixed banner still loses']);
+    expect(explanation.partTitles(tab).slice(0, 6)).toEqual([
+      'Why Third is on top', 'Why 9999 still loses', 'What else forms a stacking context', 'Why the popover wins',
+      'Why a fixed banner still loses', 'Which card is on top?'
+    ]);
+  });
+
+  test('the question of which card is on top keeps its answer closed until the reader asks for it', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+    const answer = await zIndexTab.findAnswer('show the answer');
+    expect(answer).not.toHaveAttribute('open');
+
+    await zIndexTab.askForTheAnswer('show the answer');
+
+    expect(answer).toHaveAttribute('open');
   });
 
   test('the user raises a banner from the demo', async () => {

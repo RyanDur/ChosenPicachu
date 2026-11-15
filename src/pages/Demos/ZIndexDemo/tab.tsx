@@ -8,6 +8,7 @@ import {PopoverExplained} from './PopoverExplained';
 import {StackingExplained} from './Explained';
 import {TopLayerTutorial} from './Tutorial';
 import {ZIndexIntroduction} from './Introduction';
+import {WhichCardIsOnTop} from './WhichCardIsOnTop';
 
 const usePlacingTheBanners = (): void => {
   const {side, align, enter, stack} = useControls();
@@ -28,6 +29,7 @@ export const Room: FC = () => {
     <FormsContextExplained/>
     <PopoverExplained/>
     <BannerExplained/>
+    <WhichCardIsOnTop/>
     <TopLayerTutorial/>
   </>;
 };

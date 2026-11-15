@@ -1,7 +1,7 @@
 import {Page, expect} from '@playwright/test';
 import {maybe} from '@ryandur/sand';
 import {test} from './__test_support/journey';
-import {type Card, stackingPile} from './__test_support';
+import {type Card, siteFrame, stackingPile, whichCardIsOnTop} from './__test_support';
 
 test('the z-index cards start in a stack, the button spreads them, and pressing it again stacks them', async ({page}) => {
   await page.goto('demos/z-index/');
@@ -54,4 +54,16 @@ test('Second raised while the pile is spread comes down on top when it is collap
   await pile.collapse();
 
   await expect.poll(() => pile.cardsFromTheTop()).toEqual(['Second', 'Third', 'First']);
+});
+
+test('the reader asks for the answer to which card is on top from the keyboard, and hears the question, the answer, then the drawing', async ({page}) => {
+  const asking = whichCardIsOnTop(page);
+  await page.goto('demos/z-index/');
+  await siteFrame(page).hydrated();
+  await expect(asking.answer).toBeHidden();
+
+  await asking.askFromTheKeyboard();
+
+  await expect(asking.answer).toBeVisible();
+  expect(await asking.readInOrder()).toEqual(['question', 'answer', 'drawing']);
 });

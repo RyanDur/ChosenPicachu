@@ -12,6 +12,9 @@ export const zIndexTab = {
   choose: async (controls: HTMLElement, dial: string, option: string): Promise<void> =>
     userEvent.click(within(within(controls).getByRole('group', {name: dial})).getByRole('radio', {name: option})),
   readingOf,
+  findAnswer: (summary: string): Promise<HTMLElement> => screen.findByRole('group', {name: summary}),
+  askForTheAnswer: async (summary: string): Promise<void> =>
+    userEvent.click(within(screen.getByRole('group', {name: summary})).getByText(summary)),
   findExpand,
   expandCards: async (): Promise<void> => userEvent.click(await findExpand()),
   collapseOnOffer: (): HTMLElement => screen.getByRole('button', {name: 'Collapse', expanded: true}),
