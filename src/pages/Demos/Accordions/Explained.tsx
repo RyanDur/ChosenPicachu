@@ -1,7 +1,7 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
 import {classNames} from '@components';
-import {DemoTopics} from '../demo-topics';
+import {DemoTopics} from '@pages/Demos';
 import {DialGroup, FoldType, useControls} from '../Controls';
 import {FoldMotionDial} from './FoldMotionDial';
 import {FoldTypeDial} from './FoldTypeDial';

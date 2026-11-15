@@ -1,6 +1,6 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
-import {DemoTopics} from '../demo-topics';
+import {DemoTopics} from '@pages/Demos';
 
 export const ZIndexIntroduction: FC = () =>
   <header className="tab-introduction">

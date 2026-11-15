@@ -1,7 +1,6 @@
 import {FC} from 'react';
 import {Navigate, useParams} from 'react-router';
-import {DemoTopics} from '../demo-topics';
-import {demoTab} from '../demo-tab';
+import {DemoTopics, demoTab} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
