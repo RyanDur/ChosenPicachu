@@ -11,6 +11,8 @@ const inDocumentOrder = (first: HTMLElement, second: HTMLElement): number =>
   first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
 
 export const landmarks = {
+  arrived: (): Promise<HTMLElement> => screen.findByRole('main'),
+  footerArrived: (): Promise<HTMLElement> => screen.findByRole('contentinfo'),
   ofTheFrame: (): Landmark[] => roles
     .flatMap(role => screen.queryAllByRole(role).filter(ofTheFrame).map(element => ({role, element})))
     .sort((one, other) => inDocumentOrder(one.element, other.element))
