@@ -19,7 +19,7 @@ import {
   ListenersOnce,
   OrderInState,
   OwnedPixels,
-  Promises,
+  TableGuarantees,
   QuietDials,
   CarryVertical,
   StaticMotion,
@@ -50,7 +50,7 @@ export const EagerRecipe: FC = () => {
         <TheWholeBuild tableSource={tableSource} buildSource={buildSource}/>
         <AgainstTheStream/>
         <OwnedPixels/>
-        <Promises/>
+        <TableGuarantees/>
         <Steps>
           <CssShare/>
           <OrderInState tableSource={tableSource} buildSource={buildSource}/>
