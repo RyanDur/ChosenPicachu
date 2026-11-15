@@ -201,7 +201,7 @@ describe('the sortable list demo', () => {
     expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
     const steps = recipeFolds.steps(recipeFolds.story(recipe, 'The user can arrange the list by hand'));
     expect(explanation.linkNamed(steps[steps.length - 1], /Tables demo/))
-      .toHaveAttribute('href', '/demos/tables/');
+      .toHaveAttribute('href', '/demos/tables/?native=sort');
   });
 
   const byHandStoryDialledLazyKeep = async (): Promise<HTMLElement> => {
@@ -292,7 +292,7 @@ describe('the links to other tabs', () => {
 
     const slideStep = recipeFolds.stepHeaded(story, 'Slide the crossed item into place');
 
-    expect(explanation.linkNamed(slideStep, 'custom property')).toHaveAttribute('href', `${Paths.demos}accordions/`);
+    expect(explanation.linkNamed(slideStep, 'custom property')).toHaveAttribute('href', `${Paths.demos}accordions/?native=sort`);
   });
 
   test('should link each term it glosses, and each tab it names, to that tab', async () => {

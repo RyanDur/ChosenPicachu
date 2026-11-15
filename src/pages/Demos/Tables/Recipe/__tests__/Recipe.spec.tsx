@@ -41,7 +41,7 @@ describe('the drag sort recipe', () => {
 
     await recipeFolds.press(recipe, 'The trader can sort by column');
 
-    expect((await tablesTab().linksIn('drag sort', /Drag sort list demo/))[0]).toHaveAttribute('href', '/demos/drag-and-drop/');
+    expect((await tablesTab().linksIn('drag sort', /Drag sort list demo/))[0]).toHaveAttribute('href', '/demos/drag-and-drop/?sort=column');
     expect((await tablesTab().linksIn('drag sort', 'the implementation'))[0]).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/tree/main/src/pages/Demos/Tables/Builds/EagerTable');
     expect((await tablesTab().linksIn('drag sort', 'insertBefore'))[0]).toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore'));
   });
