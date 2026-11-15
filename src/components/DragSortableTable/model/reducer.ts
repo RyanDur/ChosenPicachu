@@ -34,7 +34,7 @@ const motion = (state: TableState, action: TableAction): TableState => {
       if (action.type !== 'columnWalkedTo') {
         return shoved;
       }
-      const over = survey.spanCrossed(order, action.widths, from, to);
+      const over = survey.distanceCrossed(order, action.widths, from, to);
       return tableState.unsettle(shoved, {axis: 'column', held: action.name}, tableState.settlingFromSeat({x: to > from ? -over : over, y: 0}));
     }
     case 'rowMovedBeside':
@@ -47,7 +47,7 @@ const motion = (state: TableState, action: TableAction): TableState => {
       if (action.type !== 'rowWalkedTo') {
         return shoved;
       }
-      const over = survey.spanCrossed(standing, action.heights, from, to);
+      const over = survey.distanceCrossed(standing, action.heights, from, to);
       return tableState.unsettle(shoved, {axis: 'row', held: action.row}, tableState.settlingFromSeat({x: 0, y: to > from ? -over : over}));
     }
     default: return state;
