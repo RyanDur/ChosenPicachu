@@ -324,7 +324,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
               <summary id="measured-depth" className="opener bold">How this site does it</summary>
               <p className="paragraph">This site builds the same fold in React, and the runs below say what React and
                 state are as they come. What changes is the shape. The plain script listens for the press; the React
-                build redraws the panel from what it holds, so the measuring runs in two steps React takes before the
+                build redraws the panel from its state, so the measuring runs in two steps React takes before the
                 browser paints: the first pins where the motion starts, and the second sets where it ends.</p>
               <Measured className={exhibitMoving} folds={foldLists.measured[type]}/>
               <ol className="runs">
@@ -334,9 +334,15 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 </li>}
                 <li className="run">
                   <p className="paragraph">React, the library this site’s script is written in, keeps what it knows in
-                    state. State is a value a component holds and draws from. Here it is whether a fold is open, and,
-                    while it moves, first the height the motion starts from, then the height it ends at, and whether it
-                    has started. The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says more about state.</p>
+                    state. State is a value React keeps between draws and draws the page from. Which folds are open is
+                    the accordion’s state. The accordion holds it and hands it to every panel inside through a context,
+                    a value a component makes readable to everything it contains, and each panel reads from there
+                    whether its own fold is open. A panel also holds state of its own: whether it is shown, and, while
+                    it moves, the height the motion starts from, the height it ends at, and whether it has started. Both
+                    are kept with a reducer, a function that takes the state and a named change, called an action, and
+                    returns the next state. A component sends an action
+                    with <code className="monospaced">dispatch</code> and never sets the state itself.
+                    The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says more about state.</p>
                   <Snippet label="TS" lines={[
                     ...carve.unit(panelSource, 'type Motion ='), lines.blank,
                     ...carve.unit(panelSource, 'type Panel ='), lines.blank,
@@ -358,8 +364,11 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 <li className="run">
                   <p className="paragraph">The script makes the moves in two layout effects, code React runs after it
                     has updated the elements and before the browser paints them. The first answers a press by pinning
-                    where the motion starts. The second, once that start is on the page, sets where it ends. So the
-                    script measures the panel and pins its start with no frame showing in between.</p>
+                    where the motion starts. The second, once that start is on the page, sets where it ends. The press,
+                    the pinned start and the settled end are
+                    actions, <code className="monospaced">pressed</code>, <code className="monospaced">pinned</code> and <code className="monospaced">settled</code>,
+                    and the reducer, <code className="monospaced">nextPanel</code>, makes the panel’s next state from
+                    each. So the script measures the panel and pins its start with no frame showing in between.</p>
                   <Snippet label="TS" lines={[
                     ...carve.unit(panelSource, 'const motionOnPress'), lines.blank,
                     ...carve.unit(panelSource, 'const panelChange = {'), lines.blank,
@@ -407,8 +416,9 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 {type === 'exclusive' && <li className="run">
                   <p className="paragraph">A radio that loses its check gets no event at all. The change event the
                     pressed radio gets rises from it through the elements around it, which is called bubbling. The list
-                    item around the radio handles it by recording its own title in React state as the open one, and the
-                    fold whose title is no longer the open one closes from that state.</p>
+                    item around the radio handles it by dispatching <code className="monospaced">opened</code> with the bar
+                    that names its fold. The accordion’s reducer keeps that one fold open and closes the rest, and each
+                    panel reads from the context whether its fold is still the open one.</p>
                   <Snippet label="TS" lines={[
                     ...carve.span(exclusiveMeasuredAccordionSource, 'const [open, dispatch] = useReducer(', 'const [open, dispatch] = useReducer('), lines.blank,
                     ...carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={title} onChange={() => dispatch(', '<MeasuredPanel namedBy={barOf(id)}>')
