@@ -19,7 +19,7 @@
     }
 
     &::before {
-      content: "▸";
+      content: "▸" / "";
       transition: rotate 0.2s;
     }
   }
