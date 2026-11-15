@@ -1,5 +1,5 @@
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode, useId} from 'react';
+import {FC, PropsWithChildren, useId} from 'react';
 import {periodHistory} from '../../Market';
 import {candleShapes} from './candle-shapes';
 import {chartCaption} from '../chart-caption';
@@ -21,10 +21,9 @@ const VOLUME_HEIGHT = 24;
 
 type Props = {
   id?: string;
-  actions?: ReactNode;
 };
 
-export const Candles: FC<Props> = ({id: given, actions}) => {
+export const Candles: FC<PropsWithChildren<Props>> = ({id: given, children}) => {
   const generated = useId();
   const id = given ?? `candles${generated}`;
   const {period, fetchedPast, bucketMilliseconds, candles} = useShownCandles('candles');
@@ -38,7 +37,7 @@ export const Candles: FC<Props> = ({id: given, actions}) => {
   return <section aria-labelledby={`${id}-heading`} className="candles chart card rounded-corners lifted padded">
     <h3 id={`${id}-heading`} className="off-screen">candles</h3>
     <header className="chart-header">
-      {actions}
+      {children}
       <PeriodMenu id={`${id}-period`} kind="candles"/>
     </header>
     <figure className="chart-stage paper-veiled-before">

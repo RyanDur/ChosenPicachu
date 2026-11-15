@@ -1,5 +1,5 @@
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode, useId} from 'react';
+import {FC, PropsWithChildren, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {liveTrades, marketReads, money, Period, periods} from '../../Market';
 import {useMarketRead} from '../../Market/Trading';
@@ -15,11 +15,7 @@ const CHART_HEIGHT = 104;
 const BUCKET_MILLISECONDS = periods.bucketMilliseconds[Period.hour];
 const MOST_BUCKETS_SHOWN = 60;
 
-type Props = {
-  actions?: ReactNode;
-};
-
-export const Pressure: FC<Props> = ({actions}) => {
+export const Pressure: FC<PropsWithChildren> = ({children}) => {
   const trades = useMarketRead(marketReads.liveTrades);
   const heading = `heading${useId()}`;
   const pressures = pressureShapes.buckets(trades, BUCKET_MILLISECONDS).slice(-MOST_BUCKETS_SHOWN);
@@ -28,7 +24,7 @@ export const Pressure: FC<Props> = ({actions}) => {
   return <section aria-labelledby={heading} className="pressure chart card rounded-corners lifted padded">
     <h3 id={heading} className="off-screen">pressure</h3>
     <header className="chart-header">
-      {actions}
+      {children}
     </header>
     <figure className="chart-stage paper-veiled-before">
       <Axes extent={axisRange.of(pressures.map(pressure => pressure.openedAt), peak, -peak)} scaleText={money.bitcoin}
