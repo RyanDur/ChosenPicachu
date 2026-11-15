@@ -43,16 +43,16 @@ const of = (
 const deadZone = (struckSize: number, aloftSize: number): number =>
   Math.max(struckSize / 4, (struckSize - aloftSize) / 2);
 
-type Stretch<Identity> = {holds: Identity; at: number; size: number; start: number; end: number};
+type MeasuredSeat<Identity> = {holds: Identity; at: number; size: number; start: number; end: number};
 
 const struckPast = <Identity>(
-  stretches: readonly Stretch<Identity>[],
+  measuredSeats: readonly MeasuredSeat<Identity>[],
   home: number,
   pointerAt: number
 ): Identity | undefined => {
-  const struck = stretches.find(({end}) => pointerAt < end);
+  const struck = measuredSeats.find(({end}) => pointerAt < end);
   if (has(struck) && struck.at !== home) {
-    const held = deadZone(struck.size, stretches[home]?.size ?? 0);
+    const held = deadZone(struck.size, measuredSeats[home]?.size ?? 0);
     return (struck.at < home ? pointerAt < struck.end - held : pointerAt > struck.start + held)
       ? struck.holds
       : undefined;
@@ -65,12 +65,12 @@ const columnUnder = (order: readonly string[], bounds: Bounds) =>
     if (y >= bounds.top && y <= bounds.top + bounds.height) {
       let edge = bounds.left;
       const total = order.reduce((sum, name) => sum + (bounds.columnWidths[name] ?? 0), 0) || 1;
-      const stretches = order.map((column, at) => {
+      const measuredSeats = order.map((column, at) => {
         const size = (bounds.columnWidths[column] ?? 0) / total * bounds.width;
         edge += size;
         return {holds: column, at, size, start: edge - size, end: edge};
       });
-      return struckPast(stretches, order.indexOf(aloft), x);
+      return struckPast(measuredSeats, order.indexOf(aloft), x);
     }
     return undefined;
   };
@@ -93,12 +93,12 @@ const rowUnder = (seats: readonly string[], bounds: Survey) =>
       const {top, height, rowHeights} = bounds;
       let edge = top + height -
                 seats.reduce((total, row) => total + rowHeights[row], 0);
-      const stretches = seats.map((row, at) => {
+      const measuredSeats = seats.map((row, at) => {
         const size = rowHeights[row];
         edge += size;
         return {holds: row, at, size, start: edge - size, end: edge};
       });
-      return struckPast(stretches, seats.indexOf(aloft), y);
+      return struckPast(measuredSeats, seats.indexOf(aloft), y);
     }
     return undefined;
   };
