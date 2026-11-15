@@ -1,4 +1,5 @@
-import {screen, within} from '@testing-library/react';
+import {isInaccessible, screen, within} from '@testing-library/react';
+import {not} from '@ryandur/sand';
 import userEvent from '@testing-library/user-event';
 import {computeAccessibleName} from 'dom-accessibility-api';
 import {readingOf} from '@pages/Demos/Controls/__test_support/reading';
@@ -14,6 +15,8 @@ export const tableControls = {
   readout: (table: string): Promise<HTMLElement> => screen.findByText(table, {}, untilTheTablesTabRenders),
   reading: async (dial: string): Promise<HTMLElement> => readingOf(await region(), dial),
   axes: async (): Promise<string[]> => within(await region()).getAllByRole('group').map(axis => computeAccessibleName(axis)),
+  timesSaid: async (words: string): Promise<number> =>
+    within(await region()).getAllByText(words).filter(said => not(isInaccessible(said))).length,
   radios: async (): Promise<string[]> => within(await region()).getAllByRole('radio').map(radio => computeAccessibleName(radio)),
   radio: async (name: string): Promise<HTMLElement> => within(await region()).getByRole('radio', {name}),
   choose: async (...choices: string[]): Promise<void> => {
