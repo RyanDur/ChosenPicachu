@@ -1,15 +1,16 @@
 import {FC} from 'react';
-import {Navigate, useHref, useSearchParams} from 'react-router';
+import {Navigate, useHref, useLocation, useSearchParams} from 'react-router';
 import {useHydrated} from '@components';
-import {queryString} from '@transport';
 
 export const ToSavedTab: FC<{addressOf: (tab?: string) => string}> = ({addressOf}) => {
   const [params] = useSearchParams();
-  const {tab, ...dials} = Object.fromEntries(params);
+  const {hash} = useLocation();
   const first = useHref(addressOf());
   const hydrated = useHydrated();
+  const dials = new URLSearchParams(params);
+  dials.delete('tab');
   return <>
     <noscript><meta httpEquiv="refresh" content={`0; url=${first}`}/></noscript>
-    {hydrated && <Navigate replace to={`${addressOf(tab)}${queryString.from(dials)}`}/>}
+    {hydrated && <Navigate replace to={{pathname: addressOf(params.get('tab') ?? undefined), search: dials.toString(), hash}}/>}
   </>;
 };
