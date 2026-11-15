@@ -106,7 +106,7 @@ const rowUnder = (seats: readonly string[], bounds: Survey) =>
 const displacedBetween = <Seat>(seats: readonly Seat[], from: number, to: number): Seat[] =>
   seats.slice(Math.min(from, to), Math.max(from, to) + 1).filter((_seat, at) => at !== from - Math.min(from, to));
 
-const spanCrossed = <Seat extends string | number>(
+const distanceCrossed = <Seat extends string | number>(
   seats: readonly Seat[],
   sizes: Readonly<Partial<Record<Seat, number>>>,
   from: number,
@@ -141,7 +141,7 @@ export const survey = {
   rowTop,
   rowUnder,
   displacedBetween,
-  spanCrossed,
+  distanceCrossed,
   anchored,
   nudgedColumn,
   nudgedRow,
