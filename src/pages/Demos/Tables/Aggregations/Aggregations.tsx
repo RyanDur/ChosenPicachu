@@ -1,5 +1,5 @@
 import {Explainer} from '@components/Explainer';
-import {FC, useEffect, useState} from 'react';
+import {FC, useEffect} from 'react';
 import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
 import {Dials, useControls} from '../../Controls';
@@ -20,14 +20,6 @@ const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
     onRowMoved={({row, to, standing}) => dispatch(arrangements.rowMoved(row, to, standing))}/>;
 };
 
-const VanillaStage: FC<Dials> = dials => {
-  const [stage, setStage] = useState<'framing' | 'framed'>('framing');
-  return <>
-    <TableFrame {...dials} concealed={stage === 'framing'} onStood={() => setStage('framed')}/>
-    {stage === 'framing' && <LiveTable {...dials}/>}
-  </>;
-};
-
 export const Aggregations: FC = () => {
   const {pace, origin, motion, world} = useControls();
   const dials = {pace, origin, motion};
@@ -35,7 +27,7 @@ export const Aggregations: FC = () => {
 
   return <section aria-label="live aggregations" className="aggregations card rounded-corners lifted padded contained">
     {world === 'vanilla'
-      ? <VanillaStage {...dials}/>
+      ? <TableFrame {...dials}><LiveTable {...dials}/></TableFrame>
       : <LiveTable {...dials}/>}
     <Explainer>
       The stream folded into lookbacks, stretches of time measured back from the newest trade, one column per
