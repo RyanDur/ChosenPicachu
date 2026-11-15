@@ -1,5 +1,5 @@
 import {empty} from '@ryandur/sand';
-const limit = 120;
+export const limit = 120;
 
 /** A value wrapped onto its own line after `=` that would fit on the line before it. */
 /** @type {import('eslint').Rule.RuleModule} */
