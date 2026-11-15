@@ -11,8 +11,7 @@ const lieProposal = 'https://www.w3.org/People/howcome/p/cascade.html';
 
 export const ZenGarden: FC = () =>
   <Moment heading={moments.headings.zenGarden}>
-    <MomentSummary>Dave Shea published{' '}
-      <a className="signpost" href={cssZenGarden}>one HTML document</a> and invited the world to
+    <MomentSummary>Dave Shea published <a className="signpost" href={cssZenGarden}>one HTML document</a> and invited the world to
       restyle it. Hundreds of designs followed, and not one change to the markup: the same structure under any
       presentation.</MomentSummary>
     <FullerStory>
