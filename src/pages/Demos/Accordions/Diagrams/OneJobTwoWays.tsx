@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Arrow, Box, Diagram, Label, Part} from '../../Recipe/Drawing';
-import {FoldInput} from '../fold-type';
+import {FoldInput} from '../fold-input';
 import './Diagrams.css';
 
 export const OneJobTwoWays: FC<{input: FoldInput}> = ({input}) =>

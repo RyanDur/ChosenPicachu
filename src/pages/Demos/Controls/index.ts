@@ -2,6 +2,7 @@ export type {Copy, Dials} from './Controls';
 export type {Motion, Origin, Pace, World} from './useControls';
 export {Controls} from './Controls';
 export {useControls} from './useControls';
+export type {FoldMotion, FoldType} from './useControls';
 export {DialGroup} from './DialGroup';
 export {DialRow} from './DialRow';
 export {PaceDial} from './PaceDial';
