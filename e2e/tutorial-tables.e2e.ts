@@ -15,5 +15,5 @@ test.describe('a phone', () => {
 
   test('passes over the clues on the drag-and-drop tab with the Tab key', ({page}) => tabPassesOver(page, 'drag-and-drop', 'the clues'));
 
-  test('passes over the layers on the tables tab with the Tab key', ({page}) => tabPassesOver(page, 'tables', 'the layers'));
+  test('passes over the features on the tables tab with the Tab key', ({page}) => tabPassesOver(page, 'tables', 'the features'));
 });
