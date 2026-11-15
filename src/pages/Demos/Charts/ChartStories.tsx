@@ -204,7 +204,7 @@ const CandlesStory: FC = () =>
     <Steps>
       <Step title="Make the candles the way the price line does">
         <Words want="A second chart must not mean a second version of the market. Two charts of the same trades have to agree.">
-          <Says>The page has one live feed and gives every chart the same trades. This chart groups them into candles
+          <Says>Every chart reads the same trades from the market. This chart groups them into candles
             with bucketTrades and joins the fetched past with mergeLive, the same two functions the price line
             uses.</Says>
           <Says>The price line takes one price from each candle, its close. This chart draws all of it.</Says>
