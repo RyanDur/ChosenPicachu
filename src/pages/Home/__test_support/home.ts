@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 const openerLinkElements = (): HTMLElement[] => within(screen.getByRole('article')).getAllByRole('link');
 
 export const homePage = {
-  arrived: (): Promise<HTMLElement> => screen.findByRole('article'),
+  arrived: (): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name: 'The three languages'}),
   openerLinks: (): (string | null)[][] => openerLinkElements()
     .map(link => [link.textContent, link.getAttribute('href')]),
   followOpenerLink: (name: string): Promise<void> => {
