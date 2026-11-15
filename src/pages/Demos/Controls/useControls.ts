@@ -16,13 +16,16 @@ export type Settings = Placement & {
   motion: Motion;
   world: World;
   track: Track;
-  type: FoldType;
-  style: FoldMotion;
+  foldType: FoldType;
+  foldMotion: FoldMotion;
 };
 
 export type Controls = Settings & {change: (next: Partial<Settings>) => void};
 
-const decoders: {[K in keyof Settings]: schema.Decoder<Settings[K]>} = {
+// links saved before the fold settings had their own names carry them as type and style
+type Address = Omit<Settings, 'foldType' | 'foldMotion'> & {type: FoldType; style: FoldMotion};
+
+const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
   pace: schema.literalUnion('eager', 'lazy'),
   origin: schema.literalUnion('keep', 'hide'),
   motion: schema.literalUnion('animated', 'static'),
@@ -36,7 +39,7 @@ const decoders: {[K in keyof Settings]: schema.Decoder<Settings[K]>} = {
   stack: schema.literalUnion('down', 'up', 'left', 'right')
 };
 
-const defaults: Settings = {
+const defaults: Address = {
   pace: 'eager',
   origin: 'hide',
   motion: 'animated',
@@ -48,6 +51,11 @@ const defaults: Settings = {
 };
 
 export const useControls = (): Controls => {
-  const found = useSearchParamsObject(decoders, defaults);
-  return {...found, change: next => found.updateSearchParams(next)};
+  const {type, style, ...found} = useSearchParamsObject(decoders, defaults);
+  return {
+    ...found,
+    foldType: type,
+    foldMotion: style,
+    change: ({foldType, foldMotion, ...next}) => found.updateSearchParams({...next, type: foldType, style: foldMotion})
+  };
 };
