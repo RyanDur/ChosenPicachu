@@ -29,7 +29,6 @@ export type Settings = Placement & {
 
 export type Controls = Settings & {change: (next: Partial<Settings>) => void};
 
-// links saved before the fold settings had their own names carry them as type and style
 type Address = Omit<Settings, 'foldType' | 'foldMotion' | 'cardOne'> & {
   type: FoldType;
   style: FoldMotion;
