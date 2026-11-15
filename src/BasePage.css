@@ -498,7 +498,7 @@
 
       .rail .feedback-item {
         align-content: stretch;
-        block-size: var(--base-x-8);
+        min-block-size: var(--base-x-8);
       }
     }
   }
