@@ -134,6 +134,7 @@ const WorkspaceStory: FC = () =>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(workspaceSource, 'const plural'), lines.blank,
+            ...carve.unit(workspaceSource, 'const dismissal'), lines.blank,
             ...carve.span(workspaceSource, '{chartKinds.match(kind, {', '}).orNull()}')
           ]}/>
         </Codes>
