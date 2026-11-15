@@ -139,13 +139,20 @@ const searchFor = key => asked('query($search: String!) { search(query: $search)
 const bodyOf = answer => JSON.parse(answer.slice(answer.indexOf('{'), answer.lastIndexOf('}') + 1));
 
 describe('the stub stage answers the gallery’s museums from recordings', () => {
-  test.each([
-    ['Harvard', '/harvard?q=imagepermissionlevel%3A0+AND+_exists_%3Aprimaryimageurl&page=1&size=8&fields=id%2Ctitle%2Cpeople%2Cprimaryimageurl&apikey=recorded'],
-    ['Cleveland', '/cleveland/?skip=0&limit=8&has_image=1&fields=id%2Ctitle%2Ccreators%2Ctombstone%2Cimages']
-  ])('should answer the gallery’s first look at %s with its recorded wall', async (_museum, address) => {
+  test('should answer the gallery’s first look at Harvard with its recorded wall', async () => {
     const {stage, port} = await stageUp();
 
-    const answer = await answerTo(port, get(address));
+    const answer = await answerTo(port, get('/harvard?q=imagepermissionlevel%3A0+AND+_exists_%3Aprimaryimageurl&page=1&size=8&fields=id%2Ctitle%2Cpeople%2Cprimaryimageurl&apikey=recorded'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+    expect(answer).toMatch(/\r\ncontent-type: application\/json/i);
+  });
+
+  test('should answer the gallery’s first look at Cleveland with its recorded wall', async () => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port, get('/cleveland/?skip=0&limit=8&has_image=1&fields=id%2Ctitle%2Ccreators%2Ctombstone%2Cimages'));
     stage.kill();
 
     expect(answer).toMatch(/^HTTP\/1\.1 200/);
