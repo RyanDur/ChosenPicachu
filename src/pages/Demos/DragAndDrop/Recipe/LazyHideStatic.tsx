@@ -6,8 +6,8 @@ import {
   DirectState,
   FadeOrigin,
   HoldTheAloft,
+  ListGuarantees,
   PlatformCurrency,
-  Promises,
   RoadEnd,
   StashLanding,
   StraightToOrder
@@ -21,7 +21,7 @@ export const LazyHideStaticRecipe: FC = () => <>
     can="The user can arrange the list by hand"
     soThat="it reads in the order they mean">
     <PlatformCurrency/>
-    <Promises/>
+    <ListGuarantees/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
       <HoldTheAloft/>
