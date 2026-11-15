@@ -23,8 +23,8 @@ export type Dials = {
 export const Controls: FC<PropsWithChildren<{copy: Copy}>> = ({copy, children}) => {
   const {pace, origin, motion, change} = useControls();
   const heading = `${copy.kind}-controls-heading`;
-  return <Disclosure label="settings" className="demo-settings"
-    prompt={<>settings{' '}<code className="readout caption monospaced">{copy.readout(pace, origin, motion)}</code></>}>
+  return <Disclosure label="settings" className="demo-settings">
+    <summary className="prompt">settings{' '}<code className="readout caption monospaced">{copy.readout(pace, origin, motion)}</code></summary>
     <section aria-labelledby={heading} className="controls">
       <h4 id={heading} className="off-screen">{copy.kind} controls</h4>
       <DialGroup>

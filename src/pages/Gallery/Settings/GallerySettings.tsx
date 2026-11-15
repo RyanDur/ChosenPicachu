@@ -18,7 +18,8 @@ const Readout: FC = () => {
 
 export const GallerySettings: FC = () => <>
   <Search className="header-settings settings-standing"/>
-  <Disclosure label="gallery settings" className="header-settings settings-fold" prompt={<Readout/>}>
+  <Disclosure label="gallery settings" className="header-settings settings-fold">
+    <summary className="prompt"><Readout/></summary>
     <Search/>
     <PageControl/>
   </Disclosure>
