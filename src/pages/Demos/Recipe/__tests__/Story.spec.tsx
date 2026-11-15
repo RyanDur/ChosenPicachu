@@ -70,4 +70,23 @@ describe('a story card', () => {
     await waitFor(() => expect(recipeFolds.stepHeaded(document.body, 'First')).toHaveFocus());
     expect(appAddress.fragment()).toBe('#told-first');
   });
+
+  test('a reader who presses a story keeps the fragment they arrived by', async () => {
+    render(<TestApp at="/#told-first"><Stories>
+      <Story param="tale" id="told" can="The reader can arrive at a step" soThat="a link can point inside a story">
+        <Steps>
+          <Step title="First" id="told-first">one</Step>
+        </Steps>
+      </Story>
+      <Story param="tale" id="next" can="The reader can open the next story" soThat="reading goes on">
+        <p>the next story</p>
+      </Story>
+    </Stories></TestApp>);
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent('tale=told'));
+
+    await recipeFolds.press(document.body, 'The reader can open the next story');
+
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent('next'));
+    expect(appAddress.fragment()).toBe('#told-first');
+  });
 });
