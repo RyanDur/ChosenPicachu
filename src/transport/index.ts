@@ -1,5 +1,5 @@
 export {decoded} from './decoded';
-export type {Environment} from './environment';
+export type {Environment, Workers} from './environment';
 export {environment} from './environment';
 export {http} from './http';
 export {HTTPError} from './HTTPError';

@@ -1,5 +1,12 @@
 import {unconfigured} from './unconfigured';
 
+export type Workers = {
+  readonly controller: object | null;
+  readonly register: (script: string) => Promise<unknown>;
+  readonly ready: Promise<{readonly active: {readonly postMessage: (message: string) => void} | null}>;
+  readonly addEventListener: (type: 'controllerchange', listener: () => void, options: AddEventListenerOptions) => void;
+};
+
 export type Environment = {
   tradeFeed: string;
   tradeProduct: string;
@@ -14,6 +21,7 @@ export type Environment = {
   usersDomain: string;
   feedbackToken: string;
   feedbackEndpoint: string;
+  workers?: Workers;
 };
 
 declare global {
@@ -28,5 +36,6 @@ declare global {
 
 // the build pre-renders the pages in Node, where there is no env.js, so they are drawn from the values env.js is built
 // from
-export const environment: Environment =
-  import.meta.env.SSR ? __BUILT_ENVIRONMENT__ : window.__environment ?? unconfigured;
+export const environment: Environment = import.meta.env.SSR
+  ? __BUILT_ENVIRONMENT__
+  : {...window.__environment ?? unconfigured, workers: navigator.serviceWorker};

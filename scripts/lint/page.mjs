@@ -1,5 +1,5 @@
 import {has, not} from '@ryandur/sand';
-const globals = new Set(['document', 'window']);
+const globals = new Set(['document', 'navigator', 'window']);
 
 /**
  * A reference to the page's document or window. ESLint's no-restricted-globals did this until Babel's scope manager

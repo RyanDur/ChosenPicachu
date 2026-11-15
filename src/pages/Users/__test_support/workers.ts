@@ -1,5 +1,4 @@
-import {onTestFinished} from 'vitest';
-import {Workers} from '../usersServing';
+import {Environment, Workers} from '@transport';
 
 export type WatchedWorkers = {
   readonly workers: Workers;
@@ -43,17 +42,25 @@ export const workersContainer = (
   };
 };
 
-const forThisTest = (descriptor?: PropertyDescriptor): void => {
-  const standing = Object.getOwnPropertyDescriptor(navigator, 'serviceWorker');
-  Reflect.deleteProperty(navigator, 'serviceWorker');
-  if (descriptor) Object.defineProperty(navigator, 'serviceWorker', descriptor);
-  onTestFinished(() => {
-    Reflect.deleteProperty(navigator, 'serviceWorker');
-    if (standing) Object.defineProperty(navigator, 'serviceWorker', standing);
-  });
+type LentLater = {
+  readonly environment: Partial<Environment>;
+  readonly lend: (watched: WatchedWorkers) => void;
 };
 
-export const lentToThePage = ({workers}: WatchedWorkers): void =>
-  forThisTest({configurable: true, value: workers});
+export const lentToThePage = ({workers}: WatchedWorkers): Partial<Environment> => ({workers});
 
-export const noWorkersOnThePage = (): void => forThisTest();
+export const noWorkersOnThePage: Partial<Environment> = {workers: undefined};
+
+export const lentLater = (): LentLater => {
+  let lent: Workers | undefined;
+  return {
+    environment: {
+      get workers() {
+        return lent;
+      }
+    },
+    lend: ({workers}) => {
+      lent = workers;
+    }
+  };
+};

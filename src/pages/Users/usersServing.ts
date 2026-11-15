@@ -1,12 +1,6 @@
 import {asyncResult, Maybe, maybe} from '@ryandur/sand';
+import {Workers} from '@transport';
 import {usersServer} from './usersServer';
-
-export type Workers = {
-  readonly controller: object | null;
-  readonly register: (script: string) => Promise<unknown>;
-  readonly ready: Promise<{readonly active: {readonly postMessage: (message: string) => void} | null}>;
-  readonly addEventListener: (type: 'controllerchange', listener: () => void, options: AddEventListenerOptions) => void;
-};
 
 export type Reaching = {
   readonly reached: () => void;

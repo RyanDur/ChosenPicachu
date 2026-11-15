@@ -20,6 +20,7 @@ import {
   userRemovalRefused,
   userUpdateRefused,
   usersUnreachable,
+  lentLater,
   lentToThePage,
   noWorkersOnThePage,
   rosterAsksHeard,
@@ -42,9 +43,8 @@ describe('the users page', () => {
 
   test('the roster is asked for only once the users server takes control of the page', async () => {
     const container = workersContainer();
-    lentToThePage(container);
     const asks = rosterAsksHeard([aUser()], container.controlled);
-    render(<TestApp at={Paths.users}/>);
+    render(<TestApp at={Paths.users} environment={lentToThePage(container)}/>);
     await waitFor(() => expect(container.registered()).toBe(1));
 
     container.takeControl();
@@ -59,9 +59,8 @@ describe('the users page', () => {
       vi.useRealTimers();
     });
     const container = workersContainer();
-    lentToThePage(container);
     setupUsersResponse([aUser()]);
-    render(<TestApp at={Paths.users}/>);
+    render(<TestApp at={Paths.users} environment={lentToThePage(container)}/>);
     await usersPage.waitsOut(10_000);
     await usersPage.says('the users server could not be reached');
 
@@ -77,9 +76,8 @@ describe('the users page', () => {
       vi.useRealTimers();
     });
     const container = workersContainer();
-    lentToThePage(container);
     setupUsersResponse([aUser()]);
-    render(<TestApp at={Paths.users}/>);
+    render(<TestApp at={Paths.users} environment={lentToThePage(container)}/>);
     await usersPage.waitsOut(10_000);
     await usersPage.says('the users server could not be reached');
     await site.followRail('Practice');
@@ -92,10 +90,9 @@ describe('the users page', () => {
   });
 
   test('a browser without service workers says the users server could not be reached, and Add waits', async () => {
-    noWorkersOnThePage();
     setupUsersResponse([aUser()]);
 
-    render(<TestApp at={Paths.users}/>);
+    render(<TestApp at={Paths.users} environment={noWorkersOnThePage}/>);
 
     expect(await usersPage.says('the users server could not be reached')).toBeInTheDocument();
     expect(userForm.addButton()).toHaveAttribute('aria-disabled', 'true');
@@ -107,11 +104,12 @@ describe('the users page', () => {
       vi.useRealTimers();
     });
     usersUnreachable();
-    render(<TestApp at={Paths.users}/>);
+    const page = lentLater();
+    render(<TestApp at={Paths.users} environment={page.environment}/>);
     await usersPage.says('the users server could not be reached');
     await site.followRail('Practice');
     const container = workersContainer();
-    lentToThePage(container);
+    page.lend(container);
     setupUsersResponse([aUser()]);
     await site.followRail('Users');
     await usersPage.waitsOut(10_000);
@@ -123,10 +121,10 @@ describe('the users page', () => {
   });
 
   test('a users server that cannot take control of the page says it could not be reached', async () => {
-    lentToThePage(workersContainer({registering: Promise.reject(new Error('refused'))}));
+    const container = workersContainer({registering: Promise.reject(new Error('refused'))});
     setupUsersResponse([aUser()]);
 
-    render(<TestApp at={Paths.users}/>);
+    render(<TestApp at={Paths.users} environment={lentToThePage(container)}/>);
 
     expect(await usersPage.says('the users server could not be reached')).toBeInTheDocument();
   });
@@ -212,10 +210,9 @@ describe('the users page', () => {
   describe('adding a user', () => {
     it('Add says it cannot save yet while the roster has not arrived', async () => {
       const container = workersContainer();
-      lentToThePage(container);
       setupUsersResponse([aUser()]);
 
-      render(<TestApp at={Paths.users}/>);
+      render(<TestApp at={Paths.users} environment={lentToThePage(container)}/>);
       await waitFor(() => expect(container.registered()).toBe(1));
 
       expect(userForm.addButton()).toHaveAttribute('aria-disabled', 'true');
@@ -223,10 +220,9 @@ describe('the users page', () => {
 
     it('an Add pressed before the roster arrives sends nothing', async () => {
       const container = workersContainer();
-      lentToThePage(container);
       setupUsersResponse([aUser()]);
       const adds = userAddsHeard();
-      render(<TestApp at={Paths.users}/>);
+      render(<TestApp at={Paths.users} environment={lentToThePage(container)}/>);
       await waitFor(() => expect(container.registered()).toBe(1));
       await userForm.addWhoWorksFromHome(aUser({work: 'home'}));
 

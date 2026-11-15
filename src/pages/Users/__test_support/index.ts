@@ -18,4 +18,4 @@ export {
 export {usersTable} from './table';
 export {rowMenu} from './row-menu';
 export {usersPage} from './page';
-export {lentToThePage, noWorkersOnThePage, workersContainer} from './workers';
+export {lentLater, lentToThePage, noWorkersOnThePage, workersContainer} from './workers';
