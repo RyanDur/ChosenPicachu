@@ -9,8 +9,9 @@ export const ToSavedTab: FC<{addressOf: (tab?: string) => string}> = ({addressOf
   const hydrated = useHydrated();
   const dials = new URLSearchParams(params);
   dials.delete('tab');
+  const savedTab = {pathname: addressOf(params.get('tab') ?? undefined), search: dials.toString(), hash};
   return <>
     <noscript><meta httpEquiv="refresh" content={`0; url=${first}`}/></noscript>
-    {hydrated && <Navigate replace to={{pathname: addressOf(params.get('tab') ?? undefined), search: dials.toString(), hash}}/>}
+    {hydrated && <Navigate replace to={savedTab}/>}
   </>;
 };
