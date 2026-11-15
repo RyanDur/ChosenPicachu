@@ -4,8 +4,10 @@ import {Aggregations} from './Aggregations';
 import {Tutorials} from './Tutorials';
 import {TutorialPage} from './TutorialPage';
 import {useShownTutorial} from './useShownTutorial';
+import {ToTutorialNamed} from './ToTutorialNamed';
 
 const TabContents: FC = () => <>
+  <ToTutorialNamed/>
   <TablesIntroduction/>
   <Aggregations/>
   <Tutorials/>
