@@ -105,6 +105,21 @@ describe('the practice page', () => {
     ]);
   });
 
+  test('should tell where the page is made after the opener, before the tabs', async () => {
+    render(<TestApp at={Paths.practice}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.sectionHeadings()).toEqual(['Where the page is made', 'how I organize it']);
+  });
+
+  test('should send the reader on from where the page is made to the Behavior story', async () => {
+    render(<TestApp at={Paths.practice}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.sectionLinks('Where the page is made'))
+      .toEqual([['the Behavior story', `${Paths.record}#behavior`]]);
+  });
+
   test('should read Presentation’s practice when the reader picks its tab from Structure', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
 
