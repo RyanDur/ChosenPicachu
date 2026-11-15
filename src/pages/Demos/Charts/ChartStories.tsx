@@ -222,14 +222,16 @@ const CandlesStory: FC = () =>
             lowest low at the bottom. Across the chart, <code className="monospaced">bucketPlaces.of</code> gives each candle an equal place and makes the body
             60% of that place wide, so two candles never touch.</Says>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
-            sheet’s rules pick out. A candle that closed at or above its open gets the class up, and one that closed
-            lower gets down.</Says>
+            sheet’s rules pick out. A candle that closed at or above its open gets the
+            class <code className="monospaced">up</code>, and one that closed lower gets <code className="monospaced">down</code>.</Says>
           <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that
             lives in the site’s shared style sheet and that an element wears by name; the chart’s own style sheet keeps
             what is not a look: the chart’s size and the wick’s hairline width.</Says>
-          <Says>Each candle wears a side beside its class: a candle that went up wears buy-side and one that went down
-            wears sell-side, shared classes that set a side’s colors. The body wears side-face and the wall side-wall,
-            so the shared style sheet paints them, and the wick wears drawn, which gives it its charcoal stroke.</Says>
+          <Says>Each candle wears a side beside its class: a candle that went up
+            wears <code className="monospaced">buy-side</code> and one that went down
+            wears <code className="monospaced">sell-side</code>, shared classes that set a side’s colors. The body
+            wears <code className="monospaced">side-face</code> and the wall <code className="monospaced">side-wall</code>, so the shared style sheet paints
+            them, and the wick wears <code className="monospaced">drawn</code>, which gives it its charcoal stroke.</Says>
           <Says><code className="monospaced">Bar</code> is a component, a function that writes a piece of the page, as
             the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. It draws the wall first, then what the
             candle puts inside it, here the wick, then the body on top, so the wick shows over the wall.</Says>
@@ -273,10 +275,11 @@ const CandlesStory: FC = () =>
           <Says>The bars are a second SVG under the candles, in the same places, so each bar sits under its
             candle.</Says>
           <Says>Each volume bar is the same <code className="monospaced">Bar</code> the candles use, and the step
-            before shows it in full: its face wears side-face and its wall side-wall. The SVG around the bars wears
-            volume-side. A side’s colors are custom properties, values a style sheet names once and other rules read,
-            and a side class sets them. volume-side sets leather for the bar and drab for its edge, and the bars read
-            both through side-face and side-wall.</Says>
+            before shows it in full: its face wears <code className="monospaced">side-face</code> and its
+            wall <code className="monospaced">side-wall</code>. The SVG around the bars wears <code className="monospaced">volume-side</code>. A side’s
+            colors are custom properties, values a style sheet names once and other rules read, and a side class sets
+            them. <code className="monospaced">volume-side</code> sets leather for the bar and drab for its edge, and the bars read
+            both through <code className="monospaced">side-face</code> and <code className="monospaced">side-wall</code>.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -368,15 +371,17 @@ const PressureStory: FC = () =>
       <Step title="Draw the bars, and label them in bitcoin">
         <Words want="The reader should see which side is larger at a glance, and the labels should give size, not dollars.">
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above,
-            orange below. The bought bars wear buy-side and the sold bars sell-side. A class, as
+            orange below. The bought bars wear <code className="monospaced">buy-side</code> and the sold
+            bars <code className="monospaced">sell-side</code>. A class, as
             the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
             says, is a name a style sheet’s rules pick out. These two are shared classes, looks that live in the site’s
             shared style sheet.</Says>
           <Says>A side class sets a side’s colors as custom properties, which
             the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains:
-            values a style sheet names once and other rules read. side-face reads the face color for the bar. side-wall
-            reads the wall color for the second rectangle set just behind it, which gives it an edge. The middle line
-            wears drawn, which gives it its charcoal stroke.</Says>
+            values a style sheet names once and other rules read. <code className="monospaced">side-face</code> reads the face
+            color for the bar. <code className="monospaced">side-wall</code> reads the wall color for the second rectangle set just
+            behind it, which gives it an edge. The middle line wears <code className="monospaced">drawn</code>, which gives it its charcoal
+            stroke.</Says>
           <Says>Each bar is drawn by <code className="monospaced">Bar</code>, the component the candles use: a function
             that writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index
               tab</TabLink> says. <code className="monospaced">Bar</code> draws a bar and the wall behind it,
