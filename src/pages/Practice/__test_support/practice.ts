@@ -8,9 +8,11 @@ const tabs = (): HTMLElement => screen.getByRole('navigation', {name: 'practice'
 
 const firstSectionHeading = (): HTMLElement =>
   within(screen.getByRole('main')).getAllByRole('heading', {level: 2})[0];
-const openingParagraphs = (): HTMLElement[] => within(screen.getByRole('main')).getAllByRole('paragraph')
-  .filter(paragraph =>
-    Boolean(paragraph.compareDocumentPosition(firstSectionHeading()) & Node.DOCUMENT_POSITION_FOLLOWING));
+const openingParagraphs = (): HTMLElement[] => {
+  const firstSection = firstSectionHeading();
+  return within(screen.getByRole('main')).getAllByRole('paragraph')
+    .filter(paragraph => Boolean(paragraph.compareDocumentPosition(firstSection) & Node.DOCUMENT_POSITION_FOLLOWING));
+};
 
 const leadsToThisSitesCode = (link: HTMLElement): boolean => (link.getAttribute('href') ?? '').startsWith(Paths.repo);
 
