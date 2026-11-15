@@ -59,6 +59,21 @@ describe('The Demos page', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('drag-and-drop', '?pace=lazy'));
   });
 
+  test('an old tables address pointing to a place in the page lands on that place on the Tables tab', async () => {
+    const from = `${Paths.demos}?tab=tables#station-5`;
+    render(<TestApp at={from}/>);
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables'));
+    expect(appAddress.fragment()).toBe('#station-5');
+  });
+
+  test('an old tables address repeating a dial lands on the Tables tab with every value kept', async () => {
+    const from = `${Paths.demos}?tab=tables&col=a&col=b`;
+    render(<TestApp at={from}/>);
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables', '?col=a&col=b'));
+  });
+
   test('an old address naming the behavior tab lands on the Accordions tab', async () => {
     const from = `${Paths.demos}?tab=behavior`;
     render(<TestApp at={from}/>);
