@@ -6,7 +6,7 @@ import {DemoTopics, demoTab} from '@pages/Demos';
 import {Mdn} from '@pages/Demos/Recipe';
 import {LandmarkMap} from './LandmarkMap';
 import {AttachmentCarve, ColumnBesideCarve, HeaderCellCarve} from './TableCarves';
-import {practiceAddress} from '../practiceAddress';
+import {practiceAddress} from '@pages/Practice';
 import {structureParts} from './structureParts';
 
 const understanding = (criterion: string): string => `https://www.w3.org/WAI/WCAG22/Understanding/${criterion}.html`;
