@@ -49,7 +49,7 @@ import {
   TheRuleMatchesTheBox,
   ThreeBecomeTwo,
   TwoBordersTurned,
-  WhatEachPromises
+  WhatEachElementDoes
 } from './Diagrams';
 import {FoldInput} from './fold-input';
 import '../Runs.css';
@@ -738,7 +738,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
             ...carve.unit(exclusiveRadioToggleAccordionSource, 'const radioClicked'), lines.blank,
             ...carve.span(exclusiveRadioToggleAccordionSource, '<ul className="new-accordion" onClick', '<ul className="new-accordion" onClick')
           ]}/>
-          <WhatEachPromises/>
+          <WhatEachElementDoes/>
         </li>}
         <li className="run">
           <p className="paragraph">Under the bar, the fold’s paragraph is a grid, the CSS layout that sets a box out in

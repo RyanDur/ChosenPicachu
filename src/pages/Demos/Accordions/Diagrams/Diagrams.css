@@ -1,16 +1,16 @@
-.promises {
+.behaviors {
   border-collapse: collapse;
 
-  .promises-title {
+  .behaviors-title {
     text-align: start;
   }
 
-  .promise {
+  .behavior {
     padding: var(--base-x-0_5) var(--base);
     text-align: start;
   }
 }
 
-.run:has(.promises) .sample {
+.run:has(.behaviors) .sample {
   grid-row: span 2;
 }
