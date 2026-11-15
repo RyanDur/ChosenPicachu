@@ -56,8 +56,21 @@ const childrenInProps = {
 };
 
 const presence = {'no-restricted-syntax': ['error', comparedToUndefined, inlineAction, childrenInProps]};
+const aClass = {
+  selector: ':matches(ClassDeclaration, ClassExpression)',
+  message: 'Write a module, an object of behaviors, never a class.'
+};
+const typeTests = {'no-restricted-imports': ['error', {paths: [{
+  name: 'vitest',
+  importNames: ['expectTypeOf', 'assertType'],
+  message: 'A spec pins what a reader does or meets; the types are tsc\'s to hold.'
+}]}]};
 
 const markup = {'no-restricted-syntax': ['error', comparedToUndefined, bareInlineCode, inlineAction, childrenInProps]};
+const modulesOnly = {
+  presence: {'no-restricted-syntax': [...presence['no-restricted-syntax'], aClass]},
+  markup: {'no-restricted-syntax': [...markup['no-restricted-syntax'], aClass]}
+};
 
 const specs = Object.fromEntries([
   'await-async-events', 'await-async-queries', 'await-async-utils', 'no-await-sync-events', 'no-await-sync-queries',
@@ -112,6 +125,14 @@ module.exports = [
     rules: {...shape, ...markup}
   },
   {
+    files: ['src/**/*.ts', 'scripts/**/*.{js,mjs,cjs}', 'e2e/**/*.ts'],
+    rules: modulesOnly.presence
+  },
+  {
+    files: ['src/**/*.tsx'],
+    rules: modulesOnly.markup
+  },
+  {
     files: ['src/**/*.tsx'],
     plugins: {components},
     rules: {'components/rendered-as-jsx': 'error'}
@@ -129,7 +150,7 @@ module.exports = [
   {
     files: ['src/**/__tests__/**/*.{ts,tsx}', 'src/**/__test_support/**/*.{ts,tsx}'],
     plugins: {'testing-library': testingLibrary},
-    rules: specs
+    rules: {...specs, ...typeTests}
   },
   {
     files: ['src/**/__test_support/**/*.{ts,tsx}'],

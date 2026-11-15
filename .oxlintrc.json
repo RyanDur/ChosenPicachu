@@ -84,6 +84,16 @@
         "tags": ["section", "pre"],
         "roles": ["tabpanel"]
       }
+    ],
+    "typescript/no-floating-promises": "error",
+    "typescript/ban-ts-comment": [
+      "error",
+      {
+        "ts-expect-error": true,
+        "ts-ignore": true,
+        "ts-nocheck": true,
+        "ts-check": false
+      }
     ]
   },
   "overrides": [
