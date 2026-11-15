@@ -43,7 +43,7 @@ export type YearHeading = {date: YearDate; title: string; id: string};
 
 export type MonthHeading = {date: DateWithMonth; title: string; id: string};
 
-export type DatedInMonth = {readonly year: string; readonly month: Month; readonly day?: number};
+type DatedInMonth = {readonly year: string; readonly month: Month; readonly day?: number};
 
 const idOf = (title: string): string => title.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').join('-');
 
