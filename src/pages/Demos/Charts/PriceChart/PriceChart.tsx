@@ -3,7 +3,8 @@ import {FC, ReactNode} from 'react';
 import {Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components';
-import {Candle, LiveTradesState, money, periodHistory, Trade} from '../../Market';
+import {Candle, marketReads, money, periodHistory, Trade} from '../../Market';
+import {useMarketRead} from '../../Market/Trading';
 import {chartCaption} from '../chart-caption';
 import {useShownCandles} from '../useShownCandles';
 import {periodDisplay} from '../period-display';
@@ -40,12 +41,13 @@ const viewOf = (candles: readonly Candle[], lastTrade?: Pick<Trade, 'price'>): M
 
 const trendOf = ({first, last}: PriceView): 'rising' | 'falling' => last >= first ? 'rising' : 'falling';
 
-type Props = Pick<LiveTradesState, 'trades'> & {
+type Props = {
   id?: string;
   actions?: ReactNode;
 };
 
-export const PriceChart: FC<Props> = ({trades, id: given, actions}) => {
+export const PriceChart: FC<Props> = ({id: given, actions}) => {
+  const trades = useMarketRead(marketReads.liveTrades);
   const period = useDesk().periodOf('price');
   const {id, history, bucketMilliseconds, shownCandles} = useShownCandles({id: given, kind: 'price', period, trades});
   const view = viewOf(shownCandles, trades[trades.length - 1]);

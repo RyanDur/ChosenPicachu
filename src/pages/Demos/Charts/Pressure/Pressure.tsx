@@ -1,7 +1,8 @@
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
-import {liveTrades, money, Period, periods, Trade} from '../../Market';
+import {liveTrades, marketReads, money, Period, periods} from '../../Market';
+import {useMarketRead} from '../../Market/Trading';
 import {Axes, axisRange} from '../Axes';
 import {Bar} from '../Bar';
 import {periodDisplay} from '../period-display';
@@ -15,11 +16,11 @@ const BUCKET_MILLISECONDS = periods.bucketMilliseconds[Period.hour];
 const MOST_BUCKETS_SHOWN = 60;
 
 type Props = {
-  trades: readonly Trade[];
   actions?: ReactNode;
 };
 
-export const Pressure: FC<Props> = ({trades, actions}) => {
+export const Pressure: FC<Props> = ({actions}) => {
+  const trades = useMarketRead(marketReads.liveTrades);
   const heading = `heading${useId()}`;
   const pressures = pressureShapes.buckets(trades, BUCKET_MILLISECONDS).slice(-MOST_BUCKETS_SHOWN);
   const bars = pressureShapes.drawn(pressures, CHART_WIDTH, CHART_HEIGHT, BUCKET_MILLISECONDS);

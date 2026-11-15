@@ -1,7 +1,13 @@
-import {render} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
+import {TestApp} from '@__test_support/TestApp';
+import {feedIsSubscribed} from '@pages/Demos/__test_support';
+import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
+import {Trading} from '@pages/Demos/Market/Trading';
 import {pieShapes} from '@pages/Demos/Charts/Pie/pie-shapes';
 import {Pie} from '@pages/Demos/Charts/Pie';
 import {bought, chartsDesk, sold} from '@pages/Demos/Charts/__test_support';
+
+const now = 1700000000000;
 
 describe('the pie', () => {
   test('the session totals by side', () => {
@@ -43,35 +49,46 @@ describe('the pie', () => {
     expect(dy).toBeCloseTo(0);
   });
 
-  test('the card cuts the session into a bought and a sold slice, and says each share', () => {
-    render(<Pie trades={[
-      bought(3),
-      sold(1, {id: 2})
-    ]}/>);
+  test('the card cuts the session into a bought and a sold slice, and says each share', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at="/" feed={feed}><Trading><Pie/></Trading></TestApp>);
+    await feedIsSubscribed(feed);
 
-    expect(chartsDesk.pieShares()).toEqual(['75% bought', '25% sold']);
+    broadcast(feed, [tradeFrame(65001, now, '3', 'bought'), tradeFrame(65002, now, '1', 'sold')]);
+
+    await waitFor(() => expect(chartsDesk.pieShares()).toEqual(['75% bought', '25% sold']));
   });
 
-  test('the card says it counts up to the last 1,500 trades', () => {
-    render(<Pie trades={[bought(3)]}/>);
+  test('the card says it counts up to the last 1,500 trades', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at="/" feed={feed}><Trading><Pie/></Trading></TestApp>);
+    await feedIsSubscribed(feed);
 
-    expect(chartsDesk.chart('pie')).toHaveTextContent('volume by side · up to the last 1,500 trades');
+    broadcast(feed, [tradeFrame(65001, now, '3', 'bought')]);
+
+    await waitFor(() => expect(chartsDesk.chart('pie')).toHaveTextContent('volume by side · up to the last 1,500 trades'));
   });
 
   test('a one-sided session opens both gates fully', () => {
     expect(pieShapes.sweepGates(pieShapes.slices([{weight: 2}, {weight: 0}])[0])).toEqual({opening: 0, closing: 180});
   });
 
-  test('the card reads a one-sided session as all bought', () => {
-    render(<Pie trades={[bought(2)]}/>);
+  test('the card reads a one-sided session as all bought', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at="/" feed={feed}><Trading><Pie/></Trading></TestApp>);
+    await feedIsSubscribed(feed);
+
+    broadcast(feed, [tradeFrame(65001, now, '2', 'bought')]);
 
     const card = chartsDesk.chart('pie');
-    expect(card).toHaveTextContent('100% bought');
+    await waitFor(() => expect(card).toHaveTextContent('100% bought'));
     expect(card).toHaveTextContent('0% sold');
   });
 
-  test('an empty stream leaves the card waiting, not broken', () => {
-    render(<Pie trades={[]}/>);
+  test('an empty stream leaves the card waiting, not broken', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at="/" feed={feed}><Trading><Pie/></Trading></TestApp>);
+    await feedIsSubscribed(feed);
 
     const card = chartsDesk.chart('pie');
     expect(card).not.toHaveTextContent('%');
