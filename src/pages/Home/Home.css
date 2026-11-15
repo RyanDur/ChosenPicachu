@@ -12,21 +12,4 @@
     margin: 0;
     text-wrap: pretty;
   }
-
-  .closing {
-    align-content: start;
-    display: grid;
-    gap: var(--base-x-1_5);
-    padding-block-start: var(--base-x-2);
-
-    .paragraph {
-      margin: 0;
-      text-wrap: pretty;
-    }
-  }
-
-  .closing-title {
-    margin: 0;
-    text-wrap: balance;
-  }
 }

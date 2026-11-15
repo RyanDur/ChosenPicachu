@@ -20,13 +20,4 @@ describe('the home page', () => {
       ['The Demos', Paths.demos]
     ]);
   });
-
-  test('should close on where the page is made, its one section', () => {
-    expect(homePage.sectionHeadings()).toEqual(['Where the page is made']);
-  });
-
-  test('should send the reader on from where the page is made to the Behavior story', () => {
-    expect(homePage.sectionLinks('Where the page is made').map(link => [link.textContent, link.getAttribute('href')]))
-      .toEqual([['the Behavior story', `${Paths.record}#behavior`]]);
-  });
 });
