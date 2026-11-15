@@ -4,50 +4,44 @@
   isolation: isolate;
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: max-content;
+  grid-auto-columns: 1fr;
 
+  &::before,
   &::after {
     content: '';
     position: absolute;
-    inset: 0;
     z-index: -1;
     pointer-events: none;
   }
 
+  &::before {
+    grid-area: 1 / 1 / 2 / 2;
+    inset: 0;
+    transition: translate 0.3s ease-in-out;
+  }
+
+  &::after { inset: 0; }
+
+  &:has(.pill:nth-of-type(2) :checked)::before { translate: 100%; }
+  &:has(.pill:nth-of-type(3) :checked)::before { translate: 200%; }
+  &:has(.pill:nth-of-type(4) :checked)::before { translate: 300%; }
+
   .pill {
-    position: relative;
-    isolation: isolate;
     align-content: center;
     text-align: center;
     height: var(--base-x-5);
     padding: 0 var(--base-x-2);
     white-space: nowrap;
     cursor: pointer;
-    transition: color 0s 65ms;
+    transition: color 0s 0.15s;
 
     @media (width < 390px) {
       padding: 0 var(--base-x-0_75);
     }
+  }
 
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-
-    &:has(:checked) { transition-delay: 115ms; }
-
-    @media (forced-colors: active), (prefers-reduced-motion: reduce) {
-      &,
-      &::before { transition: none; }
-    }
-
-    &:has(:checked)::before {
-      opacity: 1;
-    }
+  @media (forced-colors: active), (prefers-reduced-motion: reduce) {
+    &::before,
+    .pill { transition: none; }
   }
 }
