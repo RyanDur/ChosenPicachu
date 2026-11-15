@@ -87,6 +87,17 @@ describe('search', () => {
       await waitFor(() => expect(search.suggestions()).toHaveTextContent(searchWord));
     });
 
+    it('a title the museum suggests twice is offered once', async () => {
+      anyRequestRespondsWith(JSON.stringify(aicSuggestionsOf([searchWord, searchWord])));
+      const search = searchPage.held();
+      render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}`}/>);
+
+      await search.type(searchWord);
+      await search.pauseEnds();
+
+      await waitFor(() => expect(search.offered().filter(title => title === searchWord)).toHaveLength(1));
+    });
+
     it("a museum that refuses the new word clears the old word's suggestions", async () => {
       const search = searchPage.held();
       render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}`}/>);
