@@ -1,4 +1,4 @@
-import {useHydrated} from '../useHydrated';
+import {useHydrated} from '@components';
 import {not} from '@ryandur/sand';
 import './PillGlider.css';
 
