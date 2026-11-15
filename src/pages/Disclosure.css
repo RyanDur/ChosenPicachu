@@ -1,7 +1,7 @@
 .disclosure {
   width: 100%;
 
-  > .prompt {
+  > .opener {
     display: flex;
     align-items: center;
     gap: var(--base-x-2);
@@ -16,7 +16,7 @@
     }
   }
 
-  &[open] > .prompt::before {
+  &[open] > .opener::before {
     rotate: 90deg;
   }
 }
