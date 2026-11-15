@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -12,7 +12,7 @@ const cssLookBack = 'https://thehistoryoftheweb.com/look-back-history-css/';
 const ieForMac = 'https://en.wikipedia.org/wiki/Internet_Explorer_for_Mac';
 
 export const BrowsersAgree: FC = () =>
-  <Moment heading={moments.headings.browsersAgree}>
+  <YearMoment heading={moments.headings.browsersAgree}>
     <MomentInBrief>In 1998 the standards were ahead of every browser. Todd Fahrner wrote a
       page, <a className="signpost" href={boxAcidTest}>The Box Acid Test</a>, that a correct CSS1 browser renders to the pixel,
       and no browser that year did. The browsers took a decade to catch up, pushed by tests, hacks and failures named
@@ -64,4 +64,4 @@ export const BrowsersAgree: FC = () =>
           1999”</a>; the buggy parts of level 2 alone took until 2011 to become CSS 2.1, and a large
         publisher betting its pages on CSS is the 2002 moment.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

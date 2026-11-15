@@ -31,28 +31,31 @@ export type MomentKey = typeof inOrder[number];
 
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
-export type MomentDate =
-  | {readonly kind: 'year'; readonly year: string}
+type YearDate = {readonly kind: 'year'; readonly year: string};
+
+type DateWithMonth =
   | {readonly kind: 'month'; readonly year: string; readonly month: Month}
   | {readonly kind: 'day'; readonly year: string; readonly month: Month; readonly day: number};
 
-export type DateWithMonth = Exclude<MomentDate, {kind: 'year'}>;
+type MomentDate = YearDate | DateWithMonth;
 
-export type MomentHeading = {date: MomentDate; title: string; id: string};
+export type YearHeading = {date: YearDate; title: string; id: string};
 
-export type AuthoredDate =
-  | {readonly year: string; readonly month?: never; readonly day?: never}
-  | {readonly year: string; readonly month: Month; readonly day?: never}
-  | {readonly year: string; readonly month: Month; readonly day: number};
+export type MonthHeading = {date: DateWithMonth; title: string; id: string};
 
-const dateOf = ({year, month, day}: AuthoredDate): MomentDate => maybe(month).either(
-  (inMonth): MomentDate => maybe(day).either(
-    (onDay): MomentDate => ({kind: 'day', year, month: inMonth, day: onDay}),
-    (): MomentDate => ({kind: 'month', year, month: inMonth})),
-  (): MomentDate => ({kind: 'year', year}));
+export type DatedInMonth = {readonly year: string; readonly month: Month; readonly day?: number};
 
-const named = (authored: AuthoredDate, title: string): MomentHeading =>
-  ({date: dateOf(authored), title, id: title.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').join('-')});
+const idOf = (title: string): string => title.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').join('-');
+
+const inYear = (year: string, title: string): YearHeading => ({date: {kind: 'year', year}, title, id: idOf(title)});
+
+const inMonth = ({year, month, day}: DatedInMonth, title: string): MonthHeading => ({
+  date: maybe(day).either(
+    (onDay): DateWithMonth => ({kind: 'day', year, month, day: onDay}),
+    (): DateWithMonth => ({kind: 'month', year, month})),
+  title,
+  id: idOf(title)
+});
 
 const twoDigits = (part: number): string => String(part).padStart(2, '0');
 
@@ -68,32 +71,32 @@ const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 
 const monthOf = (date: DateWithMonth): string => months[date.month - 1];
 
-const headings: Record<MomentKey, MomentHeading> = {
-  need: named({year: '1989'}, 'CERN needs to share what it knows'),
-  structureArrives: named({year: '1990'}, 'The information needs one interface'),
-  webGoesPublic: named({year: '1991'}, 'The web needs collaborators'),
-  presentationLeavesHome: named({year: '1994'}, 'Authors need control of the look'),
-  behaviorBorn: named({year: '1995', month: 5}, 'Pages need to respond'),
-  htmlTwo: named({year: '1995', month: 11}, 'The browsers’ tags need a standard'),
-  needOutrunsStandards: named({year: '1996', month: 8}, 'The pages need to look the same'),
-  cssOne: named({year: '1996', month: 12, day: 17}, 'The style sheet needs a standard'),
-  ecmaScript: named({year: '1997'}, 'The language needs a standard'),
-  browsersAgree: named({year: '1998'}, 'The browsers need to agree'),
-  wiredRedesign: named({year: '2002'}, 'Someone needs to go first'),
-  zenGarden: named({year: '2003'}, 'The separation needs proof'),
-  browsersTakePen: named({year: '2004'}, 'The standard needs the real world'),
-  pageBecomesApplication: named({year: '2005'}, 'The page needs to update in place'),
-  defaultsAgree: named({year: '2007'}, 'The defaults need to agree'),
-  esFive: named({year: '2009'}, 'The standard needs to move again'),
-  frameworks: named({year: '2010'}, 'The application needs a frame'),
-  cssTwoOne: named({year: '2011'}, 'The specification needs its tests'),
-  someoneNeedsComponents: named({year: '2013'}, 'Someone needs components'),
-  oneDirection: named({year: '2014', month: 7}, 'The data needs one direction'),
-  html5SaysIt: named({year: '2014', month: 10}, 'The rules need writing down'),
-  documentComesBack: named({year: '2016'}, 'The document needs to come first'),
-  constantsNeedHome: named({year: '2017'}, 'The constants need a home'),
-  elementsArrive: named({year: '2025'}, 'The elements need to arrive')
-};
+const headings = {
+  need: inYear('1989', 'CERN needs to share what it knows'),
+  structureArrives: inYear('1990', 'The information needs one interface'),
+  webGoesPublic: inYear('1991', 'The web needs collaborators'),
+  presentationLeavesHome: inYear('1994', 'Authors need control of the look'),
+  behaviorBorn: inMonth({year: '1995', month: 5}, 'Pages need to respond'),
+  htmlTwo: inMonth({year: '1995', month: 11}, 'The browsers’ tags need a standard'),
+  needOutrunsStandards: inMonth({year: '1996', month: 8}, 'The pages need to look the same'),
+  cssOne: inMonth({year: '1996', month: 12, day: 17}, 'The style sheet needs a standard'),
+  ecmaScript: inYear('1997', 'The language needs a standard'),
+  browsersAgree: inYear('1998', 'The browsers need to agree'),
+  wiredRedesign: inYear('2002', 'Someone needs to go first'),
+  zenGarden: inYear('2003', 'The separation needs proof'),
+  browsersTakePen: inYear('2004', 'The standard needs the real world'),
+  pageBecomesApplication: inYear('2005', 'The page needs to update in place'),
+  defaultsAgree: inYear('2007', 'The defaults need to agree'),
+  esFive: inYear('2009', 'The standard needs to move again'),
+  frameworks: inYear('2010', 'The application needs a frame'),
+  cssTwoOne: inYear('2011', 'The specification needs its tests'),
+  someoneNeedsComponents: inYear('2013', 'Someone needs components'),
+  oneDirection: inMonth({year: '2014', month: 7}, 'The data needs one direction'),
+  html5SaysIt: inMonth({year: '2014', month: 10}, 'The rules need writing down'),
+  documentComesBack: inYear('2016', 'The document needs to come first'),
+  constantsNeedHome: inYear('2017', 'The constants need a home'),
+  elementsArrive: inYear('2025', 'The elements need to arrive')
+} satisfies Record<MomentKey, YearHeading | MonthHeading>;
 
 export type SharedYear = {
   readonly summary: string;

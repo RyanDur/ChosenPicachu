@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -13,7 +13,7 @@ const customElements = 'https://html.spec.whatwg.org/multipage/custom-elements.h
 const scopeAtRule = 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope';
 
 export const SomeoneNeedsComponents: FC = () =>
-  <Moment heading={moments.headings.someoneNeedsComponents}>
+  <YearMoment heading={moments.headings.someoneNeedsComponents}>
     <MomentInBrief>Interfaces had grown into applications, and their builders needed components:
       self-contained pieces that carry structure, style, and behavior together, and styles
       that stay where they are put. The platform did not have them yet, so JavaScript built
@@ -52,4 +52,4 @@ export const SomeoneNeedsComponents: FC = () =>
         itself. And @scope, which <a className="signpost" href={scopeAtRule}>“works across the latest devices and browser
           versions”</a> since March 2026, is the newest arrival in the same direction.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

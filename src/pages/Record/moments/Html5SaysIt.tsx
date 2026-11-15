@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {MonthMoment} from './MonthMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {moments} from '../calendar';
 
@@ -11,7 +11,7 @@ const htmlParsing = 'https://html.spec.whatwg.org/multipage/parsing.html';
 const htmlSyntax = 'https://html.spec.whatwg.org/multipage/syntax.html';
 
 export const Html5SaysIt: FC = () =>
-  <Moment heading={moments.headings.html5SaysIt}>
+  <MonthMoment heading={moments.headings.html5SaysIt}>
     <MomentInBrief>The W3C’s HTML working group published its <a className="signpost" href={htmlDesignPrinciples}>HTML Design
       Principles</a> as a working draft on 26 November 2007, with its priority of
       constituencies, <a className="signpost" href={htmlDesignPrinciples}>“users over authors over implementors over specifiers
@@ -50,4 +50,4 @@ export const Html5SaysIt: FC = () =>
         that is incompatible with some specifications”</a>. Even Berners-Lee’s 1991 wish
       for <a className="signpost" href={infoQ}>“a nestable &lt;SECTION&gt;..&lt;/SECTION&gt;
         element”</a> resurfaced as the section element, twenty-three years later.</p>
-  </Moment>;
+  </MonthMoment>;

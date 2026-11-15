@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -10,7 +10,7 @@ const wiredTenYearsLater = 'https://stopdesign.com/archive/2012/10/11/ten-years-
 const cssLookBack = 'https://thehistoryoftheweb.com/look-back-history-css/';
 
 export const WiredRedesign: FC = () =>
-  <Moment heading={moments.headings.wiredRedesign}>
+  <YearMoment heading={moments.headings.wiredRedesign}>
     <MomentInBrief>On 11 October 2002 Wired News relaunched on XHTML and CSS with no tables for layout. Douglas Bowman
       designed it. A large daily publisher had bet its pages on the standards, and the bet held. Seven months later the
       Zen Garden made the same point as art.</MomentInBrief>
@@ -62,4 +62,4 @@ export const WiredRedesign: FC = () =>
         CSS; <a className="signpost" href={cssLookBack}>ESPN followed a few months later</a>, and the Zen Garden, in May
         2003, showed what the separation was for.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

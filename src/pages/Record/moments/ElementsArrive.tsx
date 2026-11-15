@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -13,7 +13,7 @@ const popoverExplainer = 'https://open-ui.org/components/popover.research.explai
 const scopeAtRule = 'https://developer.mozilla.org/en-US/docs/Web/CSS/@scope';
 
 export const ElementsArrive: FC = () =>
-  <Moment heading={moments.headings.elementsArrive}>
+  <YearMoment heading={moments.headings.elementsArrive}>
     <MomentInBrief>For years a page that wanted a fold, a modal dialog or a menu over its content had no element for it.
       One at a time the platform gave each an element or an attribute, and by December 2025 a button could open the
       dialog or the menu with no script.</MomentInBrief>
@@ -37,4 +37,4 @@ export const ElementsArrive: FC = () =>
         components began in script. The Record reads this as the same need answered in the markup,
         as <a className="signpost" href={scopeAtRule}>@scope</a> answered it in the style sheet.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -9,7 +9,7 @@ import {presentation} from '../sources';
 const {sassVariables, usingCssCustomProperties, wathan, tailwindTheme} = presentation;
 
 export const ConstantsNeedHome: FC = () =>
-  <Moment heading={moments.headings.constantsNeedHome}>
+  <YearMoment heading={moments.headings.constantsNeedHome}>
     <MomentInBrief>A design’s constants, its colors, sizes and fonts, lived outside the style sheet, in a preprocessor’s
       variables. CSS could not yet name a value. In 2017 it could, in every engine, and the same year Adam Wathan made
       the case for a fixed set of single-purpose classes.</MomentInBrief>
@@ -34,4 +34,4 @@ export const ConstantsNeedHome: FC = () =>
         and keeps the constants where custom properties put them, in the style sheet. The Practice page’s
         Presentation tab says what the site keeps from Tailwind and what it gives up.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

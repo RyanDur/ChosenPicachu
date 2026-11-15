@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -9,7 +9,7 @@ import {presentation} from '../sources';
 const {resetReasoning, resetReloaded, resetCss, aboutNormalizeCss, normalizeTags} = presentation;
 
 export const DefaultsAgree: FC = () =>
-  <Moment heading={moments.headings.defaultsAgree}>
+  <YearMoment heading={moments.headings.defaultsAgree}>
     <MomentInBrief>Every browser shipped its own defaults for margins, line heights and headings, and no two agreed, so
       the same style sheet drew a different page in each. Authors answered with a reset, a style sheet that zeroed the
       defaults before their own began; the platform answered later, with tests of its own.</MomentInBrief>
@@ -34,4 +34,4 @@ export const DefaultsAgree: FC = () =>
         site’s style sheets import. The site keeps it for the few defaults that still differ and the ones it wants
         gone.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

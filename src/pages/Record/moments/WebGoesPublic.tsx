@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -9,7 +9,7 @@ const altHypertextSummary = 'https://www.w3.org/People/Berners-Lee/1991/08/art-6
 const w3cHistory = 'https://www.w3.org/History.html';
 
 export const WebGoesPublic: FC = () =>
-  <Moment heading={moments.headings.webGoesPublic}>
+  <YearMoment heading={moments.headings.webGoesPublic}>
     <MomentInBrief>On 6 August 1991 Berners-Lee answered a question on the alt.hypertext newsgroup, and an hour later
       posted a summary of the project. Both gave the address of info.cern.ch, where the browser, the editor, the server
       and the documentation sat for anyone to fetch. HTML left the lab before it had a specification, as a list of tags
@@ -54,4 +54,4 @@ export const WebGoesPublic: FC = () =>
           being payable to CERN”</a>. Every one of those servers was serving HTML that no standard yet defined;
         HTML 2.0, in 1995, is the answer to that.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

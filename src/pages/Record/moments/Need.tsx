@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -7,7 +7,7 @@ import {moments} from '../calendar';
 const informationManagementProposal = 'https://www.w3.org/History/1989/proposal.html';
 
 export const Need: FC = () =>
-  <Moment heading={moments.headings.need}>
+  <YearMoment heading={moments.headings.need}>
     <MomentInBrief>Several thousand people at CERN, two-year stays, and what one project learned <a className="signpost" href={informationManagementProposal}>“sometimes lost forever, or only recovered after a detective
       investigation in an emergency”</a>. Tim Berners-Lee{' '}
     <a className="signpost" href={informationManagementProposal}>proposed a web of notes with links between them</a>, shaped like
@@ -43,4 +43,4 @@ export const Need: FC = () =>
         on the cover a note quoted ever
         since: <a className="signpost" href="https://worldwideweb.cern.ch/history/">“Vague, but exciting.”</a></p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

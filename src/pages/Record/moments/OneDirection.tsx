@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {Moment} from './Moment';
+import {MonthMoment} from './MonthMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {moments} from '../calendar';
 
@@ -9,7 +9,7 @@ const elmArchitecture = 'https://guide.elm-lang.org/architecture/';
 const reduxPrinciples = 'https://redux.js.org/understanding/thinking-in-redux/three-principles';
 
 export const OneDirection: FC = () =>
-  <Moment heading={moments.headings.oneDirection}>
+  <MonthMoment heading={moments.headings.oneDirection}>
     <MomentInBrief>Two-way binding let a change in the page change the model and a change in the model change the page.
       Facebook found that it led to cascading updates. Its answer was Flux, a pattern in which data moves one way only,
       and Flux’s code went public in July 2014.</MomentInBrief>
@@ -28,4 +28,4 @@ export const OneDirection: FC = () =>
     <p className="paragraph muted-ink hyphenated"><Link className="signpost" to={`#${moments.headings.frameworks.id}`}>The 2010
       moment</Link> tells the binding Flux answered. This site keeps the direction and none of the libraries: an event
       goes in, a pure function returns the next state, and the page is drawn from it.</p>
-  </Moment>;
+  </MonthMoment>;

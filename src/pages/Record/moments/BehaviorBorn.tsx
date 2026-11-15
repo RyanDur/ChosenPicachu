@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {MonthMoment} from './MonthMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {moments} from '../calendar';
 
@@ -9,7 +9,7 @@ const infoworldInterview = 'https://www.infoworld.com/article/2653798/javascript
 const hamToHamster = 'https://adactio.com/journal/1595';
 
 export const BehaviorBorn: FC = () =>
-  <Moment heading={moments.headings.behaviorBorn}>
+  <MonthMoment heading={moments.headings.behaviorBorn}>
     <MomentInBrief>Brendan Eich <a className="signpost" href={computerworldInterview}>wrote the interpreter in about ten days</a> in May
       1995, for a scripting language that could <a className="signpost" href={computerworldInterview}>“touch elements of the page,
         change their properties, and respond to events”</a>: a <a className="signpost" href={computerworldInterview}>glue
@@ -70,4 +70,4 @@ export const BehaviorBorn: FC = () =>
       words he credits to Dr. Johnson: <a className="signpost" href={eichPopularity}>“the part that is good is not
         original, and the part that is original is not good.”</a> And
       still: <a className="signpost" href={eichPopularity}>“JS beat Java on the client”</a>.</p>
-  </Moment>;
+  </MonthMoment>;

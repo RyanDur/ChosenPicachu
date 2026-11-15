@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {MonthMoment} from './MonthMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {moments} from '../calendar';
 
@@ -7,7 +7,7 @@ const raggettHtmlHistory = 'https://www.w3.org/People/Raggett/book4/ch02.html';
 const rfc1866 = 'https://www.rfc-editor.org/rfc/rfc1866';
 
 export const HtmlTwo: FC = () =>
-  <Moment heading={moments.headings.htmlTwo}>
+  <MonthMoment heading={moments.headings.htmlTwo}>
     <MomentInBrief>The first HTML standard was written after the fact. HTML 2.0, published in November 1995, is the set
       of tags the browsers already used, collected and defined. Dave Raggett’s history puts the cause plainly: the
       browsers had each added their own, and the language was becoming ill-defined.</MomentInBrief>
@@ -60,4 +60,4 @@ export const HtmlTwo: FC = () =>
         IETF HTML 2 standard and incorporated features from HTML+ and HTML 3”</a>.
       Standardizing what the browsers already did became HTML’s habit, and in 2007 its
       stated principle.</p>
-  </Moment>;
+  </MonthMoment>;
