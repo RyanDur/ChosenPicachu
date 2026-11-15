@@ -33,18 +33,18 @@ const lookbacks = [
   {lookback: 'session', name: 'session', milliseconds: Number.POSITIVE_INFINITY}
 ] satisfies readonly NamedLookback[];
 
-const still = (named: NamedLookback): LookbackTotals =>
-  ({...named, trades: 0, buys: 0, sells: 0, volume: 0});
+const still = (lookback: NamedLookback): LookbackTotals =>
+  ({...lookback, trades: 0, buys: 0, sells: 0, volume: 0});
 
-const aggregate = (named: NamedLookback, trades: readonly Trade[]): LookbackTotals => {
+const aggregate = (lookback: NamedLookback, trades: readonly Trade[]): LookbackTotals => {
   if (empty(trades)) {
-    return still(named);
+    return still(lookback);
   }
   const volume = trades.reduce((total, trade) => total + trade.size, 0);
   const notional = trades.reduce((total, trade) => total + trade.size * trade.price, 0);
   const buys = trades.filter(trade => trade.takerSide === 'buy').length;
   return {
-    ...named,
+    ...lookback,
     trades: trades.length,
     buys,
     sells: trades.length - buys,
@@ -58,8 +58,8 @@ const aggregate = (named: NamedLookback, trades: readonly Trade[]): LookbackTota
 };
 
 const perLookback = (trades: readonly Trade[]): readonly LookbackTotals[] =>
-  lookbacks.map(named => aggregate(named, maybe(trades[trades.length - 1])
-    .map(({tradedAt: now}) => trades.filter(trade => now - trade.tradedAt < named.milliseconds))
+  lookbacks.map(lookback => aggregate(lookback, maybe(trades[trades.length - 1])
+    .map(({tradedAt: now}) => trades.filter(trade => now - trade.tradedAt < lookback.milliseconds))
     .orElse([])));
 
 type TradeTotals = {
