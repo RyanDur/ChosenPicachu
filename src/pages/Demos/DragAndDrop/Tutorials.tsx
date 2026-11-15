@@ -55,7 +55,7 @@ export const ListTutorials: FC = () => {
         <Exercise/>
       </Station>
       <Station at={4}>
-        <h3 className="phase-title title">Layer on functionality, in the order it was asked for</h3>
+        <h3 className="phase-title title">Add features, in the order they were asked for</h3>
         <DialNote reads="list"/>
         <ListControls/>
         <NativeRecipe/>
