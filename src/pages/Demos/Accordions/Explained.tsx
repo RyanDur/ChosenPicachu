@@ -414,10 +414,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     item around the radio handles it by dispatching <code className="monospaced">opened</code> with the bar
                     that names its fold. The accordion’s reducer keeps that one fold open and closes the rest, and each
                     panel reads from the context whether its fold is still the open one.</p>
-                  <Snippet label="TS" lines={[
-                    ...carve.span(exclusiveMeasuredAccordionSource, 'const [open, dispatch] = useReducer(', 'const [open, dispatch] = useReducer('), lines.blank,
-                    ...carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={title} onChange={() => dispatch(', '<MeasuredPanel namedBy={barOf(id)}>')
-                  ]}/>
+                  <Snippet label="TS" lines={carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={title} onChange={() => dispatch(', '<MeasuredPanel namedBy={barOf(id)}>')}/>
                 </li>}
               </ol>
             </details>
