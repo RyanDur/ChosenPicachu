@@ -140,8 +140,8 @@ const bodyOf = answer => JSON.parse(answer.slice(answer.indexOf('{'), answer.las
 
 describe('the stub stage answers the gallery’s museums from recordings', () => {
   test.each([
-    ['Harvard', '/harvard?q=imagepermissionlevel:0%20AND%20_exists_:primaryimageurl&page=1&size=8&fields=id,title,people,primaryimageurl&apikey=recorded'],
-    ['Cleveland', '/cleveland/?skip=0&limit=8&has_image=1&fields=id,title,creators,tombstone,images']
+    ['Harvard', '/harvard?q=imagepermissionlevel%3A0+AND+_exists_%3Aprimaryimageurl&page=1&size=8&fields=id%2Ctitle%2Cpeople%2Cprimaryimageurl&apikey=recorded'],
+    ['Cleveland', '/cleveland/?skip=0&limit=8&has_image=1&fields=id%2Ctitle%2Ccreators%2Ctombstone%2Cimages']
   ])('should answer the gallery’s first look at %s with its recorded wall', async (_museum, address) => {
     const {stage, port} = await stageUp();
 
