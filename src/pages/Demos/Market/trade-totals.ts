@@ -9,13 +9,13 @@ export type Traded = {
 
 export type Lookback = 'minute' | 'five-minutes' | 'fifteen-minutes' | 'hour' | 'session';
 
-type LookbackSpan = {
+type NamedLookback = {
   lookback: Lookback;
   name: string;
   milliseconds: number;
 };
 
-export type LookbackTotals = LookbackSpan & {
+export type LookbackTotals = NamedLookback & {
   trades: number;
   buys: number;
   sells: number;
@@ -31,20 +31,20 @@ const lookbacks = [
   {lookback: 'fifteen-minutes', name: 'last 15 minutes', milliseconds: 15 * MINUTE},
   {lookback: 'hour', name: 'this hour', milliseconds: 60 * MINUTE},
   {lookback: 'session', name: 'session', milliseconds: Number.POSITIVE_INFINITY}
-] satisfies readonly LookbackSpan[];
+] satisfies readonly NamedLookback[];
 
-const still = (span: LookbackSpan): LookbackTotals =>
-  ({...span, trades: 0, buys: 0, sells: 0, volume: 0});
+const still = (named: NamedLookback): LookbackTotals =>
+  ({...named, trades: 0, buys: 0, sells: 0, volume: 0});
 
-const aggregate = (span: LookbackSpan, trades: readonly Trade[]): LookbackTotals => {
+const aggregate = (named: NamedLookback, trades: readonly Trade[]): LookbackTotals => {
   if (empty(trades)) {
-    return still(span);
+    return still(named);
   }
   const volume = trades.reduce((total, trade) => total + trade.size, 0);
   const notional = trades.reduce((total, trade) => total + trade.size * trade.price, 0);
   const buys = trades.filter(trade => trade.takerSide === 'buy').length;
   return {
-    ...span,
+    ...named,
     trades: trades.length,
     buys,
     sells: trades.length - buys,
@@ -58,12 +58,12 @@ const aggregate = (span: LookbackSpan, trades: readonly Trade[]): LookbackTotals
 };
 
 const perLookback = (trades: readonly Trade[]): readonly LookbackTotals[] =>
-  lookbacks.map(span => aggregate(span, maybe(trades[trades.length - 1])
-    .map(({tradedAt: now}) => trades.filter(trade => now - trade.tradedAt < span.milliseconds))
+  lookbacks.map(named => aggregate(named, maybe(trades[trades.length - 1])
+    .map(({tradedAt: now}) => trades.filter(trade => now - trade.tradedAt < named.milliseconds))
     .orElse([])));
 
 type TradeTotals = {
-  lookbacks: readonly LookbackSpan[];
+  lookbacks: readonly NamedLookback[];
   perLookback: (trades: readonly Trade[]) => readonly LookbackTotals[];
 };
 
