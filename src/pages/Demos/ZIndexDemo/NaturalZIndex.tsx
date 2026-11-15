@@ -12,17 +12,17 @@ const cardsToRaise = inOrder.raisedCards.map(value => ({words: words[value], val
 export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
   const {raised, change} = useControls();
   const [isCollapsed, updateCollapsed] = useState(true);
-  const onClick = () => updateCollapsed(not(isCollapsed));
-  const pileCard = (card: RaisedCard) => classNames('pile-card card rounded-corners floating', isCollapsed && 'closed', raised === card && 'raised');
+  const togglePile = () => updateCollapsed(not(isCollapsed));
+  const pileCardClasses = (card: RaisedCard) => classNames('pile-card card rounded-corners floating', isCollapsed && 'closed', raised === card && 'raised');
 
   return <figure className={classNames('natural-z-index', className)}>
     <button type="button" className="button primary" aria-expanded={not(isCollapsed)} aria-controls="z-index-pile"
-      onClick={onClick}>{isCollapsed ? 'Expand' : 'Collapse'}</button>
+      onClick={togglePile}>{isCollapsed ? 'Expand' : 'Collapse'}</button>
     <PillGlider label="card raised" name="card-raised" choices={cardsToRaise} chosen={raised} onChosen={next => change({raised: next})}/>
     <ol id="z-index-pile" className="demo-container">
-      <li className={pileCard('first')}>First</li>
-      <li className={pileCard('second')}>Second</li>
-      <li className={pileCard('third')}>Third</li>
+      <li className={pileCardClasses('first')}>First</li>
+      <li className={pileCardClasses('second')}>Second</li>
+      <li className={pileCardClasses('third')}>Third</li>
     </ol>
     <figcaption className="caption"><strong className="bold">The pile.</strong> Raise a card over the others with the
       pills above it.</figcaption>

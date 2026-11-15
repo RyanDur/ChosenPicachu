@@ -41,7 +41,7 @@ export const StackingExplained: FC = () =>
           still at auto, and still painted in the order the code lists them. A z-index only shows where cards
           overlap. Expand the pile, and a raise changes nothing you can see. Collapse it again, and the raised
           card comes down on top.</p>
-        <Snippet label="TS" lines={carve.unit(naturalSource, 'const pileCard =')}/>
+        <Snippet label="TS" lines={carve.unit(naturalSource, 'const pileCardClasses =')}/>
         <Snippet label="CSS" lines={carve.unit(zIndexCss, '.raised {')}/>
         <OneNumberLiftsOneCard/>
       </li>
