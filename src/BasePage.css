@@ -492,13 +492,10 @@
         block-size: 100dvh;
       }
 
-      .rail .side-nav {
+      .rail .feedback-item {
         flex: 1;
+        align-content: start;
       }
-    }
-
-    #root:has(.app-footer) .feedback-item {
-      block-size: var(--base-x-12);
     }
   }
 }
