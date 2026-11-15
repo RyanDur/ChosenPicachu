@@ -1,12 +1,7 @@
 .home {
   display: grid;
-  gap: var(--base-x-3);
+  gap: var(--base-x-2);
   padding: var(--base-x-3) var(--page-inset);
-
-  .opening {
-    display: grid;
-    gap: var(--base-x-2);
-  }
 
   .thesis {
     margin: 0;

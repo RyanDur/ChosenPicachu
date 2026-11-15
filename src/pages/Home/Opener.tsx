@@ -4,7 +4,7 @@ import {Paths} from '@navigation';
 import {recordAddress} from '@pages/Record';
 
 export const Opener: FC = () =>
-  <header className="opening">
+  <>
     <p className="thesis paragraph">I made this site because I couldn’t find one about how HTML, CSS and JavaScript work
       together. There is plenty on each. MDN documents all three in depth, the standards define each in its own
       specification, and most courses teach them one at a time. But a page is built from all three at once, and each has
@@ -34,4 +34,4 @@ export const Opener: FC = () =>
       work on features built from this site’s own code and explained beside it, running from simple to expert. Some
       compare the trick we used before the platform could do the job with what it does now; the rest show what the
       platform does with no library for the job.</p>
-  </header>;
+  </>;
