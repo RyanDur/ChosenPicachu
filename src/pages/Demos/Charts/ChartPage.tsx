@@ -3,8 +3,6 @@ import {Navigate, useParams} from 'react-router';
 import {DemoTopics} from '../demo-topics';
 import {demoTab} from '../demo-tab';
 import {TabLink} from '@pages/Demos/TabLink';
-import {marketReads} from '../Market';
-import {useMarketRead} from '../Market/Trading';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {Pressure} from './Pressure';
@@ -23,16 +21,11 @@ type Feature = {
   chart: FC;
 };
 
-const LivePrice: FC = () => <PriceChart trades={useMarketRead(marketReads.liveTrades)}/>;
-const LiveCandles: FC = () => <Candles trades={useMarketRead(marketReads.liveTrades)}/>;
-const LivePressure: FC = () => <Pressure trades={useMarketRead(marketReads.liveTrades)}/>;
-const LivePie: FC = () => <Pie trades={useMarketRead(marketReads.liveTrades)}/>;
-
 const features: Record<ChartKind, Feature> = {
   price: {
     name: 'price line',
     reference: 'https://en.wikipedia.org/wiki/Line_chart',
-    chart: LivePrice,
+    chart: PriceChart,
     quote: 'The ticker tells me now; it doesn’t tell me the way here. I want to glance up ' +
       'and know whether the market is climbing, stalling, or rolling over, without reading ' +
       'a single digit.'
@@ -40,7 +33,7 @@ const features: Record<ChartKind, Feature> = {
   candles: {
     name: 'candles',
     reference: 'https://en.wikipedia.org/wiki/Candlestick_chart',
-    chart: LiveCandles,
+    chart: Candles,
     quote: 'The line smooths over the fight. A drift and a battle can draw the same shape, ' +
       'so I want each bucket of time to answer for itself: where it opened and closed, how far it ' +
       'reached, and how much conviction was underneath.'
@@ -48,14 +41,14 @@ const features: Record<ChartKind, Feature> = {
   pressure: {
     name: 'pressure',
     reference: 'https://en.wikipedia.org/wiki/Order_flow_trading',
-    chart: LivePressure,
+    chart: Pressure,
     quote: 'I can see the price move; I can’t see who is pushing it. When it breaks out, I ' +
       'want to know whether buyers drove it there or the sellers just stepped away.'
   },
   pie: {
     name: 'pie',
     reference: 'https://en.wikipedia.org/wiki/Pie_chart',
-    chart: LivePie,
+    chart: Pie,
     quote: 'The bars tell me the battle, minute by minute. At the end I want the war: one ' +
       'circle, who owned the session.'
   }

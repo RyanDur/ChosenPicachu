@@ -38,7 +38,6 @@ type Props = {
 };
 
 export const Workspace: FC<Props> = ({product}) => {
-  const trades = useMarketRead(marketReads.liveTrades);
   const status = useMarketRead(marketReads.feedStatus);
   const {seats, absentKinds, add, remove, reorder} = useDesk();
   const [report, setReport] = useState('');
@@ -99,10 +98,10 @@ export const Workspace: FC<Props> = ({product}) => {
         </Link>
         {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
         {chartKinds.match(kind, {
-          price: () => <PriceChart id={`chart-${kind}`} trades={trades} actions={actions}/>,
-          candles: () => <Candles id={`chart-${kind}`} trades={trades} actions={actions}/>,
-          pressure: () => <Pressure trades={trades} actions={actions}/>,
-          pie: () => <Pie trades={trades} actions={actions}/>
+          price: () => <PriceChart id={`chart-${kind}`} actions={actions}/>,
+          candles: () => <Candles id={`chart-${kind}`} actions={actions}/>,
+          pressure: () => <Pressure actions={actions}/>,
+          pie: () => <Pie actions={actions}/>
         }).orNull()}
       </li>;
     })}

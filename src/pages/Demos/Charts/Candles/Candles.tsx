@@ -1,6 +1,7 @@
 import {Explainer} from '@components/Explainer';
 import {FC, ReactNode} from 'react';
-import {periodHistory, Trade} from '../../Market';
+import {marketReads, periodHistory} from '../../Market';
+import {useMarketRead} from '../../Market/Trading';
 import {candleShapes} from './candle-shapes';
 import {chartCaption} from '../chart-caption';
 import {useShownCandles} from '../useShownCandles';
@@ -21,12 +22,12 @@ const CANDLE_HEIGHT = 80;
 const VOLUME_HEIGHT = 24;
 
 type Props = {
-  trades: readonly Trade[];
   id?: string;
   actions?: ReactNode;
 };
 
-export const Candles: FC<Props> = ({trades, id: given, actions}) => {
+export const Candles: FC<Props> = ({id: given, actions}) => {
+  const trades = useMarketRead(marketReads.liveTrades);
   const period = useDesk().periodOf('candles');
   const {id, history, bucketMilliseconds, shownCandles} = useShownCandles({id: given, kind: 'candles', period, trades});
   const bodies = candleShapes.drawn(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
