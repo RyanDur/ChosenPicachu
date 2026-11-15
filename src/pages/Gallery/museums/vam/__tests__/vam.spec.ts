@@ -41,6 +41,14 @@ describe('VAM as a source of art', () => {
 
       expect(actual).toEqual(fromVAMArt);
     });
+
+    test('asks VAM for the works matching a search that holds an ampersand', async () => {
+      setupVAMAllArtResponse(vamArtResponse, {limit: 8, page: 1, search: 'rock & roll'});
+
+      const actual = await art.getAll({page: 1, size: 8, search: 'rock & roll', source: Source.VAM}).orNull();
+
+      expect(actual).toEqual(fromVAMArt);
+    });
   });
 
   describe('one piece', () => {
