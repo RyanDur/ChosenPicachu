@@ -339,7 +339,9 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     has started. The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says more about state.</p>
                   <Snippet label="TS" lines={[
                     ...carve.unit(panelSource, 'type Motion ='), lines.blank,
-                    ...carve.span(panelSource, 'const [shown, setShown] = useState(open);', 'const [motion, setMotion] = useState<Motion>(resting);')
+                    ...carve.unit(panelSource, 'type Panel ='), lines.blank,
+                    ...carve.unit(panelSource, 'type PanelChange ='), lines.blank,
+                    ...carve.span(panelSource, 'const open = useOpenFolds()', 'const [{shown, motion}, dispatch] = useReducer(')
                   ]}/>
                 </li>
                 <li className="run">
@@ -359,7 +361,9 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     where the motion starts. The second, once that start is on the page, sets where it ends. So the
                     script measures the panel and pins its start with no frame showing in between.</p>
                   <Snippet label="TS" lines={[
-                    ...carve.unit(panelSource, 'const pressed'), lines.blank,
+                    ...carve.unit(panelSource, 'const motionOnPress'), lines.blank,
+                    ...carve.unit(panelSource, 'const panelChange = {'), lines.blank,
+                    ...carve.unit(panelSource, 'const nextPanel'), lines.blank,
                     ...carve.span(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [motion, open]);'), lines.blank,
                     ...carve.unit(panelSource, 'const settled')
                   ]}/>
@@ -406,8 +410,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     item around the radio handles it by recording its own title in React state as the open one, and the
                     fold whose title is no longer the open one closes from that state.</p>
                   <Snippet label="TS" lines={[
-                    ...carve.span(exclusiveMeasuredAccordionSource, 'const [open, setOpen] = useState<string>();', 'const [open, setOpen] = useState<string>();'), lines.blank,
-                    ...carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={title} onChange={() => setOpen(title)}>', '<MeasuredPanel open={open === title}')
+                    ...carve.span(exclusiveMeasuredAccordionSource, 'const [open, dispatch] = useReducer(', 'const [open, dispatch] = useReducer('), lines.blank,
+                    ...carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={title} onChange={() => dispatch(', '<MeasuredPanel namedBy={barOf(id)}>')
                   ]}/>
                 </li>}
               </ol>
