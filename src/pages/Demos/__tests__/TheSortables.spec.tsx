@@ -179,7 +179,7 @@ describe('the sortable list demo', () => {
     expect(demoPage.title('The user can keep the list in the order they mean')).toBeVisible();
     expect(demoPage.signpost('user story'))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
-    expect(demoPage.title('Layer on functionality, in the order it was asked for')).toBeVisible();
+    expect(demoPage.title('Add features, in the order they were asked for')).toBeVisible();
     expect(explanation.linkNamed(recipe, 'dataTransfer'))
       .toHaveAttribute('href', expect.stringContaining('developer.mozilla.org/en-US/docs/Web/API/DataTransfer'));
   });
@@ -235,9 +235,9 @@ describe('arriving at a station', () => {
     render(<TestApp at={`${demosAt('drag-and-drop')}#station-4`} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    await demoPage.findTitle('Layer on functionality, in the order it was asked for');
+    await demoPage.findTitle('Add features, in the order they were asked for');
 
-    await waitFor(() => expect(itemHeadedBy('the stations', 'Layer on functionality, in the order it was asked for')).toHaveFocus());
+    await waitFor(() => expect(itemHeadedBy('the stations', 'Add features, in the order they were asked for')).toHaveFocus());
   });
 });
 
