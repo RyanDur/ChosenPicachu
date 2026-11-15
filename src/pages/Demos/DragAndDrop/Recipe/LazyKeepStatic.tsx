@@ -6,8 +6,8 @@ import {
   DirectState,
   HoldTheAloft,
   KeepStanding,
+  ListGuarantees,
   PlatformCurrency,
-  Promises,
   RoadEnd,
   StashLanding,
   StraightToOrder
@@ -21,7 +21,7 @@ export const LazyKeepStaticRecipe: FC = () => <>
     can="The user can arrange the list by hand"
     soThat="it reads in the order they mean">
     <PlatformCurrency/>
-    <Promises/>
+    <ListGuarantees/>
     <Steps>
       <ArmTheDrag itemSource={itemSource}/>
       <HoldTheAloft/>
