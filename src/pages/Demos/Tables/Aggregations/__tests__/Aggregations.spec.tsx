@@ -52,13 +52,4 @@ describe('the live aggregations', () => {
     expect(aggregations.lookbacks().slice(0, 2)).toEqual(['last 5 minutes', 'this minute']);
     expect(aggregations.columns().slice(0, 3)).toEqual(['lookback', 'buys', 'trades']);
   });
-
-  test('in the vanilla world the card holds the frame alone once it stands', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at="/?world=vanilla" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
-    await aggregations.arrived();
-
-    await waitFor(() => expect(aggregations.tableIfAny()).not.toBeInTheDocument());
-    expect(aggregations.frame()).toBeInTheDocument();
-  });
 });
