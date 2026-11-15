@@ -6,17 +6,16 @@ import {setupAICAllArtResponse} from '@pages/Gallery/__test_support';
 import {setupUsersResponse} from '@pages/Users/__test_support';
 import {landmarks} from '../__test_support';
 
-describe('the landmarks a reader meets, in order', () => {
+describe('the frame’s landmarks a reader meets, in order', () => {
   test('on the home page', async () => {
     render(<TestApp at={Paths.home}/>);
     await screen.findByRole('main');
 
-    expect(landmarks.inOrder()).toEqual([
+    expect(landmarks.ofTheFrame()).toEqual([
       ['region', '', 'pages and feedback'],
       ['navigation', 'side-nav', 'site'],
       ['banner', 'app-header', ''],
-      ['main', '', ''],
-      ['banner', '', '']
+      ['main', '', '']
     ]);
   });
 
@@ -25,13 +24,12 @@ describe('the landmarks a reader meets, in order', () => {
     render(<TestApp at={Paths.artGallery}/>);
     await screen.findByRole('contentinfo');
 
-    expect(landmarks.inOrder()).toEqual([
+    expect(landmarks.ofTheFrame()).toEqual([
       ['region', '', 'pages and feedback'],
       ['navigation', 'side-nav', 'site'],
       ['banner', 'app-header', ''],
       ['complementary', 'filter', 'gallery settings'],
       ['main', '', ''],
-      ['navigation', '', 'museums'],
       ['contentinfo', 'app-footer', ''],
       ['navigation', 'gallery-nav', 'pagination']
     ]);
@@ -42,13 +40,11 @@ describe('the landmarks a reader meets, in order', () => {
     render(<TestApp at={Paths.users}/>);
     await screen.findByRole('main');
 
-    expect(landmarks.inOrder()).toEqual([
+    expect(landmarks.ofTheFrame()).toEqual([
       ['region', '', 'pages and feedback'],
       ['navigation', 'side-nav', 'site'],
       ['banner', 'app-header', ''],
-      ['main', '', ''],
-      ['form', '', 'User Information'],
-      ['region', 'user-candidates', 'User Candidates']
+      ['main', '', '']
     ]);
   });
 
@@ -56,12 +52,11 @@ describe('the landmarks a reader meets, in order', () => {
     render(<TestApp at="/no-such-room/"/>);
     await screen.findByRole('main');
 
-    expect(landmarks.inOrder()).toEqual([
+    expect(landmarks.ofTheFrame()).toEqual([
       ['region', '', 'pages and feedback'],
       ['navigation', 'side-nav', 'site'],
       ['banner', 'app-header', ''],
-      ['main', '', ''],
-      ['region', '', 'There is no room at this address.']
+      ['main', '', '']
     ]);
   });
 });
