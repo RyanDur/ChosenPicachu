@@ -8,8 +8,8 @@ import {OpenFolds} from './OpenFolds';
 import './Accordions.css';
 import './OldWayMotion.css';
 
-const toggled = ({target}: ChangeEvent<HTMLLIElement>, fold: string): Opened | Closed =>
-  target instanceof HTMLInputElement && target.checked ? foldChange.opened(fold) : foldChange.closed(fold);
+const toggled = ({target}: ChangeEvent<HTMLLIElement>, bar: string): Opened | Closed =>
+  target instanceof HTMLInputElement && target.checked ? foldChange.opened(bar) : foldChange.closed(bar);
 
 const barOf = (id: number): string => `measured-fold-${id}-checkbox-label`;
 
