@@ -3,6 +3,7 @@ import {Motion, Origin} from '@components/DragSortableTable';
 import {DialGroup} from './DialGroup';
 import {DialRow} from './DialRow';
 import {Pace, useControls} from './useControls';
+import '../../Disclosure.css';
 import './Controls.css';
 
 export type Copy = {

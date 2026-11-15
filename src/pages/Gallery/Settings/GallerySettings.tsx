@@ -3,6 +3,7 @@ import {has, maybe} from '@ryandur/sand';
 import {Search} from '@pages/Gallery/Search';
 import {PageControl} from '@pages/Gallery/PageControl';
 import {useGallery} from '@pages/Gallery/Context';
+import '../../Disclosure.css';
 import './GallerySettings.css';
 import {museums} from '@pages/Gallery/museums';
 
