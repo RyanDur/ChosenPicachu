@@ -1,4 +1,4 @@
-.step-reveal {
+.reveal-fold {
   &::details-content {
     margin-top: var(--base-x-2);
   }
