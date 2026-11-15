@@ -67,10 +67,10 @@ export const BehaviorStory: FC = () =>
       to work on a page that already existed. The single-page application had it make the HTML in the browser, and the
       costs grew with the applications: pages that stayed blank until the script ran, a document that a crawler which
       doesn’t run script could not read, the back button rebuilt by hand. Its gains, a page served as plain files and
-      state kept as the reader moves around, are this site’s reading of the same moments, and the home page weighs the
-      two. The platform took in what the scripts had proved, XMLHttpRequest into every browser and custom elements into
-      the HTML Standard, and the language’s own committee learned to move only on two implementations. Server rendering
-      then sent the document first again, and Osmani and Miller’s survey, written for Chrome, leans that
+      state kept as the reader moves around, are this site’s reading of the same moments, and the Practice page weighs
+      the two. The platform took in what the scripts had proved, XMLHttpRequest into every browser and custom elements
+      into the HTML Standard, and the language’s own committee learned to move only on two implementations. Server
+      rendering then sent the document first again, and Osmani and Miller’s survey, written for Chrome, leans that
       way: <a className="signpost" href="https://web.dev/rendering-on-the-web/">“It’s fine to mostly ship HTML with
         minimal JavaScript to get an experience interactive.”</a> Inside the program, either way, the state is what is
       true right now, an event is what just happened, and the page is drawn from the two. That is the program’s

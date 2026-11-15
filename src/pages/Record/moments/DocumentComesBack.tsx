@@ -13,8 +13,8 @@ export const DocumentComesBack: FC = () =>
     summary={<>The question this time was where the page is rendered. In October 2016 Next.js opened as a framework for
       server-rendered pages, sending real HTML first and attaching behavior after; static generation (pages rendered
       once, at build time), islands and server components refine it: the document first, the program where the page
-      needs one. Single-page applications went on alongside them; the home page weighs the two ways, and the Behavior
-      story counts the costs.</>}>
+      needs one. Single-page applications went on alongside them; the Practice page weighs the two ways, and the
+      Behavior story counts the costs.</>}>
     <p className="paragraph muted-ink hyphenated">Next.js opened on 25 October 2016
       as <a className="signpost" href={nextJsAnnouncement}>“a small framework for server-rendered universal JavaScript webapps”</a>,
       built on React, with <a className="signpost" href={nextJsAnnouncement}>“Automatic server rendering and code

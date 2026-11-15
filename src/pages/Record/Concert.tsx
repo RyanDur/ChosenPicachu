@@ -85,9 +85,9 @@ export const Concert: FC = () =>
     <p className="paragraph hyphenated">Script took on making the document last. The single-page application made the
       HTML in the browser, and server rendering, the oldest technique on the record, came back beside it, refined into
       islands, a name that <a className="signpost" href="https://jasonformat.com/islands-architecture/">“was coined by
-        Etsy’s frontend architect Katie Sylor-Miller”</a>. The home page weighs the two, and the Behavior story counts
-      the costs. For the method, the case differs from the others in one way: the platform has not closed it, and both
-      ways are in use.</p>
+        Etsy’s frontend architect Katie Sylor-Miller”</a>. The Practice page weighs the two, and the Behavior story
+      counts the costs. For the method, the case differs from the others in one way: the platform has not closed it, and
+      both ways are in use.</p>
     <p className="paragraph hyphenated">Under those four cases runs one about who set the language. At first each side
       tried to set it alone. The browsers that shipped first thought they were defining it. In 1996 Netscape argued that
       if users liked one of its inventions <a className="signpost"
