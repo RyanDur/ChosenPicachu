@@ -3,8 +3,8 @@ import {Link} from 'react-router';
 import {recordAddress} from '@pages/Record';
 
 export const WhereThePageIsMade: FC = () =>
-  <section className="closing trim-rule-above" aria-labelledby="where-the-page-is-made">
-    <h2 className="closing-title title" id="where-the-page-is-made">Where the page is made</h2>
+  <section className="practice-trade trim-rule-above" aria-labelledby="where-the-page-is-made">
+    <h2 className="sub-title" id="where-the-page-is-made">Where the page is made</h2>
     <p className="paragraph">What changes between sites is where the HTML is made, and that is a trade. A server can
       send each page as a document, so it can be read before any script runs, and the browser handles moving between
       pages: scrolling, focus, the back button. That needs a server, or a build step that renders each page ahead of
