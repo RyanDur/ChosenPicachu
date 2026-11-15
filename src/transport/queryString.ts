@@ -8,5 +8,5 @@ export const queryString: QueryString = {
   from: (params = {}) =>
     maybe(Object.entries(params)
       .filter(([, value]) => has(value))
-      .map(([key, value]) => `${key}=${String(value)}`).join('&')).map(query => `?${query}`).orElse('')
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`).join('&')).map(query => `?${query}`).orElse('')
 };

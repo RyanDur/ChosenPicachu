@@ -32,6 +32,15 @@ describe('search', () => {
     expect(appAddress.path()).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
   });
 
+  it('a searched phrase holding an ampersand reads whole in the label', async () => {
+    render(<TestApp at={Paths.artGallery}/>);
+
+    await searchPage.bar.type('rock & roll');
+    await searchPage.bar.submit();
+
+    expect(await searchPage.bar.queryNamedAppears('Search For: rock & roll')).toBeInTheDocument();
+  });
+
   it('the keyboard walks from the query to reset, then submit', async () => {
     render(<TestApp at={Paths.artGallery}/>);
     await searchPage.bar.type('a');
