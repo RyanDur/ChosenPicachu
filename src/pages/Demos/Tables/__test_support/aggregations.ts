@@ -7,6 +7,8 @@ const card = (): HTMLElement => screen.getByRole('region', {name: 'live aggregat
 export const aggregations = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'live aggregations'}, untilTheTablesTabRenders),
   card,
+  tableIfAny: (): HTMLElement | null => within(card()).queryByRole('table'),
+  frame: (): HTMLElement => within(card()).getByTitle('the living table, in vanilla'),
   header: (measure: string): HTMLElement => within(card()).getByRole('columnheader', {name: new RegExp(`^${measure}`)}),
   rows: (): HTMLElement[] => within(card()).getAllByRole('row'),
   row: (lookback: string): HTMLElement => within(card()).getByRole('row', {name: new RegExp(`^${lookback}`)}),
