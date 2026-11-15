@@ -159,6 +159,15 @@
   }
 }
 
+/* below the specificity of .attentive:active, so a pressed last link shows its press glow */
+.backdrop-separated > :where(:last-child) {
+  box-shadow: 0 var(--base) 0 var(--backdrop);
+
+  @media (width <= 1100px), (pointer: coarse) {
+    box-shadow: none;
+  }
+}
+
 .focus-ringed {
   &:focus-visible,
   &:has(:focus-visible) {
