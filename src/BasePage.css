@@ -495,10 +495,11 @@
       .rail .side-nav {
         flex: 1;
       }
-    }
 
-    #root:has(.app-footer) .feedback-item {
-      block-size: var(--base-x-12);
+      .rail .feedback-item {
+        align-content: stretch;
+        block-size: var(--base-x-8);
+      }
     }
   }
 }
