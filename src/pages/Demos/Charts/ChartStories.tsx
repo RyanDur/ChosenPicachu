@@ -59,8 +59,7 @@ const PriceStory: FC = () =>
           <Says>Each message is checked three ways before it counts. It has to parse as JSON. It has to have the fields
             a match has, each of the right kind. And its price, its size and its time have to turn into real numbers.
             What passes is a Trade. What fails never reaches the page’s state, the values the page holds and draws from,
-            as the{' '}
-          <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
+            as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
           <Says>The page keeps only the newest 1,500 trades, because the feed never ends and the page must not grow with
             it, so the live part of the price line and the candles reaches back as far as those trades do.</Says>
         </Words>
@@ -335,8 +334,7 @@ const PressureStory: FC = () =>
         <Words want="Volume says how much was traded, never who pushed. The split has to survive the grouping.">
           <Says>The decoder accepts a match only if its side is buy or sell. Coinbase marks the side of the order that
             was waiting, so <code className="monospaced">takerSideOf</code> flips the mark to the side of the trader who
-            took the trade: a mark of sell means a buyer took it. Every Trade keeps that as{' '}
-          <code className="monospaced">takerSide</code>.</Says>
+            took the trade: a mark of sell means a buyer took it. Every Trade keeps that as <code className="monospaced">takerSide</code>.</Says>
           <Says><code className="monospaced">pressureShapes.buckets</code> groups the trades into minutes and keeps two
             sums for each minute: the size buyers took and the size sellers took. The chart shows up to 60
             minutes.</Says>
@@ -383,8 +381,8 @@ const PressureStory: FC = () =>
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above,
             orange below. The bought bars wear <code className="monospaced">buy-side</code> and the sold
             bars <code className="monospaced">sell-side</code>. A class, as
-            the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink>{' '}
-            says, is a name a style sheet’s rules pick out. These two are shared classes, looks that live in the site’s
+            the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says,
+            is a name a style sheet’s rules pick out. These two are shared classes, looks that live in the site’s
             shared style sheet.</Says>
           <Says>A side class sets a side’s colors as custom properties, which
             the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains:

@@ -82,8 +82,7 @@ export const BannerControls: FC<BannerControlsProps> = ({
         chosen={enter}
         onChosen={onEnterChosen}
         reading={<>
-          <span className="when-motion-allowed">{copy.enter[enter]}</span>{' '}
-          <span className="when-less-motion">If your system asks for less motion, a new banner appears in place,
+          <span className="when-motion-allowed">{copy.enter[enter]}</span> <span className="when-less-motion">If your system asks for less motion, a new banner appears in place,
             whichever entrance you choose.</span>
         </>}/>
       <DialRow label="stack"

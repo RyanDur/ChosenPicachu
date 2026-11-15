@@ -35,13 +35,10 @@ const SortedDirectly: FC = () => {
           <Says>The toggle and its menu are the button and the menu the page writes,
             marked <code className="monospaced">data-sort-toggle</code> and <code className="monospaced">data-sort-menu</code>. When boot calls <code className="monospaced">dragSortable</code> it finds the menu’s direction buttons and wires each.</Says>
           <Says>When the reader chooses a direction, the handler <code className="monospaced">dragSortable</code> wired
-            to that button reads the button’s <code className="monospaced">value</code> attribute.{' '}
-          <code className="monospaced">sorting.choiceOf</code> looks the value up and answers with a Maybe, as
-            the <TabLink to={DemoTopics.charts}>Charts tab</TabLink> explains: the Maybe holds a choice or nothing.{' '}
-          <code className="monospaced">map</code> calls <code className="monospaced">sortMenus.choose</code> only
+            to that button reads the button’s <code className="monospaced">value</code> attribute. <code className="monospaced">sorting.choiceOf</code> looks the value up and answers with a Maybe, as
+            the <TabLink to={DemoTopics.charts}>Charts tab</TabLink> explains: the Maybe holds a choice or nothing. <code className="monospaced">map</code> calls <code className="monospaced">sortMenus.choose</code> only
             when the Maybe holds one.</Says>
-          <Says>The handler passes <code className="monospaced">sortMenus.choose</code> the context <code className="monospaced">dragSortable</code>{' '}
-            gave it: what the table knows about itself and the functions the table answers with. <code className="monospaced">sortMenus.choose</code> raises <code className="monospaced">sorted</code> to the
+          <Says>The handler passes <code className="monospaced">sortMenus.choose</code> the context <code className="monospaced">dragSortable</code> gave it: what the table knows about itself and the functions the table answers with. <code className="monospaced">sortMenus.choose</code> raises <code className="monospaced">sorted</code> to the
             page and writes the move report, the output that tells a screen reader what happened. The page
             dispatches the sort into its arrangement and calls <code className="monospaced">reconcile</code>, which
             reseats the rows the same way in the animated build and the static one.</Says>
@@ -139,13 +136,11 @@ const RankStory: FC = () => {
         <Reveal>
           <Says>Picture your toggle as the
             middle cell of a three-by-three grid drawn over the page:
-          <Mdn path="Web/CSS/position-area"> <code className="monospaced">position-area</code></Mdn> picks cells.{' '}
-          <code className="monospaced">block-end</code> takes the row below the
+          <Mdn path="Web/CSS/position-area"> <code className="monospaced">position-area</code></Mdn> picks cells. <code className="monospaced">block-end</code> takes the row below the
             toggle; <code className="monospaced">span-inline-start</code> starts from the toggle’s
             own column and spreads toward the line’s start: under the toggle, hanging left, in
             this writing
-            mode. <Mdn path="Web/CSS/position-try-fallbacks"><code className="monospaced">position-try-fallbacks</code></Mdn>:{' '}
-          <code className="monospaced">flip-block</code> is the escape hatch: when the row below has no room, the whole
+            mode. <Mdn path="Web/CSS/position-try-fallbacks"><code className="monospaced">position-try-fallbacks</code></Mdn>: <code className="monospaced">flip-block</code> is the escape hatch: when the row below has no room, the whole
             area flips above. You measure nothing and write no JavaScript.</Says>
           <Says>A popover also comes with auto margins, a border and padding by default, but none of
             that is this rule’s business: your site reset already zeroes <code className="monospaced">menu</code>, and a
@@ -191,8 +186,7 @@ const RankStory: FC = () => {
             : <Says>The sort is one value in the page’s arrangement, a column name and a direction. When the page
               calls <code className="monospaced">reconcile</code> after a new
               sort, <code className="monospaced">sortMenus.announceChanged</code> walks the columns and
-              calls <code className="monospaced">sortMenus.announce</code> for each one.{' '}
-              Given a direction, <code className="monospaced">sortMenus.announce</code> sets <code className="monospaced">aria-sort</code> on that
+              calls <code className="monospaced">sortMenus.announce</code> for each one. Given a direction, <code className="monospaced">sortMenus.announce</code> sets <code className="monospaced">aria-sort</code> on that
               column’s <code className="monospaced">th</code>.
               Given none, it removes the attribute. So the
               sorting <code className="monospaced">th</code> gains <code className="monospaced">aria-sort</code>, and

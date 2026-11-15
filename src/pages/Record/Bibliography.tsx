@@ -10,60 +10,48 @@ export const Bibliography: FC = () =>
         <ul className="works">
           <li>
             <a className="signpost" href="https://www.w3.org/History/1989/proposal.html"><cite>Information Management: A
-              Proposal</cite></a>{' '}
-            <span className="provenance caption">Tim Berners-Lee, CERN, 1989</span>
+              Proposal</cite></a> <span className="provenance caption">Tim Berners-Lee, CERN, 1989</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html"><cite>WorldWideWeb: Proposal for a HyperText Project</cite></a>{' '}
-            <span className="provenance caption">Tim Berners-Lee and Robert Cailliau, 1990</span>
+            <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html"><cite>WorldWideWeb: Proposal for a HyperText Project</cite></a> <span className="provenance caption">Tim Berners-Lee and Robert Cailliau, 1990</span>
           </li>
           <li>
             <a className="signpost" href="https://info.cern.ch/hypertext/WWW/MarkUp/Tags.html"><cite>The original HTML
-              tags</cite></a>{' '}
-            <span className="provenance caption">info.cern.ch, as preserved in 1992</span>
+              tags</cite></a> <span className="provenance caption">info.cern.ch, as preserved in 1992</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/Protocols/HTTP/AsImplemented.html"><cite>The Original HTTP
-              as defined in 1991</cite></a>{' '}
-            <span className="provenance caption">w3.org</span>
+              as defined in 1991</cite></a> <span className="provenance caption">w3.org</span>
           </li>
           <li>
             <a className="signpost" href="https://worldwideweb.cern.ch/browser/"><cite>The WorldWideWeb browser,
-              rebuilt</cite></a>{' '}
-            <span className="provenance caption">CERN, 2019</span>
+              rebuilt</cite></a> <span className="provenance caption">CERN, 2019</span>
           </li>
           <li>
             <a className="signpost" href="https://worldwideweb.cern.ch/worldwideweb/"><cite>The Browser: WorldWideWeb
-              NeXT Application</cite></a>{' '}
-            <span className="provenance caption">CERN, 2019</span>
+              NeXT Application</cite></a> <span className="provenance caption">CERN, 2019</span>
           </li>
           <li>
             <a className="signpost" href="https://worldwideweb.cern.ch/history/"><cite>A short history of the
-              browser</cite></a>{' '}
-            <span className="provenance caption">CERN, 2019</span>
+              browser</cite></a> <span className="provenance caption">CERN, 2019</span>
           </li>
           <li>
             <a className="signpost"
-              href="https://www.ppd.stfc.ac.uk/news/unravelling-the-web-how-particle-physics-launched-the-invention-that-changed-the-world/"><cite>Weaving the Web</cite></a>{' '}
-            <span className="provenance caption">Tim Berners-Lee with Mark Fischetti, 1999, as quoted by the STFC</span>
+              href="https://www.ppd.stfc.ac.uk/news/unravelling-the-web-how-particle-physics-launched-the-invention-that-changed-the-world/"><cite>Weaving the Web</cite></a> <span className="provenance caption">Tim Berners-Lee with Mark Fischetti, 1999, as quoted by the STFC</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/People/Berners-Lee/1991/08/art-6484.txt"><cite>The
-              WorldWideWeb project, posted to alt.hypertext</cite></a>{' '}
-            <span className="provenance caption">Tim Berners-Lee, 6 August 1991</span>
+              WorldWideWeb project, posted to alt.hypertext</cite></a> <span className="provenance caption">Tim Berners-Lee, 6 August 1991</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.w3.org/People/Berners-Lee/1991/08/art-6487.txt"><cite>WorldWideWeb: Summary, posted to alt.hypertext</cite></a>{' '}
-            <span className="provenance caption">Tim Berners-Lee, 6 August 1991</span>
+            <a className="signpost" href="https://www.w3.org/People/Berners-Lee/1991/08/art-6487.txt"><cite>WorldWideWeb: Summary, posted to alt.hypertext</cite></a> <span className="provenance caption">Tim Berners-Lee, 6 August 1991</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/History.html"><cite>A Little History of the World Wide
-              Web</cite></a>{' '}
-            <span className="provenance caption">W3C</span>
+              Web</cite></a> <span className="provenance caption">W3C</span>
           </li>
           <li>
-            <a className="signpost" href="https://resilientwebdesign.com/"><cite>Resilient Web Design</cite></a>{' '}
-            <span className="provenance caption">Jeremy Keith, 2016</span>
+            <a className="signpost" href="https://resilientwebdesign.com/"><cite>Resilient Web Design</cite></a> <span className="provenance caption">Jeremy Keith, 2016</span>
           </li>
         </ul>
       </section>
@@ -72,185 +60,146 @@ export const Bibliography: FC = () =>
         <ul className="works">
           <li>
             <a className="signpost" href="https://www.w3.org/People/Raggett/book4/ch02.html"><cite>A history of
-              HTML</cite></a>{' '}
-            <span className="provenance caption">Dave Raggett, from Raggett on HTML 4, 1998</span>
+              HTML</cite></a> <span className="provenance caption">Dave Raggett, from Raggett on HTML 4, 1998</span>
           </li>
           <li>
             <a className="signpost" href="https://www.rfc-editor.org/rfc/rfc1866"><cite>RFC 1866: Hypertext Markup
-              Language 2.0</cite></a>{' '}
-            <span className="provenance caption">Tim Berners-Lee and Dan Connolly, IETF, November 1995</span>
+              Language 2.0</cite></a> <span className="provenance caption">Tim Berners-Lee and Dan Connolly, IETF, November 1995</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/TR/REC-html32"><cite>HTML 3.2 Reference
-              Specification</cite></a>{' '}
-            <span className="provenance caption">W3C Recommendation, 14 January 1997</span>
+              Specification</cite></a> <span className="provenance caption">W3C Recommendation, 14 January 1997</span>
           </li>
           <li>
-            <a className="signpost" href="https://html.com/html5/"><cite>HTML5 Basics</cite></a>{' '}
-            <span className="provenance caption">html.com, undated</span>
+            <a className="signpost" href="https://html.com/html5/"><cite>HTML5 Basics</cite></a> <span className="provenance caption">html.com, undated</span>
           </li>
           <li>
-            <a className="signpost" href="https://html.com/deprecated/"><cite>Deprecated HTML features</cite></a>{' '}
-            <span className="provenance caption">html.com</span>
+            <a className="signpost" href="https://html.com/deprecated/"><cite>Deprecated HTML features</cite></a> <span className="provenance caption">html.com</span>
           </li>
           <li>
             <a className="signpost" href="https://www.infoq.com/news/2011/05/html5-design/"><cite>Jeremy Keith on the
-              Design Principles of HTML5</cite></a>{' '}
-            <span className="provenance caption">InfoQ, 2011</span>
+              Design Principles of HTML5</cite></a> <span className="provenance caption">InfoQ, 2011</span>
           </li>
           <li>
             <a className="signpost" href="https://www.smashingmagazine.com/2020/01/html5-article-section/"><cite>Why You
-              Should Choose HTML5 article Over section</cite></a>{' '}
-            <span className="provenance caption">Bruce Lawson, Smashing Magazine, 2020</span>
+              Should Choose HTML5 article Over section</cite></a> <span className="provenance caption">Bruce Lawson, Smashing Magazine, 2020</span>
           </li>
           <li>
             <a className="signpost" href="https://whatwg.org/position-paper"><cite>Position Paper for the W3C Workshop
-              on Web Applications and Compound Documents</cite></a>{' '}
-            <span className="provenance caption">Mozilla and Opera, June 2004; the rejected proposal, preserved by the
-              WHATWG</span>
+              on Web Applications and Compound Documents</cite></a> <span className="provenance caption">Mozilla and Opera, June 2004; the rejected proposal, preserved by the
+                WHATWG</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/2004/04/webapps-cdf-ws/summary"><cite>Summary, W3C Workshop
-              on Web Applications and Compound Documents</cite></a>{' '}
-            <span className="provenance caption">Dean Jackson for the W3C, 21 July 2004</span>
+              on Web Applications and Compound Documents</cite></a> <span className="provenance caption">Dean Jackson for the W3C, 21 July 2004</span>
           </li>
           <li>
             <a className="signpost" href="https://html.spec.whatwg.org/multipage/introduction.html"><cite>The HTML
-              Standard’s own history</cite></a>{' '}
-            <span className="provenance caption">the WHATWG, in the specification’s introduction</span>
+              Standard’s own history</cite></a> <span className="provenance caption">the WHATWG, in the specification’s introduction</span>
           </li>
           <li>
-            <a className="signpost" href="https://whatwg.org/faq"><cite>The WHATWG FAQ</cite></a>{' '}
-            <span className="provenance caption">the WHATWG</span>
+            <a className="signpost" href="https://whatwg.org/faq"><cite>The WHATWG FAQ</cite></a> <span className="provenance caption">the WHATWG</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/TR/html-design-principles/"><cite>HTML Design
-              Principles</cite></a>{' '}
-            <span className="provenance caption">Anne van Kesteren and Maciej Stachowiak, W3C Working Draft, 26 November
-              2007</span>
+              Principles</cite></a> <span className="provenance caption">Anne van Kesteren and Maciej Stachowiak, W3C Working Draft, 26 November
+                2007</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.w3.org/TR/2014/REC-html5-20141028/"><cite>HTML5</cite></a>{' '}
-            <span className="provenance caption">Ian Hickson, Robin Berjon, Steve Faulkner, Travis Leithead, Erika Doyle
+            <a className="signpost" href="https://www.w3.org/TR/2014/REC-html5-20141028/"><cite>HTML5</cite></a> <span className="provenance caption">Ian Hickson, Robin Berjon, Steve Faulkner, Travis Leithead, Erika Doyle
               Navara, Theresa O’Connor and Silvia Pfeiffer, W3C Recommendation, 28 October 2014</span>
           </li>
           <li>
             <a className="signpost" href="https://html.spec.whatwg.org/multipage/parsing.html"><cite>HTML Standard,
-              parsing HTML documents</cite></a>{' '}
-            <span className="provenance caption">WHATWG, undated</span>
+              parsing HTML documents</cite></a> <span className="provenance caption">WHATWG, undated</span>
           </li>
           <li>
             <a className="signpost" href="https://html.spec.whatwg.org/multipage/syntax.html"><cite>HTML Standard, the
-              HTML syntax</cite></a>{' '}
-            <span className="provenance caption">WHATWG, undated</span>
+              HTML syntax</cite></a> <span className="provenance caption">WHATWG, undated</span>
           </li>
           <li>
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA"><cite>ARIA</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA"><cite>ARIA</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search"><cite>The
-              search element</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+              search element</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress"><cite>The
-              progress element</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+              progress element</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output"><cite>The
-              output element</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+              output element</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
-            <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element"><cite>The div element</cite></a>{' '}
-            <span className="provenance caption">the HTML Standard, WHATWG</span>
+            <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element"><cite>The div element</cite></a> <span className="provenance caption">the HTML Standard, WHATWG</span>
           </li>
           <li>
             <a className="signpost" href="https://webaim.org/projects/screenreadersurvey10/"><cite>Screen Reader User
-              Survey #10</cite></a>{' '}
-            <span className="provenance caption">WebAIM, 2024</span>
+              Survey #10</cite></a> <span className="provenance caption">WebAIM, 2024</span>
           </li>
           <li>
-            <a className="signpost" href="https://webaim.org/projects/million/"><cite>The WebAIM Million</cite></a>{' '}
-            <span className="provenance caption">WebAIM</span>
+            <a className="signpost" href="https://webaim.org/projects/million/"><cite>The WebAIM Million</cite></a> <span className="provenance caption">WebAIM</span>
           </li>
           <li>
-            <a className="signpost" href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html"><cite>HTML and CSS</cite></a>{' '}
-            <span className="provenance caption">the W3C, archived 21 December 2014; the definitions survive only in the archive</span>
+            <a className="signpost" href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html"><cite>HTML and CSS</cite></a> <span className="provenance caption">the W3C, archived 21 December 2014; the definitions survive only in the archive</span>
           </li>
           <li>
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security"><cite>Website security</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/First_steps/Website_security"><cite>Website security</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html"><cite>Understanding Success Criterion 1.3.1: Info and Relationships</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, WCAG 2.2, updated 9 March 2026</span>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html"><cite>Understanding Success Criterion 1.3.1: Info and Relationships</cite></a> <span className="provenance caption">W3C WAI, WCAG 2.2, updated 9 March 2026</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html"><cite>Understanding Success Criterion 2.4.1: Bypass Blocks</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, WCAG 2.2, updated 9 February 2026</span>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/bypass-blocks.html"><cite>Understanding Success Criterion 2.4.1: Bypass Blocks</cite></a> <span className="provenance caption">W3C WAI, WCAG 2.2, updated 9 February 2026</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels.html"><cite>Understanding Success Criterion 2.4.6: Headings and Labels</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, WCAG 2.2, updated 9 March 2026</span>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/headings-and-labels.html"><cite>Understanding Success Criterion 2.4.6: Headings and Labels</cite></a> <span className="provenance caption">W3C WAI, WCAG 2.2, updated 9 March 2026</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html"><cite>Understanding Success Criterion 4.1.2: Name, Role, Value</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, WCAG 2.2, updated 12 July 2026</span>
+            <a className="signpost" href="https://www.w3.org/WAI/WCAG22/Understanding/name-role-value.html"><cite>Understanding Success Criterion 4.1.2: Name, Role, Value</cite></a> <span className="provenance caption">W3C WAI, WCAG 2.2, updated 12 July 2026</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/"><cite>Landmark
-              Regions</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, ARIA Authoring Practices Guide, undated</span>
+              Regions</cite></a> <span className="provenance caption">W3C WAI, ARIA Authoring Practices Guide, undated</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.w3.org/TR/using-aria/"><cite>Using ARIA</cite></a>{' '}
-            <span className="provenance caption">W3C, discontinued draft, 24 February 2026</span>
+            <a className="signpost" href="https://www.w3.org/TR/using-aria/"><cite>Using ARIA</cite></a> <span className="provenance caption">W3C, discontinued draft, 24 February 2026</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details"><cite>The
-              details element</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+              details element</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog"><cite>The
-              dialog element</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+              dialog element</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover"><cite>The popover attribute</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover"><cite>The popover attribute</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form"><cite>The form
-              element</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+              element</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/fieldset"><cite>The
-              fieldset element</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+              fieldset element</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/legend"><cite>The
-              legend element</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+              legend element</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
             <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/th#scope"><cite>The
-              th element</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+              th element</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/Invoker_Commands_API"><cite>Invoker Commands API</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/Invoker_Commands_API"><cite>Invoker Commands API</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
             <a className="signpost" href="https://open-ui.org/components/popover.research.explainer/"><cite>Popover API
-              (Explainer)</cite></a>{' '}
-            <span className="provenance caption">Open UI, undated</span>
+              (Explainer)</cite></a> <span className="provenance caption">Open UI, undated</span>
           </li>
         </ul>
       </section>
@@ -259,8 +208,7 @@ export const Bibliography: FC = () =>
         <ul className="works">
           {Object.values(presentation).map(({title, address, provenance}) =>
             <li key={address}>
-              <a className="signpost" href={address}><cite>{title}</cite></a>{' '}
-              <span className="provenance caption">{provenance}</span>
+              <a className="signpost" href={address}><cite>{title}</cite></a> <span className="provenance caption">{provenance}</span>
             </li>)}
         </ul>
       </section>
@@ -268,209 +216,162 @@ export const Bibliography: FC = () =>
         <h3 className="shelf-title sub-title">Behavior</h3>
         <ul className="works">
           <li>
-            <a className="signpost" href="https://ecma-international.org/publications-and-standards/standards/ecma-262/"><cite>ECMA-262, the editions</cite></a>{' '}
-            <span className="provenance caption">Ecma International</span>
+            <a className="signpost" href="https://ecma-international.org/publications-and-standards/standards/ecma-262/"><cite>ECMA-262, the editions</cite></a> <span className="provenance caption">Ecma International</span>
           </li>
           <li>
             <a className="signpost" href="https://262.ecma-international.org/5.1/"><cite>ECMAScript Language
-              Specification, 5.1 edition, Introduction</cite></a>{' '}
-            <span className="provenance caption">Ecma International, June 2011</span>
+              Specification, 5.1 edition, Introduction</cite></a> <span className="provenance caption">Ecma International, June 2011</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/JavaScript"><cite>JavaScript</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/JavaScript"><cite>JavaScript</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/XMLHttpRequest"><cite>XMLHttpRequest</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/XMLHttpRequest"><cite>XMLHttpRequest</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/Google_Maps"><cite>Google Maps</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Google_Maps"><cite>Google Maps</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="http://prototypejs.org/"><cite>Prototype JavaScript framework</cite></a>{' '}
-            <span className="provenance caption">prototypejs.org</span>
+            <a className="signpost" href="http://prototypejs.org/"><cite>Prototype JavaScript framework</cite></a> <span className="provenance caption">prototypejs.org</span>
           </li>
           <li>
             <a className="signpost" href="https://en.wikipedia.org/wiki/Prototype_JavaScript_Framework"><cite>Prototype
-              JavaScript Framework</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+              JavaScript Framework</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://jquery.com/"><cite>jQuery</cite></a>{' '}
-            <span className="provenance caption">jquery.com</span>
+            <a className="signpost" href="https://jquery.com/"><cite>jQuery</cite></a> <span className="provenance caption">jquery.com</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/JScript"><cite>JScript</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/JScript"><cite>JScript</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
             <a className="signpost" href="https://en.wikipedia.org/wiki/ECMAScript_version_history"><cite>ECMAScript
-              version history</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+              version history</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://web.archive.org/web/2015/https://mail.mozilla.org/pipermail/es-discuss/2008-August/006837.html"><cite>ECMAScript Harmony</cite></a>{' '}
-            <span className="provenance caption">Brendan Eich on es-discuss, 13 August 2008, via the Internet
+            <a className="signpost" href="https://web.archive.org/web/2015/https://mail.mozilla.org/pipermail/es-discuss/2008-August/006837.html"><cite>ECMAScript Harmony</cite></a> <span className="provenance caption">Brendan Eich on es-discuss, 13 August 2008, via the Internet
               Archive</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/ActionScript"><cite>ActionScript</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/ActionScript"><cite>ActionScript</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/Tamarin_(software)"><cite>Tamarin</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Tamarin_(software)"><cite>Tamarin</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
             <a className="signpost" href="https://en.wikipedia.org/wiki/Adobe_Flash_Player"><cite>Adobe Flash
-              Player</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+              Player</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/AngularJS"><cite>AngularJS</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/AngularJS"><cite>AngularJS</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://angularjs.org/"><cite>Why AngularJS?</cite></a>{' '}
-            <span className="provenance caption">angularjs.org, undated</span>
+            <a className="signpost" href="https://angularjs.org/"><cite>Why AngularJS?</cite></a> <span className="provenance caption">angularjs.org, undated</span>
           </li>
           <li>
-            <a className="signpost" href="https://github.com/angular/angular.js/blob/master/CHANGELOG.md"><cite>AngularJS changelog</cite></a>{' '}
-            <span className="provenance caption">the angular.js repository on GitHub, undated</span>
+            <a className="signpost" href="https://github.com/angular/angular.js/blob/master/CHANGELOG.md"><cite>AngularJS changelog</cite></a> <span className="provenance caption">the angular.js repository on GitHub, undated</span>
           </li>
           <li>
             <a className="signpost" href="https://legacy.reactjs.org/blog/2013/06/05/why-react.html"><cite>Why did we
-              build React?</cite></a>{' '}
-            <span className="provenance caption">Pete Hunt, React blog, 5 June 2013</span>
+              build React?</cite></a> <span className="provenance caption">Pete Hunt, React blog, 5 June 2013</span>
           </li>
           <li>
             <a className="signpost" href="https://facebookarchive.github.io/flux/docs/in-depth-overview"><cite>In-Depth
-              Overview</cite></a>{' '}
-            <span className="provenance caption">Flux documentation, Facebook, undated</span>
+              Overview</cite></a> <span className="provenance caption">Flux documentation, Facebook, undated</span>
           </li>
           <li>
             <a className="signpost" href="https://guide.elm-lang.org/architecture/"><cite>The Elm
-              Architecture</cite></a>{' '}
-            <span className="provenance caption">An Introduction to Elm, undated</span>
+              Architecture</cite></a> <span className="provenance caption">An Introduction to Elm, undated</span>
           </li>
           <li>
-            <a className="signpost" href="https://redux.js.org/understanding/thinking-in-redux/three-principles"><cite>Three Principles</cite></a>{' '}
-            <span className="provenance caption">Redux documentation, undated</span>
+            <a className="signpost" href="https://redux.js.org/understanding/thinking-in-redux/three-principles"><cite>Three Principles</cite></a> <span className="provenance caption">Redux documentation, undated</span>
           </li>
           <li>
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@scope"><cite>@scope</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/CSS/@scope"><cite>@scope</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/React_(software)"><cite>React</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/React_(software)"><cite>React</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/Vue.js"><cite>Vue.js</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Vue.js"><cite>Vue.js</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/Angular_(web_framework)"><cite>Angular</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Angular_(web_framework)"><cite>Angular</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html"><cite>The A-Z of Programming Languages: JavaScript</cite></a>{' '}
-            <span className="provenance caption">Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008, via
+            <a className="signpost" href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html"><cite>The A-Z of Programming Languages: JavaScript</cite></a> <span className="provenance caption">Brendan Eich, interviewed by Naomi Hamilton, Computerworld, 2008, via
               the Internet Archive</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html"><cite>JavaScript creator ponders past, future</cite></a>{' '}
-            <span className="provenance caption">Brendan Eich, interviewed by Paul Krill, InfoWorld, 2008</span>
+            <a className="signpost" href="https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html"><cite>JavaScript creator ponders past, future</cite></a> <span className="provenance caption">Brendan Eich, interviewed by Paul Krill, InfoWorld, 2008</span>
           </li>
           <li>
-            <a className="signpost" href="https://brendaneich.com/2008/04/popularity/"><cite>Popularity</cite></a>{' '}
-            <span className="provenance caption">Brendan Eich, 2008</span>
+            <a className="signpost" href="https://brendaneich.com/2008/04/popularity/"><cite>Popularity</cite></a> <span className="provenance caption">Brendan Eich, 2008</span>
           </li>
           <li>
             <a className="signpost" href="https://adactio.com/journal/1595"><cite>Misunderstanding
-              markup</cite></a>{' '}
-            <span className="provenance caption">Jeremy Keith, 7 July 2009</span>
+              markup</cite></a> <span className="provenance caption">Jeremy Keith, 7 July 2009</span>
           </li>
           <li>
             <a className="signpost" href="https://auth0.com/blog/a-brief-history-of-javascript/"><cite>A Brief History
-              of JavaScript</cite></a>{' '}
-            <span className="provenance caption">Sebastian Peyrott, Auth0, 2017</span>
+              of JavaScript</cite></a> <span className="provenance caption">Sebastian Peyrott, Auth0, 2017</span>
           </li>
           <li>
-            <a className="signpost" href="https://medium.com/@benastontweet/lesson-1a-the-history-of-javascript-8c1ce3bffb17"><cite>A brief history of JavaScript</cite></a>{' '}
-            <span className="provenance caption">Ben Aston, 2015</span>
+            <a className="signpost" href="https://medium.com/@benastontweet/lesson-1a-the-history-of-javascript-8c1ce3bffb17"><cite>A brief history of JavaScript</cite></a> <span className="provenance caption">Ben Aston, 2015</span>
           </li>
           <li>
             <a className="signpost" href="https://www.coursereport.com/blog/history-of-javascript"><cite>JavaScript: A
-              History for Beginners</cite></a>{' '}
-            <span className="provenance caption">Course Report</span>
+              History for Beginners</cite></a> <span className="provenance caption">Course Report</span>
           </li>
           <li>
             <a className="signpost" href="https://en.wikibooks.org/wiki/JavaScript/History_of_JavaScript"><cite>History
-              of JavaScript</cite></a>{' '}
-            <span className="provenance caption">Wikibooks</span>
+              of JavaScript</cite></a> <span className="provenance caption">Wikibooks</span>
           </li>
           <li>
-            <a className="signpost" href="https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php"><cite>Ajax: A New Approach to Web Applications</cite></a>{' '}
-            <span className="provenance caption">Jesse James Garrett, Adaptive Path, 18 February 2005; archived</span>
+            <a className="signpost" href="https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php"><cite>Ajax: A New Approach to Web Applications</cite></a> <span className="provenance caption">Jesse James Garrett, Adaptive Path, 18 February 2005; archived</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/Brendan_Eich"><cite>Brendan Eich</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Brendan_Eich"><cite>Brendan Eich</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://en.wikipedia.org/wiki/Prototype-based_programming"><cite>Prototype-based programming</cite></a>{' '}
-            <span className="provenance caption">Wikipedia</span>
+            <a className="signpost" href="https://en.wikipedia.org/wiki/Prototype-based_programming"><cite>Prototype-based programming</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="https://tc39.es/process-document/"><cite>The TC39 Process</cite></a>{' '}
-            <span className="provenance caption">TC39, Ecma International</span>
+            <a className="signpost" href="https://tc39.es/process-document/"><cite>The TC39 Process</cite></a> <span className="provenance caption">TC39, Ecma International</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html"><cite>Understanding
-              Success Criterion 2.1.1: Keyboard</cite></a>{' '}
-            <span className="provenance caption">W3C WAI</span>
+              Success Criterion 2.1.1: Keyboard</cite></a> <span className="provenance caption">W3C WAI</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/focus-order.html"><cite>Understanding
-              Success Criterion 2.4.3: Focus Order</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, WCAG 2.1, updated 9 March 2026</span>
+              Success Criterion 2.4.3: Focus Order</cite></a> <span className="provenance caption">W3C WAI, WCAG 2.1, updated 9 March 2026</span>
           </li>
           <li>
             <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/status-messages.html"><cite>Understanding
-              Success Criterion 4.1.3: Status Messages</cite></a>{' '}
-            <span className="provenance caption">W3C WAI, WCAG 2.1, updated 11 May 2026</span>
+              Success Criterion 4.1.3: Status Messages</cite></a> <span className="provenance caption">W3C WAI, WCAG 2.1, updated 11 May 2026</span>
           </li>
           <li>
-            <a className="signpost" href="https://www.appcontinuum.io/"><cite>The Application Continuum</cite></a>{' '}
-            <span className="provenance caption">appcontinuum.io, undated</span>
+            <a className="signpost" href="https://www.appcontinuum.io/"><cite>The Application Continuum</cite></a> <span className="provenance caption">appcontinuum.io, undated</span>
           </li>
           <li>
-            <a className="signpost" href="https://github.com/RyanDur/sand"><cite>sand</cite></a>{' '}
-            <span className="provenance caption">Ryan Durling’s library, GitHub, version 10.0.0</span>
+            <a className="signpost" href="https://github.com/RyanDur/sand"><cite>sand</cite></a> <span className="provenance caption">Ryan Durling’s library, GitHub, version 10.0.0</span>
           </li>
           <li>
             <a className="signpost" href="https://martinfowler.com/eaaDev/EventSourcing.html"><cite>Event
-              Sourcing</cite></a>{' '}
-            <span className="provenance caption">Martin Fowler, 12 December 2005</span>
+              Sourcing</cite></a> <span className="provenance caption">Martin Fowler, 12 December 2005</span>
           </li>
           <li>
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent"><cite>CustomEvent</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent"><cite>CustomEvent</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
-            <a className="signpost" href="https://github.com/michaljanocko/schemawax"><cite>schemawax</cite></a>{' '}
-            <span className="provenance caption">Michal Janočko, GitHub, version 1.0.12</span>
+            <a className="signpost" href="https://github.com/michaljanocko/schemawax"><cite>schemawax</cite></a> <span className="provenance caption">Michal Janočko, GitHub, version 1.0.12</span>
           </li>
           <li>
-            <a className="signpost" href="https://fsharpforfunandprofit.com/posts/designing-with-types-making-illegal-states-unrepresentable/"><cite>Designing with types: Making illegal states unrepresentable</cite></a>{' '}
-            <span className="provenance caption">Scott Wlaschin, F# for fun and profit, 14 January 2013</span>
+            <a className="signpost" href="https://fsharpforfunandprofit.com/posts/designing-with-types-making-illegal-states-unrepresentable/"><cite>Designing with types: Making illegal states unrepresentable</cite></a> <span className="provenance caption">Scott Wlaschin, F# for fun and profit, 14 January 2013</span>
           </li>
           <li>
-            <a className="signpost" href="https://fsharpforfunandprofit.com/rop/"><cite>Railway Oriented Programming</cite></a>{' '}
-            <span className="provenance caption">Scott Wlaschin, F# for fun and profit, 2014</span>
+            <a className="signpost" href="https://fsharpforfunandprofit.com/rop/"><cite>Railway Oriented Programming</cite></a> <span className="provenance caption">Scott Wlaschin, F# for fun and profit, 2014</span>
           </li>
         </ul>
       </section>
@@ -478,40 +379,32 @@ export const Bibliography: FC = () =>
         <h3 className="shelf-title sub-title">The concert</h3>
         <ul className="works">
           <li>
-            <a className="signpost" href="https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html"><cite>React: CSS in JS</cite></a>{' '}
-            <span className="provenance caption">Christopher Chedeau, NationJS, 2014</span>
+            <a className="signpost" href="https://blog.vjeux.com/2014/javascript/react-css-in-js-nationjs.html"><cite>React: CSS in JS</cite></a> <span className="provenance caption">Christopher Chedeau, NationJS, 2014</span>
           </li>
           <li>
-            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM"><cite>Using shadow DOM</cite></a>{' '}
-            <span className="provenance caption">MDN</span>
+            <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM"><cite>Using shadow DOM</cite></a> <span className="provenance caption">MDN</span>
           </li>
           <li>
             <a className="signpost" href="https://html.spec.whatwg.org/multipage/custom-elements.html"><cite>Custom
-              elements</cite></a>{' '}
-            <span className="provenance caption">the HTML Standard, WHATWG</span>
+              elements</cite></a> <span className="provenance caption">the HTML Standard, WHATWG</span>
           </li>
           <li>
             <a className="signpost" href="https://jasonformat.com/islands-architecture/"><cite>Islands
-              Architecture</cite></a>{' '}
-            <span className="provenance caption">Jason Miller, 2020</span>
+              Architecture</cite></a> <span className="provenance caption">Jason Miller, 2020</span>
           </li>
           <li>
-            <a className="signpost" href="https://vercel.com/blog/next"><cite>Next.js</cite></a>{' '}
-            <span className="provenance caption">Naoyuki Kanezawa, Guillermo Rauch and Tony Kovanen, Vercel blog, 25
+            <a className="signpost" href="https://vercel.com/blog/next"><cite>Next.js</cite></a> <span className="provenance caption">Naoyuki Kanezawa, Guillermo Rauch and Tony Kovanen, Vercel blog, 25
               October 2016</span>
           </li>
           <li>
-            <a className="signpost" href="https://legacy.reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html"><cite>Introducing Zero-Bundle-Size React Server Components</cite></a>{' '}
-            <span className="provenance caption">React blog, 21 December 2020</span>
+            <a className="signpost" href="https://legacy.reactjs.org/blog/2020/12/21/data-fetching-with-react-server-components.html"><cite>Introducing Zero-Bundle-Size React Server Components</cite></a> <span className="provenance caption">React blog, 21 December 2020</span>
           </li>
           <li>
-            <a className="signpost" href="https://nextjs.org/blog/next-13-4"><cite>Next.js 13.4</cite></a>{' '}
-            <span className="provenance caption">Next.js blog, 4 May 2023</span>
+            <a className="signpost" href="https://nextjs.org/blog/next-13-4"><cite>Next.js 13.4</cite></a> <span className="provenance caption">Next.js blog, 4 May 2023</span>
           </li>
           <li>
             <a className="signpost" href="https://web.dev/rendering-on-the-web/"><cite>Rendering on the
-              Web</cite></a>{' '}
-            <span className="provenance caption">Jason Miller and Addy Osmani, web.dev, 2019</span>
+              Web</cite></a> <span className="provenance caption">Jason Miller and Addy Osmani, web.dev, 2019</span>
           </li>
         </ul>
       </section>

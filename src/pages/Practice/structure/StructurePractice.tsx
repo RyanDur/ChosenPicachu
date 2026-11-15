@@ -23,9 +23,7 @@ export const StructurePractice: FC = () =>
       accordion’s script does too, on purpose, since it shows the old way.</p>
     <p className="paragraph">The rules come from the readers: the markup is read by more than the browser, and I write
       it for all of its readers at once. A screen reader reads it for roles, names and states, and for a way to move. On
-      a long page most of its users go to the headings first: 71.6% in{' '}
-    <a className="signpost" href={survey}>WebAIM’s tenth survey</a> said they{' '}
-    <a className="signpost" href={survey}>“navigate through the headings on the page”</a>. A few go to the
+      a long page most of its users go to the headings first: 71.6% in <a className="signpost" href={survey}>WebAIM’s tenth survey</a> said they <a className="signpost" href={survey}>“navigate through the headings on the page”</a>. A few go to the
       landmarks. Reader view and a search engine read it for the content in order, with its meaning. The next
       developer reads it to see what the page is. The browser reads it for the behavior each element brings. The same
       elements have to answer all five.</p>
@@ -62,29 +60,23 @@ export const StructurePractice: FC = () =>
       you around the site. A section named pages and feedback, the rail that holds that nav and the feedback button.
       Where a page has tabs, a nav named by the tabs’ own label.</p>
     <p className="paragraph">Landmarks are what a screen reader lists and jumps to. Where one kind appears more than
-      once, I name each, so a screen reader can tell them apart. The{' '}
-    <a className="signpost" href={landmarkRegions}>Authoring Practices</a> put it plainly:{' '}
-    <a className="signpost" href={landmarkRegions}>“If a specific landmark role is used more than once on a page,
-      provide each instance of that landmark with a unique label.”</a> A section takes its name from its heading or,
+      once, I name each, so a screen reader can tell them apart. The <a className="signpost" href={landmarkRegions}>Authoring Practices</a> put it plainly: <a className="signpost" href={landmarkRegions}>“If a specific landmark role is used more than once on a page,
+        provide each instance of that landmark with a unique label.”</a> A section takes its name from its heading or,
       where it has none, from a label. If there is nothing to name it by, it is not a section. The landmark elements,
-      header, main, footer and nav, come from the standard the browser makers began writing themselves in the{' '}
-    <MomentLink to="browsersTakePen">2004 moment</MomentLink>.</p>
+      header, main, footer and nav, come from the standard the browser makers began writing themselves in the <MomentLink to="browsersTakePen">2004 moment</MomentLink>.</p>
     <LandmarkMap/>
     <p className="paragraph">One region on every page is a role and not an element, and that is the element rule from
       its other side: I write a role only where no element does the job. The banners are a section with
       the role alert, because there is no alert element to reach for. The role makes the section a live region, a
       part of the page whose changes a screen reader reads out.
-      The{' '}
-    <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
+      The <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> builds it and says what the role
       buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes; the
       part on ARIA below lists them all.</p>
     <h3 className="paragraph bold" id={structureParts.elements} tabIndex={-1}>From the content to the element</h3>
     <p className="paragraph">I start from what the content is and pick the element for it. The platform
-      has more elements than most pages use: a{' '}
-    <a className="signpost"
+      has more elements than most pages use: a <a className="signpost"
       href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/search">search</a> landmark,
-      a{' '}
-    <a className="signpost"
+      a <a className="signpost"
       href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress">progress</a> element,
       an <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output">output</a> for
       a computed result. The answer to "what is this?" is usually an element’s name.
@@ -98,17 +90,10 @@ export const StructurePractice: FC = () =>
       className="monospaced">toggle</code> event.
       A modal <Mdn path="Web/HTML/Element/dialog">dialog</Mdn> holds focus, makes the rest of the page inert
       behind its backdrop, and closes on Escape. A <Mdn path="Web/HTML/Global_attributes/popover">popover</Mdn> lives
-      in the top layer and closes on Escape or a click outside it. A <Mdn path="Web/HTML/Element/form">form</Mdn>{' '}
-      refuses an empty required field in the browser’s own words. An{' '}
-    <Mdn path="Web/HTML/Element/output">output</Mdn> is announced when its contents change. A{' '}
-    <Mdn path="Web/HTML/Element/fieldset">fieldset</Mdn> groups controls under its{' '}
-    <Mdn path="Web/HTML/Element/legend">legend</Mdn>. A th with <Mdn path="Web/HTML/Element/th#scope"><code
-      className="monospaced">scope</code></Mdn>{' '}
-      tells a screen reader which header a cell belongs to.{' '}
-    <Mdn path="Web/API/Invoker_Commands_API">Invoker commands</Mdn> open a popover or a dialog with no script, as the
+      in the top layer and closes on Escape or a click outside it. A <Mdn path="Web/HTML/Element/form">form</Mdn> refuses an empty required field in the browser’s own words. An <Mdn path="Web/HTML/Element/output">output</Mdn> is announced when its contents change. A <Mdn path="Web/HTML/Element/fieldset">fieldset</Mdn> groups controls under its <Mdn path="Web/HTML/Element/legend">legend</Mdn>. A th with <Mdn path="Web/HTML/Element/th#scope"><code
+      className="monospaced">scope</code></Mdn> tells a screen reader which header a cell belongs to. <Mdn path="Web/API/Invoker_Commands_API">Invoker commands</Mdn> open a popover or a dialog with no script, as the
       feedback dialog’s buttons do. I reach for one of these before any script.</p>
-    <p className="paragraph">Three attributes carry three jobs. A data attribute attaches a behavior:{' '}
-      <code className="monospaced">data-row-grip</code> says a grip can be dragged, and the script finds grips by it. A
+    <p className="paragraph">Three attributes carry three jobs. A data attribute attaches a behavior: <code className="monospaced">data-row-grip</code> says a grip can be dragged, and the script finds grips by it. A
       class says how the element looks, in the
       vocabulary the Presentation tab describes. An id locates one thing: a label’s for, a section’s aria-labelledby,
       a fragment link. Three jobs on three attributes, so none is overloaded: no behavior hung on a class, no look
@@ -121,18 +106,15 @@ export const StructurePractice: FC = () =>
       On the cell, <code className="monospaced">data-column</code> names its column for the script, so the column’s
       name in the class list only dresses it.
       Inside the cell, <code className="monospaced">data-resize-handle</code> and <code
-      className="monospaced">data-sort-toggle</code> sit on the buttons that do those things.{' '}
-    <code className="monospaced">popovertarget</code> names the sort menu by its id, and the menu is a menu element, a
+      className="monospaced">data-sort-toggle</code> sit on the buttons that do those things. <code className="monospaced">popovertarget</code> names the sort menu by its id, and the menu is a menu element, a
       popover, whose buttons
       close it with <code className="monospaced">popovertargetaction</code> set to hide. Every element is a real one
-      with its role, th with{' '}
-    <code className="monospaced">scope</code> col, button, menu, li, and nothing here needs ARIA beyond a name.</p>
+      with its role, th with <code className="monospaced">scope</code> col, button, menu, li, and nothing here needs ARIA beyond a name.</p>
     <p className="paragraph">The script attaches itself by the same attribute, <code
       className="monospaced">data-drag-sortable</code>.</p>
     <AttachmentCarve/>
     <p className="paragraph"><code className="monospaced">boot.ts</code>, in its <code
-      className="monospaced">feed</code> function, finds its tables with{' '}
-    <code className="monospaced">table[data-drag-sortable]</code>, builds the behavior onto each, and listens for what
+      className="monospaced">feed</code> function, finds its tables with <code className="monospaced">table[data-drag-sortable]</code>, builds the behavior onto each, and listens for what
       the table reports: <code className="monospaced">column-moved</code>, <code
       className="monospaced">row-moved</code> and <code className="monospaced">sorted</code>, custom
       events on the table itself, the way a platform element reports <code className="monospaced">change</code> or <code
@@ -163,17 +145,12 @@ export const StructurePractice: FC = () =>
       twenty
       props and does whatever they say is a div under a longer name: nothing about it says what it is, and every caller
       has to know all of it. One component, one new behavior, named for it, the way
-      one class is one look. The drag-sortable table is not one component but parts that each do one thing:{' '}
-    <a className="signpost" href={repository.file('src/components/DragSortableTable/RowGrip.tsx')}>RowGrip</a> can be
+      one class is one look. The drag-sortable table is not one component but parts that each do one thing: <a className="signpost" href={repository.file('src/components/DragSortableTable/RowGrip.tsx')}>RowGrip</a> can be
       dragged by
       hand or by key, <a className="signpost"
-      href={repository.file('src/components/DragSortableTable/ResizeHandle.tsx')}>ResizeHandle</a>{' '}
-      resizes, <a className="signpost"
-      href={repository.file('src/components/DragSortableTable/SortMenu.tsx')}>SortMenu</a> sorts,{' '}
-    <a className="signpost"
-      href={repository.file('src/components/DragSortableTable/DraggableColumn.tsx')}>DraggableColumn</a>{' '}
-      carries a column. The menu is three components that write one element each, as the{' '}
-    <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> says. A behavior the table needs
+      href={repository.file('src/components/DragSortableTable/ResizeHandle.tsx')}>ResizeHandle</a> resizes, <a className="signpost"
+      href={repository.file('src/components/DragSortableTable/SortMenu.tsx')}>SortMenu</a> sorts, <a className="signpost"
+      href={repository.file('src/components/DragSortableTable/DraggableColumn.tsx')}>DraggableColumn</a> carries a column. The menu is three components that write one element each, as the <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> says. A behavior the table needs
       that no part has gets a new part with that one job, not a prop on an old one. The platform’s own elements work the
       same way, one element per meaning: a details opens, a dialog holds focus, an output announces.</p>
     <p className="paragraph">This is also why the site’s new elements are React components and not custom elements. The
@@ -182,43 +159,34 @@ export const StructurePractice: FC = () =>
       to={recordAddress.customElements}>concert</Link> tells
       how the
       platform took back what script had built. The rule underneath is the first rule of ARIA, from the W3C’s Using
-      ARIA:{' '}
-    <a className="signpost" href="https://www.w3.org/TR/using-aria/">“If you can use a native HTML element or
-      attribute
-      with the semantics and behavior you require already built in, instead of re-purposing an element and adding an
-      ARIA role, state or property to make it accessible, then do so.”</a></p>
+      ARIA: <a className="signpost" href="https://www.w3.org/TR/using-aria/">“If you can use a native HTML element or
+        attribute
+        with the semantics and behavior you require already built in, instead of re-purposing an element and adding an
+        ARIA role, state or property to make it accessible, then do so.”</a></p>
     <h3 className="paragraph bold">ARIA last</h3>
     <p className="paragraph">The elements mean something beyond how they look. A nav tells a screen reader
       these links are for getting around; a button tells it a press will do something. The right element gives you
-      that for free, with{' '}
-    <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“built-in keyboard
-      accessibility, roles and states”</a> in
-      MDN’s words. Use a meaningless element instead and you rebuild all of it in script. The field has a saying,{' '}
-    <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“No ARIA is better
-      than bad ARIA”</a>: WebAIM
-      found pages using ARIA had{' '}
-    <a className="signpost" href="https://webaim.org/projects/million/">41 percent more detected errors</a> than
+      that for free, with <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“built-in keyboard
+        accessibility, roles and states”</a> in
+      MDN’s words. Use a meaningless element instead and you rebuild all of it in script. The field has a saying, <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“No ARIA is better
+        than bad ARIA”</a>: WebAIM
+      found pages using ARIA had <a className="signpost" href="https://webaim.org/projects/million/">41 percent more detected errors</a> than
       pages without.
       The <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> records what that rebuilding cost: links
       became
       components and the back button became state.</p>
     <p className="paragraph">A div is for when I want an element that says nothing. Sometimes that is
-      right, but the standard still calls it an element{' '}
-    <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element">“of
-      last resort, for when no other element is suitable”</a>.{' '}
-      The survey above says most screen reader users move through a long page by its headings, and a page built of
+      right, but the standard still calls it an element <a className="signpost" href="https://html.spec.whatwg.org/multipage/grouping-content.html#the-div-element">“of
+        last resort, for when no other element is suitable”</a>. The
+      survey above says most screen reader users move through a long page by its headings, and a page built of
       divs gives them nothing to move by. Everywhere else the element says what it is. A figure has its caption, a list
       is a list, and a button is a button even when it looks like a link.
-      The standard that calls a div a last resort is the one the browser makers wrote themselves, from the{' '}
-    <MomentLink to="browsersTakePen">2004 moment</MomentLink> on.</p>
+      The standard that calls a div a last resort is the one the browser makers wrote themselves, from the <MomentLink to="browsersTakePen">2004 moment</MomentLink> on.</p>
     <p className="paragraph">Here is what ARIA last looks like on this site. Every role it writes can be read in a
       minute. The banners are a section with role <code className="monospaced">alert</code>, and the old-style banner
-      the{' '}
-    <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> raises, a paragraph, carries the
+      the <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> raises, a paragraph, carries the
       same role, because there is no alert element. The z-index tab’s old-way menu, the one script opens to show what
-      the platform now does for free, is a menu element holding a list of buttons, with role{' '}
-    <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role{' '}
-    <code className="monospaced">none</code> on each list item. A screen reader reads a menu element as a list, not as a menu, and
+      the platform now does for free, is a menu element holding a list of buttons, with role <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role <code className="monospaced">none</code> on each list item. A screen reader reads a menu element as a list, not as a menu, and
       the list item’s own
       role would get in the way. The popover menu beside it carries no role at all. A term’s definition, the small card
       that opens from a word in a tutorial, has role <code className="monospaced">definition</code>. The Record’s period
@@ -232,18 +200,13 @@ export const StructurePractice: FC = () =>
       feedback dialog, the rail, and every button whose text is a glyph, the dismiss on a banner, the grip on a row,
       the resize handle on a column.</p>
     <p className="paragraph">States come from the platform wherever it has one, <code
-      className="monospaced">open</code> on a details,{' '}
-    <code className="monospaced">checked</code> on a box, <code className="monospaced">disabled</code> on a button.
-      I write four by hand, where the platform has none.{' '}
-    <code className="monospaced">aria-sort</code> marks which way a th’s column is sorted, because a th has no sort state of
-      its own.{' '}
-    <code className="monospaced">aria-current</code> marks the one of several that is current: the rail’s page, a tab,
-      a menu’s chosen item.{' '}
-    <code className="monospaced">aria-expanded</code> says that a button has opened something the platform does not
+      className="monospaced">open</code> on a details, <code className="monospaced">checked</code> on a box, <code className="monospaced">disabled</code> on a button.
+      I write four by hand, where the platform has none. <code className="monospaced">aria-sort</code> marks which way a th’s column is sorted, because a th has no sort state of
+      its own. <code className="monospaced">aria-current</code> marks the one of several that is current: the rail’s page, a tab,
+      a menu’s chosen item. <code className="monospaced">aria-expanded</code> says that a button has opened something the platform does not
       know is open: the old-way
       menu’s, and the Expand button on the z-index tab’s pile of cards. <code
-      className="monospaced">aria-hidden</code> hides what a screen reader should not read as prose. An image’s{' '}
-    <code className="monospaced">alt</code> is its text for a screen reader. I hide each drawing whole, since its
+      className="monospaced">aria-hidden</code> hides what a screen reader should not read as prose. An image’s <code className="monospaced">alt</code> is its text for a screen reader. I hide each drawing whole, since its
       caption says what it shows: a drawing in the page’s markup by <code className="monospaced">aria-hidden</code>,
       and a drawing served as an image, like the landmark map, by an empty <code className="monospaced">alt</code>. I
       hide the lettering of a glyph, a dial’s axis label and a code
@@ -268,9 +231,8 @@ export const StructurePractice: FC = () =>
         rendered it, against its
         recommended rules. I switch four style rules off and change two on purpose. A group of checkboxes may
         share a name, as radios already may, and buttons may not. An id may hold what React’s server render writes,
-        since{' '}
-      <a className="signpost" href={repository.file('e2e/a11y.e2e.ts')}>“React's server render names its own
-        script _R_, and HTML asks only that an id hold no space”</a>.
+        since <a className="signpost" href={repository.file('e2e/a11y.e2e.ts')}>“React's server render names its own
+          script _R_, and HTML asks only that an id hold no space”</a>.
       </li>
       <li className="paragraph"><a className="signpost"
         href={repository.file('src/__test_support/reading-order.ts')}><code
@@ -279,13 +241,11 @@ export const StructurePractice: FC = () =>
         Demos specs call it wherever an order is a claim.
       </li>
       <li className="paragraph"><code className="monospaced">stylelint</code> refuses a selector on an obsolete element
-        and prints{' '}
-      <a className="signpost" href={repository.file('stylelint.config.cjs')}>“obsolete element — this is a strict
-        html5 site”</a>.
+        and prints <a className="signpost" href={repository.file('stylelint.config.cjs')}>“obsolete element — this is a strict
+          html5 site”</a>.
       </li>
     </ul>
-    <p className="paragraph">The rule the review holds is one line in AGENTS.md:{' '}
-      <a className="signpost" href={repository.file('AGENTS.md')}>“Tests find what a reader finds: by role, label
-        and text, never by class.”</a> A test that found a thing by its class would pass where a reader could not find
+    <p className="paragraph">The rule the review holds is one line in AGENTS.md: <a className="signpost" href={repository.file('AGENTS.md')}>“Tests find what a reader finds: by role, label
+      and text, never by class.”</a> A test that found a thing by its class would pass where a reader could not find
       it.</p>
   </>;

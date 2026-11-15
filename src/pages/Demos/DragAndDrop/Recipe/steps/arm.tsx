@@ -16,8 +16,7 @@ export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
         card, it does not copy or link it.</Says>
       <Says>The li, the list item that is the card, also wears four shared classes, looks that live in the site’s shared
         style sheet and that an element wears by
-        name: <code className="monospaced">soft-cornered</code>, <code className="monospaced">field</code>, <code className="monospaced">hairline-outline</code> and{' '}
-      <code className="monospaced">handle-raised</code>. They are the
+        name: <code className="monospaced">soft-cornered</code>, <code className="monospaced">field</code>, <code className="monospaced">hairline-outline</code> and <code className="monospaced">handle-raised</code>. They are the
         card’s look, not its drag.</Says>
     </Words>
     <Codes>

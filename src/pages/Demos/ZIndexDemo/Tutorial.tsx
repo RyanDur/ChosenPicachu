@@ -38,8 +38,7 @@ export const TopLayerTutorial: FC = () => {
       story is done. Here is the banner’s, walked through once.
     </p>
     <p className="story walked-through card rounded-corners lifted">
-      <span className="can paragraph bold">As a reader who missed the news, I want the banner to raise it,</span>{' '}
-      <span className="so-that paragraph italic muted-ink">so that I do not go looking.</span>
+      <span className="can paragraph bold">As a reader who missed the news, I want the banner to raise it,</span> <span className="so-that paragraph italic muted-ink">so that I do not go looking.</span>
     </p>
     <p className="overview paragraph">
       The user’s words above settled two things. ‘Tell me’ means the banner speaks up on its own: it is an alert, so a

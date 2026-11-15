@@ -9,8 +9,7 @@ const informationManagementProposal = 'https://www.w3.org/History/1989/proposal.
 export const Need: FC = () =>
   <YearMoment heading={moments.headings.need}>
     <MomentInBrief>Several thousand people at CERN, two-year stays, and what one project learned <a className="signpost" href={informationManagementProposal}>“sometimes lost forever, or only recovered after a detective
-      investigation in an emergency”</a>. Tim Berners-Lee{' '}
-    <a className="signpost" href={informationManagementProposal}>proposed a web of notes with links between them</a>, shaped like
+      investigation in an emergency”</a>. Tim Berners-Lee <a className="signpost" href={informationManagementProposal}>proposed a web of notes with links between them</a>, shaped like
       the organization that would use it.</MomentInBrief>
     <FullerStory>
       <p className="paragraph muted-ink hyphenated">Berners-Lee wrote the proposal in March 1989 to answer a practical

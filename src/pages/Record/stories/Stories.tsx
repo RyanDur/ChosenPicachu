@@ -25,8 +25,7 @@ const StoryOf: FC<{concern: Concern}> = ({concern}) => {
           <Link className="story-moment paragraph signpost" to={recordAddress.ofMoment(key)}>
             <time className="story-moment-year caption bold" dateTime={moments.headings[key].date.year}>
               {moments.headings[key].date.year}
-            </time>{' '}
-            {moments.headings[key].title}
+            </time> {moments.headings[key].title}
           </Link>
         </li>)}
     </ol>

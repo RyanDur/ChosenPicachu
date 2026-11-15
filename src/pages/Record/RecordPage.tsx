@@ -9,9 +9,8 @@ import './Record.css';
 
 export const RecordPage: FC = () =>
   <article className="record-page">
-    <Quotation voice="sub-title" source={<>Tim Berners-Lee and Robert Cailliau,{' '}
-      <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">proposing
-        the WorldWideWeb, 1990</a></>}>
+    <Quotation voice="sub-title" source={<>Tim Berners-Lee and Robert Cailliau, <a className="signpost" href="https://www.w3.org/History/19921103-hypertext/hypertext/WWW/Proposal.html">proposing
+      the WorldWideWeb, 1990</a></>}>
       HyperText is a way to link and access information of various kinds as a web of nodes
       in which the user can browse at will.
     </Quotation>
