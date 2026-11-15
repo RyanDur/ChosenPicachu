@@ -205,7 +205,7 @@ const CandlesStory: FC = () =>
       <Step title="Make the candles the way the price line does">
         <Words want="A second chart must not mean a second version of the market. Two charts of the same trades have to agree.">
           <Says>Every chart reads the same trades from the market. This chart groups them into candles
-            with bucketTrades and joins the fetched past with mergeLive, the same two functions the price line
+            with <code className="monospaced">bucketTrades</code> and joins the fetched past with <code className="monospaced">mergeLive</code>, the same two functions the price line
             uses.</Says>
           <Says>The price line takes one price from each candle, its close. This chart draws all of it.</Says>
           <Says>The period menu is on this chart too, the same <Mdn path="Web/API/Popover_API">popover</Mdn> as on the
