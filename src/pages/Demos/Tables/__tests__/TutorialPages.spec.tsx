@@ -139,6 +139,13 @@ describe('a link saved to an old tables tutorial address', () => {
     expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize', '?world=vanilla'));
   });
 
+  test('should keep an encoded & inside the value the address carries', async () => {
+    const old = demosAt('tables', '?tut=resize&note=a%26b');
+    render(<TestApp at={old}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize', '?note=a%26b'));
+  });
+
   test('should stay on the tables tab and its list when it names no tutorial', async () => {
     const old = demosAt('tables', '?tut=scroll');
     render(<TestApp at={old}/>);
