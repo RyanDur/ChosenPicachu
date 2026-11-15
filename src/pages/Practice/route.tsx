@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {useParams} from 'react-router';
 import {Maybe} from '@ryandur/sand';
-import {Header, Listing, Page, PageError} from '@page';
+import {Header, Listing, Main, PageError} from '@page';
 import {Concern} from '@pages/Record/concerns';
 import {Room as NoSuchRoom} from '@pages/NoRoom';
 import names from '@navigation/names.json';
@@ -20,8 +20,8 @@ const ConcernHeader: FC = () => useConcern().either(
   concern => <Header title={`Practice ${concern}`} listed={listings[concern]}/>,
   () => null);
 
-export const ErrorBoundary: FC = () => <Page header={<ConcernHeader/>}><PageError/></Page>;
+export const ErrorBoundary: FC = () => <><ConcernHeader/><Main><PageError/></Main></>;
 
 export const Room: FC = () => useConcern().either(
-  concern => <Page header={<ConcernHeader/>}><PracticePage concern={concern}/></Page>,
+  concern => <><ConcernHeader/><Main><PracticePage concern={concern}/></Main></>,
   () => <NoSuchRoom/>);
