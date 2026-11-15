@@ -26,21 +26,21 @@
 }
 
 @container (width >= 92ch) {
-  .run:has(> :is(.sample, .recipe-figure, .promises)) {
-    > :not(.sample, .recipe-figure, .promises, .run-title) {
+  .run:has(> :is(.sample, .recipe-figure, .behaviors)) {
+    > :not(.sample, .recipe-figure, .behaviors, .run-title) {
       grid-column: 1;
     }
 
-    > :not(.sample, .recipe-figure, .promises, .run-title):has(+ :is(.sample, .recipe-figure, .promises)) {
+    > :not(.sample, .recipe-figure, .behaviors, .run-title):has(+ :is(.sample, .recipe-figure, .behaviors)) {
       grid-row-end: span 8;
     }
 
-    > :is(.sample, .recipe-figure, .promises) {
+    > :is(.sample, .recipe-figure, .behaviors) {
       grid-column: 2;
       margin-block-start: 0;
     }
 
-    > :is(.sample, .recipe-figure, .promises) + :is(.sample, .recipe-figure, .promises) {
+    > :is(.sample, .recipe-figure, .behaviors) + :is(.sample, .recipe-figure, .behaviors) {
       margin-block-start: var(--base-x-2);
     }
   }
