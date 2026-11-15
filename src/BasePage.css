@@ -491,6 +491,14 @@
         align-self: start;
         block-size: 100dvh;
       }
+
+      .rail .side-nav {
+        flex: 1;
+      }
+    }
+
+    #root:has(.app-footer) .feedback-item {
+      block-size: var(--base-x-12);
     }
   }
 }
