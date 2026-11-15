@@ -26,4 +26,4 @@ export {StaticMotion} from './StaticMotion';
 export {WalkSlides} from './WalkSlides';
 export {CutKey} from './CutKey';
 export {GripArrows} from './GripArrows';
-export {Promises} from './promises';
+export {TableGuarantees} from './TableGuarantees';

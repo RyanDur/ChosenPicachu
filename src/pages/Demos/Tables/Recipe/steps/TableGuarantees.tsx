@@ -17,7 +17,7 @@ const motions: Record<Motion, string> = {
   static: 'And the swap lands instantly, with no motion, so nothing competes with the pointer.'
 };
 
-export const Promises: FC = () => {
+export const TableGuarantees: FC = () => {
   const {pace, origin, motion} = useControls();
   return <Tell>This particular table keeps three more
     promises. A dial’s promise is what the table guarantees under that
