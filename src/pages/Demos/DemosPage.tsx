@@ -16,8 +16,8 @@ export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, ch
       expert, and each adds one thing to the tabs before
       it. <TabLink to={DemoTopics.accordions}>The accordions</TabLink> build one fold several ways, from HTML alone up
       to script. <TabLink to={DemoTopics.zIndex}>The z-index tab</TabLink> explains a component, its state and an event,
-      and the browser’s top layer, which every later tab
-      uses. <TabLink to={DemoTopics.dragAndDrop}>The drag sort tab</TabLink> uses the browser’s own drag, with script
+      which every later tab uses, and the browser’s top layer, which the charts and tables tabs
+      use. <TabLink to={DemoTopics.dragAndDrop}>The drag sort tab</TabLink> uses the browser’s own drag, with script
       only for what that drag lacks and a key for every
       move. <TabLink to={DemoTopics.charts}>The charts tab</TabLink> draws trades that keep arriving, each one checked
       where it enters. <TabLink to={DemoTopics.tables}>The tables tab</TabLink> builds one feature from those parts, in
