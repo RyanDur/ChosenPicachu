@@ -1,9 +1,9 @@
 import {FC, PropsWithChildren, useId} from 'react';
 
-export const Reveal: FC<PropsWithChildren> = ({children}) => {
+export const Reveal: FC<PropsWithChildren<{summary?: string}>> = ({summary = 'how I built it', children}) => {
   const opener = `reveal${useId()}`;
   return <details className="step-reveal" aria-labelledby={opener}>
-    <summary id={opener} className="opener sub-title muted-ink body-glyph-before">how I built it</summary>
+    <summary id={opener} className="opener sub-title muted-ink body-glyph-before">{summary}</summary>
     {children}
   </details>;
 };
