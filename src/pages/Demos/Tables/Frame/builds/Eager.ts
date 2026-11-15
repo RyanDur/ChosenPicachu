@@ -48,10 +48,7 @@ const rowNudged = (context: MountedTable, row: string, {from, to, heights}: RowN
   const before = context.standing();
   rowShoving(context, row, before, {to, heights});
   const crossed = survey.distanceCrossed(before, heights, from, to);
-  settle.row(context, row, tableState.settlingFromSeat({
-    x: 0,
-    y: to > from ? -crossed : crossed
-  }));
+  settle.row(context, row, tableState.settlingFromSeat({x: 0, y: to > from ? -crossed : crossed}));
 };
 
 const rowTo = (context: MountedTable, row: string, to: number): void => {
