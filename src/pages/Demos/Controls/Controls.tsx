@@ -1,6 +1,5 @@
 import {FC, PropsWithChildren} from 'react';
 import {Motion, Origin} from '@components/DragSortableTable';
-import {Disclosure} from '@components/Disclosure';
 import {DialGroup} from './DialGroup';
 import {DialRow} from './DialRow';
 import {Pace, useControls} from './useControls';
@@ -24,7 +23,7 @@ export const Controls: FC<PropsWithChildren<{copy: Copy}>> = ({copy, children}) 
   const {pace, origin, motion, change} = useControls();
   const heading = `${copy.kind}-controls-heading`;
   const readout = copy.readout(pace, origin, motion);
-  return <Disclosure label="settings" className="demo-settings">
+  return <details className="demo-settings disclosure" aria-label="settings">
     <summary className="prompt">settings <code className="readout caption monospaced">{readout}</code></summary>
     <section aria-labelledby={heading} className="controls">
       <h4 id={heading} className="off-screen">{copy.kind} controls</h4>
@@ -59,5 +58,5 @@ export const Controls: FC<PropsWithChildren<{copy: Copy}>> = ({copy, children}) 
       </DialGroup>
       {children}
     </section>
-  </Disclosure>;
+  </details>;
 };

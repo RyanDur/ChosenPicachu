@@ -153,10 +153,9 @@ export const StructurePractice: FC = () =>
       any page can raise. React is good at exactly that, and so are Vue, Svelte and Angular.
       A component in any of them writes a real element with its role and its keys, and attaches the behavior that is
       new. A component is not for wrapping an element the platform already has: that is the
-      default. I keep a few wrappers that trade against it, where the trade is worth it:{' '}
-    <a className="signpost" href={repository.file('src/components/Disclosure/Disclosure.tsx')}>Disclosure</a>, a
-      details with a name and a class, and the menu’s Menu, Entry and Item, which write one element each and carry the
-      site’s classes for it. Each saves a line every time it is used, and each costs the reader the doubt of whether it
+      default. I keep a few wrappers that trade against it, where the trade is worth it: the menu’s Menu, Entry and
+      Item, which write one element each and carry the site’s classes for it. Each saves a line every time it is used,
+      and each costs the reader the doubt of whether it
       is a new element, which is why I say here that they are not. The test for a component is to name the behavior the
       platform lacks. If there is none, it
       is a wrapper, and I use the element bare.</p>
