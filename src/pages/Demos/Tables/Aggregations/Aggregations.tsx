@@ -2,14 +2,15 @@ import {Explainer} from '@components/Explainer';
 import {FC, useEffect} from 'react';
 import {EagerTable} from '../Builds/EagerTable';
 import {LazyTable} from '../Builds/LazyTable';
-import {Dials, useControls} from '../../Controls';
+import {useControls} from '../../Controls';
 import {prefetch, TableFrame} from '../Frame';
 import {marketReads} from '../../Market';
 import {useMarketDispatch, useMarketRead} from '../../Market/Trading';
 import {arrangements} from '@components/DragSortableTable/model';
 import '../Aggregations.css';
 
-const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
+const LiveTable: FC = () => {
+  const {pace, origin, motion} = useControls();
   const Table = pace === 'eager' ? EagerTable : LazyTable;
   const dispatch = useMarketDispatch();
   const columns = useMarketRead(marketReads.columns);
@@ -21,14 +22,13 @@ const LiveTable: FC<Dials> = ({pace, origin, motion}) => {
 };
 
 export const Aggregations: FC = () => {
-  const {pace, origin, motion, world} = useControls();
-  const dials = {pace, origin, motion};
+  const {world} = useControls();
   useEffect(() => prefetch.assembly(), []);
 
   return <section aria-label="live aggregations" className="aggregations card rounded-corners lifted padded contained">
     {world === 'vanilla'
-      ? <TableFrame {...dials}><LiveTable {...dials}/></TableFrame>
-      : <LiveTable {...dials}/>}
+      ? <TableFrame><LiveTable/></TableFrame>
+      : <LiveTable/>}
     <Explainer>
       The stream folded into lookbacks, stretches of time measured back from the newest trade, one column per
       measure: how many trades arrived, the split of buys and sells, the bitcoin traded, the volume-weighted average
