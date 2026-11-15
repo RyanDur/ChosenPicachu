@@ -71,6 +71,16 @@ const modulesOnly = {
   presence: {'no-restricted-syntax': [...presence['no-restricted-syntax'], aClass]},
   markup: {'no-restricted-syntax': [...markup['no-restricted-syntax'], aClass]}
 };
+const aBarePromise = {
+  selector: ':matches(AwaitExpression, NewExpression[callee.name="Promise"], CallExpression[callee.property.name="then"], ' +
+    ':function[async=true])',
+  message: 'No bare promise in src: wrap what the platform hands over in asyncResult, or drop it with void.'
+};
+const promiseFree = {
+  presence: {'no-restricted-syntax': [...modulesOnly.presence['no-restricted-syntax'], aBarePromise]},
+  markup: {'no-restricted-syntax': [...modulesOnly.markup['no-restricted-syntax'], aBarePromise]}
+};
+const shapedByTheFramework = ['src/routes.ts', 'src/entry.server.tsx'];
 
 const specs = Object.fromEntries([
   'await-async-events', 'await-async-queries', 'await-async-utils', 'no-await-sync-events', 'no-await-sync-queries',
@@ -131,6 +141,16 @@ module.exports = [
   {
     files: ['src/**/*.tsx'],
     rules: modulesOnly.markup
+  },
+  {
+    files: ['src/**/*.ts'],
+    ignores: ['**/__tests__/**', '**/__test_support/**', '**/*.d.ts', ...shapedByTheFramework],
+    rules: promiseFree.presence
+  },
+  {
+    files: ['src/**/*.tsx'],
+    ignores: ['**/__tests__/**', '**/__test_support/**', ...shapedByTheFramework],
+    rules: promiseFree.markup
   },
   {
     files: ['src/**/*.tsx'],
