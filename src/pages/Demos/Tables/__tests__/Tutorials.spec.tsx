@@ -47,7 +47,7 @@ describe('the table tutorials', () => {
     render(<TestApp at="/"><Tutorials/></TestApp>);
     await demoPage.findTitle('let’s build this feature');
 
-    expect(demoPage.title('Layer on functionality, in the order it was asked for')).toBeVisible();
+    expect(demoPage.title('Add features, in the order they were asked for')).toBeVisible();
     expect(tablesTab().columnHeader('by keyboard')).toBeVisible();
     expect(demoPage.row('Widen a column')).toBeVisible();
   });

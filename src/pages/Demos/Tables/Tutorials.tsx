@@ -35,7 +35,7 @@ export const Tutorials: FC = () => {
         <FlowTableRecipe/>
       </Station>
       <Station at={6}>
-        <h3 className="phase-title title">Layer on functionality, in the order it was asked for</h3>
+        <h3 className="phase-title title">Add features, in the order they were asked for</h3>
         <FeatureMap/>
         <p className="paragraph">
           Drag sort builds the first two features, moving a column and moving a row. Sort menu builds the third,
