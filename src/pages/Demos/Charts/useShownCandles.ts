@@ -1,32 +1,27 @@
-import {useId} from 'react';
-import {Candle, candles, Period, PeriodHistory, periodHistory, periods, Trade} from '../Market';
+import {Candle, candles, marketReads, Period, PeriodHistory, periodHistory, periods} from '../Market';
+import {useMarketRead} from '../Market/Trading';
 import {usePeriodCandles} from './usePeriodCandles';
+import {useDesk} from './useDesk';
 import {PeriodChartKind} from './chart-kinds';
 
-type CandlesAsked = {
-  id?: string;
-  kind: PeriodChartKind;
-  period: Period;
-  trades: readonly Trade[];
-};
-
 type ShownCandles = {
-  id: string;
-  history: PeriodHistory;
+  period: Period;
+  fetchedPast: PeriodHistory;
   bucketMilliseconds: number;
-  shownCandles: readonly Candle[];
+  candles: readonly Candle[];
 };
 
-export const useShownCandles = ({id, kind, period, trades}: CandlesAsked): ShownCandles => {
-  const generated = useId();
-  const history = usePeriodCandles(period);
+export const useShownCandles = (kind: PeriodChartKind): ShownCandles => {
+  const period = useDesk().periodOf(kind);
+  const fetchedPast = usePeriodCandles(period);
+  const trades = useMarketRead(marketReads.liveTrades);
   const bucketMilliseconds = periods.bucketMilliseconds[period];
   return {
-    id: id ?? `${kind}${generated}`,
-    history,
+    period,
+    fetchedPast,
     bucketMilliseconds,
-    shownCandles: candles.mergeLive(
-      periodHistory.candlesOf(history),
+    candles: candles.mergeLive(
+      periodHistory.candlesOf(fetchedPast),
       candles.bucketTrades(trades, bucketMilliseconds),
       periods.candleCap[period]
     )

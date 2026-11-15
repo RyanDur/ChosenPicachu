@@ -1,14 +1,12 @@
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode} from 'react';
-import {marketReads, periodHistory} from '../../Market';
-import {useMarketRead} from '../../Market/Trading';
+import {FC, ReactNode, useId} from 'react';
+import {periodHistory} from '../../Market';
 import {candleShapes} from './candle-shapes';
 import {chartCaption} from '../chart-caption';
 import {useShownCandles} from '../useShownCandles';
 import {Loading} from '@components/Loading';
 import {periodDisplay} from '../period-display';
 import {PeriodMenu} from '../PeriodMenu';
-import {useDesk} from '../useDesk';
 import {Axes, axisRange} from '../Axes';
 import {Bar} from '../Bar';
 import {shapes} from '../shapes';
@@ -27,15 +25,15 @@ type Props = {
 };
 
 export const Candles: FC<Props> = ({id: given, actions}) => {
-  const trades = useMarketRead(marketReads.liveTrades);
-  const period = useDesk().periodOf('candles');
-  const {id, history, bucketMilliseconds, shownCandles} = useShownCandles({id: given, kind: 'candles', period, trades});
-  const bodies = candleShapes.drawn(shownCandles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
-  const bars = candleShapes.volumes(shownCandles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
+  const generated = useId();
+  const id = given ?? `candles${generated}`;
+  const {period, fetchedPast, bucketMilliseconds, candles} = useShownCandles('candles');
+  const bodies = candleShapes.drawn(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
+  const bars = candleShapes.volumes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
   const extent = axisRange.of(
-    shownCandles.map(candle => candle.openedAt),
-    Math.max(...shownCandles.map(candle => candle.high)),
-    Math.min(...shownCandles.map(candle => candle.low))
+    candles.map(candle => candle.openedAt),
+    Math.max(...candles.map(candle => candle.high)),
+    Math.min(...candles.map(candle => candle.low))
   );
   return <section aria-labelledby={`${id}-heading`} className="candles chart card rounded-corners lifted padded">
     <h3 id={`${id}-heading`} className="off-screen">candles</h3>
@@ -49,7 +47,7 @@ export const Candles: FC<Props> = ({id: given, actions}) => {
         tickEveryMilliseconds={periodDisplay.tickEveryMilliseconds[period]}
         headroomMilliseconds={2 * bucketMilliseconds}>
         <svg className="candlesticks" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${CANDLE_HEIGHT}`}>
-          {shownCandles.map((candle, at) => <g key={candle.openedAt} className={classNames('candle', sideOf[bodies[at].direction], bodies[at].direction)}>
+          {candles.map((candle, at) => <g key={candle.openedAt} className={classNames('candle', sideOf[bodies[at].direction], bodies[at].direction)}>
             <Bar x={bodies[at].x} foot={bodies[at].bodyTop + bodies[at].bodyHeight} width={bodies[at].width}
               height={bodies[at].bodyHeight}>
               <line className="wick shape drawn" y1={-1} y2={0} style={shapes.placed({
@@ -62,13 +60,13 @@ export const Candles: FC<Props> = ({id: given, actions}) => {
           </g>)}
         </svg>
         <svg className="volumes volume-side" aria-hidden="true" viewBox={`0 0 ${CHART_WIDTH} ${VOLUME_HEIGHT}`}>
-          {shownCandles.map((candle, at) =>
+          {candles.map((candle, at) =>
             <Bar key={candle.openedAt}
               x={bars[at].x} foot={bars[at].top + bars[at].height} width={bars[at].width} height={bars[at].height}/>)}
         </svg>
       </Axes>
-      {periodHistory.stillComing(history) && <Loading className="chart-loading"/>}
-      <figcaption className="chart-caption caption">{chartCaption.of(history, shownCandles.length, period)}</figcaption>
+      {periodHistory.stillComing(fetchedPast) && <Loading className="chart-loading"/>}
+      <figcaption className="chart-caption caption">{chartCaption.of(fetchedPast, candles.length, period)}</figcaption>
     </figure>
     <Explainer>
       The same measurement, grouped: each candle summarizes one bucket of time. The body runs from the first to the

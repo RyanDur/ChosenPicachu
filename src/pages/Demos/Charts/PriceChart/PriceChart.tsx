@@ -1,5 +1,5 @@
 import {Explainer} from '@components/Explainer';
-import {FC, ReactNode} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {Maybe, maybe, notEmpty} from '@ryandur/sand';
 import {Loading} from '@components/Loading';
 import {classNames} from '@components';
@@ -9,7 +9,6 @@ import {chartCaption} from '../chart-caption';
 import {useShownCandles} from '../useShownCandles';
 import {periodDisplay} from '../period-display';
 import {PeriodMenu} from '../PeriodMenu';
-import {useDesk} from '../useDesk';
 import {sparkline, TimedPrice} from '../sparkline';
 import {Axes, axisRange} from '../Axes';
 import '../chart-card.css';
@@ -48,12 +47,13 @@ type Props = {
 
 export const PriceChart: FC<Props> = ({id: given, actions}) => {
   const trades = useMarketRead(marketReads.liveTrades);
-  const period = useDesk().periodOf('price');
-  const {id, history, bucketMilliseconds, shownCandles} = useShownCandles({id: given, kind: 'price', period, trades});
-  const view = viewOf(shownCandles, trades[trades.length - 1]);
+  const generated = useId();
+  const id = given ?? `price${generated}`;
+  const {period, fetchedPast, bucketMilliseconds, candles} = useShownCandles('price');
+  const view = viewOf(candles, trades[trades.length - 1]);
   const points =
     sparkline.points(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMilliseconds);
-  const line = points.map(point => `${point.x},${point.y}`).join(' ');
+  const trendPoints = points.map(point => `${point.x},${point.y}`).join(' ');
   const trending = view.map(trendOf);
   const trend = trending.orElse(undefined);
   const side = trending.map(direction => sideOf[direction]).orElse(undefined);
@@ -75,7 +75,7 @@ export const PriceChart: FC<Props> = ({id: given, actions}) => {
           {notEmpty(points) && <line className="baseline drawn"
             x1={0} y1={points[0].y}
             x2={CHART_WIDTH} y2={points[0].y}/>}
-          <polyline className="trend side-line line-shadowed" points={line} fill="none" vectorEffect="non-scaling-stroke"/>
+          <polyline className="trend side-line line-shadowed" points={trendPoints} fill="none" vectorEffect="non-scaling-stroke"/>
           {notEmpty(points) && <circle className="marker side-dot" r={3}
             style={{translate: `${points[points.length - 1].x}px ${points[points.length - 1].y}px`}}/>}
         </svg>
@@ -84,8 +84,8 @@ export const PriceChart: FC<Props> = ({id: given, actions}) => {
         <data className="title bold ink" value={last}>{money.cents.format(last)}</data>
         <data className="side-ink" value={last - first}>{money.deltaLabel(first, last)}</data>
       </>).orNull()}</p>
-      {periodHistory.stillComing(history) && <Loading className="chart-loading"/>}
-      <figcaption className="chart-caption caption">{chartCaption.of(history, shownCandles.length, period)}</figcaption>
+      {periodHistory.stillComing(fetchedPast) && <Loading className="chart-loading"/>}
+      <figcaption className="chart-caption caption">{chartCaption.of(fetchedPast, candles.length, period)}</figcaption>
     </figure>
     <Explainer>
       This measures the price of one bitcoin in US dollars, live. The line is the closing price of each bucket in the
