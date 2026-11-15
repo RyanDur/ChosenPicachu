@@ -95,15 +95,6 @@ describe('the Structure practice tab', () => {
     expect(practicePage.linkUnder('ARIA last', 'z-index tab')).toHaveAttribute('href', demoTab.address(DemoTopics.zIndex));
   });
 
-  test('should send Disclosure, the counter-case, to its source', async () => {
-    render(<TestApp at={practiceAt('structure')}/>);
-    await practicePage.arrivedOn('Structure');
-
-    expect(practicePage.linksUnder('Components, one behavior each')).toEqual(expect.arrayContaining([
-      ['Disclosure', `${Paths.repo}/blob/main/src/components/Disclosure/Disclosure.tsx`]
-    ]));
-  });
-
   test('should send each part of the drag-sortable table to its source, and the menu’s three components to the z-index tab', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');

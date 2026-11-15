@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {has, maybe} from '@ryandur/sand';
-import {Disclosure} from '@components/Disclosure';
 import {Search} from '@pages/Gallery/Search';
 import {PageControl} from '@pages/Gallery/PageControl';
 import {useGallery} from '@pages/Gallery/Context';
@@ -18,9 +17,9 @@ const Readout: FC = () => {
 
 export const GallerySettings: FC = () => <>
   <Search className="header-settings settings-standing"/>
-  <Disclosure label="gallery settings" className="header-settings settings-fold">
+  <details className="header-settings settings-fold disclosure" aria-label="gallery settings">
     <summary className="prompt"><Readout/></summary>
     <Search/>
     <PageControl/>
-  </Disclosure>
+  </details>
 </>;
