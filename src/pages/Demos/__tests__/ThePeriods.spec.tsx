@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support';
+import {chartPageAt, demosAt} from '@pages/Demos/__test_support';
 import {render, waitFor} from '@testing-library/react';
 import {http, HttpResponse} from 'msw';
 import {HISTORY, server} from '@__test_support/server';
@@ -52,6 +52,16 @@ describe('the chart periods', () => {
     expect(chosen.get('granularity')).toBe('60');
     expect(chosen.get('start')).not.toBeNull();
     expect(chosen.get('end')).not.toBeNull();
+  });
+
+  test('choosing the day on the candles page draws the candles chart by the hour of each day', async () => {
+    server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, ({request}) => HttpResponse.json(rowsSpaced(granularityAsked(request)))));
+    render(<TestApp at={chartPageAt('candles', '?graph=candles')}/>);
+    await chartsDesk.findOnChart('candles', '5 candles · 1m each');
+
+    await chartsDesk.choosePeriod('candle', 'day');
+
+    expect(await chartsDesk.findOnChart('candles', '5 candles · 1h each')).toBeVisible();
   });
 
   test('the price line measures its move from the close of its first candle, where its dotted line starts', async () => {
