@@ -3,12 +3,10 @@ import {asyncResult, has, maybe, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {useEnvironment} from '@environment';
 import {bannerChange, useBannerDispatch} from '@banners';
-import {Dials} from '../../Controls';
+import {useControls} from '../../Controls';
 import {tableFrame} from './table-frame';
 import {tableFrameChange} from './table-frame-change';
 import './TableFrame.css';
-
-type Props = PropsWithChildren<Dials>;
 
 const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): void => {
   maybe(frame.contentDocument).map(inner => {
@@ -19,7 +17,8 @@ const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): vo
   });
 };
 
-export const TableFrame: FC<Props> = ({pace, origin, motion, children}) => {
+export const TableFrame: FC<PropsWithChildren> = ({children}) => {
+  const {pace, origin, motion} = useControls();
   const {tradeFeed, tradeHistory, tradeProduct} = useEnvironment();
   const dispatchBanner = useBannerDispatch();
   const [{frameMarkup, frame, height}, dispatch] = useReducer(tableFrame.reduce, tableFrame.initial);
