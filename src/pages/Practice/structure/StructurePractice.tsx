@@ -155,10 +155,9 @@ export const StructurePractice: FC = () =>
       new. A component is not for wrapping an element the platform already has: that is the
       default. I keep a few wrappers that trade against it, where the trade is worth it: the menu’s Menu, Entry and
       Item, which write one element each and carry the site’s classes for it. Each saves a line every time it is used,
-      and each costs the reader the doubt of whether it
-      is a new element, which is why I say here that they are not. The test for a component is to name the behavior the
-      platform lacks. If there is none, it
-      is a wrapper, and I use the element bare.</p>
+      and each costs the reader the doubt of whether it is a new element, which is why I say here that they are not. The
+      test for a component is to name the behavior the platform lacks. If there is none, it is a wrapper, and I use the
+      element bare.</p>
     <p className="paragraph">And one behavior each. When no element exists for what I need, I make one, for one
       behavior. I never make an element that does everything, what I call a swiss army element. A component that takes
       twenty
