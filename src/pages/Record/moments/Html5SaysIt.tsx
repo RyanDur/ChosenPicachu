@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {MomentSummary} from './MomentSummary';
 import {moments} from '../calendar';
 
 const htmlCom = 'https://html.com/html5/';
@@ -10,15 +11,15 @@ const htmlParsing = 'https://html.spec.whatwg.org/multipage/parsing.html';
 const htmlSyntax = 'https://html.spec.whatwg.org/multipage/syntax.html';
 
 export const Html5SaysIt: FC = () =>
-  <Moment heading={moments.headings.html5SaysIt}
-    summary={<>The W3C’s HTML working group published its <a className="signpost" href={htmlDesignPrinciples}>HTML Design
+  <Moment heading={moments.headings.html5SaysIt}>
+    <MomentSummary>The W3C’s HTML working group published its <a className="signpost" href={htmlDesignPrinciples}>HTML Design
       Principles</a> as a working draft on 26 November 2007, with its priority of
       constituencies, <a className="signpost" href={htmlDesignPrinciples}>“users over authors over implementors over specifiers
         over theoretical purity”</a>, and HTML5 became a Recommendation
       on <a className="signpost" href={html5Recommendation}>28 October 2014</a>. html.com’s summary lists the
       objectives: semantic markup, separation of design from content,
       and <a className="signpost" href={htmlCom}>“reducing the overlap between HTML, CSS, and
-        JavaScript”</a>.</>}>
+        JavaScript”</a>.</MomentSummary>
     <p className="paragraph muted-ink hyphenated">The objectives, as html.com summarizes them: encouraging semantic
       markup; separating design from content; promoting accessibility and responsiveness; reducing the overlap between
       the three languages; and supporting rich media without plugins. html.com gives the reasoning: content is

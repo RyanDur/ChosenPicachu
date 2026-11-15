@@ -1,5 +1,7 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {MomentSummary} from './MomentSummary';
+import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
 
 const cssZenGarden = 'https://csszengarden.com/';
@@ -8,41 +10,43 @@ const riseOfCss = 'https://thehistoryoftheweb.com/the-rise-of-css/';
 const lieProposal = 'https://www.w3.org/People/howcome/p/cascade.html';
 
 export const ZenGarden: FC = () =>
-  <Moment heading={moments.headings.zenGarden}
-    summary={<>Dave Shea published{' '}
+  <Moment heading={moments.headings.zenGarden}>
+    <MomentSummary>Dave Shea published{' '}
       <a className="signpost" href={cssZenGarden}>one HTML document</a> and invited the world to
       restyle it. Hundreds of designs followed, and not one change to the markup: the same structure under any
-      presentation.</>}>
-    <p className="paragraph muted-ink hyphenated">Shea’s own account starts with the state of things. By 2003 the
-      industry had <a className="signpost" href={aboutCssZenGarden}>“hunkered down and kept using the hacky table layouts and font
-        tags that typified web development in the late 90’s”</a>, and CSS was still used for little beyond fonts and
-      colors. <a className="signpost" href={aboutCssZenGarden}>“Those who understood the capabilities of CSS were rarely
-        designers, and designers largely hadn’t embraced it yet”</a>, so <a className="signpost" href={aboutCssZenGarden}>“the
-          widespread perception of CSS was as a language capable only of boxy and boring design”</a>. Three things
-      moved him. Chris Casciano spent a month restyling his own site. A Wired contest in early 2003 asked
-      designers to re-skin one of its properties with CSS alone. And Jeffrey Zeldman told those who wanted the
-      situation to change to stop talking about what CSS could do and start doing it.</p>
-    <p className="paragraph muted-ink hyphenated">The garden’s rules were the argument, and its page states
-      them: <a className="signpost" href={cssZenGarden}>“You may modify the style sheet in any way you wish, but not the
-        HTML.”</a> Choose a design from the list and <a className="signpost" href={cssZenGarden}>“The HTML remains the same,
-          the only thing that has changed is the external CSS file. Yes, really.”</a> It asked
-      for <a className="signpost" href={cssZenGarden}>“mostly CSS 1 & 2 usage”</a>,
-      and <a className="signpost" href={cssZenGarden}>“The only real requirement we have is that your CSS
-        validates.”</a> Shea made the first five designs himself in May 2003 and asked the public for the rest;
-      hundreds followed, and designers, Hoffmann writes, used the
-      garden <a className="signpost" href={riseOfCss}>“to show their bosses and clients what CSS could do”</a>.
-      After the table layouts and spacer GIFs, this was when
-      CSS <a className="signpost" href={riseOfCss}>“finally became trustworthy”</a>.</p>
-    <p className="paragraph muted-ink hyphenated">Lie’s 1994 draft had already shown the idea, as a two-line style sheet
-      that set nothing itself: reference the NYT’s style sheet at 30% and Le Monde’s at 70%, and the presentation
-      is <a className="signpost" href={lieProposal}>“a mix”</a>. Swap the style sheet, keep the document. The garden was
-      that example, industrialized, on the doctype-switched browsers of the 1998 moment.</p>
-    <p className="paragraph muted-ink hyphenated">Shea built it, he writes, as <a className="signpost" href={aboutCssZenGarden}>“a
-      collaborative gallery that could show what CSS could accomplish”</a>,
-      where <a className="signpost" href={aboutCssZenGarden}>“a designer was unable to modify the HTML in any way, the entire
-        design had to be accomplished through CSS and images/fonts alone.”</a> Separation had been argued as hygiene:
-      maintainability, sharing, adaptation. The garden showed the other side, that with the structure held
-      constant the design could be replaced any number of times. The collaboration and the demonstration worked
-      together, Shea writes, to <a className="signpost" href={aboutCssZenGarden}>“help drive home the argument”</a> that
-      CSS-based design was <a className="signpost" href={aboutCssZenGarden}>“finally ready for prime time”</a>.</p>
+      presentation.</MomentSummary>
+    <FullerStory>
+      <p className="paragraph muted-ink hyphenated">Shea’s own account starts with the state of things. By 2003 the
+        industry had <a className="signpost" href={aboutCssZenGarden}>“hunkered down and kept using the hacky table layouts and font
+          tags that typified web development in the late 90’s”</a>, and CSS was still used for little beyond fonts and
+        colors. <a className="signpost" href={aboutCssZenGarden}>“Those who understood the capabilities of CSS were rarely
+          designers, and designers largely hadn’t embraced it yet”</a>, so <a className="signpost" href={aboutCssZenGarden}>“the
+            widespread perception of CSS was as a language capable only of boxy and boring design”</a>. Three things
+        moved him. Chris Casciano spent a month restyling his own site. A Wired contest in early 2003 asked
+        designers to re-skin one of its properties with CSS alone. And Jeffrey Zeldman told those who wanted the
+        situation to change to stop talking about what CSS could do and start doing it.</p>
+      <p className="paragraph muted-ink hyphenated">The garden’s rules were the argument, and its page states
+        them: <a className="signpost" href={cssZenGarden}>“You may modify the style sheet in any way you wish, but not the
+          HTML.”</a> Choose a design from the list and <a className="signpost" href={cssZenGarden}>“The HTML remains the same,
+            the only thing that has changed is the external CSS file. Yes, really.”</a> It asked
+        for <a className="signpost" href={cssZenGarden}>“mostly CSS 1 & 2 usage”</a>,
+        and <a className="signpost" href={cssZenGarden}>“The only real requirement we have is that your CSS
+          validates.”</a> Shea made the first five designs himself in May 2003 and asked the public for the rest;
+        hundreds followed, and designers, Hoffmann writes, used the
+        garden <a className="signpost" href={riseOfCss}>“to show their bosses and clients what CSS could do”</a>.
+        After the table layouts and spacer GIFs, this was when
+        CSS <a className="signpost" href={riseOfCss}>“finally became trustworthy”</a>.</p>
+      <p className="paragraph muted-ink hyphenated">Lie’s 1994 draft had already shown the idea, as a two-line style sheet
+        that set nothing itself: reference the NYT’s style sheet at 30% and Le Monde’s at 70%, and the presentation
+        is <a className="signpost" href={lieProposal}>“a mix”</a>. Swap the style sheet, keep the document. The garden was
+        that example, industrialized, on the doctype-switched browsers of the 1998 moment.</p>
+      <p className="paragraph muted-ink hyphenated">Shea built it, he writes, as <a className="signpost" href={aboutCssZenGarden}>“a
+        collaborative gallery that could show what CSS could accomplish”</a>,
+        where <a className="signpost" href={aboutCssZenGarden}>“a designer was unable to modify the HTML in any way, the entire
+          design had to be accomplished through CSS and images/fonts alone.”</a> Separation had been argued as hygiene:
+        maintainability, sharing, adaptation. The garden showed the other side, that with the structure held
+        constant the design could be replaced any number of times. The collaboration and the demonstration worked
+        together, Shea writes, to <a className="signpost" href={aboutCssZenGarden}>“help drive home the argument”</a> that
+        CSS-based design was <a className="signpost" href={aboutCssZenGarden}>“finally ready for prime time”</a>.</p>
+    </FullerStory>
   </Moment>;

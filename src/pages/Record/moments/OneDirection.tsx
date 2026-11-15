@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {Moment} from './Moment';
+import {MomentSummary} from './MomentSummary';
 import {moments} from '../calendar';
 
 const fluxOverview = 'https://facebookarchive.github.io/flux/docs/in-depth-overview';
@@ -8,10 +9,10 @@ const elmArchitecture = 'https://guide.elm-lang.org/architecture/';
 const reduxPrinciples = 'https://redux.js.org/understanding/thinking-in-redux/three-principles';
 
 export const OneDirection: FC = () =>
-  <Moment heading={moments.headings.oneDirection}
-    summary={<>Two-way binding let a change in the page change the model and a change in the model change the page.
+  <Moment heading={moments.headings.oneDirection}>
+    <MomentSummary>Two-way binding let a change in the page change the model and a change in the model change the page.
       Facebook found that it led to cascading updates. Its answer was Flux, a pattern in which data moves one way only,
-      and Flux’s code went public in July 2014.</>}>
+      and Flux’s code went public in July 2014.</MomentSummary>
     <p className="paragraph muted-ink hyphenated">Facebook’s Flux documentation names what it
       saw: <a className="signpost" href={fluxOverview}>“two-way data bindings led to cascading updates, where changing one
         object led to another object changing, which could also trigger more updates”</a>. Its answer

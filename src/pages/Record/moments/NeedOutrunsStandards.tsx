@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {Moment} from './Moment';
+import {MomentSummary} from './MomentSummary';
 import {PeriodSample} from './PeriodSample';
 import {moments} from '../calendar';
 
@@ -12,12 +13,12 @@ const infoworldInterview = 'https://www.infoworld.com/article/2653798/javascript
 const computerworldInterview = 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
 
 export const NeedOutrunsStandards: FC = () =>
-  <Moment heading={moments.headings.needOutrunsStandards}
-    summary={<>Markup carried presentation for years because nothing else could, columns and fonts written as tags, and
-      in the chaotic years of mixed browser support <a className="signpost" href={riseOfCss}>designers leaned on tables
+  <Moment heading={moments.headings.needOutrunsStandards}>
+    <MomentSummary>Markup carried presentation for years because nothing else could, columns and fonts written as tags,
+      and in the chaotic years of mixed browser support <a className="signpost" href={riseOfCss}>designers leaned on tables
         and spacer gifs</a>: vendor tags on every side, and in Navigator 4, which came the next year, CSS
       itself <a className="signpost" href={cssSaga}>run as JavaScript</a>. The same page looked one way in one browser
-      and another in the other.</>}>
+      and another in the other.</MomentSummary>
     <p className="paragraph muted-ink hyphenated">The markup of the time said it plainly:</p>
     <PeriodSample name="Netscape’s markup of 1996: columns and a font as tags">{'<MULTICOL COLS="3" GUTTER="25">\n  <P><FONT SIZE="4" COLOR="RED">This would be some font broken up into columns</FONT></P>\n</MULTICOL>'}</PeriodSample>
     <p className="paragraph muted-ink hyphenated">Layout and paint, written as structure. Netscape, Hoffmann
