@@ -14,7 +14,7 @@ const features: Feature[] = [
 const CellHeading: FC<Required<PropsWithChildren>> = ({children}) =>
   <span className="cell-heading caption uppercase">{children}</span>;
 
-export const FeatureMap: FC = () =>
+export const FeaturesAskedFor: FC = () =>
   <>
     <p className="overview paragraph">
       Now the table gains features, each one traceable to something the trader said. The
