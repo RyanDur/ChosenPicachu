@@ -17,6 +17,7 @@ const cards = [
 const theirNumbers = [
   lines.plain('.cards {'),
   lines.plain('  position: relative;'),
+  lines.plain('  isolation: isolate;'),
   lines.plain('}'),
   lines.blank,
   lines.plain('.card {'),
@@ -52,11 +53,15 @@ export const WhichCardIsOnTop: FC = () =>
           why?</p>
         <Snippet label="HTML" lines={cards}/>
         <Snippet label="CSS" lines={theirNumbers}/>
+      </li>
+      <li className="run">
         <Reveal summary="show the answer">
           <p className="paragraph">Card two. Card one forms a stacking context, so the list’s 9999 is compared only
-            inside card one. In the tab’s content, card one’s 1 is compared with card two’s 2, and card two wins. Card
-            three is later in the code, but a positioned box with a z-index of auto paints under every box with a
-            positive number, so it is under both.</p>
+            inside card one. <code className="monospaced">.cards</code> forms a stacking context too,
+            with <code className="monospaced unbroken">isolation: isolate</code>, and inside it card one’s 1 is
+            compared with card two’s 2, and card two wins. Card three is later in the code, but a positioned box with a
+            z-index of auto paints under every box in the same stacking context that has a positive z-index, so it is
+            under both.</p>
           <CardTwoOnTop/>
         </Reveal>
       </li>
