@@ -7,6 +7,8 @@ export type {Motion, Origin};
 export type Pace = 'eager' | 'lazy';
 export type World = 'react' | 'vanilla';
 export type Track = 'pointer' | 'keyboard';
+export type FoldType = 'inclusive' | 'exclusive';
+export type FoldMotion = 'reveal' | 'drawer' | 'static';
 
 export type Settings = Placement & {
   pace: Pace;
@@ -14,6 +16,8 @@ export type Settings = Placement & {
   motion: Motion;
   world: World;
   track: Track;
+  type: FoldType;
+  style: FoldMotion;
 };
 
 export type Controls = Settings & {change: (next: Partial<Settings>) => void};
@@ -24,6 +28,8 @@ const decoders: {[K in keyof Settings]: schema.Decoder<Settings[K]>} = {
   motion: schema.literalUnion('animated', 'static'),
   world: schema.literalUnion('react', 'vanilla'),
   track: schema.literalUnion('pointer', 'keyboard'),
+  type: schema.literalUnion('inclusive', 'exclusive'),
+  style: schema.literalUnion('reveal', 'drawer', 'static'),
   side: schema.literalUnion('top', 'middle', 'bottom'),
   align: schema.literalUnion('left', 'center', 'right'),
   enter: schema.literalUnion('above', 'below', 'left', 'right'),
@@ -36,6 +42,8 @@ const defaults: Settings = {
   motion: 'animated',
   world: 'react',
   track: 'pointer',
+  type: 'exclusive',
+  style: 'reveal',
   ...unplaced
 };
 

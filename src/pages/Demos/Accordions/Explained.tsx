@@ -2,7 +2,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
 import {classNames} from '@components';
 import {DemoTopics} from '../demo-topics';
-import {DialGroup, DialRow} from '../Controls';
+import {DialGroup, DialRow, FoldMotion, FoldType, useControls} from '../Controls';
 import {AccordionProps, Fold} from './accordion-props';
 import {ExclusiveAccordion} from './ExclusiveAccordion';
 import {ExclusiveMeasuredAccordion} from './ExclusiveMeasuredAccordion';
@@ -49,9 +49,7 @@ import {
   TwoBordersTurned,
   WhatEachPromises
 } from './Diagrams';
-import {FoldInput, FoldType} from './fold-type';
-import {FoldMotion} from './fold-motion';
-import {useFoldDials} from './useFoldDials';
+import {FoldInput} from './fold-input';
 import '../Runs.css';
 import './Explained.css';
 
@@ -128,7 +126,7 @@ type Props = {
 };
 
 export const AccordionsExplained: FC<Props> = ({foldLists}) => {
-  const {type, motion, chooseType, chooseMotion} = useFoldDials();
+  const {type, style: motion, change} = useControls();
   const exhibitMoving = classNames(exhibit, motion);
   const input = inputOf[type];
   const {Accordion: HtmlAlone, source: htmlAloneSource} = htmlAloneBuilds[type];
@@ -198,8 +196,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
       <p className="paragraph">The fold motion does not reach the accordion above. A browser opens a details at once
         on its own, and the first accordion leaves it that way, so you see what HTML alone does.</p>
       <DialGroup>
-        <DialRow label="fold type" name="fold-type" choices={foldTypes} chosen={type} onChosen={chooseType} reading={typeReadings[type]}/>
-        <DialRow label="fold motion" name="fold-motion" choices={foldMotions} chosen={motion} onChosen={chooseMotion} reading={<>
+        <DialRow label="fold type" name="fold-type" choices={foldTypes} chosen={type} onChosen={next => change({type: next})} reading={typeReadings[type]}/>
+        <DialRow label="fold motion" name="fold-motion" choices={foldMotions} chosen={motion} onChosen={next => change({style: next})} reading={<>
           <span className="when-motion-allowed">{motionReadings[motion]}</span>{' '}
           <span className="when-less-motion">If your system asks for less motion, every fold here opens at once,
             whichever you choose.</span>
