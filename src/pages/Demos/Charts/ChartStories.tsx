@@ -116,13 +116,17 @@ const PriceStory: FC = () =>
             candles of an hour, at most 24 of them, marked every hour. The week has candles of six hours, at most 28 of
             them, marked every day.</Says>
           <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
+          <Says>The choice is written into the address, in its <code className="monospaced">charts</code> value, so a
+            link opens the chart at the same period. <code className="monospaced">candles:day</code> is the candle chart
+            at a day, and a chart at the hour, the default, is written as its kind alone.</Says>
           <Says>The period menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece
             of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. They write a menu, an li,
             which is one item of a list, and a button.</Says>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
             sheet’s rules pick out. Item gives its button the site’s shared classes that set its look. Menu leaves its
             own look to whatever draws it, so <code className="monospaced">PeriodMenu</code>, which the price and candle
-            charts share, passes Menu those classes, as the sample shows.</Says>
+            charts share, gives Menu its look with three of the site’s shared
+            classes, <code className="monospaced">card</code>, <code className="monospaced">rounded-corners</code> and <code className="monospaced">lifted</code>, as the sample shows.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -130,7 +134,9 @@ const PriceStory: FC = () =>
             ...carve.unit(periodSource, 'type Lengths'), lines.blank,
             ...carve.unit(periodSource, 'const perPeriod'), lines.blank,
             ...carve.unit(periodSource, 'const bucketMilliseconds'), lines.blank,
-            ...carve.unit(periodSource, 'const candleCap')
+            ...carve.unit(periodSource, 'const candleCap'), lines.blank,
+            ...carve.unit(periodMenuSource, 'const spoken'), lines.blank,
+            ...carve.span(periodMenuSource, '  const {periodOf, choosePeriod}', '  const period = periodOf(kind);')
           ]}/>
           <Snippet label="HTML" lines={[
             ...carve.span(periodMenuSource, '<button', '</Menu>')
@@ -192,8 +198,8 @@ const CandlesStory: FC = () =>
     soThat="each bucket of time shows its open, its close, its high and low, and its volume">
     <Tell>A line shows where the price went. A candle shows what each bucket of time did: where the price opened and
       closed, how high and how low it reached, and how much was traded.</Tell>
-    <Tell>This chart needs no new data and keeps none of its own. It is given the same trades as the price line, and it
-      groups and joins them with the same two functions.</Tell>
+    <Tell>This chart needs no new data and keeps none of its own. It reads the same trades from the market as the
+      price line does, and it groups and joins them with the same two functions.</Tell>
     <Tell>So two charts set to the same period are drawn from the same candles and cannot disagree.</Tell>
     <Steps>
       <Step title="Make the candles the way the price line does">
