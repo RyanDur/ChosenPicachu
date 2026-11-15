@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {PeriodSample} from './PeriodSample';
@@ -12,7 +12,7 @@ const lieThesis = 'https://www.wiumlie.no/2006/phd/#ch-postweb';
 const w3cHistory = 'https://www.w3.org/History.html';
 
 export const PresentationLeavesHome: FC = () =>
-  <Moment heading={moments.headings.presentationLeavesHome}>
+  <YearMoment heading={moments.headings.presentationLeavesHome}>
     <MomentInBrief>Håkon Wium Lie <a className="signpost" href={lieProposal}>drafted Cascading HTML Style Sheets</a> in October
       1994, encouraged by Dave Raggett, who had realized HTML should <a className="signpost" href={cssSaga}>never become a
         page-description language</a>. The draft gave the author and the reader the same notation and a share of
@@ -117,4 +117,4 @@ export const PresentationLeavesHome: FC = () =>
           WWW development”</a>, and the work passed to INRIA and the consortium. Presentation got its own language the
         same year the web got its own standards body, the W3C.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

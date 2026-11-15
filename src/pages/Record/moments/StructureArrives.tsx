@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -11,7 +11,7 @@ const worldWideWebBrowser = 'https://worldwideweb.cern.ch/worldwideweb/';
 const nexusHistory = 'https://worldwideweb.cern.ch/history/';
 
 export const StructureArrives: FC = () =>
-  <Moment heading={moments.headings.structureArrives}>
+  <YearMoment heading={moments.headings.structureArrives}>
     <MomentInBrief>In November 1990 Tim Berners-Lee and Robert Cailliau proposed <a className="signpost" href={worldWideWebProposal}>“WorldWideWeb (or W3)”</a>, and Berners-Lee wrote the server and the
       browser. HTML’s tags came from CERN’s guide to SGML, the markup standard publishers and technical writers already
       used, so they would recognize them. The one tag of his own was <a className="signpost" href={htmlTags}>the anchor</a>,
@@ -60,4 +60,4 @@ export const StructureArrives: FC = () =>
         failed: <a className="signpost" href={worldWideWebBrowser}>“it turned out that people were quite happy to
           write HTML by hand”</a>, something Berners-Lee and his colleagues had not expected.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

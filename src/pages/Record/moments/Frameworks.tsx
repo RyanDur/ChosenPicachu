@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -12,7 +12,7 @@ const vueFramework = 'https://en.wikipedia.org/wiki/Vue.js';
 const angularFramework = 'https://en.wikipedia.org/wiki/Angular_(web_framework)';
 
 export const Frameworks: FC = () =>
-  <Moment heading={moments.headings.frameworks}>
+  <YearMoment heading={moments.headings.frameworks}>
     <MomentInBrief>After Ajax and jQuery the page was an application, and an application needs a shape. AngularJS,
       released in October 2010 and maintained by Google, bound the model and the view to each other in both directions.
       React, Vue and Angular followed, each with a different answer to the same need.</MomentInBrief>
@@ -56,4 +56,4 @@ export const Frameworks: FC = () =>
         style and behavior composed in one place and rendered by the program. The 2013 moment names that need and counts
         its cost; the 2016 moment is the way back.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

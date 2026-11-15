@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -10,7 +10,7 @@ const riseOfCss = 'https://thehistoryoftheweb.com/the-rise-of-css/';
 const lieProposal = 'https://www.w3.org/People/howcome/p/cascade.html';
 
 export const ZenGarden: FC = () =>
-  <Moment heading={moments.headings.zenGarden}>
+  <YearMoment heading={moments.headings.zenGarden}>
     <MomentInBrief>Dave Shea published <a className="signpost" href={cssZenGarden}>one HTML document</a> and invited the world to
       restyle it. Hundreds of designs followed, and not one change to the markup: the same structure under any
       presentation.</MomentInBrief>
@@ -48,4 +48,4 @@ export const ZenGarden: FC = () =>
         together, Shea writes, to <a className="signpost" href={aboutCssZenGarden}>“help drive home the argument”</a> that
         CSS-based design was <a className="signpost" href={aboutCssZenGarden}>“finally ready for prime time”</a>.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

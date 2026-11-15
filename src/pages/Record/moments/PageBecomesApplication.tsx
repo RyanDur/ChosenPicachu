@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -14,7 +14,7 @@ const googleMaps = 'https://en.wikipedia.org/wiki/Google_Maps';
 const prototypeArticle = 'https://en.wikipedia.org/wiki/Prototype_JavaScript_Framework';
 
 export const PageBecomesApplication: FC = () =>
-  <Moment heading={moments.headings.pageBecomesApplication}>
+  <YearMoment heading={moments.headings.pageBecomesApplication}>
     <MomentInBrief>Ajax let a page fetch data and rewrite itself without reloading. Garrett named the approach and
       pointed at Google’s newest products as its highest-profile examples. Prototype and jQuery smoothed over the
       differences between the browsers, and then the frameworks came.</MomentInBrief>
@@ -70,4 +70,4 @@ export const PageBecomesApplication: FC = () =>
         you fetched and started being a program you ran. What the language’s standard did next is the
         2009 moment.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

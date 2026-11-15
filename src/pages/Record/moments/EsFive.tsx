@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -15,7 +15,7 @@ const flashPlayer = 'https://en.wikipedia.org/wiki/Adobe_Flash_Player';
 const eichPopularity = 'https://brendaneich.com/2008/04/popularity/';
 
 export const EsFive: FC = () =>
-  <Moment heading={moments.headings.esFive}>
+  <YearMoment heading={moments.headings.esFive}>
     <MomentInBrief>Ten years after the third edition, the language’s standard moved. The fourth edition was never
       published as a standard; a draft of it had already shipped in Flash as ActionScript 3, and the committee set it
       aside in 2008. The fifth, published on 3 December 2009, was the smaller step: strict mode, JSON, accessor
@@ -76,4 +76,4 @@ export const EsFive: FC = () =>
             standard publication”</a>. A standard that had stalled for ten years over one large change now ships what
         two engines have already proved, every year.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

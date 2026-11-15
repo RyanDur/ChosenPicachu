@@ -1,1 +1,1 @@
-export {moments, type MomentHeading, type MomentKey, type SharedYear} from './moments';
+export {moments, type MomentKey, type MonthHeading, type SharedYear, type YearHeading} from './moments';

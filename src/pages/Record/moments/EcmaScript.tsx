@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -12,7 +12,7 @@ const infoworldInterview = 'https://www.infoworld.com/article/2653798/javascript
 const computerworldInterview = 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
 
 export const EcmaScript: FC = () =>
-  <Moment heading={moments.headings.ecmaScript}>
+  <YearMoment heading={moments.headings.ecmaScript}>
     <MomentInBrief>Microsoft shipped its own JavaScript, JScript, in Internet Explorer 3 in August 1996, and the two
       dialects differed enough that pages worked in one browser and not the other. Netscape took the language to Ecma,
       the European standards body, that November. The first edition of the standard, named ECMAScript, was adopted in
@@ -62,4 +62,4 @@ export const EcmaScript: FC = () =>
           programming language that is supported by essentially all web browsers”</a>. It then stood still for
         ten years, which is the 2009 moment.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;

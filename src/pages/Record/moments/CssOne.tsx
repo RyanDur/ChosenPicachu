@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {MonthMoment} from './MonthMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {moments} from '../calendar';
 
@@ -7,7 +7,7 @@ const cssSaga = 'https://www.w3.org/Style/LieBos2e/history/Overview.html';
 const css1 = 'https://www.w3.org/TR/REC-CSS1-961217';
 
 export const CssOne: FC = () =>
-  <Moment heading={moments.headings.cssOne}>
+  <MonthMoment heading={moments.headings.cssOne}>
     <MomentInBrief>Two years after Lie’s draft, CSS level 1 became a W3C Recommendation on 17 December 1996. The first
       browser to support it had shipped in August with most of the text properties and little of the box model. The
       standard was ahead of every browser, and would stay ahead for years.</MomentInBrief>
@@ -50,4 +50,4 @@ export const CssOne: FC = () =>
       was finished in 1996. In February 1997 CSS got its own working group, chaired by Chris Lilley, recruited to the
       W3C from the University of Manchester. CSS level 2 followed as a Recommendation in May 1998, and the catching-up
       is the 1998 moment.</p>
-  </Moment>;
+  </MonthMoment>;

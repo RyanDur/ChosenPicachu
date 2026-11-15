@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {MonthMoment} from './MonthMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {PeriodSample} from './PeriodSample';
 import {moments} from '../calendar';
@@ -13,7 +13,7 @@ const infoworldInterview = 'https://www.infoworld.com/article/2653798/javascript
 const computerworldInterview = 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
 
 export const NeedOutrunsStandards: FC = () =>
-  <Moment heading={moments.headings.needOutrunsStandards}>
+  <MonthMoment heading={moments.headings.needOutrunsStandards}>
     <MomentInBrief>Markup carried presentation for years because nothing else could, columns and fonts written as tags,
       and in the chaotic years of mixed browser support <a className="signpost" href={riseOfCss}>designers leaned on tables
         and spacer gifs</a>: vendor tags on every side, and in Navigator 4, which came the next year, CSS
@@ -57,4 +57,4 @@ export const NeedOutrunsStandards: FC = () =>
         premature standardization after a furious period of innovation”</a>: Netscape took the language to Ecma in
       November 1996, and the standard got a name nobody owned, ECMAScript. The standard, and why that name, is the
       1997 moment.</p>
-  </Moment>;
+  </MonthMoment>;

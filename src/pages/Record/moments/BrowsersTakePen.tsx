@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Moment} from './Moment';
+import {YearMoment} from './YearMoment';
 import {MomentInBrief} from './MomentInBrief';
 import {FullerStory} from './FullerStory';
 import {moments} from '../calendar';
@@ -10,7 +10,7 @@ const w3cWorkshopSummary = 'https://www.w3.org/2004/04/webapps-cdf-ws/summary';
 const whatwgFaq = 'https://whatwg.org/faq';
 
 export const BrowsersTakePen: FC = () =>
-  <Moment heading={moments.headings.browsersTakePen}>
+  <YearMoment heading={moments.headings.browsersTakePen}>
     <MomentInBrief>Mozilla and Opera <a className="signpost" href={whatwgPositionPaper}>put a counter-proposal in writing</a>: evolve HTML,
       backwards compatible. A straw poll at the W3C’s workshop went against it and the W3C said it did not intend to put
       any resources into it, so the browser makers founded the WHATWG, their own working group, and wrote the
@@ -74,4 +74,4 @@ export const BrowsersTakePen: FC = () =>
           forward”</a>. The posture from 1994, the specification following the field, had become the
         rule.</p>
     </FullerStory>
-  </Moment>;
+  </YearMoment>;
