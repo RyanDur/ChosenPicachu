@@ -1,7 +1,7 @@
 import {screen} from '@testing-library/react';
 import {computeAccessibleName} from 'dom-accessibility-api';
 
-export type Landmark = readonly [role: string, id: string, name: string];
+export type Landmark = readonly [role: string, name: string];
 
 const roles = ['banner', 'navigation', 'region', 'complementary', 'search', 'form', 'main', 'contentinfo'] as const;
 
@@ -16,5 +16,5 @@ export const landmarks = {
   ofTheFrame: (): Landmark[] => roles
     .flatMap(role => screen.queryAllByRole(role).filter(ofTheFrame).map(element => ({role, element})))
     .sort((one, other) => inDocumentOrder(one.element, other.element))
-    .map(({role, element}) => [role, element.id, computeAccessibleName(element)])
+    .map(({role, element}) => [role, computeAccessibleName(element)])
 };

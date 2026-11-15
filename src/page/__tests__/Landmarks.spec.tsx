@@ -12,10 +12,10 @@ describe('the frame’s landmarks a reader meets, in order', () => {
     await landmarks.arrived();
 
     expect(landmarks.ofTheFrame()).toEqual([
-      ['region', '', 'pages and feedback'],
-      ['navigation', 'side-nav', 'site'],
-      ['banner', 'app-header', ''],
-      ['main', '', '']
+      ['region', 'pages and feedback'],
+      ['navigation', 'site'],
+      ['banner', ''],
+      ['main', '']
     ]);
   });
 
@@ -25,13 +25,13 @@ describe('the frame’s landmarks a reader meets, in order', () => {
     await landmarks.footerArrived();
 
     expect(landmarks.ofTheFrame()).toEqual([
-      ['region', '', 'pages and feedback'],
-      ['navigation', 'side-nav', 'site'],
-      ['banner', 'app-header', ''],
-      ['complementary', 'filter', 'gallery settings'],
-      ['main', '', ''],
-      ['contentinfo', 'app-footer', ''],
-      ['navigation', 'gallery-nav', 'pagination']
+      ['region', 'pages and feedback'],
+      ['navigation', 'site'],
+      ['banner', ''],
+      ['complementary', 'gallery settings'],
+      ['main', ''],
+      ['contentinfo', ''],
+      ['navigation', 'pagination']
     ]);
   });
 
@@ -41,10 +41,10 @@ describe('the frame’s landmarks a reader meets, in order', () => {
     await landmarks.arrived();
 
     expect(landmarks.ofTheFrame()).toEqual([
-      ['region', '', 'pages and feedback'],
-      ['navigation', 'side-nav', 'site'],
-      ['banner', 'app-header', ''],
-      ['main', '', '']
+      ['region', 'pages and feedback'],
+      ['navigation', 'site'],
+      ['banner', ''],
+      ['main', '']
     ]);
   });
 
@@ -53,10 +53,10 @@ describe('the frame’s landmarks a reader meets, in order', () => {
     await landmarks.arrived();
 
     expect(landmarks.ofTheFrame()).toEqual([
-      ['region', '', 'pages and feedback'],
-      ['navigation', 'side-nav', 'site'],
-      ['banner', 'app-header', ''],
-      ['main', '', '']
+      ['region', 'pages and feedback'],
+      ['navigation', 'site'],
+      ['banner', ''],
+      ['main', '']
     ]);
   });
 });
