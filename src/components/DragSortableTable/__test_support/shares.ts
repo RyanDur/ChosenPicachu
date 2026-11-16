@@ -1,2 +1,2 @@
-export const columnShares = (windowShare: number, trades: number): Readonly<Record<string, number>> =>
-  ({window: windowShare, trades, buys: 100 - windowShare - trades});
+export const columnShares = (lookbackShare: number, tradesShare: number): Readonly<Record<string, number>> =>
+  ({lookback: lookbackShare, trades: tradesShare, buys: 100 - lookbackShare - tradesShare});
