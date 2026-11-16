@@ -27,14 +27,14 @@ export const InclusiveMeasuredAccordion: FC<AccordionProps> = ({
       <fieldset>
         <legend className="off-screen">folds</legend>
         <ul className="accordion trim">
-          {folds.map(({summary, body}, id) =>
-            <li key={summary} className="fold"
+          {folds.map(({heading, story}, id) =>
+            <li key={heading} className="fold"
               onChange={event => dispatch(toggled(event, barOf(id)))}>
               <input id={`measured-fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
               <label id={barOf(id)} className="info-label opening-arrow inverse-filled prior-approached corner-after"
-                htmlFor={`measured-fold-${id}-checkbox`}>{summary}</label>
+                htmlFor={`measured-fold-${id}-checkbox`}>{heading}</label>
               <MeasuredPanel namedBy={barOf(id)}>
-                <p className="info-paragraph">{body}</p>
+                <p className="info-paragraph">{story}</p>
               </MeasuredPanel>
             </li>)}
         </ul>

@@ -14,17 +14,17 @@ export const InclusiveCheckboxToggleAccordion: FC<AccordionProps> = ({
   <fieldset>
     <legend className="off-screen">folds</legend>
     <ul className="new-accordion">
-      {folds.map(({summary, body}) =>
-        <li key={summary} className="grid-fold">
+      {folds.map(({heading, story}) =>
+        <li key={heading} className="grid-fold">
           <header className="fold-bar field-inverse field-ink field-outlined">
-            <span className="sub-title bold">{summary}</span>
+            <span className="sub-title bold">{heading}</span>
             <label className="fold-control inverse-filled attentive hairline-outline field-pressed">
               <input type="checkbox" className="off-screen"/>
               <span className="when-closed">Open</span><span className="when-open">Close</span>
-              <span className="off-screen">{summary}</span>
+              <span className="off-screen">{heading}</span>
             </label>
           </header>
-          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{body}</span></span></p>
+          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{story}</span></span></p>
         </li>)}
     </ul>
   </fieldset>

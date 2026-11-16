@@ -29,14 +29,14 @@ export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
               name="measured-group"/>
             <label className="info-label field-ink prior-approached" htmlFor="measured-close-radio">Close</label>
           </li>
-          {folds.map(({summary, body}, id) =>
-            <li className="fold" key={summary} onChange={() => dispatch(foldChange.opened(barOf(id)))}>
+          {folds.map(({heading, story}, id) =>
+            <li className="fold" key={heading} onChange={() => dispatch(foldChange.opened(barOf(id)))}>
               <input id={`measured-fold-${id}-radio`} className="info-toggle off-screen" type="radio"
                 name="measured-group"/>
               <label id={barOf(id)} className="info-label opening-arrow inverse-filled prior-approached corner-after"
-                htmlFor={`measured-fold-${id}-radio`}>{summary}</label>
+                htmlFor={`measured-fold-${id}-radio`}>{heading}</label>
               <MeasuredPanel namedBy={barOf(id)}>
-                <p className="info-paragraph">{body}</p>
+                <p className="info-paragraph">{story}</p>
               </MeasuredPanel>
             </li>)}
         </ul>

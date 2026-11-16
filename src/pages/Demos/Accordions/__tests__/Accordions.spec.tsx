@@ -7,7 +7,7 @@ import {InclusiveCheckboxToggleAccordion} from '../InclusiveCheckboxToggleAccord
 import {InclusiveMeasuredAccordion} from '../InclusiveMeasuredAccordion';
 import {accordionFolds, foldTextUnder} from '../__test_support/build';
 
-const folds = [{summary: 'Alpha', body: 'the first fold'}, {summary: 'Beta', body: 'the second fold'}];
+const folds = [{heading: 'Alpha', story: 'the first fold'}, {heading: 'Beta', story: 'the second fold'}];
 
 describe('the inclusive toggle accordion using checkboxes', () => {
   const accordion = accordionFolds('checkbox');

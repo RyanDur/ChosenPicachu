@@ -95,8 +95,8 @@ type Build = {
 };
 
 const knownHeightBuilds: Record<FoldType, Build> = {
-  inclusive: {Accordion: InclusiveAccordion, sample: carve.span(inclusiveAccordionSource, '<li key={summary} className="fold">', '</li>')},
-  exclusive: {Accordion: ExclusiveAccordion, sample: carve.span(exclusiveAccordionSource, '<li className="fold" key={summary}>', '</li>')}
+  inclusive: {Accordion: InclusiveAccordion, sample: carve.span(inclusiveAccordionSource, '<li key={heading} className="fold">', '</li>')},
+  exclusive: {Accordion: ExclusiveAccordion, sample: carve.span(exclusiveAccordionSource, '<li className="fold" key={heading}>', '</li>')}
 };
 
 const platformBuilds: Record<FoldType, Build> = {
@@ -415,7 +415,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     item around the radio handles it by dispatching <code className="monospaced">opened</code> with the bar
                     that names its fold. The accordion’s reducer keeps that one fold open and closes the rest, and each
                     panel reads from the context whether its fold is still the open one.</p>
-                  <Snippet label="TS" lines={carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={summary} onChange={() => dispatch(', '<MeasuredPanel namedBy={barOf(id)}>')}/>
+                  <Snippet label="TS" lines={carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={heading} onChange={() => dispatch(', '<MeasuredPanel namedBy={barOf(id)}>')}/>
                 </li>}
               </ol>
             </details>

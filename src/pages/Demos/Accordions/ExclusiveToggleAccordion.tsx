@@ -11,11 +11,11 @@ export const ExclusiveToggleAccordion: FC<AccordionProps> = ({
     <h3 className="sub-title bold">Exclusive accordion using details elements</h3>
   </header>
   <ul className="new-accordion">
-    {folds.map(({summary, body}) =>
-      <li key={summary}>
+    {folds.map(({heading, story}) =>
+      <li key={heading}>
         <details className="fold" name="exclusive-toggle-accordion">
-          <summary className="info-label opening-arrow inverse-filled attentive field-outlined corner-after">{summary}</summary>
-          <p className="info"><span className="fold-text">{body}</span></p>
+          <summary className="info-label opening-arrow inverse-filled attentive field-outlined corner-after">{heading}</summary>
+          <p className="info"><span className="fold-text">{story}</span></p>
         </details>
       </li>)}
   </ul>
