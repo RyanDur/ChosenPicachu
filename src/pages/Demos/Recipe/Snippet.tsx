@@ -6,8 +6,6 @@ import {excerpts} from './excerpts';
 import {Line} from './sample';
 import './Snippet.css';
 
-export type {Line} from './sample';
-
 type Props = {
   label: Label;
   lines: readonly Line[];
