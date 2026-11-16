@@ -154,7 +154,6 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
     const here = text[at];
     if (text.startsWith('{/*', at)) return mark(at, endOf(text, at + 3, '*/}'), 'comment');
     if (text.startsWith('<!--', at)) return mark(at, endOf(text, at + 4, '-->'), 'comment');
-    if (at === 0 && /["'`]/.test(here)) return mark(at, endOfQuoted(text, at, here), 'string');
     if (here === '{') return enterBraces(at);
     if (here === '<' && /[A-Za-z/>]/.test(text[at + 1] ?? '')) return openTag(at);
     return at + 1;

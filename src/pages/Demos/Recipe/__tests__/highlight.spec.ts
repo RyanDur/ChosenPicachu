@@ -87,8 +87,14 @@ describe('the code voice', () => {
     expect(kinds('TS', "<p>Do it for 'em</p>{/* it's */}")["{/* it's */}"]).toBe('comment');
   });
 
-  it('reads a quote at the start of a markup line as a string', () => {
-    expect(kinds('HTML', "'note',")["'note'"]).toBe('string');
+  it('reads a quote that starts a later line inside an attribute\'s braces as a string', () => {
+    const [, inside] = highlight.tokensOf('HTML', ['<p style={{', '\'--x\': 1', '}}>']);
+    expect(inside.find(({text}) => text === '\'--x\'')?.kind).toBe('string');
+  });
+
+  it('keeps a quote that starts a later line of markup text from opening a string', () => {
+    const [, text] = highlight.tokensOf('HTML', ['<p>', '\'tis the season, it\'s here']);
+    expect(text.map(({kind}) => kind)).not.toContain('string');
   });
 
   it('reads a quote after as as a string', () => {
