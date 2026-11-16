@@ -53,11 +53,10 @@ const tokensMatching = (line: string, tokenPatterns: ReadonlyArray<TokenPattern>
   tokensFrom(line, matchesOf(line, tokenPatterns, [], () => true));
 
 const typeScriptPatterns: ReadonlyArray<TokenPattern> = [
-  {pattern: /(?<=\w<)[A-Z]\w*(?=,|>[(;)=])/g, kind: 'type'},
   {pattern: new RegExp(`\\b(?:${typeScriptWords.colored.join('|')})\\b`, 'g'), kind: 'keyword'},
   {pattern: /(?<=:[ \t]*)(?:readonly\s+)?[A-Z]\w*(?=[[<,;)=\s|]|$)/g, kind: 'type'},
   {pattern: /(?<=\b(?:type|extends|new)[ \t]+)[A-Z]\w*/g, kind: 'type'},
-  {pattern: /(?<=<)[A-Z]\w*|(?<=, )[A-Z]\w*(?=>)/g, kind: 'type'},
+  {pattern: /(?<=<)[A-Z]\w*(?=[,>])|(?<=, )[A-Z]\w*(?=>)/g, kind: 'type'},
   {pattern: /\b[a-zA-Z_$][\w$]*(?=\()/g, kind: 'call'},
   {pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
