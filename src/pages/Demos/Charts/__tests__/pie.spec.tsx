@@ -33,6 +33,14 @@ describe('the pie', () => {
     expect(pieShapes.wedges([{weight: 0}, {weight: 0}])).toEqual([]);
   });
 
+  test('a 1 to 7 split reads 13 and 87', () => {
+    expect(pieShapes.wholePercents(pieShapes.wedges([{weight: 1}, {weight: 7}]))).toEqual([13, 87]);
+  });
+
+  test('nothing cut reads no percents', () => {
+    expect(pieShapes.wholePercents([])).toEqual([]);
+  });
+
   test('a share opens its gates in degrees', () => {
     const [threeQuarters, quarter] = pieShapes.wedges([{weight: 3}, {weight: 1}]);
 

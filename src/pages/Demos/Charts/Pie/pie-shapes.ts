@@ -49,4 +49,10 @@ const sweepGates = (wedge: Wedge): Gates => {
   return {opening: Math.min(sweep, 180) - 180, closing: Math.max(sweep - 180, 0)};
 };
 
-export const pieShapes = {sideTotals, wedges, explodedBy, degrees, sweepGates};
+const wholePercents = (cut: readonly Wedge[]): readonly number[] => {
+  const rounded = cut.slice(0, -1).map(wedge => Math.round(wedge.share * 100));
+  const leftOf100 = 100 - rounded.reduce((sum, percent) => sum + percent, 0);
+  return cut.length === 0 ? [] : [...rounded, leftOf100];
+};
+
+export const pieShapes = {sideTotals, wedges, explodedBy, degrees, sweepGates, wholePercents};
