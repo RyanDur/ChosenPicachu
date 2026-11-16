@@ -50,7 +50,7 @@ const DrawnRun: FC<{run: Run; x: number; y: number}> = ({run: {classes, word, lo
   <text x={x + widthOf(classes) / 2} y={y + 22} fontSize={codeSize} textAnchor="middle">{word}</text>
 </>;
 
-const Line: FC<{segments: Segment[]; y: number}> = ({segments, y}) => <>
+const CodeRow: FC<{segments: Segment[]; y: number}> = ({segments, y}) => <>
   {placedAlong(segments).map(({segment, x}) => typeof segment === 'string'
     ? <Code key={segment} x={x} y={y}>{segment}</Code>
     : <DrawnRun key={segment.word} run={segment} x={x} y={y}/>)}
@@ -61,14 +61,14 @@ const wideWidth = edgeSpace * 2 + lengthOf(oneLine);
 
 const WideClassList: FC = () =>
   <svg className="class-list-wide ink-filled" viewBox={`0 0 ${wideWidth} 44`} aria-hidden="true">
-    <Line segments={oneLine} y={14}/>
+    <CodeRow segments={oneLine} y={14}/>
   </svg>;
 
 const NarrowClassList: FC = () =>
   <svg className="class-list-narrow center ink-filled" viewBox="0 0 320 112" aria-hidden="true">
-    <Line segments={[opening]} y={16}/>
-    <Line segments={[nouns, needs]} y={36}/>
-    <Line segments={[states, closing]} y={80}/>
+    <CodeRow segments={[opening]} y={16}/>
+    <CodeRow segments={[nouns, needs]} y={36}/>
+    <CodeRow segments={[states, closing]} y={80}/>
   </svg>;
 
 export const ColumnHeaderClassList: FC = () =>
