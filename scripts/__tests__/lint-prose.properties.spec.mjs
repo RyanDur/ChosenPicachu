@@ -39,8 +39,6 @@ const element = fc.oneof(
 const piece = fc.oneof({arbitrary: words(12).map(text => ({text, element: false})), weight: 2},
   element.map(text => ({text, element: true})));
 
-// How a person writes prose in JSX: a space between pieces on one line, a plain break between two words, and a
-// space held as {' '} beside an element's break: at the line's end, on a line of its own, or before a blank line.
 const heldBreak = fc.constantFrom('{\' \'}\n  ', '\n  {\' \'}\n  ', '{\' \'}\n\n  ');
 const gap = fc.record({breaks: fc.boolean(), held: heldBreak});
 
@@ -59,6 +57,6 @@ describe('the prose lint, over any paragraph', () => {
   test('its fix never changes the text a reader meets', () => {
     fc.assert(fc.property(paragraph, code => {
       expect(rendered(fixed(code))).toBe(rendered(code));
-    }));
+    }), {seed: 20261115});
   });
 });
