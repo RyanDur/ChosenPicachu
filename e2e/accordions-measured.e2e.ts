@@ -11,6 +11,7 @@ import {
   type Part
 } from './__test_support';
 import {everyBuildJourneys, layoutRounding, test} from './__test_support/fold-journeys';
+import {assertionPatience} from './__test_support/patience';
 
 // WebKit stopped starting page.goto after about 90 navigations of these journeys mixed with the tab's others in one
 // worker; a worker of their own keeps them apart
@@ -18,6 +19,9 @@ test.use({workerOfItsOwn: 'the measured folds'});
 
 everyBuildJourneys(measuredBuilds);
 const gapUnderItsText = (part: Part): Promise<number> => gapUnder(part.fold, textOf(part));
+
+const settlesWithinRounding = async (measure: () => Promise<number>): Promise<void> =>
+  expect(async () => expect(await measure()).toBeLessThanOrEqual(layoutRounding)).toPass({timeout: assertionPatience});
 
 const tallestOf = async (parts: Part[]): Promise<Part> => {
   const heights = await Promise.all(parts.map(part =>
@@ -38,7 +42,7 @@ test.describe('a desktop', () => {
 
       for (const width of [390, 1440]) {
         await page.setViewportSize({width, height: 900});
-        await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
+        await settlesWithinRounding(() => gapUnderItsText(part));
       }
     });
   }
@@ -90,7 +94,7 @@ for (const build of measuredBuilds) {
       await accordionsTab(page).opensTheFirstPartThenChoosesOnceItStartsMoving(build, 'Static');
       await page.setViewportSize({width: 390, height: 900});
 
-      await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
+      await settlesWithinRounding(() => gapUnderItsText(part));
     });
 
     test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, async ({page}) => {
@@ -104,7 +108,7 @@ for (const build of measuredBuilds) {
       await heightOnceSettled(part.fold);
       await page.setViewportSize({width: 390, height: 900});
 
-      await expect.poll(() => gapUnderItsText(part)).toBeLessThanOrEqual(layoutRounding);
+      await settlesWithinRounding(() => gapUnderItsText(part));
     });
   });
 }
@@ -118,7 +122,7 @@ test.describe('the fold measured by plain script', () => {
     await fold.bar.click();
 
     await expect(fold.text).toBeVisible();
-    await expect.poll(fold.gapUnderItsText).toBeLessThanOrEqual(layoutRounding);
+    await settlesWithinRounding(fold.gapUnderItsText);
     await fold.bar.click();
     await expect(fold.text).toBeHidden();
   });
@@ -131,11 +135,11 @@ test.describe('the fold measured by plain script', () => {
       const fold = plainFold(page);
       await fold.goTo();
       await fold.bar.click();
-      await expect.poll(fold.gapUnderItsText).toBeLessThanOrEqual(layoutRounding);
+      await settlesWithinRounding(fold.gapUnderItsText);
 
       await page.setViewportSize({width: 390, height: 900});
 
-      await expect.poll(fold.gapUnderItsText).toBeLessThanOrEqual(layoutRounding);
+      await settlesWithinRounding(fold.gapUnderItsText);
     });
   });
 
@@ -167,7 +171,7 @@ test.describe('the fold measured by plain script', () => {
 
     await fold.bar.click();
 
-    await expect.poll(fold.textBelowTheFrame).toBeLessThanOrEqual(layoutRounding);
+    await settlesWithinRounding(fold.textBelowTheFrame);
   });
 });
 
