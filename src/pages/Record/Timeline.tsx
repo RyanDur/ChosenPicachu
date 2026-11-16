@@ -32,7 +32,7 @@ import {
 } from './moments';
 import {MomentKey, moments, SharedYear} from './calendar';
 import {concerns} from './concerns';
-import {entriesOf} from './timelineEntries';
+import {timelineEntries} from './timelineEntries';
 
 const momentComponents: Record<MomentKey, FC> = {
   need: Need,
@@ -61,7 +61,7 @@ const momentComponents: Record<MomentKey, FC> = {
   elementsArrive: ElementsArrive
 };
 
-const entries = entriesOf(moments.inOrder, moments.headings, moments.sharedYears);
+const entries = timelineEntries.of(moments.inOrder, moments.headings, moments.sharedYears);
 
 const TimelineMoment: FC<{moment: MomentKey}> = ({moment}) => {
   const MomentComponent = momentComponents[moment];

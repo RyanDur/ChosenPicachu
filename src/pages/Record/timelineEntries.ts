@@ -3,7 +3,7 @@ import {SharedYear} from './calendar';
 
 type Dated = {readonly date: {readonly year: string}};
 
-export type Entry<Key extends string> = {readonly kind: 'moment'; readonly key: Key}
+type Entry<Key extends string> = {readonly kind: 'moment'; readonly key: Key}
   | {
     readonly kind: 'shared year';
     readonly year: string;
@@ -11,7 +11,7 @@ export type Entry<Key extends string> = {readonly kind: 'moment'; readonly key: 
     readonly sharedYear: SharedYear;
   };
 
-export const entriesOf = <Key extends string>(
+const of = <Key extends string>(
   inOrder: readonly Key[],
   headings: Record<Key, Dated>,
   sharedYears: Partial<Record<string, SharedYear>>
@@ -28,3 +28,5 @@ export const entriesOf = <Key extends string>(
       }],
     (): readonly Entry<Key>[] => [...entriesSoFar, {kind: 'moment', key}]);
 }, []);
+
+export const timelineEntries = {of};
