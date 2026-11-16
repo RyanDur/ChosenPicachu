@@ -22,7 +22,7 @@ export const SlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.between(listSource, 'const slideStart = slideStarts.of(', 'onAnimationEnd={() => dispatch(dragSortChange.slid(item))}'), lines.blank,
+        ...carve.between(listSource, 'const slideStart = slideStarts.running(', 'onAnimationEnd={() => dispatch(dragSortChange.slid(item))}'), lines.blank,
         ...carve.unit(sources.slideStarts, 'const afterSettle'), lines.blank,
         ...carve.unit(sources.dragSort, 'const settled')
       ]}/>
