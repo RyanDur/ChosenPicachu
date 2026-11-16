@@ -12,7 +12,8 @@ export const PopoverExplained: FC = () =>
     <h2 id={partHeadings.popoverWins} className="title bold">Why the popover wins</h2>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
-        <p className="paragraph">The top-layer Sort by in <a className="signpost" href={`#${partHeadings.stillLoses}`}><cite>Why 9999 still loses</cite></a> opens over
+        <p className="paragraph">The top-layer Sort by
+          in <a className="signpost" href={`#${partHeadings.stillLoses}`}><cite>Why 9999 still loses</cite></a> opens over
           everything around it every time, with the box checked or not. It is a popover. A popover is shown in
           the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a layer the browser keeps above the
           whole page for popovers, dialogs and elements shown full screen.</p>
@@ -35,7 +36,8 @@ export const PopoverExplained: FC = () =>
           keys and the role that come with it, and its look still comes from the style sheet.</p>
       </li>
       <li className="run">
-        <p className="paragraph">The button names its menu with popovertarget, and the menu is marked <Mdn path="Web/HTML/Global_attributes/popover">popover</Mdn>, both part of
+        <p className="paragraph">The button names its menu with popovertarget, and the menu is
+          marked <Mdn path="Web/HTML/Global_attributes/popover">popover</Mdn>, both part of
           the <Mdn path="Web/API/Popover_API">Popover API</Mdn>. With that, the browser opens and closes it with
           no script, closes it on Escape or a click outside it, and gives focus back to the button when focus was in the
           menu. Each choice is a

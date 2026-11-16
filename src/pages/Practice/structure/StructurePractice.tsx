@@ -23,7 +23,9 @@ export const StructurePractice: FC = () =>
       accordion’s script does too, on purpose, since it shows the old way.</p>
     <p className="paragraph">The rules come from the readers: the markup is read by more than the browser, and I write
       it for all of its readers at once. A screen reader reads it for roles, names and states, and for a way to move. On
-      a long page most of its users go to the headings first: 71.6% in <a className="signpost" href={survey}>WebAIM’s tenth survey</a> said they <a className="signpost" href={survey}>“navigate through the headings on the page”</a>. A few go to the
+      a long page most of its users go to the headings first: 71.6%
+      in <a className="signpost" href={survey}>WebAIM’s tenth survey</a> said
+      they <a className="signpost" href={survey}>“navigate through the headings on the page”</a>. A few go to the
       landmarks. Reader view and a search engine read it for the content in order, with its meaning. The next
       developer reads it to see what the page is. The browser reads it for the behavior each element brings. The same
       elements have to answer all five.</p>
@@ -60,10 +62,12 @@ export const StructurePractice: FC = () =>
       you around the site. A section named pages and feedback, the rail that holds that nav and the feedback button.
       Where a page has tabs, a nav named by the tabs’ own label.</p>
     <p className="paragraph">Landmarks are what a screen reader lists and jumps to. Where one kind appears more than
-      once, I name each, so a screen reader can tell them apart. The <a className="signpost" href={landmarkRegions}>Authoring Practices</a> put it plainly: <a className="signpost" href={landmarkRegions}>“If a specific landmark role is used more than once on a page,
+      once, I name each, so a screen reader can tell them apart.
+      The <a className="signpost" href={landmarkRegions}>Authoring Practices</a> put it plainly: <a className="signpost" href={landmarkRegions}>“If a specific landmark role is used more than once on a page,
         provide each instance of that landmark with a unique label.”</a> A section takes its name from its heading or,
       where it has none, from a label. If there is nothing to name it by, it is not a section. The landmark elements,
-      header, main, footer and nav, come from the standard the browser makers began writing themselves in the <MomentLink to="browsersTakePen">2004 moment</MomentLink>.</p>
+      header, main, footer and nav, come from the standard the browser makers began writing themselves in
+      the <MomentLink to="browsersTakePen">2004 moment</MomentLink>.</p>
     <LandmarkMap/>
     <p className="paragraph">One region on every page is a role and not an element, and that is the element rule from
       its other side: I write a role only where no element does the job. The banners are a section with
@@ -90,7 +94,10 @@ export const StructurePractice: FC = () =>
       className="monospaced">toggle</code> event.
       A modal <Mdn path="Web/HTML/Element/dialog">dialog</Mdn> holds focus, makes the rest of the page inert
       behind its backdrop, and closes on Escape. A <Mdn path="Web/HTML/Global_attributes/popover">popover</Mdn> lives
-      in the top layer and closes on Escape or a click outside it. A <Mdn path="Web/HTML/Element/form">form</Mdn> refuses an empty required field in the browser’s own words. An <Mdn path="Web/HTML/Element/output">output</Mdn> is announced when its contents change. A <Mdn path="Web/HTML/Element/fieldset">fieldset</Mdn> groups controls under its <Mdn path="Web/HTML/Element/legend">legend</Mdn>. A th with <Mdn path="Web/HTML/Element/th#scope"><code
+      in the top layer and closes on Escape or a click outside it. A <Mdn path="Web/HTML/Element/form">form</Mdn> refuses an empty required field in the browser’s own words.
+      An <Mdn path="Web/HTML/Element/output">output</Mdn> is announced when its contents change.
+      A <Mdn path="Web/HTML/Element/fieldset">fieldset</Mdn> groups controls under
+      its <Mdn path="Web/HTML/Element/legend">legend</Mdn>. A th with <Mdn path="Web/HTML/Element/th#scope"><code
       className="monospaced">scope</code></Mdn> tells a screen reader which header a cell belongs to. <Mdn path="Web/API/Invoker_Commands_API">Invoker commands</Mdn> open a popover or a dialog with no script, as the
       feedback dialog’s buttons do. I reach for one of these before any script.</p>
     <p className="paragraph">Three attributes carry three jobs. A data attribute attaches a behavior: <code className="monospaced">data-row-grip</code> says a grip can be dragged, and the script finds grips by it. A
@@ -150,7 +157,8 @@ export const StructurePractice: FC = () =>
       hand or by key, <a className="signpost"
       href={repository.file('src/components/DragSortableTable/ResizeHandle.tsx')}>ResizeHandle</a> resizes, <a className="signpost"
       href={repository.file('src/components/DragSortableTable/SortMenu.tsx')}>SortMenu</a> sorts, <a className="signpost"
-      href={repository.file('src/components/DragSortableTable/DraggableColumn.tsx')}>DraggableColumn</a> carries a column. The menu is three components that write one element each, as the <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> says. A behavior the table needs
+      href={repository.file('src/components/DragSortableTable/DraggableColumn.tsx')}>DraggableColumn</a> carries
+      a column. The menu is three components that write one element each, as the <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> says. A behavior the table needs
       that no part has gets a new part with that one job, not a prop on an old one. The platform’s own elements work the
       same way, one element per meaning: a details opens, a dialog holds focus, an output announces.</p>
     <p className="paragraph">This is also why the site’s new elements are React components and not custom elements. The
@@ -170,7 +178,8 @@ export const StructurePractice: FC = () =>
         accessibility, roles and states”</a> in
       MDN’s words. Use a meaningless element instead and you rebuild all of it in script. The field has a saying, <a className="signpost" href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA">“No ARIA is better
         than bad ARIA”</a>: WebAIM
-      found pages using ARIA had <a className="signpost" href="https://webaim.org/projects/million/">41 percent more detected errors</a> than
+      found pages using ARIA
+      had <a className="signpost" href="https://webaim.org/projects/million/">41 percent more detected errors</a> than
       pages without.
       The <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> records what that rebuilding cost: links
       became
@@ -181,12 +190,14 @@ export const StructurePractice: FC = () =>
       survey above says most screen reader users move through a long page by its headings, and a page built of
       divs gives them nothing to move by. Everywhere else the element says what it is. A figure has its caption, a list
       is a list, and a button is a button even when it looks like a link.
-      The standard that calls a div a last resort is the one the browser makers wrote themselves, from the <MomentLink to="browsersTakePen">2004 moment</MomentLink> on.</p>
+      The standard that calls a div a last resort is the one the browser makers wrote themselves, from
+      the <MomentLink to="browsersTakePen">2004 moment</MomentLink> on.</p>
     <p className="paragraph">Here is what ARIA last looks like on this site. Every role it writes can be read in a
       minute. The banners are a section with role <code className="monospaced">alert</code>, and the old-style banner
       the <Link className="signpost" to={demoTab.address(DemoTopics.zIndex)}>z-index tab</Link> raises, a paragraph, carries the
       same role, because there is no alert element. The z-index tab’s old-way menu, the one script opens to show what
-      the platform now does for free, is a menu element holding a list of buttons, with role <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role <code className="monospaced">none</code> on each list item. A screen reader reads a menu element as a list, not as a menu, and
+      the platform now does for free, is a menu element holding a list of buttons, with
+      role <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role <code className="monospaced">none</code> on each list item. A screen reader reads a menu element as a list, not as a menu, and
       the list item’s own
       role would get in the way. The popover menu beside it carries no role at all. A term’s definition, the small card
       that opens from a word in a tutorial, has role <code className="monospaced">definition</code>. The Record’s period

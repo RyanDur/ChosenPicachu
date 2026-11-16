@@ -76,7 +76,8 @@ const WorkspaceStory: FC = () =>
             at its new place.</Says>
           <Says>Before any of this, <code className="monospaced">travel</code> calls <code
             className="monospaced">event.preventDefault()</code>, which tells the browser that a drop is allowed here. An
-            element that accepts a drop has to make that call on every dragover event that reaches it. <code className="monospaced">travel</code> also sets <code className="monospaced">dropEffect</code> to <code className="monospaced">'move'</code>, which only picks the cursor.</Says>
+            element that accepts a drop has to make that call on every dragover event that reaches
+            it. <code className="monospaced">travel</code> also sets <code className="monospaced">dropEffect</code> to <code className="monospaced">'move'</code>, which only picks the cursor.</Says>
           <Says>The neighbor’s slide is
             the <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s keyframe animation
             turned vertical. It starts its own height away and runs to its new place in 150 milliseconds. A chart cannot

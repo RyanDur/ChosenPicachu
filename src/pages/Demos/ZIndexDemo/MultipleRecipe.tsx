@@ -109,7 +109,8 @@ export const MultipleRecipe: FC = () => {
             second transition declaration on the same element replaces the list; it does not add to it. So the arriving
             banner’s transitions are all in this one list, and the leaving rule in step 4 writes a whole list of its
             own.</Says>
-          <Says>timing.css names the three values the banner moves by: <code className="monospaced">--slide-curve</code>, <code className="monospaced">--slide-duration</code> at 0.6 seconds and <code className="monospaced">--fold-duration</code> at 0.3. The slide follows the curve, a cubic-bezier,
+          <Says>timing.css names the three values the banner moves by: <code className="monospaced">--slide-curve</code>, <code className="monospaced">--slide-duration</code> at 0.6 seconds
+            and <code className="monospaced">--fold-duration</code> at 0.3. The slide follows the curve, a cubic-bezier,
             which sets how a move speeds up and slows down. This one starts slowly and eases into place at the
             end.</Says>
         </Words>
@@ -125,7 +126,9 @@ export const MultipleRecipe: FC = () => {
       </Step>
       <Step title="Slide in from off screen" id={slideInStep} dial={<EntranceDial name="journey-entrance"/>}>
         <Words want="A banner that slides in from just beside its place looks like it popped up. The slide has to start off screen.">
-          <Says>{enterFact[enter]} The distance is a <TabLink to={DemoTopics.accordions}>custom property</TabLink>, here <code className="monospaced">--arrive</code>: a value named once in the style sheet and read back
+          <Says>{enterFact[enter]} The distance is
+            a <TabLink to={DemoTopics.accordions}>custom property</TabLink>,
+            here <code className="monospaced">--arrive</code>: a value named once in the style sheet and read back
             with <code className="monospaced">var()</code> wherever it is needed. The starting style reads it to place
             the banner before the slide, and the leaving rule reads it again to send the banner back.</Says>
         </Words>

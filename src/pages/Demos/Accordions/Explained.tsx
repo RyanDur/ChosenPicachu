@@ -224,7 +224,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
             <Snippet label="HTML" lines={foldType === 'inclusive' ? carve.span(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
           </li>
           <li className="run">
-            <p className="paragraph">Now a rule has to match on whether the {input} is checked. <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
+            <p className="paragraph">Now a rule has to match on whether the {input} is
+              checked. <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
               by its state: here, a checked {input}. The ~ is
               a <Mdn path="Web/CSS/Subsequent-sibling_combinator">combinator</Mdn>, a symbol between two selectors
               that says how their elements relate; it picks the siblings that come after the element on its left, the
@@ -845,7 +846,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
             the state does.</p>
         </li>
         <li className="run">
-          <p className="paragraph">When a reader asks for <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn>, every fold opens with no slide. The
+          <p className="paragraph">When a reader asks
+            for <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn>, every fold opens with no slide. The
             reset, the style sheet that sets every element’s defaults, has a reduced-motion block with three rules.
             The first uses the universal selector, *, which picks every element and reaches their before and after
             too. It sets each transition’s duration to zero, cuts each animation to 0.01 milliseconds, plays each
