@@ -10,7 +10,7 @@ const {browserslistToTargets, transform} = require('lightningcss');
 const browserslist = require('browserslist');
 const react = require('@vitejs/plugin-react').default;
 const svgr = require('vite-plugin-svgr');
-const {has, not} = require('@ryandur/sand');
+const {has, maybe, not} = require('@ryandur/sand');
 const autoprefixer = require('autoprefixer');
 
 /** @param {string} path */
@@ -182,7 +182,7 @@ const usersServerPlugin = () => {
     name: 'users-server',
     configureServer(server) {
       server.middlewares.use(async (request, response, next) => {
-        if ((request.url ?? '').split('?')[0].endsWith(`/${script}`)) {
+        if (maybe(request.url).orElse('').split('?')[0].endsWith(`/${script}`)) {
           response.setHeader('content-type', 'text/javascript');
           response.end(await built());
           return;
@@ -201,20 +201,26 @@ const usersServerPlugin = () => {
  * @returns {import('vite').Plugin}
  */
 const runtimeEnvironment = env => {
+  /**
+   * @param {string} name
+   * @param {string} [otherwise]
+   * @returns {string}
+   */
+  const setting = (name, otherwise = '') => maybe(env[name]).orElse(otherwise);
   const values = {
-    tradeFeed: env.VITE_APP_TRADE_FEED ?? '',
-    tradeProduct: env.VITE_APP_TRADE_PRODUCT ?? '',
-    tradeHistory: env.VITE_APP_TRADE_HISTORY ?? '',
-    aicDomain: env.VITE_APP_API_AIC ?? '',
-    aicPictures: env.VITE_APP_AIC_PICTURES ?? '',
-    harvardDomain: env.VITE_APP_HARVARD_API ?? '',
-    harvardAPIKey: env.VITE_APP_HARVARD_API_KEY ?? '',
-    vamDomain: env.VITE_APP_VAM_API ?? '',
-    vamPictures: env.VITE_APP_VAM_PICTURES ?? '',
-    clevelandDomain: env.VITE_APP_CLEVELAND_API ?? '',
-    usersDomain: env.VITE_APP_USERS_API ?? '',
-    feedbackToken: env.VITE_APP_FEEDBACK_TOKEN ?? '',
-    feedbackEndpoint: env.VITE_APP_FEEDBACK_ENDPOINT ?? 'https://api.github.com/graphql'
+    tradeFeed: setting('VITE_APP_TRADE_FEED'),
+    tradeProduct: setting('VITE_APP_TRADE_PRODUCT'),
+    tradeHistory: setting('VITE_APP_TRADE_HISTORY'),
+    aicDomain: setting('VITE_APP_API_AIC'),
+    aicPictures: setting('VITE_APP_AIC_PICTURES'),
+    harvardDomain: setting('VITE_APP_HARVARD_API'),
+    harvardAPIKey: setting('VITE_APP_HARVARD_API_KEY'),
+    vamDomain: setting('VITE_APP_VAM_API'),
+    vamPictures: setting('VITE_APP_VAM_PICTURES'),
+    clevelandDomain: setting('VITE_APP_CLEVELAND_API'),
+    usersDomain: setting('VITE_APP_USERS_API'),
+    feedbackToken: setting('VITE_APP_FEEDBACK_TOKEN'),
+    feedbackEndpoint: setting('VITE_APP_FEEDBACK_ENDPOINT', 'https://api.github.com/graphql')
   };
   const body = `window.__environment = ${JSON.stringify(values, null, 2)};\n`;
   return {
@@ -222,7 +228,7 @@ const runtimeEnvironment = env => {
     config: () => ({define: {__BUILT_ENVIRONMENT__: JSON.stringify(values)}}),
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
-        if ((request.url ?? '').split('?')[0].endsWith('/env.js')) {
+        if (maybe(request.url).orElse('').split('?')[0].endsWith('/env.js')) {
           response.setHeader('content-type', 'text/javascript');
           response.end(body);
           return;
@@ -249,8 +255,8 @@ const pagesAsPublished = () => ({
   configureServer(server) {
     const base = server.config.base;
     server.middlewares.use(async (request, response, next) => {
-      const url = request.url ?? '/';
-      if (request.method !== 'GET' || not(url.startsWith(base)) || not((request.headers.accept ?? '').includes('text/html'))) {
+      const url = maybe(request.url).orElse('/');
+      if (request.method !== 'GET' || not(url.startsWith(base)) || not(maybe(request.headers.accept).orElse('').includes('text/html'))) {
         next();
         return;
       }

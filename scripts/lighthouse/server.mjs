@@ -3,12 +3,12 @@ import {existsSync, readFileSync, statSync} from 'node:fs';
 import {dirname, extname, join, resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {gzipSync} from 'node:zlib';
-import {is, not} from '@ryandur/sand';
+import {is, maybe, not} from '@ryandur/sand';
 import {WebSocketServer} from 'ws';
 
-const port = Number(process.env.STAGE_PORT ?? 4517);
+const port = Number(maybe(process.env.STAGE_PORT).orElse(4517));
 const here = dirname(fileURLToPath(import.meta.url));
-const site = resolve(process.env.STAGE_SITE ?? join(here, '../../build/client'));
+const site = resolve(maybe(process.env.STAGE_SITE).orElse(join(here, '../../build/client')));
 const fixtures = join(here, 'fixtures');
 
 const rest = new Map(JSON.parse(readFileSync(join(fixtures, 'rest.json'), 'utf8'))
@@ -37,7 +37,7 @@ const feedbackAnswerTo = ({variables}) =>
 const answers = (request, response) => {
   const send = (status, body, contentType, compress) => {
     const headers = {'content-type': contentType, 'cache-control': 'public, max-age=600'};
-    if (is(compress) && (request.headers['accept-encoding'] ?? '').includes('gzip')) {
+    if (is(compress) && maybe(request.headers['accept-encoding']).orElse('').includes('gzip')) {
       body = gzipSync(body);
       headers['content-encoding'] = 'gzip';
     }
@@ -45,7 +45,7 @@ const answers = (request, response) => {
     response.end(body);
   };
 
-  const url = request.url ?? '/';
+  const url = maybe(request.url).orElse('/');
 
   if (url.split('?')[0].endsWith('/env.js')) {
     return send(200, `window.__environment = ${JSON.stringify({
@@ -94,7 +94,7 @@ const answers = (request, response) => {
   const file = join(site, path);
   if (existsSync(file) && statSync(file).isFile()) {
     const kind = extname(file);
-    return send(200, readFileSync(file), types[kind] ?? 'application/octet-stream',
+    return send(200, readFileSync(file), maybe(types[kind]).orElse('application/octet-stream'),
       compressible.has(kind));
   }
   if (extname(path)) {

@@ -9,7 +9,7 @@ const asked = (method: string, path = '', body?: unknown): Request =>
   new Request(at(path), {method, ...maybe(body).map(sent => ({body: JSON.stringify(sent)})).orElse({})});
 
 const friendsOf = (roster: readonly User[], id: string): readonly string[] =>
-  roster.find(user => user.id === id)?.friends ?? [];
+  maybe(roster.find(user => user.id === id)).map(({friends}) => friends).orElse([]);
 
 describe('the users backend', () => {
   const a = createUser();

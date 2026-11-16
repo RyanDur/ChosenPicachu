@@ -1,4 +1,4 @@
-import {empty, has, not} from '@ryandur/sand';
+import {empty, has, is, maybe, not} from '@ryandur/sand';
 import {readFileSync, readdirSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -55,7 +55,8 @@ const nearbyOf = file => {
     const home = dirname(sheet);
     if (directory === home || directory.startsWith(home + '/')) names.forEach(name => near.add(name));
   }
-  homesOf(directory).flatMap(framedBesides).forEach(sheet => bySheet.get(sheet)?.forEach(name => near.add(name)));
+  homesOf(directory).flatMap(framedBesides)
+    .forEach(sheet => maybe(bySheet.get(sheet)).orElse([]).forEach(name => near.add(name)));
   return near;
 };
 /**
@@ -67,14 +68,15 @@ const opens = (near, prefix) => [...near].some(name => name.startsWith(prefix));
 const htmlClass = '__htmlClass';
 
 const wornClasses = (node, wear) => {
-  switch (node?.type) {
+  if (not(is(node))) return;
+  switch (node.type) {
     case 'Literal':
       if (typeof node.value === 'string') wear(node, node.value.split(/\s+/).filter(Boolean));
       return;
     case 'TemplateLiteral':
       node.quasis.forEach((quasi, at) => {
         const words = quasi.value.cooked.split(/\s+/);
-        const tail = at < node.quasis.length - 1 ? words.pop() ?? '' : '';
+        const tail = at < node.quasis.length - 1 ? maybe(words.pop()).orElse('') : '';
         if (has(tail)) wear(node, [], [tail]);
         wear(node, words.filter(Boolean));
       });
@@ -102,13 +104,15 @@ const wornClasses = (node, wear) => {
 };
 
 const firstWorn = node => {
-  if (node?.type === 'ArrowFunctionExpression') return firstWorn(node.body);
-  if (node?.type === 'Literal' && typeof node.value === 'string') return node.value.split(/\s+/).filter(Boolean);
-  if (node?.type === 'CallExpression' && node.callee.name === 'classNames') {
+  if (not(is(node))) return [];
+  if (node.type === 'ArrowFunctionExpression') return firstWorn(node.body);
+  if (node.type === 'Literal' && typeof node.value === 'string') return node.value.split(/\s+/).filter(Boolean);
+  if (node.type === 'CallExpression' && node.callee.name === 'classNames') {
     const statics = node.arguments.filter(argument => argument.type === 'Literal' && typeof argument.value === 'string');
-    return node.arguments[0]?.type === 'Literal' ? statics.flatMap(argument => argument.value.split(/\s+/)) : undefined;
+    const [first] = node.arguments;
+    return is(first) && first.type === 'Literal' ? statics.flatMap(argument => argument.value.split(/\s+/)) : [];
   }
-  return undefined;
+  return [];
 };
 
 const classPositions = visit => ({
@@ -119,7 +123,7 @@ const classPositions = visit => ({
   CallExpression: node => {
     const {callee} = node;
     if (callee.type === 'Identifier' && callee.name === htmlClass) visit(node.arguments[0]);
-    if (callee.type === 'MemberExpression' && callee.object.property?.name === 'classList' && ['add', 'remove', 'toggle'].includes(callee.property.name)) {
+    if (callee.type === 'MemberExpression' && is(callee.object.property) && callee.object.property.name === 'classList' && ['add', 'remove', 'toggle'].includes(callee.property.name)) {
       node.arguments.slice(0, callee.property.name === 'toggle' ? 1 : undefined).forEach(visit);
     }
   }
@@ -145,7 +149,7 @@ const ownClassFirst = {
   }},
   create: context => classPositions(node => {
     const names = firstWorn(node);
-    const mine = names?.find(name => own.has(name));
+    const mine = names.find(name => own.has(name));
     if (typeof mine === 'string' && not(own.has(names[0]))) context.report({node, messageId: 'behind', data: {name: mine}});
   })
 };

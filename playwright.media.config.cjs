@@ -1,5 +1,5 @@
 const {defineConfig} = require('@playwright/test');
-const {has} = require('@ryandur/sand');
+const {has, maybe} = require('@ryandur/sand');
 
 const smokeUrl = process.env.SMOKE_URL;
 
@@ -10,7 +10,7 @@ module.exports = defineConfig({
   workers: 1,
   timeout: 120_000,
   use: {
-    baseURL: smokeUrl ?? 'https://ryandur.github.io/ChosenPicachu/',
+    baseURL: maybe(smokeUrl).orElse('https://ryandur.github.io/ChosenPicachu/'),
     viewport: {width: 1000, height: 760}
   },
   webServer: has(smokeUrl) ? {

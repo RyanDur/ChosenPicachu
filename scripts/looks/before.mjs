@@ -2,10 +2,10 @@ import {execFileSync} from 'node:child_process';
 import {copyFileSync, existsSync, mkdirSync, symlinkSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join, resolve} from 'node:path';
-import {empty, not} from '@ryandur/sand';
+import {empty, maybe, not} from '@ryandur/sand';
 
 const repo = resolve(import.meta.dirname, '../..');
-const ref = process.argv[2] ?? 'main';
+const ref = maybe(process.argv[2]).orElse('main');
 const commit = execFileSync('git', ['-C', repo, 'rev-parse', '--short=12', ref], {encoding: 'utf8'}).trim();
 const root = join(tmpdir(), 'chosen-picachu-looks', commit);
 const frameworkModeOutput = 'build/client';

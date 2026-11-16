@@ -1,5 +1,5 @@
 /// <reference lib="webworker" />
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import {usersServer} from '@pages/Users/usersServer';
 import {createRandomUsers, Roster} from './core';
 import {api, respond} from './respond';
@@ -10,7 +10,7 @@ const shelf = 'users';
 
 const keyOf = (client: string): string => `roster/${client}`;
 
-const clientOf = (key: Request): string => new URL(key.url).pathname.split('/').pop() ?? '';
+const clientOf = (key: Request): string => maybe(new URL(key.url).pathname.split('/').pop()).orElse('');
 
 const kept = async (client: string, roster: Roster): Promise<Roster> => {
   const cache = await caches.open(shelf);
