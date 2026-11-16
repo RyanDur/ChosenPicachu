@@ -92,8 +92,9 @@ describe('the menu built the old way', () => {
 describe('the card that traps the menu', () => {
   test('should give its steps before any control', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
+    const trap = await theTrap.find();
 
-    expect(exhibit.controlsBeforeTheSteps(await theTrap.find())).toEqual([]);
+    expect(exhibit.controlsBeforeTheSteps(trap, theTrap.controls(trap))).toEqual([]);
   });
 
   test('should show Sort by on both buttons, under the way each is built, and name each by its words then its way', async () => {

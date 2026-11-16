@@ -10,7 +10,7 @@ describe('the banner exhibit', () => {
     render(<TestApp at={demosAt('z-index')}/>);
     const banners = await bannerExhibit.find();
 
-    expect(exhibit.controlsBeforeTheSteps(banners)).toEqual([]);
+    expect(exhibit.controlsBeforeTheSteps(banners, bannerExhibit.controls(banners))).toEqual([]);
   });
 
   test('should show Raise a banner on both buttons, under the way each is built', async () => {

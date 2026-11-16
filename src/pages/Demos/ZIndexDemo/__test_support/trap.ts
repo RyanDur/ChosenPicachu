@@ -14,5 +14,7 @@ export const theTrap = {
     .filter(card => is(within(card).queryByRole('button', {name: 'Sort by, the old way'})))[0],
   controlIn: (card: HTMLElement, name: string): HTMLElement => within(card).getByRole('button', {name}),
   cardOneHasZIndexBox,
+  controls: (trap: HTMLElement): HTMLElement[] =>
+    [...within(trap).getAllByRole('button'), cardOneHasZIndexBox(trap)],
   toggleCardOne: async (): Promise<void> => userEvent.click(cardOneHasZIndexBox(await find()))
 };
