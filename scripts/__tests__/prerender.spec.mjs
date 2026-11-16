@@ -8,16 +8,14 @@ import {not} from '@ryandur/sand';
 import {prerender} from '../../src/entry.server';
 
 describe('the pages drawn into the build', () => {
-  test('include every fixed path, demo tab, chart kind and practice concern', () => {
-    /** @type {string[]} */
-    const addresses = [
-      ...Object.values(Paths).filter(/** @param {string} path */ path => path.startsWith('/') && not(path.includes(':'))),
-      ...Object.values(DemoTopics).map(demoTab.address),
-      ...chartKinds.all.map(kind => `${Paths.demos}charts/${kind}/`),
-      ...concerns.inOrder.map(practiceAddress.of)
-    ];
-
-    expect(addresses.filter(address => not(prerender.pages.includes(address)))).toEqual([]);
+  // eslint-disable-next-line tests/parameterized-for-drift -- drift: every page in the site's page list
+  test.each([
+    ...Object.values(Paths).filter(/** @param {string} path */ path => path.startsWith('/') && not(path.includes(':'))),
+    ...Object.values(DemoTopics).map(demoTab.address),
+    ...chartKinds.all.map(kind => `${Paths.demos}charts/${kind}/`),
+    ...concerns.inOrder.map(practiceAddress.of)
+  ])('include %s', address => {
+    expect(prerender.pages).toContain(address);
   });
 });
 

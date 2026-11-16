@@ -10,6 +10,7 @@ const {page} = require('./scripts/lint/page.mjs');
 const {components} = require('./scripts/lint/components.mjs');
 const {prose} = require('./scripts/lint/prose.mjs');
 const {elements} = require('./scripts/lint/elements.mjs');
+const {tests} = require('./scripts/lint/tests.mjs');
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -57,30 +58,7 @@ const childrenInProps = {
   message: 'Take children through PropsWithChildren<Props>, never as a key of the props type.'
 };
 
-const spyOnOurOwn = {
-  selector: 'CallExpression[callee.object.name="vi"][callee.property.name="spyOn"][arguments.0.type="Identifier"]' +
-    ':not([arguments.0.name=/^(window|document|navigator|console|globalThis|history|location)$/])',
-  message: 'Spy on what the platform owns, never on our own module: render the real thing and read what a reader meets.'
-};
-
-const parameterized = {
-  selector: 'MemberExpression[object.name=/^(test|it|describe)$/][property.name="each"]',
-  message: 'A parameterized test guards drift only, one behavior across browsers, engines or one feature\'s builds; ' +
-    'name the drift in an eslint-disable reason.'
-};
-
-const fieldsetWithoutLegend = {
-  selector: 'JSXElement[openingElement.name.name="fieldset"]:not(:has(JSXOpeningElement[name.name="legend"]))',
-  message: 'A fieldset is named by its legend, off screen when the group shows its own heading.'
-};
-
-const footerInDialog = {
-  selector: 'JSXElement[openingElement.name.name="dialog"] JSXOpeningElement[name.name="footer"]',
-  message: 'A footer inside a dialog is a second landmark; the dialog\'s actions sit in its form.'
-};
-
-const presence = {'no-restricted-syntax': ['error', comparedToUndefined, inlineAction, childrenInProps, spyOnOurOwn,
-  parameterized]};
+const presence = {'no-restricted-syntax': ['error', comparedToUndefined, inlineAction, childrenInProps]};
 const aClass = {
   selector: ':matches(ClassDeclaration, ClassExpression)',
   message: 'Write a module, an object of behaviors, never a class.'
@@ -91,8 +69,7 @@ const typeTests = {'no-restricted-imports': ['error', {paths: [{
   message: 'A spec pins what a reader does or meets; the types are tsc\'s to hold.'
 }]}]};
 
-const markup = {'no-restricted-syntax': ['error', comparedToUndefined, bareInlineCode, inlineAction, childrenInProps,
-  spyOnOurOwn, parameterized, fieldsetWithoutLegend, footerInDialog]};
+const markup = {'no-restricted-syntax': ['error', comparedToUndefined, bareInlineCode, inlineAction, childrenInProps]};
 const modulesOnly = {
   presence: {'no-restricted-syntax': [...presence['no-restricted-syntax'], aClass]},
   markup: {'no-restricted-syntax': [...markup['no-restricted-syntax'], aClass]}
@@ -252,6 +229,16 @@ module.exports = [
       importNames: ['useRef', 'createRef', 'forwardRef'],
       message: 'a ref holds a dialog shown as a modal, or reads an element\'s details nothing else gives; list the file in refsWithAReason'
     }]}]}
+  },
+  {
+    files: ['**/*.{js,mjs,ts,tsx}'],
+    plugins: {tests},
+    rules: {'tests/no-double-of-ours': 'error', 'tests/parameterized-for-drift': 'error'}
+  },
+  {
+    files: ['src/**/*.tsx'],
+    plugins: {elements},
+    rules: {'elements/fieldset-opens-with-its-legend': 'error', 'elements/no-footer-in-a-dialog': 'error'}
   },
   {
     files: ['src/**/*.tsx'],

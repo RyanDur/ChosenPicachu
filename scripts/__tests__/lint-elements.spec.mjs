@@ -27,3 +27,24 @@ tester.run('step-opens-with-its-heading', elements.rules['step-opens-with-its-he
     {name: 'should refuse an empty step', code: 'export const s = <Step/>;', errors: [{messageId: 'unheaded'}]}
   ]
 });
+
+tester.run('fieldset-opens-with-its-legend', elements.rules['fieldset-opens-with-its-legend'], {
+  valid: [
+    {name: 'should accept a fieldset whose first part is its legend', code: 'export const f = <fieldset>\n  <legend>Size</legend>\n  <input/>\n</fieldset>;'}
+  ],
+  invalid: [
+    {name: 'should refuse a fieldset with no legend', code: 'export const f = <fieldset><input/></fieldset>;', errors: [{messageId: 'unnamed'}]},
+    {name: 'should refuse a fieldset whose legend comes after another part', code: 'export const f = <fieldset><input/><legend>Size</legend></fieldset>;', errors: [{messageId: 'unnamed'}]},
+    {name: 'should refuse a fieldset named only by the legend of a fieldset inside it', code: 'export const f = <fieldset><fieldset><legend>Home</legend></fieldset></fieldset>;', errors: [{messageId: 'unnamed'}]}
+  ]
+});
+
+tester.run('no-footer-in-a-dialog', elements.rules['no-footer-in-a-dialog'], {
+  valid: [
+    {name: 'should accept a footer outside a dialog', code: 'export const f = <section><footer>notes</footer></section>;'}
+  ],
+  invalid: [
+    {name: 'should refuse a footer inside a dialog', code: 'export const d = <dialog><form><footer/></form></dialog>;', errors: [{messageId: 'landmark'}]},
+    {name: 'should refuse a footer inside a Modal', code: 'export const d = <Modal><form><footer/></form></Modal>;', errors: [{messageId: 'landmark'}]}
+  ]
+});

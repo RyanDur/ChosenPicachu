@@ -87,7 +87,7 @@ describe('columns by hand', () => {
     expect(liveTable.announced()).toEqual(['trades moved to column 3 of 7']);
   });
 
-  // eslint-disable-next-line no-restricted-syntax -- drift: the eager and lazy builds of one table
+  // eslint-disable-next-line tests/parameterized-for-drift -- drift: the eager and lazy builds of one table
   test.each([['eager', EagerTable], ['lazy', LazyTable]])('every header of the %s table reads its column’s name and nothing more', (_, Table) => {
     seat(Table, {origin: 'keep', motion: 'static'});
 

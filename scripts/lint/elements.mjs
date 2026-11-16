@@ -25,4 +25,47 @@ const stepOpensWithItsHeading = {
   })
 };
 
-export const elements = {rules: {'no-div': noDiv, 'step-opens-with-its-heading': stepOpensWithItsHeading}};
+/**
+ * @param {any} node
+ * @returns {any}
+ */
+const firstPartOf = node => node.children.find(child => child.type !== 'JSXText' || child.value.trim() !== '');
+
+/**
+ * @param {any} node
+ * @param {string} name
+ * @returns {boolean}
+ */
+const isElement = (node, name) => node?.type === 'JSXElement' && node.openingElement.name.name === name;
+
+/** @type {import('eslint').Rule.RuleModule} */
+const fieldsetOpensWithItsLegend = {
+  meta: {
+    type: 'problem',
+    messages: {unnamed: 'a fieldset is named by the legend that opens it, off screen when the group shows its own heading'}
+  },
+  create: context => ({
+    'JSXElement[openingElement.name.name="fieldset"]': node => {
+      if (!isElement(firstPartOf(node), 'legend')) context.report({node: node.openingElement, messageId: 'unnamed'});
+    }
+  })
+};
+
+/** @type {import('eslint').Rule.RuleModule} */
+const noFooterInADialog = {
+  meta: {
+    type: 'problem',
+    messages: {landmark: 'a footer inside a dialog is a second landmark; the dialog\'s actions sit in its form'}
+  },
+  create: context => ({
+    'JSXElement[openingElement.name.name=/^(dialog|Modal)$/] JSXOpeningElement[name.name="footer"]': node =>
+      context.report({node, messageId: 'landmark'})
+  })
+};
+
+export const elements = {rules: {
+  'no-div': noDiv,
+  'step-opens-with-its-heading': stepOpensWithItsHeading,
+  'fieldset-opens-with-its-legend': fieldsetOpensWithItsLegend,
+  'no-footer-in-a-dialog': noFooterInADialog
+}};
