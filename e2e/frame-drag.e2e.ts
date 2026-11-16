@@ -1,11 +1,11 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {dragSortTable, type FingerPress, iPadUpright, iPhone, type Stage, stages, stagesWith} from './__test_support';
+import {type FingerPress, iPadUpright, iPhone, type Stage, tablesFrame} from './__test_support';
 
-for (const {name, at, table} of stagesWith('origin=keep')) {
+for (const {name, at, holder} of tablesFrame.stagesWith('origin=keep')) {
   test(`a column and a row still land in their new seats while their origin stays in place, in ${name}`, async ({page}) => {
     await page.goto(at);
-    const trades = dragSortTable(page, table(page));
+    const trades = tablesFrame.dragSortTable(page, holder(page));
     await expect(trades.columnHeader('trades')).toBeVisible();
 
     await trades.dragColumnPast('trades', 'vwap');
@@ -16,10 +16,10 @@ for (const {name, at, table} of stagesWith('origin=keep')) {
   });
 }
 
-for (const {name, at, table} of stages) {
+for (const {name, at, holder} of tablesFrame.stages) {
   test(`a column dragged past two neighbors is reported once, where it lands, in ${name}`, async ({page}) => {
     await page.goto(at);
-    const trades = dragSortTable(page, table(page));
+    const trades = tablesFrame.dragSortTable(page, holder(page));
     await expect(trades.columnHeader('trades')).toBeVisible();
     await trades.listenToTheMoveReport();
 
@@ -30,10 +30,10 @@ for (const {name, at, table} of stages) {
   });
 }
 
-for (const {name, at, table} of stages) {
+for (const {name, at, holder} of tablesFrame.stages) {
   test(`a row dragged past two neighbors is reported once, where it lands, in ${name}`, async ({page}) => {
     await page.goto(at);
-    const trades = dragSortTable(page, table(page));
+    const trades = tablesFrame.dragSortTable(page, holder(page));
     await expect(trades.columnHeader('trades')).toBeVisible();
     await trades.listenToTheMoveReport();
 
@@ -44,10 +44,10 @@ for (const {name, at, table} of stages) {
   });
 }
 
-for (const {name, at, table} of stages) {
+for (const {name, at, holder} of tablesFrame.stages) {
   test(`the first and last columns hold their posts, in ${name}`, async ({page}) => {
     await page.goto(at);
-    const trades = dragSortTable(page, table(page));
+    const trades = tablesFrame.dragSortTable(page, holder(page));
     await expect(trades.columnHeader('trades')).toBeVisible();
 
     await trades.dragColumnPast('lookback', 'buys');
@@ -59,10 +59,10 @@ for (const {name, at, table} of stages) {
   });
 }
 
-for (const {name, at, table} of stages) {
+for (const {name, at, holder} of tablesFrame.stages) {
   test(`a menu choice sorts, and never lifts the column, in ${name}`, async ({page}) => {
     await page.goto(at);
-    const trades = dragSortTable(page, table(page));
+    const trades = tablesFrame.dragSortTable(page, holder(page));
     await expect(trades.columnHeader('trades')).toBeVisible();
 
     await trades.sortBy('trades', 'descending');
@@ -75,12 +75,12 @@ for (const {name, at, table} of stages) {
 const aFingerCarriesTheColumn = async (
   page: Page,
   browserName: string,
-  {at, table}: Stage,
+  {at, holder}: Stage,
   from: FingerPress
 ): Promise<void> => {
   test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a finger through a drag');
   await page.goto(at);
-  const trades = dragSortTable(page, table(page));
+  const trades = tablesFrame.dragSortTable(page, holder(page));
   await expect(trades.columnHeader('trades')).toBeVisible();
 
   await trades.fingerDragColumn('trades', {by: 240, from});
@@ -95,7 +95,7 @@ for (const {reader, device} of [
   test.describe(reader, () => {
     test.use(device);
 
-    for (const stage of stages) {
+    for (const stage of tablesFrame.stages) {
       test(`a finger pressed on a column's name carries it to a new seat, in ${stage.name}`, ({page, browserName}) =>
         aFingerCarriesTheColumn(page, browserName, stage, 'name'));
     }
@@ -105,7 +105,7 @@ for (const {reader, device} of [
 test.describe('a phone', () => {
   test.use(iPhone);
 
-  for (const stage of stages) {
+  for (const stage of tablesFrame.stages) {
     test(`a finger pressed on a column's middle carries it to a new seat, in ${stage.name}`, ({page, browserName}) =>
       aFingerCarriesTheColumn(page, browserName, stage, 'middle'));
   }
