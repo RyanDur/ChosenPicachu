@@ -69,6 +69,11 @@ describe('chosen/compositor-motion', () => {
     expect(await warningsFor('dialog { transition: block-size .3s; }', 'src/styles/reset.css')).toHaveLength(1);
   });
 
+  it('should refuse a height sliding in the reset on a list that names a fold beside something else', async () => {
+    expect(await warningsFor('details::details-content, dialog { transition: block-size .3s; }', 'src/styles/reset.css'))
+      .toHaveLength(1);
+  });
+
   it('should refuse all', async () => {
     expect(await warningsFor('a { transition: all .3s; }')).toHaveLength(1);
   });
