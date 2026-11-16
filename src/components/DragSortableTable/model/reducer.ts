@@ -29,7 +29,7 @@ const motion = (state: TableState, action: TableAction): TableState => {
       const {order} = action;
       const from = order.indexOf(action.name);
       const to = action.type === 'columnWalkedTo' ? action.to : survey.interior(order.indexOf(action.neighbor), order.length);
-      const told = action.type !== 'columnWalkedTo' || to === from ? state : {...state, report: {about: 'column' as const, name: action.name, position: to, of: order.length}};
+      const told = action.type !== 'columnWalkedTo' || to === from ? state : {...state, report: {about: 'column' as const, name: action.name, position: to, outOf: order.length}};
       const shoved = tableState.shoveColumns(told, survey.displacedBetween(order, from, to), {toward: to > from ? 'start' : 'end', by: action.widths[action.name] ?? 0});
       if (action.type !== 'columnWalkedTo') {
         return shoved;
@@ -42,7 +42,7 @@ const motion = (state: TableState, action: TableAction): TableState => {
       const {standing} = action;
       const from = standing.indexOf(action.row);
       const to = action.type === 'rowWalkedTo' ? action.to : standing.indexOf(action.neighbor);
-      const told = action.type !== 'rowWalkedTo' || to === from ? state : {...state, report: {about: 'row' as const, name: action.label, position: to, of: standing.length}};
+      const told = action.type !== 'rowWalkedTo' || to === from ? state : {...state, report: {about: 'row' as const, name: action.label, position: to, outOf: standing.length}};
       const shoved = tableState.shoveRows(told, survey.displacedBetween(standing, from, to), {toward: to > from ? 'up' : 'down', by: action.heights[action.row] ?? 0});
       if (action.type !== 'rowWalkedTo') {
         return shoved;

@@ -5,7 +5,7 @@ import {demoTab} from '../demo-tab';
 
 export type Tutorial = keyof typeof names.tables;
 
-type Place = {number: number; of: number};
+type Place = {number: number; outOf: number};
 
 type TableTutorials = {
   all: () => readonly Tutorial[];
@@ -34,7 +34,7 @@ export const tableTutorials: TableTutorials = {
   all: () => inOrder,
   nameOf: tutorial => named[tutorial],
   addressOf,
-  placeOf: tutorial => ({number: inOrder.indexOf(tutorial) + 1, of: inOrder.length}),
+  placeOf: tutorial => ({number: inOrder.indexOf(tutorial) + 1, outOf: inOrder.length}),
   at: pathname => maybe(inOrder.find(tutorial => pathname === addressOf(tutorial))),
   startingStation: 5
 };
