@@ -18,7 +18,7 @@ type MarkupTextState = {within: 'text'; open: number};
 type TemplateLiteralState = {within: 'template'; from: number};
 type ScanState = CodeState | TagState | MarkupTextState | TemplateLiteralState;
 
-const valueCanStart = new RegExp(String.raw`(?:^|[([{=,:;?!&|+\-*/%<~]|=>|\.\.\.|\b(?:${typeScriptWords.beforeAValue.join('|')}))\s*$`);
+const valueCanStart = new RegExp(String.raw`(?:^|[([{=,:;?!&|+\-*/%<>~]|\.\.\.|\b(?:${typeScriptWords.beforeAValue.join('|')}))\s*$`);
 const elementCanStart = /(?:^|\s|[>([{}=,:;?!&|+\-*/%<])$/;
 const plainlyAnElement = /^<[A-Za-z][\w.:-]*(?:\s+[A-Za-z][\w-]*=|\s*\/>)/;
 const typeParameters = /^<(?:(?:const|in|out)\s+)?[A-Za-z_$][\w$]*(?:\s+extends\b|\s*,|>\s*\()/;
@@ -63,6 +63,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
   const runs: Run[] = [];
   const isCode = Array.from({length: text.length}, () => false);
   const stack: ScanState[] = [first];
+  let elementEndedAt = -1;
   const mark = (start: number, end: number, kind: Run['kind']): number => {
     runs.push({start, length: end - start, kind});
     return end;
@@ -107,7 +108,9 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
       stack.push({within: 'template', from: at});
       return at + 1;
     }
-    if ((here === '"' || here === '\'') && valueCanStart.test(before)) return mark(at, endOfQuoted(text, at, here), 'string');
+    if ((here === '"' || here === '\'') && at !== elementEndedAt && valueCanStart.test(before)) {
+      return mark(at, endOfQuoted(text, at, here), 'string');
+    }
     if (here === '<' && opensAnElement(at, before)) {
       stack.push({within: 'text', open: 0});
       return openTag(at);
@@ -138,7 +141,8 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
     if (here === '>' || text.startsWith('/>', at)) {
       const selfClosing = here === '/';
       closeTag(frame.closing, selfClosing);
-      return at + (selfClosing ? 2 : 1);
+      elementEndedAt = at + (selfClosing ? 2 : 1);
+      return elementEndedAt;
     }
     if (here === '"' || here === '\'') return mark(at, endOfQuoted(text, at, here), 'string');
     if (here === '{') return enterBraces(at);
