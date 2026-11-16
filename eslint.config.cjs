@@ -233,7 +233,7 @@ module.exports = [
     files: ['src/**/*.tsx'],
     ignores: oldWayExhibits,
     plugins: {elements},
-    rules: {'elements/no-div': 'error'}
+    rules: {'elements/no-div': 'error', 'elements/step-opens-with-its-heading': 'error'}
   },
   {
     files: ['src/**/*.{ts,tsx}'],
