@@ -113,6 +113,16 @@ describe('clear to push', () => {
     })).toEqual([]);
   });
 
+  test('a branch that renames a file another open pull request changes is refused', () => {
+    const git = (command, ...args) => {
+      if (command === 'gh') return JSON.stringify([pull(1, 'verify/a', ['src/a.ts'])]);
+      if (args[0] === 'diff') return args.includes('--no-renames') ? 'src/a.ts\nsrc/b.ts' : 'src/b.ts';
+      return '';
+    };
+
+    expect(clearToPush('verify/b', 'HEAD', git).refused).toEqual(['#1 already changes src/a.ts. That work goes to #1’s owner.']);
+  });
+
   test('a branch with no pull request yet is checked for shared files without reading any checks', () => {
     const run = (...args) => {
       if (args.includes('checks')) throw new Error('checks were read');
