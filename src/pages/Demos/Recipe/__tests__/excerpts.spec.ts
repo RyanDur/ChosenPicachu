@@ -58,4 +58,31 @@ describe('the code voice, excerpt by excerpt', () => {
     ]);
     expect(kindOfConst(after)).toBe('keyword');
   });
+
+  it('reads a carved TSX line that starts inside its file\'s template as that template\'s end', () => {
+    const view: CodeFile = {path: 'src/View.tsx', url: 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/View.tsx',
+      text: 'const a = 1;\nconst sheet = css`\n`;\nexport const b = 2;'};
+    const [, , , after] = excerpts.tokensOf('TS', [
+      carved('const a = 1;', view, 1), lines.aside('…'), carved('`;', view, 3), carved('export const b = 2;', view, 4)
+    ]);
+    expect(kindOfConst(after)).toBe('keyword');
+  });
+
+  it('reads a carved HTML line that starts inside its file\'s comment as that comment\'s end', () => {
+    const page: CodeFile = {path: 'public/frame.html', url: 'https://github.com/RyanDur/ChosenPicachu/blob/main/public/frame.html',
+      text: '<p>a</p>\n<!-- a note\nthat ends --> <b class="x">b</b>'};
+    const [, , closing] = excerpts.tokensOf('HTML', [
+      carved('<p>a</p>', page, 1), lines.aside('…'), carved('that ends --> <b class="x">b</b>', page, 3)
+    ]);
+    expect(closing.find(({text}) => text === 'that ends -->')?.kind).toBe('comment');
+  });
+
+  it('reads an HTML excerpt carved from a TSX file without the TypeScript above it', () => {
+    const view: CodeFile = {path: 'src/List.tsx', url: 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/List.tsx',
+      text: 'const fits = (width: number) => width<limit;\n// the list doesn\'t scroll\nexport const List = () => <ul className="list">\n  <li className="item">one</li>\n</ul>;'};
+    const [, item] = excerpts.tokensOf('HTML', [
+      carved('<ul className="list">', view, 3), carved('<li className="item">one</li>', view, 4), carved('</ul>', view, 5)
+    ]);
+    expect(item.find(({text}) => text === '"item"')?.kind).toBe('string');
+  });
 });
