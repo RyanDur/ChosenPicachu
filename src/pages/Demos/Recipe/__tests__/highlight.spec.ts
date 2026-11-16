@@ -7,6 +7,17 @@ const kinds = (label: 'HTML' | 'CSS' | 'TS', line: string): Record<string, Kind>
   Object.fromEntries(highlight(label, line).filter(({kind}) => kind !== 'plain').map(({text, kind}) => [text, kind]));
 
 describe('the code voice', () => {
+  it('reads a JSX comment in a TS line as a comment', () => {
+    expect(kinds('TS', '<p>{/* note */}</p>')['{/* note */}']).toBe('comment');
+  });
+
+  it('reads a JSX comment and an HTML comment in markup as comments', () => {
+    const found = kinds('HTML', '<p>{/* note */}</p><!-- aside -->');
+
+    expect(found['{/* note */}']).toBe('comment');
+    expect(found['<!-- aside -->']).toBe('comment');
+  });
+
   it('reads a JSX line the way an editor does: tags, props and strings', () => {
     const line = '    trades: <DraggableColumn key="trades" name="trades">trades<SortMenu column="trades"/></DraggableColumn>,';
 
