@@ -29,7 +29,7 @@ export const PlainFold: FC = () => {
 
   return <iframe className="plain-fold" title="A fold measured by plain script"
     style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
-    onLoad={event => maybe(event.currentTarget.contentDocument?.body).map(loaded => {
+    onLoad={event => maybe(event.currentTarget.contentDocument).map(({body: loaded}) => {
       dispatch(plainFoldChange.loaded(loaded));
       measured(loaded, dispatch);
     })}

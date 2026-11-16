@@ -1,17 +1,13 @@
-import {is} from '@ryandur/sand';
+import {is, maybe} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {feedStatus} from '@pages/Demos/__test_support';
 
-const addMenu = (): HTMLElement | null => screen.queryByLabelText('charts to add');
+const addMenus = (): HTMLElement[] => screen.queryAllByLabelText('charts to add');
 
-const theAddMenu = (): HTMLElement => {
-  const menu = addMenu();
-  if (menu) {
-    return menu;
-  }
-  throw new Error('no add-a-chart menu on the desk');
-};
+const theAddMenu = (): HTMLElement => screen.getByLabelText('charts to add');
+
+const textOf = (element: Element): string => maybe(element.textContent).orElse('');
 
 const addChart = async (name: string): Promise<void> =>
   userEvent.click(within(theAddMenu()).getByRole('button', {name, hidden: true}));
@@ -48,7 +44,7 @@ const fingerOn = (chart: string): Finger => {
 };
 
 const captionOf = (chart: string): string =>
-  within(screen.getByRole('region', {name: chart})).getByText(/candles ·/).textContent ?? '';
+  textOf(within(screen.getByRole('region', {name: chart})).getByText(/candles ·/));
 
 const chart = (name: string): HTMLElement => screen.getByRole('region', {name});
 
@@ -74,9 +70,9 @@ const keys = async (chart: string, key: string): Promise<void> => {
 };
 
 export const chartsDesk = {
-  addMenu,
+  addMenus,
   addChart,
-  offered: (name: string): HTMLElement | null => within(theAddMenu()).queryByRole('button', {name, hidden: true}),
+  offered: (name: string): HTMLElement[] => within(theAddMenu()).queryAllByRole('button', {name, hidden: true}),
   doorway,
   walkThrough,
   place,
@@ -90,7 +86,7 @@ export const chartsDesk = {
     userEvent.click(within(screen.getByLabelText(`${chart} period by`)).getByRole('button', {name: period, hidden: true})),
   findPeriodShown: (chart: string, period: string): Promise<HTMLElement> => screen.findByRole('button', {name: `${chart} period ${period}`}),
   currentPeriod: (chart: string): string =>
-    within(screen.getByLabelText(`${chart} period by`)).getByRole('button', {current: true, hidden: true}).textContent ?? '',
+    textOf(within(screen.getByLabelText(`${chart} period by`)).getByRole('button', {current: true, hidden: true})),
   chart,
   findChart,
   onChart,
@@ -98,7 +94,7 @@ export const chartsDesk = {
   foundOnChart: (name: string, told: string | RegExp): HTMLElement | null => within(chart(name)).queryByText(told),
   findLoadingOn: async (name: string): Promise<HTMLElement> => within(chart(name)).findByRole('progressbar'),
   loadingOn: (name: string): HTMLElement | null => within(chart(name)).queryByRole('progressbar'),
-  ticksOn: (name: string): string[] => within(chart(name)).getAllByRole('time').map(tick => tick.textContent ?? ''),
+  ticksOn: (name: string): string[] => within(chart(name)).getAllByRole('time').map(textOf),
   missingChart: (name: string): HTMLElement | null => screen.queryByRole('region', {name}),
   chartsNamed: (name: string): HTMLElement[] => screen.getAllByRole('region', {name}),
   recipe: (subject: string): HTMLElement => screen.getByRole('region', {name: `build the ${subject} yourself`}),
@@ -108,7 +104,7 @@ export const chartsDesk = {
   tutorial: (chart: string): HTMLElement => screen.getByRole('article', {name: `${chart} tutorial`}),
   anyTutorial: (): HTMLElement | null => screen.queryByRole('article', {name: /tutorial/}),
   findPieLegend: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pie'})).getByRole('list'),
-  pieShares: (): string[] => within(within(chart('pie')).getByRole('list')).getAllByRole('listitem').map(({textContent}) => textContent ?? ''),
+  pieShares: (): string[] => within(within(chart('pie')).getByRole('list')).getAllByRole('listitem').map(textOf),
   title: (name: string, level: number): HTMLElement => screen.getByRole('heading', {name, level}),
   findTitle: (name: string | RegExp, level?: number): Promise<HTMLElement> => screen.findByRole('heading', {name, level}),
   titleIn: (holder: HTMLElement, name: string | RegExp, level?: number): HTMLElement => within(holder).getByRole('heading', {name, level}),

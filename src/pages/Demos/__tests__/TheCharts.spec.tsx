@@ -467,9 +467,9 @@ describe('a list of charts', () => {
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
-    expect(chartsDesk.offered('Price line')).not.toBeInTheDocument();
-    expect(chartsDesk.offered('Candles')).not.toBeInTheDocument();
-    expect(chartsDesk.offered('Pressure')).not.toBeInTheDocument();
+    expect(chartsDesk.offered('Price line')).toEqual([]);
+    expect(chartsDesk.offered('Candles')).toEqual([]);
+    expect(chartsDesk.offered('Pressure')).toEqual([]);
   });
 
   test('a full desk offers no add menu', async () => {
@@ -482,7 +482,7 @@ describe('a list of charts', () => {
     await chartsDesk.addChart('Pie');
 
     await chartsDesk.findChart('pie');
-    expect(chartsDesk.addMenu()).not.toBeInTheDocument();
+    expect(chartsDesk.addMenus()).toEqual([]);
   });
 
   test('a pie added after trades arrive starts with their shares', async () => {

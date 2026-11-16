@@ -1,4 +1,4 @@
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import type {Locator, Page} from '@playwright/test';
 import {assertionPatience} from './patience';
 import {demoSettings} from './demo-settings';
@@ -15,7 +15,8 @@ export const pillSwitch = (page: Page, name: string) => {
     pill: (name: string): Locator => group.getByRole('radio', {name, exact: true, includeHidden: true}),
     wordsOf: (pill: string): Locator => group.getByText(pill, {exact: true}).first(),
     names: async (): Promise<string[]> => [...(await group.ariaSnapshot()).matchAll(/radio "([^"]+)"/g)].map(([, name]) => name),
-    chosen: async (): Promise<string> => /radio "([^"]+)" \[checked\]/.exec(await group.ariaSnapshot())?.[1] ?? ''
+    chosen: async (): Promise<string> =>
+      maybe(/radio "([^"]+)" \[checked\]/.exec(await group.ariaSnapshot())).mBind(([, name]) => maybe(name)).orElse('')
   };
 };
 

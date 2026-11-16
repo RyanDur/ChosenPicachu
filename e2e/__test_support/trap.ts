@@ -1,4 +1,5 @@
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
+import {boxOf} from './box';
 import type {Locator, Page} from '@playwright/test';
 import {assertionPatience} from './patience';
 import {clickWhereItIs} from './scrolling';
@@ -82,7 +83,7 @@ export const wearsReportedWrong = async (page: Page, whereTheListOpens: readonly
       wrong.push(`${worn}: ${seen} on top at date, not ${onTop}`);
     }
     if (not(await withinAMoment(chooser.said.filter({hasText: `${where} card two`}).waitFor({timeout: assertionPatience})))) {
-      wrong.push(`${worn}: said "${await chooser.said.textContent() ?? ''}", not ${where} card two`);
+      wrong.push(`${worn}: said "${maybe(await chooser.said.textContent()).orElse('')}", not ${where} card two`);
     }
     await page.keyboard.press('Escape');
   }
@@ -131,8 +132,8 @@ export const bannerTrap = (page: Page) => {
     siteBanner,
     dismissOld: page.getByRole('button', {name: 'dismiss the old banner'}),
     scrollCardTwoOnto: async (banner: Locator): Promise<void> => {
-      const [card, strip] = await Promise.all([cardTwo.boundingBox(), banner.boundingBox()]);
-      await page.mouse.wheel(0, (card?.y ?? 0) + (card?.height ?? 0) / 2 - (strip?.y ?? 0) - (strip?.height ?? 0) / 2);
+      const [card, strip] = await Promise.all([boxOf(cardTwo), boxOf(banner)]);
+      await page.mouse.wheel(0, card.y + card.height / 2 - strip.y - strip.height / 2);
     },
     onTopOf: async (banner: Locator, where: 'middle' | 'start'): Promise<string> => banner.evaluate((element, {at, card}) => {
       const {left, top, width, height} = element.getBoundingClientRect();
