@@ -97,6 +97,15 @@ describe('the code voice', () => {
     expect(text.map(({kind}) => kind)).not.toContain('string');
   });
 
+  it('reads an attribute value that spans lines as one string, and the attribute after it as an attribute', () => {
+    const [, rest] = highlight.tokensOf('HTML', ['<path d="M 0 0', 'L 10 10" stroke="red"/>']);
+    expect(rest.filter(({kind}) => kind !== 'plain')).toEqual([
+      {text: 'L 10 10"', kind: 'string'},
+      {text: 'stroke', kind: 'attribute'},
+      {text: '"red"', kind: 'string'}
+    ]);
+  });
+
   it('reads a quote after as as a string', () => {
     expect(kinds('TS', "const k = label as 'TS';")["'TS'"]).toBe('string');
   });
