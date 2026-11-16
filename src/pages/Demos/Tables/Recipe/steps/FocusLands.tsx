@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
+import {carve, Codes, lines, Mdn, Reveal, Sample, Says, Snippet, Step, StepHeading, Want, Words} from '../../../Recipe';
 import {useControls} from '../../../Controls';
 import {sources} from './sources';
 
@@ -38,8 +38,8 @@ export const FocusLands: FC<{headerSource: Sample}> = ({headerSource}) => {
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
-            ...carve.span(headerSource, 'tabIndex={travels', 'tabIndex={travels'), lines.blank,
-            ...carve.span(sources.grip, '<button', '</button>'),
+            ...carve.between(headerSource, 'tabIndex={travels', 'tabIndex={travels'), lines.blank,
+            ...carve.between(sources.grip, '<button', '</button>'),
             lines.aside('{/* the button was focusable all along; Safari’s Tab still wants it written */}')
           ]}/>
           : <Snippet label="TS" lines={[

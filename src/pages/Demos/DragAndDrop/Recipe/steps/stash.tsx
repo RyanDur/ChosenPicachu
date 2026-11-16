@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {PaceDial} from '../../../Controls';
-import {Codes, Mdn, Sample, Says, Snippet, DialStep, StepHeading, Want, Words, carve, lines} from '../../../Recipe';
+import {carve, Codes, DialStep, lines, Mdn, Sample, Says, Snippet, StepHeading, Want, Words} from '../../../Recipe';
 import {Term} from '../Term';
 import {sources} from './sources';
 
@@ -19,8 +19,8 @@ export const StashLanding: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(listSource, 'onDragOver={() => dispatch(dragSortChange.hovered(index))}', 'onDragOver={() => dispatch(dragSortChange.hovered(index))}'), lines.blank,
-        ...carve.span(listSource, 'onDragLeave={() => dispatch(dragSortChange.left())}', 'onDragLeave={() => dispatch(dragSortChange.left())}'), lines.blank,
+        ...carve.between(listSource, 'onDragOver={() => dispatch(dragSortChange.hovered(index))}', 'onDragOver={() => dispatch(dragSortChange.hovered(index))}'), lines.blank,
+        ...carve.between(listSource, 'onDragLeave={() => dispatch(dragSortChange.left())}', 'onDragLeave={() => dispatch(dragSortChange.left())}'), lines.blank,
         ...carve.unit(sources.dragSort, 'const settled')
       ]}/>
     </Codes>

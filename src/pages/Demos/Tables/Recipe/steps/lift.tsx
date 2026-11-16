@@ -42,13 +42,13 @@ export const LiftOnce: FC<{headerSource: Sample; buildSource: Sample}> = ({heade
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(headerSource, 'onPointerDown={travels ? lifting.column(column', 'onPointerDown={travels ? lifting.column(column'), lines.blank,
+            ...carve.between(headerSource, 'onPointerDown={travels ? lifting.column(column', 'onPointerDown={travels ? lifting.column(column'), lines.blank,
             ...carve.unit(headerSource, 'const lift = '), lines.blank,
             ...carve.unit(sources.state, 'const dragOf'), lines.blank,
             ...carve.unit(sources.state, 'const lift = ')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.span(buildSource, "th.addEventListener('pointerdown', lifting.column",
+            ...carve.between(buildSource, "th.addEventListener('pointerdown', lifting.column",
               "th.addEventListener('pointerdown', lifting.column"), lines.blank,
             ...carve.unit(buildSource, 'const lift = '), lines.blank,
             ...carve.unit(sources.state, 'const dragOf'), lines.blank,

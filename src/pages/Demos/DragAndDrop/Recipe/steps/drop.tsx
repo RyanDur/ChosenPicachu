@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, StepHeading, Want, Words, carve, Sample, lines} from '../../../Recipe';
+import {carve, Codes, lines, Mdn, Sample, Says, Snippet, Step, StepHeading, Want, Words} from '../../../Recipe';
 
 export const AcceptTheDrop: FC<{listSource: Sample; itemSource: Sample}> = ({listSource, itemSource}) =>
   <Step>
@@ -22,8 +22,8 @@ export const AcceptTheDrop: FC<{listSource: Sample; itemSource: Sample}> = ({lis
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(listSource, '<ol aria-label="sortable list"', 'onDrop={event => event.preventDefault()}'), lines.blank,
-        ...carve.span(itemSource, 'onDragOver={event => {', '}}')
+        ...carve.between(listSource, '<ol aria-label="sortable list"', 'onDrop={event => event.preventDefault()}'), lines.blank,
+        ...carve.between(itemSource, 'onDragOver={event => {', '}}')
       ]}/>
     </Codes>
   </Step>;

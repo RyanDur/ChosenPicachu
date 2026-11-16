@@ -48,7 +48,7 @@ export const MenuExplained: FC = () =>
           context the tab’s content forms, where card two is, and there 9999 is the larger number. With the box checked
           again, the card forms its layer again, with the list inside it.</p>
         <Snippet label="HTML" lines={[
-          ...carve.span(trappedSource, "<li className={classNames('old-way-card", '</label>')
+          ...carve.between(trappedSource, "<li className={classNames('old-way-card", '</label>')
         ]}/>
       </li>
     </ol>

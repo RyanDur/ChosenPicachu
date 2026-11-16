@@ -48,7 +48,7 @@ const SortedDirectly: FC = () => {
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(sources.menu, 'export const SortMenu', '</>;')
+            ...carve.between(sources.menu, 'export const SortMenu', '</>;')
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.unit(frameMenus, 'const choosing = '), lines.blank,
@@ -121,11 +121,11 @@ const RankStory: FC = () => {
           <Codes>
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...carve.span(menuSource, 'className="menu-toggle', 'aria-label={`sort ${column}`}/>'), lines.blank,
-                ...carve.span(menuSource, '<Menu id={`sort-${column}`}', '</Menu>')
+                ...carve.between(menuSource, 'className="menu-toggle', 'aria-label={`sort ${column}`}/>'), lines.blank,
+                ...carve.between(menuSource, '<Menu id={`sort-${column}`}', '</Menu>')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...carve.span(frameTable, '<button type="button" tabindex="0" data-sort-toggle', '</menu>')
+                ...carve.between(frameTable, '<button type="button" tabindex="0" data-sort-toggle', '</menu>')
               ]}/>}
           </Codes>
         </Reveal>
@@ -168,9 +168,9 @@ const RankStory: FC = () => {
             popover.</Says>
           <Codes>
             <Snippet label="CSS" lines={[
-              ...carve.span(menuCss, 'inset: auto;', 'inset: auto;'),
+              ...carve.between(menuCss, 'inset: auto;', 'inset: auto;'),
               lines.aside('/* centered is the browser’s default placement; this menu chooses the anchor */'), lines.blank,
-              ...carve.span(menuCss, 'position-area: block-end span-inline-start;', 'position-try-fallbacks: flip-block;'),
+              ...carve.between(menuCss, 'position-area: block-end span-inline-start;', 'position-try-fallbacks: flip-block;'),
               lines.aside('/* the invoker is the implicit anchor: below it, hanging leading; flips when cramped */'), lines.blank,
               ...carve.unit(menuCss, '@supports not (position-area: block-end)'),
               lines.aside('/* no anchor positioning? centered: worse placement, same menu */')
@@ -224,11 +224,11 @@ const RankStory: FC = () => {
             ]}/>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...carve.span(headerSource, 'const {sorted, data} = useTableRead(tableReads.columnNamed', '.orElse(tableReads.unknownColumn'), lines.blank,
-                ...carve.span(headerSource, 'aria-sort={sorted}', 'aria-sort={sorted}')
+                ...carve.between(headerSource, 'const {sorted, data} = useTableRead(tableReads.columnNamed', '.orElse(tableReads.unknownColumn'), lines.blank,
+                ...carve.between(headerSource, 'aria-sort={sorted}', 'aria-sort={sorted}')
               ]}/>
               : <Snippet label="HTML" lines={[
-                ...carve.span(frameTable, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>')
+                ...carve.between(frameTable, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>')
               ]}/>}
           </Codes>
         </Reveal>
@@ -278,12 +278,12 @@ const RankStory: FC = () => {
             {world === 'react'
               ? <Snippet label="TS" lines={[
                 ...carve.unit(arrangementSource, 'const sortEnded'), lines.blank,
-                ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), lines.blank,
+                ...carve.between(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), lines.blank,
                 ...carve.unit(rowSource, 'const beside = ')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...carve.unit(arrangementSource, 'const sortEnded'), lines.blank,
-                ...carve.span(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), lines.blank,
+                ...carve.between(arrangementSource, "case 'rowMoved':", "case 'rowMoved':"), lines.blank,
                 ...carve.unit(buildSource, 'const rowBeside = '),
                 lines.aside('// the strike and the nudge each carry the standing in their own action; the sort ends as the row moves')
               ]}/>}
@@ -321,19 +321,19 @@ const RankStory: FC = () => {
           <Codes>
             {world === 'react'
               ? <Snippet label="TS" lines={[
-                ...carve.span(menuSource, 'onPointerDown={event => event.stopPropagation()}',
+                ...carve.between(menuSource, 'onPointerDown={event => event.stopPropagation()}',
                   'onPointerDown={event => event.stopPropagation()}'),
                 lines.aside('// on the toggle and on the menu both')
               ]}/>
               : <Snippet label="TS" lines={[
                 ...carve.unit(frameMenus, 'const keepingTheColumnStill = '), lines.blank,
-                ...carve.span(frameMenus, "[menu, ...th.querySelectorAll('[data-sort-toggle]')]", "[menu, ...th.querySelectorAll('[data-sort-toggle]')]"),
+                ...carve.between(frameMenus, "[menu, ...th.querySelectorAll('[data-sort-toggle]')]", "[menu, ...th.querySelectorAll('[data-sort-toggle]')]"),
                 lines.aside('// on the toggle and on the menu both')
               ]}/>}
             {world === 'react'
               ? <Snippet label="HTML" lines={[
-                ...carve.span(tableSource, '<Column column="lookback"', '</Column>'),
-                ...carve.span(tableSource, '<DraggableColumn column="trades"', '</DraggableColumn>'), lines.blank,
+                ...carve.between(tableSource, '<Column column="lookback"', '</Column>'),
+                ...carve.between(tableSource, '<DraggableColumn column="trades"', '</DraggableColumn>'), lines.blank,
                 ...carve.unit(baseCss, '    &:has(.menu-toggle) {')
               ]}/>
               : <Snippet label="TS" lines={[

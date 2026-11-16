@@ -74,7 +74,7 @@ const css = aSample(`.sortable .header-cell {
 
 describe('carving examples out of the source they teach', () => {
   test('every carved line remembers the file it was taken from', () => {
-    const carved = [...carve.unit(source, 'const travel = '), ...carve.span(source, 'onPointerMove', 'onPointerUp')];
+    const carved = [...carve.unit(source, 'const travel = '), ...carve.between(source, 'onPointerMove', 'onPointerUp')];
 
     expect(new Set(carved.map(({from}) => from?.file))).toEqual(new Set([source]));
   });
@@ -251,40 +251,40 @@ describe('carving examples out of the source they teach', () => {
     ]);
   });
 
-  test('a span runs inclusively between two anchors', () => {
-    expect(carve.span(source, 'onPointerMove', 'onPointerUp').map(({text}) => text)).toEqual([
+  test('a carve between two anchors runs inclusively', () => {
+    expect(carve.between(source, 'onPointerMove', 'onPointerUp').map(({text}) => text)).toEqual([
       'onPointerMove: travel,',
       'onPointerUp: drop'
     ]);
   });
 
-  test('a one-line span that leaves a bracket open fails loudly instead of teaching half a statement', () => {
-    expect(() => carve.span(source, 'const seeded', 'const seeded')).toThrow(/const seeded/);
+  test('a one-line carve between anchors that leaves a bracket open fails loudly instead of teaching half a statement', () => {
+    expect(() => carve.between(source, 'const seeded', 'const seeded')).toThrow(/const seeded/);
   });
 
-  test('a one-line span that closes what it never opened fails loudly instead of teaching half a statement', () => {
-    expect(() => carve.span(source, '({...shares', '({...shares')).toThrow(/shares/);
+  test('a one-line carve between anchors that closes what it never opened fails loudly instead of teaching half a statement', () => {
+    expect(() => carve.between(source, '({...shares', '({...shares')).toThrow(/shares/);
   });
 
-  test('a one-line span may open a block it leaves for the next lines', () => {
-    expect(carve.span(source, 'if (event.buttons', 'if (event.buttons').map(({text}) => text))
+  test('a one-line carve between anchors may open a block it leaves for the next lines', () => {
+    expect(carve.between(source, 'if (event.buttons', 'if (event.buttons').map(({text}) => text))
       .toEqual(['if (event.buttons === 0) {']);
   });
 
-  test('a one-line span that opens a block and runs on past it fails loudly instead of teaching half a statement', () => {
+  test('a one-line carve between anchors that opens a block and runs on past it fails loudly instead of teaching half a statement', () => {
     const guarded = aSample('if (ready) { drop();\n    tidy();\n}\n');
 
-    expect(() => carve.span(guarded, 'if (ready)', 'if (ready)')).toThrow(/if \(ready\)/);
+    expect(() => carve.between(guarded, 'if (ready)', 'if (ready)')).toThrow(/if \(ready\)/);
   });
 
-  test('a one-line span that opens two blocks at once fails loudly instead of teaching half a statement', () => {
+  test('a one-line carve between anchors that opens two blocks at once fails loudly instead of teaching half a statement', () => {
     const nested = aSample('const rule = {surface: {\n    onPointerUp: drop\n}};\n');
 
-    expect(() => carve.span(nested, 'const rule', 'const rule')).toThrow(/const rule/);
+    expect(() => carve.between(nested, 'const rule', 'const rule')).toThrow(/const rule/);
   });
 
   test('an elided run gives way to an aside standing at the run’s indent', () => {
-    const rule = carve.span(source, 'const rule', '};');
+    const rule = carve.between(source, 'const rule', '};');
 
     expect(carve.elided(rule, 'onPointerMove', 'onPointerUp', '// …and the move').map(({text}) => text)).toEqual([
       'const rule = {',
@@ -297,7 +297,7 @@ describe('carving examples out of the source they teach', () => {
   });
 
   test('an elided run that never opens or never closes fails loudly instead of dropping the wrong lines', () => {
-    const rule = carve.span(source, 'const rule', '};');
+    const rule = carve.between(source, 'const rule', '};');
 
     expect(() => carve.elided(rule, 'onGone', 'onPointerUp', '// …')).toThrow(/onGone/);
     expect(() => carve.elided(rule, 'onPointerMove', 'onGone', '// …')).toThrow(/onGone/);
@@ -305,6 +305,6 @@ describe('carving examples out of the source they teach', () => {
 
   test('a missing anchor fails loudly instead of teaching nothing', () => {
     expect(() => carve.unit(source, 'const vanished = ')).toThrow(/vanished/);
-    expect(() => carve.span(source, 'onPointerMove', 'onGone')).toThrow(/onGone/);
+    expect(() => carve.between(source, 'onPointerMove', 'onGone')).toThrow(/onGone/);
   });
 });

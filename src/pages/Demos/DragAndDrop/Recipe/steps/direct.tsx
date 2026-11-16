@@ -12,7 +12,7 @@ export const DirectState: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(listSource, 'const [sort, dispatch] = useReducer(', 'const [sort, dispatch] = useReducer('),
+        ...carve.between(listSource, 'const [sort, dispatch] = useReducer(', 'const [sort, dispatch] = useReducer('),
         lines.aside('// animated: false, so no slide is ever recorded')
       ]}/>
     </Codes>

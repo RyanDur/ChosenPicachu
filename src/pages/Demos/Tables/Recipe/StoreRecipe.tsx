@@ -72,7 +72,7 @@ const OneState: FC = () => {
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.unit(buildSource, 'export const dragSortable = '), lines.blank,
-            ...carve.span(bootSource, 'const page = marketStore(', 'page.dispatch(marketActions.feedRequested());')
+            ...carve.between(bootSource, 'const page = marketStore(', 'page.dispatch(marketActions.feedRequested());')
           ]}/>}
       </Codes>
     </Reveal>
@@ -121,7 +121,7 @@ const ActionsAreData: FC = () =>
       <Says>What the table shows is what it was given, and what the trader does to it comes back as an event.</Says>
       <Codes>
         <Snippet label="TS" lines={[
-          ...carve.span(arrangementSource, 'export type ArrangementAction', 'readonly keys: readonly string[]}'), lines.blank,
+          ...carve.between(arrangementSource, 'export type ArrangementAction', 'readonly keys: readonly string[]}'), lines.blank,
           ...carve.unit(arrangementSource, 'const columnMoved'), lines.blank,
           ...carve.unit(actionsSource, 'const columnMovedBeside = '),
           lines.aside('// the record says what happened; the creator is named for the verb')
@@ -167,8 +167,8 @@ const NamedReads: FC = () => {
         ]}/>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(headerSource, 'const {sorted, data} = useTableRead(tableReads.columnNamed', 'const carried = useTableRead(tableReads.columnHeld'), lines.blank,
-            ...carve.span(headerSource, 'const travels = useTableRead(tableReads.columnTravels', 'const travels = useTableRead(tableReads.columnTravels')
+            ...carve.between(headerSource, 'const {sorted, data} = useTableRead(tableReads.columnNamed', 'const carried = useTableRead(tableReads.columnHeld'), lines.blank,
+            ...carve.between(headerSource, 'const travels = useTableRead(tableReads.columnTravels', 'const travels = useTableRead(tableReads.columnTravels')
           ]}/>
           : undefined}
       </Codes>
@@ -222,7 +222,7 @@ const ExchangeIsMiddleware: FC = () => {
             ...carve.unit(openingSource, 'export const useExchange')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.span(bootSource, 'page.dispatch(marketActions.feedRequested());', 'page.dispatch(marketActions.feedRequested());')
+            ...carve.between(bootSource, 'page.dispatch(marketActions.feedRequested());', 'page.dispatch(marketActions.feedRequested());')
           ]}/>}
       </Codes>
     </Reveal>
@@ -274,8 +274,8 @@ const WhoSubscribes: FC = () => {
             ...carve.unit(elementSource, 'export const useDragSortable')
           ]}/>
           : <Snippet label="TS" lines={[
-            ...carve.span(buildSource, 'hand.subscribe(', 'hand.subscribe('), lines.blank,
-            ...carve.span(bootSource, "table.addEventListener('column-moved'", 'page.subscribe(previous =>')
+            ...carve.between(buildSource, 'hand.subscribe(', 'hand.subscribe('), lines.blank,
+            ...carve.between(bootSource, "table.addEventListener('column-moved'", 'page.subscribe(previous =>')
           ]}/>}
       </Codes>
     </Reveal>

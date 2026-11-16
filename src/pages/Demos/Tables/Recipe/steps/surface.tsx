@@ -45,8 +45,8 @@ export const DragSurface: FC<{headerSource: Sample}> = ({headerSource}) => {
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(sources.travel, 'const notHeld', '} : notHeld;'), lines.blank,
-            ...carve.span(headerSource, 'onPointerDown={travels ?', '{...travel.whileHeld(drag, moved, release)}'), lines.blank,
+            ...carve.between(sources.travel, 'const notHeld', '} : notHeld;'), lines.blank,
+            ...carve.between(headerSource, 'onPointerDown={travels ?', '{...travel.whileHeld(drag, moved, release)}'), lines.blank,
             ...carve.unit(headerSource, 'const release = '),
             lines.aside('// a cancel, or a move with no buttons down, is the drop itself')
           ]}/>

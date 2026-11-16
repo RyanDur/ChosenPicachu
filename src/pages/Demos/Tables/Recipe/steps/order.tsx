@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
+import {carve, Codes, lines, Reveal, Sample, Says, Snippet, Step, StepHeading, Want, Words} from '../../../Recipe';
 import {useControls} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
@@ -42,11 +42,11 @@ export const OrderInState: FC<{tableSource: Sample; buildSource: Sample}> = ({ta
             ...carve.unit(sources.arrangement, 'export type Arrangement')
           ]}/>
           <Snippet label="TS" lines={[
-            ...carve.span(tableSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
+            ...carve.between(tableSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...elidedHeaders(carve.span(tableSource, '<Headers onColumnMoved', '</Headers>')), lines.blank,
-            ...carve.span(tableSource, '<Body onRowMoved', '</Body>')
+            ...elidedHeaders(carve.between(tableSource, '<Headers onColumnMoved', '</Headers>')), lines.blank,
+            ...carve.between(tableSource, '<Body onRowMoved', '</Body>')
           ]}/>
           <Snippet label="TS" lines={[
             ...carve.unit(sources.headers, 'export const Headers'), lines.blank,
@@ -57,11 +57,11 @@ export const OrderInState: FC<{tableSource: Sample; buildSource: Sample}> = ({ta
         : <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(sources.arrangement, 'export type Arrangement'), lines.blank,
-            ...carve.span(buildSource, 'order: () => columns().map', 'standing: () => rows().map'), lines.blank,
+            ...carve.between(buildSource, 'order: () => columns().map', 'standing: () => rows().map'), lines.blank,
             ...carve.unit(sources.boot, 'const fed = ')
           ]}/>
           <Snippet label="TS" lines={[
-            ...carve.span(sources.frameRows, 'const reseat = ',
+            ...carve.between(sources.frameRows, 'const reseat = ',
               'body.insertBefore(desired, body.children[position] ?? null);'),
             lines.aside('// the same lane, its new seat: the reconcile moves the node, not a copy')
           ]}/>

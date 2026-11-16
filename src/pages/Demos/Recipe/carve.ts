@@ -1,4 +1,4 @@
-import {has, empty, not, maybe} from '@ryandur/sand';
+import {empty, has, maybe, not} from '@ryandur/sand';
 import {Line} from './Snippet';
 import {Sample} from './sample';
 import {lines} from './lines';
@@ -71,15 +71,15 @@ const unit = (sample: Sample, anchor: string): Line[] => {
   return dedented(source.slice(start, close < 0 ? source.length : close).split('\n'), sample, lineAt(source, start));
 };
 
-const span = (sample: Sample, from: string, to: string): Line[] => {
+const between = (sample: Sample, from: string, to: string): Line[] => {
   const source = sample.text;
   const first = source.indexOf(from);
   if (first < 0) {
-    throw new Error(`no span opens at "${from}"`);
+    throw new Error(`no carve opens at "${from}"`);
   }
   const last = source.indexOf(to, first);
   if (last < 0) {
-    throw new Error(`no span closes at "${to}"`);
+    throw new Error(`no carve closes at "${to}"`);
   }
   const start = source.lastIndexOf('\n', first) + 1;
   const close = source.indexOf('\n', last);
@@ -121,9 +121,9 @@ const elided = (carved: Line[], from: string, until: string, note: string): Line
 
 type Carve = {
   unit: (sample: Sample, anchor: string) => Line[];
-  span: (sample: Sample, from: string, to: string) => Line[];
+  between: (sample: Sample, from: string, to: string) => Line[];
   withoutImports: (sample: Sample) => Line[];
   elided: (carved: Line[], from: string, until: string, note: string) => Line[];
 };
 
-export const carve: Carve = {unit, span, withoutImports, elided};
+export const carve: Carve = {unit, between, withoutImports, elided};

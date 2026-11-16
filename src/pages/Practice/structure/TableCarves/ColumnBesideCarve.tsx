@@ -5,11 +5,11 @@ import {Snippet, lines, carve} from '@pages/Demos/Recipe';
 import './ColumnBesideCarve.css';
 
 const tradesHeader = [
-  ...carve.span(tableSource, '<th scope="col" class="cell header-cell trades', 'class="menu card rounded-corners lifted">'),
+  ...carve.between(tableSource, '<th scope="col" class="cell header-cell trades', 'class="menu card rounded-corners lifted">'),
   lines.aside('        <!-- …ascending, descending and reset… -->'),
-  ...carve.span(tableSource, '</menu>', '</th>')
+  ...carve.between(tableSource, '</menu>', '</th>')
 ];
-const tradesWritten = carve.span(eagerTableSource, '<DraggableColumn column="trades"', '</DraggableColumn>');
+const tradesWritten = carve.between(eagerTableSource, '<DraggableColumn column="trades"', '</DraggableColumn>');
 
 export const ColumnBesideCarve: FC = () =>
   <figure className="carves-beside">

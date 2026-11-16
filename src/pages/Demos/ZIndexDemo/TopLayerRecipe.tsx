@@ -58,7 +58,7 @@ export const TopLayerRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
-            ...carve.span(bannersSource, '<section id="banners"', '</section>;')
+            ...carve.between(bannersSource, '<section id="banners"', '</section>;')
           ]}/>
         </Codes>
       </Step>
@@ -79,7 +79,7 @@ export const TopLayerRecipe: FC = () => {
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(providerSource, 'export const BannerProvider'), lines.blank,
-            ...carve.span(bannersSource, 'return has(banners)', "className={classNames('banners'")
+            ...carve.between(bannersSource, 'return has(banners)', "className={classNames('banners'")
           ]}/>
         </Codes>
       </Step>
@@ -103,9 +103,9 @@ export const TopLayerRecipe: FC = () => {
             the browser’s element reads, for this page’s choice, {side} {align}.</Says>
         </Words>
         <Codes>
-          <Snippet label="HTML" lines={carve.span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
+          <Snippet label="HTML" lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
           <Snippet label="CSS" lines={[
-            ...carve.span(bannersCss, '.banners {', 'z-index: 3;'), lines.blank,
+            ...carve.between(bannersCss, '.banners {', 'z-index: 3;'), lines.blank,
             ...carve.unit(bannersCss, `.${side} {`), lines.blank,
             ...carve.unit(alignSheet[align], `.${align} {`)
           ]}/>

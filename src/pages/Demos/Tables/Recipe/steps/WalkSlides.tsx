@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {MotionDial, useControls} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
+import {carve, Codes, DialStep, lines, Reveal, Sample, Says, Snippet, StepHeading, Want, Words} from '../../../Recipe';
 import {sources} from './sources';
 
 export const WalkSlides: FC<{headerSource: Sample; buildSource: Sample}> = ({headerSource, buildSource}) => {
@@ -26,7 +26,7 @@ export const WalkSlides: FC<{headerSource: Sample; buildSource: Sample}> = ({hea
           ? <Snippet label="TS" lines={[
             ...carve.unit(sources.arrows, 'const column: Arrows'), lines.blank,
             ...carve.unit(headerSource, 'const walkedTo = '), lines.blank,
-            ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(tableActions.settled', 'onAnimationEnd={() => dispatch(tableActions.settled'),
+            ...carve.between(headerSource, 'onAnimationEnd={() => dispatch(tableActions.settled', 'onAnimationEnd={() => dispatch(tableActions.settled'),
             lines.aside('// the walk marks both parties; the style sheet slides them; the keyframe’s end clears the mark')
           ]}/>
           : <Snippet label="TS" lines={[

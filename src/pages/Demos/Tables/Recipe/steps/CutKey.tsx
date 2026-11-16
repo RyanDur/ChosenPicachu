@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {MotionDial, useControls} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
+import {carve, Codes, DialStep, lines, Reveal, Sample, Says, Snippet, StepHeading, Want, Words} from '../../../Recipe';
 import {sources} from './sources';
 
 export const CutKey: FC<{headerSource: Sample; buildSource: Sample}> = ({headerSource, buildSource}) => {
@@ -21,14 +21,14 @@ export const CutKey: FC<{headerSource: Sample; buildSource: Sample}> = ({headerS
         {world === 'react'
           ? <Snippet label="TS" lines={[
             ...carve.unit(sources.arrows, 'const column: Arrows'), lines.blank,
-            ...carve.span(headerSource, 'onKeyDown={travels ? arrows.column', 'walkedTo(to, widths)) : undefined}'), lines.blank,
+            ...carve.between(headerSource, 'onKeyDown={travels ? arrows.column', 'walkedTo(to, widths)) : undefined}'), lines.blank,
             ...carve.unit(headerSource, 'const walkedTo = '),
             lines.aside('// the whole walk; the marks land and clear at once, nothing to wait for')
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.unit(sources.arrows, 'const column: Arrows'), lines.blank,
             ...carve.unit(buildSource, 'const columnTo = '), lines.blank,
-            ...carve.span(buildSource, "th.addEventListener('keydown', arrows.column", "th.addEventListener('keydown', arrows.column"),
+            ...carve.between(buildSource, "th.addEventListener('keydown', arrows.column", "th.addEventListener('keydown', arrows.column"),
             lines.aside('// the whole walk; the marks land and clear at once, nothing to wait for')
           ]}/>}
       </Codes>

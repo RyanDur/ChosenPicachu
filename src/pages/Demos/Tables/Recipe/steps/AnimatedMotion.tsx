@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {MotionDial, useControls} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
+import {carve, Codes, DialStep, lines, Reveal, Sample, Says, Snippet, StepHeading, Want, Words} from '../../../Recipe';
 import {sources} from './sources';
 
 export const AnimatedMotion: FC<{headerSource: Sample; cssSource: Sample; buildSource: Sample}> =
@@ -59,8 +59,8 @@ export const AnimatedMotion: FC<{headerSource: Sample; cssSource: Sample; buildS
         <Codes>
           {world === 'react'
             ? <Snippet label="TS" lines={[
-              ...carve.span(headerSource, 'onAnimationEnd={() => dispatch(tableActions.settled', 'onAnimationEnd={() => dispatch(tableActions.settled'), lines.blank,
-              ...carve.span(sources.reducer, "case 'columnMovedBeside':", "return tableState.unsettle(shoved, {axis: 'column', held: action.name}"), lines.blank,
+              ...carve.between(headerSource, 'onAnimationEnd={() => dispatch(tableActions.settled', 'onAnimationEnd={() => dispatch(tableActions.settled'), lines.blank,
+              ...carve.between(sources.reducer, "case 'columnMovedBeside':", "return tableState.unsettle(shoved, {axis: 'column', held: action.name}"), lines.blank,
               ...carve.unit(sources.state, 'const shoveColumns'), lines.blank,
               ...carve.unit(sources.state, 'const settle'),
               lines.aside('// the marks are state; the strike and the drop set them, the cells wear them, the style sheet moves them')

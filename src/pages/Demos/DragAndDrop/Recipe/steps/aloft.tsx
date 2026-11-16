@@ -28,7 +28,7 @@ export const HoldTheAloft: FC = () =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(sources.dragSort, "case 'lifted':", "case 'lifted':"),
+        ...carve.between(sources.dragSort, "case 'lifted':", "case 'lifted':"),
         lines.aside('// the item dispatches its lift; the reducer records which one is held')
       ]}/>
     </Codes>

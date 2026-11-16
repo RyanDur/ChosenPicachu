@@ -24,7 +24,7 @@ export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...carve.span(itemSource, '<li', 'draggable={gripped.map(pressed => pressed === item).orElse(false)}>')
+        ...carve.between(itemSource, '<li', 'draggable={gripped.map(pressed => pressed === item).orElse(false)}>')
       ]}/>
     </Codes>
   </Step>;
