@@ -95,11 +95,11 @@ const withoutImports = (sample: Sample): Line[] => {
   const lastImport = lines.reduce((found, line, at) => line.startsWith('import ') ? at : found, -1);
   const belowImports = lines.slice(lastImport + 1);
   let firstLine = lastImport + 2;
-  while (belowImports[0]?.trim() === '') {
+  while (maybe(belowImports[0]).map(line => line.trim() === '').orElse(false)) {
     belowImports.shift();
     firstLine += 1;
   }
-  while (belowImports[belowImports.length - 1]?.trim() === '') {
+  while (maybe(belowImports[belowImports.length - 1]).map(line => line.trim() === '').orElse(false)) {
     belowImports.pop();
   }
   return dedented(belowImports, sample, firstLine);

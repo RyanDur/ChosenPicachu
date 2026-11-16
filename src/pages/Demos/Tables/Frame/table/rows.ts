@@ -6,7 +6,8 @@ import {orders} from './orders';
 import {keepingFocus} from './focus';
 import {frameColumns} from './columns';
 
-const named = (lane: HTMLTableRowElement): string => lane.querySelector('th')?.textContent?.trim() ?? '';
+const named = (lane: HTMLTableRowElement): string =>
+  maybe(lane.querySelector('th')).mBind(header => maybe(header.textContent)).map(text => text.trim()).orElse('');
 
 const lanes = (body: HTMLTableSectionElement): ReadonlyMap<string, HTMLTableRowElement> =>
   new Map([...body.rows].map(lane => [named(lane), lane]));
@@ -33,11 +34,11 @@ const reseat = ({body, lanes, standing}: Pick<MountedTable, 'body' | 'lanes' | '
     next.forEach((row, seat) =>
       maybe(lanes.get(row)).map(desired => {
         if (body.children[seat] !== desired) {
-          body.insertBefore(desired, body.children[seat] ?? null);
+          body.insertBefore(desired, maybe(body.children[seat]).orNull());
         }
       })));
   next.forEach((row, seat) =>
-    maybe(lanes.get(row)?.querySelector('[data-row-grip]')).map(button => {
+    maybe(lanes.get(row)).mBind(lane => maybe(lane.querySelector('[data-row-grip]'))).map(button => {
       const label = grip.label(seat);
       if (button.getAttribute('aria-label') !== label) {
         button.setAttribute('aria-label', label);
