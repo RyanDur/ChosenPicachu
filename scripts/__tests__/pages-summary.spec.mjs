@@ -1,4 +1,4 @@
-import {changesBetween, summaryOf} from '../pages/summary.mjs';
+import {changesBetween, summaryOf} from '../pages-summary.mjs';
 
 const page = (main, head = '') =>
   `<html lang="en"><head>${head}</head><body><header>ChosenPicachu</header><main>${main}</main></body></html>`;
@@ -37,6 +37,24 @@ describe('the pages summary', () => {
     expect(one('index.html',
       built('JI7zjAv7', '4379d3d675813c64b592ca0b6aa91906929ce060', '_R_174m_'),
       built('Bj2un6Nt', 'daf3d71155e32dbc71a6da32f0a3f0fe7e57770b', '_R_af6v74m_'))).toEqual([]);
+  });
+
+  test('a second id React gives in one component is not a change either', () => {
+    expect(one('index.html', page('<p id="_R_174mH1_">a</p>'), page('<p id="_R_af6vH1_">a</p>'))).toEqual([]);
+  });
+
+  test('words outside main, in the header, count as words', () => {
+    const [change] = one('index.html',
+      '<html lang="en"><body><header>Demos</header><main><p>a</p></main></body></html>',
+      '<html lang="en"><body><header>Exhibits</header><main><p>a</p></main></body></html>');
+
+    expect(change.kind).toBe('words');
+  });
+
+  test('a tag or a mark in the words is shown as written, not rendered', () => {
+    const summary = summaryOf([{page: 'index.html', kind: 'words', before: 'the <details> *x*', after: 'a & b'}], 1);
+
+    expect(summary).toContain('“the &lt;details&gt; \\*x\\*” → “a &amp; b”');
   });
 
   test('a page only one build has is listed as new or gone', () => {

@@ -3,24 +3,21 @@ import {readFileSync, readdirSync} from 'node:fs';
 import {join, relative} from 'node:path';
 import {JSDOM} from 'jsdom';
 
-// What changes on every build and says nothing about the page: the assets' content hashes, the commit the source
-// links point at, React's ids and the empty comments it writes between neighboring texts.
 const steady = html => html
   .replace(/(assets\/[\w.-]+?)-[\w-]{8}\.(js|css)/g, '$1.$2')
   .replace(/(github\.com\/RyanDur\/ChosenPicachu\/blob\/)[0-9a-f]{40}/g, '$1<sha>')
-  .replace(/_R_[a-z0-9]+_/g, '_R_')
+  .replace(/_R_[a-z0-9]+(?:H[a-z0-9]+)?_/g, '_R_')
   .replace(/<!-- -->/g, '');
 
-// A block's text ends where the block does, as a reader sees it; inline elements keep their spacing exactly, so a
-// space lost beside a code element still shows as a change.
-const blocks = 'address, article, aside, blockquote, br, caption, dd, details, div, dl, dt, figcaption, figure, footer, ' +
+const blockBoundaries = 'address, article, aside, blockquote, br, caption, dd, details, div, dl, dt, figcaption, figure, footer, ' +
   'form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, legend, li, main, nav, ol, p, pre, section, summary, table, td, ' +
   'th, tr, ul';
 
 const wordsOf = html => {
   const {document} = new JSDOM(html).window;
-  document.querySelectorAll(blocks).forEach(block => block.append('\n'));
-  return (document.querySelector('main') ?? document.body).textContent.split(/\s+/).filter(word => word !== '');
+  document.querySelectorAll('script, template').forEach(hidden => hidden.remove());
+  document.querySelectorAll(blockBoundaries).forEach(block => block.append('\n'));
+  return document.body.textContent.split(/\s+/).filter(word => has(word));
 };
 
 const around = 6;
@@ -59,19 +56,23 @@ export const changesBetween = (before, after) => [...new Set([...Object.keys(bef
   .map(page => changeOf(page, before[page], after[page]))
   .filter(change => has(change));
 
+const literally = words => words
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/[\\`*_[\]]/g, mark => `\\${mark}`);
+
 const named = page => page === 'index.html' ? 'home' : page.replace(/\/index\.html$/, '');
 
-const section = (title, lines) => empty(lines) ? [] : ['', `### ${title}`, '', ...lines];
+const headedList = (title, lines) => empty(lines) ? [] : ['', `### ${title}`, '', ...lines];
 
 export const summaryOf = (changes, total) => {
   if (empty(changes)) return `## pages: all ${total} the same\n`;
   const of = kind => changes.filter(change => change.kind === kind);
   return [
     `## pages: ${changes.length} of ${total} changed`,
-    ...section('words changed', of('words').map(({page, before, after}) => `- **${named(page)}**: “${before}” → “${after}”`)),
-    ...section('markup changed, words the same', of('markup').map(({page}) => `- ${named(page)}`)),
-    ...section('new pages', of('new').map(({page}) => `- ${named(page)}`)),
-    ...section('pages gone', of('gone').map(({page}) => `- ${named(page)}`)),
+    ...headedList('words changed', of('words').map(({page, before, after}) => `- **${named(page)}**: “${literally(before)}” → “${literally(after)}”`)),
+    ...headedList('markup changed, words the same', of('markup').map(({page}) => `- ${named(page)}`)),
+    ...headedList('new pages', of('new').map(({page}) => `- ${named(page)}`)),
+    ...headedList('pages gone', of('gone').map(({page}) => `- ${named(page)}`)),
     '',
     `${total - changes.length} the same`,
     ''
