@@ -87,7 +87,8 @@ for (const {reader, use} of desks) {
 
       await page.mouse.wheel(0, 1000);
 
-      await expect.poll(() => polledTopOf(held)).toBe(open);
+      await twoFramesLater(page);
+      expect(await topOf(held)).toBe(open);
     });
   });
 }
