@@ -33,7 +33,7 @@ describe('the pie', () => {
     expect(pieShapes.wedges([{weight: 0}, {weight: 0}])).toEqual([]);
   });
 
-  test('a 1 to 7 split reads 13 and 87', () => {
+  test('the legend\'s shares add up to 100% when the sides split 1 to 7', () => {
     expect(pieShapes.wholePercents(pieShapes.wedges([{weight: 1}, {weight: 7}]))).toEqual([13, 87]);
   });
 
@@ -65,16 +65,6 @@ describe('the pie', () => {
     broadcast(feed, [tradeFrame(65001, now, '3', 'bought'), tradeFrame(65002, now, '1', 'sold')]);
 
     await waitFor(() => expect(chartsDesk.pieShares()).toEqual(['75% bought', '25% sold']));
-  });
-
-  test('the legend\'s shares add up to 100% when the sides split 1 to 7', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at="/" feed={feed}><Trading><Pie/></Trading></TestApp>);
-    await feedIsSubscribed(feed);
-
-    broadcast(feed, [tradeFrame(65001, now, '1', 'bought'), tradeFrame(65002, now, '7', 'sold')]);
-
-    await waitFor(() => expect(chartsDesk.pieShares()).toEqual(['13% bought', '87% sold']));
   });
 
   test('the card says it counts up to the last 1,500 trades', async () => {
