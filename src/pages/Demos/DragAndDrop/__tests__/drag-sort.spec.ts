@@ -52,7 +52,11 @@ describe('a drop', () => {
     const lifted = dragSort.reduce(stepped, dragSortChange.lifted('A'));
     const hovered = dragSort.reduce(lifted, dragSortChange.hovered(2));
 
-    expect(dragSort.reduce(hovered, dragSortChange.released()).report.orNull()).toEqual({item: 'A', landedAt: 0, stayed: true});
+    expect(dragSort.reduce(hovered, dragSortChange.released()).report.orNull()).toEqual({
+      item: 'A',
+      landedAt: 0,
+      stayed: true
+    });
   });
 });
 
@@ -93,7 +97,7 @@ describe('a keyboard step', () => {
 
     const steppedAgain = dragSort.reduce(settled, dragSortChange.stepped('B', 1));
 
-    expect([stepped, steppedAgain].map(({slideStarts: starts}) => slideStarts.runningSlide(starts, 'B').map(({again}) => again).orNull()))
+    expect([stepped, steppedAgain].map(({slideStarts: starts}) => slideStarts.underway(starts, 'B').map(({again}) => again).orNull()))
       .toEqual([false, true]);
   });
 });

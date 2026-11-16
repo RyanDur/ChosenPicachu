@@ -21,7 +21,7 @@ export const EagerKeepAnimatedList: FC<Props> = ({list}) => {
       onDrop={event => event.preventDefault()}
       className="sortable-list eager-paced card rounded-corners lifted padded contained">{
         sort.order.map((item, index) => {
-          const slideStart = slideStarts.runningSlide(sort.slideStarts, item);
+          const slideStart = slideStarts.underway(sort.slideStarts, item);
           return <KeepItem key={item} item={item}
             className={classNames('item', slideStart.map(({again}) => again ? 'sliding-in-again' : 'sliding-in').orElse(''))}
             style={slideStart.map(({places}) => ({'--starts-places-right': places})).orElse({})}
