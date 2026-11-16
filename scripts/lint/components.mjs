@@ -28,7 +28,7 @@ const functionIn = node => {
  * @returns {any}
  */
 const definitionOf = variable => {
-  const [first] = variable.map(({defs}) => defs).orElse([]);
+  const [first] = variable.mBind(({defs}) => maybe(defs)).orElse([]);
   if (empty(first) || not(definitionTypes.has(first.type))) return undefined;
   const definition = first.node;
   return definition.type === 'VariableDeclarator' ? unwrapped(definition.init) : definition;
