@@ -19,7 +19,7 @@ describe('the pie', () => {
   });
 
   test('weights cut the circle into consecutive shares', () => {
-    const cut = pieShapes.slices([{weight: 3}, {weight: 1}]);
+    const cut = pieShapes.wedges([{weight: 3}, {weight: 1}]);
 
     expect(cut[0].share).toBe(0.75);
     expect(cut[0].from).toBe(0);
@@ -30,18 +30,18 @@ describe('the pie', () => {
   });
 
   test('nothing traded cuts nothing', () => {
-    expect(pieShapes.slices([{weight: 0}, {weight: 0}])).toEqual([]);
+    expect(pieShapes.wedges([{weight: 0}, {weight: 0}])).toEqual([]);
   });
 
   test('a share opens its gates in degrees', () => {
-    const [threeQuarters, quarter] = pieShapes.slices([{weight: 3}, {weight: 1}]);
+    const [threeQuarters, quarter] = pieShapes.wedges([{weight: 3}, {weight: 1}]);
 
     expect(pieShapes.sweepGates(threeQuarters)).toEqual({opening: 0, closing: 90});
     expect(pieShapes.sweepGates(quarter)).toEqual({opening: -90, closing: 0});
   });
 
-  test('a slice explodes along its own middle', () => {
-    const [rightHalf] = pieShapes.slices([{weight: 1}, {weight: 1}]);
+  test('a wedge explodes along its own middle', () => {
+    const [rightHalf] = pieShapes.wedges([{weight: 1}, {weight: 1}]);
 
     const {dx, dy} = pieShapes.explodedBy(rightHalf, 4);
 
@@ -49,7 +49,7 @@ describe('the pie', () => {
     expect(dy).toBeCloseTo(0);
   });
 
-  test('the card cuts the session into a bought and a sold slice, and says each share', async () => {
+  test('the card cuts the session into a bought and a sold wedge, and says each share', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/" feed={feed}><Trading><Pie/></Trading></TestApp>);
     await feedIsSubscribed(feed);
@@ -70,7 +70,7 @@ describe('the pie', () => {
   });
 
   test('a one-sided session opens both gates fully', () => {
-    expect(pieShapes.sweepGates(pieShapes.slices([{weight: 2}, {weight: 0}])[0])).toEqual({opening: 0, closing: 180});
+    expect(pieShapes.sweepGates(pieShapes.wedges([{weight: 2}, {weight: 0}])[0])).toEqual({opening: 0, closing: 180});
   });
 
   test('the card reads a one-sided session as all bought', async () => {

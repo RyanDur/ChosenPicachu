@@ -16,7 +16,7 @@ export type Weighed = {
   weight: number;
 };
 
-const slices = <Part extends Weighed>(parts: readonly Part[]): readonly (Part & Wedge)[] => {
+const wedges = <Part extends Weighed>(parts: readonly Part[]): readonly (Part & Wedge)[] => {
   const whole = parts.reduce((sum, {weight}) => sum + weight, 0);
   return whole === 0
     ? []
@@ -49,4 +49,4 @@ const sweepGates = (wedge: Wedge): Gates => {
   return {opening: Math.min(sweep, 180) - 180, closing: Math.max(sweep - 180, 0)};
 };
 
-export const pieShapes = {sideTotals, slices, explodedBy, degrees, sweepGates};
+export const pieShapes = {sideTotals, wedges, explodedBy, degrees, sweepGates};

@@ -22,7 +22,7 @@ export const Pie: FC<PropsWithChildren> = ({children}) => {
   const trades = useMarketRead(marketReads.liveTrades);
   const heading = `heading${useId()}`;
   const totals = pieShapes.sideTotals(trades);
-  const cut = pieShapes.slices(sides.map(side => ({side, weight: totals[side]})));
+  const cut = pieShapes.wedges(sides.map(side => ({side, weight: totals[side]})));
   return <section aria-labelledby={heading} className="pie chart card rounded-corners lifted padded">
     <h3 id={heading} className="off-screen">pie</h3>
     <header className="chart-header">
@@ -34,7 +34,7 @@ export const Pie: FC<PropsWithChildren> = ({children}) => {
           const {dx, dy} = wedge.share === 1 ? {dx: 0, dy: 0} : pieShapes.explodedBy(wedge, EXPLODE);
           const {opening, closing} = pieShapes.sweepGates(wedge);
           const drop = dressed === 'wall' ? DEPTH : 0;
-          return <g key={`${wedge.side}-${dressed}`} className={classNames('slice', sideOf[wedge.side], wedge.side)}
+          return <g key={`${wedge.side}-${dressed}`} className={classNames('wedge', sideOf[wedge.side], wedge.side)}
             style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
             <g className={classNames(dressed, dressed === 'wall' ? 'side-wall' : 'side-face')} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
               <g className="spin" style={{'--turn': `${pieShapes.degrees(wedge.from)}deg`}}>
@@ -65,7 +65,7 @@ export const Pie: FC<PropsWithChildren> = ({children}) => {
     </figure>
     <Explainer>
       Up to the last {liveTrades.cap.toLocaleString('en-US')} trades, as one circle, split by who came and took each
-      trade. The green slice is the size buyers took from waiting sellers. The orange slice is the size sellers took
+      trade. The green wedge is the size buyers took from waiting sellers. The orange wedge is the size sellers took
       from waiting buyers. The fetched past doesn’t say who took each trade, so the pie starts empty and counts only the
       trades that arrive while the page is open.
     </Explainer>
