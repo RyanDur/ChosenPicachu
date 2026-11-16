@@ -2,9 +2,10 @@ import stylelint from 'stylelint';
 import {describe, expect, it} from 'vitest';
 import {motion} from '../lint/motion.mjs';
 
-const warningsFor = async code => {
+const warningsFor = async (code, codeFilename = 'src/a.css') => {
   const {results: [{warnings}]} = await stylelint.lint({
     code,
+    codeFilename,
     config: {plugins: [motion], rules: {'chosen/compositor-motion': true}}
   });
   return warnings.map(({text}) => text);
@@ -53,6 +54,19 @@ describe('chosen/compositor-motion', () => {
 
   it('should refuse a height', async () => {
     expect(await warningsFor('a { transition: block-size .3s; }')).toHaveLength(1);
+  });
+
+  it('should accept the reset sliding a fold’s height to auto', async () => {
+    expect(await warningsFor('details::details-content { transition: block-size .3s ease-in-out, content-visibility .3s allow-discrete; }',
+      'src/styles/reset.css')).toEqual([]);
+  });
+
+  it('should refuse a fold’s height sliding outside the reset', async () => {
+    expect(await warningsFor('details::details-content { transition: block-size .3s; }', 'src/pages/a.css')).toHaveLength(1);
+  });
+
+  it('should refuse a height sliding in the reset on anything but a fold', async () => {
+    expect(await warningsFor('dialog { transition: block-size .3s; }', 'src/styles/reset.css')).toHaveLength(1);
   });
 
   it('should refuse all', async () => {
