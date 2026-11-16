@@ -6,6 +6,7 @@ const tester = new RuleTester();
 tester.run('no-double-of-ours', tests.rules['no-double-of-ours'], {
   valid: [
     {name: 'should accept a spy that listens to the console', code: "vi.spyOn(console, 'error');"},
+    {name: 'should accept a scrollTo spy that records where the page went', code: "vi.spyOn(window, 'scrollTo').mockImplementation(record);"},
     {name: 'should accept a spy on the page\'s scrollTo', code: "vi.spyOn(window, 'scrollTo');"},
     {name: 'should accept a spy on an element\'s scrollTo', code: "vi.spyOn(Element.prototype, 'scrollTo');"},
     {name: 'should accept a value set on an object that isn\'t a prototype', code: 'store.count = 1;'},
@@ -23,6 +24,7 @@ tester.run('no-double-of-ours', tests.rules['no-double-of-ours'], {
     {name: 'should refuse a global stubbed', code: "vi.stubGlobal('fetch', vi.fn());", errors: [{messageId: 'mocked'}]},
     {name: 'should refuse a prototype method assigned', code: 'HTMLElement.prototype.getBoundingClientRect = () => ({});', errors: [{messageId: 'replaced'}]},
     {name: 'should refuse a prototype method defined', code: "Object.defineProperty(Node.prototype, 'blur', {});", errors: [{messageId: 'replaced'}]},
+    {name: 'should refuse a console spy that silences what it hears', code: "vi.spyOn(console, 'warn').mockImplementation(() => {});", errors: [{messageId: 'silenced'}]},
     {name: 'should refuse a mock made later', code: "vi.doMock('./store');", errors: [{messageId: 'mocked'}]}
   ]
 });

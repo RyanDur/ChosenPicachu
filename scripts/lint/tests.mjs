@@ -35,6 +35,7 @@ const noDoubleOfOurs = {
     type: 'problem',
     messages: {
       spied: 'a spy may only listen, on console or scrollTo; render the real thing and read what a reader meets',
+      silenced: 'a spy on console only listens; a warning printed during the run is a defect, never something to silence',
       mocked: 'the world is stubbed only at its edge, the network through msw; render the real collaborators',
       replaced: 'a spec never replaces a method of the platform\'s or ours; render the real thing and read what a reader meets'
     }
@@ -42,6 +43,8 @@ const noDoubleOfOurs = {
   create: context => ({
     'CallExpression[callee.object.name="vi"][callee.property.name="spyOn"]': node => {
       if (not(onlyListens(node.arguments))) context.report({node, messageId: 'spied'});
+      const chained = node.parent.type === 'MemberExpression' && node.parent.object === node ? spelled(node.parent.property) : '';
+      if (spelled(node.arguments[0]) === 'console' && chained.startsWith('mock')) context.report({node, messageId: 'silenced'});
     },
     'CallExpression[callee.object.name="vi"][callee.property.name=/^(mock|doMock|importMock|stubGlobal)$/]': node =>
       context.report({node, messageId: 'mocked'}),
