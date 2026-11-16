@@ -1,5 +1,5 @@
 import {has, empty, not, maybe} from '@ryandur/sand';
-import {Line} from './Snippet';
+import {Line} from './sample';
 import {Sample} from './sample';
 import {lines} from './lines';
 
