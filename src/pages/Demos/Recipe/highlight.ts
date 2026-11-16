@@ -17,11 +17,11 @@ type Found = {
 
 type TokenPattern = {pattern: RegExp; kind: Kind};
 
-const matchesOf = (line: string, tokenPatterns: ReadonlyArray<TokenPattern>, taken: Found[],
+const matchesOf = (text: string, tokenPatterns: ReadonlyArray<TokenPattern>, taken: Found[],
   allowed: (start: number, end: number) => boolean): Found[] => {
   const found = [...taken];
   tokenPatterns.forEach(tokenPattern => {
-    for (const match of line.matchAll(tokenPattern.pattern)) {
+    for (const match of text.matchAll(tokenPattern.pattern)) {
       const start = match.index;
       const overlaps = found.some(other =>
         start < other.start + other.length && other.start < start + match[0].length);
@@ -33,18 +33,18 @@ const matchesOf = (line: string, tokenPatterns: ReadonlyArray<TokenPattern>, tak
   return found;
 };
 
-const tokensFrom = (line: string, found: Found[]): Token[] => {
+const tokensFrom = (text: string, found: Found[]): Token[] => {
   const tokens: Token[] = [];
   let at = 0;
   [...found].sort((left, right) => left.start - right.start).forEach(({start, length, kind}) => {
     if (start > at) {
-      tokens.push({text: line.slice(at, start), kind: 'plain'});
+      tokens.push({text: text.slice(at, start), kind: 'plain'});
     }
-    tokens.push({text: line.slice(start, start + length), kind});
+    tokens.push({text: text.slice(start, start + length), kind});
     at = start + length;
   });
-  if (at < line.length) {
-    tokens.push({text: line.slice(at), kind: 'plain'});
+  if (at < text.length) {
+    tokens.push({text: text.slice(at), kind: 'plain'});
   }
   return tokens;
 };
