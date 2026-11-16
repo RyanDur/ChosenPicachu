@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {dragSortTable, tableWorlds} from './__test_support';
+import {tableWorlds} from './__test_support';
 
 for (const stage of tableWorlds.stagesWith('pace=eager')) {
   test.describe(`an eager table, in ${stage.name}`, () => {
@@ -16,8 +16,7 @@ for (const stage of tableWorlds.stagesWith('pace=eager')) {
 
     test('a column whose button is let go outside the page lands where it was carried', async ({page, browserName}) => {
       test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a pointer whose button was let go elsewhere');
-      await page.goto(stage.at);
-      const trades = dragSortTable(page, stage.holder(page));
+      const trades = await tableWorlds.opened(page, stage);
       await trades.listenToTheMoveReport();
       const hold = await trades.holdColumn('trades');
       await hold.carryTo(trades.columnHeader('vwap'));

@@ -8,8 +8,7 @@ for (const stage of tableWorlds.stages) {
       test.use(device);
 
       test.beforeEach(async ({page}) => {
-        await page.goto(stage.at);
-        await expect(dragSortTable(page, stage.holder(page)).columnHeader('trades')).toBeVisible({timeout: 30_000});
+        await tableWorlds.opened(page, stage, {patience: 30_000});
       });
 
       test('narrows buys to a stop, and buys\' sort control still opens its menu', async ({page}) => {
@@ -41,10 +40,7 @@ for (const stage of tableWorlds.stages) {
       test('stops buys by keyboard within a point of the share a drag stops it at', async ({page, context}) => {
         const dragged = dragSortTable(page, stage.holder(page));
         await dragged.dragEdge('buys', {by: -400, moves: 20});
-        const other = await context.newPage();
-        await other.goto(stage.at);
-        const keyed = dragSortTable(other, stage.holder(other));
-        await expect(keyed.columnHeader('trades')).toBeVisible({timeout: 30_000});
+        const keyed = await tableWorlds.opened(await context.newPage(), stage, {patience: 30_000});
 
         await keyed.narrowByKeys('buys', 40);
 
