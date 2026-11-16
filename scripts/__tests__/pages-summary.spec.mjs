@@ -22,6 +22,20 @@ describe('the pages summary', () => {
     expect(change.kind).toBe('markup');
   });
 
+  test('a wrapper around words that come before a dialog changes only markup', () => {
+    const [change] = one('index.html', page('<span>Open</span><dialog>Close</dialog>'),
+      page('<p><span>Open</span></p><dialog>Close</dialog>'));
+
+    expect(change.kind).toBe('markup');
+  });
+
+  test('a wrapper around words that come before a fieldset changes only markup', () => {
+    const [change] = one('index.html', page('<span>Name</span><fieldset>Given</fieldset>'),
+      page('<p><span>Name</span></p><fieldset>Given</fieldset>'));
+
+    expect(change.kind).toBe('markup');
+  });
+
   test('a space lost between two words is a change of words', () => {
     const [change] = one('index.html', page('<p>the <code>details</code> element</p>'), page('<p>the <code>details</code>element</p>'));
 

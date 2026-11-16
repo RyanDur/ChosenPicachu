@@ -9,9 +9,9 @@ const steady = html => html
   .replace(/_R_[a-z0-9]+(?:H[a-z0-9]+)?_/g, '_R_')
   .replace(/<!-- -->/g, '');
 
-const blockBoundaries = 'address, article, aside, blockquote, br, caption, dd, details, div, dl, dt, figcaption, figure, footer, ' +
-  'form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, legend, li, main, nav, ol, p, pre, section, summary, table, td, ' +
-  'th, tr, ul';
+const blockBoundaries = 'address, article, aside, blockquote, br, caption, dd, details, dialog, div, dl, dt, fieldset, ' +
+  'figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, legend, li, main, menu, nav, ol, p, ' +
+  'pre, search, section, summary, table, td, th, tr, ul';
 
 const wordsInAttributes = ['alt', 'aria-label', 'aria-description', 'placeholder', 'title'];
 
@@ -79,17 +79,17 @@ const literally = words => words
 
 const named = page => page === 'index.html' ? 'home' : page.replace(/\/index\.html$/, '');
 
-const headedList = (title, lines) => empty(lines) ? [] : ['', `### ${title}`, '', ...lines];
+const headedList = (heading, lines) => empty(lines) ? [] : ['', `### ${heading}`, '', ...lines];
 
 export const summaryOf = (changes, total) => {
   if (empty(changes)) return `## pages: all ${total} the same\n`;
-  const of = kind => changes.filter(change => change.kind === kind);
+  const changesOfKind = kind => changes.filter(change => change.kind === kind);
   return [
     `## pages: ${changes.length} of ${total} changed`,
-    ...headedList('words changed', of('words').map(({page, before, after}) => `- **${named(page)}**: “${literally(before)}” → “${literally(after)}”`)),
-    ...headedList('markup changed, words the same', of('markup').map(({page}) => `- ${named(page)}`)),
-    ...headedList('new pages', of('new').map(({page}) => `- ${named(page)}`)),
-    ...headedList('pages gone', of('gone').map(({page}) => `- ${named(page)}`)),
+    ...headedList('words changed', changesOfKind('words').map(({page, before, after}) => `- **${named(page)}**: “${literally(before)}” → “${literally(after)}”`)),
+    ...headedList('markup changed, words the same', changesOfKind('markup').map(({page}) => `- ${named(page)}`)),
+    ...headedList('new pages', changesOfKind('new').map(({page}) => `- ${named(page)}`)),
+    ...headedList('pages gone', changesOfKind('gone').map(({page}) => `- ${named(page)}`)),
     '',
     `${total - changes.length} the same`,
     ''
