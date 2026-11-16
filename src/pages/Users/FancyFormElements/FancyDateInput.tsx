@@ -1,17 +1,7 @@
-import {FC, ChangeEvent, PropsWithChildren} from 'react';
-import {PropsWithClassName} from '@components';
-import {FancyInput} from './FancyInput';
+import {FC, PropsWithChildren} from 'react';
+import {FancyInput, FancyInputProps} from './FancyInput';
 
-type FancyDateInputProps = PropsWithClassName<{
-  required?: boolean;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  inputClass?: string;
-  labelClass?: string;
-  value?: string | Date;
-  readOnly?: boolean;
-  disabled?: boolean;
-  pattern?: string;
-}>;
+type FancyDateInputProps = Omit<FancyInputProps, 'type'>;
 
 export const FancyDateInput: FC<PropsWithChildren<FancyDateInputProps>> = ({readOnly = false, ...rest}) => readOnly ?
   <FancyInput type="text" readOnly={readOnly} {...rest}/> : <FancyInput type="date" {...rest}/>;
