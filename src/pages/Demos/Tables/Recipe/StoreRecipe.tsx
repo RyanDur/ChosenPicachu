@@ -187,7 +187,7 @@ const ExchangeIsMiddleware: FC = () => {
         chain.</Says>
       <Says>The chain is composed inside the store’s own dispatch, so every action passes through it before the
         reducer runs. The path is strict: middleware, then the reducer, then the listeners.</Says>
-      <Says>A store built with no middleware has a chain of one.</Says>
+      <Says>A store built with no middleware has an empty chain, so every action goes straight to the reducer.</Says>
       <Says>A middleware holds two dispatches. next sends an action on to the next middleware, and after the last
         one, to the reducer.</Says>
       <Says>The other is the store’s own dispatch, on the view the middleware was given. It sends an action back to
