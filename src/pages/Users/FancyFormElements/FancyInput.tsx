@@ -3,7 +3,7 @@ import {classNames, PropsWithClassName} from '@components';
 import {format} from 'date-fns';
 import './Fancy.css';
 
-type FancyTextInputProps = PropsWithClassName<{
+type FancyInputProps = PropsWithClassName<{
   type?: 'text' | 'email' | 'date';
   required?: boolean;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -15,7 +15,7 @@ type FancyTextInputProps = PropsWithClassName<{
   pattern?: string;
 }>;
 
-export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
+export const FancyInput: FC<PropsWithChildren<FancyInputProps>> = (
   {
     type = 'text',
     children,
