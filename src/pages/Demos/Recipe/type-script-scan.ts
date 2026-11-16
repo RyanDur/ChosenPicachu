@@ -19,9 +19,13 @@ type TemplateLiteralState = {within: 'template'; from: number};
 type ScanState = CodeState | TagState | MarkupTextState | TemplateLiteralState;
 
 const valueCanStart = new RegExp(String.raw`(?:^|[([{=,:;?!&|+\-*/%<>~]|\.\.\.|\b(?:${typeScriptWords.beforeAValue.join('|')}))\s*$`);
+const valueEnded = /(?:\+\+|--|[\w)\]]!)\s*$/;
 const elementCanStart = /(?:^|\s|[>([{}=,:;?!&|+\-*/%])$/;
 const plainlyAnElement = /^<[A-Za-z][\w.:-]*(?:\s+[A-Za-z][\w-]*=|\s*\/>)/;
 const typeParameters = /^<(?:(?:const|in|out)\s+)?(?:[A-Za-z_$][\w$]*(?:\s+extends\b|\s*,|\s*=)|[A-Z][\w$]*>\s*\()/;
+
+const regularExpressionCanStart = (before: string): boolean =>
+  valueCanStart.test(before) && not(valueEnded.test(before));
 
 const endOfQuoted = (text: string, from: number, quote: string): number => {
   let at = from + 1;
@@ -119,7 +123,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
     if (isJsxComment(text, at)) return recordRun(at, endOf(text, at + 3, '*/}'), 'comment');
     if (text.startsWith('//', at)) return recordRun(at, endOfLine(text, at), 'comment');
     if (text.startsWith('/*', at)) return recordRun(at, endOf(text, at + 2, '*/'), 'comment');
-    if (here === '/' && valueCanStart.test(text.slice(startOfCodeBefore(text, at), at))) {
+    if (here === '/' && regularExpressionCanStart(text.slice(startOfCodeBefore(text, at), at))) {
       return endOfRegularExpression(text, at);
     }
     if (here === '`') {

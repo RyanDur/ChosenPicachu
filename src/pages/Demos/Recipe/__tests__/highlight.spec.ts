@@ -373,6 +373,30 @@ describe('the code voice', () => {
     expect(divided.find(({text}) => text === '\'x\'')?.kind).toBe('string');
   });
 
+  it('reads a slash after a non-null assertion on a name as a division, so a template after it is a string', () => {
+    expect(kinds('TS', 'const half = width! / 2; const s = `a`;')['`a`']).toBe('string');
+  });
+
+  it('reads a slash after a non-null assertion on a call as a division, so a template after it is a string', () => {
+    expect(kinds('TS', 'const half = widthOf(box)! / 2; const s = `a`;')['`a`']).toBe('string');
+  });
+
+  it('reads a slash after a non-null assertion on an index as a division, so a template after it is a string', () => {
+    expect(kinds('TS', 'const half = widths[0]! / 2; const s = `a`;')['`a`']).toBe('string');
+  });
+
+  it('reads a slash after a postfix increment as a division, so a template after it is a string', () => {
+    expect(kinds('TS', 'const n = i++ / 2; const s = `a`;')['`a`']).toBe('string');
+  });
+
+  it('reads a slash after a postfix decrement as a division, so a template after it is a string', () => {
+    expect(kinds('TS', 'const n = i-- / 2; const s = `a`;')['`a`']).toBe('string');
+  });
+
+  it('reads a slash after a not as a regular expression, so a template after it is a string', () => {
+    expect(kinds('TS', 'const ticked = !/`/.test(s), t = `a`;')['`a`']).toBe('string');
+  });
+
   it('opens an element whose text starts with a parenthesis, and reads the line after it as code', () => {
     expect(constOnTheLineAfter('return <p>(press ` to open)</p>;')).toBe('keyword');
   });
