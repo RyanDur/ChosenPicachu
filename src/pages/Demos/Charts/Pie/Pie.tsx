@@ -34,10 +34,10 @@ export const Pie: FC<PropsWithChildren> = ({children}) => {
         {['wall', 'face'].map(dressed => cut.map(wedge => {
           const {dx, dy} = wedge.share === 1 ? {dx: 0, dy: 0} : pieShapes.explodedBy(wedge, EXPLODE);
           const {opening, closing} = pieShapes.sweepGates(wedge);
-          const drop = dressed === 'wall' ? DEPTH : 0;
+          const lowered = dressed === 'wall' ? DEPTH : 0;
           return <g key={`${wedge.side}-${dressed}`} className={classNames('wedge', sideOf[wedge.side], wedge.side)}
             style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
-            <g className={classNames(dressed, dressed === 'wall' ? 'side-wall' : 'side-face')} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
+            <g className={classNames(dressed, dressed === 'wall' ? 'side-wall' : 'side-face')} transform={`translate(${SIZE / 2} ${SIZE / 2 + lowered})`}>
               <g className="spin" style={{'--turn': `${pieShapes.degrees(wedge.from)}deg`}}>
                 <svg x={0} y={-RADIUS} width={RADIUS} height={2 * RADIUS}
                   viewBox={`0 ${-RADIUS} ${RADIUS} ${2 * RADIUS}`}>
