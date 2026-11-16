@@ -1,7 +1,7 @@
 import {empty, has, maybe, not} from '@ryandur/sand';
 import {limit} from './wrap.mjs';
 
-const exempt = new Set(['String', 'Template']);
+const stringTokenTypes = new Set(['String', 'Template']);
 
 /** A space held in `{' '}` at a line's end, which JSX needs only because the break sits beside an element. */
 /** @type {import('eslint').Rule.RuleModule} */
@@ -30,7 +30,8 @@ const breaksBetweenWords = {
      * @returns {boolean}
      */
     const stringsOn = line =>
-      source.ast.tokens.some(token => exempt.has(token.type) && not(heldAtLineEnd(token)) && onLine(token, line));
+      source.ast.tokens.some(token =>
+        stringTokenTypes.has(token.type) && not(heldAtLineEnd(token)) && onLine(token, line));
     /**
      * @param {string} text
      * @param {boolean} exemptLine
@@ -44,40 +45,40 @@ const breaksBetweenWords = {
         const {expression, parent} = held;
         if (expression.type !== 'Literal' || expression.value !== ' ') return;
         if (parent.type !== 'JSXElement' && parent.type !== 'JSXFragment') return;
-        const after = source.text.slice(held.range[1]).match(/^[ \t]*\n(?:[ \t]*\n)*([ \t]*)/);
-        if (empty(after)) return;
+        const lineBreak = source.text.slice(held.range[1]).match(/^[ \t]*\n(?:[ \t]*\n)*([ \t]*)/);
+        if (empty(lineBreak)) return;
         const report = fix => context.report({node: held, messageId: 'beside', fix});
-        const line = held.loc.start.line;
-        const head = source.text.slice(held.range[0] - held.loc.start.column, held.range[0]);
-        if (head.trim() === '') return report(null);
-        const nextAt = held.range[1] + after[0].length;
-        const nextLine = source.getLocFromIndex(nextAt).line;
-        const indent = after[1];
-        const proseIndent = head.match(/^[ \t]*/)[0];
-        const next = source.lines[nextLine - 1].trimStart();
-        const tokenBefore = held.range[0] - head.length;
-        const headStrings = stringsOn(line);
-        const nextStrings = stringsOn(nextLine);
+        const lineNumber = held.loc.start.line;
+        const textBeforeSpace = source.text.slice(held.range[0] - held.loc.start.column, held.range[0]);
+        if (textBeforeSpace.trim() === '') return report(null);
+        const nextAt = held.range[1] + lineBreak[0].length;
+        const nextLineNumber = source.getLocFromIndex(nextAt).line;
+        const nextLineIndent = lineBreak[1];
+        const proseIndent = textBeforeSpace.match(/^[ \t]*/)[0];
+        const nextLineText = source.lines[nextLineNumber - 1].trimStart();
+        const lineStart = held.range[0] - textBeforeSpace.length;
+        const stringOnThisLine = stringsOn(lineNumber);
+        const stringOnNextLine = stringsOn(nextLineNumber);
 
         const moves = [
-          {lines: [[`${head} ${next}`, headStrings || nextStrings, 0]], fix: fixer => fixer.replaceTextRange([held.range[0], nextAt], ' ')}
+          {lines: [[`${textBeforeSpace} ${nextLineText}`, stringOnThisLine || stringOnNextLine, 0]], fix: fixer => fixer.replaceTextRange([held.range[0], nextAt], ' ')}
         ];
 
-        const before = head.match(/^(.*\S)( +)([^\s<>{}]+)$/);
-        if (has(before) && endsInWord.test(before[1])) {
-          const [, kept, , word] = before;
+        const wordBeforeBreak = textBeforeSpace.match(/^(.*\S)( +)([^\s<>{}]+)$/);
+        if (has(wordBeforeBreak) && endsInWord.test(wordBeforeBreak[1])) {
+          const [, kept, , word] = wordBeforeBreak;
           moves.push({
-            lines: [[kept, headStrings, head.length], [`${proseIndent}${word} ${next}`, nextStrings, 0]],
-            fix: fixer => fixer.replaceTextRange([tokenBefore + kept.length, nextAt], `\n${proseIndent}${word} `)
+            lines: [[kept, stringOnThisLine, textBeforeSpace.length], [`${proseIndent}${word} ${nextLineText}`, stringOnNextLine, 0]],
+            fix: fixer => fixer.replaceTextRange([lineStart + kept.length, nextAt], `\n${proseIndent}${word} `)
           });
         }
 
-        const following = next.match(/^([^\s<>{}]+) +(\S.*)$/);
-        if (has(following) && not(startsWithMarkup.test(following[2]))) {
-          const [, word, rest] = following;
+        const wordAfterBreak = nextLineText.match(/^([^\s<>{}]+) +(\S.*)$/);
+        if (has(wordAfterBreak) && not(startsWithMarkup.test(wordAfterBreak[2]))) {
+          const [, word, rest] = wordAfterBreak;
           moves.push({
-            lines: [[`${head} ${word}`, headStrings, 0], [`${indent}${rest}`, nextStrings, indent.length + next.length]],
-            fix: fixer => fixer.replaceTextRange([held.range[0], nextAt + word.length + 1], ` ${word}\n${indent}`)
+            lines: [[`${textBeforeSpace} ${word}`, stringOnThisLine, 0], [`${nextLineIndent}${rest}`, stringOnNextLine, nextLineIndent.length + nextLineText.length]],
+            fix: fixer => fixer.replaceTextRange([held.range[0], nextAt + word.length + 1], ` ${word}\n${nextLineIndent}`)
           });
         }
 
