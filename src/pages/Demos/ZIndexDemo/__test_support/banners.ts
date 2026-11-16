@@ -9,3 +9,30 @@ export const siteBanners = {
   standingIn,
   raise: async (): Promise<void> => userEvent.click(await screen.findByRole('button', {name: 'Raise a banner, the site’s own'}))
 };
+
+const oldWords = /^An old banner\./;
+const findRaiser = (): Promise<HTMLElement> => screen.findByRole('button', {name: 'Raise a banner, the old way'});
+
+export const bannerExhibit = {
+  find: (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^The banners\./}),
+  steps: (exhibit: HTMLElement): HTMLElement => within(exhibit).getAllByRole('list')[0],
+  controls: (exhibit: HTMLElement): HTMLElement[] => within(exhibit).getAllByRole('button'),
+  button: (exhibit: HTMLElement, name: string): HTMLElement => within(exhibit).getByRole('button', {name})
+};
+
+export const oldBanner = {
+  findRaiser,
+  raiser: (): HTMLElement => screen.getByRole('button', {name: 'Raise a banner, the old way'}),
+  raise: async (): Promise<void> => userEvent.click(await findRaiser()),
+  raiseByKeyboard: async (): Promise<void> => {
+    (await findRaiser()).focus();
+    await userEvent.keyboard('{Enter}');
+  },
+  tab: async (): Promise<void> => userEvent.tab(),
+  dismissButton: (): HTMLElement => screen.getByRole('button', {name: 'dismiss the old banner'}),
+  pressEnter: async (): Promise<void> => {
+    await userEvent.keyboard('{Enter}');
+  },
+  shown: (): HTMLElement => screen.getByText(oldWords),
+  query: (): HTMLElement | null => screen.queryByText(oldWords)
+};
