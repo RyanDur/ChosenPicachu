@@ -21,7 +21,7 @@ export const LazyHideAnimatedList: FC<Props> = ({list}) => {
       onDragLeave={() => dispatch(dragSortChange.left())}
       className="sortable-list lazy-paced card rounded-corners lifted padded contained">{
         sort.order.map((item, index) => {
-          const slideStart = slideStarts.running(sort.slideStarts, item);
+          const slideStart = slideStarts.runningSlide(sort.slideStarts, item);
           return <HideItem key={item} item={item}
             onDragOver={() => dispatch(dragSortChange.hovered(index))}
             className={classNames('item', slideStart.map(({again}) => again ? 'sliding-in-again' : 'sliding-in').orElse(''))}
