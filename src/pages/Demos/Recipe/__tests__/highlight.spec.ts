@@ -19,6 +19,18 @@ describe('the code voice', () => {
     expect(kinds('HTML', '<p>text</p><!-- aside -->')['<!-- aside -->']).toBe('comment');
   });
 
+  it('keeps a URL in a TS string a string', () => {
+    expect(kinds('TS', "const link = 'https://example.com';")["'https://example.com'"]).toBe('string');
+  });
+
+  it('keeps a URL in a JSX comment one comment', () => {
+    expect(kinds('TS', '<p>{/* see https://mdn.io */}</p>')['{/* see https://mdn.io */}']).toBe('comment');
+  });
+
+  it('still reads a line comment after code as a comment', () => {
+    expect(kinds('TS', 'const at = 0; // where it starts')['// where it starts']).toBe('comment');
+  });
+
   it('reads a JSX line the way an editor does: tags, props and strings', () => {
     const line = '    trades: <DraggableColumn key="trades" name="trades">trades<SortMenu column="trades"/></DraggableColumn>,';
 

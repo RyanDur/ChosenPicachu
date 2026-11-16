@@ -47,7 +47,7 @@ const keywords = [
 ];
 
 const ts: ReadonlyArray<{pattern: RegExp; kind: Kind}> = [
-  {pattern: /\/\/.*$/g, kind: 'comment'},
+  {pattern: /(?<!:)\/\/.*$/g, kind: 'comment'},
   {pattern: /\{\/\*.*?\*\/}/g, kind: 'comment'},
   {pattern: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
   {pattern: /(?<=\w<)[A-Z]\w*(?=,|>[(;)=])/g, kind: 'type'},
