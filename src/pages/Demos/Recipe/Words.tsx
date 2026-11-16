@@ -5,7 +5,7 @@ type Props = PropsWithChildren<{
 }>;
 
 export const Words: FC<Props> = ({want, children}) =>
-  <div className="step-words">
+  <article className="step-words">
     <p className="step-want paragraph italic muted-ink">{want}</p>
     {children}
-  </div>;
+  </article>;
