@@ -16,7 +16,8 @@ const script = `${import.meta.env.BASE_URL}${usersServer.script}`;
 const unwatched = (): void => undefined;
 
 const askedToClaim = (workers: Workers): void => {
-  asyncResult(workers.ready).onSuccess(({active}) => active?.postMessage(usersServer.loadedUncontrolled));
+  asyncResult(workers.ready)
+    .onSuccess(({active}) => maybe(active).map(worker => worker.postMessage(usersServer.loadedUncontrolled)));
 };
 
 const watchedForControl = (workers: Workers, {reached, unreachable}: Reaching): () => void => {

@@ -21,8 +21,8 @@ const ranked = <Seat>(
     const first = sortKeyOf(left);
     const second = sortKeyOf(right);
     const difference = typeof first === 'string' || typeof second === 'string'
-      ? String(first ?? '').localeCompare(String(second ?? ''))
-      : (first ?? Number.NEGATIVE_INFINITY) - (second ?? Number.NEGATIVE_INFINITY);
+      ? String(maybe(first).orElse('')).localeCompare(String(maybe(second).orElse('')))
+      : maybe(first).orElse(Number.NEGATIVE_INFINITY) - maybe(second).orElse(Number.NEGATIVE_INFINITY);
     return direction === 'ascending' ? difference : -difference;
   });
 

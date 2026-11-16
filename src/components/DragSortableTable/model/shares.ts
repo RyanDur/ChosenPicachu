@@ -7,7 +7,7 @@ const measuredWidths = (keys: readonly string[], table: HTMLTableElement): Colum
   const widths = [...table.querySelectorAll('thead th')].map(header => header.getBoundingClientRect().width);
   const total = widths.reduce((sum, width) => sum + width, 0);
   return keys.reduce<ColumnWidths>((measured, key, at) =>
-    ({...measured, [key]: (widths[at] ?? 0) / (total || 1) * 100}), {});
+    ({...measured, [key]: maybe(widths[at]).orElse(0) / (total || 1) * 100}), {});
 };
 
 const pixels = (length: string): number => parseFloat(length) || 0;
@@ -25,7 +25,7 @@ const measuredFloors = (keys: readonly string[], table: HTMLTableElement): Colum
     ({...floors, [key]: maybe(headers[at]).map(controlsWidth).orElse(0) / (total || 1) * 100}), {});
 };
 
-const floorOf = (floors: ColumnWidths, column: string): number => Math.max(SLIMMEST, floors[column] ?? 0);
+const floorOf = (floors: ColumnWidths, column: string): number => Math.max(SLIMMEST, maybe(floors[column]).orElse(0));
 
 const traded = (column: string, neighbor: string, delta: number, floors: ColumnWidths) =>
   (previous: ColumnWidths): ColumnWidths => {
@@ -38,7 +38,7 @@ const traded = (column: string, neighbor: string, delta: number, floors: ColumnW
 
 const neighborOf = (apportioned: readonly string[], key: string): string => {
   const index = apportioned.indexOf(key);
-  return apportioned[index + 1] ?? apportioned[index - 1];
+  return maybe(apportioned[index + 1]).orElse(apportioned[index - 1]);
 };
 
 const step = 2;

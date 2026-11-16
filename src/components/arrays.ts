@@ -1,4 +1,4 @@
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 
 const empty = <T>(list: T[] = []): boolean =>
   not(list.length);
@@ -37,7 +37,7 @@ const addToGrid = <T>(
   grid: T[][]
 ) => {
   const safeRow = row < 0 ? 0 : row;
-  const currentRow = grid[safeRow] ?? [];
+  const currentRow = maybe(grid[safeRow]).orElse<T[]>([]);
   if (empty(currentRow)) {
     return insertAt(safeRow, [item], grid);
   }

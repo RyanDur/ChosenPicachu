@@ -1,9 +1,12 @@
 import {CSSProperties} from 'react';
-import {has} from '@ryandur/sand';
+import {has, maybe, Maybe} from '@ryandur/sand';
 import {ColumnShove, RowShove, Settling} from './table-state';
 import {Drift} from './travel';
 
 const pixels = (length?: number): `${number}px` | undefined => has(length) ? `${length}px` : undefined;
+
+const offset = (drift: Maybe<Drift>, axis: keyof Drift): `${number}px` | undefined =>
+  drift.map(at => pixels(at[axis])).orElse(undefined);
 
 const shoveDistance = (shove?: ColumnShove | RowShove): `${number}px` | undefined =>
   has(shove) ? `${shove.by}px` : undefined;
@@ -13,17 +16,20 @@ const shoved = (shove?: ColumnShove | RowShove): string | false =>
 
 type Placement = {seat?: Drift; drift?: Drift; settlingFrom?: Settling; shove?: ColumnShove | RowShove};
 
-const placement = ({seat, drift, settlingFrom, shove}: Placement): CSSProperties => ({
-  '--seat-x': pixels(seat?.x),
-  '--seat-y': pixels(seat?.y),
-  '--drift-x': pixels(drift?.x),
-  '--drift-y': pixels(drift?.y),
-  '--settle-x': pixels(settlingFrom?.seat.x),
-  '--settle-y': pixels(settlingFrom?.seat.y),
-  '--settle-drift-x': pixels(settlingFrom?.drift.x),
-  '--settle-drift-y': pixels(settlingFrom?.drift.y),
-  '--shoved-by': shoveDistance(shove)
-});
+const placement = ({seat, drift, settlingFrom, shove}: Placement): CSSProperties => {
+  const settling = maybe(settlingFrom);
+  return {
+    '--seat-x': offset(maybe(seat), 'x'),
+    '--seat-y': offset(maybe(seat), 'y'),
+    '--drift-x': offset(maybe(drift), 'x'),
+    '--drift-y': offset(maybe(drift), 'y'),
+    '--settle-x': offset(settling.map(settled => settled.seat), 'x'),
+    '--settle-y': offset(settling.map(settled => settled.seat), 'y'),
+    '--settle-drift-x': offset(settling.map(settled => settled.drift), 'x'),
+    '--settle-drift-y': offset(settling.map(settled => settled.drift), 'y'),
+    '--shoved-by': shoveDistance(shove)
+  };
+};
 
 const rowHeaderCell = ['cell', 'row-header'] as const;
 

@@ -1,5 +1,5 @@
 import {Report} from './report';
-import {has, maybe, Maybe, nothing} from '@ryandur/sand';
+import {has, maybe, Maybe, nothing, some} from '@ryandur/sand';
 import {ColumnWidths, Grip, shares} from './shares';
 import {Direction, SortKey} from './sorting';
 import {Drift, Moving, travel} from './travel';
@@ -85,7 +85,7 @@ export type TableState = {
 const resting: TableState = {columnMarks: {}, rowMarks: {}, floors: {}};
 
 const columnOf = (order: readonly string[], cell: Element): string =>
-  order.find(name => cell.classList.contains(name)) ?? '';
+  maybe(order.find(name => cell.classList.contains(name))).orElse('');
 
 const measure = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): TableState =>
   ({...state, widths, floors});
@@ -102,35 +102,38 @@ const trade = (state: TableState, column: string, neighbor: string, delta: numbe
 
 const endSizing = ({sizing, ...state}: TableState): TableState =>
   maybe(sizing)
-    .mBind(({column, from}) => maybe(state.widths?.[column])
+    .mBind(({column, from}) => maybe(state.widths).mBind(widths => maybe(widths[column]))
       .map((share): TableState => shares.wholePercent(share) === shares.wholePercent(from) ? state : {...state, report: {about: 'share', name: column, share}}))
     .orElse(state);
 
-const sizingOf = (state: TableState, column: string): TableState =>
-  state.sizing?.column === column ? state : endSizing(state);
+const sizingFor = (state: TableState, column: string): Maybe<Sizing> =>
+  maybe(state.sizing).mBind(sizing => sizing.column === column ? some(sizing) : nothing());
 
-const startedAt = (state: TableState, column: string): number | undefined =>
-  state.sizing?.column === column ? state.sizing.from : state.widths?.[column];
+const sizingOf = (state: TableState, column: string): TableState =>
+  sizingFor(state, column).either(() => state, () => endSizing(state));
+
+const startedAt = (state: TableState, column: string): Maybe<number> =>
+  sizingFor(state, column).map(({from}) => from).or(() => maybe(state.widths).mBind(widths => maybe(widths[column])));
 
 const tradeBy = (state: TableState, column: string, neighbor: string, delta: number): TableState => {
   const ours = sizingOf(state, column);
-  return maybe(startedAt(ours, column))
-    .map((from): TableState => trade({...ours, sizing: ours.sizing ?? {stage: 'keyed', column, from}}, column, neighbor, delta))
+  return startedAt(ours, column)
+    .map((from): TableState => trade({...ours, sizing: maybe(ours.sizing).orElse<Sizing>({stage: 'keyed', column, from})}, column, neighbor, delta))
     .orElse(ours);
 };
 
 const grip = (state: TableState, column: string, at: Grip): TableState => {
   const ours = sizingOf(state, column);
-  return maybe(startedAt(ours, column))
+  return startedAt(ours, column)
     .map((from): TableState => ({...ours, sizing: {stage: 'gripped', column, from, grip: at}}))
     .orElse(ours);
 };
 
 const pointerSizing = (sizing?: Sizing): PointerSizing | undefined =>
-  sizing?.stage === 'keyed' ? undefined : sizing;
+  has(sizing) && sizing.stage === 'keyed' ? undefined : sizing;
 
 const gripOf = (state: TableState, column: string): PointerSizing | undefined =>
-  state.sizing?.column === column ? pointerSizing(state.sizing) : undefined;
+  sizingFor(state, column).map(pointerSizing).orElse(undefined);
 
 const pointerHolds = (state: TableState, column: string): boolean =>
   maybe(gripOf(state, column)).map(() => true).orElse(false);
@@ -147,12 +150,13 @@ const ungripOf = (state: TableState, column: string): TableState =>
   maybe(gripOf(state, column)).map(() => endSizing(state)).orElse(state);
 
 const endKeyedSizingOf = (state: TableState, column: string): TableState =>
-  state.sizing?.column === column && state.sizing.stage === 'keyed' ? endSizing(state) : state;
+  sizingFor(state, column).map(sizing => sizing.stage === 'keyed' ? endSizing(state) : state).orElse(state);
 
 const endSizingOf = (state: TableState, column: string): TableState =>
-  state.sizing?.column === column ? endSizing(state) : state;
+  sizingFor(state, column).map(() => endSizing(state)).orElse(state);
 
-const namedShare = (state: TableState, column: string): number | undefined => startedAt(state, column);
+const namedShare = (state: TableState, column: string): number | undefined =>
+  startedAt(state, column).orElse(undefined);
 
 const unmarked = (state: TableState): TableState => ({...state, columnMarks: {}, rowMarks: {}});
 
@@ -200,10 +204,10 @@ const drift = (state: TableState, moving: Moving): TableState =>
   has(state.drag) ? {...state, drag: {...state.drag, drift: travel.drifted(moving, state.drag.origin)}} : state;
 
 const landColumn = (state: TableState, landing: Maybe<string>): TableState =>
-  state.drag?.axis === 'column' ? {...state, drag: {...state.drag, landing}} : state;
+  has(state.drag) && state.drag.axis === 'column' ? {...state, drag: {...state.drag, landing}} : state;
 
 const landRow = (state: TableState, landing: Maybe<string>): TableState =>
-  state.drag?.axis === 'row' ? {...state, drag: {...state.drag, landing}} : state;
+  has(state.drag) && state.drag.axis === 'row' ? {...state, drag: {...state.drag, landing}} : state;
 
 const orderAtLift = (drag: Drag): readonly string[] =>
   Object.keys(drag.axis === 'column' ? drag.survey.columnWidths : drag.survey.rowHeights);
@@ -225,7 +229,10 @@ const seatOffset = (
 };
 
 const settlingAt = (state: TableState, order: readonly string[], standing: readonly string[]): Settling =>
-  ({seat: seatOffset(state, order, standing) ?? travel.still, drift: state.drag?.drift ?? travel.still});
+  ({
+    seat: maybe(seatOffset(state, order, standing)).orElse(travel.still),
+    drift: maybe(state.drag).map(drag => drag.drift).orElse(travel.still)
+  });
 
 export type TableView = {
   readonly state: TableState;

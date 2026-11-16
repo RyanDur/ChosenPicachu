@@ -62,6 +62,7 @@ const harvardArtToArt = (record: HarvardArtResponse): Art => ({
   id: String(record.id),
   title: maybe(record.title).orElse('Untitled'),
   ...artFields.pictured(record.primaryimageurl),
-  ...artFields.attributed(record.people?.find(person => person.role === 'Artist')?.displayname),
+  ...maybe(record.people).mBind(people => maybe(people.find(person => person.role === 'Artist')))
+    .map(artist => artFields.attributed(artist.displayname)).orElse({}),
   altText: maybe(record.title).orElse('Untitled')
 });

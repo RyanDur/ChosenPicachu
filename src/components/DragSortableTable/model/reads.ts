@@ -14,14 +14,16 @@ const columnNamed = (name: string) => ({columns}: TableView): Maybe<TableColumn<
 
 const unknownColumn = (name: string): TableColumn<Labeled> => ({name, data: {label: name}});
 
-const widthOfColumn = (name: string) => ({state}: TableView): number | undefined => state.widths?.[name];
+const widthOfColumn = (name: string) => ({state}: TableView): number | undefined =>
+  maybe(state.widths).mBind(widths => maybe(widths[name])).orElse(undefined);
 
 const namedShareOfColumn = (name: string) => ({state}: TableView): number | undefined =>
   tableState.namedShare(state, name);
 
-const columnMarks = (name: string) => ({state}: TableView): Marks<ColumnShove> => state.columnMarks[name] ?? {};
+const columnMarks = (name: string) => ({state}: TableView): Marks<ColumnShove> =>
+  maybe(state.columnMarks[name]).orElse({});
 
-const rowMarks = (key: string) => ({state}: TableView): Marks<RowShove> => state.rowMarks[key] ?? {};
+const rowMarks = (key: string) => ({state}: TableView): Marks<RowShove> => maybe(state.rowMarks[key]).orElse({});
 
 const positionOfColumn = (name: string) => (view: TableView): number => order(view).indexOf(name);
 
@@ -36,10 +38,10 @@ const columnTravels = (name: string) => (view: TableView): boolean =>
 const neighborOfColumn = (name: string) => (view: TableView): string => shares.neighborOf(order(view), name);
 
 const columnDrag = (name: string) => ({state}: TableView): ColumnDrag | undefined =>
-  state.drag?.axis === 'column' && state.drag.held === name ? state.drag : undefined;
+  has(state.drag) && state.drag.axis === 'column' && state.drag.held === name ? state.drag : undefined;
 
 const rowDrag = (key: string) => ({state}: TableView): RowDrag | undefined =>
-  state.drag?.axis === 'row' && state.drag.held === key ? state.drag : undefined;
+  has(state.drag) && state.drag.axis === 'row' && state.drag.held === key ? state.drag : undefined;
 
 const columnHeld = (name: string) => (view: TableView): boolean => has(columnDrag(name)(view));
 
@@ -58,9 +60,11 @@ const seatOfColumn = (name: string) => (view: TableView): Drift | undefined =>
 const seatOfRow = (key: string) => (view: TableView): Drift | undefined =>
   rowHeld(key)(view) ? seatOffset(view) : undefined;
 
-const driftOfColumn = (name: string) => (view: TableView): Drift | undefined => columnDrag(name)(view)?.drift;
+const driftOfColumn = (name: string) => (view: TableView): Drift | undefined =>
+  maybe(columnDrag(name)(view)).map(drag => drag.drift).orElse(undefined);
 
-const driftOfRow = (key: string) => (view: TableView): Drift | undefined => rowDrag(key)(view)?.drift;
+const driftOfRow = (key: string) => (view: TableView): Drift | undefined =>
+  maybe(rowDrag(key)(view)).map(drag => drag.drift).orElse(undefined);
 
 const settlingOfColumnIn = (name: string, order: readonly string[]) => (view: TableView): Settling | undefined =>
   columnHeld(name)(view) ? tableState.settlingAt(view.state, order, standing(view)) : undefined;

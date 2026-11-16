@@ -1,4 +1,4 @@
-import {is, not} from '@ryandur/sand';
+import {is, maybe, not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {itemHeadedBy} from '@__test_support/headed-item';
@@ -21,7 +21,8 @@ export const recordPage = {
   title: (): HTMLElement => screen.getByRole('heading', {name: 'The record', level: 1}),
   findMomentTitle: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {name}),
   momentsTold: async (): Promise<string | undefined> =>
-    /one sentence said ([a-z-]+) ways/.exec((await screen.findByText(/one sentence said/)).textContent)?.[1],
+    maybe(/one sentence said ([a-z-]+) ways/.exec((await screen.findByText(/one sentence said/)).textContent))
+      .map(said => said[1]).orElse(undefined),
   paragraphOpening,
   argument: (): HTMLElement => screen.getByText(/^The home page says what each language is for/),
   parts: (): HTMLElement => screen.getByText(/^The page supports that in four parts/),
@@ -58,7 +59,7 @@ export const recordPage = {
     const shelf = research();
     return within(screen.getByRole('article')).getAllByRole('link', {hidden: true})
       .filter(link => not(shelf.contains(link)))
-      .map(link => link.getAttribute('href') ?? '')
+      .map(link => maybe(link.getAttribute('href')).orElse(''))
       .filter(source => new URL(source, window.location.href).origin !== window.location.origin);
   },
   openFullerStory,

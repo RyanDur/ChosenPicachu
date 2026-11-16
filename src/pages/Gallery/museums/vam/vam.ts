@@ -24,9 +24,12 @@ const vamRecordToArt = (record: VAMSearchRecord): Art => ({
   ...maybe(record._images).map(({_iiif_image_base_url: base}) => ({
     picture: {src: iiifImage(base, 800), srcSet: iiifSrcSet(base)}
   })).orElse({}),
-  ...artFields.attributed(record._primaryMaker?.name),
+  ...maybe(record._primaryMaker).map(maker => artFields.attributed(maker.name)).orElse({}),
   altText: record._primaryTitle || 'Untitled'
 });
+
+const titleOf = ({titles, objectType}: VAMArtResponse['record']): string =>
+  maybe(titles).mBind(all => maybe(all[0])).mBind(first => maybe(first.title)).orElse(objectType);
 
 const tipuSultan = '2009BY1329';
 
@@ -55,10 +58,12 @@ export const vam = {
     .mBind(decoded.by(vamSchema.art))
     .map(({record}: VAMArtResponse): Art => ({
       id: record.systemNumber,
-      title: maybe(record.titles?.[0]?.title).orElse(record.objectType),
-      ...maybe(record.images?.[0]).map(first => ({picture: {src: iiifImage(`https://framemark.vam.ac.uk/collections/${first}/`, 2000)}})).orElse({}),
-      ...artFields.attributed(record.artistMakerPerson?.[0]?.name.text),
-      altText: maybe(record.titles?.[0]?.title).orElse(record.objectType)
+      title: titleOf(record),
+      ...maybe(record.images).mBind(images => maybe(images[0]))
+        .map(first => ({picture: {src: iiifImage(`https://framemark.vam.ac.uk/collections/${first}/`, 2000)}})).orElse({}),
+      ...maybe(record.artistMakerPerson).mBind(makers => maybe(makers[0]))
+        .map(maker => artFields.attributed(maker.name.text)).orElse({}),
+      altText: titleOf(record)
     })),
 
   searchOptions: (search: string) => http

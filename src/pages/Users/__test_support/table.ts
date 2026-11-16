@@ -1,4 +1,4 @@
-import {is} from '@ryandur/sand';
+import {is, maybe} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -10,10 +10,10 @@ const rowOf = (name: string): Promise<HTMLElement> =>
 const rows = (): HTMLElement[] =>
   within(table()).getAllByRole('row').filter(row => is(within(row).queryByRole('rowheader')));
 
-const names = (): string[] => rows().map(row => within(row).getByRole('rowheader').textContent ?? '');
+const names = (): string[] => rows().map(row => within(row).getByRole('rowheader').textContent);
 
 const worksFromHome = (row: HTMLElement): string =>
-  ['Yes', 'No'].find(answer => is(within(row).queryByRole('cell', {name: answer}))) ?? '';
+  maybe(['Yes', 'No'].find(answer => is(within(row).queryByRole('cell', {name: answer})))).orElse('');
 
 const actionOn = async (name: string, action: string, role: 'link' | 'button'): Promise<void> =>
   userEvent.click(within(await rowOf(name)).getByRole(role, {name: action, hidden: true}));

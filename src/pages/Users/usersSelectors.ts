@@ -1,4 +1,4 @@
-import {Maybe, maybe} from '@ryandur/sand';
+import {has, Maybe, maybe} from '@ryandur/sand';
 import {arrangements, TableColumn} from '@components/DragSortableTable/model';
 import {User} from './profile';
 import {ColumnLabel, userColumns} from './columns';
@@ -11,7 +11,7 @@ const inOrder = (users: readonly User[], order: readonly string[]): readonly Use
   order.flatMap(id => users.filter(user => user.id === id));
 
 const valueOf = (users: readonly User[]) => (row: string, column: string) =>
-  userColumns.seated(users).find(({key}) => key === row)?.values[column];
+  maybe(userColumns.seated(users).find(({key}) => key === row)).map(seated => seated.values[column]).orElse(undefined);
 
 type UsersSelectors = {
   users: (state: UsersState) => readonly User[];
@@ -27,8 +27,8 @@ export const usersSelectors: UsersSelectors = {
   users: ({users, arrangement}) => inOrder(users, arrangements.standingOf(arrangement, valueOf(users))),
   columns: ({arrangement}) => arrangement.columns.map(name => ({
     name,
-    data: userColumns.all.find(column => column.name === name)?.data ?? {label: name},
-    sorted: arrangement.sort?.column === name ? arrangement.sort.direction : undefined
+    data: maybe(userColumns.all.find(column => column.name === name)).map(column => column.data).orElse({label: name}),
+    sorted: has(arrangement.sort) && arrangement.sort.column === name ? arrangement.sort.direction : undefined
   })),
   withId: id => ({users}) => maybe(users.find(user => user.id === id)),
   friendsReportOf: userId => ({friendsReports}) => maybe(friendsReports[userId]),
