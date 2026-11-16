@@ -1,7 +1,7 @@
 import {Locator, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {not} from '@ryandur/sand';
-import {clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, tablesDemo, twoFramesLater} from './__test_support';
+import {boxOf, clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, tablesDemo, twoFramesLater} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -15,7 +15,7 @@ const readers = [
 
 const desks = readers.filter(({use}) => not('hasTouch' in use));
 
-const topOf = async (part: Locator): Promise<number> => (await part.boundingBox())?.y ?? Number.NaN;
+const topOf = async (part: Locator): Promise<number> => (await boxOf(part)).y;
 
 for (const {reader, use} of readers) {
   test.describe(reader, () => {

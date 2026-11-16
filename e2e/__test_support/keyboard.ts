@@ -1,9 +1,10 @@
 import type {Locator, Page} from '@playwright/test';
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 
 // WebKit's Tab skips controls unless the system's keyboard navigation is on, and Alt+Tab reaches every one
 export const pressTab = (page: Page, {backwards = false} = {}): Promise<void> => {
-  const tab = page.context().browser()?.browserType().name() === 'webkit' ? 'Alt+Tab' : 'Tab';
+  const inWebKit = maybe(page.context().browser()).map(browser => browser.browserType().name() === 'webkit').orElse(false);
+  const tab = inWebKit ? 'Alt+Tab' : 'Tab';
   return page.keyboard.press(backwards ? `Shift+${tab}` : tab);
 };
 

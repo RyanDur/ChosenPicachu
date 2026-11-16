@@ -29,9 +29,9 @@ const looked = async (
   if (view.held) await page.route(view.held, () => new Promise(() => undefined));
   await page.goto(base + view.page.path);
   await page.getByRole(view.page.ready).first().waitFor();
-  await view.page.loaded?.(page).waitFor();
+  if (view.page.loaded) await view.page.loaded(page).waitFor();
   await settled();
-  await view.into?.(page);
+  if (view.into) await view.into(page);
   await settled();
   const look = await steadyLookOf(page);
   await context.close();

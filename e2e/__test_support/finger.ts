@@ -1,4 +1,4 @@
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import type {Locator, Page} from '@playwright/test';
 import {assertionPatience} from './patience';
 
@@ -33,7 +33,7 @@ export const foldsAFingerLeavesShut = async (page: Page, folds: Locator[]): Prom
     const bar = fold.getByText(/\S/).first();
     await fingerTap(page, bar);
     if (not(await opensWithinAMoment(page, fold))) {
-      shut.push(await bar.textContent() ?? '');
+      shut.push(maybe(await bar.textContent()).orElse(''));
     }
   }
   return shut;

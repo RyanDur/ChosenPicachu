@@ -1,4 +1,5 @@
 import {not} from '@ryandur/sand';
+import {boxOf} from './box';
 import type {Locator, Page} from '@playwright/test';
 import {siteFrame} from './site';
 
@@ -197,8 +198,8 @@ export const oldWayFoldLabels = async (page: Page): Promise<(string | undefined)
       toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? undefined : undefined));
 
 export const gapUnder = async (around: Locator, inside: Locator): Promise<number> => {
-  const [outer, inner] = await Promise.all([around.boundingBox(), inside.boundingBox()]);
-  return Math.abs((outer?.y ?? 0) + (outer?.height ?? 0) - (inner?.y ?? Infinity) - (inner?.height ?? 0));
+  const [outer, inner] = await Promise.all([boxOf(around), boxOf(inside)]);
+  return Math.abs(outer.y + outer.height - inner.y - inner.height);
 };
 
 const plainFoldTitle = 'A fold measured by plain script';
@@ -231,8 +232,8 @@ export const plainFold = (page: Page) => {
     },
     gapUnderItsText: (): Promise<number> => gapUnder(panel, text),
     textBelowTheFrame: async (): Promise<number> => {
-      const [around, inner] = await Promise.all([frame.boundingBox(), text.boundingBox()]);
-      return (inner?.y ?? Infinity) + (inner?.height ?? 0) - (around?.y ?? 0) - (around?.height ?? 0);
+      const [around, inner] = await Promise.all([boxOf(frame), boxOf(text)]);
+      return inner.y + inner.height - around.y - around.height;
     }
   };
 };

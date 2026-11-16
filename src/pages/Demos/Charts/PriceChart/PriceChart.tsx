@@ -47,7 +47,7 @@ type Props = {
 export const PriceChart: FC<PropsWithChildren<Props>> = ({id: given, children}) => {
   const trades = useMarketRead(marketReads.liveTrades);
   const generated = useId();
-  const id = given ?? `price${generated}`;
+  const id = maybe(given).orElse(`price${generated}`);
   const {period, fetchedPast, bucketMilliseconds, candles} = useShownCandles('price');
   const view = viewOf(candles, trades[trades.length - 1]);
   const points =

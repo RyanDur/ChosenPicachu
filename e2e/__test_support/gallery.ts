@@ -1,7 +1,7 @@
 import type {Locator, Page} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 import * as schema from 'schemawax';
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import {assertionPatience} from './patience';
 
 const stageAnswers = schema.array(schema.object({
@@ -42,7 +42,7 @@ export const galleryPage = (page: Page) => {
       const missing: string[] = [];
       for (const work of await wall.all()) {
         await work.scrollIntoViewIfNeeded();
-        const alt = await work.getByRole('img', {includeHidden: true}).first().getAttribute('alt') ?? '';
+        const alt = maybe(await work.getByRole('img', {includeHidden: true}).first().getAttribute('alt')).orElse('');
         const shown = await work.getByRole('img', {name: alt, exact: true}).waitFor({state: 'visible', timeout: assertionPatience})
           .then(() => true, () => false);
         if (not(shown)) {

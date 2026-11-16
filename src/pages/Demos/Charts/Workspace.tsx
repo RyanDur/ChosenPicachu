@@ -30,7 +30,8 @@ const doorway = (kind: ChartKind): string => generatePath(Paths.chartTutorial, {
 
 const doorwayAt = (at: number, pressed: Element): Maybe<HTMLElement> =>
   maybe(pressed.closest('li'))
-    .mBind(removed => maybe(removed.parentElement?.children[at]))
+    .mBind(removed => maybe(removed.parentElement))
+    .mBind(list => maybe(list.children[at]))
     .mBind(neighbor => maybe([...neighbor.children].find(child => child instanceof HTMLAnchorElement)));
 
 type Props = {
