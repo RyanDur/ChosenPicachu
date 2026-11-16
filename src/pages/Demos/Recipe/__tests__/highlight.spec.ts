@@ -11,11 +11,12 @@ describe('the code voice', () => {
     expect(kinds('TS', '<p>{/* note */}</p>')['{/* note */}']).toBe('comment');
   });
 
-  it('reads a JSX comment and an HTML comment in markup as comments', () => {
-    const found = kinds('HTML', '<p>{/* note */}</p><!-- aside -->');
+  it('reads a JSX comment in markup as a comment', () => {
+    expect(kinds('HTML', '<p>{/* note */}</p>')['{/* note */}']).toBe('comment');
+  });
 
-    expect(found['{/* note */}']).toBe('comment');
-    expect(found['<!-- aside -->']).toBe('comment');
+  it('reads an HTML comment in markup as a comment', () => {
+    expect(kinds('HTML', '<p>text</p><!-- aside -->')['<!-- aside -->']).toBe('comment');
   });
 
   it('reads a JSX line the way an editor does: tags, props and strings', () => {
