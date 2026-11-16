@@ -1,23 +1,29 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {dragSortTable, type FingerPress, iPadUpright, iPhone, type Stage, stages, stagesWith} from './__test_support';
+import {dragSortTable, type FingerPress, iPadUpright, iPhone, type Stage, stages, stageWith} from './__test_support';
 
-for (const {name, at, table} of [...stagesWith('origin=keep'), ...stagesWith('origin=hide')]) {
-  test(`a trader drags a column and a row into new seats without the page erring, in ${name}`, async ({page}) => {
-    const troubles: string[] = [];
-    page.on('pageerror', error => troubles.push(String(error)));
-    await page.goto(at);
-    const trades = dragSortTable(page, table(page));
-    await expect(trades.columnHeader('trades')).toBeVisible();
+const aTraderDragsAColumnAndARow = async (page: Page, {at, table}: Stage): Promise<void> => {
+  const troubles: string[] = [];
+  page.on('pageerror', error => troubles.push(String(error)));
+  await page.goto(at);
+  const trades = dragSortTable(page, table(page));
+  await expect(trades.columnHeader('trades')).toBeVisible();
 
-    await trades.dragColumnPast('trades', 'vwap');
-    await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+  await trades.dragColumnPast('trades', 'vwap');
+  await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
 
-    await trades.dragRowPast(1, /last 15 minutes/);
-    await expect.poll(() => trades.rowOrder()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
+  await trades.dragRowPast(1, /last 15 minutes/);
+  await expect.poll(() => trades.rowOrder()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
 
-    expect(troubles).toEqual([]);
-  });
+  expect(troubles).toEqual([]);
+};
+
+for (const stage of stages) {
+  test(`a trader drags a column and a row into new seats without the page erring, with the origin kept, in ${stage.name}`,
+    ({page}) => aTraderDragsAColumnAndARow(page, stageWith(stage, 'origin=keep')));
+
+  test(`a trader drags a column and a row into new seats without the page erring, with the origin hidden, in ${stage.name}`,
+    ({page}) => aTraderDragsAColumnAndARow(page, stageWith(stage, 'origin=hide')));
 }
 
 for (const {name, at, table} of stages) {
