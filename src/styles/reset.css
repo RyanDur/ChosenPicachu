@@ -127,9 +127,14 @@ details::details-content {
   overflow-x: visible;
   overflow-y: clip;
   overflow-clip-margin: var(--hairline-x-3);
-  transition:
-    block-size .3s ease-in-out,
-    content-visibility .3s allow-discrete;
+}
+
+@supports (interpolate-size: allow-keywords) {
+  details::details-content {
+    transition:
+      block-size .3s ease-in-out,
+      content-visibility .3s allow-discrete;
+  }
 }
 
 details[open]::details-content {
