@@ -341,6 +341,10 @@ describe('the code voice', () => {
     expect(constOnTheLineAfter('const o = {/* none */ a: 1};')).toBe('keyword');
   });
 
+  it('reads a quote after a greater-than as a string', () => {
+    expect(kinds('TS', 'if (x > \'a\') go();')['\'a\'']).toBe('string');
+  });
+
   it('opens an element right after a word when it has an attribute', () => {
     expect(kinds('TS', 'Home<b title="x">').b).toBe('tag');
   });
