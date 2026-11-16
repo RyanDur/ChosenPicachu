@@ -19,8 +19,6 @@ const config = [{
 
 const fixed = code => linter.verifyAndFix(code, config, {filename: 'prose.jsx'}).output;
 
-// The text a reader meets: Vite's own compiler turns the JSX into calls with the language's whitespace rules, and
-// each element renders its children's text.
 const rendered = code => {
   const compiled = transformSync('prose.jsx', code, {jsx: {runtime: 'classic'}}).code;
   const React = {createElement: (_, __, ...children) => children.flat().join('')};

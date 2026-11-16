@@ -21,11 +21,11 @@ const wordsOf = html => {
   document.querySelectorAll(blockBoundaries).forEach(block => block.append('\n'));
   /** @type {Element[]} */
   const elements = [...document.querySelectorAll('*')];
-  const named = elements.flatMap(element => wordsInAttributes
+  const attributeWords = elements.flatMap(element => wordsInAttributes
     .map(attribute => element.getAttribute(attribute) ?? '')
     .concat(element.matches('input, textarea') ? [element.getAttribute('value') ?? ''] : []));
   const description = document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
-  return [document.title, description, document.body.textContent, ...named].join('\n').split(/\s+/).filter(word => has(word));
+  return [document.title, description, document.body.textContent, ...attributeWords].join('\n').split(/\s+/).filter(word => has(word));
 };
 
 const wordsOfContext = 6;
