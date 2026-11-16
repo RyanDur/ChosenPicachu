@@ -13,6 +13,8 @@ const openFullerStory = async (title: string): Promise<void> =>
   userEvent.click(within(itemHeadedBy('the timeline', title)).getByText('the fuller story'));
 const timeline = (): HTMLElement => screen.getByRole('list', {name: 'the timeline'});
 const shelvedWorks = (): HTMLElement[] => within(research()).getAllByRole('listitem', {hidden: true});
+const momentLinkUnder = (heading: string, title: string, name: string): HTMLElement =>
+  within(itemHeadedBy(heading, title)).getByRole('link', {name, hidden: true});
 
 export const recordPage = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
@@ -38,10 +40,8 @@ export const recordPage = {
     .map(link => [link.textContent, link.getAttribute('href')]),
   followConcertLink: async (name: string): Promise<void> =>
     userEvent.click(within(concert()).getByRole('link', {name})),
-  bridgeLink: (name: string): HTMLElement => screen.getByRole('link', {name}),
-  citation: (name: string | RegExp): HTMLElement => screen.getByRole('link', {name}),
-  citations: (name: string): HTMLElement[] => screen.getAllByRole('link', {name}),
-  quotationLink: (name: string): HTMLElement => screen.getByRole('link', {name, hidden: true}),
+  signpost: (name: string | RegExp): HTMLElement => screen.getByRole('link', {name}),
+  signposts: (name: string): HTMLElement[] => screen.getAllByRole('link', {name}),
   timelineHeading: (): HTMLElement => screen.getByRole('heading', {level: 2, name: 'How the web got its languages'}),
   timelineDates: (): string[] => within(timeline()).getAllByRole('time').map(date => date.textContent),
   timelineTitles: (): string[] => within(timeline()).getAllByRole('heading', {level: 3}).map(title => title.textContent),
@@ -62,10 +62,8 @@ export const recordPage = {
       .filter(source => new URL(source, window.location.href).origin !== window.location.origin);
   },
   openFullerStory,
-  momentLink: (title: string, name: string): HTMLElement =>
-    within(itemHeadedBy('the timeline', title)).getByRole('link', {name, hidden: true}),
-  momentLinkUnder: (heading: string, title: string, name: string): HTMLElement =>
-    within(itemHeadedBy(heading, title)).getByRole('link', {name, hidden: true}),
+  momentLink: (title: string, name: string): HTMLElement => momentLinkUnder('the timeline', title, name),
+  momentLinkUnder,
   momentLinksUnder: (heading: string, title: string, name: string): HTMLElement[] =>
     within(itemHeadedBy(heading, title)).getAllByRole('link', {name, hidden: true}),
   followFromMoment: async (title: string, name: string): Promise<void> => {
