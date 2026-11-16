@@ -5,7 +5,6 @@ import {theTrap} from './trap';
 const unchosen = 'Sort by, the old way';
 const findButton = async (name: string = unchosen): Promise<HTMLElement> =>
   within(await theTrap.find()).findByRole('button', {name});
-const cardOneBox = (): Promise<HTMLElement> => screen.findByRole('checkbox', {name: 'Card one has z-index: 1'});
 
 export const oldWayMenu = {
   findButton,
@@ -21,7 +20,5 @@ export const oldWayMenu = {
   currentChoice: (): HTMLElement => screen.getByRole('menuitem', {current: true}),
   queryMenu: (): HTMLElement | null => screen.queryByRole('menu'),
   whereItOpened: (): HTMLElement => screen.getByRole('status', {name: 'where the list opened'}),
-  findWhereItOpened: (): Promise<HTMLElement> => screen.findByRole('status', {name: 'where the list opened'}),
-  cardOneBox,
-  toggleCardOne: async (): Promise<void> => userEvent.click(await cardOneBox())
+  findWhereItOpened: (): Promise<HTMLElement> => screen.findByRole('status', {name: 'where the list opened'})
 };

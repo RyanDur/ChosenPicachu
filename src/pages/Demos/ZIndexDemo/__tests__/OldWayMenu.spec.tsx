@@ -128,7 +128,7 @@ describe('the card that traps the menu', () => {
     await oldWayMenu.open();
     await oldWayMenu.press('{Escape}');
 
-    await oldWayMenu.toggleCardOne();
+    await theTrap.toggleCardOne();
 
     expect(oldWayMenu.whereItOpened()).toBeEmptyDOMElement();
   });
@@ -152,7 +152,7 @@ describe('the card that traps the menu', () => {
 
   test('should say the list opened over card two once the box is unchecked, and write it into the address', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
-    await oldWayMenu.toggleCardOne();
+    await theTrap.toggleCardOne();
 
     await oldWayMenu.open();
 
@@ -165,7 +165,7 @@ describe('the card that traps the menu', () => {
     await oldWayMenu.open();
     await oldWayMenu.press('{Escape}');
 
-    await oldWayMenu.toggleCardOne();
+    await theTrap.toggleCardOne();
     await oldWayMenu.open();
 
     expect(oldWayMenu.whereItOpened()).toHaveTextContent(under);
@@ -174,7 +174,7 @@ describe('the card that traps the menu', () => {
   test('should open freed when the address says so', async () => {
     render(<TestApp at={demosAt('z-index', '?card-one=free')}/>);
 
-    expect(await oldWayMenu.cardOneBox()).not.toBeChecked();
+    expect(theTrap.cardOneHasZIndexBox(await theTrap.find())).not.toBeChecked();
   });
 });
 
