@@ -3,7 +3,7 @@ import {changesBetween, summaryOf} from '../pages-summary.mjs';
 const page = (main, head = '') =>
   `<html lang="en"><head>${head}</head><body><header>ChosenPicachu</header><main>${main}</main></body></html>`;
 
-const one = (path, before, after) => changesBetween({[path]: before}, {[path]: after});
+const one = (path, onMain, onPull) => changesBetween({[path]: onMain}, {[path]: onPull});
 
 describe('the pages summary', () => {
   test('a page whose words change is listed with the words before and after', () => {
@@ -12,8 +12,8 @@ describe('the pages summary', () => {
       page('<p>A row moves when you drag its handle.</p>'));
 
     expect(change.kind).toBe('words');
-    expect(change.before).toContain('drag it.');
-    expect(change.after).toContain('drag its handle.');
+    expect(change.onMain).toContain('drag it.');
+    expect(change.onPull).toContain('drag its handle.');
   });
 
   test('a wrapper around words that come before a block changes only markup', () => {
@@ -123,11 +123,11 @@ describe('the pages summary', () => {
     const [change] = one('index.html', page(`<header>old</header><p>${many}</p><footer>old</footer>`),
       page(`<header>new</header><p>${many}</p><footer>new</footer>`));
 
-    expect(change.before.split(' ').length).toBeLessThanOrEqual(41);
+    expect(change.onMain.split(' ').length).toBeLessThanOrEqual(41);
   });
 
   test('a tag or a mark in the words is shown as written, not rendered', () => {
-    const summary = summaryOf([{page: 'index.html', kind: 'words', before: 'the <details> *x*', after: 'a & b'}], 1);
+    const summary = summaryOf([{page: 'index.html', kind: 'words', onMain: 'the <details> *x*', onPull: 'a & b'}], 1);
 
     expect(summary).toContain('“the &lt;details&gt; \\*x\\*” → “a &amp; b”');
   });
@@ -140,7 +140,7 @@ describe('the pages summary', () => {
 
   test('a summary names each changed page under what changed, and counts the rest as the same', () => {
     const summary = summaryOf([
-      {page: 'demos/tables/index.html', kind: 'words', before: '…drag it.', after: '…drag its handle.'},
+      {page: 'demos/tables/index.html', kind: 'words', onMain: '…drag it.', onPull: '…drag its handle.'},
       {page: 'users/index.html', kind: 'markup'}
     ], 24);
 

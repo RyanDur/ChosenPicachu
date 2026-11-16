@@ -48,29 +48,29 @@ const excerpt = (words, start, end) => {
   return `${start > 0 ? '…' : ''}${words.slice(start, shown).join(' ')}${shown < words.length ? '…' : ''}`;
 };
 
-const wordChange = (before, after) => {
-  const lead = matchingLeadCount(before, after);
-  const tail = matchingLeadCount(before.slice(lead).reverse(), after.slice(lead).reverse());
+const wordChange = (onMain, onPull) => {
+  const lead = matchingLeadCount(onMain, onPull);
+  const tail = matchingLeadCount(onMain.slice(lead).reverse(), onPull.slice(lead).reverse());
   const start = Math.max(0, lead - wordsOfContext);
   return {
-    before: excerpt(before, start, Math.min(before.length, before.length - tail + wordsOfContext)),
-    after: excerpt(after, start, Math.min(after.length, after.length - tail + wordsOfContext))
+    onMain: excerpt(onMain, start, Math.min(onMain.length, onMain.length - tail + wordsOfContext)),
+    onPull: excerpt(onPull, start, Math.min(onPull.length, onPull.length - tail + wordsOfContext))
   };
 };
 
-const changeOf = (page, before, after) => {
-  if (empty(before)) return {page, kind: 'new'};
-  if (empty(after)) return {page, kind: 'gone'};
-  const [was, is] = [steady(before), steady(after)];
+const changeOf = (page, onMain, onPull) => {
+  if (empty(onMain)) return {page, kind: 'new'};
+  if (empty(onPull)) return {page, kind: 'gone'};
+  const [was, is] = [steady(onMain), steady(onPull)];
   if (was === is) return undefined;
   const [wordsWere, wordsAre] = [wordsOf(was), wordsOf(is)];
   if (wordsWere.join(' ') === wordsAre.join(' ')) return {page, kind: 'markup'};
   return {page, kind: 'words', ...wordChange(wordsWere, wordsAre)};
 };
 
-export const changesBetween = (before, after) => [...new Set([...Object.keys(before), ...Object.keys(after)])]
+export const changesBetween = (onMain, onPull) => [...new Set([...Object.keys(onMain), ...Object.keys(onPull)])]
   .sort()
-  .map(page => changeOf(page, before[page], after[page]))
+  .map(page => changeOf(page, onMain[page], onPull[page]))
   .filter(change => has(change));
 
 const literally = words => words
@@ -86,7 +86,7 @@ export const summaryOf = (changes, total) => {
   const changesOfKind = kind => changes.filter(change => change.kind === kind);
   return [
     `## pages: ${changes.length} of ${total} changed`,
-    ...headedList('words changed', changesOfKind('words').map(({page, before, after}) => `- **${named(page)}**: “${literally(before)}” → “${literally(after)}”`)),
+    ...headedList('words changed', changesOfKind('words').map(({page, onMain, onPull}) => `- **${named(page)}**: “${literally(onMain)}” → “${literally(onPull)}”`)),
     ...headedList('markup changed, words the same', changesOfKind('markup').map(({page}) => `- ${named(page)}`)),
     ...headedList('new pages', changesOfKind('new').map(({page}) => `- ${named(page)}`)),
     ...headedList('pages gone', changesOfKind('gone').map(({page}) => `- ${named(page)}`)),
@@ -102,7 +102,7 @@ const pagesIn = folder => Object.fromEntries(readdirSync(folder, {recursive: tru
 
 if (import.meta.main) {
   const [, , beforeFolder, afterFolder] = process.argv;
-  const [before, after] = [pagesIn(beforeFolder), pagesIn(afterFolder)];
-  const total = new Set([...Object.keys(before), ...Object.keys(after)]).size;
-  process.stdout.write(summaryOf(changesBetween(before, after), total));
+  const [onMain, onPull] = [pagesIn(beforeFolder), pagesIn(afterFolder)];
+  const total = new Set([...Object.keys(onMain), ...Object.keys(onPull)]).size;
+  process.stdout.write(summaryOf(changesBetween(onMain, onPull), total));
 }

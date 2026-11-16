@@ -32,6 +32,12 @@ const sharingRefusals = (changed, others) => others.flatMap(other => {
   return has(shared) ? [`#${other.number} already changes ${shared.join(', ')}. That work goes to #${other.number}’s owner.`] : [];
 });
 
+/**
+ * @param {string} branch
+ * @param {Pull[]} pulls
+ */
+const ownPull = (branch, pulls) => pulls.find(({headRefName}) => headRefName === branch);
+
 /** @param {string} branch */
 const fixesMain = branch => branch.startsWith('verify/main-');
 
@@ -40,7 +46,7 @@ const fixesMain = branch => branch.startsWith('verify/main-');
  * @return {string[]}
  */
 export const refusals = ({branch, changed, pulls, checks}) => {
-  const own = pulls.find(({headRefName}) => headRefName === branch);
+  const own = ownPull(branch, pulls);
   if (has(own)) return runRefusals(own, checks);
   return fixesMain(branch) ? [] : sharingRefusals(changed, pulls);
 };
@@ -68,19 +74,18 @@ export const checksOf = (branch, run = outputOf) => {
 };
 
 /**
- * gh lists at most a hundred files a pull request, so a larger one is read from its diff.
+ * gh lists at most a hundred files a pull request, so a larger one's files are read page by page.
+ * @param {Pull} pull
  * @param {Run} run
- * @return {Pull[]}
+ * @return {Pull}
  */
-const pullsOf = run => {
-  /** @type {Pull[]} */
-  const listed = JSON.parse(run('gh', 'pr', 'list', '--state', 'open', '--limit', '1000', '--json', 'number,headRefName,files,changedFiles'));
-  return listed.map(pull => maybe(pull.changedFiles).orElse(0) > pull.files.length
-    ? {...pull, files: run('gh', 'pr', 'diff', String(pull.number), '--name-only').split('\n').filter(path => has(path)).map(path => ({path}))}
-    : pull);
-};
+const everyFileOf = (pull, run) => maybe(pull.changedFiles).orElse(0) > pull.files.length
+  ? {...pull, files: run('gh', 'api', '--paginate', `repos/{owner}/{repo}/pulls/${pull.number}/files`, '--jq', '.[].filename')
+    .split('\n').filter(path => has(path)).map(path => ({path}))}
+  : pull;
 
 /**
+ * A branch whose pull request is open needs only its checks, so it reads nothing else.
  * @param {string} branch
  * @param {string} pushed
  * @param {Run} run
@@ -88,11 +93,14 @@ const pullsOf = run => {
  */
 export const clearToPush = (branch, pushed, run = outputOf) => {
   try {
-    const pulls = pullsOf(run);
+    /** @type {Pull[]} */
+    const pulls = JSON.parse(run('gh', 'pr', 'list', '--state', 'open', '--limit', '1000', '--json', 'number,headRefName,files,changedFiles'));
+    const own = ownPull(branch, pulls);
+    if (has(own)) return {refused: runRefusals(own, checksOf(branch, run))};
+    if (fixesMain(branch)) return {refused: []};
     run('git', 'fetch', '--quiet', 'origin', 'main');
     const changed = run('git', 'diff', '--name-only', '--no-renames', `origin/main...${pushed}`).split('\n').filter(path => has(path));
-    const opened = pulls.some(({headRefName}) => headRefName === branch);
-    return {refused: refusals({branch, changed, pulls, checks: opened ? checksOf(branch, run) : []})};
+    return {refused: refusals({branch, changed, pulls: pulls.map(pull => everyFileOf(pull, run)), checks: []})};
   } catch (error) {
     const printed = maybe(error.stderr).map(stderr => String(stderr).trim()).orElse('');
     return {refused: [], unread: has(printed) ? printed : error.message.split('\n')[0]};
@@ -101,7 +109,7 @@ export const clearToPush = (branch, pushed, run = outputOf) => {
 
 if (import.meta.main) {
   const [, , pushedTo, pushed = 'HEAD'] = process.argv;
-  const {refused, unread} = clearToPush(pushedTo ?? outputOf('git', 'branch', '--show-current'), pushed);
+  const {refused, unread} = clearToPush(has(pushedTo) ? pushedTo : outputOf('git', 'branch', '--show-current'), pushed);
   if (has(unread)) console.error(`pre-push: the open pull requests couldn't be checked (${unread}).`);
   refused.forEach(reason => console.error(`pre-push: ${reason}`));
   process.exitCode = has(refused) ? 1 : 0;
