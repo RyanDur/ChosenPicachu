@@ -24,9 +24,8 @@ const plainlyAnElement = /^<[A-Za-z][\w.:-]*(?:\s+[A-Za-z][\w-]*=|\s*\/>)/;
 const typeParameters = /^<(?:(?:const|in|out)\s+)?[A-Za-z_$][\w$]*(?:\s+extends\b|\s*,|>\s*\()/;
 
 const endOfQuoted = (text: string, from: number, quote: string): number => {
-  const crossesLines = quote === '`';
   let at = from + 1;
-  while (at < text.length && text[at] !== quote && (crossesLines || text[at] !== '\n')) at += text[at] === '\\' ? 2 : 1;
+  while (at < text.length && text[at] !== quote && text[at] !== '\n') at += text[at] === '\\' ? 2 : 1;
   return text[at] === quote ? at + 1 : Math.min(at, text.length);
 };
 
