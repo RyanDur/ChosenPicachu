@@ -68,6 +68,12 @@ tester.run('breaks-between-words', prose.rules['breaks-between-words'], {
       errors: [{messageId: 'beside'}]
     },
     {
+      name: 'should leave a space held on its own line after an element to a person',
+      code: 'const said = <p>\n  <code className="monospaced">read</code>\n  {\' \'}\n  read read\n</p>;',
+      output: null,
+      errors: [{messageId: 'beside'}]
+    },
+    {
       name: 'should join across a blank line to the next line with content',
       code: 'const said = <p>\n  read the{\' \'}\n\n  <b>record</b>\n</p>;',
       output: 'const said = <p>\n  read the <b>record</b>\n</p>;',
