@@ -48,11 +48,10 @@ describe('the old banner', () => {
   test('should leave when dismissed by keyboard, and give focus back to the button that raised it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
     await oldBanner.raiseByKeyboard();
-    await oldBanner.tab();
-    await oldBanner.tab();
+    await oldBanner.tabToDismiss();
     expect(oldBanner.dismissButton()).toHaveFocus();
 
-    await oldBanner.pressEnter();
+    await oldBanner.dismissByKeyboard();
 
     expect(oldBanner.standing()).not.toBeInTheDocument();
     expect(oldBanner.raiser()).toHaveFocus();

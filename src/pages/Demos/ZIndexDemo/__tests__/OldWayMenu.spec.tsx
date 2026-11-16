@@ -25,16 +25,16 @@ describe('the menu built the old way', () => {
     render(<TestApp at={demosAt('z-index')}/>);
     await oldWayMenu.focusButton();
 
-    await oldWayMenu.press('{Enter}');
-    await oldWayMenu.press('{ArrowDown}');
+    await oldWayMenu.openWithEnter();
+    await oldWayMenu.next();
     expect(oldWayMenu.choice('date')).toHaveFocus();
-    await oldWayMenu.press('{End}');
+    await oldWayMenu.last();
     expect(oldWayMenu.choice('size')).toHaveFocus();
-    await oldWayMenu.press('{ArrowDown}');
+    await oldWayMenu.next();
     expect(oldWayMenu.choice('name')).toHaveFocus();
-    await oldWayMenu.press('{ArrowUp}');
+    await oldWayMenu.previous();
     expect(oldWayMenu.choice('size')).toHaveFocus();
-    await oldWayMenu.press('{Home}');
+    await oldWayMenu.first();
     expect(oldWayMenu.choice('name')).toHaveFocus();
   });
 
@@ -42,7 +42,9 @@ describe('the menu built the old way', () => {
     render(<TestApp at={demosAt('z-index')}/>);
     await oldWayMenu.focusButton();
 
-    await oldWayMenu.press('{Enter}{ArrowDown}{Enter}');
+    await oldWayMenu.openWithEnter();
+    await oldWayMenu.next();
+    await oldWayMenu.takeByKeyboard();
 
     expect(oldWayMenu.queryMenu()).not.toBeInTheDocument();
     expect(await oldWayMenu.findButton('Sort by: date, the old way')).toHaveFocus();
@@ -62,7 +64,7 @@ describe('the menu built the old way', () => {
     render(<TestApp at={demosAt('z-index')}/>);
     await oldWayMenu.open();
 
-    await oldWayMenu.press('{Escape}');
+    await oldWayMenu.close();
 
     expect(oldWayMenu.queryMenu()).not.toBeInTheDocument();
     expect(await oldWayMenu.findButton()).toHaveFocus();
@@ -72,7 +74,7 @@ describe('the menu built the old way', () => {
     render(<TestApp at={demosAt('z-index')}/>);
     await oldWayMenu.focusButton();
 
-    await oldWayMenu.press('{ArrowDown}');
+    await oldWayMenu.openWithArrowDown();
 
     expect(oldWayMenu.choice('name')).toHaveFocus();
   });
@@ -126,7 +128,7 @@ describe('the card that traps the menu', () => {
   test('should take back what it said when the box changes, since the next press answers', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
     await oldWayMenu.open();
-    await oldWayMenu.press('{Escape}');
+    await oldWayMenu.close();
 
     await theTrap.toggleCardOne();
 
@@ -145,7 +147,7 @@ describe('the card that traps the menu', () => {
     render(<TestApp at={demosAt('z-index')}/>);
     await oldWayMenu.focusButton();
 
-    await oldWayMenu.press('{ArrowDown}');
+    await oldWayMenu.openWithArrowDown();
 
     expect(oldWayMenu.whereItOpened()).toHaveTextContent(under);
   });
@@ -163,7 +165,7 @@ describe('the card that traps the menu', () => {
   test('should say the list opened under card two again once the box is checked again', async () => {
     render(<TestApp at={demosAt('z-index', '?card-one=free')}/>);
     await oldWayMenu.open();
-    await oldWayMenu.press('{Escape}');
+    await oldWayMenu.close();
 
     await theTrap.toggleCardOne();
     await oldWayMenu.open();
