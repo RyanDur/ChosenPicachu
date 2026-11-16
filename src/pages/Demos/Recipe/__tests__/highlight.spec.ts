@@ -405,6 +405,18 @@ describe('the code voice', () => {
     expect(kinds('TS', 'const ticked = !/`/.test(s), t = `a`;')['`a`']).toBe('string');
   });
 
+  it('reads a slash after a property named like a keyword as a division, so a string after it is a string', () => {
+    expect(kinds('TS', 'const half = range.from / 2; const s = "q";')['"q"']).toBe('string');
+  });
+
+  it('reads a slash after a name that ends in a keyword as a division, so a string after it is a string', () => {
+    expect(kinds('TS', 'const half = datafrom / 2; const s = "q";')['"q"']).toBe('string');
+  });
+
+  it('reads a slash after a dollar name that ends in a keyword as a division, so a string after it is a string', () => {
+    expect(kinds('TS', 'const half = $from / 2; const s = "q";')['"q"']).toBe('string');
+  });
+
   it('opens an element whose text starts with a parenthesis, and reads the line after it as code', () => {
     expect(constOnTheLineAfter('return <p>(press ` to open)</p>;')).toBe('keyword');
   });

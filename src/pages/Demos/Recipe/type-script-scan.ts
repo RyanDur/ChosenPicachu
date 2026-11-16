@@ -18,7 +18,7 @@ type MarkupTextState = {within: 'text'; open: number};
 type TemplateLiteralState = {within: 'template'; from: number};
 type ScanState = CodeState | TagState | MarkupTextState | TemplateLiteralState;
 
-const valueCanStart = new RegExp(String.raw`(?:^|[([{=,:;?!&|+\-*/%<>~]|\.\.\.|\b(?:${typeScriptWords.beforeAValue.join('|')}))\s*$`);
+const valueCanStart = new RegExp(String.raw`(?:^|[([{=,:;?!&|+\-*/%<>~]|\.\.\.|(?<![.$\w])(?:${typeScriptWords.beforeAValue.join('|')}))\s*$`);
 const valueEnded = /(?:\+\+|--|[\w)\]]!)\s*$/;
 const elementCanStart = /(?:^|\s|[>([{}=,:;?!&|+\-*/%])$/;
 const plainlyAnElement = /^<[A-Za-z][\w.:-]*(?:\s+[A-Za-z][\w-]*=|\s*\/>)/;
