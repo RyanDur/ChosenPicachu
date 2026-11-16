@@ -30,15 +30,15 @@ const reseat = ({body, lanes, standing}: Pick<MountedTable, 'body' | 'lanes' | '
     return;
   }
   keepingFocus(maybe(body.ownerDocument.activeElement), () =>
-    next.forEach((row, at) =>
+    next.forEach((row, seat) =>
       maybe(lanes.get(row)).map(desired => {
-        if (body.children[at] !== desired) {
-          body.insertBefore(desired, body.children[at] ?? null);
+        if (body.children[seat] !== desired) {
+          body.insertBefore(desired, body.children[seat] ?? null);
         }
       })));
-  next.forEach((row, at) =>
+  next.forEach((row, seat) =>
     maybe(lanes.get(row)?.querySelector('[data-row-grip]')).map(button => {
-      const label = grip.label(at);
+      const label = grip.label(seat);
       if (button.getAttribute('aria-label') !== label) {
         button.setAttribute('aria-label', label);
       }

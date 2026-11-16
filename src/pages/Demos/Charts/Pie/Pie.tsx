@@ -53,9 +53,9 @@ export const Pie: FC<PropsWithChildren> = ({children}) => {
         }))}
       </svg>
       <ul className="legend caption">
-        {cut.map((wedge, at) =>
+        {cut.map((wedge, seat) =>
           <li key={wedge.side} className={classNames(sideOf[wedge.side], 'side-ink', wedge.side)}>
-            <data value={wedge.share}>{`${percents[at]}% ${wedge.side}`}</data>
+            <data value={wedge.share}>{`${percents[seat]}% ${wedge.side}`}</data>
           </li>)}
       </ul>
       <figcaption className="chart-caption caption">

@@ -62,7 +62,7 @@ export const OrderInState: FC<{tableSource: Sample; buildSource: Sample}> = ({ta
           ]}/>
           <Snippet label="TS" lines={[
             ...carve.between(sources.frameRows, 'const reseat = ',
-              'body.insertBefore(desired, body.children[at] ?? null);'),
+              'body.insertBefore(desired, body.children[seat] ?? null);'),
             lines.aside('// the same lane, its new seat: the reconcile moves the node, not a copy')
           ]}/>
         </Codes>}
