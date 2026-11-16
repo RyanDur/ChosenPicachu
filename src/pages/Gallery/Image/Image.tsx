@@ -20,8 +20,12 @@ type ImageProps = PropsWithClassName<{
   lazy?: boolean;
 }>;
 
-const Framed: FC<PropsWithChildren<{link: Maybe<string>; title: string}>> = ({link, title, children}) => link.either(
-  to => <Link to={to} aria-label={title} className="scrim looking-glassed liftable">{children}</Link>,
+const Framed: FC<PropsWithChildren<{link: Maybe<string>; linkName: string}>> = ({
+  link,
+  linkName,
+  children
+}) => link.either(
+  to => <Link to={to} aria-label={linkName} className="scrim looking-glassed liftable">{children}</Link>,
   () => <>{children}</>
 );
 
@@ -43,7 +47,7 @@ export const Image: FC<ImageProps> = (
       className="image"
       src={noImage}/> : maybe(piece.picture).either(({src, srcSet}) =>
       <>
-        <Framed link={link} title={piece.title}>
+        <Framed link={link} linkName={piece.title}>
           <img className={classNames('image', className, arrival === 'arriving' && 'arriving')}
             referrerPolicy="no-referrer"
             onError={() => arrived('missing')}
