@@ -11,7 +11,7 @@ import {MenuRecipe, ResizeRecipe} from './Recipe';
 import {stations} from '../Recipe';
 import './TutorialPage.css';
 
-const bodies: Record<Tutorial, FC> = {
+const recipes: Record<Tutorial, FC> = {
   sort: DragSortTutorial,
   menu: MenuRecipe,
   resize: ResizeRecipe
@@ -22,7 +22,7 @@ export const TutorialPage: FC = () => {
   const titled = `tutorial${useId()}`;
   return useShownTutorial().either(tutorial => {
     const {ordinal, outOf} = tableTutorials.placeOf(tutorial);
-    const Body = bodies[tutorial];
+    const TutorialRecipe = recipes[tutorial];
     return <section aria-labelledby={titled} className="tutorial-page">
       <hgroup>
         <p className="caption">
@@ -47,7 +47,7 @@ export const TutorialPage: FC = () => {
         with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
         those are new to you, read that station first.
       </p>
-      <Body/>
+      <TutorialRecipe/>
     </section>;
   }, () => null);
 };
