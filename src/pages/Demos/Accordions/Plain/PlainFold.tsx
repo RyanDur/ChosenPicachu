@@ -25,7 +25,7 @@ export const PlainFold: FC = () => {
     const watcher = new ResizeObserver(() => measured(watched, dispatch));
     watcher.observe(watched);
     return () => watcher.disconnect();
-  }).orElse(undefined), [body]);
+  }).orElse(() => undefined), [body]);
 
   return <iframe className="plain-fold" title="A fold measured by plain script"
     style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
