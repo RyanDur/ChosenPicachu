@@ -1,10 +1,34 @@
 import {FC} from 'react';
 import {some} from '@ryandur/sand';
 import {
-  Need, StructureArrives, PresentationLeavesHome, BehaviorBorn, NeedOutrunsStandards, BrowsersAgree, ZenGarden,
-  BrowsersTakePen, PageBecomesApplication, SomeoneNeedsComponents, Html5SaysIt, OneDirection, DocumentComesBack,
-  WebGoesPublic, HtmlTwo, CssOne, WiredRedesign, CssTwoOne, EcmaScript, EsFive, DefaultsAgree, ConstantsNeedHome,
-  ElementsArrive, Frameworks, ConcernsInTheYear, spelled, MomentInBrief, FullerStory
+  BehaviorBorn,
+  BrowsersAgree,
+  BrowsersTakePen,
+  ConcernsInTheYear,
+  ConstantsNeedHome,
+  CssOne,
+  CssTwoOne,
+  DefaultsAgree,
+  DocumentComesBack,
+  EcmaScript,
+  ElementsArrive,
+  EsFive,
+  Frameworks,
+  FullerStory,
+  Html5SaysIt,
+  HtmlTwo,
+  MomentInBrief,
+  Need,
+  NeedOutrunsStandards,
+  OneDirection,
+  PageBecomesApplication,
+  PresentationLeavesHome,
+  SomeoneNeedsComponents,
+  spelled,
+  StructureArrives,
+  WebGoesPublic,
+  WiredRedesign,
+  ZenGarden
 } from './moments';
 import {MomentKey, moments, SharedYear} from './calendar';
 import {concerns} from './concerns';
@@ -37,16 +61,21 @@ const momentComponents: Record<MomentKey, FC> = {
 };
 
 type Entry = {readonly kind: 'moment'; readonly key: MomentKey}
-  | {readonly kind: 'year'; readonly year: string; readonly momentsInTheYear: readonly MomentKey[]; readonly sharedYear: SharedYear};
+  | {
+    readonly kind: 'shared year';
+    readonly year: string;
+    readonly momentsInTheYear: readonly MomentKey[];
+    readonly sharedYear: SharedYear;
+  };
 
 const entries = moments.inOrder.reduce<readonly Entry[]>((entriesSoFar, key) => {
   const {date} = moments.headings[key];
   if (date.kind === 'year') return [...entriesSoFar, {kind: 'moment', key}];
   const {year} = date;
-  return entriesSoFar.some(entry => entry.kind === 'year' && entry.year === year)
+  return entriesSoFar.some(entry => entry.kind === 'shared year' && entry.year === year)
     ? entriesSoFar
     : [...entriesSoFar, {
-      kind: 'year',
+      kind: 'shared year',
       year,
       momentsInTheYear: moments.inOrder.filter(other => moments.headings[other].date.year === year),
       sharedYear: moments.sharedYears[year]
@@ -66,12 +95,15 @@ const lowercased = (title: string): string => `${title.charAt(0).toLowerCase()}$
 
 const joinedTitle = ([first, ...rest]: readonly string[]): string => [first, ...rest.map(lowercased)].join(', and ');
 
-const Year: FC<{year: string; momentsInTheYear: readonly MomentKey[]; sharedYear: SharedYear}> = ({
-  year, momentsInTheYear, sharedYear: {inBrief}
+const SharedYearFold: FC<{year: string; momentsInTheYear: readonly MomentKey[]; sharedYear: SharedYear}> = ({
+  year,
+  momentsInTheYear,
+  sharedYear: {inBrief}
 }) =>
   <li className="moment trim-rail-along">
     <time dateTime={year} className="year caption bold">{year}</time>
-    <h3 className="moment-title sub-title void-dot-before">{joinedTitle(momentsInTheYear.map(key => moments.headings[key].title))}</h3>
+    <h3
+      className="moment-title sub-title void-dot-before">{joinedTitle(momentsInTheYear.map(key => moments.headings[key].title))}</h3>
     <MomentInBrief>{inBrief}</MomentInBrief>
     <FullerStory>
       <ol className="moments-of-a-year timeline" aria-label={year}>
@@ -89,7 +121,7 @@ export const Timeline: FC = () =>
     <ol className="timeline" aria-label="the timeline">
       {entries.map(entry => entry.kind === 'moment'
         ? <TimelineMoment key={entry.key} moment={entry.key}/>
-        : <Year key={entry.year} year={entry.year}
+        : <SharedYearFold key={entry.year} year={entry.year}
           momentsInTheYear={entry.momentsInTheYear} sharedYear={entry.sharedYear}/>)}
     </ol>
     <p className="sub-title">
