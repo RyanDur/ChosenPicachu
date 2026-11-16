@@ -49,6 +49,21 @@ describe('the code voice', () => {
     expect(kinds('TS', "<p>Don't stop</p>; // it's fine")["// it's fine"]).toBe('comment');
   });
 
+  it('keeps a JSX comment after a possessive on a closing tag a comment', () => {
+    expect(kinds('TS', "<b>Ryan</b>'s note {/* it's here */}")["{/* it's here */}"]).toBe('comment');
+  });
+
+  it('keeps an apostrophe after a space in JSX text from opening a string', () => {
+    const found = kinds('TS', "<p>the '90s</p>; const a = 'b';");
+
+    expect(found.const).toBe('keyword');
+    expect(found["'b'"]).toBe('string');
+  });
+
+  it('reads a quote after an arrow as a string', () => {
+    expect(kinds('TS', "const door = (): Door => 'open';")["'open'"]).toBe('string');
+  });
+
   it('still reads a line comment after code as a comment', () => {
     expect(kinds('TS', 'const at = 0; // where it starts')['// where it starts']).toBe('comment');
   });
