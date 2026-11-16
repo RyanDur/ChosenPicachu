@@ -67,8 +67,8 @@ const tsPatterns: ReadonlyArray<TokenPattern> = [
 ];
 
 const ts = (text: string): Token[] => {
-  const {spans, code} = scan.ts(text);
-  return tokensFrom(text, matchesOf(text, tsPatterns, spans, (start, end) => code.slice(start, end).every(Boolean)));
+  const {runs, code} = scan.ts(text);
+  return tokensFrom(text, matchesOf(text, tsPatterns, runs, (start, end) => code.slice(start, end).every(Boolean)));
 };
 
 const css: ReadonlyArray<TokenPattern> = [
@@ -83,8 +83,8 @@ const css: ReadonlyArray<TokenPattern> = [
 ];
 
 const markup = (text: string): Token[] => {
-  const {spans} = scan.markup(text);
-  return tokensFrom(text, matchesOf(text, [{pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}], spans, () => true));
+  const {runs} = scan.markup(text);
+  return tokensFrom(text, matchesOf(text, [{pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}], runs, () => true));
 };
 
 const linesOf = (tokens: Token[]): Token[][] => tokens.reduce<Token[][]>((lines, {text, kind}) => {
