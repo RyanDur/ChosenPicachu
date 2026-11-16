@@ -25,14 +25,14 @@ const begun = (starts: SlideStarts, places: Places): SlideStarts => ({
     [item, {places: from, again: maybe(starts[item]).map(({again}) => not(again)).orElse(false), running: true}]))
 });
 
-const runningSlide = (starts: SlideStarts, item: string): Maybe<Slide> =>
+const underway = (starts: SlideStarts, item: string): Maybe<Slide> =>
   maybe(starts[item]).mBind(slide => slide.running ? some(slide) : nothing());
 
 const ended = (starts: SlideStarts, item: string): SlideStarts =>
   maybe(starts[item]).map(slide => ({...starts, [item]: {...slide, running: false}})).orElse(starts);
 
 type SlideStartsModule = {
-  runningSlide: (starts: SlideStarts, item: string) => Maybe<Slide>;
+  underway: (starts: SlideStarts, item: string) => Maybe<Slide>;
   afterCrossing: (item: string, homeward: boolean) => Places;
   afterKeyboardStep: (order: readonly string[], walker: string, step: 1 | -1) => Places;
   afterSettle: (before: readonly string[], after: readonly string[]) => Places;
@@ -40,6 +40,4 @@ type SlideStartsModule = {
   ended: (starts: SlideStarts, item: string) => SlideStarts;
 };
 
-export const slideStarts: SlideStartsModule = {
-  runningSlide, afterCrossing, afterKeyboardStep, afterSettle, begun, ended
-};
+export const slideStarts: SlideStartsModule = {underway, afterCrossing, afterKeyboardStep, afterSettle, begun, ended};
