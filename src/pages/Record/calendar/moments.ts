@@ -111,13 +111,10 @@ export type SharedYear = {
 
 type Headings = typeof headings;
 
-type YearsOfMonthMoments =
-  {[Key in MomentKey]: Headings[Key] extends MonthHeading<infer Year> ? Year : never}[MomentKey];
+type YearOf<Key extends MomentKey> = Headings[Key]['date']['year'];
 
-type YearsOfYearMoments =
-  {[Key in MomentKey]: Headings[Key] extends YearHeading<infer Year> ? Year : never}[MomentKey];
-
-type SharedYears = Exclude<YearsOfMonthMoments, YearsOfYearMoments>;
+type SharedYears =
+  {[Key in MomentKey]: YearOf<Key> extends YearOf<Exclude<MomentKey, Key>> ? YearOf<Key> : never}[MomentKey];
 
 const sharedYears: Record<SharedYears, SharedYear> = {
   '1995': {
