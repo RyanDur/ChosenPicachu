@@ -53,7 +53,7 @@ const keywords = [
 ];
 
 const stringOrComment =
-  /(?<string>(?<!\w)'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")|(?<comment>\/\/.*$|\{\/\*.*?\*\/})/g;
+  /(?<string>(?<=(?:^|[([{=,:;?!&|+\-*/%<]|=>|\b(?:return|case|in|of|from|import|export|typeof|module))\s*)'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")|(?<comment>\/\/.*$|\{\/\*.*?\*\/})/g;
 
 const ts: ReadonlyArray<TokenPattern> = [
   {pattern: stringOrComment, groups: ['string', 'comment']},
