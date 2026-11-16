@@ -1,7 +1,7 @@
 import {Locator, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {not} from '@ryandur/sand';
-import {boxOf, clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, tablesDemo, twoFramesLater} from './__test_support';
+import {boxOf, clickWhereItIs, laidOutBoxOf, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, tablesDemo, twoFramesLater} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -16,6 +16,8 @@ const readers = [
 const desks = readers.filter(({use}) => not('hasTouch' in use));
 
 const topOf = async (part: Locator): Promise<number> => (await boxOf(part)).y;
+const polledTopOf = async (part: Locator): Promise<number> =>
+  (await laidOutBoxOf(part)).map(box => box.y).orElse(Number.NaN);
 
 for (const {reader, use} of readers) {
   test.describe(reader, () => {
@@ -48,7 +50,7 @@ for (const {reader, use} of desks) {
 
       await page.keyboard.press('PageDown');
 
-      await expect.poll(() => topOf(opening)).toBeLessThan(before);
+      await expect.poll(() => polledTopOf(opening)).toBeLessThan(before);
     });
 
     test('a tab switch keeps the tabs where they were on screen', async ({page}) => {
@@ -78,14 +80,14 @@ for (const {reader, use} of desks) {
       await held.scrollIntoViewIfNeeded();
       const shut = await topOf(held);
       await page.mouse.wheel(0, 200);
-      await expect.poll(() => topOf(held)).toBeLessThan(shut);
+      await expect.poll(() => polledTopOf(held)).toBeLessThan(shut);
       await clickWhereItIs(page, feedbackOn(page).open);
       await expect(feedbackOn(page).dialog).toBeVisible();
       const open = await topOf(held);
 
       await page.mouse.wheel(0, 1000);
 
-      await expect.poll(() => topOf(held)).toBe(open);
+      await expect.poll(() => polledTopOf(held)).toBe(open);
     });
   });
 }
