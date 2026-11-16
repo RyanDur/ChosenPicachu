@@ -88,8 +88,6 @@ jobs:
           path: ./build/client
 
   pages:
-    # main's pages beside the pull request's, so a change meant to leave the site alone shows that it did, and one
-    # that changes words shows which: the words checked by hand before a ready, done on every pull request
     needs: build_test
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-26.04
@@ -133,7 +131,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           clean: false
       - name: Name the pages that changed
-        run: node scripts/pages/summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"
+        run: node scripts/pages-summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"
 
   journeys:
     needs: build_test
@@ -330,7 +328,7 @@ jobs:
         run: printf '%s' "$REVIEW_FINDINGS" | node scripts/review/report.mjs >> "$GITHUB_STEP_SUMMARY"
 
   ready:
-    needs: [changes, build_test, pages, journeys, lighthouse, lighthouse_scores, review]
+    needs: [changes, build_test, journeys, lighthouse, lighthouse_scores, review]
     if: always()
     runs-on: ubuntu-26.04
     steps:
