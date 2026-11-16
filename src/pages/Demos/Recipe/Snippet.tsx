@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {has, not} from '@ryandur/sand';
 import {classNames} from '@components';
-import {Kind, highlight} from './highlight';
+import {highlight, Kind} from './highlight';
 import {CodeFile} from './sample';
 import './Snippet.css';
 
@@ -60,16 +60,18 @@ const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
 
 export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
+  const split = lines.map(({text}) => splitIndent(text));
+  const inked = highlight.tokensOf(label, split.map(({code}) => code));
   return <figure className="sample">
     <pre className="snippet code-paper-filled code-ink listing rounded-corners monospaced">
       <span className="lang caption uppercase comment-ink" aria-hidden="true">{label}</span>
-      <code>{lines.map(({text, dim = false}, at) => {
-        const {indent, code} = splitIndent(text);
+      <code>{lines.map(({dim = false}, at) => {
+        const {indent, code} = split[at];
         return <span className={classNames('line', dim && inkOf.comment)} key={at}>
           {has(indent) && <span className="indent">{indent}</span>}
           {dim
             ? code
-            : highlight.tokensOf(label, code).map(({text: piece, kind}, part) =>
+            : inked[at].map(({text: piece, kind}, part) =>
               kind === 'plain' ? piece : <span className={inkOf[kind]} key={part}>{piece}</span>)}
           {'\n'}
         </span>;
