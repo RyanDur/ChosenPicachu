@@ -8,6 +8,8 @@ const tester = new RuleTester({languageOptions: {
 }});
 
 const long = 'words '.repeat(17).trim();
+const half = 'words '.repeat(10).trim();
+const page = `/${'x'.repeat(60)}`;
 
 tester.run('breaks-between-words', prose.rules['breaks-between-words'], {
   valid: [
@@ -76,6 +78,24 @@ tester.run('breaks-between-words', prose.rules['breaks-between-words'], {
       code: `const said = <p>\n  ${long} the{' '}\n  <b>${long}</b>{' '}\n  <i>${long}</i>\n</p>;`,
       output: `const said = <p>\n  ${long}\n  the <b>${long}</b>{' '}\n  <i>${long}</i>\n</p>;`,
       errors: [{messageId: 'beside'}, {messageId: 'beside'}]
+    },
+    {
+      name: 'should carry a word within 120 columns before joining a line that only a string lets run long',
+      code: `const said = <p>\n  <b title="lead">bold</b> ${half} the{' '}\n  <i>${half}</i>\n</p>;`,
+      output: `const said = <p>\n  <b title="lead">bold</b> ${half}\n  the <i>${half}</i>\n</p>;`,
+      errors: [{messageId: 'beside'}]
+    },
+    {
+      name: 'should join a line that only a string lets run long when no move fits within 120 columns',
+      code: `const said = <p>\n  <a href="/record">${long}</a>{' '}\n  <i>${long}</i>\n</p>;`,
+      output: `const said = <p>\n  <a href="/record">${long}</a> <i>${long}</i>\n</p>;`,
+      errors: [{messageId: 'beside'}]
+    },
+    {
+      name: 'should carry a word down from a line a string already runs past 120, since that line only shortens',
+      code: `const said = <p>\n  <a href="${page}">x</a> ${half} the{' '}\n  <i>${half}</i>\n</p>;`,
+      output: `const said = <p>\n  <a href="${page}">x</a> ${half}\n  the <i>${half}</i>\n</p>;`,
+      errors: [{messageId: 'beside'}]
     }
   ]
 });
