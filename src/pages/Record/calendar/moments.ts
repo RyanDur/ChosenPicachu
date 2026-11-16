@@ -65,9 +65,12 @@ const twoDigits = (part: number): string => String(part).padStart(2, '0');
 
 const isoDateOf = (date: MomentDate): string => {
   switch (date.kind) {
-    case 'year': return date.year;
-    case 'month': return `${date.year}-${twoDigits(date.month)}`;
-    case 'day': return `${date.year}-${twoDigits(date.month)}-${twoDigits(date.day)}`;
+    case 'year':
+      return date.year;
+    case 'month':
+      return `${date.year}-${twoDigits(date.month)}`;
+    case 'day':
+      return `${date.year}-${twoDigits(date.month)}-${twoDigits(date.day)}`;
   }
 };
 
@@ -114,9 +117,9 @@ type YearsOfMonthMoments =
 type YearsOfYearMoments =
   {[Key in MomentKey]: Headings[Key] extends YearHeading<infer Year> ? Year : never}[MomentKey];
 
-type SharedYearOf = Exclude<YearsOfMonthMoments, YearsOfYearMoments>;
+type SharedYears = Exclude<YearsOfMonthMoments, YearsOfYearMoments>;
 
-const sharedYears: Record<SharedYearOf, SharedYear> = {
+const sharedYears: Record<SharedYears, SharedYear> = {
   '1995': {
     inBrief: 'Two concerns moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.'
   },
