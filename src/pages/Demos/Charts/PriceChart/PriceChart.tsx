@@ -53,11 +53,9 @@ export const PriceChart: FC<PropsWithChildren<Props>> = ({id: given, children}) 
   const points =
     sparkline.points(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMilliseconds);
   const trendPoints = points.map(point => `${point.x},${point.y}`).join(' ');
-  const trending = view.map(trendOf);
-  const trend = trending.orElse(undefined);
-  const side = trending.map(direction => sideOf[direction]).orElse(undefined);
+  const trendClasses = view.map(trendOf).map(direction => classNames(sideOf[direction], direction)).orElse('');
   return <section aria-labelledby={`${id}-heading`}
-    className={classNames('price-chart chart card rounded-corners lifted padded', side, trend)}>
+    className={classNames('price-chart chart card rounded-corners lifted padded', trendClasses)}>
     <h3 id={`${id}-heading`} className="off-screen">live trades</h3>
     <header className="chart-header">
       {children}
