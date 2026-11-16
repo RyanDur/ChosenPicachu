@@ -12,5 +12,5 @@ const gripping = (context: TableContext, grip: HTMLElement, held: string): void 
 };
 
 export const rowGrip = (context: TableContext, grip: HTMLElement): void => {
-  maybe(grip.closest('tr')).map(lane => gripping(context, grip, frameRows.of(lane)));
+  maybe(grip.closest('tr')).map(lane => gripping(context, grip, frameRows.named(lane)));
 };
