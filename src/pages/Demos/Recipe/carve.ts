@@ -1,6 +1,5 @@
 import {has, empty, not, maybe} from '@ryandur/sand';
-import {Line} from './Snippet';
-import {Sample} from './sample';
+import {Line, Sample} from './sample';
 import {lines} from './lines';
 
 type Closer = '}' | ')' | ']';

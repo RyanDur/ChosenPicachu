@@ -1,7 +1,6 @@
 import {excerpts} from '../excerpts';
 import {lines} from '../lines';
-import {Line} from '../Snippet';
-import {CodeFile} from '../sample';
+import {CodeFile, Line} from '../sample';
 
 const store: CodeFile = {path: 'src/store.ts', url: 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/store.ts'};
 const shared: CodeFile = {path: 'src/shared.ts', url: 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/shared.ts'};

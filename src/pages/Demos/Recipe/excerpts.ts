@@ -1,6 +1,6 @@
 import {is, maybe, not} from '@ryandur/sand';
 import {highlight, Label, Token} from './highlight';
-import {Line} from './Snippet';
+import {Line} from './sample';
 
 const followsInItsFile = (previous: Line, line: Line): boolean => maybe(previous.from)
   .map(before => maybe(line.from)
