@@ -116,7 +116,6 @@ h1, h2, h3, h4, h5, h6, p {
 
 /* :root, not html, so a drawing written as an image file, whose root is its svg, reads the same size and face */
 :root {
-  interpolate-size: allow-keywords;
   font-size: 62.5%;
   font-family: Arial, sans-serif;
 }
@@ -131,6 +130,7 @@ details::details-content {
 
 @supports (interpolate-size: allow-keywords) {
   details::details-content {
+    interpolate-size: allow-keywords;
     transition:
       block-size .3s ease-in-out,
       content-visibility .3s allow-discrete;
