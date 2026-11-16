@@ -542,10 +542,15 @@ const PieStory: FC = () =>
         <StepHeading title="Print each share"/>
         <Words>
           <Want>A circle without numbers is only an impression. The trader wants the split in figures.</Want>
-          <Says>The legend prints each share as a whole percentage, in its wedge’s color. The caption says what the pie
-            is: the size traded on each side, up to the last 1,500 trades.</Says>
+          <Says>The legend prints each share as a whole percentage, in its wedge’s color. It rounds every share but
+            the last, and the last is what is left of 100, so the figures always add up to 100. The caption says what
+            the pie is: the size traded on each side, up to the last 1,500 trades.</Says>
         </Words>
         <Codes>
+          <Snippet label="TS" lines={[
+            ...carve.unit(pieSource, 'const wholePercents'), lines.blank,
+            ...carve.unit(pieComponent, 'const percents')
+          ]}/>
           <Snippet label="HTML" lines={[
             ...carve.between(pieComponent, '<ul className="legend caption">', '</ul>')
           ]}/>
