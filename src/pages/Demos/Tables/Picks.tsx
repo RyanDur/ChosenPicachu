@@ -1,6 +1,5 @@
 import {not} from '@ryandur/sand';
-import {classNames, PropsWithClassName} from '@components';
-import {useHydrated} from '@components';
+import {classNames, PropsWithClassName, useHydrated} from '@components';
 import './Picks.css';
 
 type Option<T extends string> = {

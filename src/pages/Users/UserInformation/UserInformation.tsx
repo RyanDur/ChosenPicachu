@@ -1,6 +1,6 @@
 import {FC, useReducer} from 'react';
 import {FancyDateInput, FancyInput, FancyTextarea} from '../FancyFormElements';
-import {classNames, PropsWithClassName} from '@components';
+import {classNames, PropsWithClassName, useHydrated} from '@components';
 import {User} from '../profile';
 import {draftActions} from './draftActions';
 import {AddressFields} from './AddressFields';
@@ -16,7 +16,6 @@ import {usersActions} from '../usersActions';
 import {useOpened} from '../useOpened';
 import {useUsersSelector} from '../useUsersSelector';
 import {usersSelectors} from '../usersSelectors';
-import {useHydrated} from '@components';
 import './UserInformation.css';
 
 const FormButtons: FC = () => {
