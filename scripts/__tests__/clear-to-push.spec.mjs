@@ -127,7 +127,7 @@ describe('clear to push', () => {
     const hundred = Array.from({length: 100}, (_, at) => `src/${at}.ts`);
     const github = (_command, ...args) => {
       if (args[1] === 'list') return JSON.stringify([{...pull(1, 'verify/a', hundred), changedFiles: 101}]);
-      if (args[1] === 'diff') return [...hundred, 'src/late.ts'].join('\n');
+      if (args[0] === 'api') return [...hundred, 'src/late.ts'].join('\n');
       if (args[0] === 'diff') return 'src/late.ts';
       return '';
     };
@@ -147,6 +147,16 @@ describe('clear to push', () => {
     };
 
     expect(clearToPush('verify/b', 'HEAD', github).refused).toEqual(['#31 is still running review. Push once the run is done, with every fix for it.']);
+  });
+
+  test('a branch whose pull request is open reads only its checks, so a stalled fetch cannot let it through', () => {
+    const github = (_command, ...args) => {
+      if (args[1] === 'list') return JSON.stringify([pull(1, 'verify/a', ['src/a.ts'])]);
+      if (args[1] === 'checks') return JSON.stringify([{name: 'journeys', bucket: 'pending', workflow: 'Checks'}]);
+      throw new Error('timed out');
+    };
+
+    expect(clearToPush('verify/a', 'HEAD', github)).toEqual({refused: ['#1 is still running journeys. Push once the run is done, with every fix for it.']});
   });
 
   test('a branch with no pull request yet is checked for shared files without reading any checks', () => {
