@@ -3,7 +3,7 @@ import {array} from '@components';
 import {DragSortChange} from './drag-sort-change';
 import {Places, SlideStarts, slideStarts} from './slide-starts';
 
-export type Report = {readonly item: string; readonly position: number; readonly stayed: boolean};
+export type Report = {readonly item: string; readonly landedAt: number; readonly stayed: boolean};
 
 export type Held = {readonly item: string; readonly landing: Maybe<number>};
 
@@ -36,12 +36,12 @@ const moved = (
 ): DragSort => ({
   ...sort,
   order,
-  report: some({item, position: order.indexOf(item), stayed: false}),
+  report: some({item, landedAt: order.indexOf(item), stayed: false}),
   slideStarts: sort.animated ? slideStarts.begun(sort.slideStarts, starts) : {}
 });
 
 const stayed = (sort: DragSort, item: string): DragSort =>
-  ({...sort, report: some({item, position: sort.order.indexOf(item), stayed: true})});
+  ({...sort, report: some({item, landedAt: sort.order.indexOf(item), stayed: true})});
 
 const sliding = (sort: DragSort, item: string): boolean => not(slideStarts.running(sort.slideStarts, item).isNothing);
 

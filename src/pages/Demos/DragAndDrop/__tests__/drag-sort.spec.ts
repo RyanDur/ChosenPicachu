@@ -52,7 +52,7 @@ describe('a drop', () => {
     const lifted = dragSort.reduce(stepped, dragSortChange.lifted('A'));
     const hovered = dragSort.reduce(lifted, dragSortChange.hovered(2));
 
-    expect(dragSort.reduce(hovered, dragSortChange.released()).report.orNull()).toEqual({item: 'A', position: 0, stayed: true});
+    expect(dragSort.reduce(hovered, dragSortChange.released()).report.orNull()).toEqual({item: 'A', landedAt: 0, stayed: true});
   });
 });
 

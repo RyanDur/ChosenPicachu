@@ -29,7 +29,7 @@ const columnTo = (context: MountedTable, name: string, to: number, widths: Pixel
   const from = current.indexOf(name);
   const over = survey.distanceCrossed(current, widths, from, to);
   columnShoving(context, name, to, widths);
-  context.report({about: 'column', name, position: to, outOf: current.length});
+  context.report({about: 'column', name, landedAt: to, outOf: current.length});
   settle.column(context, name, tableState.settlingFromSeat({x: to > from ? -over : over, y: 0}));
 };
 
@@ -54,7 +54,7 @@ const rowNudged = (context: MountedTable, row: string, {from, to, heights}: RowN
 const rowTo = (context: MountedTable, row: string, to: number): void => {
   const before = context.standing();
   tell(context.table, 'row-moved', {row, to, standing: before});
-  context.report({about: 'row', name: row, position: to, outOf: before.length});
+  context.report({about: 'row', name: row, landedAt: to, outOf: before.length});
 };
 
 const rowBeside = (context: MountedTable, row: string, neighbor: string): void => {
