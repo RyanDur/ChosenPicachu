@@ -5,7 +5,7 @@ import {Maybe, maybe, not} from '@ryandur/sand';
 type KeptPlace = {place: string};
 
 type ScrollPlace = {
-  of: (location: Location) => string;
+  named: (location: Location) => string;
   keptFrom: (location: Location) => KeptPlace;
   keeps: (location: Location) => boolean;
 };
@@ -17,10 +17,10 @@ const ownPlaceOf = ({key, pathname, search}: Location): string => key === 'defau
 
 const placeKeptIn = ({state}: Location): Maybe<string> => maybe(keptPlace.decode(state)).map(({place}) => place);
 
-const of = (location: Location): string => placeKeptIn(location).orElse(ownPlaceOf(location));
+const named = (location: Location): string => placeKeptIn(location).orElse(ownPlaceOf(location));
 
-const keptFrom = (location: Location): KeptPlace => ({place: of(location)});
+const keptFrom = (location: Location): KeptPlace => ({place: named(location)});
 
 const keeps = (location: Location): boolean => not(placeKeptIn(location).isNothing);
 
-export const scrollPlace: ScrollPlace = {of, keptFrom, keeps};
+export const scrollPlace: ScrollPlace = {named, keptFrom, keeps};

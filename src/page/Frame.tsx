@@ -14,6 +14,6 @@ export const Frame: FC<PropsWithChildren<{pageUnknown?: boolean}>> = ({children,
     <Rail/>
     {children}
     <Banners/>
-    <ScrollRestoration getKey={scrollPlace.of}/>
+    <ScrollRestoration getKey={scrollPlace.named}/>
   </PageUnknown.Provider></FeedbackProvider></PageNameProvider></BannerProvider>;
 };
