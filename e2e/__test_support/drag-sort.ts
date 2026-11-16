@@ -80,9 +80,8 @@ export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
   const columnHeader = (name: string): Locator => holder.getByRole('columnheader', {name});
   const grip = (row: number): Locator => holder.getByRole('button', {name: `move row ${row}`, exact: true});
   const resizeHandle = (name: string): Locator => holder.getByRole('button', {name: new RegExp(`^resize ${name}`)});
-  const {hydrated} = siteFrame(page);
   const centerOfHandle = async (name: string): Promise<Point> => {
-    await hydrated();
+    await siteFrame(page).hydrated();
     await resizeHandle(name).scrollIntoViewIfNeeded();
     return centerOf(await boxOf(resizeHandle(name)));
   };
@@ -118,7 +117,7 @@ export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
     },
     resizeHandle,
     focusHandle: async (name: string): Promise<void> => {
-      await hydrated();
+      await siteFrame(page).hydrated();
       await resizeHandle(name).focus();
     },
     holdHandle: async (
@@ -152,14 +151,14 @@ export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
       await page.mouse.move(middle.x + by, middle.y, {steps: 8});
     },
     narrowByKeys: async (name: string, presses: number): Promise<void> => {
-      await hydrated();
+      await siteFrame(page).hydrated();
       await resizeHandle(name).focus();
       for (let press = 0; press < presses; press++) {
         await page.keyboard.press('ArrowLeft');
       }
     },
     announcedShare: async (name: string): Promise<number> => {
-      await hydrated();
+      await siteFrame(page).hydrated();
       const label = await resizeHandle(name).getAttribute('aria-label') ?? '';
       const share = /, (\d+)%$/.exec(label)?.[1] ?? '';
       if (share === '') throw new Error(`the handle "${label}" names no share`);
@@ -184,12 +183,12 @@ export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
       .filter(line => /^- (table|caption|columnheader|rowheader|img)\b/.test(line)),
     row: (name: RegExp): Locator => holder.getByRole('row', {name}),
     moveColumnByKey: async (column: string, key: string): Promise<void> => {
-      await hydrated();
+      await siteFrame(page).hydrated();
       await columnHeader(column).focus();
       await page.keyboard.press(key);
     },
     moveRowByKey: async (row: number, key: string): Promise<void> => {
-      await hydrated();
+      await siteFrame(page).hydrated();
       await grip(row).focus();
       await page.keyboard.press(key);
     },
@@ -208,7 +207,7 @@ export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
     },
     moveReport: (): Locator => holder.getByRole('status', {name: 'move report'}),
     listenToTheMoveReport: async (): Promise<void> => {
-      await hydrated();
+      await siteFrame(page).hydrated();
       await holder.getByRole('status', {name: 'move report'}).evaluate(report => {
         const said: string[] = [];
         new MutationObserver(() => said.push(report.textContent ?? '')).observe(report, {childList: true, characterData: true, subtree: true});
@@ -220,7 +219,7 @@ export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
       return Array.isArray(said) ? said.filter(text => text !== '') : [];
     }),
     sortBy: async (column: string, direction: string): Promise<void> => {
-      await hydrated();
+      await siteFrame(page).hydrated();
       await holder.getByRole('button', {name: `sort ${column}`}).click();
       await holder.getByRole('button', {name: direction}).click();
     }
