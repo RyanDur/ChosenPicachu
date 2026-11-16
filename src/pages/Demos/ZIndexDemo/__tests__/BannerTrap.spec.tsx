@@ -34,7 +34,7 @@ describe('the old banner', () => {
 
     await oldBanner.findRaiser();
 
-    expect(oldBanner.query()).not.toBeInTheDocument();
+    expect(oldBanner.standing()).not.toBeInTheDocument();
   });
 
   test('should be announced when raised from card one', async () => {
@@ -42,7 +42,7 @@ describe('the old banner', () => {
 
     await oldBanner.raise();
 
-    expect(oldBanner.shown()).toHaveRole('alert');
+    expect(oldBanner.raised()).toHaveRole('alert');
   });
 
   test('should leave when dismissed by keyboard, and give focus back to the button that raised it', async () => {
@@ -54,7 +54,7 @@ describe('the old banner', () => {
 
     await oldBanner.pressEnter();
 
-    expect(oldBanner.query()).not.toBeInTheDocument();
+    expect(oldBanner.standing()).not.toBeInTheDocument();
     expect(oldBanner.raiser()).toHaveFocus();
   });
 });
