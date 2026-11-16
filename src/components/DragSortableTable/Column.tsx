@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {classNames} from '../classNames';
+import {classNames} from '@components';
 import {useTableRead} from './useTableRead';
 import {looks, shares, tableReads} from './model';
 import './Header.css';

@@ -4,7 +4,7 @@ import {tableActions, sorting} from './model';
 import {useHeaderEvents} from './useHeaderEvents';
 import {useTableDispatch} from './useTableDispatch';
 import {not} from '@ryandur/sand';
-import {useHydrated} from '../useHydrated';
+import {useHydrated} from '@components';
 
 export const SortMenu: FC<{column: string}> = ({column}) => {
   const {onSorted} = useHeaderEvents();

@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {classNames} from '../classNames';
+import {classNames} from '@components';
 
 export const Item: FC<Omit<ComponentProps<'button'>, 'type'>> = ({className, ...button}) =>
   <button {...button} type="button"

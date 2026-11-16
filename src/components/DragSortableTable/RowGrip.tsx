@@ -1,7 +1,7 @@
 import {ComponentProps, FC} from 'react';
 import Handle from '@components/grip.svg';
 import {grip} from './model';
-import {useHydrated} from '../useHydrated';
+import {useHydrated} from '@components';
 import {not} from '@ryandur/sand';
 import './RowGrip.css';
 
