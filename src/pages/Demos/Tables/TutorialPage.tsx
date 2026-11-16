@@ -1,8 +1,7 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsObject} from '@navigation/search-params';
-import {DemoTopics} from '@pages/Demos';
-import {demoTab} from '../demo-tab';
+import {DemoTopics, demoTab} from '@pages/Demos';
 import {Aggregations} from './Aggregations';
 import {Tutorial, tableTutorials} from './tutorial-pages';
 import {WorldGlider, WorldNote} from './World';
