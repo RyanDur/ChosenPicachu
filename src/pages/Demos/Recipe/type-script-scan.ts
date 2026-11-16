@@ -171,7 +171,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
 
   const inText = (at: number): number => {
     const here = text[at];
-    if (text.startsWith('{/*', at)) return recordRun(at, endOf(text, at + 3, '*/}'), 'comment');
+    if (isJsxComment(text, at)) return recordRun(at, endOf(text, at + 3, '*/}'), 'comment');
     if (text.startsWith('<!--', at)) return recordRun(at, endOf(text, at + 4, '-->'), 'comment');
     if (here === '{') return enterBraces(at);
     if (here === '<' && /[A-Za-z/>]/.test(text[at + 1] ?? '')) return openTag(at);
