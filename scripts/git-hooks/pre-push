@@ -4,10 +4,12 @@ set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 echo "pre-push: is the pull request's run done, and does any other open pull request change these files?"
-read -r _ pushed remote_ref _ || true
-if [ -n "${remote_ref:-}" ] && [ "$pushed" != 0000000000000000000000000000000000000000 ]; then
-  node scripts/clear-to-push.mjs "${remote_ref#refs/heads/}" "$pushed"
-fi
+while read -r _ pushed remote_ref _; do
+  case "$remote_ref" in refs/heads/*) ;; *) continue;; esac
+  if [ "$pushed" != 0000000000000000000000000000000000000000 ]; then
+    node scripts/clear-to-push.mjs "${remote_ref#refs/heads/}" "$pushed"
+  fi
+done
 
 echo "pre-push: oxlint + stylelint + eslint stylistic..."
 npm run lint
