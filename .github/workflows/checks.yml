@@ -87,6 +87,54 @@ jobs:
           name: site
           path: ./build/client
 
+  pages:
+    # main's pages beside the pull request's, so a change meant to leave the site alone shows that it did, and one
+    # that changes words shows which: the words checked by hand before a ready, done on every pull request
+    needs: build_test
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-26.04
+    env:
+      VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
+      VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
+      VITE_APP_HARVARD_API_KEY: ${{ secrets.VITE_APP_HARVARD_API_KEY }}
+      VITE_APP_VAM_API: ${{ vars.VITE_APP_VAM_API }}
+      VITE_APP_AIC_PICTURES: https://www.artic.edu/iiif/2
+      VITE_APP_VAM_PICTURES: https://framemark.vam.ac.uk/collections
+      VITE_APP_CLEVELAND_API: https://openaccess-api.clevelandart.org/api/artworks
+      VITE_APP_USERS_API: /api/users
+      VITE_APP_FEEDBACK_TOKEN: ${{ secrets.CHOSEN_PICACHU_FEEDBACK }}
+      VITE_APP_TRADE_FEED: wss://ws-feed.exchange.coinbase.com
+      VITE_APP_TRADE_PRODUCT: BTC-USD
+      VITE_APP_TRADE_HISTORY: https://api.exchange.coinbase.com
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Build main
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm ci
+          npm run build
+          mv build/client "$RUNNER_TEMP/main"
+      - name: Take the pull request's pages
+        uses: actions/download-artifact@v7
+        with:
+          name: site
+          path: ${{ runner.temp }}/pull
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          clean: false
+      - name: Name the pages that changed
+        run: node scripts/pages/summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"
+
   journeys:
     needs: build_test
     runs-on: ubuntu-24.04
@@ -282,7 +330,7 @@ jobs:
         run: printf '%s' "$REVIEW_FINDINGS" | node scripts/review/report.mjs >> "$GITHUB_STEP_SUMMARY"
 
   ready:
-    needs: [changes, build_test, journeys, lighthouse, lighthouse_scores, review]
+    needs: [changes, build_test, pages, journeys, lighthouse, lighthouse_scores, review]
     if: always()
     runs-on: ubuntu-26.04
     steps:
