@@ -12,26 +12,23 @@
 
   .step {
     counter-increment: recipe-step;
-    display: grid;
-    grid-template-columns: var(--base-x-4) minmax(0, 1fr);
+    position: relative;
+    padding-inline-start: calc(var(--base-x-4) + var(--base-x-2));
+    display: flex;
+    flex-wrap: wrap;
     align-items: start;
-    gap: var(--base-x-2);
+    gap: var(--base-x-2) var(--base-x-3);
 
     &::before {
       content: counter(recipe-step);
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline-start: 0;
       display: grid;
       place-items: center;
       width: var(--base-x-4);
       height: var(--base-x-4);
     }
-  }
-
-  .step-body {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: start;
-    gap: var(--base-x-2) var(--base-x-3);
-    min-width: 0;
   }
 
   .step-words {
@@ -99,8 +96,7 @@
     }
 
     .step {
-      grid-template-columns: var(--base-x-2_5) minmax(0, 1fr);
-      gap: var(--base);
+      padding-inline-start: calc(var(--base-x-2_5) + var(--base));
 
       &::before {
         width: var(--base-x-2_5);
