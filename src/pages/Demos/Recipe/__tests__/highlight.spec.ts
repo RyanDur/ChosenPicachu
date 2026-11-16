@@ -417,6 +417,11 @@ describe('the code voice', () => {
     expect(kinds('TS', 'const half = $from / 2; const s = "q";')['"q"']).toBe('string');
   });
 
+  it('reads a slash that starts the line after a comment as a regular expression, and the rest of that line as code', () => {
+    const [, tested] = highlight.tokensOf('TS', ['// keep digits', '/\\d+/.test(x) && go("a");']);
+    expect(tested.find(({text}) => text === '"a"')?.kind).toBe('string');
+  });
+
   it('opens an element whose text starts with a parenthesis, and reads the line after it as code', () => {
     expect(constOnTheLineAfter('return <p>(press ` to open)</p>;')).toBe('keyword');
   });

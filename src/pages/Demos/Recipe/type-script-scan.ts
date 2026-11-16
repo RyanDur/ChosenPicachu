@@ -67,12 +67,6 @@ const endOfRegularExpression = (text: string, from: number): number => {
 
 const startOfLine = (text: string, at: number): number => text.lastIndexOf('\n', at - 1) + 1;
 
-const startOfCodeBefore = (text: string, at: number): number => {
-  let from = at;
-  while (from > 0 && /\s/.test(text[from - 1])) from -= 1;
-  return startOfLine(text, from);
-};
-
 const isJsxComment = (text: string, at: number): boolean =>
   text.startsWith('{/*', at) && text[endOf(text, at + 3, '*/')] === '}';
 
@@ -82,6 +76,7 @@ const nameAt = (line: string, from: number): number =>
 const scanFrom = (text: string, first: ScanState): Scanned => {
   const runs: Run[] = [];
   const isCode = Array.from({length: text.length}, () => false);
+  const lineCommentStarts = new Map<number, number>();
   const stack: ScanState[] = [first];
   let elementEndedAt = -1;
   const recordRun = (start: number, end: number, kind: Run['kind']): number => {
@@ -89,6 +84,13 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
     return end;
   };
   const innermost = (): ScanState => stack[stack.length - 1];
+  const codeBefore = (at: number): string => {
+    let from = at;
+    while (from > 0 && (/\s/.test(text[from - 1]) || lineCommentStarts.has(from))) {
+      from = lineCommentStarts.get(from) ?? from - 1;
+    }
+    return text.slice(startOfLine(text, from), from);
+  };
   const openTag = (at: number): number => {
     const closing = text[at + 1] === '/';
     stack.push({within: 'tag', closing});
@@ -121,9 +123,13 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
     const here = text[at];
     const before = text.slice(startOfLine(text, at), at);
     if (isJsxComment(text, at)) return recordRun(at, endOf(text, at + 3, '*/}'), 'comment');
-    if (text.startsWith('//', at)) return recordRun(at, endOfLine(text, at), 'comment');
+    if (text.startsWith('//', at)) {
+      const end = endOfLine(text, at);
+      lineCommentStarts.set(end, at);
+      return recordRun(at, end, 'comment');
+    }
     if (text.startsWith('/*', at)) return recordRun(at, endOf(text, at + 2, '*/'), 'comment');
-    if (here === '/' && regularExpressionCanStart(text.slice(startOfCodeBefore(text, at), at))) {
+    if (here === '/' && regularExpressionCanStart(codeBefore(at))) {
       return endOfRegularExpression(text, at);
     }
     if (here === '`') {
