@@ -1,4 +1,4 @@
-import {empty, has, not} from '@ryandur/sand';
+import {empty, has, maybe, not} from '@ryandur/sand';
 import {limit} from './wrap.mjs';
 
 const exempt = new Set(['String', 'Template']);
@@ -59,26 +59,31 @@ const breaksBetweenWords = {
         const headStrings = stringsOn(line);
         const nextStrings = stringsOn(nextLine);
 
-        if (fits(`${head} ${next}`, headStrings || nextStrings)) {
-          return report(fixer => fixer.replaceTextRange([held.range[0], nextAt], ' '));
-        }
+        const moves = [
+          {lines: [[`${head} ${next}`, headStrings || nextStrings, 0]], fix: fixer => fixer.replaceTextRange([held.range[0], nextAt], ' ')}
+        ];
 
         const before = head.match(/^(.*\S)( +)([^\s<>{}]+)$/);
         if (has(before) && endsInWord.test(before[1])) {
           const [, kept, , word] = before;
-          if (fits(kept, headStrings) && fits(`${proseIndent}${word} ${next}`, nextStrings)) {
-            return report(fixer => fixer.replaceTextRange([tokenBefore + kept.length, nextAt], `\n${proseIndent}${word} `));
-          }
+          moves.push({
+            lines: [[kept, headStrings, head.length], [`${proseIndent}${word} ${next}`, nextStrings, 0]],
+            fix: fixer => fixer.replaceTextRange([tokenBefore + kept.length, nextAt], `\n${proseIndent}${word} `)
+          });
         }
 
         const following = next.match(/^([^\s<>{}]+) +(\S.*)$/);
         if (has(following) && not(startsWithMarkup.test(following[2]))) {
           const [, word, rest] = following;
-          if (fits(`${head} ${word}`, headStrings) && fits(`${indent}${rest}`, nextStrings)) {
-            return report(fixer => fixer.replaceTextRange([held.range[0], nextAt + word.length + 1], ` ${word}\n${indent}`));
-          }
+          moves.push({
+            lines: [[`${head} ${word}`, headStrings, 0], [`${indent}${rest}`, nextStrings, indent.length + next.length]],
+            fix: fixer => fixer.replaceTextRange([held.range[0], nextAt + word.length + 1], ` ${word}\n${indent}`)
+          });
         }
-        return report(null);
+
+        const within = moves.find(move => move.lines.every(([text, , was]) => text.length <= Math.max(limit, was)));
+        const exempted = moves.find(move => move.lines.every(([text, exemptLine]) => fits(text, exemptLine)));
+        return report(maybe(within).or(() => maybe(exempted)).map(move => move.fix).orNull());
       }
     };
   }
