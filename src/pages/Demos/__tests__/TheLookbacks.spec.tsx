@@ -1,7 +1,8 @@
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support';
+import {demoPage, demosAt} from '@pages/Demos/__test_support';
+import {aggregations} from '@pages/Demos/Tables/__test_support';
 import {coinbaseSide} from '@pages/Demos/__test_support/feed';
-import {render, screen, waitFor, within} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {tradeHistoryAnswers, tradeHistoryUnreachable} from '@__test_support/server';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
 
@@ -20,11 +21,10 @@ describe('the lookbacks hydrate from history', () => {
 
     render(<TestApp at={demosAt('tables')}/>);
 
-    const card = await screen.findByRole('region', {name: 'live aggregations'});
-    const rowFor = (label: string) => within(card).getByRole('row', {name: new RegExp(`^${label}`)});
-    await waitFor(() => expect(sortableTable.texts(rowFor('this minute'))).toEqual(
+    await aggregations.arrived();
+    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))).toEqual(
       ['this minute', '1', '1', '0', '0.01', '$50,004.00', '+$0.00']));
-    expect(sortableTable.texts(rowFor('this hour'))).toEqual(
+    expect(sortableTable.texts(aggregations.row('this hour'))).toEqual(
       ['this hour', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
@@ -33,10 +33,10 @@ describe('the lookbacks hydrate from history', () => {
 
     render(<TestApp at={demosAt('tables')}/>);
 
-    const card = await screen.findByRole('region', {name: 'live aggregations'});
-    expect(await within(card).findByText('session')).toBeVisible();
-    const sessionRow = within(card).getByRole('row', {name: /^session/});
+    await aggregations.arrived();
+    const sessionRow = await aggregations.findRow('session');
+    expect(sessionRow).toBeVisible();
     expect(sessionRow).toHaveTextContent('0');
-    expect(await within(await screen.findByRole('alert')).findByText('the trade history could not be reached')).toBeInTheDocument();
+    expect(await demoPage.alertSaying('the trade history could not be reached')).toBeInTheDocument();
   });
 });
