@@ -1,7 +1,8 @@
 import {FC} from 'react';
 import {has, not} from '@ryandur/sand';
 import {classNames} from '@components';
-import {highlight, Kind} from './highlight';
+import {Kind} from './highlight';
+import {excerpts} from './excerpts';
 import {CodeFile} from './sample';
 import './Snippet.css';
 
@@ -61,18 +62,16 @@ const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
 export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
   const indented = lines.map(({text}) => splitIndent(text));
-  const inked = highlight.tokensOf(label, indented.map(({code}) => code));
+  const inked = excerpts.tokensOf(label, lines.map((line, at) => ({...line, text: indented[at].code})));
   return <figure className="sample">
     <pre className="snippet code-paper-filled code-ink listing rounded-corners monospaced">
       <span className="lang caption uppercase comment-ink" aria-hidden="true">{label}</span>
       <code>{lines.map(({dim = false}, at) => {
-        const {indent, code} = indented[at];
+        const {indent} = indented[at];
         return <span className={classNames('line', dim && inkOf.comment)} key={at}>
           {has(indent) && <span className="indent">{indent}</span>}
-          {dim
-            ? code
-            : inked[at].map(({text: piece, kind}, part) =>
-              kind === 'plain' ? piece : <span className={inkOf[kind]} key={part}>{piece}</span>)}
+          {inked[at].map(({text: piece, kind}, part) =>
+            kind === 'plain' ? piece : <span className={inkOf[kind]} key={part}>{piece}</span>)}
           {'\n'}
         </span>;
       })}</code>
