@@ -6,10 +6,10 @@ import {orders} from './orders';
 import {keepingFocus} from './focus';
 import {frameColumns} from './columns';
 
-const of = (lane: HTMLTableRowElement): string => lane.querySelector('th')?.textContent?.trim() ?? '';
+const named = (lane: HTMLTableRowElement): string => lane.querySelector('th')?.textContent?.trim() ?? '';
 
 const lanes = (body: HTMLTableSectionElement): ReadonlyMap<string, HTMLTableRowElement> =>
-  new Map([...body.rows].map(lane => [of(lane), lane]));
+  new Map([...body.rows].map(lane => [named(lane), lane]));
 
 const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' | 'rows'>): void => {
   const order = frameColumns.shown(table);
@@ -26,7 +26,7 @@ const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' |
 
 const reseat = ({body, lanes, standing}: Pick<MountedTable, 'body' | 'lanes' | 'standing'>): void => {
   const next = standing();
-  if (not(orders.differ([...body.rows].map(of), next))) {
+  if (not(orders.differ([...body.rows].map(named), next))) {
     return;
   }
   keepingFocus(maybe(body.ownerDocument.activeElement), () =>
@@ -46,7 +46,7 @@ const reseat = ({body, lanes, standing}: Pick<MountedTable, 'body' | 'lanes' | '
 };
 
 export const frameRows = {
-  of,
+  named,
   lanes,
   writeCells,
   reseat
