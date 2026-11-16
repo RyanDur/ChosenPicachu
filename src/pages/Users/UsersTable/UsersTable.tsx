@@ -56,6 +56,6 @@ export const UsersTable: FC = () => {
         })}
       </Body>
     </table>
-    <output className="off-screen" htmlFor="users-table" aria-label="move report">{tableReports.of(tableReads.report(sortable))}</output>
+    <output className="off-screen" htmlFor="users-table" aria-label="move report">{tableReports.spoken(tableReads.report(sortable))}</output>
   </DragSortable>;
 };

@@ -35,10 +35,10 @@ const landing = (axis: 'column' | 'row', orderAtLift: readonly string[], held: s
   return some(report);
 };
 
-const of = (report: Maybe<Report>): string => report.map(move).orElse('');
+const spoken = (report: Maybe<Report>): string => report.map(move).orElse('');
 
 export const tableReports = {
   move,
   landing,
-  of
+  spoken
 };
