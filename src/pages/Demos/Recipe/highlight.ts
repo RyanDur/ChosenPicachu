@@ -12,15 +12,15 @@ type Found = {
   kind: Kind;
 };
 
-const scan = (line: string, patterns: ReadonlyArray<{match: RegExp; kind: Kind}>): Token[] => {
+const scan = (line: string, patterns: ReadonlyArray<{pattern: RegExp; kind: Kind}>): Token[] => {
   const found: Found[] = [];
-  patterns.forEach(({match, kind}) => {
-    for (const hit of line.matchAll(match)) {
-      const start = hit.index;
+  patterns.forEach(({pattern, kind}) => {
+    for (const match of line.matchAll(pattern)) {
+      const start = match.index;
       const overlaps = found.some(taken =>
-        start < taken.start + taken.length && taken.start < start + hit[0].length);
-      if (not(overlaps) && has(hit[0])) {
-        found.push({start, length: hit[0].length, kind});
+        start < taken.start + taken.length && taken.start < start + match[0].length);
+      if (not(overlaps) && has(match[0])) {
+        found.push({start, length: match[0].length, kind});
       }
     }
   });
@@ -46,38 +46,38 @@ const keywords = [
   'switch', 'case', 'default', 'throw', 'try', 'catch', 'finally', 'await', 'async', 'while', 'for', 'declare'
 ];
 
-const ts: ReadonlyArray<{match: RegExp; kind: Kind}> = [
-  {match: /\/\/.*$/g, kind: 'comment'},
-  {match: /\{\/\*.*?\*\/}/g, kind: 'comment'},
-  {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
-  {match: /(?<=\w<)[A-Z]\w*(?=,|>[(;)=])/g, kind: 'type'},
-  {match: /(?<=<\/?)[A-Za-z][\w.]*/g, kind: 'tag'},
-  {match: /(?<=<[A-Za-z][\w.]*\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
-  {match: new RegExp(`\\b(?:${keywords.join('|')})\\b`, 'g'), kind: 'keyword'},
-  {match: /(?<=:\s*)(?:readonly\s+)?[A-Z]\w*(?=[[<,;)=\s|]|$)/g, kind: 'type'},
-  {match: /(?<=\b(?:type|extends|new)\s+)[A-Z]\w*/g, kind: 'type'},
-  {match: /(?<=<)[A-Z]\w*(?=[,>])|(?<=, )[A-Z]\w*(?=>)/g, kind: 'type'},
-  {match: /\b[a-zA-Z_$][\w$]*(?=\()/g, kind: 'call'},
-  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
+const ts: ReadonlyArray<{pattern: RegExp; kind: Kind}> = [
+  {pattern: /\/\/.*$/g, kind: 'comment'},
+  {pattern: /\{\/\*.*?\*\/}/g, kind: 'comment'},
+  {pattern: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
+  {pattern: /(?<=\w<)[A-Z]\w*(?=,|>[(;)=])/g, kind: 'type'},
+  {pattern: /(?<=<\/?)[A-Za-z][\w.]*/g, kind: 'tag'},
+  {pattern: /(?<=<[A-Za-z][\w.]*\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
+  {pattern: new RegExp(`\\b(?:${keywords.join('|')})\\b`, 'g'), kind: 'keyword'},
+  {pattern: /(?<=:\s*)(?:readonly\s+)?[A-Z]\w*(?=[[<,;)=\s|]|$)/g, kind: 'type'},
+  {pattern: /(?<=\b(?:type|extends|new)\s+)[A-Z]\w*/g, kind: 'type'},
+  {pattern: /(?<=<)[A-Z]\w*(?=[,>])|(?<=, )[A-Z]\w*(?=>)/g, kind: 'type'},
+  {pattern: /\b[a-zA-Z_$][\w$]*(?=\()/g, kind: 'call'},
+  {pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
 
-const css: ReadonlyArray<{match: RegExp; kind: Kind}> = [
-  {match: /\/\*.*?\*\//g, kind: 'comment'},
-  {match: /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
-  {match: /@[\w-]+/g, kind: 'keyword'},
-  {match: /^[ \t]*[^:;{}@][^:;{}]*(?=\s*\{)/g, kind: 'tag'},
-  {match: /^[ \t]*[.&][^:;{}]*,$/g, kind: 'tag'},
-  {match: /(?<![\w-])-?\d+(?:\.\d+)?[a-z%]*/g, kind: 'number'},
-  {match: /(?<=^[ \t]*)[a-z-]+(?=\s*:)/gm, kind: 'attribute'},
-  {match: /[a-z-]+(?=\()/g, kind: 'call'}
+const css: ReadonlyArray<{pattern: RegExp; kind: Kind}> = [
+  {pattern: /\/\*.*?\*\//g, kind: 'comment'},
+  {pattern: /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
+  {pattern: /@[\w-]+/g, kind: 'keyword'},
+  {pattern: /^[ \t]*[^:;{}@][^:;{}]*(?=\s*\{)/g, kind: 'tag'},
+  {pattern: /^[ \t]*[.&][^:;{}]*,$/g, kind: 'tag'},
+  {pattern: /(?<![\w-])-?\d+(?:\.\d+)?[a-z%]*/g, kind: 'number'},
+  {pattern: /(?<=^[ \t]*)[a-z-]+(?=\s*:)/gm, kind: 'attribute'},
+  {pattern: /[a-z-]+(?=\()/g, kind: 'call'}
 ];
 
-const html: ReadonlyArray<{match: RegExp; kind: Kind}> = [
-  {match: /\{\/\*.*?\*\/}|<!--.*?-->/g, kind: 'comment'},
-  {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
-  {match: /(?<=<\/?)[\w.-]+/g, kind: 'tag'},
-  {match: /(?<=<[\w.-]+\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
-  {match: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
+const html: ReadonlyArray<{pattern: RegExp; kind: Kind}> = [
+  {pattern: /\{\/\*.*?\*\/}|<!--.*?-->/g, kind: 'comment'},
+  {pattern: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
+  {pattern: /(?<=<\/?)[\w.-]+/g, kind: 'tag'},
+  {pattern: /(?<=<[\w.-]+\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
+  {pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
 
 const grammars = {TS: ts, CSS: css, HTML: html};
