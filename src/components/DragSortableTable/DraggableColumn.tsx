@@ -60,10 +60,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({
     aria-sort={sorted}
     tabIndex={travels ? 0 : undefined}
     onPointerDown={travels ? lifting.column(column, () => order, () => standing, lift) : undefined}
-    onPointerMove={has(drag) ? travel.pointer(moved(drag), release) : undefined}
-    onPointerUp={has(drag) ? release : undefined}
-    onPointerCancel={has(drag) ? release : undefined}
-    onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}
+    {...travel.held(drag, moved, release)}
     onKeyDown={travels ? arrows.column(column, () => order, ({
       to,
       widths
@@ -71,15 +68,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{
       '--share': shares.width(width),
-      '--seat-x': looks.pixels(seat?.x),
-      '--seat-y': looks.pixels(seat?.y),
-      '--drift-x': looks.pixels(drift?.x),
-      '--drift-y': looks.pixels(drift?.y),
-      '--settle-x': looks.pixels(settlingFrom?.seat.x),
-      '--settle-y': looks.pixels(settlingFrom?.seat.y),
-      '--settle-drift-x': looks.pixels(settlingFrom?.drift.x),
-      '--settle-drift-y': looks.pixels(settlingFrom?.drift.y),
-      '--shoved-by': looks.shoveDistance(shoved)
+      ...looks.placement({seat, drift, settlingFrom, shove: shoved})
     }}>
     {children}
   </th>;

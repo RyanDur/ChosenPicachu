@@ -20,13 +20,7 @@ export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({
 
   return <td {...td}
     className={classNames('cell', className, ...looks.cellNeeds, ...looks.motionStates(columnCarried || rowCarried, from, shove))}
-    style={{
-      '--seat-x': looks.pixels(seat?.x), '--seat-y': looks.pixels(seat?.y),
-      '--drift-x': looks.pixels(drift?.x), '--drift-y': looks.pixels(drift?.y),
-      '--settle-x': looks.pixels(from?.seat.x), '--settle-y': looks.pixels(from?.seat.y),
-      '--settle-drift-x': looks.pixels(from?.drift.x), '--settle-drift-y': looks.pixels(from?.drift.y),
-      '--shoved-by': looks.shoveDistance(shove)
-    }}>
+    style={looks.placement({seat, drift, settlingFrom: from, shove})}>
     {children}
   </td>;
 };
