@@ -12,9 +12,12 @@ export const oldBanner = {
     (await findRaiser()).focus();
     await userEvent.keyboard('{Enter}');
   },
-  tab: async (): Promise<void> => userEvent.tab(),
+  tabToDismiss: async (): Promise<void> => {
+    await userEvent.tab();
+    await userEvent.tab();
+  },
   dismissButton: (): HTMLElement => screen.getByRole('button', {name: 'dismiss the old banner'}),
-  pressEnter: async (): Promise<void> => {
+  dismissByKeyboard: async (): Promise<void> => {
     await userEvent.keyboard('{Enter}');
   },
   raised: (): HTMLElement => screen.getByText(oldWords),
