@@ -1,18 +1,48 @@
+import {not} from '@ryandur/sand';
+import {structure} from './structure.mjs';
+
 const platform = new Set([
   'window', 'document', 'navigator', 'console', 'globalThis', 'history', 'location', 'Date', 'Math', 'performance',
   'crypto', 'localStorage', 'sessionStorage'
 ]);
-const platformElement = /^(Node|Element|Document|Window|EventTarget|HTML\w*Element|SVG\w*Element)$/;
-const ours = /^[.@]/;
+const platformClass = /^(Node|Element|Document|Window|EventTarget|Storage|HTML\w*Element|SVG\w*Element|\w+Observer)$/;
+const runners = new Set(['test', 'it', 'describe']);
+
+/**
+ * @param {any} node
+ * @returns {any}
+ */
+const rootOf = node => node.type === 'MemberExpression' ? rootOf(node.object) : node;
 
 /**
  * @param {any} target
  * @returns {boolean}
  */
-const ownedByThePlatform = target =>
-  target.type === 'Identifier' && platform.has(target.name)
-  || target.type === 'MemberExpression' && target.object.type === 'Identifier' && platformElement.test(target.object.name)
+const ownedByThePlatform = target => {
+  const root = rootOf(target);
+  if (root.type !== 'Identifier') return false;
+  if (platform.has(root.name)) return true;
+  return platformClass.test(root.name) && target.type === 'MemberExpression' && target.object === root
     && target.property.name === 'prototype';
+};
+
+/**
+ * @param {string} path
+ * @returns {boolean}
+ */
+const ours = path => path.startsWith('.')
+  || structure.aliases.some(alias => path === alias || path.startsWith(`${alias}/`));
+
+/**
+ * @param {any} argument
+ * @returns {string}
+ */
+const pathIn = argument => {
+  if (argument.type === 'Literal' && typeof argument.value === 'string') return argument.value;
+  if (argument.type === 'TemplateLiteral' && argument.expressions.length === 0) return argument.quasis[0].value.cooked;
+  if (argument.type === 'ImportExpression') return pathIn(argument.source);
+  return '';
+};
 
 /** @type {import('eslint').Rule.RuleModule} */
 const noDoubleOfOurs = {
@@ -25,10 +55,11 @@ const noDoubleOfOurs = {
   },
   create: context => ({
     'CallExpression[callee.object.name="vi"][callee.property.name="spyOn"]': node => {
-      if (!ownedByThePlatform(node.arguments[0])) context.report({node, messageId: 'spied'});
+      if (not(ownedByThePlatform(node.arguments[0]))) context.report({node, messageId: 'spied'});
     },
-    'CallExpression[callee.object.name="vi"][callee.property.name=/^(mock|doMock)$/] > Literal.arguments:first-child': node => {
-      if (ours.test(node.value)) context.report({node, messageId: 'mocked', data: {path: node.value}});
+    'CallExpression[callee.object.name="vi"][callee.property.name=/^(mock|doMock)$/]': node => {
+      const path = pathIn(node.arguments[0]);
+      if (ours(path)) context.report({node, messageId: 'mocked', data: {path}});
     }
   })
 };
@@ -43,8 +74,10 @@ const parameterizedForDrift = {
     }
   },
   create: context => ({
-    'MemberExpression[object.name=/^(test|it|describe)$/][property.name="each"]': node =>
-      context.report({node, messageId: 'drift'})
+    'MemberExpression[property.name=/^(each|for)$/]': node => {
+      const root = rootOf(node.object);
+      if (root.type === 'Identifier' && runners.has(root.name)) context.report({node, messageId: 'drift'});
+    }
   })
 };
 
