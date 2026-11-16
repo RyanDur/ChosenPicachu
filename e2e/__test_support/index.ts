@@ -5,7 +5,7 @@ export {practicePage} from './practice';
 export {recordPage} from './record';
 export {galleryPage} from './gallery';
 export {piecePage} from './piece';
-export {dragSortTable, stages, stagesWith, tablesCard, type FingerPress, type Hold, type Stage} from './frame';
+export {tablesFrame, type FingerPress, type Hold, type Stage} from './frame';
 export {usersPage, type Person} from './users';
 export {violationsOf} from './axe';
 export {phone, phoneSideways, iPhone, iPadSplitView, iPadUpright, iPadSideways, iPad13Upright, iPad11Upright, splitViewWide, justPastAPhone, desktop} from './devices';

@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {dragSortTable, iPadSplitView, iPhone, Person, usersPage} from './__test_support';
+import {iPadSplitView, iPhone, Person, tablesFrame, usersPage} from './__test_support';
 import {usersServer} from '../src/pages/Users/usersServer';
 
 const ada: Person = {
@@ -64,7 +64,7 @@ test('a person in the roster drags to a new seat once the roster has arrived, an
   const users = usersPage(page);
   await page.goto('users');
   await expect(users.names.first()).toBeVisible({timeout: 30_000});
-  const roster = dragSortTable(page, page.getByRole('region', {name: 'User Candidates'}));
+  const roster = tablesFrame.dragSortTable(page, page.getByRole('region', {name: 'User Candidates'}));
   const [first, second, third, ...rest] = await roster.rowOrder();
   await roster.listenToTheMoveReport();
 

@@ -1,15 +1,15 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {dragSortTable, stagesWith} from './__test_support';
+import {tablesFrame} from './__test_support';
 
 const columnsAsDealt = ['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
 const lookbacksAsDealt = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
-for (const {name, at, table} of stagesWith('pace=lazy')) {
+for (const {name, at, holder} of tablesFrame.stagesWith('pace=lazy')) {
   test.describe(`a lazy table, in ${name}`, () => {
     test('a held column leaves the order alone until it is dropped, then takes its seat', async ({page}) => {
       await page.goto(at);
-      const trades = dragSortTable(page, table(page));
+      const trades = tablesFrame.dragSortTable(page, holder(page));
       await expect(trades.columnHeader('trades')).toBeVisible();
 
       const hold = await trades.holdColumn('trades');
@@ -24,7 +24,7 @@ for (const {name, at, table} of stagesWith('pace=lazy')) {
 
     test('a column dropped past two neighbors is said once, where it lands', async ({page}) => {
       await page.goto(at);
-      const trades = dragSortTable(page, table(page));
+      const trades = tablesFrame.dragSortTable(page, holder(page));
       await expect(trades.columnHeader('trades')).toBeVisible();
       await trades.listenToTheMoveReport();
 
@@ -40,7 +40,7 @@ for (const {name, at, table} of stagesWith('pace=lazy')) {
 
     test('a held row leaves the lookbacks alone until it is dropped, then takes its seat', async ({page}) => {
       await page.goto(at);
-      const trades = dragSortTable(page, table(page));
+      const trades = tablesFrame.dragSortTable(page, holder(page));
       await expect(trades.columnHeader('trades')).toBeVisible();
 
       const hold = await trades.holdRow(1);
