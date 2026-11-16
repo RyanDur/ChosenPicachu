@@ -1,10 +1,10 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {type FingerPress, iPadUpright, iPhone, type Stage, tablesFrame} from './__test_support';
+import {type FingerPress, iPadUpright, iPhone, type Stage, tableWorlds} from './__test_support';
 
-for (const stage of tablesFrame.stagesWith('origin=keep')) {
+for (const stage of tableWorlds.stagesWith('origin=keep')) {
   test(`a column and a row still land in their new seats while their origin stays in place, in ${stage.name}`, async ({page}) => {
-    const trades = await tablesFrame.opened(page, stage);
+    const trades = await tableWorlds.opened(page, stage);
 
     await trades.dragColumnPast('trades', 'vwap');
     await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
@@ -14,9 +14,9 @@ for (const stage of tablesFrame.stagesWith('origin=keep')) {
   });
 }
 
-for (const stage of tablesFrame.stages) {
+for (const stage of tableWorlds.stages) {
   test(`a column dragged past two neighbors is reported once, where it lands, in ${stage.name}`, async ({page}) => {
-    const trades = await tablesFrame.opened(page, stage);
+    const trades = await tableWorlds.opened(page, stage);
     await trades.listenToTheMoveReport();
 
     await trades.dragColumnPast('trades', 'sells');
@@ -26,9 +26,9 @@ for (const stage of tablesFrame.stages) {
   });
 }
 
-for (const stage of tablesFrame.stages) {
+for (const stage of tableWorlds.stages) {
   test(`a row dragged past two neighbors is reported once, where it lands, in ${stage.name}`, async ({page}) => {
-    const trades = await tablesFrame.opened(page, stage);
+    const trades = await tableWorlds.opened(page, stage);
     await trades.listenToTheMoveReport();
 
     await trades.dragRowPast(1, /last 15 minutes/);
@@ -38,9 +38,9 @@ for (const stage of tablesFrame.stages) {
   });
 }
 
-for (const stage of tablesFrame.stages) {
+for (const stage of tableWorlds.stages) {
   test(`the first and last columns hold their posts, in ${stage.name}`, async ({page}) => {
-    const trades = await tablesFrame.opened(page, stage);
+    const trades = await tableWorlds.opened(page, stage);
 
     await trades.dragColumnPast('lookback', 'buys');
     await trades.dragColumnPast('change', 'volume');
@@ -51,9 +51,9 @@ for (const stage of tablesFrame.stages) {
   });
 }
 
-for (const stage of tablesFrame.stages) {
+for (const stage of tableWorlds.stages) {
   test(`a menu choice sorts, and never lifts the column, in ${stage.name}`, async ({page}) => {
-    const trades = await tablesFrame.opened(page, stage);
+    const trades = await tableWorlds.opened(page, stage);
 
     await trades.sortBy('trades', 'descending');
 
@@ -69,7 +69,7 @@ const aFingerCarriesTheColumn = async (
   from: FingerPress
 ): Promise<void> => {
   test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a finger through a drag');
-  const trades = await tablesFrame.opened(page, stage);
+  const trades = await tableWorlds.opened(page, stage);
 
   await trades.fingerDragColumn('trades', {by: 240, from});
 
@@ -83,7 +83,7 @@ for (const {reader, device} of [
   test.describe(reader, () => {
     test.use(device);
 
-    for (const stage of tablesFrame.stages) {
+    for (const stage of tableWorlds.stages) {
       test(`a finger pressed on a column's name carries it to a new seat, in ${stage.name}`, ({page, browserName}) =>
         aFingerCarriesTheColumn(page, browserName, stage, 'name'));
     }
@@ -93,7 +93,7 @@ for (const {reader, device} of [
 test.describe('a phone', () => {
   test.use(iPhone);
 
-  for (const stage of tablesFrame.stages) {
+  for (const stage of tableWorlds.stages) {
     test(`a finger pressed on a column's middle carries it to a new seat, in ${stage.name}`, ({page, browserName}) =>
       aFingerCarriesTheColumn(page, browserName, stage, 'middle'));
   }
