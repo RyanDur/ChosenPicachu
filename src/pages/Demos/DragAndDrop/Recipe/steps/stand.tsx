@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {OriginDial} from '../../../Controls';
-import {Codes, Says, Sample, Snippet, DialStep, StepHeading, Want, Words, lines, carve} from '../../../Recipe';
+import {carve, Codes, DialStep, lines, Sample, Says, Snippet, StepHeading, Want, Words} from '../../../Recipe';
 
 export const KeepStanding: FC<{listSource: Sample}> = ({listSource}) =>
   <DialStep>
@@ -14,7 +14,7 @@ export const KeepStanding: FC<{listSource: Sample}> = ({listSource}) =>
     </Words>
     <Codes>
       <Snippet label="HTML" lines={[
-        ...carve.span(listSource, '<KeepItem key={item}', '<KeepItem key={item}'),
+        ...carve.between(listSource, '<KeepItem key={item}', '<KeepItem key={item}'),
         lines.aside('{/* no hiding wiring exists in this list; nothing to erase */}')
       ]}/>
     </Codes>

@@ -50,7 +50,7 @@ const WorkspaceStory: FC = () =>
             ...carve.unit(deskSource, 'const added =')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...carve.span(workspaceSource, '<Menu id="add-chart"', '</Menu>')
+            ...carve.between(workspaceSource, '<Menu id="add-chart"', '</Menu>')
           ]}/>
         </Codes>
       </Step>
@@ -93,7 +93,7 @@ const WorkspaceStory: FC = () =>
             ...carve.unit(crossingSource, 'const strayedTo'), lines.blank,
             ...carve.unit(travelSource, 'const travel = (event'), lines.blank,
             ...carve.unit(travelSource, 'const swap = (held'), lines.blank,
-            ...carve.span(chartTravelSource, "case 'swapped'", '};')
+            ...carve.between(chartTravelSource, "case 'swapped'", '};')
           ]}/>
           <AThirdFromThePointer/>
           <Snippet label="CSS" lines={[
@@ -142,7 +142,7 @@ const WorkspaceStory: FC = () =>
           <Snippet label="TS" lines={[
             ...carve.unit(workspaceSource, 'const plural'), lines.blank,
             ...carve.unit(workspaceSource, 'const dismissal'), lines.blank,
-            ...carve.span(workspaceSource, '{chartKinds.match(kind, {', '}).orNull()}')
+            ...carve.between(workspaceSource, '{chartKinds.match(kind, {', '}).orNull()}')
           ]}/>
         </Codes>
       </Step>

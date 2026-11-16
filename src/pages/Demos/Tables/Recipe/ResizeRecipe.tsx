@@ -26,8 +26,8 @@ const ledgerCodes: Record<World, ReactNode> = {
       ...carve.unit(looksSource, 'const headerNeeds')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...carve.span(headerSource, 'className={classNames(', '...looks.headerNeeds(travels, width)'), lines.blank,
-      ...carve.span(headerSource, "'--share': shares.width(width)", "'--share': shares.width(width)")
+      ...carve.between(headerSource, 'className={classNames(', '...looks.headerNeeds(travels, width)'), lines.blank,
+      ...carve.between(headerSource, "'--share': shares.width(width)", "'--share': shares.width(width)")
     ]}/>
     <Snippet label="CSS" lines={[
       ...carve.unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), lines.blank,
@@ -51,11 +51,11 @@ const ledgerCodes: Record<World, ReactNode> = {
 
 const edgeMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...carve.span(headerSource, 'return <th {...th}', '{children}')
+    ...carve.between(headerSource, 'return <th {...th}', '{children}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...carve.span(frameTable, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>'), lines.blank,
-    ...carve.span(frameTable, '</menu>', '</th>')
+    ...carve.between(frameTable, '<th scope="col" class="cell header-cell trades', 'aria-label="sort trades"></button>'), lines.blank,
+    ...carve.between(frameTable, '</menu>', '</th>')
   ]}/>
 };
 
@@ -66,10 +66,10 @@ const SpokenLabel: FC = () =>
 
 const handleMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
-    ...carve.span(resizeSource, '<button type="button"', 'aria-label={shares.resizeLabel(column, namedShare)}')
+    ...carve.between(resizeSource, '<button type="button"', 'aria-label={shares.resizeLabel(column, namedShare)}')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
-    ...carve.span(frameTable, '<button type="button" tabindex="0" data-resize-handle', 'aria-label="resize lookback"></button>')
+    ...carve.between(frameTable, '<button type="button" tabindex="0" data-resize-handle', 'aria-label="resize lookback"></button>')
   ]}/>
 };
 
@@ -140,16 +140,16 @@ const captureCodes: Record<World, ReactNode> = {
 const gestureCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.span(resizeSource, 'onPointerDown={(event', 'event.stopPropagation();'),
+      ...carve.between(resizeSource, 'onPointerDown={(event', 'event.stopPropagation();'),
       lines.aside('// …the press measures; the bubbling stops here'), lines.blank,
       ...carve.unit(sharesSource, 'const resizeArrows'), lines.blank,
-      ...carve.span(resizeSource, 'onKeyDown={shares.resizeArrows(trade)}', 'onKeyDown={shares.resizeArrows(trade)}'),
+      ...carve.between(resizeSource, 'onKeyDown={shares.resizeArrows(trade)}', 'onKeyDown={shares.resizeArrows(trade)}'),
       lines.aside('// the column drag above never gets the press')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.span(frameHandle, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
+      ...carve.between(frameHandle, "handle.addEventListener('pointerdown', event => {", 'event.stopPropagation();'),
       lines.aside('// …the press measures; the bubbling stops here'), lines.blank,
       ...carve.unit(sharesSource, 'const resizeArrows'), lines.blank,
       ...carve.unit(frameHandle, "handle.addEventListener('keydown'"),

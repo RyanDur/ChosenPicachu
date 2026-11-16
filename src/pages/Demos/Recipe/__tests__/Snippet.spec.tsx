@@ -10,7 +10,7 @@ const shared = aSample('export type Store = {};\n', 'src/components/store.ts');
 
 describe('a code sample', () => {
   test('should name the file it was taken from, and link to it on GitHub', () => {
-    render(<Snippet label="TS" lines={carve.span(store, 'export const store', 'export const more')}/>);
+    render(<Snippet label="TS" lines={carve.between(store, 'export const store', 'export const more')}/>);
 
     expect(codeSample.fileLink('Demos/store.ts on GitHub')).toHaveAttribute('href', `${store.url}#L1-L2`);
   });
@@ -24,9 +24,9 @@ describe('a code sample', () => {
 
   test('should link each file it was taken from, in the order they first appear', () => {
     render(<Snippet label="TS" lines={[
-      ...carve.span(shared, 'export type Store', 'export type Store'), lines.plain(' '),
-      ...carve.span(store, 'export const store', 'export const store'),
-      ...carve.span(shared, 'export type Store', 'export type Store')
+      ...carve.between(shared, 'export type Store', 'export type Store'), lines.plain(' '),
+      ...carve.between(store, 'export const store', 'export const store'),
+      ...carve.between(shared, 'export type Store', 'export type Store')
     ]}/>);
 
     expect(codeSample.fileNames()).toEqual(['components/store.ts on GitHub', 'Demos/store.ts on GitHub']);
@@ -34,8 +34,8 @@ describe('a code sample', () => {
 
   test('should open each file at the lines the sample took from it', () => {
     render(<Snippet label="TS" lines={[
-      ...carve.span(store, 'export const more', 'export const more'),
-      ...carve.span(shared, 'export type Store', 'export type Store')
+      ...carve.between(store, 'export const more', 'export const more'),
+      ...carve.between(shared, 'export type Store', 'export type Store')
     ]}/>);
 
     expect(codeSample.fileAddresses()).toEqual([`${store.url}#L2-L2`, `${shared.url}#L1-L1`]);
@@ -43,7 +43,7 @@ describe('a code sample', () => {
 
   test('should show each line of a carved sample with its indent, as it reads in the file', () => {
     const travel = aSample('const travel = (event) => {\n  if (event.buttons === 0) {\n    drop();\n  }\n};\n');
-    render(<Snippet label="TS" lines={[...carve.span(travel, 'const travel', '};'), lines.aside('  // dimmed, and indented')]}/>);
+    render(<Snippet label="TS" lines={[...carve.between(travel, 'const travel', '};'), lines.aside('  // dimmed, and indented')]}/>);
 
     expect(codeSample.code()).toEqual([
       'const travel = (event) => {',
@@ -63,14 +63,14 @@ describe('a code sample', () => {
 
   test('should name what a lowercase folder sits inside, since it is a module of that component', () => {
     const survey = aSample('export const survey = 1;\n', 'src/components/DragSortableTable/model/survey.ts');
-    render(<Snippet label="TS" lines={carve.span(survey, 'export const survey', 'export const survey')}/>);
+    render(<Snippet label="TS" lines={carve.between(survey, 'export const survey', 'export const survey')}/>);
 
     expect(codeSample.fileLink('DragSortableTable/model/survey.ts on GitHub')).toBeInTheDocument();
   });
 
   test('should show a file directly under src with its folder', () => {
     const sheet = aSample('.x {}\n', 'src/index.css');
-    render(<Snippet label="CSS" lines={carve.span(sheet, '.x {', '.x {')}/>);
+    render(<Snippet label="CSS" lines={carve.between(sheet, '.x {', '.x {')}/>);
 
     expect(codeSample.fileLink('src/index.css on GitHub')).toBeInTheDocument();
   });

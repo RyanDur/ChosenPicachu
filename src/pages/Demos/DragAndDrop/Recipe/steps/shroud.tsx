@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {OriginDial} from '../../../Controls';
-import {Codes, Mdn, Sample, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve} from '../../../Recipe';
+import {carve, Codes, DialStep, lines, Mdn, Sample, Says, Snippet, StepHeading, Want, Words} from '../../../Recipe';
 import {sources} from './sources';
 
 export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
@@ -16,8 +16,8 @@ export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[
-        ...carve.span(itemSource, 'const {held, gripped} = useDragSort();', 'const {held, gripped} = useDragSort();'), lines.blank,
-        ...carve.span(itemSource, "className={classNames('draggable'", "held.map(lifted => lifted.item === item).orElse(false) && 'hide', className)}")
+        ...carve.between(itemSource, 'const {held, gripped} = useDragSort();', 'const {held, gripped} = useDragSort();'), lines.blank,
+        ...carve.between(itemSource, "className={classNames('draggable'", "held.map(lifted => lifted.item === item).orElse(false) && 'hide', className)}")
       ]}/>
       <Snippet label="CSS" lines={[
         ...carve.unit(sources.hideItemCss, '.draggable.hide {'),

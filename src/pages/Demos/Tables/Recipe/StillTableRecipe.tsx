@@ -95,24 +95,24 @@ const suppliedBy: Record<World, ReactNode> = {
 const dealCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
-      ...carve.span(dealSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
+      ...carve.between(dealSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...elidedHeaders(carve.span(dealSource, 'return <DragSortable value={sortable}>', '</Headers>')), lines.blank,
-      ...carve.span(dealSource, '</table>', '</DragSortable>')
+      ...elidedHeaders(carve.between(dealSource, 'return <DragSortable value={sortable}>', '</Headers>')), lines.blank,
+      ...carve.between(dealSource, '</table>', '</DragSortable>')
     ]}/>
     <Snippet label="CSS" lines={[
       ...carve.unit(widthsSource, '.aggregations {')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...carve.span(headerSource, 'return <th {...th}', 'scope="col"'), lines.blank,
-      ...carve.span(cellSource, 'return <td {...td}', '</td>;')
+      ...carve.between(headerSource, 'return <th {...th}', 'scope="col"'), lines.blank,
+      ...carve.between(cellSource, 'return <td {...td}', '</td>;')
     ]}/>
   </Codes>,
   vanilla: <Codes>
     <Snippet label="HTML" lines={[
-      ...carve.span(frameTable, '<table class="fancy-table', '</th>'), lines.blank,
-      ...carve.span(frameTable, '<tbody class="body">', '</tr>')
+      ...carve.between(frameTable, '<table class="fancy-table', '</th>'), lines.blank,
+      ...carve.between(frameTable, '<tbody class="body">', '</tr>')
     ]}/>
     <Snippet label="CSS" lines={[
       ...carve.unit(widthsSource, '.aggregations {')

@@ -42,7 +42,7 @@ export const PopoverExplained: FC = () =>
           no script, closes it on Escape or a click outside it, and gives focus back to the button when focus was in the
           menu. Each choice is a
           button that closes the menu with popovertargetaction set to hide.</p>
-        <Snippet label="HTML" lines={carve.span(topLayerSource, '<button type="button"', '</Menu>')}/>
+        <Snippet label="HTML" lines={carve.between(topLayerSource, '<button type="button"', '</Menu>')}/>
       </li>
       <li className="run">
         <p className="paragraph">Menu, Entry and Item are this site’s components for a menu, and they write one element
@@ -59,7 +59,7 @@ export const PopoverExplained: FC = () =>
           React spells it. A tabindex of 0 asks the browser to stop on the element when
           Tab moves focus. A button stops Tab by itself in most browsers, but by default Safari moves Tab only to text
           fields and to elements that ask for it.</p>
-        <Snippet label="HTML" lines={carve.span(topLayerSource, '<button type="button" tabIndex={0} className="button primary', '</button>')}/>
+        <Snippet label="HTML" lines={carve.between(topLayerSource, '<button type="button" tabIndex={0} className="button primary', '</button>')}/>
       </li>
       <li className="run">
         <p className="paragraph">Script adds two things, and both wait for an event. An event is the browser telling the
@@ -83,7 +83,7 @@ export const PopoverExplained: FC = () =>
             forms a stacking context</cite></a> names
           its own anchor.</p>
         <Snippet label="CSS" lines={[
-          ...carve.span(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'), lines.blank,
+          ...carve.between(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'), lines.blank,
           ...carve.unit(menuCss, '@supports not (position-area: block-end) {')
         ]}/>
       </li>

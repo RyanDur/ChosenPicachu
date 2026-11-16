@@ -145,10 +145,10 @@ const PriceStory: FC = () =>
             ...carve.unit(periodSource, 'const bucketMilliseconds'), lines.blank,
             ...carve.unit(periodSource, 'const candleCap'), lines.blank,
             ...carve.unit(periodMenuSource, 'const spoken'), lines.blank,
-            ...carve.span(periodMenuSource, '  const {periodOf, choosePeriod}', '  const period = periodOf(kind);')
+            ...carve.between(periodMenuSource, '  const {periodOf, choosePeriod}', '  const period = periodOf(kind);')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...carve.span(periodMenuSource, '<button', '</Menu>')
+            ...carve.between(periodMenuSource, '<button', '</Menu>')
           ]}/>
         </Codes>
       </Step>
@@ -166,10 +166,10 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.span(sparklineSource, 'const points = (', 'export const sparkline = {points};')
+            ...carve.between(sparklineSource, 'const points = (', 'export const sparkline = {points};')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...carve.span(priceSource, '<svg className="sparkline"', '</svg>')
+            ...carve.between(priceSource, '<svg className="sparkline"', '</svg>')
           ]}/>
         </Codes>
       </Step>
@@ -196,7 +196,7 @@ const PriceStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.span(axesSource, 'export const Axes', '</>;')
+            ...carve.between(axesSource, 'export const Axes', '</>;')
           ]}/>
           <Snippet label="CSS" lines={[
             ...carve.unit(axesCss, '.chart-stage:has(> .y-labels) {')
@@ -274,13 +274,13 @@ const CandlesStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.span(bucketPlacesSource, 'const of = (', 'export const bucketPlaces = {of};'), lines.blank,
+            ...carve.between(bucketPlacesSource, 'const of = (', 'export const bucketPlaces = {of};'), lines.blank,
             ...carve.unit(candleShapesSource, 'const drawn'), lines.blank,
-            ...carve.span(shapesSource, 'const placed = (', 'export const shapes = {placed};'), lines.blank,
-            ...carve.span(barSource, 'export const Bar', '</g>;')
+            ...carve.between(shapesSource, 'const placed = (', 'export const shapes = {placed};'), lines.blank,
+            ...carve.between(barSource, 'export const Bar', '</g>;')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...carve.span(candlesSource, '<svg className="candlesticks"', '</svg>')
+            ...carve.between(candlesSource, '<svg className="candlesticks"', '</svg>')
           ]}/>
           <Snippet label="CSS" lines={[
             ...carve.unit(candlesCss, '.wick {'), lines.blank,
@@ -315,7 +315,7 @@ const CandlesStory: FC = () =>
             ...carve.unit(candleShapesSource, 'const volumes')
           ]}/>
           <Snippet label="HTML" lines={[
-            ...carve.span(candlesSource, '<svg className="volumes volume-side"', '</svg>')
+            ...carve.between(candlesSource, '<svg className="volumes volume-side"', '</svg>')
           ]}/>
           <Snippet label="CSS" lines={[
             ...carve.unit(shapeCss, '.shape {'), lines.blank,
@@ -336,8 +336,8 @@ const CandlesStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.span(candlesSource, 'const extent = axisRange.of(', '  );'), lines.blank,
-            ...carve.span(candlesSource, '<Axes extent', 'headroomMilliseconds={2 * bucketMilliseconds}>')
+            ...carve.between(candlesSource, 'const extent = axisRange.of(', '  );'), lines.blank,
+            ...carve.between(candlesSource, '<Axes extent', 'headroomMilliseconds={2 * bucketMilliseconds}>')
           ]}/>
         </Codes>
       </Step>
@@ -402,7 +402,7 @@ const PressureStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.span(bucketPlacesSource, 'const of = (', 'export const bucketPlaces = {of};'), lines.blank,
+            ...carve.between(bucketPlacesSource, 'const of = (', 'export const bucketPlaces = {of};'), lines.blank,
             ...carve.unit(pressureShapesSource, 'const heaviestSide'), lines.blank,
             ...carve.unit(pressureShapesSource, 'const drawn')
           ]}/>
@@ -439,7 +439,7 @@ const PressureStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
-            ...carve.span(pressureComponent, '<svg className="pressures"', '</svg>')
+            ...carve.between(pressureComponent, '<svg className="pressures"', '</svg>')
           ]}/>
           <Snippet label="CSS" lines={[
             ...carve.unit(pressureCss, '.midline {'), lines.blank,
@@ -527,7 +527,7 @@ const PieStory: FC = () =>
             ...carve.unit(pieSource, 'const sweepGates =')
           ]}/>
           <Snippet label="TS" lines={[
-            ...carve.span(pieComponent, "{['wall', 'face'].map(dressed", '}))}')
+            ...carve.between(pieComponent, "{['wall', 'face'].map(dressed", '}))}')
           ]}/>
           <Snippet label="CSS" lines={[
             ...carve.unit(pieCss, '@property --explode-x {'), lines.blank,
@@ -547,7 +547,7 @@ const PieStory: FC = () =>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
-            ...carve.span(pieComponent, '<ul className="legend caption">', '</ul>')
+            ...carve.between(pieComponent, '<ul className="legend caption">', '</ul>')
           ]}/>
         </Codes>
       </Step>

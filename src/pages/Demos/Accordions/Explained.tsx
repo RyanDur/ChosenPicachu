@@ -95,17 +95,17 @@ type Build = {
 };
 
 const knownHeightBuilds: Record<FoldType, Build> = {
-  inclusive: {Accordion: InclusiveAccordion, sample: carve.span(inclusiveAccordionSource, '<li key={heading} className="fold">', '</li>')},
-  exclusive: {Accordion: ExclusiveAccordion, sample: carve.span(exclusiveAccordionSource, '<li className="fold" key={heading}>', '</li>')}
+  inclusive: {Accordion: InclusiveAccordion, sample: carve.between(inclusiveAccordionSource, '<li key={heading} className="fold">', '</li>')},
+  exclusive: {Accordion: ExclusiveAccordion, sample: carve.between(exclusiveAccordionSource, '<li className="fold" key={heading}>', '</li>')}
 };
 
 const platformBuilds: Record<FoldType, Build> = {
-  inclusive: {Accordion: InclusiveToggleAccordion, sample: carve.span(inclusiveToggleAccordionSource, '<details className="fold">', '</details>')},
-  exclusive: {Accordion: ExclusiveToggleAccordion, sample: carve.span(exclusiveToggleAccordionSource, '<details className="fold" name=', '</details>')}
+  inclusive: {Accordion: InclusiveToggleAccordion, sample: carve.between(inclusiveToggleAccordionSource, '<details className="fold">', '</details>')},
+  exclusive: {Accordion: ExclusiveToggleAccordion, sample: carve.between(exclusiveToggleAccordionSource, '<details className="fold" name=', '</details>')}
 };
 
 const sharedOpenFolds = (source: Sample): Line[] =>
-  carve.elided(carve.span(source, 'const [open, dispatch] = useReducer(', '</OpenFolds.Provider>;'), '<article', '</OpenFolds.Provider>;', '{/* …the folds */}');
+  carve.elided(carve.between(source, 'const [open, dispatch] = useReducer(', '</OpenFolds.Provider>;'), '<article', '</OpenFolds.Provider>;', '{/* …the folds */}');
 
 const measuredBuilds: Record<FoldType, Build> = {
   inclusive: {Accordion: InclusiveMeasuredAccordion, sample: sharedOpenFolds(inclusiveMeasuredAccordionSource)},
@@ -154,7 +154,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
       <ol className={runs}>
         <li className="run">
           <HtmlAlone/>
-          <Snippet label="HTML" lines={carve.span(htmlAloneSource, '<ul>', '</ul>')}/>
+          <Snippet label="HTML" lines={carve.between(htmlAloneSource, '<ul>', '</ul>')}/>
         </li>
         <li className="run">
           <p className="paragraph">An HTML page is made of elements. Most are a pair of tags, such
@@ -222,7 +222,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 other element on the page shares. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute
                 names the radio’s id. That link makes a press anywhere on the label press the radio. Each id
                 includes the fold’s place in the list, so no two radios share one.</p>}
-            <Snippet label="HTML" lines={foldType === 'inclusive' ? carve.span(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
+            <Snippet label="HTML" lines={foldType === 'inclusive' ? carve.between(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
           </li>
           <li className="run">
             <p className="paragraph">Now a rule has to match on whether the {input} is
@@ -343,7 +343,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     ...carve.unit(panelSource, 'type Motion ='), lines.blank,
                     ...carve.unit(panelSource, 'type Panel ='), lines.blank,
                     ...carve.unit(panelSource, 'type PanelChange ='), lines.blank,
-                    ...carve.span(panelSource, 'const open = useOpenFolds()', 'const [{shown, motion}, dispatch] = useReducer(')
+                    ...carve.between(panelSource, 'const open = useOpenFolds()', 'const [{shown, motion}, dispatch] = useReducer(')
                   ]}/>
                 </li>
                 <li className="run">
@@ -351,7 +351,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     only to measure: the text’s height, the height the panel stands at, and whether the style sheet
                     gives the height a transition at all.</p>
                   <Snippet label="TS" lines={[
-                    ...carve.span(panelSource, 'const panel = useRef<HTMLElement>(null);', 'const panel = useRef<HTMLElement>(null);'), lines.blank,
+                    ...carve.between(panelSource, 'const panel = useRef<HTMLElement>(null);', 'const panel = useRef<HTMLElement>(null);'), lines.blank,
                     ...carve.unit(panelSource, 'const textHeight'), lines.blank,
                     ...carve.unit(panelSource, 'const standing'), lines.blank,
                     ...carve.unit(panelSource, 'const moves')
@@ -369,7 +369,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     ...carve.unit(panelSource, 'const motionOnPress'), lines.blank,
                     ...carve.unit(panelSource, 'const panelChange = {'), lines.blank,
                     ...carve.unit(panelSource, 'const nextPanel'), lines.blank,
-                    ...carve.span(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [motion, open]);'), lines.blank,
+                    ...carve.between(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [motion, open]);'), lines.blank,
                     ...carve.unit(panelSource, 'const settled')
                   ]}/>
                 </li>
@@ -395,7 +395,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     So the script pins the start first, with <code className="monospaced">unmoving</code>, as the plain
                     script does.</p>
                   <Snippet label="TS" lines={[
-                    ...carve.span(panelSource, "useLayoutEffect(() => {\n    const measured = panel.current;\n    if (motion.kind === 'pinned'", '}, [motion, open]);'), lines.blank,
+                    ...carve.between(panelSource, "useLayoutEffect(() => {\n    const measured = panel.current;\n    if (motion.kind === 'pinned'", '}, [motion, open]);'), lines.blank,
                     ...carve.unit(panelSource, 'return <section ref={panel}')
                   ]}/>
                   <Snippet label="CSS" lines={carve.unit(oldWayMotionCss, '.info-toggle ~ .info-measured.unmoving {')}/>
@@ -415,7 +415,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     item around the radio handles it by dispatching <code className="monospaced">opened</code> with the bar
                     that names its fold. The accordion’s reducer keeps that one fold open and closes the rest, and each
                     panel reads from the context whether its fold is still the open one.</p>
-                  <Snippet label="TS" lines={carve.span(exclusiveMeasuredAccordionSource, '<li className="fold" key={heading} onChange={() => dispatch(', '<MeasuredPanel namedBy={barOf(id)}>')}/>
+                  <Snippet label="TS" lines={carve.between(exclusiveMeasuredAccordionSource, '<li className="fold" key={heading} onChange={() => dispatch(', '<MeasuredPanel namedBy={barOf(id)}>')}/>
                 </li>}
               </ol>
             </details>
@@ -593,7 +593,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 <p className="paragraph">A checked radio stays checked when you press it again, so a fold cannot close
                   itself. So the list starts with a Close radio, checked at first, and choosing it unchecks
                   whichever fold was open.</p>
-                <Snippet label="HTML" lines={carve.span(exclusiveAccordionSource, '<li className="fold close field-inverse">', '</li>')}/>
+                <Snippet label="HTML" lines={carve.between(exclusiveAccordionSource, '<li className="fold close field-inverse">', '</li>')}/>
               </li>}
               {foldType === 'exclusive' && <li className="run">
                 <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
@@ -724,7 +724,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
             at its end, an Open or Close control, and the checkbox remembers whether the fold is open, as it did in the
             known-height build. The name is only a name: pressing it does nothing. Only the control works the fold. What
             is new is the way the text opens, below.</p>
-          <Snippet label="HTML" lines={carve.span(inclusiveCheckboxToggleAccordionSource, '<fieldset>\n    <legend className="off-screen">folds</legend>\n    <ul className="new-accordion">', '</header>')}/>
+          <Snippet label="HTML" lines={carve.between(inclusiveCheckboxToggleAccordionSource, '<fieldset>\n    <legend className="off-screen">folds</legend>\n    <ul className="new-accordion">', '</header>')}/>
         </li>}
         {foldType === 'exclusive' && <li className="run">
           <p className="paragraph">The exclusive build keeps the radio group from the old way and takes its slide from
@@ -746,7 +746,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
             ...carve.unit(exclusiveRadioToggleAccordionSource, 'const openAfter'), lines.blank,
             ...carve.unit(exclusiveRadioToggleAccordionSource, 'const radioPressed'), lines.blank,
             ...carve.unit(exclusiveRadioToggleAccordionSource, 'const radioClicked'), lines.blank,
-            ...carve.span(exclusiveRadioToggleAccordionSource, '<ul className="new-accordion" onClick', '<ul className="new-accordion" onClick')
+            ...carve.between(exclusiveRadioToggleAccordionSource, '<ul className="new-accordion" onClick', '<ul className="new-accordion" onClick')
           ]}/>
           <WhatEachElementDoes/>
         </li>}

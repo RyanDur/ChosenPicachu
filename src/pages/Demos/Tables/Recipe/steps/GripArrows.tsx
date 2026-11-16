@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
+import {carve, Codes, lines, Reveal, Sample, Says, Snippet, Step, StepHeading, Want, Words} from '../../../Recipe';
 import {useControls} from '../../../Controls';
 import {sources} from './sources';
 
@@ -22,7 +22,7 @@ export const GripArrows: FC<{rowSource: Sample; buildSource: Sample}> = ({rowSou
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.span(rowSource, 'onKeyDown={arrows.row(', '})}/>'),
+            ...carve.between(rowSource, 'onKeyDown={arrows.row(', '})}/>'),
             lines.aside('// the grip handles its own arrows; the walk is shared')
           ]}/>
           : <Snippet label="TS" lines={[

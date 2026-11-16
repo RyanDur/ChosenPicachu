@@ -90,7 +90,7 @@ export const MultipleRecipe: FC = () => {
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(changeSource, 'export const bannerChange = {'), lines.blank,
-            ...carve.span(newsSource, "case 'raised':", ': {...news, banners: [...news.banners, change.banner]};')
+            ...carve.between(newsSource, "case 'raised':", ': {...news, banners: [...news.banners, change.banner]};')
           ]}/>
         </Codes>
       </Step>
@@ -121,10 +121,10 @@ export const MultipleRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="CSS" lines={[
-            ...carve.span(timingCss, '--slide-curve:', '--fold-duration:'), lines.blank,
+            ...carve.between(timingCss, '--slide-curve:', '--fold-duration:'), lines.blank,
             ...carve.unit(bannersCss, '.trouble {'), lines.blank,
             ...carve.unit(bannersCss, `${axisSelector[axisOf(stack)]} .trouble {`), lines.blank,
-            ...carve.span(bannersCss, ownedMargin[axisOf(stack)], '}'), lines.blank,
+            ...carve.between(bannersCss, ownedMargin[axisOf(stack)], '}'), lines.blank,
             ...carve.unit(bannersCss, '.news-item {')
           ]}/>
         </Codes>

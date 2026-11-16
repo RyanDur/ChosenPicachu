@@ -24,7 +24,7 @@ export const StackingExplained: FC = () =>
           property changes it, and its starting value, auto, keeps a positioned card in the order the code lists
           it. No card here sets a z-index, so First is painted first, Third is painted last, and Third lands on
           top.</p>
-        <Snippet label="HTML" lines={carve.span(naturalSource, '<ol id="z-index-pile"', '</ol>')}/>
+        <Snippet label="HTML" lines={carve.between(naturalSource, '<ol id="z-index-pile"', '</ol>')}/>
         <Snippet label="CSS" lines={[
           ...carve.unit(zIndexCss, '.pile-card {'), lines.blank,
           ...carve.unit(zIndexCss, '.closed {')

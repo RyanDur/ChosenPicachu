@@ -46,7 +46,7 @@ export const ListenersOnce: FC<{buildSource: Sample}> = ({buildSource}) => {
       <Codes>
         <Snippet label="TS" lines={[
           ...carve.unit(sources.store, 'export type Store'), lines.blank,
-          ...carve.span(sources.lift, 'const column = (', ') => (event: GrabEvent): void => {'),
+          ...carve.between(sources.lift, 'const column = (', ') => (event: GrabEvent): void => {'),
           lines.aside('// the order is a question the event asks, not a value the listener keeps')
         ]}/>
         {world === 'react'
@@ -55,7 +55,7 @@ export const ListenersOnce: FC<{buildSource: Sample}> = ({buildSource}) => {
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.unit(buildSource, 'export const dragSortable = '), lines.blank,
-            ...carve.span(buildSource, 'hand.subscribe(', 'hand.subscribe(')
+            ...carve.between(buildSource, 'hand.subscribe(', 'hand.subscribe(')
           ]}/>}
       </Codes>
     </Reveal>

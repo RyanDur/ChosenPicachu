@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
+import {carve, Codes, lines, Reveal, Sample, Says, Snippet, Step, StepHeading, Want, Words} from '../../../Recipe';
 import {useControls} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
@@ -40,18 +40,18 @@ export const CarryVertical: FC<{rowSource: Sample; buildSource: Sample}> = ({row
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
-            ...carve.span(sources.grip, '<button', '</button>'),
+            ...carve.between(sources.grip, '<button', '</button>'),
             lines.aside('{/* focusable by birth; the keyboard track builds on it */}')
           ]}/>
           : <Snippet label="HTML" lines={[
-            ...carve.span(sources.frameHtml, '<button type="button" tabindex="0" data-row-grip', '</button>this minute'),
+            ...carve.between(sources.frameHtml, '<button type="button" tabindex="0" data-row-grip', '</button>this minute'),
             lines.aside('<!-- focusable by birth; the keyboard track builds on it -->')
           ]}/>}
         {world === 'react'
           ? <Snippet label="TS" lines={[
             ...carve.unit(sources.survey, 'const rowUnder'), lines.blank,
             ...carve.unit(rowSource, 'const beside = '), lines.blank,
-            ...carve.span(rowSource, 'onPointerDown={lifting.row(', '{...travel.whileHeld(drag, moved, release)}'),
+            ...carve.between(rowSource, 'onPointerDown={lifting.row(', '{...travel.whileHeld(drag, moved, release)}'),
             lines.aside('{/* the grip lifts and the grip travels; retake the pointer anywhere else and Safari drops it */}')
           ]}/>
           : <Snippet label="TS" lines={[

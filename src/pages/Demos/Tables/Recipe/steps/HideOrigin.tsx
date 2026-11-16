@@ -70,15 +70,15 @@ export const HideOrigin: FC<{headerSource: Sample; cssSource: Sample; buildSourc
           {world === 'react'
             ? <Snippet label="TS" lines={[
               ...carve.unit(headerSource, 'const moved = '), lines.blank,
-              ...carve.span(headerSource, 'className={classNames(', '...looks.motionStates(carried'), lines.blank,
+              ...carve.between(headerSource, 'className={classNames(', '...looks.motionStates(carried'), lines.blank,
               ...carve.unit(sources.looks, 'const motionStates'), lines.blank,
-              ...carve.span(headerSource, '...looks.placement(', '...looks.placement('), lines.blank,
-              ...carve.span(sources.looks, "'--seat-x'", "'--drift-y'")
+              ...carve.between(headerSource, '...looks.placement(', '...looks.placement('), lines.blank,
+              ...carve.between(sources.looks, "'--seat-x'", "'--drift-y'")
             ]}/>
             : <Snippet label="TS" lines={[
               ...carve.unit(buildSource, 'const moved = '), lines.blank,
               ...carve.unit(sources.frameCarry, 'const dress'), lines.blank,
-              ...carve.span(sources.frameSettle, 'type Toward', 'const motions'), lines.blank,
+              ...carve.between(sources.frameSettle, 'type Toward', 'const motions'), lines.blank,
               ...carve.unit(sources.frameSettle, 'const changeMotion'),
               lines.aside('// the reconcile sets the carried cells’ classes; the style sheet moves them')
             ]}/>}

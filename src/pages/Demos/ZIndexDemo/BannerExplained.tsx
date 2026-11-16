@@ -36,8 +36,8 @@ export const BannerExplained: FC = () => {
             context</cite></a> shows, so no card’s z-index is ever compared with the banner’s. The banner’s 3 is
           compared with the content and with the header, the footer, the site’s navigation and the tabs, none of them
           higher than 2. It stays at the window’s edge, over every card on the page, card two included.</p>
-        <Snippet label="HTML" lines={carve.span(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
-        <Snippet label="CSS" lines={carve.span(bannersCss, '.banners {', 'z-index: 3;')}/>
+        <Snippet label="HTML" lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
+        <Snippet label="CSS" lines={carve.between(bannersCss, '.banners {', 'z-index: 3;')}/>
       </li>
       <li className="run">
         <p className="paragraph">To build this banner yourself, go to <Link className="signpost"
