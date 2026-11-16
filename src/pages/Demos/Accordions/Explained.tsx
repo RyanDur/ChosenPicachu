@@ -149,7 +149,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         fold open at a time, and say which language each job needed and why. The first accordion below is HTML
         alone.</p>
     </header>
-    <section aria-labelledby="html-alone-heading" className="accordion-part">
+    <section aria-labelledby="html-alone-heading" className="accordion-part snapping">
       <h2 id="html-alone-heading" className="title bold">An accordion in HTML alone</h2>
       <ol className={runs}>
         <li className="run">
@@ -190,7 +190,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         selector, which names the elements it applies to. It also has properties. A property is one aspect of a look,
         like a height or a color, given a value.</p>
       <p className="paragraph">The fold motion does not reach the accordion above. A browser opens a details at once
-        on its own, and the first accordion leaves it that way, so you see what HTML alone does.</p>
+        on its own. The site’s reset, the style sheet that sets every element’s defaults, slides every details where the
+        browser can, and the first accordion turns that off, so you see what HTML alone does.</p>
       <DialGroup>
         <FoldTypeDial/>
         <FoldMotionDial/>
