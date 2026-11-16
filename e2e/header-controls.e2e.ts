@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {iPhone, phoneSideways, tableWorlds} from './__test_support';
+import {arrivalPatience, iPhone, phoneSideways, tableWorlds} from './__test_support';
 
 for (const stage of tableWorlds.stages) {
   for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a phone held sideways', device: phoneSideways}]) {
@@ -8,7 +8,7 @@ for (const stage of tableWorlds.stages) {
       test.use(device);
 
       test('narrows buys to a stop, and buys\' sort control still opens its menu', async ({page}) => {
-        const table = await tableWorlds.opened(page, stage, {patience: 30_000});
+        const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
         await table.dragEdge('buys', {by: -400, moves: 20});
         await expect(table.resizeHandle('buys')).toHaveAccessibleName(/, \d+%$/);
         const stopped = await table.announcedShare('buys');
@@ -21,7 +21,7 @@ for (const stage of tableWorlds.stages) {
       });
 
       test('widens buys into sells to a stop, and sells\' sort control still opens its menu', async ({page}) => {
-        const table = await tableWorlds.opened(page, stage, {patience: 30_000});
+        const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
         await table.dragEdge('buys', {by: 400, moves: 20});
         await expect(table.resizeHandle('sells')).toHaveAccessibleName(/, \d+%$/);
         const stopped = await table.announcedShare('sells');
@@ -34,9 +34,9 @@ for (const stage of tableWorlds.stages) {
       });
 
       test('stops buys by keyboard within a point of the share a drag stops it at', async ({page, context}) => {
-        const dragged = await tableWorlds.opened(page, stage, {patience: 30_000});
+        const dragged = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
         await dragged.dragEdge('buys', {by: -400, moves: 20});
-        const keyed = await tableWorlds.opened(await context.newPage(), stage, {patience: 30_000});
+        const keyed = await tableWorlds.opened(await context.newPage(), stage, {patience: arrivalPatience});
 
         await keyed.narrowByKeys('buys', 40);
 
@@ -45,7 +45,7 @@ for (const stage of tableWorlds.stages) {
       });
 
       test('opens the buys sort menu from a finger on its sort control', async ({page}) => {
-        const table = await tableWorlds.opened(page, stage, {patience: 30_000});
+        const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
 
         await table.sortToggle('buys').tap();
 
@@ -53,7 +53,7 @@ for (const stage of tableWorlds.stages) {
       });
 
       test('gives volume the share vwap gives up, from a mouse dragged where the two meet, and opens no menu', async ({page}) => {
-        const table = await tableWorlds.opened(page, stage, {patience: 30_000});
+        const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
         await table.dragFromWhereHeadersMeet('volume', 20);
         const [volume, vwap] = [await table.announcedShare('volume'), await table.announcedShare('vwap')];
 

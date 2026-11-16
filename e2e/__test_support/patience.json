@@ -1,1 +1,1 @@
-{"assertionPatience": 5000}
+{"assertionPatience": 5000, "arrivalPatience": 30000}

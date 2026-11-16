@@ -1,6 +1,6 @@
 import {expect, Locator} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {desktop, fingertipMiss, iPadUpright, iPhone, tableWorlds} from './__test_support';
+import {arrivalPatience, desktop, fingertipMiss, iPadUpright, iPhone, tableWorlds} from './__test_support';
 
 const namingAShare = /, \d+%$/;
 
@@ -27,7 +27,7 @@ for (const stage of tableWorlds.stages) {
       test.use(device);
 
       test('widens a column from a press under a coarse pointer just off its edge', async ({page}) => {
-        const table = await tableWorlds.opened(page, stage, {patience: 30_000});
+        const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
         await table.pressBesideEdgeAndDrag('volume', {besideBy: fingertipMiss, by: 30});
         const before = await table.announcedShare('volume');
 
@@ -37,7 +37,7 @@ for (const stage of tableWorlds.stages) {
       });
 
       test('opens the sort menu from a finger on the toggle beside the edge, and resizes nothing', async ({page}) => {
-        const table = await tableWorlds.opened(page, stage, {patience: 30_000});
+        const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
 
         await table.sortToggle('trades').tap();
 
@@ -51,7 +51,7 @@ for (const stage of tableWorlds.stages) {
     test.use(desktop);
 
     test('a column still narrows to 5% under a mouse', async ({page}) => {
-      const table = await tableWorlds.opened(page, stage, {patience: 30_000});
+      const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
 
       await table.dragEdge('buys', {by: -600, moves: 20});
 
@@ -59,8 +59,8 @@ for (const stage of tableWorlds.stages) {
     });
 
     test('a flick that leaves the edge in one move widens a column as far as a slow drag does', async ({page, context}) => {
-      const slow = await tableWorlds.opened(await context.newPage(), stage, {patience: 30_000});
-      const flicked = await tableWorlds.opened(page, stage, {patience: 30_000});
+      const slow = await tableWorlds.opened(await context.newPage(), stage, {patience: arrivalPatience});
+      const flicked = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
       const startingName = await measuredName(slow.resizeHandle('trades'));
       await slow.dragEdge('trades', {by: 120, moves: 20});
       const slowName = await nameOnceMoved(slow.resizeHandle('trades'), startingName);
@@ -71,7 +71,7 @@ for (const stage of tableWorlds.stages) {
     });
 
     test('after a flick, the next press on the same handle starts a new resize', async ({page}) => {
-      const table = await tableWorlds.opened(page, stage, {patience: 30_000});
+      const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
       const startingName = await measuredName(table.resizeHandle('trades'));
       await table.dragEdge('trades', {by: 120, moves: 1});
       const flickedName = await nameOnceMoved(table.resizeHandle('trades'), startingName);

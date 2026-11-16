@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {dragSortTable, iPadSplitView, iPhone, Person, usersPage} from './__test_support';
+import {arrivalPatience, dragSortTable, iPadSplitView, iPhone, Person, usersPage} from './__test_support';
 import {usersServer} from '../src/pages/Users/usersServer';
 
 const ada: Person = {
@@ -16,7 +16,7 @@ const ada: Person = {
 test('a new person cannot be added without a first name', async ({page}) => {
   const users = usersPage(page);
   await page.goto('users');
-  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
 
   await users.add({...ada, firstName: ''});
 
@@ -27,19 +27,19 @@ test('a new person cannot be added without a first name', async ({page}) => {
 test('a person added on the users page still stands in the roster after leaving and coming back', async ({page}) => {
   const users = usersPage(page);
   await page.goto('users');
-  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
 
   await users.add(ada);
   await expect(users.rowOf(ada)).toBeVisible();
   await users.leaveAndComeBack();
 
-  await expect(users.rowOf(ada)).toBeVisible({timeout: 30_000});
+  await expect(users.rowOf(ada)).toBeVisible({timeout: arrivalPatience});
 });
 
 test('focus stays on Add after a confirmed add', async ({page}) => {
   const users = usersPage(page);
   await page.goto('users');
-  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
 
   await users.addByKey(ada);
 
@@ -51,19 +51,19 @@ test('focus stays on Add after a confirmed add', async ({page}) => {
 test('a refresh brings new people to the users page', async ({page}) => {
   const users = usersPage(page);
   await page.goto('users');
-  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
   const before = await users.names.allTextContents();
 
   await page.reload();
 
-  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
   await expect(users.names).not.toHaveText(before);
 });
 
 test('a person in the roster drags to a new seat once the roster has arrived, and the move is said by name', async ({page}) => {
   const users = usersPage(page);
   await page.goto('users');
-  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
   const roster = dragSortTable(page, page.getByRole('region', {name: 'User Candidates'}));
   const [first, second, third, ...rest] = await roster.rowOrder();
   await roster.listenToTheMoveReport();
@@ -77,7 +77,7 @@ test('a person in the roster drags to a new seat once the roster has arrived, an
 test('following View in a row\'s actions closes the actions and shows that person in the form', async ({page}) => {
   const users = usersPage(page);
   await page.goto('users');
-  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
   const viewed = await users.names.first().textContent();
 
   await users.viewTheFirstRow();
@@ -89,7 +89,7 @@ test('following View in a row\'s actions closes the actions and shows that perso
 test('editing a person and going Back shows that person as stored', async ({page}) => {
   const users = usersPage(page);
   await page.goto('users');
-  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
   const stored = await users.names.first().textContent();
   await users.viewTheFirstRow();
   await users.editTheShownPerson();
@@ -122,7 +122,7 @@ for (const {reader, device} of handhelds) {
     test('scrolling the roster sideways reaches its last column', async ({page}) => {
       const users = usersPage(page);
       await page.goto('users');
-      await expect(users.names.first()).toBeVisible({timeout: 30_000});
+      await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
 
       await users.scrollRosterSideways();
 
@@ -141,7 +141,7 @@ test.describe('when the browser allows no service workers', () => {
   test('the users page still says the users server could not be reached', async ({page}) => {
     await page.goto('users');
 
-    await expect(page.getByRole('alert')).toContainText('the users server could not be reached', {timeout: 30_000});
+    await expect(page.getByRole('alert')).toContainText('the users server could not be reached', {timeout: arrivalPatience});
   });
 });
 
@@ -149,11 +149,11 @@ test('a users page reloaded past its worker is taken back by it', async ({page, 
   test.skip(browserName !== 'chromium', 'only Chromium offers a reload that leaves the page uncontrolled while its worker stays active, so Firefox and WebKit hold no pin for the reclaim');
   const users = usersPage(page);
   await page.goto('users');
-  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
 
   await users.reloadPastItsWorker();
 
-  await expect(users.names.first()).toBeVisible({timeout: 30_000});
+  await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
 });
 
 test('the users page gives up on a worker script that never answers and says the users server could not be reached', async ({page, browserName}) => {
@@ -162,5 +162,5 @@ test('the users page gives up on a worker script that never answers and says the
 
   await page.goto('users', {waitUntil: 'commit'});
 
-  await expect(page.getByRole('alert')).toContainText('the users server could not be reached', {timeout: 30_000});
+  await expect(page.getByRole('alert')).toContainText('the users server could not be reached', {timeout: arrivalPatience});
 });
