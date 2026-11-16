@@ -5,4 +5,4 @@ export {exhibit} from './steps';
 export {zIndexTab} from './tab';
 export {oldWayMenu} from './oldWayMenu';
 export {theTrap} from './trap';
-export {wayLabelled} from './ways';
+export {wayLabeled} from './ways';

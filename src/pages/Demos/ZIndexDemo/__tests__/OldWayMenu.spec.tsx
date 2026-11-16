@@ -3,7 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {exhibit, oldWayMenu, theTrap, wayLabelled, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {exhibit, oldWayMenu, theTrap, wayLabeled, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const under = 'The list opened under card two. Its 9999 counts only inside card one.';
 const over = 'The list opened over card two. Card one has no z-index now, so the 9999 is compared with card two’s 1.';
@@ -101,9 +101,9 @@ describe('the card that traps the menu', () => {
     const oldWay = theTrap.controlIn(trap, 'Sort by, the old way');
     const topLayer = theTrap.controlIn(trap, 'Sort by, in the top layer');
 
-    expect(wayLabelled(trap, 'The old way')).toContainElement(oldWay);
-    expect(wayLabelled(trap, 'The old way')).not.toContainElement(topLayer);
-    expect(wayLabelled(trap, 'The top layer')).toContainElement(topLayer);
+    expect(wayLabeled(trap, 'The old way')).toContainElement(oldWay);
+    expect(wayLabeled(trap, 'The old way')).not.toContainElement(topLayer);
+    expect(wayLabeled(trap, 'The top layer')).toContainElement(topLayer);
     expect(oldWay).toHaveTextContent(/^Sort by$/);
     expect(topLayer).toHaveTextContent(/^Sort by$/);
   });
