@@ -27,6 +27,18 @@ describe('the code voice', () => {
     expect(kinds('TS', '<p>{/* see https://mdn.io */}</p>')['{/* see https://mdn.io */}']).toBe('comment');
   });
 
+  it('keeps a protocol-relative URL in a TS string a string', () => {
+    expect(kinds('TS', "fetch('//fonts.example.com/a.css');")["'//fonts.example.com/a.css'"]).toBe('string');
+  });
+
+  it('keeps a file URL in a TS string a string', () => {
+    expect(kinds('TS', "const u = 'file:///etc/hosts';")["'file:///etc/hosts'"]).toBe('string');
+  });
+
+  it('keeps a JSX comment that holds two slashes one comment', () => {
+    expect(kinds('TS', '{/* a // b */}')['{/* a // b */}']).toBe('comment');
+  });
+
   it('still reads a line comment after code as a comment', () => {
     expect(kinds('TS', 'const at = 0; // where it starts')['// where it starts']).toBe('comment');
   });
