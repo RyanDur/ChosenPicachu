@@ -25,15 +25,18 @@ export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
         <legend className="off-screen">folds</legend>
         <ul className="accordion trim">
           <li className="fold close field-inverse" onChange={() => dispatch(foldChange.allClosed())}>
-            <input id="measured-close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="measured-group"/>
+            <input id="measured-close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio"
+              name="measured-group"/>
             <label className="info-label field-ink prior-approached" htmlFor="measured-close-radio">Close</label>
           </li>
-          {folds.map(({title, text}, id) =>
-            <li className="fold" key={title} onChange={() => dispatch(foldChange.opened(barOf(id)))}>
-              <input id={`measured-fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="measured-group"/>
-              <label id={barOf(id)} className="info-label opening-arrow inverse-filled prior-approached corner-after" htmlFor={`measured-fold-${id}-radio`}>{title}</label>
+          {folds.map(({summary, body}, id) =>
+            <li className="fold" key={summary} onChange={() => dispatch(foldChange.opened(barOf(id)))}>
+              <input id={`measured-fold-${id}-radio`} className="info-toggle off-screen" type="radio"
+                name="measured-group"/>
+              <label id={barOf(id)} className="info-label opening-arrow inverse-filled prior-approached corner-after"
+                htmlFor={`measured-fold-${id}-radio`}>{summary}</label>
               <MeasuredPanel namedBy={barOf(id)}>
-                <p className="info-paragraph">{text}</p>
+                <p className="info-paragraph">{body}</p>
               </MeasuredPanel>
             </li>)}
         </ul>

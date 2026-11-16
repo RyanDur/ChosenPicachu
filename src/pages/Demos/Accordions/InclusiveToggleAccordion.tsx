@@ -11,11 +11,11 @@ export const InclusiveToggleAccordion: FC<AccordionProps> = ({
     <h3 className="sub-title bold">Inclusive accordion using details elements</h3>
   </header>
   <ul className="new-accordion">
-    {folds.map(({title, text}) =>
-      <li key={title}>
+    {folds.map(({summary, body}) =>
+      <li key={summary}>
         <details className="fold">
-          <summary className="info-label opening-arrow inverse-filled attentive field-outlined corner-after">{title}</summary>
-          <p className="info"><span className="fold-text">{text}</span></p>
+          <summary className="info-label opening-arrow inverse-filled attentive field-outlined corner-after">{summary}</summary>
+          <p className="info"><span className="fold-text">{body}</span></p>
         </details>
       </li>)}
   </ul>

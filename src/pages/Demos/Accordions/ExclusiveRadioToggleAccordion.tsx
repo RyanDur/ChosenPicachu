@@ -41,17 +41,17 @@ export const ExclusiveRadioToggleAccordion: FC<AccordionProps> = ({
   <fieldset>
     <legend className="off-screen">folds</legend>
     <ul className="new-accordion" onClick={radioClicked} onKeyDown={spacePressed}>
-      {folds.map(({title, text}) =>
-        <li key={title} className="grid-fold">
+      {folds.map(({summary, body}) =>
+        <li key={summary} className="grid-fold">
           <header className="fold-bar field-inverse field-ink field-outlined">
-            <span className="sub-title bold">{title}</span>
+            <span className="sub-title bold">{summary}</span>
             <label className="fold-control inverse-filled attentive hairline-outline field-pressed">
-              <input type="radio" name="exclusive-radio-toggle" value={title} className="off-screen"/>
+              <input type="radio" name="exclusive-radio-toggle" value={summary} className="off-screen"/>
               <span className="when-closed">Open</span><span className="when-open">Close</span>
-              <span className="off-screen">{title}</span>
+              <span className="off-screen">{summary}</span>
             </label>
           </header>
-          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{text}</span></span></p>
+          <p className="fold-clip"><span className="fold-clip-item"><span className="fold-text">{body}</span></span></p>
         </li>)}
     </ul>
   </fieldset>
