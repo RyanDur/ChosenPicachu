@@ -343,6 +343,11 @@ describe('the code voice', () => {
     expect(kinds('TS', 'const re = /[a]/, s = \'x\';')['\'x\'']).toBe('string');
   });
 
+  it('reads a slash that starts a line after a value as a division', () => {
+    const [, divided] = highlight.tokensOf('TS', ['const half = width', '/ 2; const s = \'x\';']);
+    expect(divided.find(({text}) => text === '\'x\'')?.kind).toBe('string');
+  });
+
   it('reads a block comment just inside an object\'s brace as a comment, and the line after it as code', () => {
     expect(constOnTheLineAfter('const o = {/* none */ a: 1};')).toBe('keyword');
   });
