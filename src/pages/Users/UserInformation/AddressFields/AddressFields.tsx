@@ -9,24 +9,24 @@ import {not} from '@ryandur/sand';
 import './AddressFields.css';
 
 type AddressFieldsAttributes = PropsWithClassName<{
-  title: string;
+  legend: string;
   name: AddressName;
 }>;
 
 export const AddressFields: FC<PropsWithChildren<AddressFieldsAttributes>> = (
   {
-    title,
+    legend,
     children,
     className,
     name
   }) => {
-  const titleId = useId();
+  const legendId = useId();
   const {address, followsHome, edit} = useAddressDraft(name);
   const readOnly = useOpened().mode === 'viewing';
   const required = name === 'home' && not(readOnly);
   return <fieldset name={name} className={classNames('address', 'shrinkable', className)} disabled={followsHome}
-    aria-labelledby={titleId}>
-    <legend className="address-title sub-title bold"><span id={titleId}>{title}</span>{children}</legend>
+    aria-labelledby={legendId}>
+    <legend className="address-title sub-title bold"><span id={legendId}>{legend}</span>{children}</legend>
     <FancyInput className="street"
       required={required} value={address.streetAddress} readOnly={readOnly}
       onChange={event => edit({...address, streetAddress: event.currentTarget.value})}>
