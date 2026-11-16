@@ -9,9 +9,9 @@ const steady = html => html
   .replace(/_R_[a-z0-9]+(?:H[a-z0-9]+)?_/g, '_R_')
   .replace(/<!-- -->/g, '');
 
-const blockBoundaries = 'address, article, aside, blockquote, br, caption, dd, details, dialog, div, dl, dt, fieldset, ' +
-  'figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, legend, li, main, menu, nav, ol, p, ' +
-  'pre, search, section, summary, table, td, th, tr, ul';
+const blockBoundaries = 'address, article, aside, blockquote, br, button, caption, dd, details, dialog, div, dl, dt, ' +
+  'fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, legend, li, main, menu, nav, ' +
+  'ol, optgroup, option, p, pre, search, section, select, summary, table, td, textarea, th, tr, ul';
 
 const wordsInAttributes = ['alt', 'aria-label', 'aria-description', 'placeholder', 'title'];
 

@@ -62,7 +62,8 @@ export const checksOf = (branch, run = outputOf) => {
   } catch (failure) {
     const {stdout, stderr} = failure;
     if (typeof stdout === 'string' && has(stdout.trim())) return JSON.parse(stdout);
-    if (typeof stderr === 'string' && stderr.includes('no pull requests found')) return [];
+    const noChecksYet = ['no pull requests found', 'no checks reported'];
+    if (typeof stderr === 'string' && noChecksYet.some(reply => stderr.includes(reply))) return [];
     throw failure;
   }
 };
