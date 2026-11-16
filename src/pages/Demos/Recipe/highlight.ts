@@ -15,11 +15,7 @@ type Found = {
   kind: Kind;
 };
 
-type TokenPattern = {pattern: RegExp; kind: Kind} | {pattern: RegExp; groups: ReadonlyArray<Kind>};
-
-const kindOf = (tokenPattern: TokenPattern, match: RegExpExecArray): Kind => 'kind' in tokenPattern
-  ? tokenPattern.kind
-  : tokenPattern.groups.find(group => has(match.groups?.[group])) ?? 'plain';
+type TokenPattern = {pattern: RegExp; kind: Kind};
 
 const matchesOf = (line: string, tokenPatterns: ReadonlyArray<TokenPattern>, taken: Found[],
   allowed: (start: number, end: number) => boolean): Found[] => {
@@ -30,7 +26,7 @@ const matchesOf = (line: string, tokenPatterns: ReadonlyArray<TokenPattern>, tak
       const overlaps = found.some(other =>
         start < other.start + other.length && other.start < start + match[0].length);
       if (not(overlaps) && has(match[0]) && allowed(start, start + match[0].length)) {
-        found.push({start, length: match[0].length, kind: kindOf(tokenPattern, match)});
+        found.push({start, length: match[0].length, kind: tokenPattern.kind});
       }
     }
   });
