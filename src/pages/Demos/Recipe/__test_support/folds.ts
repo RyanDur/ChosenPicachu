@@ -32,5 +32,6 @@ export const recipeFolds = {
     await userEvent.click(within(reveal).getByText('how I built it'));
     return reveal;
   },
+  sourceLink: (reveal: HTMLElement, name: string): HTMLElement => within(reveal).getByRole('link', {name}),
   opened: (details: readonly HTMLElement[]): HTMLElement[] => details.filter(fold => fold.hasAttribute('open'))
 };
