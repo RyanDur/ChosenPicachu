@@ -61,9 +61,9 @@ const wordChange = (onMain, onPull) => {
 const changeOf = (page, onMain, onPull) => {
   if (empty(onMain)) return {page, kind: 'new'};
   if (empty(onPull)) return {page, kind: 'gone'};
-  const [was, is] = [withoutBuildNoise(onMain), withoutBuildNoise(onPull)];
-  if (was === is) return undefined;
-  const [wordsWere, wordsAre] = [wordsOf(was), wordsOf(is)];
+  const [htmlOnMain, htmlOnPull] = [withoutBuildNoise(onMain), withoutBuildNoise(onPull)];
+  if (htmlOnMain === htmlOnPull) return undefined;
+  const [wordsWere, wordsAre] = [wordsOf(htmlOnMain), wordsOf(htmlOnPull)];
   if (wordsWere.join(' ') === wordsAre.join(' ')) return {page, kind: 'markup'};
   return {page, kind: 'words', ...wordChange(wordsWere, wordsAre)};
 };
