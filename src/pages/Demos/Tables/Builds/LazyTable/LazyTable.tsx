@@ -64,6 +64,6 @@ export const LazyTable: FC<Props> = ({caption, origin, motion, columns, rows, on
         })}
       </Body>
     </table>
-    <output className="off-screen" htmlFor="live-aggregations" aria-label="move report">{tableReports.of(tableReads.report(sortable))}</output>
+    <output className="off-screen" htmlFor="live-aggregations" aria-label="move report">{tableReports.spoken(tableReads.report(sortable))}</output>
   </DragSortable>;
 };
