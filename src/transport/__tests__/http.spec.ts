@@ -11,39 +11,39 @@ describe('http', () => {
   const endpoint = `/${faker.lorem.word()}/${faker.lorem.word()}`;
 
   test('a get can ask the cache to stand in for the network', async () => {
-    let asked: string | undefined;
+    const asked: RequestCache[] = [];
     server.use(handle.get(endpoint, ({request}) => {
-      asked = request.cache;
+      asked.push(request.cache);
       return HttpResponse.json(testObject);
     }));
 
     await http.get(endpoint, {cache: 'force-cache'}).value;
 
-    expect(asked).toBe('force-cache');
+    expect(asked).toEqual(['force-cache']);
   });
 
   test('a plain get leaves caching to the response headers', async () => {
-    let asked: string | undefined;
+    const asked: RequestCache[] = [];
     server.use(handle.get(endpoint, ({request}) => {
-      asked = request.cache;
+      asked.push(request.cache);
       return HttpResponse.json(testObject);
     }));
 
     await http.get(endpoint).value;
 
-    expect(asked).toBe('default');
+    expect(asked).toEqual(['default']);
   });
 
   test('a post carries the headers it is given', async () => {
-    let asked: string | null = null;
+    const asked: Headers[] = [];
     server.use(handle.post(endpoint, ({request}) => {
-      asked = request.headers.get('authorization');
+      asked.push(request.headers);
       return HttpResponse.json(testObject, {status: 200});
     }));
 
     await http.post(endpoint, testObject, {headers: {authorization: 'bearer token'}}).value;
 
-    expect(asked).toBe('bearer token');
+    expect(asked.map(headers => headers.get('authorization'))).toEqual(['bearer token']);
   });
 
   const handlers = {
