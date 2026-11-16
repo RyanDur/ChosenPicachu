@@ -7,7 +7,7 @@ const categories = ['performance', 'accessibility', 'best-practices', 'seo'];
 
 const floorsFor = (url, {ci}) => {
   const matching = ci.assert.assertMatrix.find(({matchingUrlPattern}) => new RegExp(matchingUrlPattern).test(url));
-  const assertions = maybe(matching).map(rule => rule.assertions);
+  const assertions = maybe(matching).mBind(entry => maybe(entry.assertions));
   return Object.fromEntries(categories.flatMap(category => assertions
     .mBind(asserted => maybe(asserted[`categories:${category}`]))
     .map(rule => Array.isArray(rule) ? [[category, rule[1].minScore]] : [])

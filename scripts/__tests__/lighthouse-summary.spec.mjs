@@ -31,6 +31,12 @@ describe('the lighthouse summary', () => {
     expect(table).toContain('| performance | 80 | 80 | 85 | below the floor |');
   });
 
+  test('a matched page with no assertions shows its scores with no floors', () => {
+    const unasserted = {ci: {assert: {assertMatrix: [{matchingUrlPattern: '.*'}]}}};
+
+    expect(foldOf({page: 'demos', runs, rc: unasserted})).toContain('| performance | 92 | 75 to 92 |  |  |');
+  });
+
   test('a page folds its runs behind its name and url', () => {
     const fold = foldOf({page: 'demos', runs, rc});
     expect(fold).toMatch(/^<details><summary>demos · http:\/\/localhost:4517\/ChosenPicachu\/demos\/, 3 runs<\/summary>/);
