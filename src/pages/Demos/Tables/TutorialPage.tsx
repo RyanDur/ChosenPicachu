@@ -21,7 +21,7 @@ export const TutorialPage: FC = () => {
   const {searchFromShown} = useSearchParamsObject({});
   const titled = `tutorial${useId()}`;
   return useShownTutorial().either(tutorial => {
-    const {number, outOf} = tableTutorials.placeOf(tutorial);
+    const {ordinal, outOf} = tableTutorials.placeOf(tutorial);
     const Body = bodies[tutorial];
     return <section aria-labelledby={titled} className="tutorial-page">
       <hgroup>
@@ -29,7 +29,7 @@ export const TutorialPage: FC = () => {
           <Link className="signpost" to={`${demoTab.address(DemoTopics.tables)}${searchFromShown({})}`}>
             {demoTab.names[DemoTopics.tables]}
           </Link>
-          {` · tutorial ${number} of ${outOf}`}
+          {` · tutorial ${ordinal} of ${outOf}`}
         </p>
         <h2 id={titled} className="title">{tableTutorials.nameOf(tutorial)}</h2>
       </hgroup>
