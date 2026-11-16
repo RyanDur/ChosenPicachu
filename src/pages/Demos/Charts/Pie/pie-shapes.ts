@@ -1,4 +1,4 @@
-import {empty} from '@ryandur/sand';
+import {empty, maybe} from '@ryandur/sand';
 import {Trade} from '../../Market';
 import {SideTotals, tally} from '../tally';
 
@@ -22,7 +22,7 @@ const wedges = <Part extends Weighed>(parts: readonly Part[]): readonly (Part & 
   return whole === 0
     ? []
     : parts.reduce<readonly (Part & Wedge)[]>((cut, part) => {
-      const from = cut[cut.length - 1]?.to ?? 0;
+      const from = maybe(cut[cut.length - 1]).map(wedge => wedge.to).orElse(0);
       const share = part.weight / whole;
       return [...cut, {...part, share, from, to: from + share * TAU}];
     }, []);
