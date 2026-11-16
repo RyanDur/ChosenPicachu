@@ -7,6 +7,7 @@ export type {CardOne, FoldMotion, FoldType, RaisedCard, Worn} from './useControl
 export {DialGroup} from './DialGroup';
 export {DialRow} from './DialRow';
 export {PaceDial} from './PaceDial';
+export {TrackDial} from './TrackDial';
 export {OriginDial} from './OriginDial';
 export {MotionDial} from './MotionDial';
 export {SideDial} from './SideDial';
