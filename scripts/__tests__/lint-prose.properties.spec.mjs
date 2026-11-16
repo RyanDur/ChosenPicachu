@@ -37,9 +37,9 @@ const piece = fc.oneof({arbitrary: words(12).map(text => ({text, element: false}
   element.map(text => ({text, element: true})));
 
 const heldBreak = fc.constantFrom('{\' \'}\n  ', '\n  {\' \'}\n  ', '{\' \'}\n\n  ');
-const gap = fc.record({kind: fc.constantFrom('space', 'touch', 'break'), held: fc.boolean(), heldBreak});
+const between = fc.record({kind: fc.constantFrom('space', 'touch', 'break'), held: fc.boolean(), heldBreak});
 
-const paragraph = fc.array(fc.tuple(piece, gap), {minLength: 2, maxLength: 14}).map(pieces => {
+const paragraph = fc.array(fc.tuple(piece, between), {minLength: 2, maxLength: 14}).map(pieces => {
   const body = pieces.map(([{text}], index) => {
     if (index === 0) return text;
     const [{element: before}, {kind, held, heldBreak: breakHeld}] = pieces[index - 1];
