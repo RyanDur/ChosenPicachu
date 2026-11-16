@@ -16,7 +16,7 @@ export const pillSwitch = (page: Page, name: string) => {
     wordsOf: (pill: string): Locator => group.getByText(pill, {exact: true}).first(),
     names: async (): Promise<string[]> => [...(await group.ariaSnapshot()).matchAll(/radio "([^"]+)"/g)].map(([, name]) => name),
     chosen: async (): Promise<string> =>
-      maybe(/radio "([^"]+)" \[checked\]/.exec(await group.ariaSnapshot())).mBind(([, name]) => maybe(name)).orElse('')
+      maybe(/radio "([^"]+)" \[checked\]/.exec(await group.ariaSnapshot())).map(([, name]) => name).orElse('')
   };
 };
 
