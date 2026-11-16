@@ -4,7 +4,7 @@ import {SideTotals, tally} from '../tally';
 const sideTotals = (trades: readonly Trade[]): SideTotals =>
   trades.reduce(tally.add, {bought: 0, sold: 0});
 
-export type Slice = {
+export type Wedge = {
   share: number;
   from: number;
   to: number;
@@ -16,11 +16,11 @@ export type Weighed = {
   weight: number;
 };
 
-const slices = <Part extends Weighed>(parts: readonly Part[]): readonly (Part & Slice)[] => {
+const slices = <Part extends Weighed>(parts: readonly Part[]): readonly (Part & Wedge)[] => {
   const whole = parts.reduce((sum, {weight}) => sum + weight, 0);
   return whole === 0
     ? []
-    : parts.reduce<readonly (Part & Slice)[]>((cut, part) => {
+    : parts.reduce<readonly (Part & Wedge)[]>((cut, part) => {
       const from = cut[cut.length - 1]?.to ?? 0;
       const share = part.weight / whole;
       return [...cut, {...part, share, from, to: from + share * TAU}];
@@ -32,8 +32,8 @@ export type Explosion = {
   dy: number;
 };
 
-const explodedBy = (slice: Slice, by: number): Explosion => {
-  const middle = (slice.from + slice.to) / 2;
+const explodedBy = (wedge: Wedge, by: number): Explosion => {
+  const middle = (wedge.from + wedge.to) / 2;
   return {dx: by * Math.sin(middle), dy: -by * Math.cos(middle)};
 };
 
@@ -44,8 +44,8 @@ export type Gates = {
   closing: number;
 };
 
-const sweepGates = (slice: Slice): Gates => {
-  const sweep = degrees(slice.to - slice.from);
+const sweepGates = (wedge: Wedge): Gates => {
+  const sweep = degrees(wedge.to - wedge.from);
   return {opening: Math.min(sweep, 180) - 180, closing: Math.max(sweep - 180, 0)};
 };
 

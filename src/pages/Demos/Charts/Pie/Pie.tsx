@@ -30,14 +30,14 @@ export const Pie: FC<PropsWithChildren> = ({children}) => {
     </header>
     <figure className="chart-stage paper-veiled-before">
       <svg className="split" aria-hidden="true" viewBox={`0 0 ${SIZE} ${SIZE + DEPTH}`}>
-        {['wall', 'face'].map(dressed => cut.map(slice => {
-          const {dx, dy} = slice.share === 1 ? {dx: 0, dy: 0} : pieShapes.explodedBy(slice, EXPLODE);
-          const {opening, closing} = pieShapes.sweepGates(slice);
+        {['wall', 'face'].map(dressed => cut.map(wedge => {
+          const {dx, dy} = wedge.share === 1 ? {dx: 0, dy: 0} : pieShapes.explodedBy(wedge, EXPLODE);
+          const {opening, closing} = pieShapes.sweepGates(wedge);
           const drop = dressed === 'wall' ? DEPTH : 0;
-          return <g key={`${slice.side}-${dressed}`} className={classNames('slice', sideOf[slice.side], slice.side)}
+          return <g key={`${wedge.side}-${dressed}`} className={classNames('slice', sideOf[wedge.side], wedge.side)}
             style={{'--explode-x': `${dx}px`, '--explode-y': `${dy}px`}}>
             <g className={classNames(dressed, dressed === 'wall' ? 'side-wall' : 'side-face')} transform={`translate(${SIZE / 2} ${SIZE / 2 + drop})`}>
-              <g className="spin" style={{'--turn': `${pieShapes.degrees(slice.from)}deg`}}>
+              <g className="spin" style={{'--turn': `${pieShapes.degrees(wedge.from)}deg`}}>
                 <svg x={0} y={-RADIUS} width={RADIUS} height={2 * RADIUS}
                   viewBox={`0 ${-RADIUS} ${RADIUS} ${2 * RADIUS}`}>
                   <path className="half" d={HALF} style={{'--swing': `${opening}deg`}}/>
@@ -52,9 +52,9 @@ export const Pie: FC<PropsWithChildren> = ({children}) => {
         }))}
       </svg>
       <ul className="legend caption">
-        {cut.map(slice =>
-          <li key={slice.side} className={classNames(sideOf[slice.side], 'side-ink', slice.side)}>
-            <data value={slice.share}>{`${Math.round(slice.share * 100)}% ${slice.side}`}</data>
+        {cut.map(wedge =>
+          <li key={wedge.side} className={classNames(sideOf[wedge.side], 'side-ink', wedge.side)}>
+            <data value={wedge.share}>{`${Math.round(wedge.share * 100)}% ${wedge.side}`}</data>
           </li>)}
       </ul>
       <figcaption className="chart-caption caption">
