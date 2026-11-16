@@ -1,4 +1,4 @@
-import {empty, has, maybe, not} from '@ryandur/sand';
+import {has, empty, not, maybe} from '@ryandur/sand';
 import {Line} from './Snippet';
 import {Sample} from './sample';
 import {lines} from './lines';
