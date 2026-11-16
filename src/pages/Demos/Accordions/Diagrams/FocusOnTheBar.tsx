@@ -3,7 +3,7 @@ import {Arrow, Box, Diagram, Label} from '../../Recipe/Drawing';
 import './Diagrams.css';
 
 export const FocusOnTheBar: FC = () =>
-  <Diagram title="Focus on the box, drawn on the bar" height={110}
+  <Diagram lead="Focus on the box, drawn on the bar" height={110}
     says="The box off screen holds the keyboard’s focus, and a sibling rule lights the bar the reader sees.">
     <Box x={110} y={20} width={200} height={70} kind="piece"/>
     <Label x={210} y={36}>the viewport</Label>

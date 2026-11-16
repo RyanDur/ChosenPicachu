@@ -3,7 +3,7 @@ import {Arrow, Box, Diagram, Label, Part} from '../../Recipe/Drawing';
 import './Diagrams.css';
 
 export const OffScreenNotGone: FC = () =>
-  <Diagram title="Off screen, not gone" height={120}
+  <Diagram lead="Off screen, not gone" height={120}
     says="The box sits past the left edge, so it takes no room and draws nothing, yet Tab still stops on it.">
     <Box x={110} y={20} width={200} height={70} kind="piece"/>
     <Label x={210} y={36}>the viewport</Label>

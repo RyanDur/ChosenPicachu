@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Box, Diagram, Label} from '../Recipe/Drawing';
 
 export const Where9999IsCompared: FC = () =>
-  <Diagram title="Where 9999 is compared" height={180}
+  <Diagram lead="Where 9999 is compared" height={180}
     says="Each card with a z-index makes its own stacking context. The menu’s 9999 is compared only inside card one; in the tab’s content, card one and card two are compared at 1 and 1.">
     <Box kind="clip" x={10} y={10} width={300} height={150}/>
     <Label x={20} y={26} anchor="start">the tab’s content, the context that holds both cards</Label>

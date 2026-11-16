@@ -3,7 +3,7 @@ import {Box, Diagram, Label} from '../../Recipe/Drawing';
 import './Diagrams.css';
 
 export const OneGuessTwoFolds: FC = () =>
-  <Diagram title="One guess, two folds" height={170}
+  <Diagram lead="One guess, two folds" height={170}
     says="Both folds stop at their own text, but the motion crosses the whole guess, so the short fold is open almost at once and shuts only after a wait.">
     <Label x={160} y={18}>max-height: the guess</Label>
     <Box x={40} y={30} width={100} height={110} kind="unseen"/>

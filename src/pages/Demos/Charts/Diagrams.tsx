@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Arrow, Box, Circle, Diagram, Label} from '../Recipe/Drawing';
 
 export const AThirdFromThePointer: FC = () =>
-  <Diagram title="A third from the pointer" height={392}
+  <Diagram lead="A third from the pointer" height={392}
     says="The short chart dropped a tall chart’s height while the pointer stood still.">
     <Label x={20} y={12} anchor="start">before</Label>
     <Box kind="unseen" x={20} y={20} width={130} height={60}/>

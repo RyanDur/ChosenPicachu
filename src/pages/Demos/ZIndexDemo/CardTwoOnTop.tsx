@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Box, Diagram, Label} from '../Recipe/Drawing';
 
 export const CardTwoOnTop: FC = () =>
-  <Diagram title="Why card two is on top" height={180}
+  <Diagram lead="Why card two is on top" height={180}
     says="The list is drawn inside card one, the context its 9999 counts in. The three cards are drawn side by side inside .cards, the context they are compared in.">
     <Box kind="clip" x={10} y={10} width={300} height={150}/>
     <Label x={20} y={26} anchor="start">.cards</Label>

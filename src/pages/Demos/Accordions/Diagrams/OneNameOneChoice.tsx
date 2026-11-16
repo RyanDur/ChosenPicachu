@@ -3,7 +3,7 @@ import {Circle, Diagram, Label} from '../../Recipe/Drawing';
 import './Diagrams.css';
 
 export const OneNameOneChoice: FC = () =>
-  <Diagram title="One name, one choice" height={150}
+  <Diagram lead="One name, one choice" height={150}
     says="Radios that share a name make one group, so choosing one fold unchooses the last, and Close is the choice that shows nothing.">
     {['Close', 'first fold', 'second fold', 'third fold'].map((fold, at) =>
       <g key={fold}>

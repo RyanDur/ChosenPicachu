@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Box, Diagram, Label} from '../Recipe/Drawing';
 
 export const AboveThePage: FC = () =>
-  <Diagram title="Above the page" height={240}
+  <Diagram lead="Above the page" height={240}
     says="The top layer sits over the page and every stacking context in it. Nothing is compared with the new menu, so it is drawn last, over both cards.">
     <Box kind="clip" x={10} y={10} width={300} height={44}/>
     <Label x={20} y={26} anchor="start">the top layer</Label>

@@ -4,7 +4,7 @@ import {FoldInput} from '../fold-input';
 import './Diagrams.css';
 
 export const OneJobTwoWays: FC<{input: FoldInput}> = ({input}) =>
-  <Diagram title="One job, two ways" height={150}
+  <Diagram lead="One job, two ways" height={150}
     says={`Details holds its summary and its content, where the trick needs a ${input}, a label that presses it through for, and the text, in that order.`}>
     <Label x={80} y={14}>natively</Label>
     <Box x={10} y={22} width={140} height={116} kind="native"/>

@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Arrow, Box, Diagram, Label} from '../Recipe/Drawing';
 
 export const ANumberInsideALayer: FC = () =>
-  <Diagram title="A number inside a layer" height={200}
+  <Diagram lead="A number inside a layer" height={200}
     says="Card one is painted as one layer, menu and all, so the menu is on top of card one’s face and still under card two.">
     <Label x={60} y={14}>the reader</Label>
     <Arrow through={[{x: 60, y: 22}, {x: 60, y: 46}]}/>
