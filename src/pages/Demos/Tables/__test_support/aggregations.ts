@@ -10,6 +10,7 @@ export const aggregations = {
   header: (measure: string): HTMLElement => within(card()).getByRole('columnheader', {name: new RegExp(`^${measure}`)}),
   rows: (): HTMLElement[] => within(card()).getAllByRole('row'),
   row: (lookback: string): HTMLElement => within(card()).getByRole('row', {name: new RegExp(`^${lookback}`)}),
+  findRow: (lookback: string): Promise<HTMLElement> => within(card()).findByRole('row', {name: new RegExp(`^${lookback}`)}),
   counted: async (trades: number): Promise<HTMLElement[]> => within(card()).findAllByText(String(trades)),
   columns: (): (string | null)[] => within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label')),
   lookbacks: (): (string | null)[] => within(card()).getAllByRole('rowheader').map(header => header.textContent),
