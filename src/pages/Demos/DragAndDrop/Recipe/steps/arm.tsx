@@ -1,11 +1,14 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
 import {FC} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, Words, carve, Sample} from '../../../Recipe';
+import {Codes, Mdn, Says, Snippet, Step, StepHeading, Want, Words, carve, Sample} from '../../../Recipe';
 
 export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
-  <Step title="Arm the drag from its grip">
-    <Words want="The browser will drag anything marked draggable, but marking the whole card turns every press into a lift and stops text selection inside it.">
+  <Step>
+    <StepHeading title="Arm the drag from its grip"/>
+    <Words>
+      <Want>The browser will drag anything marked draggable, but marking the whole card turns every press into a lift
+        and stops text selection inside it.</Want>
       <Says><code className="monospaced">draggable</code> is an attribute, a setting written on the element, and the
         grip turns it on. An event is the browser telling the page that something happened.
         The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says more about events. On pointerdown, the event for

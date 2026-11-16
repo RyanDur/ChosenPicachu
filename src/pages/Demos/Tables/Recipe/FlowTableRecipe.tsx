@@ -1,5 +1,5 @@
 import {FC, ReactNode} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
 import type {World} from '../../Controls';
 import {StoreStory} from './StoreRecipe';
@@ -62,8 +62,11 @@ const FlowStory: FC = () => {
       so a long session cannot grow forever. {refolds[world]}</Tell>
     <DataPath/>
     <Steps>
-      <Step title="Start with the recent past, in one fetch">
-        <Words want="An empty table at open is a lie about the market; the trader arrives mid-session, so the recent past comes first, and it is just a fetch.">
+      <Step>
+        <StepHeading title="Start with the recent past, in one fetch"/>
+        <Words>
+          <Want>An empty table at open is a lie about the market; the trader arrives mid-session, so the recent past
+            comes first, and it is just a fetch.</Want>
           <Says>The recent past is not a stream problem: it is one request, and the only care is
             the overlap between the fetch and the socket.</Says>
         </Words>
@@ -79,10 +82,12 @@ const FlowStory: FC = () => {
           </Codes>
         </Reveal>
       </Step>
-      <Step title="Open a socket to the exchange">
-        <Words want={<>The table is only worth sorting if its numbers are the market’s, now:
-          a <Mdn path="Web/API/WebSocket">socket</Mdn> to the exchange, subscribed to the product,
-          every trade arriving as it happens.</>}>
+      <Step>
+        <StepHeading title="Open a socket to the exchange"/>
+        <Words>
+          <Want>The table is only worth sorting if its numbers are the market’s, now:
+            a <Mdn path="Web/API/WebSocket">socket</Mdn> to the exchange, subscribed to the product,
+            every trade arriving as it happens.</Want>
           <Says>{socketPlans[world]} The open questions are the cap that keeps a long session
             from growing forever, and what to do when the socket closes.</Says>
         </Words>
@@ -99,8 +104,11 @@ const FlowStory: FC = () => {
           </Codes>
         </Reveal>
       </Step>
-      <Step title="Fold the stream into lookbacks">
-        <Words want="Raw trades tick too fast to read. The trader reads lookbacks, each measured back from the newest trade: this minute, the last five, the hour, the whole session.">
+      <Step>
+        <StepHeading title="Fold the stream into lookbacks"/>
+        <Words>
+          <Want>Raw trades tick too fast to read. The trader reads lookbacks, each measured back from the newest trade:
+            this minute, the last five, the hour, the whole session.</Want>
           <Says>The lookbacks should be derived, never accumulated: refold every trade the page holds
             each time, so the totals cannot drift from the trades that made them.</Says>
         </Words>

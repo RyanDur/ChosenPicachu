@@ -1,9 +1,12 @@
 import {FC} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, Words, carve, Sample, lines} from '../../../Recipe';
+import {Codes, Mdn, Says, Snippet, Step, StepHeading, Want, Words, carve, Sample, lines} from '../../../Recipe';
 
 export const AcceptTheDrop: FC<{listSource: Sample; itemSource: Sample}> = ({listSource, itemSource}) =>
-  <Step title="Accept the drop, or the platform takes it back">
-    <Words want="By default nothing accepts a drop: release over the list and the browser plays the cancel, carrying the card back to where it came from, and you cannot stop it.">
+  <Step>
+    <StepHeading title="Accept the drop, or the platform takes it back"/>
+    <Words>
+      <Want>By default nothing accepts a drop: release over the list and the browser plays the cancel, carrying the card
+        back to where it came from, and you cannot stop it.</Want>
       <Says>A bare list looks finished. Then you release over it, the card flies back, and your drop handler never
         ran.</Says>
       <Says>One call accepts the <Mdn path="Web/API/HTMLElement/drop_event">drop</Mdn>: the dragover handler

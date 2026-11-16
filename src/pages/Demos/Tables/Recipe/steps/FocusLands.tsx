@@ -1,12 +1,15 @@
 import {FC} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {useControls} from '../../../Controls';
 import {sources} from './sources';
 
 export const FocusLands: FC<{headerSource: Sample}> = ({headerSource}) => {
   const {world} = useControls();
-  return <Step title="Give focus a place to land">
-    <Words want="The trader without a pointer expects the same reorders. First, focus needs a place to land; a plain header holds none.">
+  return <Step>
+    <StepHeading title="Give focus a place to land"/>
+    <Words>
+      <Want>The trader without a pointer expects the same reorders. First, focus needs a place to land; a plain header
+        holds none.</Want>
       <Says>HTML already does most of this: a button is focusable by birth,
         and a header can ask with
         a <Mdn path="Web/HTML/Global_attributes/tabindex">tabindex</Mdn>. CSS draws the

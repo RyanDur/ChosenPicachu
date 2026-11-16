@@ -1,14 +1,16 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, Step, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {Term} from '../Term';
 import {useControls} from '../../../Controls';
 import {sources} from './sources';
 
 export const ListenersOnce: FC<{buildSource: Sample}> = ({buildSource}) => {
   const {world} = useControls();
-  return <Step title="Write each listener once, for both worlds">
-    <Words want={<>A pointer does not know which world it landed in: the lift, the <Term word="travel">travel</Term>,
-      and the arrows should each be one function, written once and attached twice.</>}>
+  return <Step>
+    <StepHeading title="Write each listener once, for both worlds"/>
+    <Words>
+      <Want>A pointer does not know which world it landed in: the lift, the <Term word="travel">travel</Term>,
+        and the arrows should each be one function, written once and attached twice.</Want>
       <Says>The trap to check before sharing anything: a listener that closes over state
         remembers the world as it stood when the listener was made. Sharing only works if a handler holds no state at
         all: it asks at event time and writes back through one dispatch.</Says>

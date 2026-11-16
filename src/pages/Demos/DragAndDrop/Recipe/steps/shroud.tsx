@@ -1,11 +1,14 @@
 import {FC} from 'react';
 import {OriginDial} from '../../../Controls';
-import {Codes, Mdn, Sample, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Mdn, Sample, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve} from '../../../Recipe';
 import {sources} from './sources';
 
 export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
-  <Step title="Fade the lifted card almost away" dial={<OriginDial name="native-origin"/>}>
-    <Words want="With the drag image under the pointer, the card it came from reads as a duplicate, but removing it can end the drag: some engines stop the drag when its source disappears.">
+  <DialStep>
+    <StepHeading title="Fade the lifted card almost away"><OriginDial name="native-origin"/></StepHeading>
+    <Words>
+      <Want>With the drag image under the pointer, the card it came from reads as a duplicate, but removing it can end
+        the drag: some engines stop the drag when its source disappears.</Want>
       <Says>So the card does not disappear; it fades almost away. This is the hide list, so its Item reads which item is
         held from the list’s state and wears the class while it is the held one. The CSS behind the class is
         an <Mdn path="Web/CSS/opacity">opacity</Mdn> of nearly nothing: the node stays in the page, the drag keeps its
@@ -21,4 +24,4 @@ export const FadeOrigin: FC<{itemSource: Sample}> = ({itemSource}) =>
         lines.aside('/* opacity, not visibility: a card hidden by visibility is out of view, and so is the drag’s source */')
       ]}/>
     </Codes>
-  </Step>;
+  </DialStep>;

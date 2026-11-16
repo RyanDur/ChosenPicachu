@@ -2,7 +2,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
 import {FC} from 'react';
 import {useControls} from '../../Controls';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {Term} from './Term';
 import menuCss from '@components/Menu/Menu.css?sample';
 import headerCss from '@components/DragSortableTable/Header.css?sample';
@@ -20,8 +20,10 @@ import '../../Recipe/Recipe.css';
 
 const SortedDirectly: FC = () => {
   const {world} = useControls();
-  return <Step title="Sort directly">
-    <Words want="A sort reorders everything at once, and no one move explains it.">
+  return <Step>
+    <StepHeading title="Sort directly"/>
+    <Words>
+      <Want>A sort reorders everything at once, and no one move explains it.</Want>
       <Says>The answer is the sort alone. The page dispatches it to its own store as an action, a record that
         a column asked for an order. The rows then cut to their ranked seats. Motion in these tables explains one
         move: a column or a row, and what it shoved aside.</Says>
@@ -78,8 +80,11 @@ const RankStory: FC = () => {
       the order too: the trader who drags a row mid-sort is not wrong, and the table must
       decide whose order wins.</Tell>
     <Steps>
-      <Step title="A menu that is a menu">
-        <Words want="A sort chooser needs a popup, and popups built from divs re-invent focus, dismissal, and stacking.">
+      <Step>
+        <StepHeading title="A menu that is a menu"/>
+        <Words>
+          <Want>A sort chooser needs a popup, and popups built from divs re-invent focus, dismissal, and
+            stacking.</Want>
           <Says>The platform provides the whole popup: point the
             button’s <Mdn path="Web/HTML/Element/button#popovertarget"><code className="monospaced">popoverTarget</code></Mdn> at the
             menu,
@@ -125,8 +130,11 @@ const RankStory: FC = () => {
           </Codes>
         </Reveal>
       </Step>
-      <Step title="Anchored, not measured">
-        <Words want="The menu must land by its own button, not centered in the page, and nothing should measure to put it there.">
+      <Step>
+        <StepHeading title="Anchored, not measured"/>
+        <Words>
+          <Want>The menu must land by its own button, not centered in the page, and nothing should measure to put it
+            there.</Want>
           <Says>A popover opened by its invoker is anchored to that invoker
             automatically, so <Mdn path="Web/CSS/CSS_anchor_positioning">anchor
               positioning</Mdn> can place it:
@@ -170,8 +178,11 @@ const RankStory: FC = () => {
           </Codes>
         </Reveal>
       </Step>
-      <Step title="The glyph derives from the sort">
-        <Words want="A sorted column must say so, visibly and to assistive technology, without a second source of truth appearing anywhere.">
+      <Step>
+        <StepHeading title="The glyph derives from the sort"/>
+        <Words>
+          <Want>A sorted column must say so, visibly and to assistive technology, without a second source of truth
+            appearing anywhere.</Want>
           <Says>Which column is sorted should be written once, as
             the <Term word="sort">sort</Term>, and every column should wear it from there;
             let <Mdn path="Web/Accessibility/ARIA/Attributes/aria-sort"><code className="monospaced">aria-sort</code></Mdn> be
@@ -222,8 +233,10 @@ const RankStory: FC = () => {
           </Codes>
         </Reveal>
       </Step>
-      <Step title="The sort keeps sorting">
-        <Words want="The data keeps streaming under the sort, so the sort has to keep sorting.">
+      <Step>
+        <StepHeading title="The sort keeps sorting"/>
+        <Words>
+          <Want>The data keeps streaming under the sort, so the sort has to keep sorting.</Want>
           <Says>The <Term word="sort">sort</Term> should never be applied once: it is asked of
             the rows every time a value changes, with the ranking living in one function both
             worlds call.</Says>
@@ -247,8 +260,11 @@ const RankStory: FC = () => {
         </Reveal>
       </Step>
       <SortedDirectly/>
-      <Step title="A move ends the sort">
-        <Words want="Manual order and sorted order cannot both own the table. The moment you drag a row, whose order is it?">
+      <Step>
+        <StepHeading title="A move ends the sort"/>
+        <Words>
+          <Want>Manual order and sorted order cannot both own the table. The moment you drag a row, whose order is
+            it?</Want>
           <Says>The trader should win: the moment the trader moves a row, the sorted order must become
             the real order, and the sort must end.</Says>
         </Words>
@@ -274,8 +290,11 @@ const RankStory: FC = () => {
           </Codes>
         </Reveal>
       </Step>
-      <Step title="The press never becomes a drag">
-        <Words want="The menu lives inside a draggable header, where an unguarded press on the toggle would lift the whole column.">
+      <Step>
+        <StepHeading title="The press never becomes a drag"/>
+        <Words>
+          <Want>The menu lives inside a draggable header, where an unguarded press on the toggle would lift the whole
+            column.</Want>
           <Says>Both the toggle and the menu should <Mdn path="Web/API/Event/stopPropagation">stop a press from
             bubbling</Mdn> up to the header around them, so the header never gets it, and a menu should exist only
             where ranking the column means something.</Says>

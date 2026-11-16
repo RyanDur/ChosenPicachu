@@ -1,14 +1,17 @@
 import {FC} from 'react';
 import {PaceDial, useControls} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {Term} from '../Term';
 import {sources} from './sources';
 
 export const LazyPace: FC<{headerSource: Sample; paceSource: Sample; buildSource: Sample}> =
   ({headerSource, paceSource, buildSource}) => {
     const {world} = useControls();
-    return <Step title="Hold still, dispatch on release" dial={<PaceDial name="step-pace"/>}>
-      <Words want="The trader wants the table calm while they drag, because motion during the drag distracts, and only the destination matters.">
+    return <DialStep>
+      <StepHeading title="Hold still, dispatch on release"><PaceDial name="step-pace"/></StepHeading>
+      <Words>
+        <Want>The trader wants the table calm while they drag, because motion during the drag distracts, and only the
+          destination matters.</Want>
         <Says>Instead of dispatching the order, a <Term word="strike">strike</Term> only remembers
           a <Term word="landing">landing</Term>, and the
           release dispatches it. The landing is kept in the drag slice, never in the order:
@@ -46,5 +49,5 @@ export const LazyPace: FC<{headerSource: Sample; paceSource: Sample; buildSource
           ]}/>
         </Codes>
       </Reveal>
-    </Step>;
+    </DialStep>;
   };

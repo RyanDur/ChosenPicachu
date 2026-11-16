@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, Step, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {useControls} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
@@ -7,8 +7,11 @@ import {elidedHeaders} from '../elidedHeaders';
 
 export const OrderInState: FC<{tableSource: Sample; buildSource: Sample}> = ({tableSource, buildSource}) => {
   const {world} = useControls();
-  return <Step title="Keep the order in state, not in the data">
-    <Words want="Every story runs against the stream: a reorder that rewrote the data would lose to the next trade, so order and data must never fight.">
+  return <Step>
+    <StepHeading title="Keep the order in state, not in the data"/>
+    <Words>
+      <Want>Every story runs against the stream: a reorder that rewrote the data would lose to the next trade, so order
+        and data must never fight.</Want>
       <Says>So the order is the page’s state, the columns and the rows as they stand, held beside
         the data and never inside it; a trade rewrites a row’s values and never touches its seat.
         The table shows what it is given, and what the trader does to it comes back as an event

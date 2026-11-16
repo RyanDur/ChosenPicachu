@@ -1,12 +1,15 @@
 import {FC} from 'react';
 import {MotionDial, useControls} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {sources} from './sources';
 
 export const WalkSlides: FC<{headerSource: Sample; buildSource: Sample}> = ({headerSource, buildSource}) => {
   const {world} = useControls();
-  return <Step title="Both parties slide" dial={<MotionDial name="step-motion"/>}>
-    <Words want="A pointer swap explains itself with the column in hand; the trader’s keyboard swap has no pointer, and if only the neighbor slid, the walked column would simply jump.">
+  return <DialStep>
+    <StepHeading title="Both parties slide"><MotionDial name="step-motion"/></StepHeading>
+    <Words>
+      <Want>A pointer swap explains itself with the column in hand; the trader’s keyboard swap has no pointer, and if
+        only the neighbor slid, the walked column would simply jump.</Want>
       <Says>Both parties should explain themselves: each starts where it was and slides to
         where it now sits. A walk is a reorder, and it wears the same marks a strike does, plus
         one for the column that walked.</Says>
@@ -34,5 +37,5 @@ export const WalkSlides: FC<{headerSource: Sample; buildSource: Sample}> = ({hea
           ]}/>}
       </Codes>
     </Reveal>
-  </Step>;
+  </DialStep>;
 };

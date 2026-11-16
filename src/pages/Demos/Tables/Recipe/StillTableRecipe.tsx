@@ -1,7 +1,7 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
 import {FC, ReactNode} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
 import type {World} from '../../Controls';
 import {TheImplementation} from './steps';
@@ -131,10 +131,12 @@ const StillStory: FC = () => {
       whatever trades the page holds: headers on both axes, and the
       reading order correct before a single interaction exists.</Tell>
     <Steps>
-      <Step title="Deal a real HTML table">
-        <Words want={<>The table is more than JavaScript holding numbers; it is an
-          HTML <Mdn path="Web/HTML/Element/table">table</Mdn>: header cells that declare their
-          scope, rows a reader and a screen reader both move through.</>}>
+      <Step>
+        <StepHeading title="Deal a real HTML table"/>
+        <Words>
+          <Want>The table is more than JavaScript holding numbers; it is an
+            HTML <Mdn path="Web/HTML/Element/table">table</Mdn>: header cells that declare their
+            scope, rows a reader and a screen reader both move through.</Want>
           {dealPlans[world]}
         </Words>
         <Reveal>

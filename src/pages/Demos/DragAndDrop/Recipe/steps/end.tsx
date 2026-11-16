@@ -1,11 +1,13 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
 import {DemoTopics} from '@pages/Demos';
-import {Codes, Says, Snippet, Step, Words, lines} from '../../../Recipe';
+import {Codes, Says, Snippet, Step, StepHeading, Want, Words, lines} from '../../../Recipe';
 
 export const RoadEnd: FC = () =>
-  <Step title="What drag and drop cannot give you">
-    <Words want="You cannot change how the browser draws its drag image, its cursor or its cancel.">
+  <Step>
+    <StepHeading title="What drag and drop cannot give you"/>
+    <Words>
+      <Want>You cannot change how the browser draws its drag image, its cursor or its cancel.</Want>
       <Says>The drag image is a picture taken once at dragstart, so it cannot be animated, and on macOS it cannot be
         made opaque. The cursor is the browser’s. The cancel is the browser’s animation; on macOS it is the system’s,
         and nothing in the page can shorten it. When those pixels matter, build the drag from

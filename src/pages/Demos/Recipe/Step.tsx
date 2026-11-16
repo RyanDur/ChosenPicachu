@@ -1,22 +1,5 @@
-import {FC, PropsWithChildren, ReactNode} from 'react';
-import {has} from '@ryandur/sand';
-import {classNames} from '@components';
-import {useRanks} from './useRanks';
+import {FC} from 'react';
+import {StepItem, StepProps} from './StepItem';
 
-type Props = PropsWithChildren<{
-  title: string;
-  dial?: ReactNode;
-  id?: string;
-}>;
-
-export const Step: FC<Props> = ({title, dial, id, children}) => {
-  const {step: Title} = useRanks();
-  return <li className={classNames('step', 'badge-before', has(dial) ? 'mint-badge-before' : 'shadow-badge-before')} id={id}
-    tabIndex={has(id) ? -1 : undefined}>
-    <header className="step-heading">
-      <Title className="sub-title">{title}</Title>
-      {dial}
-    </header>
-    {children}
-  </li>;
-};
+export const Step: FC<StepProps> = ({id, children}) =>
+  <StepItem badge="shadow-badge-before" id={id}>{children}</StepItem>;

@@ -1,13 +1,15 @@
 import {FC} from 'react';
 import {PaceDial, useControls} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {Term} from '../Term';
 import {sources} from './sources';
 
 export const EagerPace: FC<{headerSource: Sample; buildSource: Sample}> = ({headerSource, buildSource}) => {
   const {world} = useControls();
-  return <Step title="Commit inside the move" dial={<PaceDial name="step-pace"/>}>
-    <Words want="The trader wants the table to answer inside the move, so they can change their mind before the drop.">
+  return <DialStep>
+    <StepHeading title="Commit inside the move"><PaceDial name="step-pace"/></StepHeading>
+    <Words>
+      <Want>The trader wants the table to answer inside the move, so they can change their mind before the drop.</Want>
       <Says>Answering mid-drag means a <Term word="strike">strike</Term> is simply a dispatch: the same state change a
         drop would make, made early. One thing has to hold: the reorder moves real nodes, not copies,
         so the drag keeps flying over a table that has already reordered.</Says>
@@ -59,5 +61,5 @@ export const EagerPace: FC<{headerSource: Sample; buildSource: Sample}> = ({head
         ]}/>
       </Codes>
     </Reveal>
-  </Step>;
+  </DialStep>;
 };

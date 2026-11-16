@@ -1,11 +1,14 @@
 import {FC} from 'react';
 import {MotionDial} from '../../../Controls';
-import {carve, Codes, lines, Sample, Says, Snippet, Step, Words} from '../../../Recipe';
+import {carve, Codes, lines, Sample, Says, Snippet, DialStep, StepHeading, Want, Words} from '../../../Recipe';
 import {sources} from './sources';
 
 export const SlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
-  <Step title="Slide every moved item home on release" dial={<MotionDial name="native-motion"/>}>
-    <Words want="A lazy settle happens all at once on release, so every item whose place changed has to travel, and the reader should see them all go together.">
+  <DialStep>
+    <StepHeading title="Slide every moved item home on release"><MotionDial name="native-motion"/></StepHeading>
+    <Words>
+      <Want>A lazy settle happens all at once on release, so every item whose place changed has to travel, and the
+        reader should see them all go together.</Want>
       <Says>The list takes its new order at once. Each item whose place changed gets a slide
         class, <code className="monospaced">sliding-in</code> or <code className="monospaced">sliding-in-again</code>,
         whichever it didn’t wear last, and its own <code className="monospaced">--starts-places-right</code>, its old place minus its new one, so an item that moved
@@ -27,4 +30,4 @@ export const SlideSettle: FC<{listSource: Sample}> = ({listSource}) =>
         ...carve.unit(sources.sortableListCss, '@keyframes slide-in {')
       ]}/>
     </Codes>
-  </Step>;
+  </DialStep>;

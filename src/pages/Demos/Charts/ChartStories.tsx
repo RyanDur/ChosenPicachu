@@ -4,7 +4,7 @@ import {generatePath, Link} from 'react-router';
 import {Paths} from '@navigation';
 import {DemoTopics} from '@pages/Demos';
 import {ChartKind} from './chart-kinds';
-import {Codes, Mdn, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../Recipe';
+import {Codes, Mdn, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../Recipe';
 import candleShapesSource from './Candles/candle-shapes.ts?sample';
 import candleSeriesSource from '@pages/Demos/Market/candles.ts?sample';
 import sparklineSource from './sparkline.ts?sample';
@@ -52,8 +52,11 @@ const PriceStory: FC = () =>
       the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. Every time it redraws the chart, the candles made
       from live trades, the joined series and the points are worked out again. None of them is stored.</Tell>
     <Steps>
-      <Step title="Open a socket, and keep only what decodes">
-        <Words want="A live chart starts with a connection to the exchange, and nothing it sends is trusted until it has been checked.">
+      <Step>
+        <StepHeading title="Open a socket, and keep only what decodes"/>
+        <Words>
+          <Want>A live chart starts with a connection to the exchange, and nothing it sends is trusted until it has been
+            checked.</Want>
           <Says>The browser opens a <Mdn path="Web/API/WebSocket">WebSocket</Mdn>, a connection the server can keep
             sending on, and asks the exchange for one product’s matches. A match is one trade.</Says>
           <Says>Each message is checked three ways before it counts. It has to parse as JSON. It has to have the fields
@@ -72,8 +75,10 @@ const PriceStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Fetch the recent past, and join it to the live trades">
-        <Words want="The trader arrives mid-session. The left of the chart happened before they came.">
+      <Step>
+        <StepHeading title="Fetch the recent past, and join it to the live trades"/>
+        <Words>
+          <Want>The trader arrives mid-session. The left of the chart happened before they came.</Want>
           <Says>The exchange also answers plain requests over <Mdn path="Web/API/Fetch_API">HTTP</Mdn>. The page asks it
             for recent candles, each the size the chosen period uses, and checks them as it checks the live
             messages.</Says>
@@ -89,8 +94,10 @@ const PriceStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Group the live trades into candles">
-        <Words want="Raw trades arrive too fast to draw. The line needs one point for each bucket of time.">
+      <Step>
+        <StepHeading title="Group the live trades into candles"/>
+        <Words>
+          <Want>Raw trades arrive too fast to draw. The line needs one point for each bucket of time.</Want>
           <Says><code className="monospaced">bucketTrades</code> goes through the live trades in order and makes one
             candle for each bucket. <code className="monospaced">bucketOpening</code> finds a trade’s bucket by
             rounding its time down to the start of the bucket. The first trade in a bucket opens the candle. Each
@@ -105,8 +112,11 @@ const PriceStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Let the trader choose the period">
-        <Words want="A trader watching the last few minutes and one reading the whole week are asking different questions. The trader picks the period, and everything on the chart follows it.">
+      <Step>
+        <StepHeading title="Let the trader choose the period"/>
+        <Words>
+          <Want>A trader watching the last few minutes and one reading the whole week are asking different questions.
+            The trader picks the period, and everything on the chart follows it.</Want>
           <Says>The period menu sits on the chart. It is a <Mdn path="Web/API/Popover_API">popover</Mdn>, the kind of
             menu the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains.</Says>
           <Says>Each period has a length of time, a bucket length for a candle, and its own spacing for the marks on
@@ -142,8 +152,10 @@ const PriceStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Turn each candle into a point on the line">
-        <Words want="The line has to stay smooth while trades keep arriving, on a slow machine too.">
+      <Step>
+        <StepHeading title="Turn each candle into a point on the line"/>
+        <Words>
+          <Want>The line has to stay smooth while trades keep arriving, on a slow machine too.</Want>
           <Says>Each candle becomes a point by proportion. Its time sets how far across the point is, and its closing
             price sets how far down, with the highest price at the top.</Says>
           <Says>The points go to one SVG <Mdn path="Web/SVG/Element/polyline">polyline</Mdn>, a line drawn through a
@@ -161,8 +173,11 @@ const PriceStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Label the prices and the time">
-        <Words want="A line with no labels is a shape, not a chart. The trader needs the high, the low and the time under it.">
+      <Step>
+        <StepHeading title="Label the prices and the time"/>
+        <Words>
+          <Want>A line with no labels is a shape, not a chart. The trader needs the high, the low and the time under
+            it.</Want>
           <Says>Axes places its parts on the chart’s own grid, with a column at the side for the prices. At the side
             it labels the highest price, the lowest, and the one
             midway between them. Along the bottom it marks the time.</Says>
@@ -201,8 +216,11 @@ const CandlesStory: FC = () =>
       price line does, and it groups and joins them with the same two functions.</Tell>
     <Tell>So two charts set to the same period are drawn from the same candles and cannot disagree.</Tell>
     <Steps>
-      <Step title="Make the candles the way the price line does">
-        <Words want="A second chart must not mean a second version of the market. Two charts of the same trades have to agree.">
+      <Step>
+        <StepHeading title="Make the candles the way the price line does"/>
+        <Words>
+          <Want>A second chart must not mean a second version of the market. Two charts of the same trades have to
+            agree.</Want>
           <Says>Every chart reads the same trades from the market. This chart groups them into candles
             with <code className="monospaced">bucketTrades</code> and joins the fetched past with <code className="monospaced">mergeLive</code>, the same two functions the price line
             uses.</Says>
@@ -219,8 +237,10 @@ const CandlesStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Draw each candle as a body, a wall and a wick">
-        <Words want="Open, high, low, close: four numbers for each bucket, drawn as one mark.">
+      <Step>
+        <StepHeading title="Draw each candle as a body, a wall and a wick"/>
+        <Words>
+          <Want>Open, high, low, close: four numbers for each bucket, drawn as one mark.</Want>
           <Says><code className="monospaced">candleShapes.drawn</code> turns each candle into two shapes. The body runs from the open to
             the close, and the wick, a thin line through the body, runs from the high to the low. The chart adds a
             third, the wall: a copy of the body moved 1 right and 1.5 down, which gives the body an edge.</Says>
@@ -273,8 +293,11 @@ const CandlesStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Draw the volume under each candle">
-        <Words want="A price move on little trading and one on heavy trading mean different things. The trader reads both at once.">
+      <Step>
+        <StepHeading title="Draw the volume under each candle"/>
+        <Words>
+          <Want>A price move on little trading and one on heavy trading mean different things. The trader reads both at
+            once.</Want>
           <Says><code className="monospaced">candleShapes.volumes</code> draws a bar under each candle for how much was traded in
             that bucket. The tallest bar is the busiest bucket on the chart, and every other bar is in proportion to
             it.</Says>
@@ -302,8 +325,11 @@ const CandlesStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Use the same axes">
-        <Words want="Candles with no labels are a shape, not a chart. They need their prices labeled and their time marked.">
+      <Step>
+        <StepHeading title="Use the same axes"/>
+        <Words>
+          <Want>Candles with no labels are a shape, not a chart. They need their prices labeled and their time
+            marked.</Want>
           <Says>The same Axes wraps this chart. Its prices come from the highest high and the lowest low of the candles
             on show, and its time marks follow the period, as on the price line.</Says>
           <Says>Axes does one job, so every chart that has that job uses it.</Says>
@@ -330,8 +356,10 @@ const PressureStory: FC = () =>
     <Tell>The fetched past is candles, and a candle doesn’t say who took a trade. So the chart counts only the trades
       that arrive while the page is open, and the page keeps the newest 1,500 of those.</Tell>
     <Steps>
-      <Step title="Sum each minute by who took the trade">
-        <Words want="Volume says how much was traded, never who pushed. The split has to survive the grouping.">
+      <Step>
+        <StepHeading title="Sum each minute by who took the trade"/>
+        <Words>
+          <Want>Volume says how much was traded, never who pushed. The split has to survive the grouping.</Want>
           <Says>The decoder accepts a match only if its side is buy or sell. Coinbase marks the side of the order that
             was waiting, so <code className="monospaced">takerSideOf</code> flips the mark to the side of the trader who
             took the trade: a mark of sell means a buyer took it. Every Trade keeps that
@@ -362,8 +390,11 @@ const PressureStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Scale both sides by the larger one">
-        <Words want="The two sides can only be compared on one scale. A taller bar has to mean more size and nothing else.">
+      <Step>
+        <StepHeading title="Scale both sides by the larger one"/>
+        <Words>
+          <Want>The two sides can only be compared on one scale. A taller bar has to mean more size and nothing
+            else.</Want>
           <Says><code className="monospaced">pressureShapes.heaviestSide</code> finds the largest single side of any
             minute on the chart, and that sets the scale. Bought
             rises from the middle line and sold falls from it. A minute that bought four and sold two shows bars in that
@@ -377,8 +408,11 @@ const PressureStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Draw the bars, and label them in bitcoin">
-        <Words want="The reader should see which side is larger at a glance, and the labels should give size, not dollars.">
+      <Step>
+        <StepHeading title="Draw the bars, and label them in bitcoin"/>
+        <Words>
+          <Want>The reader should see which side is larger at a glance, and the labels should give size, not
+            dollars.</Want>
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above,
             orange below. The bought bars wear <code className="monospaced">buy-side</code> and the sold
             bars <code className="monospaced">sell-side</code>. A class, as
@@ -435,8 +469,10 @@ const PieStory: FC = () =>
     <Tell>The circle has to move as the split changes, and move smoothly. So I make each slice from two half-discs that
       only ever rotate, and a share is how far they have turned into view.</Tell>
     <Steps>
-      <Step title="Add up each side">
-        <Words want="One number for each side. The pie asks nothing about time.">
+      <Step>
+        <StepHeading title="Add up each side"/>
+        <Words>
+          <Want>One number for each side. The pie asks nothing about time.</Want>
           <Says><code className="monospaced">sideTotals</code> hands every trade
             to <code className="monospaced">tally.add</code>, which puts the trade’s size into one of two sums, bought
             or sold, by its <code className="monospaced">takerSide</code>: whether a buyer or a seller took the
@@ -451,8 +487,11 @@ const PieStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Cut the circle with rotations only">
-        <Words want="The shares have to become shapes that can move. A split that changes with every trade should turn smoothly, not jump.">
+      <Step>
+        <StepHeading title="Cut the circle with rotations only"/>
+        <Words>
+          <Want>The shares have to become shapes that can move. A split that changes with every trade should turn
+            smoothly, not jump.</Want>
           <Says>You could paint the split with a conic gradient, a background that sweeps color round a point. But a
             painted background has no parts: nothing to label, nothing for a test to find, and nothing to give a class,
             which is a name a style sheet’s rules pick out, as the <TabLink to={DemoTopics.accordions}>accordions
@@ -499,8 +538,10 @@ const PieStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="Print each share">
-        <Words want="A circle without numbers is only an impression. The trader wants the split in figures.">
+      <Step>
+        <StepHeading title="Print each share"/>
+        <Words>
+          <Want>A circle without numbers is only an impression. The trader wants the split in figures.</Want>
           <Says>The legend prints each share as a whole percentage, in its slice’s color. The caption says what the pie
             is: the size traded on each side, up to the last 1,500 trades.</Says>
         </Words>
