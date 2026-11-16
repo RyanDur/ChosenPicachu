@@ -72,8 +72,20 @@ describe('the code voice', () => {
     expect(kinds('TS', "f('a')")["'a'"]).toBe('string');
   });
 
-  it('reads a quote after satisfies, a word the keywords table lacks, as a string', () => {
+  it('reads a quote after satisfies as a string', () => {
     expect(kinds('TS', "x satisfies 'a'")["'a'"]).toBe('string');
+  });
+
+  it('keeps a double quote in JSX text from opening a string', () => {
+    expect(kinds('TS', '<p>A 12" ruler</p>{/* say "hi" */}')['{/* say "hi" */}']).toBe('comment');
+  });
+
+  it('keeps a quote after a word no value follows from opening a string', () => {
+    expect(kinds('TS', "<p>Do it for 'em</p>{/* it's */}")["{/* it's */}"]).toBe('comment');
+  });
+
+  it('reads a quote at the start of a markup line as a string', () => {
+    expect(kinds('HTML', "'note',")["'note'"]).toBe('string');
   });
 
   it('reads a quote after as as a string', () => {
