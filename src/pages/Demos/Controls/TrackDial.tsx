@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Picks} from '@pages/Demos/Tables';
+import {Picks} from './Picks';
 import {useControls} from './useControls';
 
 export const TrackDial: FC = () => {

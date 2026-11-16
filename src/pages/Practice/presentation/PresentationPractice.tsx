@@ -179,7 +179,7 @@ export const PresentationPractice: FC = () =>
       not import, since each component imports its own. A component’s style sheet holds its structure only, the grid and
       placement of that one component, named for it and kept beside it. A family of components shares a style sheet at
       the family’s root, as the
-      tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code> sit
+      tables’ <code className="monospaced">Aggregations.css</code> sits
       at the top of the tables.</p>
     <p className="paragraph">Stylelint rules hold three of the five: place, value and
       selector. <code className="monospaced">selector-max-type</code>, for a tag selector outside the reset, prints <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a
