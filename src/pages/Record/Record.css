@@ -181,7 +181,10 @@
 
   .bibliography .shelves {
     display: grid;
-    gap: var(--base-x-2_5);
+
+    &[open] {
+      gap: var(--base-x-2_5);
+    }
 
     .fold-bar {
       width: fit-content;
