@@ -18,6 +18,10 @@ const excerptsOf = (lines: readonly Line[]): number[][] => lines.reduce<number[]
     : [...excerpts, [at]];
 }, []);
 
+const linesBefore = (line: Line): string[] => maybe(line.from)
+  .map(({file, line: number}) => maybe(file.text).map(text => text.split('\n').slice(0, number - 1)).orElse([]))
+  .orElse([]);
+
 type Excerpts = {
   tokensOf: (label: Label, lines: readonly Line[]) => Token[][];
 };
@@ -25,7 +29,8 @@ type Excerpts = {
 export const excerpts: Excerpts = {
   tokensOf: (label, lines) => {
     const inked = new Map(excerptsOf(lines).flatMap(excerpt => {
-      const tokens = highlight.tokensOf(label, excerpt.map(at => lines[at].text));
+      const before = linesBefore(lines[excerpt[0]]);
+      const tokens = highlight.tokensOf(label, [...before, ...excerpt.map(at => lines[at].text)]).slice(before.length);
       return excerpt.map((at, index): [number, Token[]] => [at, tokens[index]]);
     }));
     return lines.map(({text}, at) => inked.get(at) ?? [{text, kind: 'plain'}]);
