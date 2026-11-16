@@ -31,28 +31,32 @@ export type MomentKey = typeof inOrder[number];
 
 export type Month = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
-type YearDate = {readonly kind: 'year'; readonly year: string};
+type YearDate<Year extends string = string> = {readonly kind: 'year'; readonly year: Year};
 
-type DateWithMonth =
-  | {readonly kind: 'month'; readonly year: string; readonly month: Month}
-  | {readonly kind: 'day'; readonly year: string; readonly month: Month; readonly day: number};
+type DateWithMonth<Year extends string = string> =
+  | {readonly kind: 'month'; readonly year: Year; readonly month: Month}
+  | {readonly kind: 'day'; readonly year: Year; readonly month: Month; readonly day: number};
 
 type MomentDate = YearDate | DateWithMonth;
 
-export type YearHeading = {date: YearDate; title: string; id: string};
+export type YearHeading<Year extends string = string> = {date: YearDate<Year>; title: string; id: string};
 
-export type MonthHeading = {date: DateWithMonth; title: string; id: string};
+export type MonthHeading<Year extends string = string> = {date: DateWithMonth<Year>; title: string; id: string};
 
-type DatedInMonth = {readonly year: string; readonly month: Month; readonly day?: number};
+type DatedInMonth<Year extends string> = {readonly year: Year; readonly month: Month; readonly day?: number};
 
 const idOf = (title: string): string => title.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(' ').join('-');
 
-const inYear = (year: string, title: string): YearHeading => ({date: {kind: 'year', year}, title, id: idOf(title)});
+const inYear = <const Year extends string>(year: Year, title: string): YearHeading<Year> =>
+  ({date: {kind: 'year', year}, title, id: idOf(title)});
 
-const inMonth = ({year, month, day}: DatedInMonth, title: string): MonthHeading => ({
+const inMonth = <const Year extends string>(
+  {year, month, day}: DatedInMonth<Year>,
+  title: string
+): MonthHeading<Year> => ({
   date: maybe(day).either(
-    (onDay): DateWithMonth => ({kind: 'day', year, month, day: onDay}),
-    (): DateWithMonth => ({kind: 'month', year, month})),
+    (onDay): DateWithMonth<Year> => ({kind: 'day', year, month, day: onDay}),
+    (): DateWithMonth<Year> => ({kind: 'month', year, month})),
   title,
   id: idOf(title)
 });
@@ -102,7 +106,17 @@ export type SharedYear = {
   readonly inBrief: string;
 };
 
-const sharedYears: Partial<Record<string, SharedYear>> = {
+type Headings = typeof headings;
+
+type YearsOfMonthMoments =
+  {[Key in MomentKey]: Headings[Key] extends MonthHeading<infer Year> ? Year : never}[MomentKey];
+
+type YearsOfYearMoments =
+  {[Key in MomentKey]: Headings[Key] extends YearHeading<infer Year> ? Year : never}[MomentKey];
+
+type SharedYearOf = Exclude<YearsOfMonthMoments, YearsOfYearMoments>;
+
+const sharedYears: Record<SharedYearOf, SharedYear> = {
   '1995': {
     inBrief: 'Two concerns moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.'
   },
