@@ -4,7 +4,7 @@ import {presentation} from './sources';
 export const Bibliography: FC = () =>
   <section className="bibliography" aria-labelledby="the-research">
     <details className="shelves">
-      <summary className="prompt"><h2 className="research-title title" id="the-research">The research</h2></summary>
+      <summary className="fold-bar"><h2 className="research-title title" id="the-research">The research</h2></summary>
       <section className="shelf" aria-label="the web research">
         <h3 className="shelf-title sub-title">The web</h3>
         <ul className="works">
