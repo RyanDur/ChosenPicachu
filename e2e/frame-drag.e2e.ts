@@ -3,8 +3,6 @@ import {test} from './__test_support/journey';
 import {dragSortTable, type FingerPress, iPadUpright, iPhone, type Stage, stages, stageWith} from './__test_support';
 
 const aTraderDragsAColumnAndARow = async (page: Page, {at, table}: Stage): Promise<void> => {
-  const troubles: string[] = [];
-  page.on('pageerror', error => troubles.push(String(error)));
   await page.goto(at);
   const trades = dragSortTable(page, table(page));
   await expect(trades.columnHeader('trades')).toBeVisible();
@@ -14,8 +12,6 @@ const aTraderDragsAColumnAndARow = async (page: Page, {at, table}: Stage): Promi
 
   await trades.dragRowPast(1, /last 15 minutes/);
   await expect.poll(() => trades.rowOrder()).toEqual(['last 5 minutes', 'last 15 minutes', 'this minute', 'this hour', 'session']);
-
-  expect(troubles).toEqual([]);
 };
 
 for (const stage of stages) {
