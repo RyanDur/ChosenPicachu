@@ -51,7 +51,13 @@ jobs:
           ready=
           until [ -n "$ready" ]; do
             sleep 15
-            ready=$(gh run view "$run" -R "$GITHUB_REPOSITORY" --json jobs -q '.jobs[] | select(.name == "ready") | .conclusion')
+            seen=$(gh run view "$run" -R "$GITHUB_REPOSITORY" --json status,jobs \
+              -q '"\(.status) \([.jobs[] | select(.name == "ready") | .conclusion][0] // "")"') || continue
+            ready=${seen#* }
+            if [ -z "$ready" ] && [ "${seen%% *}" = completed ]; then
+              echo "::error::run $run finished with no ready job, so #$pull's site is not taken"
+              exit 1
+            fi
           done
           if [ "$ready" != success ]; then
             echo "::error::#$pull's head $head did not pass ready, so its site is not taken"

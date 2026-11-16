@@ -40,7 +40,7 @@ describe('clear to push', () => {
   });
 
   test('the pages report gates nothing, so it does not hold a push', () => {
-    const run = github({pulls: [{number: 1, branch: 'verify/a'}], checks: [check('pages', 'pending'), check('review', 'pass')]});
+    const run = github({pulls: [{number: 1, branch: 'verify/a'}], checks: [check('pages', 'pending', 'Pages'), check('review', 'pass')]});
 
     expect(clearToPush('verify/a', 'HEAD', run)).toEqual({refused: []});
   });
