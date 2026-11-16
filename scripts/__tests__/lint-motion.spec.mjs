@@ -16,7 +16,7 @@ describe('chosen/compositor-motion', () => {
     expect(await warningsFor('a { transition: translate .3s ease, opacity .3s; }')).toEqual([]);
   });
 
-  it('should read a style sheet that has no file name', async () => {
+  it('should refuse a height sliding in a style sheet that has no file name', async () => {
     expect(await warningsFor('a { transition: block-size 1s; }', {codeFilename: undefined})).toHaveLength(1);
   });
 
