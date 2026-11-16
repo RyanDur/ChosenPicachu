@@ -1,4 +1,4 @@
-import {has, not} from '@ryandur/sand';
+import {has, maybe, not} from '@ryandur/sand';
 import {execFileSync} from 'node:child_process';
 
 /** @typedef {{name: string, bucket: string, workflow: string}} Check */
@@ -82,7 +82,8 @@ export const clearToPush = (branch, pushed, run = outputOf) => {
     const opened = pulls.some(({headRefName}) => headRefName === branch);
     return {refused: refusals({branch, changed, pulls, checks: opened ? checksOf(branch, run) : []})};
   } catch (error) {
-    return {refused: [], unread: error.message.split('\n')[0]};
+    const printed = maybe(error.stderr).map(stderr => String(stderr).trim()).orElse('');
+    return {refused: [], unread: has(printed) ? printed : error.message.split('\n')[0]};
   }
 };
 
