@@ -1,10 +1,19 @@
 import {expect, Locator, Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {desktop, fingertipMiss, iPadUpright, iPhone, siteFrame, Stage, tablesFrame} from './__test_support';
+import {
+  desktop,
+  dragSortTable,
+  fingertipMiss,
+  iPadUpright,
+  iPhone,
+  siteFrame,
+  Stage,
+  tableWorlds
+} from './__test_support';
 
 const standing = async (page: Page, stage: Stage) => {
   await page.goto(stage.at);
-  const table = tablesFrame.dragSortTable(page, stage.holder(page));
+  const table = dragSortTable(page, stage.holder(page));
   await expect(table.columnHeader('trades')).toBeVisible({timeout: 30_000});
   await siteFrame(page).hydrated();
   return table;
@@ -29,7 +38,7 @@ const measuredName = async (handle: Locator): Promise<string> => {
   return nameOf(handle);
 };
 
-for (const stage of tablesFrame.stages) {
+for (const stage of tableWorlds.stages) {
   for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpright}, {reader: 'a phone', device: iPhone}]) {
     test.describe(`${reader}, in ${stage.name}`, () => {
       test.use(device);

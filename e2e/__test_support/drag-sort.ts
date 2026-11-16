@@ -1,28 +1,6 @@
 import type {FrameLocator, Locator, Page} from '@playwright/test';
 import {siteFrame} from './site';
 import {type Box, boxOf} from './box';
-import {assertionPatience} from './patience';
-
-export type Stage = {name: string; at: string; holder: (page: Page) => Locator | FrameLocator};
-
-const tablesCard = (page: Page) => {
-  const card = page.getByRole('region', {name: 'live aggregations'});
-  const vanillaFrame = card.getByTitle('the living table, in vanilla').contentFrame();
-  return {
-    card,
-    vanillaFrame,
-    ownTables: card.getByRole('table'),
-    vanillaTable: vanillaFrame.getByRole('table')
-  };
-};
-
-const stages: readonly Stage[] = [
-  {name: 'react', at: '/ChosenPicachu/demos/tables/?world=react', holder: page => tablesCard(page).card},
-  {name: 'vanilla', at: '/ChosenPicachu/demos/tables/?world=vanilla', holder: page => tablesCard(page).vanillaFrame}
-];
-
-const stagesWith = (dials: string): readonly Stage[] =>
-  stages.map(stage => ({...stage, name: `${stage.name}, ${dials}`, at: `${stage.at}&${dials}`}));
 
 type Point = {x: number; y: number};
 
@@ -98,7 +76,7 @@ const pressedOn = async (header: Locator, where: FingerPress): Promise<Point> =>
   return {x: box.x + within.x, y: box.y + within.y};
 };
 
-const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
+export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
   const columnHeader = (name: string): Locator => holder.getByRole('columnheader', {name});
   const grip = (row: number): Locator => holder.getByRole('button', {name: `move row ${row}`, exact: true});
   const resizeHandle = (name: string): Locator => holder.getByRole('button', {name: new RegExp(`^resize ${name}`)});
@@ -247,19 +225,4 @@ const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
       await holder.getByRole('button', {name: direction}).click();
     }
   };
-};
-
-const opened = async (page: Page, {at, holder}: Pick<Stage, 'at' | 'holder'>) => {
-  await page.goto(at);
-  const table = dragSortTable(page, holder(page));
-  await table.columnHeader('trades').waitFor({timeout: assertionPatience});
-  return table;
-};
-
-export const tablesFrame = {
-  stages,
-  stagesWith,
-  card: tablesCard,
-  dragSortTable,
-  opened
 };

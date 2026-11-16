@@ -1,14 +1,14 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {tablesFrame} from './__test_support';
+import {tableWorlds} from './__test_support';
 
 const columnsAsDealt = ['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
 const lookbacksAsDealt = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
-for (const stage of tablesFrame.stagesWith('pace=lazy')) {
+for (const stage of tableWorlds.stagesWith('pace=lazy')) {
   test.describe(`a lazy table, in ${stage.name}`, () => {
     test('a held column leaves the order alone until it is dropped, then takes its seat', async ({page}) => {
-      const trades = await tablesFrame.opened(page, stage);
+      const trades = await tableWorlds.opened(page, stage);
 
       const hold = await trades.holdColumn('trades');
       await hold.carryTo(trades.columnHeader('vwap'));
@@ -21,7 +21,7 @@ for (const stage of tablesFrame.stagesWith('pace=lazy')) {
     });
 
     test('a column dropped past two neighbors is said once, where it lands', async ({page}) => {
-      const trades = await tablesFrame.opened(page, stage);
+      const trades = await tableWorlds.opened(page, stage);
       await trades.listenToTheMoveReport();
 
       const hold = await trades.holdColumn('trades');
@@ -35,7 +35,7 @@ for (const stage of tablesFrame.stagesWith('pace=lazy')) {
     });
 
     test('a held row leaves the lookbacks alone until it is dropped, then takes its seat', async ({page}) => {
-      const trades = await tablesFrame.opened(page, stage);
+      const trades = await tableWorlds.opened(page, stage);
 
       const hold = await trades.holdRow(1);
       await hold.carryTo(trades.row(/last 15 minutes/));

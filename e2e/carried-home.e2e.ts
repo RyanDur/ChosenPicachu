@@ -1,15 +1,15 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {tablesFrame} from './__test_support';
+import {tableWorlds} from './__test_support';
 
 const columnsAsDealt = ['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
 const lookbacksAsDealt = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
 for (const pace of ['eager', 'lazy']) {
-  for (const stage of tablesFrame.stagesWith(`pace=${pace}`)) {
+  for (const stage of tableWorlds.stagesWith(`pace=${pace}`)) {
     test.describe(`a ${pace} table, in ${stage.name}`, () => {
       test('a column carried past a neighbor and home again lands nowhere and says nothing', async ({page}) => {
-        const trades = await tablesFrame.opened(page, stage);
+        const trades = await tableWorlds.opened(page, stage);
         await trades.listenToTheMoveReport();
 
         const hold = await trades.holdColumn('trades');
@@ -24,7 +24,7 @@ for (const pace of ['eager', 'lazy']) {
       });
 
       test('a row carried past a neighbor and home again lands nowhere and says nothing', async ({page}) => {
-        const trades = await tablesFrame.opened(page, stage);
+        const trades = await tableWorlds.opened(page, stage);
         await trades.listenToTheMoveReport();
 
         const hold = await trades.holdRow(1);

@@ -1,6 +1,6 @@
 import {expect, Locator, Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {chartsPage, siteFrame, tablesFrame} from './__test_support';
+import {chartsPage, dragSortTable, siteFrame, tableWorlds} from './__test_support';
 
 const opensFromTheKeyboardClosesOnEscape = async (
   page: Page,
@@ -24,7 +24,7 @@ test('the price period menu opens from the keyboard and closes on Escape', ({pag
   opensFromTheKeyboardClosesOnEscape(page, 'demos/charts/', chartsPage(page).periodToggle, page.getByLabel('price period by')));
 
 test("a column's sort menu opens from the keyboard and closes on Escape", ({page}) => {
-  const trades = tablesFrame.dragSortTable(page, tablesFrame.stages[0].holder(page));
+  const trades = dragSortTable(page, tableWorlds.stages[0].holder(page));
 
   return opensFromTheKeyboardClosesOnEscape(page, 'demos/tables/', trades.sortToggle('trades'), trades.sortMenu('trades'));
 });
