@@ -1,6 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
 import {itemHeadedBy} from '@__test_support/headed-item';
-import {render, screen, waitFor, within} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@navigation';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {recordPage} from '@pages/Record/__test_support/record';
@@ -15,7 +15,7 @@ describe('the 1989 moment', () => {
   });
 
   test('should link the book’s words to the page that quotes them', () => {
-    expect(screen.getByRole('link', {name: '“as close as possible to no rules at all”', hidden: true})).toHaveAttribute('href', 'https://www.ppd.stfc.ac.uk/news/unravelling-the-web-how-particle-physics-launched-the-invention-that-changed-the-world/');
+    expect(recordPage.quotationLink('“as close as possible to no rules at all”')).toHaveAttribute('href', 'https://www.ppd.stfc.ac.uk/news/unravelling-the-web-how-particle-physics-launched-the-invention-that-changed-the-world/');
   });
 });
 
@@ -48,7 +48,7 @@ describe('the first 1995 moment', () => {
   });
 
   test('should link Keith’s line to his journal', () => {
-    expect(within(itemHeadedBy('1995', 'Pages need to respond')).getByRole('link', {name: '“Java is to JavaScript as ham is to hamster.”', hidden: true})).toHaveAttribute('href', 'https://adactio.com/journal/1595');
+    expect(recordPage.momentLinkUnder('1995', 'Pages need to respond', '“Java is to JavaScript as ham is to hamster.”')).toHaveAttribute('href', 'https://adactio.com/journal/1595');
   });
 });
 
@@ -59,7 +59,7 @@ describe('the first 1996 moment', () => {
   });
 
   test('should link HTML 3.2 to its Recommendation', () => {
-    expect(within(itemHeadedBy('1996', 'The pages need to look the same')).getByRole('link', {name: 'HTML 3.2', hidden: true})).toHaveAttribute('href', 'https://www.w3.org/TR/REC-html32');
+    expect(recordPage.momentLinkUnder('1996', 'The pages need to look the same', 'HTML 3.2')).toHaveAttribute('href', 'https://www.w3.org/TR/REC-html32');
   });
 });
 
@@ -84,7 +84,7 @@ describe('the 2014 moment', () => {
   });
 
   test('should link the Recommendation\'s date to the Recommendation, in the tells and in the story', () => {
-    const dated = within(itemHeadedBy('the timeline', 'The rules need writing down')).getAllByRole('link', {name: '28 October 2014', hidden: true});
+    const dated = recordPage.momentLinksUnder('the timeline', 'The rules need writing down', '28 October 2014');
 
     expect(dated.map(link => link.getAttribute('href'))).toEqual(['https://www.w3.org/TR/2014/REC-html5-20141028/', 'https://www.w3.org/TR/2014/REC-html5-20141028/']);
   });
@@ -136,10 +136,10 @@ describe('the record', () => {
   });
 
   test('should open on its title, then tell the record, then walk into the demos, then collect the research', () => {
-    const title = screen.getByRole('heading', {name: 'The record', level: 1});
-    const record = screen.getByRole('heading', {name: 'How the web got its languages', level: 2});
-    const research = screen.getByRole('heading', {name: 'The research', level: 2});
-    const demos = screen.getByRole('link', {name: 'The Demos'});
+    const title = recordPage.title();
+    const record = recordPage.timelineHeading();
+    const research = recordPage.researchHeading();
+    const demos = recordPage.bridgeLink('The Demos');
 
     expect(title.compareDocumentPosition(record) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(record.compareDocumentPosition(demos) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
@@ -154,11 +154,9 @@ describe('the record', () => {
   });
 
   test('the timeline walks the years in order, one entry each, a year of two moments holding both under its title', () => {
-    const timeline = within(screen.getByRole('list', {name: 'the timeline'}));
-
-    expect(timeline.getAllByRole('time').map(year => year.textContent)).toEqual(
+    expect(recordPage.timelineDates()).toEqual(
       ['1989', '1990', '1991', '1994', '1995', 'May', 'November', '1996', 'August', 'December', '1997', '1998', '2002', '2003', '2004', '2005', '2007', '2009', '2010', '2011', '2013', '2014', 'July', 'October', '2016', '2017', '2025']);
-    expect(timeline.getAllByRole('heading', {level: 3}).map(title => title.textContent)).toEqual([
+    expect(recordPage.timelineTitles()).toEqual([
       'CERN needs to share what it knows',
       'The information needs one interface',
       'The web needs collaborators',
@@ -598,26 +596,25 @@ describe('the record', () => {
   });
 
   test('should read every shelved work as its title, a space, then where it comes from', () => {
-    within(screen.getByRole('region', {name: 'The research'})).getAllByRole('listitem', {hidden: true}).forEach(entry => {
-      const title = within(entry).getByRole('link', {hidden: true}).textContent ?? '';
-      expect(entry.textContent?.startsWith(`${title} `), `${title} runs into its provenance`).toBe(true);
+    recordPage.shelvedReadings().forEach(({title, reads}) => {
+      expect(reads.startsWith(`${title} `), `${title} runs into its provenance`).toBe(true);
     });
   });
 
   test('the history cites its sources', () => {
-    expect(screen.getByRole('link', {name: /proposing the WorldWideWeb/}))
+    expect(recordPage.citation(/proposing the WorldWideWeb/))
       .toHaveAttribute('href', expect.stringContaining('w3.org/History'));
-    expect(screen.getByRole('link', {name: /drafted Cascading HTML Style Sheets/}))
+    expect(recordPage.citation(/drafted Cascading HTML Style Sheets/))
       .toHaveAttribute('href', expect.stringContaining('w3.org/People/howcome'));
-    expect(screen.getByRole('link', {name: /never become a page-description language/}))
+    expect(recordPage.citation(/never become a page-description language/))
       .toHaveAttribute('href', expect.stringContaining('w3.org/Style/LieBos2e'));
-    screen.getAllByRole('link', {name: 'The Box Acid Test'})
+    recordPage.citations('The Box Acid Test')
       .forEach(link => expect(link).toHaveAttribute('href', expect.stringContaining('w3.org/Style/CSS/Test')));
-    expect(screen.getByRole('link', {name: /one HTML document/}))
+    expect(recordPage.citation(/one HTML document/))
       .toHaveAttribute('href', expect.stringContaining('csszengarden.com'));
-    expect(screen.getByRole('link', {name: /wrote the interpreter in about ten days/}))
+    expect(recordPage.citation(/wrote the interpreter in about ten days/))
       .toHaveAttribute('href', 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html');
-    expect(screen.getByRole('link', {name: /reducing the overlap/}))
+    expect(recordPage.citation(/reducing the overlap/))
       .toHaveAttribute('href', expect.stringContaining('html.com/html5'));
   });
 
@@ -626,14 +623,12 @@ describe('the record', () => {
   });
 
   test('the research stands collected, closed until asked', () => {
-    const bibliography = screen.getByRole('region', {name: 'The research'});
-
-    expect(within(bibliography).getByRole('heading', {name: 'The research'})).toBeVisible();
-    expect(within(bibliography).getByRole('group', {hidden: true})).not.toHaveAttribute('open');
-    const works = within(bibliography).getAllByRole('listitem', {hidden: true});
+    expect(recordPage.researchHeading()).toBeVisible();
+    expect(recordPage.researchFold()).not.toHaveAttribute('open');
+    const works = recordPage.shelvedWorks();
     expect(works.length).toBeGreaterThanOrEqual(25);
-    works.forEach(work => expect(within(work).getAllByRole('link', {hidden: true}).length).toBeGreaterThan(0));
-    const cited = within(bibliography).getAllByRole('link', {hidden: true}).map(link => link.getAttribute('href') ?? '');
+    works.forEach(work => expect(recordPage.linksOfWork(work).length).toBeGreaterThan(0));
+    const cited = recordPage.shelvedSources().map(href => href ?? '');
     expect(cited.some(href => href.includes('w3.org/Style/LieBos2e'))).toBe(true);
     expect(cited.some(href => href.includes('web.archive.org'))).toBe(true);
     expect(cited.some(href => href.includes('w3.org/History/1989'))).toBe(true);
@@ -644,7 +639,7 @@ describe('arriving at a moment on the record', () => {
   test('should take the keyboard to the moment the address names, so the next Tab starts there', async () => {
     render(<TestApp at={`${Paths.record}#the-document-needs-to-come-first`}/>);
 
-    await screen.findByRole('heading', {name: 'The document needs to come first'});
+    await recordPage.findMomentTitle('The document needs to come first');
 
     await waitFor(() => expect(itemHeadedBy('the timeline', 'The document needs to come first')).toHaveFocus());
   });
@@ -652,7 +647,7 @@ describe('arriving at a moment on the record', () => {
   test('should take the keyboard to a moment whose title carries an apostrophe', async () => {
     render(<TestApp at={`${Paths.record}#the-browsers-tags-need-a-standard`}/>);
 
-    await screen.findByRole('heading', {name: 'The browsers’ tags need a standard'});
+    await recordPage.findMomentTitle('The browsers’ tags need a standard');
 
     await waitFor(() => expect(itemHeadedBy('1995', 'The browsers’ tags need a standard')).toHaveFocus());
   });

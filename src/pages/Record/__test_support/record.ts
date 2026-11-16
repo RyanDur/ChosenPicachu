@@ -11,9 +11,13 @@ const epigraphOf = (name: string): HTMLElement => within(story(name)).getByRole(
 const storyMoments = (name: string): HTMLElement => within(story(name)).getByRole('list', {name: `${name}, the moments it rests on`});
 const openFullerStory = async (title: string): Promise<void> =>
   userEvent.click(within(itemHeadedBy('the timeline', title)).getByText('the fuller story'));
+const timeline = (): HTMLElement => screen.getByRole('list', {name: 'the timeline'});
+const shelvedWorks = (): HTMLElement[] => within(research()).getAllByRole('listitem', {hidden: true});
 
 export const recordPage = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The research'}),
+  title: (): HTMLElement => screen.getByRole('heading', {name: 'The record', level: 1}),
+  findMomentTitle: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {name}),
   momentsTold: async (): Promise<string | undefined> =>
     /one sentence said ([a-z-]+) ways/.exec((await screen.findByText(/one sentence said/)).textContent)?.[1],
   paragraphOpening,
@@ -35,7 +39,20 @@ export const recordPage = {
   followConcertLink: async (name: string): Promise<void> =>
     userEvent.click(within(concert()).getByRole('link', {name})),
   bridgeLink: (name: string): HTMLElement => screen.getByRole('link', {name}),
+  citation: (name: string | RegExp): HTMLElement => screen.getByRole('link', {name}),
+  citations: (name: string): HTMLElement[] => screen.getAllByRole('link', {name}),
+  quotationLink: (name: string): HTMLElement => screen.getByRole('link', {name, hidden: true}),
   timelineHeading: (): HTMLElement => screen.getByRole('heading', {level: 2, name: 'How the web got its languages'}),
+  timelineDates: (): string[] => within(timeline()).getAllByRole('time').map(date => date.textContent),
+  timelineTitles: (): string[] => within(timeline()).getAllByRole('heading', {level: 3}).map(title => title.textContent),
+  researchHeading: (): HTMLElement => within(research()).getByRole('heading', {name: 'The research', level: 2}),
+  researchFold: (): HTMLElement => within(research()).getByRole('group', {hidden: true}),
+  shelvedWorks,
+  linksOfWork: (work: HTMLElement): HTMLElement[] => within(work).getAllByRole('link', {hidden: true}),
+  shelvedReadings: (): {title: string; reads: string}[] => shelvedWorks().map(work => ({
+    title: within(work).getByRole('link', {hidden: true}).textContent,
+    reads: work.textContent
+  })),
   shelvedSources: (): (string | null)[] => within(research()).getAllByRole('link', {hidden: true}).map(work => work.getAttribute('href')),
   sourcesLinked: (): string[] => {
     const shelf = research();
@@ -47,6 +64,10 @@ export const recordPage = {
   openFullerStory,
   momentLink: (title: string, name: string): HTMLElement =>
     within(itemHeadedBy('the timeline', title)).getByRole('link', {name, hidden: true}),
+  momentLinkUnder: (heading: string, title: string, name: string): HTMLElement =>
+    within(itemHeadedBy(heading, title)).getByRole('link', {name, hidden: true}),
+  momentLinksUnder: (heading: string, title: string, name: string): HTMLElement[] =>
+    within(itemHeadedBy(heading, title)).getAllByRole('link', {name, hidden: true}),
   followFromMoment: async (title: string, name: string): Promise<void> => {
     await openFullerStory(title);
     await userEvent.click(within(itemHeadedBy('the timeline', title)).getByRole('link', {name}));
