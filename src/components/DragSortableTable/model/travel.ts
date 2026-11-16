@@ -74,7 +74,7 @@ const notHeld: HeldHandlers = {
   onLostPointerCapture: undefined
 };
 
-const held = <Drag>(
+const whileHeld = <Drag>(
   drag: Drag | undefined,
   moved: (held: Drag) => (moving: Moving) => void,
   release: () => void
@@ -91,5 +91,5 @@ export const travel = {
   eager,
   lazy,
   pointer,
-  held
+  whileHeld
 };
