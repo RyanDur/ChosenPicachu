@@ -1,6 +1,6 @@
 import type {FrameLocator, Locator, Page} from '@playwright/test';
 import {siteFrame} from './site';
-import {type Box, boxOf} from './box';
+import {boxOf, type Box} from './box';
 
 export type Stage = {name: string; at: string; table: (page: Page) => Locator | FrameLocator};
 
@@ -20,10 +20,8 @@ export const stages: readonly Stage[] = [
   {name: 'vanilla', at: '/ChosenPicachu/demos/tables/?world=vanilla', table: page => tablesCard(page).vanillaFrame}
 ];
 
-export const stageWith = (stage: Stage, dials: string): Stage =>
-  ({...stage, name: `${stage.name}, ${dials}`, at: `${stage.at}&${dials}`});
-
-export const stagesWith = (dials: string): readonly Stage[] => stages.map(stage => stageWith(stage, dials));
+export const stagesWith = (dials: string): readonly Stage[] =>
+  stages.map(stage => ({...stage, name: `${stage.name}, ${dials}`, at: `${stage.at}&${dials}`}));
 
 type Point = {x: number; y: number};
 
