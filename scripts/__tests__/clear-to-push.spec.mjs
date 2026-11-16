@@ -87,6 +87,14 @@ describe('clear to push', () => {
     expect(checksOf('verify/a', none)).toEqual([]);
   });
 
+  test('a pull request whose run has not registered yet has no checks', () => {
+    const notYet = () => {
+      throw Object.assign(new Error('exit status 1'), {stdout: '', stderr: "no checks reported on the 'verify/a' branch"});
+    };
+
+    expect(checksOf('verify/a', notYet)).toEqual([]);
+  });
+
   test('when the checks cannot be read, the push goes through and says so', () => {
     const dropped = (...args) => {
       if (args.includes('checks')) throw Object.assign(new Error('connection reset'), {stdout: '', stderr: 'connection reset'});
