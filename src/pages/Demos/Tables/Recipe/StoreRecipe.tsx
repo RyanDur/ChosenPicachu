@@ -96,8 +96,8 @@ const ActionsAreData: FC = () =>
       <Says>My first draft dispatched functions from state to state and called them reducers. They were not
         reducers: a reducer interprets an action it did not write.</Says>
       <Says>Making the action data costs a union of types and one switch. It gets what the shape guarantees: the
-        store knows nothing about tables, a layer of middleware can read what kind of action is passing, and a
-        dispatch can be logged or replayed as a record.</Says>
+        store knows nothing about tables, a middleware can read what kind of action is passing, and a dispatch can
+        be logged or replayed as a record.</Says>
       <Says>A <Term word="slice">slice</Term> is a reducer with the state it starts from, and a store starts from its
         slice’s beginning, so nobody names an initial state.</Says>
       <Says>Slices combine by key when a state has more than one concern, each seeing only its own. The page’s
@@ -182,18 +182,20 @@ const ExchangeIsMiddleware: FC = () => {
     <StepHeading title="The exchange is middleware"/>
     <Words>
       <Want>Trades must reach the store without any chart or table knowing where they come from.</Want>
-      <Says><Term word="middleware">Middleware</Term> has that same shape. A layer is given a view of the store, its
-        state and its dispatch, then the next dispatch, and it returns the dispatch for its place in the chain.</Says>
+      <Says><Term word="middleware">Middleware</Term> has that same shape. A middleware is given a view of the store,
+        its state and its dispatch, then the next dispatch, and it returns the dispatch for its place in the
+        chain.</Says>
       <Says>The chain is composed inside the store’s own dispatch, so every action passes through it before the
         reducer runs. The path is strict: middleware, then the reducer, then the listeners.</Says>
       <Says>A store built with no middleware has a chain of one.</Says>
-      <Says>A layer holds two dispatches. next sends an action down to the layer beneath it, and at last to the
-        reducer.</Says>
-      <Says>The other is the store’s own dispatch, on the view the layer was given. It sends an action back in at
-        the top, so an action a layer raises itself is seen by every layer, including its own.</Says>
+      <Says>A middleware holds two dispatches. next sends an action on to the next middleware, and after the last
+        one, to the reducer.</Says>
+      <Says>The other is the store’s own dispatch, on the view the middleware was given. It sends an action back to
+        the start of the chain, so an action a middleware raises itself passes through every middleware, its own
+        included.</Says>
     </Words>
     <Reveal>
-      <Says>The exchange is that layer, in both worlds, and it handles three actions.</Says>
+      <Says>The exchange is that middleware, in both worlds, and it handles three actions.</Says>
       <Says>On feedRequested it fetches the recent history and opens the socket. From then on it dispatches what the
         exchange did: historyArrived, feedOpened, tradeArrived, feedFailed.</Says>
       <Says>On candlesAsked it fetches the candles for one period, and dispatches candlesArrived or
@@ -202,11 +204,11 @@ const ExchangeIsMiddleware: FC = () => {
       <Says>It lets every other action through untouched. Nothing in the page or in the table knows a socket exists: the
         page dispatches that it wants the feed, and it sees the store change.</Says>
       {world === 'react'
-        ? <Says>A <Term word="hook">hook</Term> builds the store with the layer, and its
+        ? <Says>A <Term word="hook">hook</Term> builds the store with the exchange, and its
           one <Term word="effect">effect</Term> dispatches the request
           when the page arrives and the release when it leaves.</Says>
         : <>
-          <Says>The page builds the store with the same layer and dispatches the request last, once it has
+          <Says>The page builds the store with the same exchange and dispatches the request last, once it has
             called <code className="monospaced">dragSortable</code> on the table and is listening for what the trader
             does.</Says>
           <Says>The frame’s socket lives as long as the frame does.</Says>
