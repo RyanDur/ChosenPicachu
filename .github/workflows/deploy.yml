@@ -48,16 +48,28 @@ jobs:
             echo "::error::#$pull's head $head has no checks run to take the site from"
             exit 1
           fi
-          ready=
-          until [ -n "$ready" ]; do
-            sleep 15
-            seen=$(gh run view "$run" -R "$GITHUB_REPOSITORY" --json status,jobs \
-              -q '"\(.status) \([.jobs[] | select(.name == "ready") | .conclusion][0] // "")"') || continue
-            ready=${seen#* }
-            if [ -z "$ready" ] && [ "${seen%% *}" = completed ]; then
-              echo "::error::run $run finished with no ready job, so #$pull's site is not taken"
-              exit 1
+          misses=0
+          while true; do
+            if seen=$(gh run view "$run" -R "$GITHUB_REPOSITORY" --json status,jobs \
+              -q '"\(.status) \([.jobs[] | select(.name == "ready") | .conclusion][0] // "")"' 2> "$RUNNER_TEMP/unread"); then
+              misses=0
+              ready=${seen#* }
+              if [ -n "$ready" ]; then
+                break
+              fi
+              if [ "${seen%% *}" = completed ]; then
+                echo "::error::run $run finished with no ready job, so #$pull's site is not taken"
+                exit 1
+              fi
+            else
+              misses=$((misses + 1))
+              echo "::warning::run $run could not be read: $(cat "$RUNNER_TEMP/unread")"
+              if [ "$misses" -ge 5 ]; then
+                echo "::error::run $run could not be read five times in a row, so #$pull's site is not taken"
+                exit 1
+              fi
             fi
+            sleep 15
           done
           if [ "$ready" != success ]; then
             echo "::error::#$pull's head $head did not pass ready, so its site is not taken"
