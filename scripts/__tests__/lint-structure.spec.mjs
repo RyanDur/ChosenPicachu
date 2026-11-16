@@ -51,3 +51,8 @@ tester.run('index-top-level', structure.rules['index-top-level'], {
     {name: 'should refuse an index that exports from a nested directory', code: "export {x} from './__tests__/x';", filename: at('src/banners/index.ts'), errors: 1}
   ]
 });
+
+tester.run('by-feature', structure.rules['by-feature'], {
+  valid: [{name: 'should accept a directory named for a feature', code: 'export const x = 1;', filename: withIndex}],
+  invalid: [{name: 'should refuse a directory named for a kind of file', code: 'export const x = 1;', filename: at('src/pages/Home/utils/Probe.ts'), errors: 1}]
+});

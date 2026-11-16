@@ -175,6 +175,19 @@ const indexTopLevel = ruleWith('an index exports only what code outside its dire
   };
 });
 
+const kindNames = new Set(['common', 'shared', 'util', 'utils', 'helper', 'helpers', 'misc']);
+
+const byFeature = ruleWith('a directory names a feature, never a kind of file', (file, report) => ({
+  Program: node => file.split('/').slice(0, -1).filter(part => kindNames.has(part.toLowerCase()))
+    .forEach(part => report(node, `${part} names a kind of file; files group by feature or bounded context`))
+}));
+
 export const structure = {
-  rules: {'one-export': oneExport, 'has-index': everyDirectoryHasAnIndex, 'through-index': throughIndex, 'index-top-level': indexTopLevel}
+  rules: {
+    'one-export': oneExport,
+    'has-index': everyDirectoryHasAnIndex,
+    'through-index': throughIndex,
+    'index-top-level': indexTopLevel,
+    'by-feature': byFeature
+  }
 };
