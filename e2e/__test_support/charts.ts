@@ -61,13 +61,13 @@ export const chartsPage = (page: Page) => {
     };
     return {height: box.height, pointerWhenTheyTrade};
   };
-  const fingerOnTheGrip = async (region: string): Promise<{cancelled: () => Promise<void>}> => {
+  const fingerOnTheGrip = async (region: string): Promise<{canceled: () => Promise<void>}> => {
     const devtools = await page.context().newCDPSession(page);
     const grip = seat(region).getByRole('button', {name: 'move chart', exact: true});
     await grip.scrollIntoViewIfNeeded();
     const box = await boxOf(grip, `the ${region} chart has no grip`);
     await devtools.send('Input.dispatchTouchEvent', {type: 'touchStart', touchPoints: [{x: box.x + box.width / 2, y: box.y + box.height / 2}]});
-    return {cancelled: async (): Promise<void> => {
+    return {canceled: async (): Promise<void> => {
       await devtools.send('Input.dispatchTouchEvent', {type: 'touchCancel', touchPoints: []});
     }};
   };

@@ -34,8 +34,8 @@ export const sortableList = (page: Page) => {
   const pastTheMiddleOf = async (target: Locator, from: {x: number; y: number}): Promise<{x: number; y: number}> => {
     const middle = await middleOf(target);
     const box = await boxOf(target, 'the list never stood');
-    const along = (start: number, size: number, coming: number, centre: number): number =>
-      start + size * (coming < centre ? 0.8 : 0.2);
+    const along = (start: number, size: number, coming: number, center: number): number =>
+      start + size * (coming < center ? 0.8 : 0.2);
     return Math.abs(middle.x - from.x) > Math.abs(middle.y - from.y)
       ? {x: along(box.x, box.width, from.x, middle.x), y: middle.y}
       : {x: middle.x, y: along(box.y, box.height, from.y, middle.y)};
