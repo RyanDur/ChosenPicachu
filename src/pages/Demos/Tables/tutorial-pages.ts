@@ -1,6 +1,6 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
-import {DemoTopics} from '../demo-topics';
+import {DemoTopics} from '@pages/Demos';
 import {demoTab} from '../demo-tab';
 
 export type Tutorial = keyof typeof names.tables;
