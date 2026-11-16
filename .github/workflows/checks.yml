@@ -34,7 +34,7 @@ jobs:
     needs: changes
     if: needs.changes.outputs.site == 'true'
     runs-on: ubuntu-26.04
-    env: &site
+    env:
       VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
       VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
       VITE_APP_HARVARD_API_KEY: ${{ secrets.VITE_APP_HARVARD_API_KEY }}
@@ -61,7 +61,7 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
       - name: Build
         id: build
-        env: &build
+        env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VITE_APP_TRADE_FEED: wss://ws-feed.exchange.coinbase.com
           VITE_APP_TRADE_PRODUCT: BTC-USD
@@ -86,48 +86,6 @@ jobs:
         with:
           name: site
           path: ./build/client
-
-  pages:
-    needs: build_test
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-26.04
-    timeout-minutes: 15
-    env: *site
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
-      - name: Check out where the pull request left main
-        env:
-          BASE: ${{ github.event.pull_request.base.sha }}
-        run: git checkout --detach "$(git merge-base HEAD "$BASE")"
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version-file: .nvmrc
-          cache: 'npm'
-          registry-url: 'https://npm.pkg.github.com'
-      - name: Build where the pull request left main
-        env: *build
-        run: |
-          npm ci
-          npm run build
-          mv build/client "$RUNNER_TEMP/main"
-      - name: Take the pull request's pages
-        uses: actions/download-artifact@v7
-        with:
-          name: site
-          path: ${{ runner.temp }}/pull
-      - uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          clean: false
-      - name: Name the pages that changed
-        env: *build
-        run: |
-          npm ci
-          node scripts/pages-summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"
 
   journeys:
     needs: build_test

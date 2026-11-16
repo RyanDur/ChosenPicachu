@@ -1,0 +1,58 @@
+name: Pages
+on:
+  pull_request:
+    branches:
+      - main
+concurrency:
+  group: pages-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  pages:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: read
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
+      VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
+      VITE_APP_VAM_API: ${{ vars.VITE_APP_VAM_API }}
+      VITE_APP_AIC_PICTURES: https://www.artic.edu/iiif/2
+      VITE_APP_VAM_PICTURES: https://framemark.vam.ac.uk/collections
+      VITE_APP_CLEVELAND_API: https://openaccess-api.clevelandart.org/api/artworks
+      VITE_APP_USERS_API: /api/users
+      VITE_APP_TRADE_FEED: wss://ws-feed.exchange.coinbase.com
+      VITE_APP_TRADE_PRODUCT: BTC-USD
+      VITE_APP_TRADE_HISTORY: https://api.exchange.coinbase.com
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Build the pull request
+        run: |
+          npm ci
+          npm run build
+          mv build/client "$RUNNER_TEMP/pull"
+      - name: Build where the pull request left main
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git checkout --detach "$(git merge-base HEAD "$BASE")"
+          npm ci
+          npm run build
+          mv build/client "$RUNNER_TEMP/main"
+      - name: Name the pages that changed
+        env:
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git checkout --detach "$HEAD"
+          npm ci
+          node scripts/pages-summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"

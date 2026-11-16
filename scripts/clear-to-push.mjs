@@ -1,14 +1,12 @@
-import {has, maybe, not} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {execFileSync} from 'node:child_process';
 
 /** @typedef {{name: string, bucket: string, workflow: string}} Check */
 /** @typedef {{number: number, headRefName: string}} Pull */
 /** @typedef {(command: string, ...args: string[]) => string} Run */
 
-const reportsOnly = ['pages'];
-
 /** @param {Check} check */
-const gates = ({workflow, name}) => workflow === 'Checks' && not(reportsOnly.includes(name));
+const gates = ({workflow}) => workflow === 'Checks';
 
 /**
  * @param {Pull} own
