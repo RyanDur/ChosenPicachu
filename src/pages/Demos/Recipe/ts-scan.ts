@@ -1,22 +1,22 @@
 import {maybe, not} from '@ryandur/sand';
 import {tsWords} from './ts-words';
 
-export type Span = {
+export type Run = {
   start: number;
   length: number;
   kind: 'string' | 'comment' | 'tag' | 'attribute';
 };
 
 export type Scanned = {
-  spans: Span[];
+  runs: Run[];
   code: boolean[];
 };
 
-type Code = {within: 'code'; closesOnBrace: boolean; braces: number};
-type Tag = {within: 'tag'; closing: boolean};
-type Text = {within: 'text'; open: number};
-type Template = {within: 'template'; from: number};
-type Frame = Code | Tag | Text | Template;
+type CodeState = {within: 'code'; closesOnBrace: boolean; braces: number};
+type TagState = {within: 'tag'; closing: boolean};
+type MarkupTextState = {within: 'text'; open: number};
+type TemplateLiteralState = {within: 'template'; from: number};
+type ScanState = CodeState | TagState | MarkupTextState | TemplateLiteralState;
 
 const valueCanStart = new RegExp(String.raw`(?:^|[([{=,:;?!&|+\-*/%<~]|=>|\.\.\.|\b(?:${tsWords.beforeAValue.join('|')}))\s*$`);
 const elementCanStart = /(?:^|\s|[>([{}=,:;?!&|+\-*/%<])$/;
@@ -45,15 +45,15 @@ const startOfLine = (text: string, at: number): number => text.lastIndexOf('\n',
 const nameAt = (line: string, from: number): number =>
   maybe(/^[A-Za-z_$][\w$.:-]*/.exec(line.slice(from))).map(([name]) => name.length).orElse(0);
 
-const scanFrom = (text: string, first: Frame): Scanned => {
-  const spans: Span[] = [];
+const scanFrom = (text: string, first: ScanState): Scanned => {
+  const runs: Run[] = [];
   const code = Array.from({length: text.length}, () => false);
-  const stack: Frame[] = [first];
-  const mark = (start: number, end: number, kind: Span['kind']): number => {
-    spans.push({start, length: end - start, kind});
+  const stack: ScanState[] = [first];
+  const mark = (start: number, end: number, kind: Run['kind']): number => {
+    runs.push({start, length: end - start, kind});
     return end;
   };
-  const top = (): Frame => stack[stack.length - 1];
+  const top = (): ScanState => stack[stack.length - 1];
   const openTag = (at: number): number => {
     const closing = text[at + 1] === '/';
     stack.push({within: 'tag', closing});
@@ -82,7 +82,7 @@ const scanFrom = (text: string, first: Frame): Scanned => {
     && (text[at + 1] === '/' || plainlyAnElement.test(text.slice(at))
       || (elementCanStart.test(before) && not(typeParameters.test(text.slice(at)))));
 
-  const inCode = (frame: Code, at: number): number => {
+  const inCode = (frame: CodeState, at: number): number => {
     const here = text[at];
     const before = text.slice(startOfLine(text, at), at);
     if (text.startsWith('{/*', at)) return mark(at, endOf(text, at + 3, '*/}'), 'comment');
@@ -104,7 +104,7 @@ const scanFrom = (text: string, first: Frame): Scanned => {
     return at + 1;
   };
 
-  const inTemplate = (frame: Template, at: number): number => {
+  const inTemplate = (frame: TemplateLiteralState, at: number): number => {
     if (text[at] === '\\') return at + 2;
     if (text[at] === '`') {
       stack.pop();
@@ -117,7 +117,7 @@ const scanFrom = (text: string, first: Frame): Scanned => {
     return at + 1;
   };
 
-  const inTag = (frame: Tag, at: number): number => {
+  const inTag = (frame: TagState, at: number): number => {
     const here = text[at];
     const length = nameAt(text, at);
     if (here === '>' || text.startsWith('/>', at)) {
@@ -153,7 +153,7 @@ const scanFrom = (text: string, first: Frame): Scanned => {
   while (at < text.length) at = step(at);
   const last = top();
   if (last.within === 'template' && last.from < text.length) mark(last.from, text.length, 'string');
-  return {spans, code};
+  return {runs, code};
 };
 
 type Scan = {
