@@ -1,6 +1,6 @@
 import {FC, ReactNode} from 'react';
 import {TabLink} from '@pages/Demos/TabLink';
-import {DemoTopics} from '../demo-topics';
+import {DemoTopics} from '@pages/Demos';
 import {Entrance, Stack} from '@banners';
 import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../Recipe';
 import {EntranceDial, StackDial, useControls} from '../Controls';

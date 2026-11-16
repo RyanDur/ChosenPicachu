@@ -26,7 +26,7 @@ import {
 import {OneDirectionLoop} from './OneDirectionLoop';
 import {TwoTracks} from './TwoTracks';
 import {structureParts} from '../structure';
-import {practiceAddress} from '../practiceAddress';
+import {practiceAddress} from '@pages/Practice';
 
 const eventSourcing = 'https://martinfowler.com/eaaDev/EventSourcing.html';
 const customEvent = 'https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent';

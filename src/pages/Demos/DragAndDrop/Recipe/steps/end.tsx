@@ -1,6 +1,6 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
-import {DemoTopics} from '../../../demo-topics';
+import {DemoTopics} from '@pages/Demos';
 import {Codes, Says, Snippet, Step, Words, lines} from '../../../Recipe';
 
 export const RoadEnd: FC = () =>
