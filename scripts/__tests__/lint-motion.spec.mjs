@@ -16,6 +16,15 @@ describe('chosen/compositor-motion', () => {
     expect(await warningsFor('a { transition: translate .3s ease, opacity .3s; }')).toEqual([]);
   });
 
+  it('should read a style sheet that has no file name', async () => {
+    const {results: [{warnings}]} = await stylelint.lint({
+      code: 'a { transition: block-size 1s; }',
+      config: {plugins: [motion], rules: {'chosen/compositor-motion': true}}
+    });
+
+    expect(warnings).toHaveLength(1);
+  });
+
   it('should accept a grid track opening and closing', async () => {
     expect(await warningsFor('a { transition: grid-template-rows .3s ease-in-out, grid-template-columns .3s; }')).toEqual([]);
   });

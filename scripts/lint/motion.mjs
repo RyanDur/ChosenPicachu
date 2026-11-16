@@ -47,7 +47,7 @@ const allowed = property => property === 'none' || composited.has(property) || d
 /** @param {import('postcss').Declaration} declaration */
 const inTheResetsFold = declaration => {
   const selectors = declaration.parent && 'selectors' in declaration.parent ? declaration.parent.selectors : [];
-  return maybe(declaration.source).map(({input}) => input.file).orElse('').endsWith('src/styles/reset.css') && selectors.length > 0
+  return maybe(declaration.source).mBind(({input}) => maybe(input.file)).orElse('').endsWith('src/styles/reset.css') && selectors.length > 0
     && selectors.every(selector => selector.includes('::details-content'));
 };
 

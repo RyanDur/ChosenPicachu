@@ -1,7 +1,7 @@
 import {empty, maybe} from '@ryandur/sand';
 import {readFileSync} from 'node:fs';
 
-const saidBy = results => maybe(results.map(({error}) => maybe(error).map(({message}) => message).orElse(''))
+const saidBy = results => maybe(results.map(({error}) => maybe(error).mBind(({message}) => maybe(message)).orElse(''))
   .find(message => message !== '')).orElse('');
 
 const outcomesOf = (spec, path) => maybe(spec.tests).orElse([]).map(test => ({

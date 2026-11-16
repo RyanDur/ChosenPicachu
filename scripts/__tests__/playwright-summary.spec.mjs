@@ -24,6 +24,16 @@ describe('the playwright summary', () => {
     expect(outcomes.map(({title}) => title)).toContain('the price card › wears its ink');
   });
 
+  test('a retry that threw something other than an Error leaves the next retry\'s reason to speak', () => {
+    const retried = {suites: [{title: 'gallery.e2e.ts', specs: [{title: 'the wall loads', tests: [{
+      projectName: 'webkit',
+      status: 'unexpected',
+      results: [{status: 'failed', error: {value: "'x'"}}, {status: 'failed', error: {message: 'Timed out'}}]
+    }]}]}]};
+
+    expect(failuresList(outcomesIn(retried))).toContain('- **the wall loads** in webkit: Timed out');
+  });
+
   test('the counts stand by browser', () => {
     const table = countTable(outcomesIn(report));
     expect(table).toContain('| chromium | 1 | 1 | 1 | 0 |');
