@@ -32,23 +32,23 @@ export const store = <State, Action>(
   const hold = (state: State, action: Action): void => {
     const previous = held.state;
     held = {...held, state};
-    held.listeners.forEach(listener => listener(previous, current, top, action));
+    held.listeners.forEach(listener => listener(previous, current, dispatchThroughMiddleware, action));
   };
 
   const api: Pick<Store<State, Action>, 'state' | 'dispatch'> = {
     get state() {
       return held.state;
     },
-    dispatch: action => top(action)
+    dispatch: action => dispatchThroughMiddleware(action)
   };
   const reduce = (action: Action): void => hold(reducer(held.state, action), action);
-  const top = middleware.reduceRight((next, wrapper) => wrapper(api)(next), reduce);
+  const dispatchThroughMiddleware = middleware.reduceRight((next, wrapper) => wrapper(api)(next), reduce);
 
   return Object.freeze({
     get state() {
       return held.state;
     },
-    dispatch: top,
+    dispatch: dispatchThroughMiddleware,
     subscribe: (listener: Listener<State, Action>) => {
       held = {...held, listeners: [...held.listeners, listener]};
       return () => {
