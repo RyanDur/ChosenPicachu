@@ -28,6 +28,10 @@
         content-visibility .3s allow-discrete;
     }
 
+    .static &::details-content {
+      transition: none;
+    }
+
     .drawer &::details-content {
       align-content: end;
       align-items: end;
