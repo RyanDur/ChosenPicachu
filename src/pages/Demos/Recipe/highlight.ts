@@ -82,5 +82,10 @@ const html: ReadonlyArray<{pattern: RegExp; kind: Kind}> = [
 
 const grammars = {TS: ts, CSS: css, HTML: html};
 
-export const highlight = (label: 'HTML' | 'CSS' | 'TS', line: string): Token[] =>
-  scan(line, grammars[label]);
+type Highlight = {
+  tokensOf: (label: keyof typeof grammars, line: string) => Token[];
+};
+
+export const highlight: Highlight = {
+  tokensOf: (label, line) => scan(line, grammars[label])
+};
