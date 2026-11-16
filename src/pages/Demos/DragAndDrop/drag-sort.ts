@@ -43,7 +43,7 @@ const moved = (
 const stayed = (sort: DragSort, item: string): DragSort =>
   ({...sort, report: some({item, position: sort.order.indexOf(item), stayed: true})});
 
-const sliding = (sort: DragSort, item: string): boolean => not(slideStarts.of(sort.slideStarts, item).isNothing);
+const sliding = (sort: DragSort, item: string): boolean => not(slideStarts.running(sort.slideStarts, item).isNothing);
 
 const crossed = (sort: DragSort, at: number, homeward: boolean): DragSort => {
   const neighbor = sort.order[at];
