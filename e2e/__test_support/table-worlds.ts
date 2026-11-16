@@ -1,6 +1,7 @@
 import type {FrameLocator, Locator, Page} from '@playwright/test';
 import {dragSortTable} from './drag-sort';
 import {assertionPatience} from './patience';
+import {siteFrame} from './site';
 
 export type Stage = {name: string; at: string; holder: (page: Page) => Locator | FrameLocator};
 
@@ -23,10 +24,11 @@ const stages: readonly Stage[] = [
 const stagesWith = (dials: string): readonly Stage[] =>
   stages.map(stage => ({...stage, name: `${stage.name}, ${dials}`, at: `${stage.at}&${dials}`}));
 
-const opened = async (page: Page, {at, holder}: Pick<Stage, 'at' | 'holder'>) => {
+const opened = async (page: Page, {at, holder}: Pick<Stage, 'at' | 'holder'>, {patience = assertionPatience} = {}) => {
   await page.goto(at);
   const table = dragSortTable(page, holder(page));
-  await table.columnHeader('trades').waitFor({timeout: assertionPatience});
+  await table.columnHeader('trades').waitFor({timeout: patience});
+  await siteFrame(page).hydrated();
   return table;
 };
 

@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {dragSortTable, pillSwitch, tableWorlds} from './__test_support';
+import {pillSwitch, tableWorlds} from './__test_support';
 
 test('in the vanilla world, the live table arrives in the card’s own frame and the card holds no second table', async ({page}) => {
   const tables = tableWorlds.card(page);
@@ -23,13 +23,11 @@ test('the world dial swaps the stage, from the react table to the vanilla frame 
 
 test('the vanilla table reads to a screen reader as the react table does: its caption, its headers on both axes and no stray image', async ({page}) => {
   const [react, vanilla] = tableWorlds.stages;
-  await page.goto(react.at);
-  await expect(tableWorlds.card(page).ownTables).toBeVisible();
-  const told = await dragSortTable(page, react.holder(page)).reading();
-  await page.goto(vanilla.at);
-  await expect(tableWorlds.card(page).vanillaTable).toBeVisible();
+  const reactTable = await tableWorlds.opened(page, react);
+  const told = await reactTable.reading();
+  const vanillaTable = await tableWorlds.opened(page, vanilla);
 
-  expect(await dragSortTable(page, vanilla.holder(page)).reading()).toEqual(told);
+  expect(await vanillaTable.reading()).toEqual(told);
   expect(told).toContain('- table "Live totals by lookback":');
   expect(told.filter(line => line.startsWith('- img'))).toEqual([]);
 });

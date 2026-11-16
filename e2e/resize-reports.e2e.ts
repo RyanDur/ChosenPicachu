@@ -1,14 +1,13 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {dragSortTable, tableWorlds} from './__test_support';
+import {tableWorlds} from './__test_support';
 
 const asDealt = ['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
 
-for (const {name, at, holder} of tableWorlds.stages) {
-  test.describe(`resizing a column, in ${name}`, () => {
+for (const stage of tableWorlds.stages) {
+  test.describe(`resizing a column, in ${stage.name}`, () => {
     test('an arrow on a handle trades two points with its neighbor either way, says the new share, and never moves the column', async ({page}) => {
-      await page.goto(at);
-      const trades = dragSortTable(page, holder(page));
+      const trades = await tableWorlds.opened(page, stage);
       await trades.focusHandle('lookback');
       const lookback = await trades.announcedShare('lookback');
       const neighbor = await trades.announcedShare('trades');
@@ -29,8 +28,7 @@ for (const {name, at, holder} of tableWorlds.stages) {
     });
 
     test('a handle whose column was moved past still trades two points a press', async ({page}) => {
-      await page.goto(at);
-      const trades = dragSortTable(page, holder(page));
+      const trades = await tableWorlds.opened(page, stage);
       await trades.moveColumnByKey('trades', 'ArrowRight');
       await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
       await trades.focusHandle('buys');
@@ -42,8 +40,7 @@ for (const {name, at, holder} of tableWorlds.stages) {
     });
 
     test('an arrow held through its repeats says the share once, when it is let go', async ({page}) => {
-      await page.goto(at);
-      const trades = dragSortTable(page, holder(page));
+      const trades = await tableWorlds.opened(page, stage);
       await trades.focusHandle('lookback');
       const lookback = await trades.announcedShare('lookback');
       await trades.listenToTheMoveReport();
@@ -58,8 +55,7 @@ for (const {name, at, holder} of tableWorlds.stages) {
     });
 
     test('a keyboard resize ends when the handle loses focus', async ({page}) => {
-      await page.goto(at);
-      const trades = dragSortTable(page, holder(page));
+      const trades = await tableWorlds.opened(page, stage);
       await trades.focusHandle('lookback');
       const lookback = await trades.announcedShare('lookback');
       await trades.listenToTheMoveReport();
@@ -72,8 +68,7 @@ for (const {name, at, holder} of tableWorlds.stages) {
     });
 
     test('a second resize replaces what the page said about the first', async ({page}) => {
-      await page.goto(at);
-      const trades = dragSortTable(page, holder(page));
+      const trades = await tableWorlds.opened(page, stage);
       await trades.focusHandle('lookback');
       await page.keyboard.press('ArrowRight');
       await trades.focusHandle('trades');
@@ -85,8 +80,7 @@ for (const {name, at, holder} of tableWorlds.stages) {
     });
 
     test('a handle dragged through several shares says nothing on the way, keeps its name, and says where it lands', async ({page}) => {
-      await page.goto(at);
-      const trades = dragSortTable(page, holder(page));
+      const trades = await tableWorlds.opened(page, stage);
       await trades.listenToTheMoveReport();
 
       const hold = await trades.holdHandle('lookback');
@@ -102,8 +96,7 @@ for (const {name, at, holder} of tableWorlds.stages) {
     });
 
     test('a handle dragged and then left says its share once', async ({page}) => {
-      await page.goto(at);
-      const trades = dragSortTable(page, holder(page));
+      const trades = await tableWorlds.opened(page, stage);
       await trades.focusHandle('lookback');
       await trades.listenToTheMoveReport();
 
@@ -117,8 +110,7 @@ for (const {name, at, holder} of tableWorlds.stages) {
     });
 
     test('a handle pressed and let go, or dragged away and back, says nothing until a key moves it', async ({page}) => {
-      await page.goto(at);
-      const trades = dragSortTable(page, holder(page));
+      const trades = await tableWorlds.opened(page, stage);
       await trades.listenToTheMoveReport();
 
       const pressed = await trades.holdHandle('lookback');
@@ -135,8 +127,7 @@ for (const {name, at, holder} of tableWorlds.stages) {
     });
 
     test('a handle dragged while another holds focus says only its own share', async ({page}) => {
-      await page.goto(at);
-      const trades = dragSortTable(page, holder(page));
+      const trades = await tableWorlds.opened(page, stage);
       await trades.focusHandle('lookback');
       await trades.listenToTheMoveReport();
 
@@ -150,8 +141,7 @@ for (const {name, at, holder} of tableWorlds.stages) {
 
     test('a resize whose finger is canceled stops following the pointer', async ({page, browserName}) => {
       test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol cancels a finger');
-      await page.goto(at);
-      const trades = dragSortTable(page, holder(page));
+      const trades = await tableWorlds.opened(page, stage);
       await trades.focusHandle('lookback');
       const before = await trades.announcedShare('lookback');
 
