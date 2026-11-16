@@ -17,7 +17,7 @@ type Placed = {
 // A monospace face advances 0.6em a character, so a run's width follows from the one size its text is set at.
 const codeSize = 8;
 const advance = codeSize * 0.6;
-const gap = 5;
+const runSpacing = 5;
 const margin = 4;
 
 const opening = '<th scope="col" class="';
@@ -32,10 +32,10 @@ const tag = `${opening}${[nouns, needs, states].map(run => run.classes).join(' '
 const textOf = (segment: Segment): string => typeof segment === 'string' ? segment : segment.classes;
 const widthOf = (text: string): number => text.length * advance;
 const lengthOf = (segments: Segment[]): number =>
-  segments.reduce((length, segment, at) => length + (at > 0 ? gap : 0) + widthOf(textOf(segment)), 0);
+  segments.reduce((length, segment, at) => length + (at > 0 ? runSpacing : 0) + widthOf(textOf(segment)), 0);
 
 const placedAlong = (segments: Segment[]): Placed[] =>
-  segments.map((segment, at) => ({segment, x: margin + (at > 0 ? lengthOf(segments.slice(0, at)) + gap : 0)}));
+  segments.map((segment, at) => ({segment, x: margin + (at > 0 ? lengthOf(segments.slice(0, at)) + runSpacing : 0)}));
 
 const Code: FC<Required<PropsWithChildren<{x: number; y: number}>>> = ({x, y, children}) =>
   <text className="monospaced" x={x} y={y} fontSize={codeSize}>{children}</text>;

@@ -61,15 +61,15 @@ test('sort stills: the lift, the strike, the slide', async ({browser}) => {
 
   const ghost = page.locator('table.column-ghost');
   await expect(ghost).toBeVisible();
-  const gap = card.locator('thead th.hide');
-  await expect(gap).toHaveCount(1);
+  const hiddenOrigin = card.locator('thead th.hide');
+  await expect(hiddenOrigin).toHaveCount(1);
   await calloutOn(ghost, 'the ghost rides the hand', true);
-  await calloutOn(gap, 'the gap stays open behind it');
+  await calloutOn(hiddenOrigin, 'the gap stays open behind it');
   await shot(page, frame, `${mediaRoot}/sort/stills/the-lift.png`);
   await clearCallouts(page);
 
   await slowDrag(page, from, neighbor.x + neighbor.width * 0.2, {steps: 6, anchor: 0.9});
-  await expect(gap).toHaveCount(1);
+  await expect(hiddenOrigin).toHaveCount(1);
   await calloutOn(buys, 'the inner half earns the swap');
   await shot(page, frame, `${mediaRoot}/sort/stills/the-strike.png`);
   await clearCallouts(page);
