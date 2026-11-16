@@ -3,7 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
-import {bannerExhibit, exhibit, oldBanner, wayLabelled, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {bannerExhibit, exhibit, oldBanner, wayLabeled, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 describe('the banner exhibit', () => {
   test('should give its steps before any control', async () => {
@@ -20,9 +20,9 @@ describe('the banner exhibit', () => {
     const oldWay = bannerExhibit.button(banners, 'Raise a banner, the old way');
     const sites = bannerExhibit.button(banners, 'Raise a banner, the site’s own');
 
-    expect(wayLabelled(banners, 'The old way')).toContainElement(oldWay);
-    expect(wayLabelled(banners, 'The old way')).not.toContainElement(sites);
-    expect(wayLabelled(banners, 'The site’s banner')).toContainElement(sites);
+    expect(wayLabeled(banners, 'The old way')).toContainElement(oldWay);
+    expect(wayLabeled(banners, 'The old way')).not.toContainElement(sites);
+    expect(wayLabeled(banners, 'The site’s banner')).toContainElement(sites);
     expect(oldWay).toHaveTextContent(/^Raise a banner$/);
     expect(sites).toHaveTextContent(/^Raise a banner$/);
   });
