@@ -12,20 +12,21 @@ type Found = {
   kind: Kind;
 };
 
-// A string or a comment owns the line from where it opens to where it closes,
-// so whichever opens first wins; its pattern names each kind as a group.
-const openers = ['string', 'comment'] as const;
+type Rule = {pattern: RegExp; kind: Kind} | {pattern: RegExp; groups: ReadonlyArray<Kind>};
 
-const scan = (line: string, patterns: ReadonlyArray<{pattern: RegExp; kind: Kind}>): Token[] => {
+const kindOf = (rule: Rule, match: RegExpExecArray): Kind => 'kind' in rule
+  ? rule.kind
+  : rule.groups.find(group => has(match.groups?.[group])) ?? 'plain';
+
+const scan = (line: string, rules: ReadonlyArray<Rule>): Token[] => {
   const found: Found[] = [];
-  patterns.forEach(({pattern, kind}) => {
-    for (const match of line.matchAll(pattern)) {
-      const opened = openers.find(opener => has(match.groups?.[opener])) ?? kind;
+  rules.forEach(rule => {
+    for (const match of line.matchAll(rule.pattern)) {
       const start = match.index;
       const overlaps = found.some(taken =>
         start < taken.start + taken.length && taken.start < start + match[0].length);
       if (not(overlaps) && has(match[0])) {
-        found.push({start, length: match[0].length, kind: opened});
+        found.push({start, length: match[0].length, kind: kindOf(rule, match)});
       }
     }
   });
@@ -51,8 +52,11 @@ const keywords = [
   'switch', 'case', 'default', 'throw', 'try', 'catch', 'finally', 'await', 'async', 'while', 'for', 'declare'
 ];
 
-const ts: ReadonlyArray<{pattern: RegExp; kind: Kind}> = [
-  {pattern: /(?<string>'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")|(?<comment>\/\/.*$|\{\/\*.*?\*\/})/g, kind: 'string'},
+const stringOrComment =
+  /(?<string>'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")|(?<comment>\/\/.*$|\{\/\*.*?\*\/})/g;
+
+const ts: ReadonlyArray<Rule> = [
+  {pattern: stringOrComment, groups: ['string', 'comment']},
   {pattern: /(?<=\w<)[A-Z]\w*(?=,|>[(;)=])/g, kind: 'type'},
   {pattern: /(?<=<\/?)[A-Za-z][\w.]*/g, kind: 'tag'},
   {pattern: /(?<=<[A-Za-z][\w.]*\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
@@ -64,7 +68,7 @@ const ts: ReadonlyArray<{pattern: RegExp; kind: Kind}> = [
   {pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
 
-const css: ReadonlyArray<{pattern: RegExp; kind: Kind}> = [
+const css: ReadonlyArray<Rule> = [
   {pattern: /\/\*.*?\*\//g, kind: 'comment'},
   {pattern: /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
   {pattern: /@[\w-]+/g, kind: 'keyword'},
@@ -75,7 +79,7 @@ const css: ReadonlyArray<{pattern: RegExp; kind: Kind}> = [
   {pattern: /[a-z-]+(?=\()/g, kind: 'call'}
 ];
 
-const html: ReadonlyArray<{pattern: RegExp; kind: Kind}> = [
+const html: ReadonlyArray<Rule> = [
   {pattern: /\{\/\*.*?\*\/}|<!--.*?-->/g, kind: 'comment'},
   {pattern: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
   {pattern: /(?<=<\/?)[\w.-]+/g, kind: 'tag'},
