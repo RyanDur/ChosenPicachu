@@ -9,6 +9,7 @@ const blurring = <T extends Node>(node: T): void => {
   }
 };
 
+/* eslint-disable tests/no-double-of-ours -- jsdom moves a focused node without a blur; this adds it */
 const losingFocusOn = (move: Move): void => {
   const untouched = Object.getOwnPropertyDescriptor(Node.prototype, move);
   if (untouched) {
@@ -23,6 +24,7 @@ const losingFocusOn = (move: Move): void => {
   }
   throw new Error(`no ${move} to blur`);
 };
+/* eslint-enable tests/no-double-of-ours */
 
 // the browser blurs a focused node when it is moved in the DOM; jsdom does not, so the suite supplies the loss
 export const blurFocusOnMoves = (): void => {

@@ -35,6 +35,7 @@ globalThis.AnimationEvent ??= class extends Event {
   readonly elapsedTime = 0;
   readonly pseudoElement = '';
 };
+/* eslint-disable tests/no-double-of-ours -- jsdom lacks these; the stand-ins are inert, not doubles */
 HTMLElement.prototype.setPointerCapture = () => undefined;
 Element.prototype.getAnimations = () => [];
 Document.prototype.getAnimations = () => [];
@@ -43,6 +44,7 @@ Element.prototype.scrollIntoView = () => undefined;
 window.scrollTo = () => undefined;
 Element.prototype.scrollTo = () => undefined;
 HTMLElement.prototype.hidePopover = () => undefined;
+/* eslint-enable tests/no-double-of-ours */
 globalThis.ResizeObserver = class {
   observe(): void {}
   unobserve(): void {}

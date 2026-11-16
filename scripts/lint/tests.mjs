@@ -35,15 +35,20 @@ const noDoubleOfOurs = {
     type: 'problem',
     messages: {
       spied: 'a spy may only listen, on console or scrollTo; render the real thing and read what a reader meets',
-      mocked: 'the world is stubbed only at its edge, the network through msw; render the real collaborators'
+      mocked: 'the world is stubbed only at its edge, the network through msw; render the real collaborators',
+      replaced: 'a spec never replaces a method of the platform\'s or ours; render the real thing and read what a reader meets'
     }
   },
   create: context => ({
     'CallExpression[callee.object.name="vi"][callee.property.name="spyOn"]': node => {
       if (not(onlyListens(node.arguments))) context.report({node, messageId: 'spied'});
     },
-    'CallExpression[callee.object.name="vi"][callee.property.name=/^(mock|doMock)$/]': node =>
-      context.report({node, messageId: 'mocked'})
+    'CallExpression[callee.object.name="vi"][callee.property.name=/^(mock|doMock|importMock|stubGlobal)$/]': node =>
+      context.report({node, messageId: 'mocked'}),
+    'AssignmentExpression > MemberExpression.left[object.property.name="prototype"]': node =>
+      context.report({node, messageId: 'replaced'}),
+    'CallExpression[callee.object.name="Object"][callee.property.name="defineProperty"][arguments.0.property.name="prototype"]': node =>
+      context.report({node, messageId: 'replaced'})
   })
 };
 

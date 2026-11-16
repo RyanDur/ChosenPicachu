@@ -7,7 +7,9 @@ tester.run('no-double-of-ours', tests.rules['no-double-of-ours'], {
   valid: [
     {name: 'should accept a spy that listens to the console', code: "vi.spyOn(console, 'error');"},
     {name: 'should accept a spy on the page\'s scrollTo', code: "vi.spyOn(window, 'scrollTo');"},
-    {name: 'should accept a spy on an element\'s scrollTo', code: "vi.spyOn(Element.prototype, 'scrollTo');"}
+    {name: 'should accept a spy on an element\'s scrollTo', code: "vi.spyOn(Element.prototype, 'scrollTo');"},
+    {name: 'should accept a value set on an object that isn\'t a prototype', code: 'store.count = 1;'},
+    {name: 'should accept a property defined on an object that isn\'t a prototype', code: "Object.defineProperty(navigator, 'onLine', {});"}
   ],
   invalid: [
     {name: 'should refuse a spy on our own module', code: "vi.spyOn(store, 'get');", errors: [{messageId: 'spied'}]},
@@ -17,6 +19,10 @@ tester.run('no-double-of-ours', tests.rules['no-double-of-ours'], {
     {name: 'should refuse a mock of a module', code: "vi.mock('react-router');", errors: [{messageId: 'mocked'}]},
     {name: 'should refuse a spy still being written', code: 'vi.spyOn();', errors: [{messageId: 'spied'}]},
     {name: 'should refuse a mock still being written', code: 'vi.mock();', errors: [{messageId: 'mocked'}]},
+    {name: 'should refuse a module mocked on import', code: "vi.importMock('./store');", errors: [{messageId: 'mocked'}]},
+    {name: 'should refuse a global stubbed', code: "vi.stubGlobal('fetch', vi.fn());", errors: [{messageId: 'mocked'}]},
+    {name: 'should refuse a prototype method assigned', code: 'HTMLElement.prototype.getBoundingClientRect = () => ({});', errors: [{messageId: 'replaced'}]},
+    {name: 'should refuse a prototype method defined', code: "Object.defineProperty(Node.prototype, 'blur', {});", errors: [{messageId: 'replaced'}]},
     {name: 'should refuse a mock made later', code: "vi.doMock('./store');", errors: [{messageId: 'mocked'}]}
   ]
 });
