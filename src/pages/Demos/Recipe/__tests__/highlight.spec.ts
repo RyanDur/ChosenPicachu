@@ -64,6 +64,18 @@ describe('the code voice', () => {
     expect(kinds('TS', "const door = (): Door => 'open';")["'open'"]).toBe('string');
   });
 
+  it('reads a quote at the start of a line as a string', () => {
+    expect(kinds('TS', "'a' : b")["'a'"]).toBe('string');
+  });
+
+  it('reads a quote after punctuation that starts a value as a string', () => {
+    expect(kinds('TS', "f('a')")["'a'"]).toBe('string');
+  });
+
+  it('reads a quote after satisfies, a word the keywords table lacks, as a string', () => {
+    expect(kinds('TS', "x satisfies 'a'")["'a'"]).toBe('string');
+  });
+
   it('reads a quote after as as a string', () => {
     expect(kinds('TS', "const k = label as 'TS';")["'TS'"]).toBe('string');
   });
