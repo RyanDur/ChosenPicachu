@@ -44,6 +44,18 @@ const flips = item => maybe(item.split(/\s+/).find(measures))
 /** @param {string} property */
 const allowed = property => property === 'none' || composited.has(property) || discrete.has(property) || tracks.has(property);
 
+/** @param {import('postcss').Declaration} declaration */
+const inTheResetsFold = declaration => {
+  const selector = declaration.parent && 'selector' in declaration.parent ? declaration.parent.selector : '';
+  return (declaration.source?.input.file ?? '').endsWith('src/styles/reset.css') && selector.includes('::details-content');
+};
+
+/**
+ * @param {import('postcss').Declaration} declaration
+ * @param {string} property
+ */
+const foldHeightInTheReset = (declaration, property) => property === 'block-size' && inTheResetsFold(declaration);
+
 /** @type {import('stylelint').Rule} */
 const rule = primary => (root, result) => {
   if (primary !== true) return;
@@ -56,7 +68,7 @@ const rule = primary => (root, result) => {
   root.walkDecls(/^transition(-property)?$/, declaration => items(declaration.value)
     .filter(item => declaration.prop === 'transition-property' || not(flips(item)))
     .map(item => declaration.prop === 'transition' && item !== 'none' ? propertyIn(item) : item)
-    .filter(property => not(allowed(property)))
+    .filter(property => not(allowed(property)) && not(foldHeightInTheReset(declaration, property)))
     .forEach(property => report(declaration, property)));
   root.walkAtRules('keyframes', keyframes => keyframes.walkDecls(declaration => {
     if (not(allowed(declaration.prop)) && declaration.prop !== 'animation-timing-function') report(declaration, declaration.prop);
