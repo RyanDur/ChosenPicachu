@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {maybe, Maybe, nothing, some} from '@ryandur/sand';
 
 export type PixelSizes = Readonly<Record<string, number>>;
 
@@ -49,19 +49,19 @@ const struckPast = <Identity>(
   measuredSeats: readonly MeasuredSeat<Identity>[],
   home: number,
   pointerAt: number
-): Identity | undefined => {
-  const struck = measuredSeats.find(({end}) => pointerAt < end);
-  if (has(struck) && struck.at !== home) {
+): Maybe<Identity> =>
+  maybe(measuredSeats.find(({end}) => pointerAt < end)).mBind(struck => {
+    if (struck.at === home) {
+      return some(struck.holds);
+    }
     const held = deadZone(struck.size, measuredSeats[home]?.size ?? 0);
     return (struck.at < home ? pointerAt < struck.end - held : pointerAt > struck.start + held)
-      ? struck.holds
-      : undefined;
-  }
-  return struck?.holds;
-};
+      ? some(struck.holds)
+      : nothing();
+  });
 
 const columnUnder = (order: readonly string[], bounds: Bounds) =>
-  (x: number, y: number, aloft: string): string | undefined => {
+  (x: number, y: number, aloft: string): Maybe<string> => {
     if (y >= bounds.top && y <= bounds.top + bounds.height) {
       let edge = bounds.left;
       const total = order.reduce((sum, name) => sum + (bounds.columnWidths[name] ?? 0), 0) || 1;
@@ -72,7 +72,7 @@ const columnUnder = (order: readonly string[], bounds: Bounds) =>
       });
       return struckPast(measuredSeats, order.indexOf(aloft), x);
     }
-    return undefined;
+    return nothing();
   };
 
 const columnLeft = (order: readonly string[], bounds: Bounds) => (column: string): number => {
@@ -88,7 +88,7 @@ const rowTop = (seats: readonly string[], bounds: Survey) => (seat: string): num
 };
 
 const rowUnder = (seats: readonly string[], bounds: Survey) =>
-  (x: number, y: number, aloft: string): string | undefined => {
+  (x: number, y: number, aloft: string): Maybe<string> => {
     if (x >= bounds.left && x <= bounds.left + bounds.width) {
       const {top, height, rowHeights} = bounds;
       let edge = top + height -
@@ -100,7 +100,7 @@ const rowUnder = (seats: readonly string[], bounds: Survey) =>
       });
       return struckPast(measuredSeats, seats.indexOf(aloft), y);
     }
-    return undefined;
+    return nothing();
   };
 
 const displacedBetween = <Seat>(seats: readonly Seat[], from: number, to: number): Seat[] =>
@@ -126,8 +126,8 @@ const nudgedRow = (seats: readonly string[], held: string, toward: number): {fro
   return {from, to: Math.min(Math.max(from + toward, 0), seats.length - 1)};
 };
 
-const struckAway = <Seat>(held: Seat, struck: Seat | undefined): struck is Seat =>
-  has(struck) && struck !== held;
+const struckAway = <Seat>(held: Seat, struck: Seat): Maybe<Seat> =>
+  struck === held ? nothing() : some(struck);
 
 const interior = (at: number, count: number): number =>
   Math.min(Math.max(at, 1), count - 2);

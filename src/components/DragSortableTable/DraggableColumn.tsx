@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {classNames} from '@components';
 import {useHeaderEvents} from './useHeaderEvents';
 import {useTableDispatch} from './useTableDispatch';
@@ -60,7 +60,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({
     aria-sort={sorted}
     tabIndex={travels ? 0 : undefined}
     onPointerDown={travels ? lifting.column(column, () => order, () => standing, lift) : undefined}
-    {...travel.whileHeld(drag, moved, release)}
+    {...travel.whileHeld(maybe(drag), moved, release)}
     onKeyDown={travels ? arrows.column(column, () => order, ({
       to,
       widths

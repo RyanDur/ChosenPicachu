@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {classNames} from '@components';
 import {useBodyEvents} from './useBodyEvents';
 import {useTableDispatch} from './useTableDispatch';
@@ -54,7 +54,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     style={looks.placement({seat, drift, settlingFrom, shove: shoved})}>
     <RowGrip position={position}
       onPointerDown={lifting.row(() => order, () => standing, lift)}
-      {...travel.whileHeld(drag, moved, release)}
+      {...travel.whileHeld(maybe(drag), moved, release)}
       onKeyDown={arrows.row(row, () => standing, {
         nudged: ({to, heights}) => nudged(to, heights),
         moved: ({to}) => arrived(to)

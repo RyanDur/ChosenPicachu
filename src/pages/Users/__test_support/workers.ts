@@ -52,15 +52,15 @@ export const lentToThePage = ({workers}: WatchedWorkers): Partial<Environment> =
 export const noWorkersOnThePage: Partial<Environment> = {workers: undefined};
 
 export const lentLater = (): LentLater => {
-  let lent: Workers | undefined;
+  let lent: {readonly workers?: Workers} = {};
   return {
     environment: {
       get workers() {
-        return lent;
+        return lent.workers;
       }
     },
     lend: ({workers}) => {
-      lent = workers;
+      lent = {workers};
     }
   };
 };

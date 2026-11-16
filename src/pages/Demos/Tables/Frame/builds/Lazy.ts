@@ -66,10 +66,10 @@ const rowBeside = (context: MountedTable, row: string, neighbor: string): void =
 
 const landed = (context: MountedTable): void => {
   const {drag} = context.store.state;
-  if (drag?.axis === 'column' && has(drag.landing)) {
-    columnBeside(context, drag.held, drag.landing);
-  } else if (drag?.axis === 'row' && has(drag.landing)) {
-    rowBeside(context, drag.held, drag.landing);
+  if (drag?.axis === 'column') {
+    drag.landing.map(neighbor => columnBeside(context, drag.held, neighbor));
+  } else if (drag?.axis === 'row') {
+    drag.landing.map(neighbor => rowBeside(context, drag.held, neighbor));
   }
 };
 

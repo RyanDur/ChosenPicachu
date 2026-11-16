@@ -6,7 +6,7 @@ import {
   aicSchema
 } from '@pages/Gallery/museums/aic/types';
 import {environment, queryString} from '@transport';
-import {maybe} from '@ryandur/sand';
+import {maybe, Maybe} from '@ryandur/sand';
 import {limits} from '@pages/Gallery/limits';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
 import {decoded} from '@transport';
@@ -64,13 +64,13 @@ const aicImage = (imageId: string, width: number) =>
 const aicSrcSet = (imageId: string) =>
   [400, 800, 1200].map(width => `${aicImage(imageId, width)} ${width}w`).join(', ');
 
-const pictured = (imageId: string | null | undefined, width: number): Pick<Art, 'picture'> =>
-  maybe(imageId).map(id => ({picture: {src: aicImage(id, width), srcSet: aicSrcSet(id)}})).orElse({});
+const pictured = (imageId: Maybe<string>, width: number): Pick<Art, 'picture'> =>
+  imageId.map(id => ({picture: {src: aicImage(id, width), srcSet: aicSrcSet(id)}})).orElse({});
 
 const aicToPiece = (width: number) => (data: AICArt): Art => ({
   id: String(data.id),
   title: data.title,
-  ...pictured(data.image_id, width),
+  ...pictured(maybe(data.image_id), width),
   ...artFields.attributed(data.artist_display),
   altText: maybe(data.thumbnail?.alt_text).orElse(data.term_titles.join(' '))
 });

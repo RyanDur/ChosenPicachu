@@ -1,3 +1,4 @@
+import {Maybe} from '@ryandur/sand';
 import {Direction} from './sorting';
 import {ColumnWidths, Grip} from './shares';
 import {Carry, ColumnShove, RowShove, Settling} from './table-state';
@@ -15,8 +16,8 @@ export type TableAction =
   | {readonly type: 'handleDragged'; readonly column: string; readonly neighbor: string; readonly clientX: number}
   | {readonly type: 'lifted'; readonly carry: Carry; readonly grab: Grab}
   | {readonly type: 'drifted'; readonly moving: Moving}
-  | {readonly type: 'columnLandingFound'; readonly neighbor?: string}
-  | {readonly type: 'rowLandingFound'; readonly neighbor?: string}
+  | {readonly type: 'columnLandingFound'; readonly neighbor: Maybe<string>}
+  | {readonly type: 'rowLandingFound'; readonly neighbor: Maybe<string>}
   | {readonly type: 'released'}
   | {readonly type: 'arrowLifted'; readonly column: string}
   | {readonly type: 'handleLeft'; readonly column: string}
@@ -71,8 +72,8 @@ const gripped = (column: string, grip: Grip): Action => ({type: 'gripped', colum
 const handleDragged = (column: string, neighbor: string, clientX: number): Action => ({type: 'handleDragged', column, neighbor, clientX});
 const lifted = (carry: Carry, grab: Grab): Action => ({type: 'lifted', carry, grab});
 const drifted = (moving: Moving): Action => ({type: 'drifted', moving: {clientX: moving.clientX, clientY: moving.clientY}});
-const columnLandingFound = (neighbor?: string): Action => ({type: 'columnLandingFound', neighbor});
-const rowLandingFound = (neighbor?: string): Action => ({type: 'rowLandingFound', neighbor});
+const columnLandingFound = (neighbor: Maybe<string>): Action => ({type: 'columnLandingFound', neighbor});
+const rowLandingFound = (neighbor: Maybe<string>): Action => ({type: 'rowLandingFound', neighbor});
 const released = (): Action => ({type: 'released'});
 const arrowLifted = (column: string): Action => ({type: 'arrowLifted', column});
 const handleLeft = (column: string): Action => ({type: 'handleLeft', column});
