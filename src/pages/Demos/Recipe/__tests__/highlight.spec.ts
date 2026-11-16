@@ -348,6 +348,10 @@ describe('the code voice', () => {
     expect(kinds('TS', 'for (let i = 0; i<Max; i++) {}').Max).toBeUndefined();
   });
 
+  it('reads an arrow inside an element\'s type arguments as part of them, and the line after it as code', () => {
+    expect(constOnTheLineAfter('const a = <List<() => void> items={x}/>;')).toBe('keyword');
+  });
+
   it('reads a left shift as code, and the line after it as code', () => {
     expect(constOnTheLineAfter('const x = 1<<n;')).toBe('keyword');
   });

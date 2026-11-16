@@ -48,7 +48,7 @@ const endOfTypeArguments = (text: string, from: number): number => {
   let at = from;
   do {
     if (text[at] === '<') depth += 1;
-    if (text[at] === '>') depth -= 1;
+    if (text[at] === '>' && text[at - 1] !== '=') depth -= 1;
     at += 1;
   } while (at < text.length && depth > 0);
   return at;
