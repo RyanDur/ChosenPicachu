@@ -1,7 +1,7 @@
 import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
 import {dirname, join, relative, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {has, not} from '@ryandur/sand';
+import {has, maybe, not} from '@ryandur/sand';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = join(root, 'src');
@@ -36,8 +36,8 @@ const resolved = (specifier, fromFile) => {
     : specifier.startsWith('.') ? join(dirname(fromFile), specifier) : '';
   if (specifier.includes('?') || base === '') return {};
   if (isDirectory(base)) return {directory: base};
-  const file = ['.ts', '.tsx'].map(extension => base + extension).find(existsSync)
-    ?? (code.test(base) && existsSync(base) ? base : undefined);
+  const file = maybe(['.ts', '.tsx'].map(extension => base + extension).find(existsSync))
+    .orElse(code.test(base) && existsSync(base) ? base : '');
   if (not(has(file))) return {};
   return isIndex(file) ? {directory: dirname(file)} : {file};
 };
@@ -75,7 +75,7 @@ let wanted;
 const noteWhatLeaves = (into, file) => importsIn(file).forEach(({names, specifier}) => {
   const {directory} = resolved(specifier, file);
   if (not(has(directory)) || inside(directory, file)) return;
-  const needed = into.get(directory) ?? new Set();
+  const needed = maybe(into.get(directory)).orElse(new Set());
   names.forEach(name => needed.add(name));
   into.set(directory, needed);
 });
@@ -86,7 +86,7 @@ const wantedFrom = directory => {
     wanted = new Map();
     sourceFiles(src).forEach(file => noteWhatLeaves(wanted, file));
   }
-  return wanted.get(directory) ?? new Set();
+  return maybe(wanted.get(directory)).orElse(new Set());
 };
 
 /**

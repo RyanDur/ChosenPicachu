@@ -1,4 +1,4 @@
-import {empty, has, not} from '@ryandur/sand';
+import {empty, has, maybe, not} from '@ryandur/sand';
 
 const functionTypes = new Set(['ArrowFunctionExpression', 'FunctionExpression', 'FunctionDeclaration']);
 const wrapperTypes = new Set(['TSAsExpression', 'TSSatisfiesExpression', 'TSNonNullExpression', 'ParenthesizedExpression']);
@@ -28,7 +28,7 @@ const functionIn = node => {
  * @returns {any}
  */
 const definitionOf = variable => {
-  const [first] = variable?.defs ?? [];
+  const [first] = variable.map(({defs}) => defs).orElse([]);
   if (empty(first) || not(definitionTypes.has(first.type))) return undefined;
   const definition = first.node;
   return definition.type === 'VariableDeclarator' ? unwrapped(definition.init) : definition;
@@ -48,7 +48,8 @@ const renderedAsJsx = {
     const functionsReturningJsx = new Set();
     const callsByName = [];
     const variableOf = identifier =>
-      source.getScope(identifier).references.find(each => each.identifier === identifier)?.resolved;
+      maybe(source.getScope(identifier).references.find(each => each.identifier === identifier))
+        .mBind(({resolved}) => maybe(resolved));
     /**
      * @param {any} node
      * @returns {boolean}

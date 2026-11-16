@@ -1,21 +1,22 @@
-import {empty} from '@ryandur/sand';
+import {empty, maybe} from '@ryandur/sand';
 import {readFileSync} from 'node:fs';
 
-const saidBy = results => results.map(({error}) => error?.message ?? '').find(message => message !== '') ?? '';
+const saidBy = results => maybe(results.map(({error}) => maybe(error).map(({message}) => message).orElse(''))
+  .find(message => message !== '')).orElse('');
 
-const outcomesOf = (spec, path) => (spec.tests ?? []).map(test => ({
+const outcomesOf = (spec, path) => maybe(spec.tests).orElse([]).map(test => ({
   title: [...path, spec.title].join(' › '),
   browser: test.projectName,
   status: test.status,
-  said: saidBy(test.results ?? [])
+  said: saidBy(maybe(test.results).orElse([]))
 }));
 
 const outcomesUnder = (suite, path) => [
-  ...(suite.specs ?? []).flatMap(spec => outcomesOf(spec, path)),
-  ...(suite.suites ?? []).flatMap(describe => outcomesUnder(describe, [...path, describe.title]))
+  ...maybe(suite.specs).orElse([]).flatMap(spec => outcomesOf(spec, path)),
+  ...maybe(suite.suites).orElse([]).flatMap(describe => outcomesUnder(describe, [...path, describe.title]))
 ];
 
-export const outcomesIn = report => (report.suites ?? []).flatMap(file => outcomesUnder(file, []));
+export const outcomesIn = report => maybe(report.suites).orElse([]).flatMap(file => outcomesUnder(file, []));
 
 const counted = (outcomes, status) => outcomes.filter(outcome => outcome.status === status).length;
 
@@ -28,7 +29,7 @@ export const countTable = outcomes => {
   return ['| browser | passed | failed | flaky | skipped |', '| --- | ---: | ---: | ---: | ---: |', ...rows].join('\n');
 };
 
-const firstLine = said => said.split('\n').map(line => line.trim()).find(line => line !== '') ?? '';
+const firstLine = said => maybe(said.split('\n').map(line => line.trim()).find(line => line !== '')).orElse('');
 
 export const failuresList = outcomes => {
   const fell = outcomes.filter(({status}) => status === 'unexpected');

@@ -29,7 +29,7 @@ const flattened = value => value.split('').reduce(keepOutermost, {text: '', dept
 const items = value => flattened(value).split(',').map(item => item.trim()).filter(item => item !== '');
 
 /** @param {string} item */
-const propertyIn = item => item.split(/\s+/).find(word => not(notAProperty.test(word))) ?? 'all';
+const propertyIn = item => maybe(item.split(/\s+/).find(word => not(notAProperty.test(word)))).orElse('all');
 
 const time = /^[\d.]+m?s$/i;
 const easing = /^(cubic-bezier|steps|linear)\(\)$/;
@@ -47,7 +47,7 @@ const allowed = property => property === 'none' || composited.has(property) || d
 /** @param {import('postcss').Declaration} declaration */
 const inTheResetsFold = declaration => {
   const selectors = declaration.parent && 'selectors' in declaration.parent ? declaration.parent.selectors : [];
-  return (declaration.source?.input.file ?? '').endsWith('src/styles/reset.css') && selectors.length > 0
+  return maybe(declaration.source).map(({input}) => input.file).orElse('').endsWith('src/styles/reset.css') && selectors.length > 0
     && selectors.every(selector => selector.includes('::details-content'));
 };
 

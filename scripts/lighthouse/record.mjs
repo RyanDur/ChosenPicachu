@@ -2,7 +2,7 @@ import {chromium} from '@playwright/test';
 import {mkdirSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {empty, not} from '@ryandur/sand';
+import {empty, maybe, not} from '@ryandur/sand';
 
 const site = 'https://ryandur.github.io/ChosenPicachu/';
 const fixtures = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
@@ -29,7 +29,7 @@ page.on('response', async response => {
   if (empty(prefix)) return;
   const key = url.replace(prefix, localized[prefix]);
   rest.set(key, {
-    contentType: response.headers()['content-type'] ?? 'application/json',
+    contentType: maybe(response.headers()['content-type']).orElse('application/json'),
     body: await response.text()
   });
 });

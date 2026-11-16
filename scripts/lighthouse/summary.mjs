@@ -1,16 +1,16 @@
 import {existsSync, readFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {empty, has, not} from '@ryandur/sand';
+import {empty, has, maybe, not} from '@ryandur/sand';
 import {audited} from './audited.mjs';
 
 const categories = ['performance', 'accessibility', 'best-practices', 'seo'];
 
 const floorsFor = (url, {ci}) => {
   const matching = ci.assert.assertMatrix.find(({matchingUrlPattern}) => new RegExp(matchingUrlPattern).test(url));
-  return Object.fromEntries(categories.map(category => {
-    const rule = matching?.assertions[`categories:${category}`];
-    return [category, Array.isArray(rule) ? rule[1].minScore : undefined];
-  }));
+  return Object.fromEntries(categories.flatMap(category => maybe(matching)
+    .map(({assertions}) => assertions[`categories:${category}`])
+    .map(rule => Array.isArray(rule) ? [[category, rule[1].minScore]] : [])
+    .orElse([])));
 };
 
 const percent = score => `${Math.round(score * 100)}`;
@@ -22,7 +22,7 @@ const range = (runs, category) => {
   return low === high ? percent(low) : `${percent(low)} to ${percent(high)}`;
 };
 
-const representativeOf = runs => runs.find(({isRepresentativeRun}) => isRepresentativeRun) ?? runs[0];
+const representativeOf = runs => maybe(runs.find(({isRepresentativeRun}) => isRepresentativeRun)).orElse(runs[0]);
 
 export const scoreTable = (runs, floors) => {
   const representative = representativeOf(runs);
@@ -41,7 +41,7 @@ export const failuresList = results => {
     return '';
   }
   return ['', '### what fell short', '', ...failed.map(({auditId, auditTitle, expected, actual, operator}) =>
-    `- **${auditId}** ${auditTitle ?? ''}: ${actual} ${operator} ${expected} expected`)].join('\n');
+    `- **${auditId}** ${maybe(auditTitle).orElse('')}: ${actual} ${operator} ${expected} expected`)].join('\n');
 };
 
 export const foldOf = ({page, runs, rc, results = []}) => {
