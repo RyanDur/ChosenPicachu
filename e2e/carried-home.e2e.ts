@@ -6,12 +6,10 @@ const columnsAsDealt = ['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap',
 const lookbacksAsDealt = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
 
 for (const pace of ['eager', 'lazy']) {
-  for (const {name, at, holder} of tablesFrame.stagesWith(`pace=${pace}`)) {
-    test.describe(`a ${pace} table, in ${name}`, () => {
+  for (const stage of tablesFrame.stagesWith(`pace=${pace}`)) {
+    test.describe(`a ${pace} table, in ${stage.name}`, () => {
       test('a column carried past a neighbor and home again lands nowhere and says nothing', async ({page}) => {
-        await page.goto(at);
-        const trades = tablesFrame.dragSortTable(page, holder(page));
-        await expect(trades.columnHeader('trades')).toBeVisible();
+        const trades = await tablesFrame.opened(page, stage);
         await trades.listenToTheMoveReport();
 
         const hold = await trades.holdColumn('trades');
@@ -26,9 +24,7 @@ for (const pace of ['eager', 'lazy']) {
       });
 
       test('a row carried past a neighbor and home again lands nowhere and says nothing', async ({page}) => {
-        await page.goto(at);
-        const trades = tablesFrame.dragSortTable(page, holder(page));
-        await expect(trades.columnHeader('trades')).toBeVisible();
+        const trades = await tablesFrame.opened(page, stage);
         await trades.listenToTheMoveReport();
 
         const hold = await trades.holdRow(1);
