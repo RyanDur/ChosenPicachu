@@ -1,15 +1,16 @@
 import {FC} from 'react';
-import {Quotation} from '@components/Quotation';
+import {Attribution, Quotation, Quote} from '@components/Quotation';
 import {Link} from 'react-router';
 import {practiceAddress} from '@pages/Practice';
 
 export const PresentationStory: FC = () =>
   <>
-    <Quotation voice="paragraph" source={<a className="signpost"
-      href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html">the
-      W3C, on HTML and CSS</a>}>
-      The separation of HTML from CSS makes it easier to maintain sites, share style
-      sheets across pages, and tailor pages to different environments.
+    <Quotation>
+      <Quote voice="paragraph">
+        The separation of HTML from CSS makes it easier to maintain sites, share style sheets across pages, and tailor
+        pages to different environments.
+      </Quote>
+      <Attribution><a className="signpost" href="https://web.archive.org/web/20141221170539/https://www.w3.org/standards/webdesign/htmlcss.html">the W3C, on HTML and CSS</a></Attribution>
     </Quotation>
     <p className="paragraph">That separation is the rule this story ends on: the look lives in the style sheet. What
       follows is how the web came to keep it.</p>

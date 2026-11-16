@@ -1,11 +1,14 @@
 import {FC} from 'react';
-import {Quotation} from '@components/Quotation';
+import {Attribution, Quotation, Quote} from '@components/Quotation';
 
 export const StructureStory: FC = () =>
   <>
-    <Quotation voice="paragraph" source={<a className="signpost" href="https://html.com/html5/">html.com, on HTML</a>}>
-      It is not a programming language, but rather a language that identifies the meaning,
-      purpose, and structure of text within a document.
+    <Quotation>
+      <Quote voice="paragraph">
+        It is not a programming language, but rather a language that identifies the meaning, purpose, and structure of
+        text within a document.
+      </Quote>
+      <Attribution><a className="signpost" href="https://html.com/html5/">html.com, on HTML</a></Attribution>
     </Quotation>
     <p className="paragraph">The rule this story ends on follows from that definition: choose the element that means
       what the content is. What follows is how HTML became that kind of language.</p>
