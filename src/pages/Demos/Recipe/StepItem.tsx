@@ -1,6 +1,7 @@
-import {FC, PropsWithChildren} from 'react';
+import {FC, PropsWithChildren, useId} from 'react';
 import {has} from '@ryandur/sand';
 import {classNames} from '@components';
+import {StepName} from './StepName';
 
 export type StepProps = PropsWithChildren<{
   id?: string;
@@ -12,5 +13,5 @@ type Props = StepProps & {
 
 export const StepItem: FC<Props> = ({badge, id, children}) =>
   <li className={classNames('step', 'badge-before', badge)} id={id} tabIndex={has(id) ? -1 : undefined}>
-    {children}
+    <StepName value={useId()}>{children}</StepName>
   </li>;
