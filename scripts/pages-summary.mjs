@@ -1,5 +1,5 @@
-import {empty, has, not} from '@ryandur/sand';
-import {readFileSync, readdirSync} from 'node:fs';
+import {empty, has, maybe} from '@ryandur/sand';
+import {readdirSync, readFileSync} from 'node:fs';
 import {join, relative} from 'node:path';
 import {JSDOM} from 'jsdom';
 
@@ -22,9 +22,11 @@ const wordsOf = html => {
   /** @type {Element[]} */
   const elements = [...document.querySelectorAll('*')];
   const attributeWords = elements.flatMap(element => wordsInAttributes
-    .map(attribute => element.getAttribute(attribute) ?? '')
-    .concat(element.matches('input, textarea') ? [element.getAttribute('value') ?? ''] : []));
-  const description = document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
+    .map(attribute => maybe(element.getAttribute(attribute)).orElse(''))
+    .concat(element.matches('input, textarea') ? [maybe(element.getAttribute('value')).orElse('')] : []));
+  const description = maybe(document.querySelector('meta[name="description"]'))
+    .map(meta => maybe(meta.getAttribute('content')).orElse(''))
+    .orElse('');
   return [document.title, description, document.body.textContent, ...attributeWords].join('\n').split(/\s+/).filter(word => has(word));
 };
 
@@ -54,8 +56,8 @@ const wordChange = (before, after) => {
 };
 
 const changeOf = (page, before, after) => {
-  if (not(has(before))) return {page, kind: 'new'};
-  if (not(has(after))) return {page, kind: 'gone'};
+  if (empty(before)) return {page, kind: 'new'};
+  if (empty(after)) return {page, kind: 'gone'};
   const [was, is] = [steady(before), steady(after)];
   if (was === is) return undefined;
   const [wordsWere, wordsAre] = [wordsOf(was), wordsOf(is)];

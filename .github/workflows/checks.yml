@@ -123,7 +123,10 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           clean: false
       - name: Name the pages that changed
-        run: node scripts/pages-summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"
+        env: *build
+        run: |
+          npm ci
+          node scripts/pages-summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"
 
   journeys:
     needs: build_test
