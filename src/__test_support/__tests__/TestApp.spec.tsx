@@ -1,10 +1,12 @@
-import {render, screen, waitFor, within} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {render, waitFor} from '@testing-library/react';
 import {Route} from 'react-router';
 import * as schema from 'schemawax';
 import {Tabs} from '@navigation/Tabs';
 import {useSearchParamsObject} from '@navigation/search-params';
-import {TestApp} from '../TestApp';
+import {tabStrip} from '@navigation/Tabs/__test_support/tabStrip';
+import {appAddress} from '@__test_support/address';
+import {appErrors} from '@__test_support/errors';
+import {TestApp} from '@__test_support/TestApp';
 
 const doors = [{display: 'First', param: 'first', to: '?tab=first'}, {display: 'Second', param: 'second', to: '?tab=second'}];
 
@@ -17,10 +19,10 @@ describe('the test app', () => {
   test('the address probe never runs ahead of the screen', async () => {
     render(<TestApp at="/somewhere"><Doors/></TestApp>);
 
-    await userEvent.click(screen.getByRole('link', {name: 'Second'}));
+    await tabStrip('doors').open('Second');
 
-    await waitFor(() => expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('tab=second'));
-    expect(screen.getByRole('link', {name: 'Second', current: 'page'})).toBeInTheDocument();
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent('tab=second'));
+    expect(tabStrip('doors').current()).toEqual(['Second']);
   });
 
   test('the page reads the address the app is at, and the address follows each navigation', async () => {
@@ -28,7 +30,7 @@ describe('the test app', () => {
 
     expect(window.location).toBeAt('/somewhere#here');
 
-    await userEvent.click(screen.getByRole('link', {name: 'Second'}));
+    await tabStrip('doors').open('Second');
 
     await waitFor(() => expect(window.location).toBeAt('/somewhere?tab=second'));
   });
@@ -36,7 +38,7 @@ describe('the test app', () => {
   test('Back returns to the address the reader came from', async () => {
     render(<TestApp cameFrom="/before" at="/somewhere"><Doors/></TestApp>);
 
-    await userEvent.click(screen.getByRole('button', {name: 'browser back'}));
+    await appAddress.back();
 
     await waitFor(() => expect(window.location).toBeAt('/before'));
   });
@@ -51,9 +53,8 @@ describe('the test app', () => {
     render(<TestApp at="/nowhere"><Route path="/nowhere" element={<Boom/>}/></TestApp>,
       {onCaughtError: error => caught.push(error)});
 
-    const errors = await screen.findByRole('list', {name: 'errors reported'});
-    expect((await within(errors).findAllByRole('listitem')).map(item => item.textContent)).toEqual(['boom']);
-    expect(screen.getByRole('status', {name: 'url path'})).toHaveTextContent('/nowhere');
+    expect(await appErrors.reported()).toEqual(['boom']);
+    expect(appAddress.path()).toHaveTextContent('/nowhere');
   });
 
   test("an error no page catches reaches the test's error handler", async () => {
@@ -66,7 +67,7 @@ describe('the test app', () => {
     render(<TestApp at="/nowhere"><Route path="/nowhere" element={<Boom/>}/></TestApp>,
       {onCaughtError: error => caught.push(error)});
 
-    await screen.findByRole('list', {name: 'errors reported'});
+    await appErrors.reported();
     expect(caught).toEqual([boom]);
   });
 });
