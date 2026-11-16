@@ -222,6 +222,7 @@ jobs:
     runs-on: ubuntu-26.04
     permissions:
       contents: read
+      packages: read
       pull-requests: write
       id-token: write
     env:
