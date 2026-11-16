@@ -39,6 +39,14 @@ describe('the code voice', () => {
     expect(kinds('TS', '{/* a // b */}')['{/* a // b */}']).toBe('comment');
   });
 
+  it('keeps a JSX comment after an apostrophe in JSX text a comment', () => {
+    expect(kinds('TS', "<p>Don't</p>{/* it's here */}")["{/* it's here */}"]).toBe('comment');
+  });
+
+  it('keeps a line comment after an apostrophe in JSX text a comment', () => {
+    expect(kinds('TS', "<p>Don't stop</p>; // it's fine")["// it's fine"]).toBe('comment');
+  });
+
   it('still reads a line comment after code as a comment', () => {
     expect(kinds('TS', 'const at = 0; // where it starts')['// where it starts']).toBe('comment');
   });

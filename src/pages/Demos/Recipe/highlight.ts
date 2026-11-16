@@ -53,7 +53,7 @@ const keywords = [
 ];
 
 const stringOrComment =
-  /(?<string>'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")|(?<comment>\/\/.*$|\{\/\*.*?\*\/})/g;
+  /(?<string>(?<!\w)'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")|(?<comment>\/\/.*$|\{\/\*.*?\*\/})/g;
 
 const ts: ReadonlyArray<Rule> = [
   {pattern: stringOrComment, groups: ['string', 'comment']},
