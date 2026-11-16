@@ -299,7 +299,7 @@ describe('the record', () => {
   });
 
   test('should link “smooths over the rough edges of…” in The page needs to update in place to prototypejs.org', () => {
-    expect(recordPage.momentLink('The page needs to update in place', '“smooths over the rough edges of cross-browser development”')).toHaveAttribute('href', 'http://prototypejs.org/');
+    expect(recordPage.momentLink('The page needs to update in place', '“smooths over the rough edges of cross-browser development”')).toHaveAttribute('href', 'https://prototypejs.org/');
   });
 
   test('should link “an easy-to-use API that works across…” in The page needs to update in place to jquery.com', () => {
@@ -1128,7 +1128,7 @@ describe('the record\'s three stories', () => {
   });
 
   test('should link “smooths over the rough edges of…” in Behavior’s story to prototypejs.org', () => {
-    recordPage.storyQuotations('Behavior', '“smooths over the rough edges of cross-browser development”').forEach(link => expect(link).toHaveAttribute('href', 'http://prototypejs.org/'));
+    recordPage.storyQuotations('Behavior', '“smooths over the rough edges of cross-browser development”').forEach(link => expect(link).toHaveAttribute('href', 'https://prototypejs.org/'));
   });
 
   test('should link “an easy-to-use API that works across…” in Behavior’s story to jquery.com', () => {

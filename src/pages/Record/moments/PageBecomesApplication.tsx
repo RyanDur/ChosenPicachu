@@ -7,7 +7,7 @@ import {moments} from '../calendar';
 const garrettAjaxEssay = 'https://web.archive.org/web/20071002213206/http://www.adaptivepath.com/ideas/essays/archives/000385.php';
 const computerworldInterview = 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html';
 const infoworldInterview = 'https://www.infoworld.com/article/2653798/javascript-creator-ponders-past--future.html';
-const prototypeJsSite = 'http://prototypejs.org/';
+const prototypeJsSite = 'https://prototypejs.org/';
 const jQuerySite = 'https://jquery.com/';
 const xmlHttpRequest = 'https://en.wikipedia.org/wiki/XMLHttpRequest';
 const googleMaps = 'https://en.wikipedia.org/wiki/Google_Maps';
