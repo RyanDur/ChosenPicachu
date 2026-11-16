@@ -3,7 +3,7 @@ import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {feedStatus} from '@pages/Demos/__test_support';
 
-const addMenus = (): HTMLElement[] => screen.queryAllByLabelText('charts to add');
+const addMenu = (): HTMLElement | null => screen.queryByLabelText('charts to add');
 
 const theAddMenu = (): HTMLElement => screen.getByLabelText('charts to add');
 
@@ -68,9 +68,9 @@ const keys = async (chart: string, key: string): Promise<void> => {
 };
 
 export const chartsDesk = {
-  addMenus,
+  addMenu,
   addChart,
-  offered: (name: string): HTMLElement[] => within(theAddMenu()).queryAllByRole('button', {name, hidden: true}),
+  offered: (name: string): HTMLElement | null => within(theAddMenu()).queryByRole('button', {name, hidden: true}),
   doorway,
   walkThrough,
   place,

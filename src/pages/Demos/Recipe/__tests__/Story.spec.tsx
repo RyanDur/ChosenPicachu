@@ -19,7 +19,7 @@ describe('a story card', () => {
       </Story>
     </Stories></TestApp>);
 
-    expect(recipeFolds.talliesOf(card('The reader can follow two steps'))).toEqual(['2 steps']);
+    expect(recipeFolds.tally(card('The reader can follow two steps'))).toHaveTextContent('2 steps');
   });
 
   test('with one step says 1 step', () => {
@@ -32,7 +32,7 @@ describe('a story card', () => {
       </Story>
     </Stories></TestApp>);
 
-    expect(recipeFolds.talliesOf(card('The reader can follow one step'))).toEqual(['1 step']);
+    expect(recipeFolds.tally(card('The reader can follow one step'))).toHaveTextContent('1 step');
   });
 
   test('with no build shows no step tally', () => {
@@ -42,7 +42,7 @@ describe('a story card', () => {
       </Story>
     </Stories></TestApp>);
 
-    expect(recipeFolds.talliesOf(card('The reader can read prose alone'))).toEqual([]);
+    expect(recipeFolds.tally(card('The reader can read prose alone'))).not.toBeInTheDocument();
   });
 
   test('a story that arrival opened closes on one press', async () => {
