@@ -43,18 +43,21 @@ export const refusals = ({branch, changed, pulls, checks}) => {
 /** @typedef {(command: string, ...args: string[]) => string} Run */
 
 /** @type {Run} */
-const said = (command, ...args) => execFileSync(command, args, {encoding: 'utf8', stdio: 'pipe'}).trim();
+const outputOf = (command, ...args) => execFileSync(command, args, {encoding: 'utf8', stdio: 'pipe'}).trim();
 
 /**
  * @param {string} branch
  * @param {Run} run
  * @return {Check[]}
  */
-export const checksOf = (branch, run = said) => {
+export const checksOf = (branch, run = outputOf) => {
   try {
     return JSON.parse(run('gh', 'pr', 'checks', branch, '--json', 'name,bucket'));
-  } catch ({stdout}) {
-    return typeof stdout === 'string' && has(stdout.trim()) ? JSON.parse(stdout) : [];
+  } catch (failure) {
+    const {stdout, stderr} = failure;
+    if (typeof stdout === 'string' && has(stdout.trim())) return JSON.parse(stdout);
+    if (typeof stderr === 'string' && stderr.includes('no pull requests found')) return [];
+    throw failure;
   }
 };
 
@@ -64,7 +67,7 @@ export const checksOf = (branch, run = said) => {
  * @param {Run} run
  * @return {{refused: string[], unread?: string}}
  */
-export const clearToPush = (branch, pushed, run = said) => {
+export const clearToPush = (branch, pushed, run = outputOf) => {
   try {
     const pulls = JSON.parse(run('gh', 'pr', 'list', '--state', 'open', '--json', 'number,headRefName,files'));
     const changed = run('git', 'diff', '--name-only', `origin/main...${pushed}`).split('\n').filter(path => has(path));
@@ -76,7 +79,7 @@ export const clearToPush = (branch, pushed, run = said) => {
 
 if (import.meta.main) {
   const [, , pushedTo, pushed = 'HEAD'] = process.argv;
-  const {refused, unread} = clearToPush(pushedTo ?? said('git', 'branch', '--show-current'), pushed);
+  const {refused, unread} = clearToPush(pushedTo ?? outputOf('git', 'branch', '--show-current'), pushed);
   if (has(unread)) console.error(`pre-push: the open pull requests couldn't be checked (${unread}).`);
   refused.forEach(reason => console.error(`pre-push: ${reason}`));
   process.exitCode = has(refused) ? 1 : 0;

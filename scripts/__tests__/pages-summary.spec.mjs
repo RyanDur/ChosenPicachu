@@ -51,6 +51,36 @@ describe('the pages summary', () => {
     expect(change.kind).toBe('words');
   });
 
+  test('a page whose title changes has changed its words', () => {
+    const [change] = one('index.html', page('<p>a</p>', '<title>Demos</title>'), page('<p>a</p>', '<title>Exhibits</title>'));
+
+    expect(change.kind).toBe('words');
+  });
+
+  test('a page whose description changes has changed its words', () => {
+    const described = words => page('<p>a</p>', `<meta name="description" content="${words}">`);
+
+    expect(one('index.html', described('the demos'), described('the exhibits'))[0].kind).toBe('words');
+  });
+
+  test('a picture whose alt text changes has changed its words', () => {
+    expect(one('index.html', page('<img src="a.png" alt="a cat">'), page('<img src="a.png" alt="a dog">'))[0].kind).toBe('words');
+  });
+
+  test('a control whose label changes has changed its words', () => {
+    const labeled = words => page(`<button aria-label="${words}"></button>`);
+
+    expect(one('index.html', labeled('open'), labeled('close'))[0].kind).toBe('words');
+  });
+
+  test('a change spread across the page is shown in an excerpt of bounded length', () => {
+    const many = Array.from({length: 300}, (_, at) => `w${at}`).join(' ');
+    const [change] = one('index.html', page(`<header>old</header><p>${many}</p><footer>old</footer>`),
+      page(`<header>new</header><p>${many}</p><footer>new</footer>`));
+
+    expect(change.before.split(' ').length).toBeLessThanOrEqual(41);
+  });
+
   test('a tag or a mark in the words is shown as written, not rendered', () => {
     const summary = summaryOf([{page: 'index.html', kind: 'words', before: 'the <details> *x*', after: 'a & b'}], 1);
 

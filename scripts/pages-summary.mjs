@@ -17,27 +17,34 @@ const wordsOf = html => {
   const {document} = new JSDOM(html).window;
   document.querySelectorAll('script, template').forEach(hidden => hidden.remove());
   document.querySelectorAll(blockBoundaries).forEach(block => block.append('\n'));
-  return document.body.textContent.split(/\s+/).filter(word => has(word));
+  const named = [...document.querySelectorAll('[alt], [aria-label]')]
+    .map(element => element.getAttribute('alt') ?? element.getAttribute('aria-label'));
+  const description = document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
+  return [document.title, description, document.body.textContent, ...named].join('\n').split(/\s+/).filter(word => has(word));
 };
 
-const around = 6;
+const wordsOfContext = 6;
 
-const shared = (left, right) => {
+const matchingLeadCount = (left, right) => {
   let count = 0;
   while (count < left.length && count < right.length && left[count] === right[count]) count++;
   return count;
 };
 
-const excerpt = (words, start, end) =>
-  `${start > 0 ? '…' : ''}${words.slice(start, end).join(' ')}${end < words.length ? '…' : ''}`;
+const longestExcerpt = 40;
+
+const excerpt = (words, start, end) => {
+  const shown = Math.min(end, start + longestExcerpt);
+  return `${start > 0 ? '…' : ''}${words.slice(start, shown).join(' ')}${shown < words.length ? '…' : ''}`;
+};
 
 const wordChange = (before, after) => {
-  const lead = shared(before, after);
-  const tail = shared(before.slice(lead).reverse(), after.slice(lead).reverse());
-  const start = Math.max(0, lead - around);
+  const lead = matchingLeadCount(before, after);
+  const tail = matchingLeadCount(before.slice(lead).reverse(), after.slice(lead).reverse());
+  const start = Math.max(0, lead - wordsOfContext);
   return {
-    before: excerpt(before, start, Math.min(before.length, before.length - tail + around)),
-    after: excerpt(after, start, Math.min(after.length, after.length - tail + around))
+    before: excerpt(before, start, Math.min(before.length, before.length - tail + wordsOfContext)),
+    after: excerpt(after, start, Math.min(after.length, after.length - tail + wordsOfContext))
   };
 };
 
