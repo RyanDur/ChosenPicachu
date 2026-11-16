@@ -2,7 +2,7 @@
   display: none;
   min-width: 0;
 
-  > .opener {
+  > .fold-bar {
     min-width: 0;
   }
 
