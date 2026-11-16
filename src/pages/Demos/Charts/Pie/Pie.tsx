@@ -23,7 +23,7 @@ export const Pie: FC<PropsWithChildren> = ({children}) => {
   const heading = `heading${useId()}`;
   const totals = pieShapes.sideTotals(trades);
   const cut = pieShapes.wedges(sides.map(side => ({side, weight: totals[side]})));
-  const firstPercent = Math.round((cut[0]?.share ?? 0) * 100);
+  const percents = pieShapes.wholePercents(cut);
   return <section aria-labelledby={heading} className="pie chart card rounded-corners lifted padded">
     <h3 id={heading} className="off-screen">pie</h3>
     <header className="chart-header">
@@ -55,7 +55,7 @@ export const Pie: FC<PropsWithChildren> = ({children}) => {
       <ul className="legend caption">
         {cut.map((wedge, at) =>
           <li key={wedge.side} className={classNames(sideOf[wedge.side], 'side-ink', wedge.side)}>
-            <data value={wedge.share}>{`${at === 0 ? firstPercent : 100 - firstPercent}% ${wedge.side}`}</data>
+            <data value={wedge.share}>{`${percents[at]}% ${wedge.side}`}</data>
           </li>)}
       </ul>
       <figcaption className="chart-caption caption">
