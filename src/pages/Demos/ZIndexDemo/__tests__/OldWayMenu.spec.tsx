@@ -47,7 +47,7 @@ describe('the menu built the old way', () => {
     await oldWayMenu.takeByKeyboard();
 
     expect(oldWayMenu.queryMenu()).not.toBeInTheDocument();
-    expect(await oldWayMenu.findButton('Sort by: date, the old way')).toHaveFocus();
+    expect(oldWayMenu.button('Sort by: date, the old way')).toHaveFocus();
   });
 
   test('should mark the choice taken as current when it opens again', async () => {
@@ -67,7 +67,7 @@ describe('the menu built the old way', () => {
     await oldWayMenu.close();
 
     expect(oldWayMenu.queryMenu()).not.toBeInTheDocument();
-    expect(await oldWayMenu.findButton()).toHaveFocus();
+    expect(oldWayMenu.button()).toHaveFocus();
   });
 
   test('should open from ArrowDown on its button, with its first choice in focus', async () => {
@@ -116,7 +116,7 @@ describe('the card that traps the menu', () => {
 
     await oldWayMenu.choose('date');
 
-    expect(await oldWayMenu.findButton('Sort by: date, the old way')).toHaveTextContent(/^Sort by: date$/);
+    expect(oldWayMenu.button('Sort by: date, the old way')).toHaveTextContent(/^Sort by: date$/);
   });
 
   test('should say nothing before the first press', async () => {

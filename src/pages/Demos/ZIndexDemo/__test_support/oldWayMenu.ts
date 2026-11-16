@@ -11,6 +11,7 @@ const press = async (key: string): Promise<void> => {
 
 export const oldWayMenu = {
   findButton,
+  button: (name: string = unchosen): HTMLElement => within(theTrap.figure()).getByRole('button', {name}),
   open: async (name: string = unchosen): Promise<void> => userEvent.click(await findButton(name)),
   focusButton: async (): Promise<void> => (await findButton()).focus(),
   openWithEnter: async (): Promise<void> => press('{Enter}'),
