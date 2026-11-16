@@ -15,7 +15,7 @@ describe('the 1989 moment', () => {
   });
 
   test('should link the book’s words to the page that quotes them', () => {
-    expect(recordPage.quotationLink('“as close as possible to no rules at all”')).toHaveAttribute('href', 'https://www.ppd.stfc.ac.uk/news/unravelling-the-web-how-particle-physics-launched-the-invention-that-changed-the-world/');
+    expect(recordPage.signpost('“as close as possible to no rules at all”')).toHaveAttribute('href', 'https://www.ppd.stfc.ac.uk/news/unravelling-the-web-how-particle-physics-launched-the-invention-that-changed-the-world/');
   });
 });
 
@@ -139,7 +139,7 @@ describe('the record', () => {
     const title = recordPage.title();
     const record = recordPage.timelineHeading();
     const research = recordPage.researchHeading();
-    const demos = recordPage.bridgeLink('The Demos');
+    const demos = recordPage.signpost('The Demos');
 
     expect(title.compareDocumentPosition(record) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(record.compareDocumentPosition(demos) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
@@ -570,15 +570,15 @@ describe('the record', () => {
   });
 
   test('should send the reader on from the bridge to the Practice page', () => {
-    expect(recordPage.bridgeLink('the Practice page')).toHaveAttribute('href', Paths.practice);
+    expect(recordPage.signpost('the Practice page')).toHaveAttribute('href', Paths.practice);
   });
 
   test('should send the reader on from the bridge to the Demos', () => {
-    expect(recordPage.bridgeLink('The Demos')).toHaveAttribute('href', Paths.demos);
+    expect(recordPage.signpost('The Demos')).toHaveAttribute('href', Paths.demos);
   });
 
   test('should send the reader on from the bridge to the accordions', () => {
-    expect(recordPage.bridgeLink('the accordions')).toHaveAttribute('href', `${Paths.demos}accordions/`);
+    expect(recordPage.signpost('the accordions')).toHaveAttribute('href', `${Paths.demos}accordions/`);
   });
 
   test('should tell the concert after the timeline closes and before the Record’s footer', () => {
@@ -602,19 +602,19 @@ describe('the record', () => {
   });
 
   test('the history cites its sources', () => {
-    expect(recordPage.citation(/proposing the WorldWideWeb/))
+    expect(recordPage.signpost(/proposing the WorldWideWeb/))
       .toHaveAttribute('href', expect.stringContaining('w3.org/History'));
-    expect(recordPage.citation(/drafted Cascading HTML Style Sheets/))
+    expect(recordPage.signpost(/drafted Cascading HTML Style Sheets/))
       .toHaveAttribute('href', expect.stringContaining('w3.org/People/howcome'));
-    expect(recordPage.citation(/never become a page-description language/))
+    expect(recordPage.signpost(/never become a page-description language/))
       .toHaveAttribute('href', expect.stringContaining('w3.org/Style/LieBos2e'));
-    recordPage.citations('The Box Acid Test')
+    recordPage.signposts('The Box Acid Test')
       .forEach(link => expect(link).toHaveAttribute('href', expect.stringContaining('w3.org/Style/CSS/Test')));
-    expect(recordPage.citation(/one HTML document/))
+    expect(recordPage.signpost(/one HTML document/))
       .toHaveAttribute('href', expect.stringContaining('csszengarden.com'));
-    expect(recordPage.citation(/wrote the interpreter in about ten days/))
+    expect(recordPage.signpost(/wrote the interpreter in about ten days/))
       .toHaveAttribute('href', 'https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html');
-    expect(recordPage.citation(/reducing the overlap/))
+    expect(recordPage.signpost(/reducing the overlap/))
       .toHaveAttribute('href', expect.stringContaining('html.com/html5'));
   });
 
