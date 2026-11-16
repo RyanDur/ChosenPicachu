@@ -1,4 +1,7 @@
-import {not, has} from '@ryandur/sand';
+import {has, not} from '@ryandur/sand';
+import {scan} from './ts-scan';
+import {tsWords} from './ts-words';
+
 export type Kind = 'plain' | 'keyword' | 'string' | 'number' | 'comment' | 'tag' | 'attribute' | 'type' | 'call';
 
 export type Token = {
@@ -18,22 +21,26 @@ const kindOf = (tokenPattern: TokenPattern, match: RegExpExecArray): Kind => 'ki
   ? tokenPattern.kind
   : tokenPattern.groups.find(group => has(match.groups?.[group])) ?? 'plain';
 
-const scan = (line: string, tokenPatterns: ReadonlyArray<TokenPattern>): Token[] => {
-  const found: Found[] = [];
+const matchesOf = (line: string, tokenPatterns: ReadonlyArray<TokenPattern>, taken: Found[],
+  allowed: (start: number, end: number) => boolean): Found[] => {
+  const found = [...taken];
   tokenPatterns.forEach(tokenPattern => {
     for (const match of line.matchAll(tokenPattern.pattern)) {
       const start = match.index;
-      const overlaps = found.some(taken =>
-        start < taken.start + taken.length && taken.start < start + match[0].length);
-      if (not(overlaps) && has(match[0])) {
+      const overlaps = found.some(other =>
+        start < other.start + other.length && other.start < start + match[0].length);
+      if (not(overlaps) && has(match[0]) && allowed(start, start + match[0].length)) {
         found.push({start, length: match[0].length, kind: kindOf(tokenPattern, match)});
       }
     }
   });
-  found.sort((left, right) => left.start - right.start);
+  return found;
+};
+
+const tokensFrom = (line: string, found: Found[]): Token[] => {
   const tokens: Token[] = [];
   let at = 0;
-  found.forEach(({start, length, kind}) => {
+  [...found].sort((left, right) => left.start - right.start).forEach(({start, length, kind}) => {
     if (start > at) {
       tokens.push({text: line.slice(at, start), kind: 'plain'});
     }
@@ -46,35 +53,23 @@ const scan = (line: string, tokenPatterns: ReadonlyArray<TokenPattern>): Token[]
   return tokens;
 };
 
-const keywords = [
-  'const', 'let', 'return', 'if', 'else', 'new', 'function', 'undefined', 'true', 'false', 'null',
-  'export', 'import', 'from', 'type', 'readonly', 'extends', 'typeof', 'in', 'of', 'as', 'void',
-  'switch', 'case', 'default', 'throw', 'try', 'catch', 'finally', 'await', 'async', 'while', 'for', 'declare'
-];
+const tokensMatching = (line: string, tokenPatterns: ReadonlyArray<TokenPattern>): Token[] =>
+  tokensFrom(line, matchesOf(line, tokenPatterns, [], () => true));
 
-const wordsBeforeAValue = [
-  'return', 'case', 'as', 'satisfies', 'extends', 'from', 'import', 'export', 'default', 'throw', 'in', 'of', 'typeof',
-  'void', 'await', 'yield', 'else', 'module'
-].join('|');
-
-const stringOrComment = new RegExp(
-  String.raw`(?<string>(?<=(?:^|[([{=,:;?!&|+\-*/%<]|=>|\b(?:${wordsBeforeAValue}))\s*)` +
-  String.raw`(?:'(?:[^'\\]|\\.)*'|\x60(?:[^\x60\\]|\\.)*\x60|"(?:[^"\\]|\\.)*"))` +
-  String.raw`|(?<comment>\/\/.*$|\{\/\*.*?\*\/})`,
-  'g');
-
-const ts: ReadonlyArray<TokenPattern> = [
-  {pattern: stringOrComment, groups: ['string', 'comment']},
+const tsPatterns: ReadonlyArray<TokenPattern> = [
   {pattern: /(?<=\w<)[A-Z]\w*(?=,|>[(;)=])/g, kind: 'type'},
-  {pattern: /(?<=<\/?)[A-Za-z][\w.]*/g, kind: 'tag'},
-  {pattern: /(?<=<[A-Za-z][\w.]*\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
-  {pattern: new RegExp(`\\b(?:${keywords.join('|')})\\b`, 'g'), kind: 'keyword'},
-  {pattern: /(?<=:\s*)(?:readonly\s+)?[A-Z]\w*(?=[[<,;)=\s|]|$)/g, kind: 'type'},
+  {pattern: new RegExp(`\\b(?:${tsWords.keywords.join('|')})\\b`, 'g'), kind: 'keyword'},
+  {pattern: /(?<=:[ \t]*)(?:readonly\s+)?[A-Z]\w*(?=[[<,;)=\s|]|$)/g, kind: 'type'},
   {pattern: /(?<=\b(?:type|extends|new)\s+)[A-Z]\w*/g, kind: 'type'},
-  {pattern: /(?<=<)[A-Z]\w*(?=[,>])|(?<=, )[A-Z]\w*(?=>)/g, kind: 'type'},
+  {pattern: /(?<=<)[A-Z]\w*|(?<=, )[A-Z]\w*(?=>)/g, kind: 'type'},
   {pattern: /\b[a-zA-Z_$][\w$]*(?=\()/g, kind: 'call'},
   {pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
+
+const ts = (text: string): Token[] => {
+  const {spans, code} = scan.ts(text);
+  return tokensFrom(text, matchesOf(text, tsPatterns, spans, (start, end) => code.slice(start, end).every(Boolean)));
+};
 
 const css: ReadonlyArray<TokenPattern> = [
   {pattern: /\/\*.*?\*\//g, kind: 'comment'},
@@ -87,20 +82,32 @@ const css: ReadonlyArray<TokenPattern> = [
   {pattern: /[a-z-]+(?=\()/g, kind: 'call'}
 ];
 
-const html: ReadonlyArray<TokenPattern> = [
-  {pattern: /\{\/\*.*?\*\/}|<!--.*?-->/g, kind: 'comment'},
-  {pattern: /(?<=(?:^|[([{=,:;?!&|+\-*/%<]|=>)\s*)(?:'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")/g, kind: 'string'},
-  {pattern: /(?<=<\/?)[\w.-]+/g, kind: 'tag'},
-  {pattern: /(?<=<[\w.-]+\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
-  {pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
-];
+const markup = (text: string): Token[] => {
+  const {spans} = scan.markup(text);
+  return tokensFrom(text, matchesOf(text, [{pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}], spans, () => true));
+};
 
-const grammars = {TS: ts, CSS: css, HTML: html};
+const linesOf = (tokens: Token[]): Token[][] => tokens.reduce<Token[][]>((lines, {text, kind}) => {
+  text.split('\n').forEach((piece, at) => {
+    if (at > 0) lines.push([]);
+    if (has(piece)) lines[lines.length - 1].push({text: piece, kind});
+  });
+  return lines;
+}, [[]]);
+
+const wholeSample = (grammar: (text: string) => Token[]) =>
+  (lines: readonly string[]): Token[][] => linesOf(grammar(lines.join('\n')));
+
+const grammars = {
+  TS: wholeSample(ts),
+  CSS: (lines: readonly string[]) => lines.map(line => tokensMatching(line, css)),
+  HTML: wholeSample(markup)
+};
 
 type Highlight = {
-  tokensOf: (label: keyof typeof grammars, line: string) => Token[];
+  tokensOf: (label: keyof typeof grammars, lines: readonly string[]) => Token[][];
 };
 
 export const highlight: Highlight = {
-  tokensOf: (label, line) => scan(line, grammars[label])
+  tokensOf: (label, lines) => grammars[label](lines)
 };

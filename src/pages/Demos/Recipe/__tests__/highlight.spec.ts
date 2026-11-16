@@ -1,10 +1,10 @@
-import {Kind, highlight} from '../highlight';
+import {highlight, Kind} from '../highlight';
 
 // language=TypeScript
 const columnAlias = 'export type Column<C> = {readonly name: string; readonly width?: number; readonly data: C};';
 
 const kinds = (label: 'HTML' | 'CSS' | 'TS', line: string): Record<string, Kind> =>
-  Object.fromEntries(highlight.tokensOf(label, line)
+  Object.fromEntries(highlight.tokensOf(label, [line]).flat()
     .filter(({kind}) => kind !== 'plain')
     .map(({text, kind}) => [text, kind]));
 
@@ -111,6 +111,10 @@ describe('the code voice', () => {
     expect(kinds('TS', 'const at = 0; // where it starts')['// where it starts']).toBe('comment');
   });
 
+  it('keeps two slashes in JSX text from opening a line comment', () => {
+    expect(kinds('TS', '<p>see https://mdn.io</p>{/* the docs */}')['{/* the docs */}']).toBe('comment');
+  });
+
   it('reads a JSX line the way an editor does: tags, props and strings', () => {
     const line = '    trades: <DraggableColumn key="trades" name="trades">trades<SortMenu column="trades"/></DraggableColumn>,';
 
@@ -168,5 +172,213 @@ describe('the code voice', () => {
     expect(found.scope).toBe('attribute');
     expect(found['aria-label']).toBe('attribute');
     expect(found['"window"']).toBe('string');
+  });
+
+  it('keeps a JSX comment after a question and an elided word a comment', () => {
+    expect(kinds('TS', "<p>Why? 'Cause</p>{/* it's */}")["{/* it's */}"]).toBe('comment');
+  });
+
+  it('keeps an elided word after a comma from opening a string', () => {
+    expect(Object.values(kinds('TS', "<p>Yes, 'tis</p>{/* it's */}"))).not.toContain('string');
+  });
+
+  it('keeps an elided word after a colon from opening a string', () => {
+    expect(Object.values(kinds('TS', "<p>Note: 'twas</p>{/* it's */}"))).not.toContain('string');
+  });
+
+  it('reads a template tagged by a member as a string', () => {
+    expect(kinds('TS', 'const t = x.y`tag`;')['`tag`']).toBe('string');
+  });
+
+  it('reads a template tagged by String.raw as a string', () => {
+    expect(kinds('TS', 'const t = String.raw`a\\b`;')['`a\\b`']).toBe('string');
+  });
+
+  it('reads a quote in a type predicate as a string', () => {
+    expect(kinds('TS', "const f = (x): x is 'a' => true;")["'a'"]).toBe('string');
+  });
+
+  it('reads a quote after keyof as a string', () => {
+    expect(kinds('TS', "type K = keyof 'a';")["'a'"]).toBe('string');
+  });
+
+  it('reads a quote after a spread as a string', () => {
+    expect(kinds('TS', "const l = [...'abc'];")["'abc'"]).toBe('string');
+  });
+
+  it('reads a quote after a tilde as a string', () => {
+    expect(kinds('TS', "const n = ~'a';")["'a'"]).toBe('string');
+  });
+
+  it('reads code inside braces in markup as code', () => {
+    expect(kinds('HTML', "<p>{x as 'y'}</p>")["'y'"]).toBe('string');
+  });
+
+  it('reads a multi-line template\'s closing line as the template\'s end', () => {
+    const [, closing] = highlight.tokensOf('TS', ['const query = `{', '}`;']);
+
+    expect(closing).toEqual([{text: '}`', kind: 'string'}, {text: ';', kind: 'plain'}]);
+  });
+
+  it('opens an element at the start of a line', () => {
+    expect(kinds('TS', '<b>x').b).toBe('tag');
+  });
+
+  it('reads code inside a template\'s braces as code, and the template around it as a string', () => {
+    const found = kinds('TS', 'const c = `a ${b} c`;');
+
+    expect(found['`a ${']).toBe('string');
+    expect(found.b).toBeUndefined();
+    expect(found['} c`']).toBe('string');
+  });
+
+  it('reads code in a template\'s braces as code across lines, and the template\'s end as a string', () => {
+    const [, inside, closing] = highlight.tokensOf('TS', ['const to = `${from({', 'size: 1', '})}`;']);
+
+    expect(inside).toEqual([{text: 'size: ', kind: 'plain'}, {text: '1', kind: 'number'}]);
+    expect(closing).toEqual([{text: '})', kind: 'plain'}, {text: '}`', kind: 'string'}, {text: ';', kind: 'plain'}]);
+  });
+
+  it('keeps an escaped backtick inside its template', () => {
+    expect(kinds('TS', 'const t = `a\\`b`;')['`a\\`b`']).toBe('string');
+  });
+
+  it('reads a template the sample leaves open as a string to the sample\'s end', () => {
+    expect(highlight.tokensOf('TS', ['const q = `{', 'a'])).toEqual([
+      [{text: 'const', kind: 'keyword'}, {text: ' q = ', kind: 'plain'}, {text: '`{', kind: 'string'}],
+      [{text: 'a', kind: 'string'}]
+    ]);
+  });
+
+  it('ends a line comment at the end of its line', () => {
+    const [, next] = highlight.tokensOf('TS', ['go(); // soon', 'stop();']);
+
+    expect(next).toEqual([{text: 'stop', kind: 'call'}, {text: '();', kind: 'plain'}]);
+  });
+
+  it('ends an unclosed quote at the end of its line', () => {
+    const [, next] = highlight.tokensOf('TS', ['const a = \'b', 'stop();']);
+
+    expect(next).toEqual([{text: 'stop', kind: 'call'}, {text: '();', kind: 'plain'}]);
+  });
+
+  it('reads a quote at the start of a line as a string, whatever the line before ends with', () => {
+    const [, next] = highlight.tokensOf('TS', ['f(a)', '\'b\'']);
+
+    expect(next).toEqual([{text: '\'b\'', kind: 'string'}]);
+  });
+
+  it('reads a capital on the line after a colon as a value, not a type', () => {
+    const [, next] = highlight.tokensOf('TS', ['const a = b ? c :', 'Fallback;']);
+
+    expect(next).toEqual([{text: 'Fallback;', kind: 'plain'}]);
+  });
+
+  it('opens an element after a space, as in prose', () => {
+    expect(kinds('TS', 'see <b>x').b).toBe('tag');
+  });
+
+  it('opens an element after punctuation', () => {
+    expect(kinds('TS', 'f(<b>x').b).toBe('tag');
+  });
+
+  it('opens no element right after a name, where it is a generic', () => {
+    expect(kinds('TS', 'Promise<b>').b).toBeUndefined();
+  });
+
+  it('reads type parameters that extend a type as code', () => {
+    expect(kinds('TS', 'const f = <T extends string>(x: T) => x;').T).not.toBe('tag');
+  });
+
+  it('reads type parameters with a trailing comma as code', () => {
+    expect(kinds('TS', 'const f = <T,>(x: T) => x;').T).not.toBe('tag');
+  });
+
+  it('reads type parameters before an arrow function\'s parameters as code', () => {
+    expect(kinds('TS', 'const f = <T>(x: T) => x;').T).not.toBe('tag');
+  });
+
+  it('opens an element right after a word when it has an attribute', () => {
+    expect(kinds('TS', 'Home<b title="x">').b).toBe('tag');
+  });
+
+  it('opens an element right after a word when it closes itself', () => {
+    expect(kinds('TS', 'City<b/>').b).toBe('tag');
+  });
+
+  it('opens an element right after a word in JSX text', () => {
+    expect(kinds('TS', '<p>x<b>').b).toBe('tag');
+  });
+
+  it('reads a block comment in code as a comment', () => {
+    expect(kinds('TS', 'go(/* soon */);')['/* soon */']).toBe('comment');
+  });
+
+  it('reads a greater-than inside an attribute\'s braces as code, not the end of the tag', () => {
+    expect(kinds('TS', '<b hidden={a > 1} id="x">').id).toBe('attribute');
+  });
+
+  it('keeps an object\'s closing brace from ending an attribute\'s braces', () => {
+    expect(kinds('TS', '<b hidden={{a: 1}.a > 0} id="x">').id).toBe('attribute');
+  });
+
+  it('reads code inside JSX text\'s braces', () => {
+    expect(kinds('TS', "<p>see {'x'}")["'x'"]).toBe('string');
+  });
+
+  it('reads code again after a self-closing element', () => {
+    expect(kinds('TS', "const a = <b/>; const c = 'd';")["'d'"]).toBe('string');
+  });
+
+  it('reads code again after an element closes', () => {
+    expect(kinds('TS', "const a = <b>x</b>; const c = 'd';")["'d'"]).toBe('string');
+  });
+
+  it('closes an element anywhere a closing tag stands', () => {
+    expect(kinds('TS', 'onClick={go}>×</button>').button).toBe('tag');
+  });
+
+  it('reads a double-quoted string after punctuation as a string', () => {
+    expect(kinds('TS', 'f("a")')['"a"']).toBe('string');
+  });
+
+  it('keeps slashes, a tag and a brace inside a string one string', () => {
+    expect(kinds('TS', "const said = 'a // b /* c <p> {d}';")["'a // b /* c <p> {d}'"]).toBe('string');
+  });
+
+  it('keeps a quote, a backtick and a tag inside a line comment one comment', () => {
+    expect(kinds('TS', "const at = 0; // it's `<p>")["// it's `<p>"]).toBe('comment');
+  });
+
+  it('keeps a JSX comment after JSX text that says for \'em a comment', () => {
+    expect(kinds('TS', "<p>for 'em</p>{/* note */}")['{/* note */}']).toBe('comment');
+  });
+
+  it('keeps a double quote in markup text from opening a string', () => {
+    expect(highlight.tokensOf('HTML', ['<p>say "hi"</p><b>it\'s</b>']).flat().map(({kind}) => kind)).not.toContain('string');
+  });
+});
+
+describe('the code voice, line by line', () => {
+  const rejoined = (label: 'HTML' | 'CSS' | 'TS', lines: string[]): string[] =>
+    highlight.tokensOf(label, lines).map(line => line.map(({text}) => text).join(''));
+
+  it('rejoins a TS sample\'s tokens into its lines, a template that crosses them included', () => {
+    const lines = ['const said = `first', 'second`;', '', '// done'];
+    expect(rejoined('TS', lines)).toEqual(lines);
+  });
+
+  it('rejoins an HTML sample\'s tokens into its lines', () => {
+    const lines = ['<p class="said">', '  it\'s "here"', '</p>'];
+    expect(rejoined('HTML', lines)).toEqual(lines);
+  });
+
+  it('rejoins a CSS sample\'s tokens into its lines', () => {
+    const lines = ['a {', '  color: red;', '}'];
+    expect(rejoined('CSS', lines)).toEqual(lines);
+  });
+
+  it('gives an empty line no tokens', () => {
+    expect(highlight.tokensOf('TS', ['const a = 1;', '', 'const b = 2;'])[1]).toEqual([]);
   });
 });
