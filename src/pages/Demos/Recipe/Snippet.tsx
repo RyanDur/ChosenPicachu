@@ -69,7 +69,7 @@ export const Snippet: FC<Props> = ({label, lines}) => {
           {has(indent) && <span className="indent">{indent}</span>}
           {dim
             ? code
-            : highlight(label, code).map(({text: piece, kind}, part) =>
+            : highlight.tokensOf(label, code).map(({text: piece, kind}, part) =>
               kind === 'plain' ? piece : <span className={inkOf[kind]} key={part}>{piece}</span>)}
           {'\n'}
         </span>;
