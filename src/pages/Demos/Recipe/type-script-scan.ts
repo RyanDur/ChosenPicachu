@@ -152,7 +152,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
       elementEndedAt = at + (selfClosing ? 2 : 1);
       return elementEndedAt;
     }
-    if (here === '"' || here === '\'') return recordRun(at, endOfQuoted(text, at, here), 'string');
+    if (here === '"' || here === '\'') return recordRun(at, endOf(text, at + 1, here), 'string');
     if (here === '{') return enterBraces(at);
     if (length > 0 && text[at + length] === '=') return recordRun(at, at + length, 'attribute');
     return at + Math.max(length, 1);
