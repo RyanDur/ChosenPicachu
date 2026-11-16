@@ -60,13 +60,13 @@ const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
 
 export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
-  const split = lines.map(({text}) => splitIndent(text));
-  const inked = highlight.tokensOf(label, split.map(({code}) => code));
+  const indented = lines.map(({text}) => splitIndent(text));
+  const inked = highlight.tokensOf(label, indented.map(({code}) => code));
   return <figure className="sample">
     <pre className="snippet code-paper-filled code-ink listing rounded-corners monospaced">
       <span className="lang caption uppercase comment-ink" aria-hidden="true">{label}</span>
       <code>{lines.map(({dim = false}, at) => {
-        const {indent, code} = split[at];
+        const {indent, code} = indented[at];
         return <span className={classNames('line', dim && inkOf.comment)} key={at}>
           {has(indent) && <span className="indent">{indent}</span>}
           {dim
