@@ -8,6 +8,9 @@ const kinds = (label: 'HTML' | 'CSS' | 'TS', line: string): Record<string, Kind>
     .filter(({kind}) => kind !== 'plain')
     .map(({text, kind}) => [text, kind]));
 
+const constOnTheLineAfter = (line: string): Kind | undefined =>
+  highlight.tokensOf('TS', [line, 'const a = 1;'])[1].find(({text}) => text === 'const')?.kind;
+
 describe('the code voice', () => {
   it('reads a JSX comment in a TS line as a comment', () => {
     expect(kinds('TS', '<p>{/* note */}</p>')['{/* note */}']).toBe('comment');
@@ -296,6 +299,18 @@ describe('the code voice', () => {
 
   it('reads type parameters before an arrow function\'s parameters as code', () => {
     expect(kinds('TS', 'const f = <T>(x: T) => x;').T).not.toBe('tag');
+  });
+
+  it('reads const type parameters as code, and the line after them too', () => {
+    expect(constOnTheLineAfter('const f = <const T extends string>(x: T) => x;')).toBe('keyword');
+  });
+
+  it('reads in type parameters as code, and the line after them too', () => {
+    expect(constOnTheLineAfter('const f = <in T>(x: T) => x;')).toBe('keyword');
+  });
+
+  it('reads out type parameters as code, and the line after them too', () => {
+    expect(constOnTheLineAfter('const f = <out T>(x: T) => x;')).toBe('keyword');
   });
 
   it('opens an element right after a word when it has an attribute', () => {
