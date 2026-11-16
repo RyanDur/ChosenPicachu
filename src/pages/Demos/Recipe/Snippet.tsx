@@ -3,14 +3,8 @@ import {has, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {Kind, Label} from './highlight';
 import {excerpts} from './excerpts';
-import {CodeFile} from './sample';
+import {Line} from './sample';
 import './Snippet.css';
-
-export type Line = {
-  text: string;
-  dim?: boolean;
-  from?: {file: CodeFile; line: number};
-};
 
 type Props = {
   label: Label;

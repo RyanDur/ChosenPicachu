@@ -9,3 +9,9 @@ export type CodeFile = {
   url: string;
   owner?: string;
 };
+
+export type Line = {
+  text: string;
+  dim?: boolean;
+  from?: {file: CodeFile; line: number};
+};

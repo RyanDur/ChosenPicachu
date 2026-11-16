@@ -1,4 +1,4 @@
-import {Line} from './Snippet';
+import {Line} from './sample';
 
 type Lines = {
   plain: (text: string) => Line;
