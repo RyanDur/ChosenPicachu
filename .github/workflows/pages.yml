@@ -20,12 +20,13 @@ jobs:
       NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       VITE_APP_API_AIC: ${{ vars.VITE_APP_API_AIC }}
       VITE_APP_HARVARD_API: ${{ vars.VITE_APP_HARVARD_API }}
+      VITE_APP_HARVARD_API_KEY: ${{ secrets.VITE_APP_HARVARD_API_KEY }}
       VITE_APP_VAM_API: ${{ vars.VITE_APP_VAM_API }}
       VITE_APP_AIC_PICTURES: https://www.artic.edu/iiif/2
       VITE_APP_VAM_PICTURES: https://framemark.vam.ac.uk/collections
       VITE_APP_CLEVELAND_API: https://openaccess-api.clevelandart.org/api/artworks
       VITE_APP_USERS_API: /api/users
-      VITE_APP_FEEDBACK_TOKEN: report-only
+      VITE_APP_FEEDBACK_TOKEN: ${{ secrets.CHOSEN_PICACHU_FEEDBACK }}
       VITE_APP_TRADE_FEED: wss://ws-feed.exchange.coinbase.com
       VITE_APP_TRADE_PRODUCT: BTC-USD
       VITE_APP_TRADE_HISTORY: https://api.exchange.coinbase.com
