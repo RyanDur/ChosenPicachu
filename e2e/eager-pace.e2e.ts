@@ -2,12 +2,10 @@ import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {tablesFrame} from './__test_support';
 
-for (const {name, at, holder} of tablesFrame.stagesWith('pace=eager')) {
-  test.describe(`an eager table, in ${name}`, () => {
+for (const stage of tablesFrame.stagesWith('pace=eager')) {
+  test.describe(`an eager table, in ${stage.name}`, () => {
     test('a held column takes each seat it crosses before it is dropped', async ({page}) => {
-      await page.goto(at);
-      const trades = tablesFrame.dragSortTable(page, holder(page));
-      await expect(trades.columnHeader('trades')).toBeVisible();
+      const trades = await tablesFrame.opened(page, stage);
 
       const hold = await trades.holdColumn('trades');
       await hold.carryTo(trades.columnHeader('vwap'));
@@ -18,8 +16,8 @@ for (const {name, at, holder} of tablesFrame.stagesWith('pace=eager')) {
 
     test('a column whose button is let go outside the page lands where it was carried', async ({page, browserName}) => {
       test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a pointer whose button was let go elsewhere');
-      await page.goto(at);
-      const trades = tablesFrame.dragSortTable(page, holder(page));
+      await page.goto(stage.at);
+      const trades = tablesFrame.dragSortTable(page, stage.holder(page));
       await trades.listenToTheMoveReport();
       const hold = await trades.holdColumn('trades');
       await hold.carryTo(trades.columnHeader('vwap'));
@@ -31,9 +29,7 @@ for (const {name, at, holder} of tablesFrame.stagesWith('pace=eager')) {
     });
 
     test('a held row takes each seat it crosses before it is dropped', async ({page}) => {
-      await page.goto(at);
-      const trades = tablesFrame.dragSortTable(page, holder(page));
-      await expect(trades.columnHeader('trades')).toBeVisible();
+      const trades = await tablesFrame.opened(page, stage);
 
       const hold = await trades.holdRow(1);
       await hold.carryTo(trades.row(/last 15 minutes/));

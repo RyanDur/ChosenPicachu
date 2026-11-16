@@ -1,6 +1,7 @@
 import type {FrameLocator, Locator, Page} from '@playwright/test';
 import {siteFrame} from './site';
 import {type Box, boxOf} from './box';
+import {assertionPatience} from './patience';
 
 export type Stage = {name: string; at: string; holder: (page: Page) => Locator | FrameLocator};
 
@@ -248,9 +249,17 @@ const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
   };
 };
 
+const opened = async (page: Page, {at, holder}: Pick<Stage, 'at' | 'holder'>) => {
+  await page.goto(at);
+  const table = dragSortTable(page, holder(page));
+  await table.columnHeader('trades').waitFor({timeout: assertionPatience});
+  return table;
+};
+
 export const tablesFrame = {
   stages,
   stagesWith,
   card: tablesCard,
-  dragSortTable
+  dragSortTable,
+  opened
 };

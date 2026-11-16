@@ -2,11 +2,9 @@ import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {type FingerPress, iPadUpright, iPhone, type Stage, tablesFrame} from './__test_support';
 
-for (const {name, at, holder} of tablesFrame.stagesWith('origin=keep')) {
-  test(`a column and a row still land in their new seats while their origin stays in place, in ${name}`, async ({page}) => {
-    await page.goto(at);
-    const trades = tablesFrame.dragSortTable(page, holder(page));
-    await expect(trades.columnHeader('trades')).toBeVisible();
+for (const stage of tablesFrame.stagesWith('origin=keep')) {
+  test(`a column and a row still land in their new seats while their origin stays in place, in ${stage.name}`, async ({page}) => {
+    const trades = await tablesFrame.opened(page, stage);
 
     await trades.dragColumnPast('trades', 'vwap');
     await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
@@ -16,11 +14,9 @@ for (const {name, at, holder} of tablesFrame.stagesWith('origin=keep')) {
   });
 }
 
-for (const {name, at, holder} of tablesFrame.stages) {
-  test(`a column dragged past two neighbors is reported once, where it lands, in ${name}`, async ({page}) => {
-    await page.goto(at);
-    const trades = tablesFrame.dragSortTable(page, holder(page));
-    await expect(trades.columnHeader('trades')).toBeVisible();
+for (const stage of tablesFrame.stages) {
+  test(`a column dragged past two neighbors is reported once, where it lands, in ${stage.name}`, async ({page}) => {
+    const trades = await tablesFrame.opened(page, stage);
     await trades.listenToTheMoveReport();
 
     await trades.dragColumnPast('trades', 'sells');
@@ -30,11 +26,9 @@ for (const {name, at, holder} of tablesFrame.stages) {
   });
 }
 
-for (const {name, at, holder} of tablesFrame.stages) {
-  test(`a row dragged past two neighbors is reported once, where it lands, in ${name}`, async ({page}) => {
-    await page.goto(at);
-    const trades = tablesFrame.dragSortTable(page, holder(page));
-    await expect(trades.columnHeader('trades')).toBeVisible();
+for (const stage of tablesFrame.stages) {
+  test(`a row dragged past two neighbors is reported once, where it lands, in ${stage.name}`, async ({page}) => {
+    const trades = await tablesFrame.opened(page, stage);
     await trades.listenToTheMoveReport();
 
     await trades.dragRowPast(1, /last 15 minutes/);
@@ -44,11 +38,9 @@ for (const {name, at, holder} of tablesFrame.stages) {
   });
 }
 
-for (const {name, at, holder} of tablesFrame.stages) {
-  test(`the first and last columns hold their posts, in ${name}`, async ({page}) => {
-    await page.goto(at);
-    const trades = tablesFrame.dragSortTable(page, holder(page));
-    await expect(trades.columnHeader('trades')).toBeVisible();
+for (const stage of tablesFrame.stages) {
+  test(`the first and last columns hold their posts, in ${stage.name}`, async ({page}) => {
+    const trades = await tablesFrame.opened(page, stage);
 
     await trades.dragColumnPast('lookback', 'buys');
     await trades.dragColumnPast('change', 'volume');
@@ -59,11 +51,9 @@ for (const {name, at, holder} of tablesFrame.stages) {
   });
 }
 
-for (const {name, at, holder} of tablesFrame.stages) {
-  test(`a menu choice sorts, and never lifts the column, in ${name}`, async ({page}) => {
-    await page.goto(at);
-    const trades = tablesFrame.dragSortTable(page, holder(page));
-    await expect(trades.columnHeader('trades')).toBeVisible();
+for (const stage of tablesFrame.stages) {
+  test(`a menu choice sorts, and never lifts the column, in ${stage.name}`, async ({page}) => {
+    const trades = await tablesFrame.opened(page, stage);
 
     await trades.sortBy('trades', 'descending');
 
@@ -75,13 +65,11 @@ for (const {name, at, holder} of tablesFrame.stages) {
 const aFingerCarriesTheColumn = async (
   page: Page,
   browserName: string,
-  {at, holder}: Stage,
+  stage: Stage,
   from: FingerPress
 ): Promise<void> => {
   test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol moves a finger through a drag');
-  await page.goto(at);
-  const trades = tablesFrame.dragSortTable(page, holder(page));
-  await expect(trades.columnHeader('trades')).toBeVisible();
+  const trades = await tablesFrame.opened(page, stage);
 
   await trades.fingerDragColumn('trades', {by: 240, from});
 
