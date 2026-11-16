@@ -1,5 +1,5 @@
 import {not} from '@ryandur/sand';
-import {boxOf} from './box';
+import {laidOutBoxOf} from './box';
 import type {Locator, Page} from '@playwright/test';
 import {siteFrame} from './site';
 
@@ -197,9 +197,13 @@ export const oldWayFoldLabels = async (page: Page): Promise<(string | undefined)
     .evaluateAll(toggles => toggles.map(toggle =>
       toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? undefined : undefined));
 
+// a part not laid out yet measures as infinitely far, which fails every poll that asks for a small gap
+const unmeasured = Number.POSITIVE_INFINITY;
+
 export const gapUnder = async (around: Locator, inside: Locator): Promise<number> => {
-  const [outer, inner] = await Promise.all([boxOf(around), boxOf(inside)]);
-  return Math.abs(outer.y + outer.height - inner.y - inner.height);
+  const [outer, inner] = await Promise.all([laidOutBoxOf(around), laidOutBoxOf(inside)]);
+  return outer.and(inner).map(([outerBox, innerBox]) =>
+    Math.abs(outerBox.y + outerBox.height - innerBox.y - innerBox.height)).orElse(unmeasured);
 };
 
 const plainFoldTitle = 'A fold measured by plain script';
@@ -232,8 +236,9 @@ export const plainFold = (page: Page) => {
     },
     gapUnderItsText: (): Promise<number> => gapUnder(panel, text),
     textBelowTheFrame: async (): Promise<number> => {
-      const [around, inner] = await Promise.all([boxOf(frame), boxOf(text)]);
-      return inner.y + inner.height - around.y - around.height;
+      const [around, inner] = await Promise.all([laidOutBoxOf(frame), laidOutBoxOf(text)]);
+      return around.and(inner).map(([frameBox, textBox]) =>
+        textBox.y + textBox.height - frameBox.y - frameBox.height).orElse(unmeasured);
     }
   };
 };
