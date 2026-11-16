@@ -21,7 +21,7 @@ type ScanState = CodeState | TagState | MarkupTextState | TemplateLiteralState;
 const valueCanStart = new RegExp(String.raw`(?:^|[([{=,:;?!&|+\-*/%<>~]|\.\.\.|\b(?:${typeScriptWords.beforeAValue.join('|')}))\s*$`);
 const elementCanStart = /(?:^|\s|[>([{}=,:;?!&|+\-*/%])$/;
 const plainlyAnElement = /^<[A-Za-z][\w.:-]*(?:\s+[A-Za-z][\w-]*=|\s*\/>)/;
-const typeParameters = /^<(?:(?:const|in|out)\s+)?[A-Za-z_$][\w$]*(?:\s+extends\b|\s*,|\s*=|>\s*\()/;
+const typeParameters = /^<(?:(?:const|in|out)\s+)?(?:[A-Za-z_$][\w$]*(?:\s+extends\b|\s*,|\s*=)|[A-Z][\w$]*>\s*\()/;
 
 const endOfQuoted = (text: string, from: number, quote: string): number => {
   let at = from + 1;

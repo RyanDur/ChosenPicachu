@@ -373,6 +373,10 @@ describe('the code voice', () => {
     expect(divided.find(({text}) => text === '\'x\'')?.kind).toBe('string');
   });
 
+  it('opens an element whose text starts with a parenthesis, and reads the line after it as code', () => {
+    expect(constOnTheLineAfter('return <p>(press ` to open)</p>;')).toBe('keyword');
+  });
+
   it('keeps a type word at the end of the line before from coloring a line\'s first word', () => {
     const [, called] = highlight.tokensOf('TS', ['// returns a brand new', 'Map.groupBy(list, key);']);
     expect(called[0]).toEqual({text: 'Map.', kind: 'plain'});
