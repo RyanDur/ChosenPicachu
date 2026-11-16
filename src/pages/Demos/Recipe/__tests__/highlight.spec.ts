@@ -328,6 +328,14 @@ describe('the code voice', () => {
     expect(constOnTheLineAfter('const f = <out T>(x: T) => x;')).toBe('keyword');
   });
 
+  it('reads type arguments on an element as part of its tag, and the line after it as code', () => {
+    expect(constOnTheLineAfter('return <Table<Row> rows={rows}/>;')).toBe('keyword');
+  });
+
+  it('reads a left shift as code, and the line after it as code', () => {
+    expect(constOnTheLineAfter('const x = 1<<n;')).toBe('keyword');
+  });
+
   it('reads a backtick inside a regular expression as part of it, and the line after it as code', () => {
     expect(constOnTheLineAfter('const re = /[`]/;')).toBe('keyword');
   });

@@ -19,7 +19,7 @@ type TemplateLiteralState = {within: 'template'; from: number};
 type ScanState = CodeState | TagState | MarkupTextState | TemplateLiteralState;
 
 const valueCanStart = new RegExp(String.raw`(?:^|[([{=,:;?!&|+\-*/%<>~]|\.\.\.|\b(?:${typeScriptWords.beforeAValue.join('|')}))\s*$`);
-const elementCanStart = /(?:^|\s|[>([{}=,:;?!&|+\-*/%<])$/;
+const elementCanStart = /(?:^|\s|[>([{}=,:;?!&|+\-*/%])$/;
 const plainlyAnElement = /^<[A-Za-z][\w.:-]*(?:\s+[A-Za-z][\w-]*=|\s*\/>)/;
 const typeParameters = /^<(?:(?:const|in|out)\s+)?[A-Za-z_$][\w$]*(?:\s+extends\b|\s*,|>\s*\()/;
 
@@ -37,6 +37,17 @@ const endOf = (text: string, from: number, closer: string): number => {
 const endOfLine = (text: string, from: number): number => {
   const found = text.indexOf('\n', from);
   return found === -1 ? text.length : found;
+};
+
+const endOfTypeArguments = (text: string, from: number): number => {
+  let depth = 0;
+  let at = from;
+  do {
+    if (text[at] === '<') depth += 1;
+    if (text[at] === '>') depth -= 1;
+    at += 1;
+  } while (at < text.length && depth > 0);
+  return at;
 };
 
 const endOfRegularExpression = (text: string, from: number): number => {
@@ -152,6 +163,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
       return elementEndedAt;
     }
     if (here === '"' || here === '\'') return recordRun(at, endOf(text, at + 1, here), 'string');
+    if (here === '<') return endOfTypeArguments(text, at);
     if (here === '{') return enterBraces(at);
     if (length > 0 && text[at + length] === '=') return recordRun(at, at + length, 'attribute');
     return at + Math.max(length, 1);
