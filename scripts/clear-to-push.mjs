@@ -2,9 +2,8 @@ import {has, maybe, not} from '@ryandur/sand';
 import {execFileSync} from 'node:child_process';
 
 /** @typedef {{name: string, bucket: string, workflow: string}} Check */
-/** @typedef {{number: number, headRefName: string, files: {path: string}[]}} Pull */
+/** @typedef {{number: number, headRefName: string, files: {path: string}[], changedFiles?: number}} Pull */
 
-/** @param {Check[]} checks */
 const reportsOnly = ['pages'];
 
 /** @param {Check} check */
@@ -69,6 +68,19 @@ export const checksOf = (branch, run = outputOf) => {
 };
 
 /**
+ * gh lists at most a hundred files a pull request, so a larger one is read from its diff.
+ * @param {Run} run
+ * @return {Pull[]}
+ */
+const pullsOf = run => {
+  /** @type {Pull[]} */
+  const listed = JSON.parse(run('gh', 'pr', 'list', '--state', 'open', '--limit', '1000', '--json', 'number,headRefName,files,changedFiles'));
+  return listed.map(pull => maybe(pull.changedFiles).orElse(0) > pull.files.length
+    ? {...pull, files: run('gh', 'pr', 'diff', String(pull.number), '--name-only').split('\n').filter(path => has(path)).map(path => ({path}))}
+    : pull);
+};
+
+/**
  * @param {string} branch
  * @param {string} pushed
  * @param {Run} run
@@ -76,8 +88,7 @@ export const checksOf = (branch, run = outputOf) => {
  */
 export const clearToPush = (branch, pushed, run = outputOf) => {
   try {
-    /** @type {Pull[]} */
-    const pulls = JSON.parse(run('gh', 'pr', 'list', '--state', 'open', '--json', 'number,headRefName,files'));
+    const pulls = pullsOf(run);
     run('git', 'fetch', '--quiet', 'origin', 'main');
     const changed = run('git', 'diff', '--name-only', '--no-renames', `origin/main...${pushed}`).split('\n').filter(path => has(path));
     const opened = pulls.some(({headRefName}) => headRefName === branch);
