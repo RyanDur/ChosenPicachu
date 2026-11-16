@@ -340,6 +340,14 @@ describe('the code voice', () => {
     expect(constOnTheLineAfter('return <Table<Row> rows={rows}/>;')).toBe('keyword');
   });
 
+  it('reads a lone type argument as a type', () => {
+    expect(kinds('TS', 'const [item, choose] = useState<Item>(first);').Item).toBe('type');
+  });
+
+  it('leaves a capitalised name after a less-than sign plain', () => {
+    expect(kinds('TS', 'for (let i = 0; i<Max; i++) {}').Max).toBeUndefined();
+  });
+
   it('reads a left shift as code, and the line after it as code', () => {
     expect(constOnTheLineAfter('const x = 1<<n;')).toBe('keyword');
   });
