@@ -1,6 +1,6 @@
 import {has, not} from '@ryandur/sand';
-import {scan} from './ts-scan';
-import {tsWords} from './ts-words';
+import {scan} from './type-script-scan';
+import {typeScriptWords} from './type-script-words';
 
 export type Kind = 'plain' | 'keyword' | 'string' | 'number' | 'comment' | 'tag' | 'attribute' | 'type' | 'call';
 
@@ -56,9 +56,9 @@ const tokensFrom = (line: string, found: Found[]): Token[] => {
 const tokensMatching = (line: string, tokenPatterns: ReadonlyArray<TokenPattern>): Token[] =>
   tokensFrom(line, matchesOf(line, tokenPatterns, [], () => true));
 
-const tsPatterns: ReadonlyArray<TokenPattern> = [
+const typeScriptPatterns: ReadonlyArray<TokenPattern> = [
   {pattern: /(?<=\w<)[A-Z]\w*(?=,|>[(;)=])/g, kind: 'type'},
-  {pattern: new RegExp(`\\b(?:${tsWords.keywords.join('|')})\\b`, 'g'), kind: 'keyword'},
+  {pattern: new RegExp(`\\b(?:${typeScriptWords.colored.join('|')})\\b`, 'g'), kind: 'keyword'},
   {pattern: /(?<=:[ \t]*)(?:readonly\s+)?[A-Z]\w*(?=[[<,;)=\s|]|$)/g, kind: 'type'},
   {pattern: /(?<=\b(?:type|extends|new)\s+)[A-Z]\w*/g, kind: 'type'},
   {pattern: /(?<=<)[A-Z]\w*|(?<=, )[A-Z]\w*(?=>)/g, kind: 'type'},
@@ -66,9 +66,10 @@ const tsPatterns: ReadonlyArray<TokenPattern> = [
   {pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
 
-const ts = (text: string): Token[] => {
-  const {runs, isCode} = scan.ts(text);
-  return tokensFrom(text, matchesOf(text, tsPatterns, runs, (start, end) => isCode.slice(start, end).every(Boolean)));
+const typeScript = (text: string): Token[] => {
+  const {runs, isCode} = scan.typeScript(text);
+  return tokensFrom(text, matchesOf(text, typeScriptPatterns, runs,
+    (start, end) => isCode.slice(start, end).every(Boolean)));
 };
 
 const css: ReadonlyArray<TokenPattern> = [
@@ -99,7 +100,7 @@ const wholeSample = (grammar: (text: string) => Token[]) =>
   (lines: readonly string[]): Token[][] => linesOf(grammar(lines.join('\n')));
 
 const grammars = {
-  TS: wholeSample(ts),
+  TS: wholeSample(typeScript),
   CSS: (lines: readonly string[]) => lines.map(line => tokensMatching(line, css)),
   HTML: wholeSample(markup)
 };

@@ -1,5 +1,5 @@
 import {maybe, not} from '@ryandur/sand';
-import {tsWords} from './ts-words';
+import {typeScriptWords} from './type-script-words';
 
 export type Run = {
   start: number;
@@ -18,7 +18,7 @@ type MarkupTextState = {within: 'text'; open: number};
 type TemplateLiteralState = {within: 'template'; from: number};
 type ScanState = CodeState | TagState | MarkupTextState | TemplateLiteralState;
 
-const valueCanStart = new RegExp(String.raw`(?:^|[([{=,:;?!&|+\-*/%<~]|=>|\.\.\.|\b(?:${tsWords.beforeAValue.join('|')}))\s*$`);
+const valueCanStart = new RegExp(String.raw`(?:^|[([{=,:;?!&|+\-*/%<~]|=>|\.\.\.|\b(?:${typeScriptWords.beforeAValue.join('|')}))\s*$`);
 const elementCanStart = /(?:^|\s|[>([{}=,:;?!&|+\-*/%<])$/;
 const plainlyAnElement = /^<[A-Za-z][\w.:-]*(?:\s+[A-Za-z][\w-]*=|\s*\/>)/;
 const typeParameters = /^<[A-Za-z_$][\w$]*(?:\s+extends\b|\s*,|>\s*\()/;
@@ -157,11 +157,11 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
 };
 
 type Scan = {
-  ts: (text: string) => Scanned;
+  typeScript: (text: string) => Scanned;
   markup: (text: string) => Scanned;
 };
 
 export const scan: Scan = {
-  ts: text => scanFrom(text, {within: 'code', closesOnBrace: false, braces: 0}),
+  typeScript: text => scanFrom(text, {within: 'code', closesOnBrace: false, braces: 0}),
   markup: text => scanFrom(text, {within: 'text', open: Number.POSITIVE_INFINITY})
 };
