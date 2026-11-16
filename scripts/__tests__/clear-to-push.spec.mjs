@@ -123,6 +123,32 @@ describe('clear to push', () => {
     expect(clearToPush('verify/b', 'HEAD', git).refused).toEqual(['#1 already changes src/a.ts. That work goes to #1’s owner.']);
   });
 
+  test('a file past the first hundred of a large open pull request is still seen as shared', () => {
+    const hundred = Array.from({length: 100}, (_, at) => `src/${at}.ts`);
+    const github = (_command, ...args) => {
+      if (args[1] === 'list') return JSON.stringify([{...pull(1, 'verify/a', hundred), changedFiles: 101}]);
+      if (args[1] === 'diff') return [...hundred, 'src/late.ts'].join('\n');
+      if (args[0] === 'diff') return 'src/late.ts';
+      return '';
+    };
+
+    expect(clearToPush('verify/b', 'HEAD', github).refused).toEqual(['#1 already changes src/late.ts. That work goes to #1’s owner.']);
+  });
+
+  test('every open pull request is read, past gh’s default of thirty', () => {
+    const others = Array.from({length: 30}, (_, at) => pull(at + 1, `verify/${at}`, []));
+    const github = (_command, ...args) => {
+      if (args[1] === 'list') {
+        const all = [...others, pull(31, 'verify/b', ['src/b.ts'])];
+        return JSON.stringify(args.includes('--limit') ? all : all.slice(0, 30));
+      }
+      if (args[1] === 'checks') return JSON.stringify([{name: 'review', bucket: 'pending', workflow: 'Checks'}]);
+      return '';
+    };
+
+    expect(clearToPush('verify/b', 'HEAD', github).refused).toEqual(['#31 is still running review. Push once the run is done, with every fix for it.']);
+  });
+
   test('a branch with no pull request yet is checked for shared files without reading any checks', () => {
     const run = (...args) => {
       if (args.includes('checks')) throw new Error('checks were read');
