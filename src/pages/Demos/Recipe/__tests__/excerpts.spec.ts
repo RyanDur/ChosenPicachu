@@ -50,4 +50,12 @@ describe('the code voice, excerpt by excerpt', () => {
     const [, after] = excerpts.tokensOf('TS', [carved('return <ul>', store, 1), lines.plain('const a = 1;')]);
     expect(kindOfConst(after)).toBe('keyword');
   });
+
+  it('reads a carved line that starts inside its file\'s template as that template\'s end', () => {
+    const styles: CodeFile = {...store, text: 'const a = 1;\nconst sheet = css`\n`;\nexport const b = 2;'};
+    const [, , , after] = excerpts.tokensOf('TS', [
+      carved('const a = 1;', styles, 1), lines.aside('…'), carved('`;', styles, 3), carved('export const b = 2;', styles, 4)
+    ]);
+    expect(kindOfConst(after)).toBe('keyword');
+  });
 });

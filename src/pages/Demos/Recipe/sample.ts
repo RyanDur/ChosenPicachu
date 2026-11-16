@@ -8,6 +8,7 @@ export type CodeFile = {
   path: string;
   url: string;
   owner?: string;
+  text?: string;
 };
 
 export type Line = {
