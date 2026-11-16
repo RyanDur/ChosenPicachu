@@ -52,11 +52,15 @@ const keywords = [
   'switch', 'case', 'default', 'throw', 'try', 'catch', 'finally', 'await', 'async', 'while', 'for', 'declare'
 ];
 
-const wordsBeforeAValue = [...keywords, 'module', 'satisfies', 'yield'].join('|');
+const wordsBeforeAValue = [
+  'return', 'case', 'as', 'satisfies', 'extends', 'from', 'import', 'export', 'default', 'throw', 'in', 'of', 'typeof',
+  'void', 'await', 'yield', 'else', 'module'
+].join('|');
 
 const stringOrComment = new RegExp(
-  String.raw`(?<string>(?<=(?:^|[([{=,:;?!&|+\-*/%<]|=>|\b(?:${wordsBeforeAValue}))\s*)'(?:[^'\\]|\\.)*'` +
-  String.raw`|\x60(?:[^\x60\\]|\\.)*\x60|"(?:[^"\\]|\\.)*")|(?<comment>\/\/.*$|\{\/\*.*?\*\/})`,
+  String.raw`(?<string>(?<=(?:^|[([{=,:;?!&|+\-*/%<]|=>|\b(?:${wordsBeforeAValue}))\s*)` +
+  String.raw`(?:'(?:[^'\\]|\\.)*'|\x60(?:[^\x60\\]|\\.)*\x60|"(?:[^"\\]|\\.)*"))` +
+  String.raw`|(?<comment>\/\/.*$|\{\/\*.*?\*\/})`,
   'g');
 
 const ts: ReadonlyArray<TokenPattern> = [
@@ -85,7 +89,7 @@ const css: ReadonlyArray<TokenPattern> = [
 
 const html: ReadonlyArray<TokenPattern> = [
   {pattern: /\{\/\*.*?\*\/}|<!--.*?-->/g, kind: 'comment'},
-  {pattern: /(?<=(?:[([{=,:;?!&|+\-*/%<]|=>)\s*)(?:'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")/g, kind: 'string'},
+  {pattern: /(?<=(?:^|[([{=,:;?!&|+\-*/%<]|=>)\s*)(?:'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")/g, kind: 'string'},
   {pattern: /(?<=<\/?)[\w.-]+/g, kind: 'tag'},
   {pattern: /(?<=<[\w.-]+\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
   {pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
