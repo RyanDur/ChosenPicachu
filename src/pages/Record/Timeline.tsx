@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {maybe, some} from '@ryandur/sand';
+import {some} from '@ryandur/sand';
 import {
   Need, StructureArrives, PresentationLeavesHome, BehaviorBorn, NeedOutrunsStandards, BrowsersAgree, ZenGarden,
   BrowsersTakePen, PageBecomesApplication, SomeoneNeedsComponents, Html5SaysIt, OneDirection, DocumentComesBack,
@@ -40,14 +40,17 @@ type Entry = {readonly kind: 'moment'; readonly key: MomentKey}
   | {readonly kind: 'year'; readonly year: string; readonly momentsInTheYear: readonly MomentKey[]; readonly sharedYear: SharedYear};
 
 const entries = moments.inOrder.reduce<readonly Entry[]>((entriesSoFar, key) => {
-  const {year} = moments.headings[key].date;
-  return maybe(moments.sharedYears[year]).either(
-    (sharedYear): readonly Entry[] => entriesSoFar.some(entry => entry.kind === 'year' && entry.year === year)
-      ? entriesSoFar
-      : [...entriesSoFar, {
-        kind: 'year', year, momentsInTheYear: moments.inOrder.filter(other => moments.headings[other].date.year === year), sharedYear
-      }],
-    (): readonly Entry[] => [...entriesSoFar, {kind: 'moment', key}]);
+  const {date} = moments.headings[key];
+  if (date.kind === 'year') return [...entriesSoFar, {kind: 'moment', key}];
+  const {year} = date;
+  return entriesSoFar.some(entry => entry.kind === 'year' && entry.year === year)
+    ? entriesSoFar
+    : [...entriesSoFar, {
+      kind: 'year',
+      year,
+      momentsInTheYear: moments.inOrder.filter(other => moments.headings[other].date.year === year),
+      sharedYear: moments.sharedYears[year]
+    }];
 }, []);
 
 const TimelineMoment: FC<{moment: MomentKey}> = ({moment}) => {
