@@ -58,4 +58,7 @@ jobs:
           npm run build
           mv build/client "$RUNNER_TEMP/pull"
       - name: Name the pages that changed
-        run: node scripts/pages-summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          git fetch --quiet origin "$GITHUB_SHA"
+          git checkout "$GITHUB_SHA" -- scripts/pages-summary.mjs
+          node scripts/pages-summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"
