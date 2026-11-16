@@ -12,15 +12,20 @@ type Found = {
   kind: Kind;
 };
 
+// A string or a comment owns the line from where it opens to where it closes,
+// so whichever opens first wins; its pattern names each kind as a group.
+const openers = ['string', 'comment'] as const;
+
 const scan = (line: string, patterns: ReadonlyArray<{pattern: RegExp; kind: Kind}>): Token[] => {
   const found: Found[] = [];
   patterns.forEach(({pattern, kind}) => {
     for (const match of line.matchAll(pattern)) {
+      const opened = openers.find(opener => has(match.groups?.[opener])) ?? kind;
       const start = match.index;
       const overlaps = found.some(taken =>
         start < taken.start + taken.length && taken.start < start + match[0].length);
       if (not(overlaps) && has(match[0])) {
-        found.push({start, length: match[0].length, kind});
+        found.push({start, length: match[0].length, kind: opened});
       }
     }
   });
@@ -47,9 +52,7 @@ const keywords = [
 ];
 
 const ts: ReadonlyArray<{pattern: RegExp; kind: Kind}> = [
-  {pattern: /(?<!:)\/\/.*$/g, kind: 'comment'},
-  {pattern: /\{\/\*.*?\*\/}/g, kind: 'comment'},
-  {pattern: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
+  {pattern: /(?<string>'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")|(?<comment>\/\/.*$|\{\/\*.*?\*\/})/g, kind: 'string'},
   {pattern: /(?<=\w<)[A-Z]\w*(?=,|>[(;)=])/g, kind: 'type'},
   {pattern: /(?<=<\/?)[A-Za-z][\w.]*/g, kind: 'tag'},
   {pattern: /(?<=<[A-Za-z][\w.]*\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
