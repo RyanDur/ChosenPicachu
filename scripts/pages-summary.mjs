@@ -13,12 +13,17 @@ const blockBoundaries = 'address, article, aside, blockquote, br, caption, dd, d
   'form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, legend, li, main, nav, ol, p, pre, section, summary, table, td, ' +
   'th, tr, ul';
 
+const wordsInAttributes = ['alt', 'aria-label', 'aria-description', 'placeholder', 'title'];
+
 const wordsOf = html => {
   const {document} = new JSDOM(html).window;
   document.querySelectorAll('script, template').forEach(hidden => hidden.remove());
   document.querySelectorAll(blockBoundaries).forEach(block => block.append('\n'));
-  const named = [...document.querySelectorAll('[alt], [aria-label]')]
-    .map(element => element.getAttribute('alt') ?? element.getAttribute('aria-label'));
+  /** @type {Element[]} */
+  const elements = [...document.querySelectorAll('*')];
+  const named = elements.flatMap(element => wordsInAttributes
+    .map(attribute => element.getAttribute(attribute) ?? '')
+    .concat(element.matches('input, textarea') ? [element.getAttribute('value') ?? ''] : []));
   const description = document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
   return [document.title, description, document.body.textContent, ...named].join('\n').split(/\s+/).filter(word => has(word));
 };

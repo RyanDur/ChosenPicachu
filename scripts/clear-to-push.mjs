@@ -1,11 +1,17 @@
-import {has} from '@ryandur/sand';
+import {has, not} from '@ryandur/sand';
 import {execFileSync} from 'node:child_process';
 
-/** @typedef {{name: string, bucket: string}} Check */
+/** @typedef {{name: string, bucket: string, workflow: string}} Check */
 /** @typedef {{number: number, headRefName: string, files: {path: string}[]}} Pull */
 
 /** @param {Check[]} checks */
-const running = checks => checks.filter(({bucket}) => bucket === 'pending').map(({name}) => name);
+const reportsOnly = ['pages'];
+
+/** @param {Check} check */
+const gates = ({workflow, name}) => workflow === 'Checks' && not(reportsOnly.includes(name));
+
+/** @param {Check[]} checks */
+const running = checks => checks.filter(check => gates(check) && check.bucket === 'pending').map(({name}) => name);
 
 /**
  * @param {Pull} own
@@ -52,7 +58,7 @@ const outputOf = (command, ...args) => execFileSync(command, args, {encoding: 'u
  */
 export const checksOf = (branch, run = outputOf) => {
   try {
-    return JSON.parse(run('gh', 'pr', 'checks', branch, '--json', 'name,bucket'));
+    return JSON.parse(run('gh', 'pr', 'checks', branch, '--json', 'name,bucket,workflow'));
   } catch (failure) {
     const {stdout, stderr} = failure;
     if (typeof stdout === 'string' && has(stdout.trim())) return JSON.parse(stdout);
@@ -69,9 +75,11 @@ export const checksOf = (branch, run = outputOf) => {
  */
 export const clearToPush = (branch, pushed, run = outputOf) => {
   try {
+    /** @type {Pull[]} */
     const pulls = JSON.parse(run('gh', 'pr', 'list', '--state', 'open', '--json', 'number,headRefName,files'));
     const changed = run('git', 'diff', '--name-only', `origin/main...${pushed}`).split('\n').filter(path => has(path));
-    return {refused: refusals({branch, changed, pulls, checks: checksOf(branch, run)})};
+    const opened = pulls.some(({headRefName}) => headRefName === branch);
+    return {refused: refusals({branch, changed, pulls, checks: opened ? checksOf(branch, run) : []})};
   } catch (error) {
     return {refused: [], unread: error.message.split('\n')[0]};
   }
