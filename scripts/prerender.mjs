@@ -1,6 +1,7 @@
 import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';
 import {join, resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
+import {maybe} from '@ryandur/sand';
 
 const base = '/ChosenPicachu/';
 const client = 'build/client';
@@ -16,7 +17,7 @@ const {prerender} = await import(pathToFileURL(resolve('build/server/entry.serve
 const withImports = (chunk, into) => {
   if (into.has(chunk)) return into;
   into.add(chunk);
-  (manifest[chunk].imports ?? []).forEach(imported => withImports(imported, into));
+  maybe(manifest[chunk].imports).orElse([]).forEach(imported => withImports(imported, into));
   return into;
 };
 

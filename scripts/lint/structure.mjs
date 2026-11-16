@@ -1,7 +1,7 @@
 import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
 import {dirname, join, relative, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {has, maybe, not} from '@ryandur/sand';
+import {has, maybe, not, nothing, some} from '@ryandur/sand';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = join(root, 'src');
@@ -37,7 +37,7 @@ const resolved = (specifier, fromFile) => {
   if (specifier.includes('?') || base === '') return {};
   if (isDirectory(base)) return {directory: base};
   const file = maybe(['.ts', '.tsx'].map(extension => base + extension).find(existsSync))
-    .orElse(code.test(base) && existsSync(base) ? base : '');
+    .or(() => code.test(base) && existsSync(base) ? some(base) : nothing()).orElse('');
   if (not(has(file))) return {};
   return isIndex(file) ? {directory: dirname(file)} : {file};
 };

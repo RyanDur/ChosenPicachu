@@ -1,10 +1,11 @@
 const {defineConfig} = require('@playwright/test');
+const {maybe} = require('@ryandur/sand');
 
 const unnamed = () => {
   throw new Error('LOOKS_BEFORE names the build to compare against: node scripts/looks/before.mjs main');
 };
 
-const before = process.env.LOOKS_BEFORE ?? unnamed();
+const before = maybe(process.env.LOOKS_BEFORE).or(unnamed).orElse('');
 
 module.exports = defineConfig({
   testDir: './e2e/looks',
