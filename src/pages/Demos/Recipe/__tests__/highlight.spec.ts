@@ -313,6 +313,30 @@ describe('the code voice', () => {
     expect(constOnTheLineAfter('const f = <out T>(x: T) => x;')).toBe('keyword');
   });
 
+  it('reads a backtick inside a regular expression as part of it, and the line after it as code', () => {
+    expect(constOnTheLineAfter('const re = /[`]/;')).toBe('keyword');
+  });
+
+  it('reads a comment opener inside a regular expression as part of it, and the line after it as code', () => {
+    expect(constOnTheLineAfter('const re = /\\/*x/;')).toBe('keyword');
+  });
+
+  it('reads an escaped slash inside a regular expression as part of it, and the line after it as code', () => {
+    expect(constOnTheLineAfter('const re = /\\/`/;')).toBe('keyword');
+  });
+
+  it('reads a tag inside a regular expression as part of it, and the line after it as code', () => {
+    expect(constOnTheLineAfter('const re = /<b>/;')).toBe('keyword');
+  });
+
+  it('reads a slash inside a regular expression\'s class as part of it, and the line after it as code', () => {
+    expect(constOnTheLineAfter('const re = /[/]`/;')).toBe('keyword');
+  });
+
+  it('ends a regular expression\'s class at its bracket, so a string after it is a string', () => {
+    expect(kinds('TS', 'const re = /[a]/, s = \'x\';')['\'x\'']).toBe('string');
+  });
+
   it('opens an element right after a word when it has an attribute', () => {
     expect(kinds('TS', 'Home<b title="x">').b).toBe('tag');
   });

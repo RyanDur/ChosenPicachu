@@ -40,6 +40,17 @@ const endOfLine = (text: string, from: number): number => {
   return found === -1 ? text.length : found;
 };
 
+const endOfRegularExpression = (text: string, from: number): number => {
+  let at = from + 1;
+  let inClass = false;
+  while (at < text.length && text[at] !== '\n' && (inClass || text[at] !== '/')) {
+    if (text[at] === '[') inClass = true;
+    if (text[at] === ']') inClass = false;
+    at += text[at] === '\\' ? 2 : 1;
+  }
+  return text[at] === '/' ? at + 1 : at;
+};
+
 const startOfLine = (text: string, at: number): number => text.lastIndexOf('\n', at - 1) + 1;
 
 const nameAt = (line: string, from: number): number =>
@@ -88,6 +99,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
     if (text.startsWith('{/*', at)) return mark(at, endOf(text, at + 3, '*/}'), 'comment');
     if (text.startsWith('//', at)) return mark(at, endOfLine(text, at), 'comment');
     if (text.startsWith('/*', at)) return mark(at, endOf(text, at + 2, '*/'), 'comment');
+    if (here === '/' && valueCanStart.test(before)) return endOfRegularExpression(text, at);
     if (here === '`') {
       stack.push({within: 'template', from: at});
       return at + 1;
