@@ -3,14 +3,14 @@ import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
-import {bannerExhibit, controlsBeforeTheSteps, oldBanner, wayLabelled, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {bannerExhibit, exhibit, oldBanner, wayLabelled, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 describe('the banner exhibit', () => {
   test('should give its steps before any control', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
     const banners = await bannerExhibit.find();
 
-    expect(controlsBeforeTheSteps(bannerExhibit.steps(banners), bannerExhibit.controls(banners))).toEqual([]);
+    expect(exhibit.controlsBeforeTheSteps(banners)).toEqual([]);
   });
 
   test('should show Raise a banner on both buttons, under the way each is built', async () => {
