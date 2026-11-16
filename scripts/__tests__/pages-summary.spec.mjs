@@ -16,6 +16,12 @@ describe('the pages summary', () => {
     expect(change.after).toContain('drag its handle.');
   });
 
+  test('a wrapper around words that come before a block changes only markup', () => {
+    const [change] = one('index.html', page('<span>Open</span><p>menu</p>'), page('<p><span>Open</span></p><p>menu</p>'));
+
+    expect(change.kind).toBe('markup');
+  });
+
   test('a space lost between two words is a change of words', () => {
     const [change] = one('index.html', page('<p>the <code>details</code> element</p>'), page('<p>the <code>details</code>element</p>'));
 

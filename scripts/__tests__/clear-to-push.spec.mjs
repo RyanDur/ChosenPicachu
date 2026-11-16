@@ -70,6 +70,15 @@ describe('clear to push', () => {
     expect(clearToPush('verify/a', 'HEAD', offline)).toEqual({refused: [], unread: 'could not resolve host: api.github.com'});
   });
 
+  test('when a command fails, the note gives the reason it printed', () => {
+    const expired = () => {
+      throw Object.assign(new Error('Command failed: gh pr list\nHTTP 401: Bad credentials\n'),
+        {stderr: 'HTTP 401: Bad credentials\n'});
+    };
+
+    expect(clearToPush('verify/a', 'HEAD', expired)).toEqual({refused: [], unread: 'HTTP 401: Bad credentials'});
+  });
+
   test('a branch with no pull request yet has no checks', () => {
     const none = () => {
       throw Object.assign(new Error('exit status 1'), {stdout: '', stderr: 'no pull requests found for branch "verify/a"'});

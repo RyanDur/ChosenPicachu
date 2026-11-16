@@ -18,7 +18,10 @@ const wordsInAttributes = ['alt', 'aria-label', 'aria-description', 'placeholder
 const wordsOf = html => {
   const {document} = new JSDOM(html).window;
   document.querySelectorAll('script, template').forEach(hidden => hidden.remove());
-  document.querySelectorAll(blockBoundaries).forEach(block => block.append('\n'));
+  document.querySelectorAll(blockBoundaries).forEach(block => {
+    block.before('\n');
+    block.append('\n');
+  });
   /** @type {Element[]} */
   const elements = [...document.querySelectorAll('*')];
   const attributeWords = elements.flatMap(element => wordsInAttributes
