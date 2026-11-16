@@ -4,7 +4,9 @@ import {Kind, highlight} from '../highlight';
 const columnAlias = 'export type Column<C> = {readonly name: string; readonly width?: number; readonly data: C};';
 
 const kinds = (label: 'HTML' | 'CSS' | 'TS', line: string): Record<string, Kind> =>
-  Object.fromEntries(highlight.tokensOf(label, line).filter(({kind}) => kind !== 'plain').map(({text, kind}) => [text, kind]));
+  Object.fromEntries(highlight.tokensOf(label, line)
+    .filter(({kind}) => kind !== 'plain')
+    .map(({text, kind}) => [text, kind]));
 
 describe('the code voice', () => {
   it('reads a JSX comment in a TS line as a comment', () => {
