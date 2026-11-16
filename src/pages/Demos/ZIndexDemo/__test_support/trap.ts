@@ -1,10 +1,16 @@
 import {is} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+const find = (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^The trap\./});
+const cardOneHasZIndexBox = (trap: HTMLElement): HTMLElement =>
+  within(trap).getByRole('checkbox', {name: 'Card one has z-index: 1'});
 
 export const theTrap = {
-  find: (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^The trap\./}),
+  find,
   cardOne: (trap: HTMLElement): HTMLElement => within(trap).getAllByRole('listitem')
     .filter(card => is(within(card).queryByRole('button', {name: 'Sort by, the old way'})))[0],
   controlIn: (card: HTMLElement, name: string): HTMLElement => within(card).getByRole('button', {name}),
-  cardOneHasZIndexBox: (trap: HTMLElement): HTMLElement => within(trap).getByRole('checkbox', {name: 'Card one has z-index: 1'})
+  cardOneHasZIndexBox,
+  toggleCardOne: async (): Promise<void> => userEvent.click(cardOneHasZIndexBox(await find()))
 };
