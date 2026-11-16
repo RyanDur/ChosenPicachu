@@ -53,6 +53,9 @@ const endOfRegularExpression = (text: string, from: number): number => {
 
 const startOfLine = (text: string, at: number): number => text.lastIndexOf('\n', at - 1) + 1;
 
+const isJsxComment = (text: string, at: number): boolean =>
+  text.startsWith('{/*', at) && text[endOf(text, at + 3, '*/')] === '}';
+
 const nameAt = (line: string, from: number): number =>
   maybe(/^[A-Za-z_$][\w$.:-]*/.exec(line.slice(from))).map(([name]) => name.length).orElse(0);
 
@@ -96,7 +99,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
   const inCode = (frame: CodeState, at: number): number => {
     const here = text[at];
     const before = text.slice(startOfLine(text, at), at);
-    if (text.startsWith('{/*', at)) return mark(at, endOf(text, at + 3, '*/}'), 'comment');
+    if (isJsxComment(text, at)) return mark(at, endOf(text, at + 3, '*/}'), 'comment');
     if (text.startsWith('//', at)) return mark(at, endOfLine(text, at), 'comment');
     if (text.startsWith('/*', at)) return mark(at, endOf(text, at + 2, '*/'), 'comment');
     if (here === '/' && valueCanStart.test(before)) return endOfRegularExpression(text, at);

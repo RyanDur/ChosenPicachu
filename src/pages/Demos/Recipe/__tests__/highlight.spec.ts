@@ -337,6 +337,10 @@ describe('the code voice', () => {
     expect(kinds('TS', 'const re = /[a]/, s = \'x\';')['\'x\'']).toBe('string');
   });
 
+  it('reads a block comment just inside an object\'s brace as a comment, and the line after it as code', () => {
+    expect(constOnTheLineAfter('const o = {/* none */ a: 1};')).toBe('keyword');
+  });
+
   it('opens an element right after a word when it has an attribute', () => {
     expect(kinds('TS', 'Home<b title="x">').b).toBe('tag');
   });
