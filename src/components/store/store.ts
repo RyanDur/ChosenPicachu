@@ -42,7 +42,7 @@ export const store = <State, Action>(
     dispatch: action => top(action)
   };
   const reduce = (action: Action): void => hold(reducer(held.state, action), action);
-  const top = middleware.reduceRight((next, layer) => layer(api)(next), reduce);
+  const top = middleware.reduceRight((next, wrapper) => wrapper(api)(next), reduce);
 
   return Object.freeze({
     get state() {

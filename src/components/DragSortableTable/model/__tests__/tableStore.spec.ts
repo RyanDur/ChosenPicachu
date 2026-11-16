@@ -119,12 +119,12 @@ describe('the table store', () => {
 
   test('the pattern holds its order: middleware, then the reducer, then the listeners', () => {
     const order: string[] = [];
-    const layer: TableMiddleware = () => next => action => {
+    const recording: TableMiddleware = () => next => action => {
       order.push('middleware');
       next(action);
       order.push('middleware after');
     };
-    const store = tableStore(layer);
+    const store = tableStore(recording);
     store.subscribe(previous => order.push(`listener saw ${widths(previous).join()} become ${widths(store.state).join()}`));
 
     store.dispatch(tableActions.measured(columnShares(40, 30), noFloors));
