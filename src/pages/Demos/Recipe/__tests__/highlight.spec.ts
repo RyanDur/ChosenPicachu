@@ -328,6 +328,10 @@ describe('the code voice', () => {
     expect(constOnTheLineAfter('const f = <out T>(x: T) => x;')).toBe('keyword');
   });
 
+  it('reads a type parameter with a default as code, and the line after it too', () => {
+    expect(constOnTheLineAfter('const f = <T = string,>(x: T) => x;')).toBe('keyword');
+  });
+
   it('reads type arguments on an element as part of its tag, and the line after it as code', () => {
     expect(constOnTheLineAfter('return <Table<Row> rows={rows}/>;')).toBe('keyword');
   });
