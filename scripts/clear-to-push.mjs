@@ -77,6 +77,7 @@ export const clearToPush = (branch, pushed, run = outputOf) => {
   try {
     /** @type {Pull[]} */
     const pulls = JSON.parse(run('gh', 'pr', 'list', '--state', 'open', '--json', 'number,headRefName,files'));
+    run('git', 'fetch', '--quiet', 'origin', 'main');
     const changed = run('git', 'diff', '--name-only', `origin/main...${pushed}`).split('\n').filter(path => has(path));
     const opened = pulls.some(({headRefName}) => headRefName === branch);
     return {refused: refusals({branch, changed, pulls, checks: opened ? checksOf(branch, run) : []})};

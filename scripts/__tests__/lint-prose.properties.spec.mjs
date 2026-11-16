@@ -1,4 +1,3 @@
-import {not} from '@ryandur/sand';
 import fc from 'fast-check';
 import {Linter} from 'eslint';
 import parser from '@babel/eslint-parser';
@@ -38,15 +37,16 @@ const piece = fc.oneof({arbitrary: words(12).map(text => ({text, element: false}
   element.map(text => ({text, element: true})));
 
 const heldBreak = fc.constantFrom('{\' \'}\n  ', '\n  {\' \'}\n  ', '{\' \'}\n\n  ');
-const gap = fc.record({breaks: fc.boolean(), held: heldBreak});
+const gap = fc.record({kind: fc.constantFrom('space', 'touch', 'break'), held: fc.boolean(), heldBreak});
 
 const paragraph = fc.array(fc.tuple(piece, gap), {minLength: 2, maxLength: 14}).map(pieces => {
   const body = pieces.map(([{text}], index) => {
     if (index === 0) return text;
-    const [{element: before}, {breaks, held}] = pieces[index - 1];
+    const [{element: before}, {kind, held, heldBreak: breakHeld}] = pieces[index - 1];
     const [{element: after}] = pieces[index];
-    if (not(breaks)) return ` ${text}`;
-    return before || after ? `${held}${text}` : `\n  ${text}`;
+    if (kind === 'touch' && (before || after)) return text;
+    if (kind !== 'break') return ` ${text}`;
+    return held ? `${breakHeld}${text}` : `\n  ${text}`;
   }).join('');
   return `const said = <p>\n  ${body}\n</p>;\n`;
 });
