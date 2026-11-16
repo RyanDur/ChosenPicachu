@@ -10,10 +10,10 @@ const openers: Record<string, Closer> = {'{': '}', '(': ')', '[': ']'};
 const lineAt = (source: string, offset: number): number => source.slice(0, offset).split('\n').length;
 
 const dedented = (lines: string[], from: Sample, firstLine: number): Line[] => {
-  const margin = Math.min(...lines
+  const commonIndent = Math.min(...lines
     .filter(line => has(line.trim()))
     .map(line => line.length - line.trimStart().length));
-  return lines.map((line, at) => ({text: line.slice(margin), from: {file: from, line: firstLine + at}}));
+  return lines.map((line, at) => ({text: line.slice(commonIndent), from: {file: from, line: firstLine + at}}));
 };
 
 const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>): boolean =>
@@ -93,16 +93,16 @@ const between = (sample: Sample, from: string, to: string): Line[] => {
 const withoutImports = (sample: Sample): Line[] => {
   const lines = sample.text.split('\n');
   const lastImport = lines.reduce((found, line, at) => line.startsWith('import ') ? at : found, -1);
-  const body = lines.slice(lastImport + 1);
+  const belowImports = lines.slice(lastImport + 1);
   let firstLine = lastImport + 2;
-  while (body[0]?.trim() === '') {
-    body.shift();
+  while (belowImports[0]?.trim() === '') {
+    belowImports.shift();
     firstLine += 1;
   }
-  while (body[body.length - 1]?.trim() === '') {
-    body.pop();
+  while (belowImports[belowImports.length - 1]?.trim() === '') {
+    belowImports.pop();
   }
-  return dedented(body, sample, firstLine);
+  return dedented(belowImports, sample, firstLine);
 };
 
 const elided = (carved: Line[], from: string, until: string, note: string): Line[] => {
