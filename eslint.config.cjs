@@ -142,6 +142,12 @@ module.exports = [
     rules: {...shape, ...markup, 'prose/breaks-between-words': 'error'}
   },
   {
+    files: ['**/*.{js,mjs,cjs,ts,tsx}'],
+    ignores: ['**/*.d.ts', 'scripts/lint/prose.mjs', 'scripts/__tests__/lint-prose.spec.mjs'],
+    plugins: {prose},
+    rules: {'prose/american-spelling': 'error'}
+  },
+  {
     files: ['src/**/*.ts', 'scripts/**/*.{js,mjs,cjs}', 'e2e/**/*.ts'],
     rules: modulesOnly.presence
   },

@@ -105,3 +105,32 @@ tester.run('breaks-between-words', prose.rules['breaks-between-words'], {
     }
   ]
 });
+
+const british = (word, american) => [{messageId: 'british', data: {british: word, american}}];
+
+tester.run('american-spelling', prose.rules['american-spelling'], {
+  valid: [
+    {name: 'should accept words spelled the American way', code: "const said = 'the color of the center';"},
+    {name: 'should accept a British word inside a Quotation', code: 'const said = <Quotation>the colour</Quotation>;'},
+    {name: 'should accept a British word inside a q', code: 'const said = <q>the colour</q>;'},
+    {name: 'should accept a British word inside a blockquote', code: 'const said = <blockquote>the colour</blockquote>;'},
+    {name: 'should accept a British word nested deeper in a quotation', code: 'const said = <q>the <b>colour</b></q>;'},
+    {name: 'should accept a British word between curly quotes', code: "const said = 'he wrote “the colour” there';"},
+    {name: 'should accept ARIA’s labelledby', code: '<div aria-labelledby="x" />;'},
+    {name: 'should accept ARIA’s labelledby spelled as a property', code: 'const props = {ariaLabelledBy: 1};'},
+    {name: 'should accept a string with no words', code: "const said = '123';"},
+    {name: 'should accept a number', code: 'const said = 1;'},
+    {name: 'should accept a raw template with no cooked text', code: 'const said = String.raw`\\unicode`;'}
+  ],
+  invalid: [
+    {name: 'should refuse a British word in a comment', code: '// the colour\nconst said = 1;', errors: british('colour', 'color')},
+    {name: 'should refuse a British name', code: 'const colour = 1;', errors: british('colour', 'color')},
+    {name: 'should refuse a British word inside a camel-cased name', code: 'const wayLabelled = 1;', errors: british('labelled', 'labeled')},
+    {name: 'should refuse a British word in capitals', code: 'const COLOUR = 1;', errors: british('colour', 'color')},
+    {name: 'should refuse a British JSX name', code: '<Colour />;', errors: british('colour', 'color')},
+    {name: 'should refuse a British word in JSX text', code: 'const said = <p>the colour</p>;', errors: british('colour', 'color')},
+    {name: 'should refuse a British word in a string', code: "const said = 'the colour';", errors: british('colour', 'color')},
+    {name: 'should refuse a British word in a template', code: 'const said = `the colour`;', errors: british('colour', 'color')},
+    {name: 'should report a word said twice once', code: "const said = 'colour on colour';", errors: british('colour', 'color')}
+  ]
+});
