@@ -24,7 +24,10 @@ export const DragSurface: FC<{headerSource: Sample}> = ({headerSource}) => {
       {world === 'react'
         ? <Says>While something is <Term word="aloft">aloft</Term>, the header cell carries the move and
           release handlers, and only then: the props are there when the state says the column
-          is held and gone when it is not, so nothing is ever stale. Every move retakes the
+          is held and gone when it is not, so nothing is ever stale. When nothing is held, the four are set
+          to <code className="monospaced">undefined</code>, not left out. React attaches nothing
+          for <code className="monospaced">undefined</code>, and it still replaces any handler a caller
+          passed in, so the header never answers a move it isn’t carrying. Every move retakes the
           capture. Treat a cancel or a move with no buttons pressed as the drop, because a pointerup does not
           always arrive. Losing the capture is not the drop. When a settle moves the header cell in the DOM, the browser
           drops the capture with it and fires <code className="monospaced">lostpointercapture</code> at the next move,
