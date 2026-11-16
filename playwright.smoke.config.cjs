@@ -1,4 +1,5 @@
 const {defineConfig} = require('@playwright/test');
+const {maybe} = require('@ryandur/sand');
 
 module.exports = defineConfig({
   testDir: './e2e',
@@ -7,7 +8,7 @@ module.exports = defineConfig({
   workers: 1,
   timeout: 60_000,
   use: {
-    baseURL: process.env.SMOKE_URL ?? 'https://ryandur.github.io/ChosenPicachu/',
+    baseURL: maybe(process.env.SMOKE_URL).orElse('https://ryandur.github.io/ChosenPicachu/'),
     trace: 'on-first-retry'
   },
   projects: [

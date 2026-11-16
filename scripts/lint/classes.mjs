@@ -56,7 +56,7 @@ const nearbyOf = file => {
     if (directory === home || directory.startsWith(home + '/')) names.forEach(name => near.add(name));
   }
   homesOf(directory).flatMap(framedBesides)
-    .forEach(sheet => maybe(bySheet.get(sheet)).orElse([]).forEach(name => near.add(name)));
+    .forEach(sheet => maybe(bySheet.get(sheet)).orElse(new Set()).forEach(name => near.add(name)));
   return near;
 };
 /**
@@ -68,7 +68,7 @@ const opens = (near, prefix) => [...near].some(name => name.startsWith(prefix));
 const htmlClass = '__htmlClass';
 
 const wornClasses = (node, wear) => {
-  if (not(is(node))) return;
+  if (not(node)) return;
   switch (node.type) {
     case 'Literal':
       if (typeof node.value === 'string') wear(node, node.value.split(/\s+/).filter(Boolean));
@@ -104,7 +104,7 @@ const wornClasses = (node, wear) => {
 };
 
 const firstWorn = node => {
-  if (not(is(node))) return [];
+  if (not(node)) return [];
   if (node.type === 'ArrowFunctionExpression') return firstWorn(node.body);
   if (node.type === 'Literal' && typeof node.value === 'string') return node.value.split(/\s+/).filter(Boolean);
   if (node.type === 'CallExpression' && node.callee.name === 'classNames') {

@@ -1,4 +1,4 @@
-import {maybe, not} from '@ryandur/sand';
+import {has, maybe, not} from '@ryandur/sand';
 import stylelint from 'stylelint';
 
 const name = 'chosen/compositor-motion';
@@ -47,7 +47,8 @@ const allowed = property => property === 'none' || composited.has(property) || d
 /** @param {import('postcss').Declaration} declaration */
 const inTheResetsFold = declaration => {
   const selectors = declaration.parent && 'selectors' in declaration.parent ? declaration.parent.selectors : [];
-  return maybe(declaration.source).mBind(({input}) => maybe(input.file)).orElse('').endsWith('src/styles/reset.css') && selectors.length > 0
+  const file = maybe(declaration.source).mBind(({input}) => maybe(input.file)).orElse('');
+  return file.endsWith('src/styles/reset.css') && has(selectors)
     && selectors.every(selector => selector.includes('::details-content'));
 };
 
