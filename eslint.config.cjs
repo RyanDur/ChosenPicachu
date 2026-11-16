@@ -9,6 +9,7 @@ const {wrap} = require('./scripts/lint/wrap.mjs');
 const {page} = require('./scripts/lint/page.mjs');
 const {components} = require('./scripts/lint/components.mjs');
 const {prose} = require('./scripts/lint/prose.mjs');
+const {elements} = require('./scripts/lint/elements.mjs');
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -104,6 +105,10 @@ const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/
 const refsWithAReason = [
   'src/components/Modal/Modal.tsx', 'src/pages/Demos/Accordions/MeasuredPanel.tsx',
   'src/pages/Demos/Controls/DialGroup.tsx'
+];
+
+const oldWayExhibits = [
+  'src/pages/Demos/Accordions/ExclusiveAccordion.tsx', 'src/pages/Demos/Accordions/InclusiveAccordion.tsx'
 ];
 
 module.exports = [
@@ -223,6 +228,12 @@ module.exports = [
       importNames: ['useRef', 'createRef', 'forwardRef'],
       message: 'a ref holds a dialog shown as a modal, or reads an element\'s details nothing else gives; list the file in refsWithAReason'
     }]}]}
+  },
+  {
+    files: ['src/**/*.tsx'],
+    ignores: oldWayExhibits,
+    plugins: {elements},
+    rules: {'elements/no-div': 'error'}
   },
   {
     files: ['src/**/*.{ts,tsx}'],
