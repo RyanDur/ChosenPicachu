@@ -373,6 +373,11 @@ describe('the code voice', () => {
     expect(divided.find(({text}) => text === '\'x\'')?.kind).toBe('string');
   });
 
+  it('keeps a type word at the end of the line before from coloring a line\'s first word', () => {
+    const [, called] = highlight.tokensOf('TS', ['// returns a brand new', 'Map.groupBy(list, key);']);
+    expect(called[0]).toEqual({text: 'Map.', kind: 'plain'});
+  });
+
   it('reads a block comment just inside an object\'s brace as a comment, and the line after it as code', () => {
     expect(constOnTheLineAfter('const o = {/* none */ a: 1};')).toBe('keyword');
   });
