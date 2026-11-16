@@ -225,10 +225,10 @@ describe('the code voice', () => {
   });
 
   it('reads code inside a template\'s braces as code, and the template around it as a string', () => {
-    const found = kinds('TS', 'const c = `a ${b} c`;');
+    const found = kinds('TS', 'const c = `a ${go()} c`;');
 
     expect(found['`a ${']).toBe('string');
-    expect(found.b).toBeUndefined();
+    expect(found.go).toBe('call');
     expect(found['} c`']).toBe('string');
   });
 
