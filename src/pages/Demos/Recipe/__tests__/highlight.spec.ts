@@ -64,6 +64,14 @@ describe('the code voice', () => {
     expect(kinds('TS', "const door = (): Door => 'open';")["'open'"]).toBe('string');
   });
 
+  it('reads a quote after as as a string', () => {
+    expect(kinds('TS', "const k = label as 'TS';")["'TS'"]).toBe('string');
+  });
+
+  it('reads a quote in a conditional type as a string', () => {
+    expect(kinds('TS', "type K<T> = T extends 'a' ? 1 : 2;")["'a'"]).toBe('string');
+  });
+
   it('still reads a line comment after code as a comment', () => {
     expect(kinds('TS', 'const at = 0; // where it starts')['// where it starts']).toBe('comment');
   });

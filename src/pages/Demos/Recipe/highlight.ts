@@ -52,8 +52,12 @@ const keywords = [
   'switch', 'case', 'default', 'throw', 'try', 'catch', 'finally', 'await', 'async', 'while', 'for', 'declare'
 ];
 
-const stringOrComment =
-  /(?<string>(?<=(?:^|[([{=,:;?!&|+\-*/%<]|=>|\b(?:return|case|in|of|from|import|export|typeof|module))\s*)'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")|(?<comment>\/\/.*$|\{\/\*.*?\*\/})/g;
+const wordsBeforeAValue = [...keywords, 'module', 'satisfies', 'yield'].join('|');
+
+const stringOrComment = new RegExp(
+  String.raw`(?<string>(?<=(?:^|[([{=,:;?!&|+\-*/%<]|=>|\b(?:${wordsBeforeAValue}))\s*)'(?:[^'\\]|\\.)*'` +
+  String.raw`|\x60(?:[^\x60\\]|\\.)*\x60|"(?:[^"\\]|\\.)*")|(?<comment>\/\/.*$|\{\/\*.*?\*\/})`,
+  'g');
 
 const ts: ReadonlyArray<TokenPattern> = [
   {pattern: stringOrComment, groups: ['string', 'comment']},
