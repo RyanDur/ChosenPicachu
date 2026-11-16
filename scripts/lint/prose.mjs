@@ -2,6 +2,13 @@ import {empty, has, maybe, not} from '@ryandur/sand';
 import {limit} from './wrap.mjs';
 
 const stringTokenTypes = new Set(['String', 'Template']);
+export const spaceClosedAtLineEnd = /^}[ \t]*\n/;
+export const endsInWord = /[^\s<>{}]$/;
+export const startsWithMarkup = /^[<{]/;
+export const lineBreakAhead = /^[ \t]*\n(?:[ \t]*\n)*([ \t]*)/;
+export const indentOfLine = /^[ \t]*/;
+export const lastWordOfLine = /^(.*\S)( +)([^\s<>{}]+)$/;
+export const firstWordOfLine = /^([^\s<>{}]+) +(\S.*)$/;
 
 /** A space held in `{' '}` at a line's end, which JSX needs only because the break sits beside an element. */
 /** @type {import('eslint').Rule.RuleModule} */
@@ -24,7 +31,7 @@ const breaksBetweenWords = {
      * @param {import('eslint').AST.Token} token
      * @returns {boolean}
      */
-    const heldAtLineEnd = token => token.value === "' '" && /^}[ \t]*\n/.test(source.text.slice(token.range[1]));
+    const heldAtLineEnd = token => token.value === "' '" && spaceClosedAtLineEnd.test(source.text.slice(token.range[1]));
     /**
      * @param {number} line
      * @returns {boolean}
@@ -38,14 +45,12 @@ const breaksBetweenWords = {
      * @returns {boolean}
      */
     const fits = (text, exemptLine) => text.length <= limit || exemptLine;
-    const endsInWord = /[^\s<>{}]$/;
-    const startsWithMarkup = /^[<{]/;
     return {
       JSXExpressionContainer: held => {
         const {expression, parent} = held;
         if (expression.type !== 'Literal' || expression.value !== ' ') return;
         if (parent.type !== 'JSXElement' && parent.type !== 'JSXFragment') return;
-        const lineBreak = source.text.slice(held.range[1]).match(/^[ \t]*\n(?:[ \t]*\n)*([ \t]*)/);
+        const lineBreak = source.text.slice(held.range[1]).match(lineBreakAhead);
         if (empty(lineBreak)) return;
         const report = fix => context.report({node: held, messageId: 'beside', fix});
         const lineNumber = held.loc.start.line;
@@ -54,7 +59,7 @@ const breaksBetweenWords = {
         const nextAt = held.range[1] + lineBreak[0].length;
         const nextLineNumber = source.getLocFromIndex(nextAt).line;
         const nextLineIndent = lineBreak[1];
-        const proseIndent = textBeforeSpace.match(/^[ \t]*/)[0];
+        const proseIndent = textBeforeSpace.match(indentOfLine)[0];
         const nextLineText = source.lines[nextLineNumber - 1].trimStart();
         const lineStart = held.range[0] - textBeforeSpace.length;
         const stringOnThisLine = stringsOn(lineNumber);
@@ -64,7 +69,7 @@ const breaksBetweenWords = {
           {lines: [[`${textBeforeSpace} ${nextLineText}`, stringOnThisLine || stringOnNextLine, 0]], fix: fixer => fixer.replaceTextRange([held.range[0], nextAt], ' ')}
         ];
 
-        const wordBeforeBreak = textBeforeSpace.match(/^(.*\S)( +)([^\s<>{}]+)$/);
+        const wordBeforeBreak = textBeforeSpace.match(lastWordOfLine);
         if (has(wordBeforeBreak) && endsInWord.test(wordBeforeBreak[1])) {
           const [, kept, , word] = wordBeforeBreak;
           moves.push({
@@ -73,7 +78,7 @@ const breaksBetweenWords = {
           });
         }
 
-        const wordAfterBreak = nextLineText.match(/^([^\s<>{}]+) +(\S.*)$/);
+        const wordAfterBreak = nextLineText.match(firstWordOfLine);
         if (has(wordAfterBreak) && not(startsWithMarkup.test(wordAfterBreak[2]))) {
           const [, word, rest] = wordAfterBreak;
           moves.push({
