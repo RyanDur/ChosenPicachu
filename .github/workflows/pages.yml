@@ -60,5 +60,6 @@ jobs:
       - name: Name the pages that changed
         run: |
           git fetch --quiet origin "$GITHUB_SHA"
-          git checkout "$GITHUB_SHA" -- scripts/pages-summary.mjs
+          git checkout --detach "$GITHUB_SHA"
+          npm ci
           node scripts/pages-summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"
