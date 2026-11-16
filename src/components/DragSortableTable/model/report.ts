@@ -3,17 +3,17 @@ import {Maybe, has, nothing, some} from '@ryandur/sand';
 import {Direction} from './sorting';
 
 export type Report =
-  | {readonly about: 'column'; readonly name: string; readonly position: number; readonly outOf: number}
-  | {readonly about: 'row'; readonly name: string; readonly position: number; readonly outOf: number}
+  | {readonly about: 'column'; readonly name: string; readonly landedAt: number; readonly outOf: number}
+  | {readonly about: 'row'; readonly name: string; readonly landedAt: number; readonly outOf: number}
   | {readonly about: 'share'; readonly name: string; readonly share: number}
   | {readonly about: 'sort'; readonly name: string; readonly direction?: Direction};
 
 const move = (report: Report): string => {
   switch (report.about) {
     case 'column':
-      return `${report.name} moved to column ${report.position + 1} of ${report.outOf}`;
+      return `${report.name} moved to column ${report.landedAt + 1} of ${report.outOf}`;
     case 'row':
-      return `${report.name} moved to ${report.position + 1} of ${report.outOf}`;
+      return `${report.name} moved to ${report.landedAt + 1} of ${report.outOf}`;
     case 'share':
       return `${report.name} resized to ${shares.wholePercent(report.share)}%`;
     case 'sort':
@@ -30,8 +30,8 @@ const landing = (axis: 'column' | 'row', orderAtLift: readonly string[], held: s
     return nothing();
   }
   const report: Report = axis === 'column'
-    ? {about: 'column', name, position: to, outOf: order.length}
-    : {about: 'row', name, position: to, outOf: order.length};
+    ? {about: 'column', name, landedAt: to, outOf: order.length}
+    : {about: 'row', name, landedAt: to, outOf: order.length};
   return some(report);
 };
 

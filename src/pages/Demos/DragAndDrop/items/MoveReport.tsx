@@ -2,8 +2,8 @@ import {FC} from 'react';
 import {Report} from '../drag-sort';
 import {useDragSort} from '../useDragSort';
 
-const moveReport = ({item, position, stayed}: Report, count: number): string =>
-  `${item} ${stayed ? 'stays at' : 'moved to'} ${position + 1} of ${count}`;
+const moveReport = ({item, landedAt, stayed}: Report, count: number): string =>
+  `${item} ${stayed ? 'stays at' : 'moved to'} ${landedAt + 1} of ${count}`;
 
 export const MoveReport: FC = () => {
   const {report, order} = useDragSort();
