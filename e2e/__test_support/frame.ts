@@ -159,7 +159,7 @@ const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
         letGo: () => page.mouse.up()
       };
     },
-    fingerCancelledOnHandle: async (name: string, by: number): Promise<void> => {
+    fingerCanceledOnHandle: async (name: string, by: number): Promise<void> => {
       const devtools = await page.context().newCDPSession(page);
       const middle = await centerOfHandle(name);
       await devtools.send('Input.dispatchTouchEvent', {type: 'touchStart', touchPoints: [{x: middle.x, y: middle.y}]});
