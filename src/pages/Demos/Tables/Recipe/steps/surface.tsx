@@ -1,13 +1,16 @@
 import {FC} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {useControls} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
 
 export const DragSurface: FC<{headerSource: Sample}> = ({headerSource}) => {
   const {world} = useControls();
-  return <Step title="Hold the pointer from the lift">
-    <Words want="The carry outruns the header it grabbed: the pointer leaves the element mid-drag, and the release can land anywhere, even outside the window.">
+  return <Step>
+    <StepHeading title="Hold the pointer from the lift"/>
+    <Words>
+      <Want>The carry outruns the header it grabbed: the pointer leaves the element mid-drag, and the release can land
+        anywhere, even outside the window.</Want>
       <Says>So nothing can wait for the pointer to come back. Whoever lifts
         takes <Mdn path="Web/API/Element/setPointerCapture">pointer capture</Mdn> on the
         pointerdown itself, and from then on every move and the release come to it wherever

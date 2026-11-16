@@ -1,11 +1,4 @@
-import {FC, PropsWithChildren, ReactNode} from 'react';
+import {FC, PropsWithChildren} from 'react';
 
-type Props = PropsWithChildren<{
-  want: ReactNode;
-}>;
-
-export const Words: FC<Props> = ({want, children}) =>
-  <article className="step-words">
-    <p className="step-want paragraph italic muted-ink">{want}</p>
-    {children}
-  </article>;
+export const Words: FC<PropsWithChildren> = ({children}) =>
+  <article className="step-words">{children}</article>;

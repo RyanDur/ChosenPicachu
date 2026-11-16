@@ -1,11 +1,14 @@
 import {FC} from 'react';
 import {MotionDial, useControls} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 
 export const StaticMotion: FC<{cssSource: Sample}> = ({cssSource}) => {
   const {world} = useControls();
-  return <Step title="Leave the motion out" dial={<MotionDial name="step-motion"/>} id="step-motion">
-    <Words want="Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at all.">
+  return <DialStep id="step-motion">
+    <StepHeading title="Leave the motion out"><MotionDial name="step-motion"/></StepHeading>
+    <Words>
+      <Want>Motion is not free: it competes with the pointer, costs a frame budget, and some traders ask for none at
+        all.</Want>
       <Says>No motion should be the style sheet’s decision, not a second table: the same marks
         are dispatched and worn, and when the table wears static the style sheet gives them no time to play.</Says>
     </Words>
@@ -28,5 +31,5 @@ export const StaticMotion: FC<{cssSource: Sample}> = ({cssSource}) => {
         ]}/>
       </Codes>
     </Reveal>
-  </Step>;
+  </DialStep>;
 };

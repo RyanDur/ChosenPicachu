@@ -1,12 +1,14 @@
 import {FC} from 'react';
 import {MotionDial, useControls} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {sources} from './sources';
 
 export const CutKey: FC<{headerSource: Sample; buildSource: Sample}> = ({headerSource, buildSource}) => {
   const {world} = useControls();
-  return <Step title="Cut on the keypress" dial={<MotionDial name="step-motion"/>}>
-    <Words want="Motion is not free, a held key multiplies it, and some traders ask for none at all.">
+  return <DialStep>
+    <StepHeading title="Cut on the keypress"><MotionDial name="step-motion"/></StepHeading>
+    <Words>
+      <Want>Motion is not free, a held key multiplies it, and some traders ask for none at all.</Want>
       <Says>Motion off should cost nothing extra: no waiting. The static walk should be the arrow
         handler with the slides simply absent.</Says>
     </Words>
@@ -31,5 +33,5 @@ export const CutKey: FC<{headerSource: Sample; buildSource: Sample}> = ({headerS
           ]}/>}
       </Codes>
     </Reveal>
-  </Step>;
+  </DialStep>;
 };

@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {render, waitFor} from '@testing-library/react';
-import {Step, Steps, Stories, Story} from '@pages/Demos/Recipe';
+import {Step, StepHeading, Steps, Stories, Story} from '@pages/Demos/Recipe';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 
 const card = (title: string): HTMLElement => recipeFolds.story(document.body, title);
@@ -11,8 +11,10 @@ describe('a story card', () => {
     render(<TestApp at="/"><Stories>
       <Story param="tale" id="told" can="The reader can follow two steps" soThat="the build is short">
         <Steps>
-          <Step title="First">one</Step>
-          <Step title="Second">two</Step>
+          <Step>
+            <StepHeading title="First"/>one</Step>
+          <Step>
+            <StepHeading title="Second"/>two</Step>
         </Steps>
       </Story>
     </Stories></TestApp>);
@@ -24,7 +26,8 @@ describe('a story card', () => {
     render(<TestApp at="/"><Stories>
       <Story param="tale" id="told" can="The reader can follow one step" soThat="the build is shortest">
         <Steps>
-          <Step title="Only">one</Step>
+          <Step>
+            <StepHeading title="Only"/>one</Step>
         </Steps>
       </Story>
     </Stories></TestApp>);
@@ -46,7 +49,8 @@ describe('a story card', () => {
     render(<TestApp at="/#told-first"><Stories>
       <Story param="tale" id="told" can="The reader can arrive at a step" soThat="a link can point inside a story">
         <Steps>
-          <Step title="First" id="told-first">one</Step>
+          <Step id="told-first">
+            <StepHeading title="First"/>one</Step>
         </Steps>
       </Story>
     </Stories></TestApp>);
@@ -62,7 +66,8 @@ describe('a story card', () => {
     render(<TestApp at="/#told-first"><Stories>
       <Story param="tale" id="told" can="The reader can arrive at a step" soThat="a link can point inside a story">
         <Steps>
-          <Step title="First" id="told-first">one</Step>
+          <Step id="told-first">
+            <StepHeading title="First"/>one</Step>
         </Steps>
       </Story>
     </Stories></TestApp>);
@@ -75,7 +80,8 @@ describe('a story card', () => {
     render(<TestApp at="/#told-first"><Stories>
       <Story param="tale" id="told" can="The reader can arrive at a step" soThat="a link can point inside a story">
         <Steps>
-          <Step title="First" id="told-first">one</Step>
+          <Step id="told-first">
+            <StepHeading title="First"/>one</Step>
         </Steps>
       </Story>
       <Story param="tale" id="next" can="The reader can open the next story" soThat="reading goes on">

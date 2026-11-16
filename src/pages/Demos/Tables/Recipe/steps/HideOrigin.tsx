@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {OriginDial, useControls} from '../../../Controls';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {Term} from '../Term';
 import {sources} from './sources';
 import {WhatACustomPropertyIs} from '../WhatACustomPropertyIs';
@@ -10,8 +10,11 @@ import {carriedProperties} from './carriedProperties';
 export const HideOrigin: FC<{headerSource: Sample; cssSource: Sample; buildSource: Sample}> =
   ({headerSource, cssSource, buildSource}) => {
     const {world} = useControls();
-    return <Step title="Carry the real thing" dial={<OriginDial name="step-origin"/>}>
-      <Words want="The trader wants the column they grabbed in their hand, buttons and all, and a gap where it came from that says where the drop will land.">
+    return <DialStep>
+      <StepHeading title="Carry the real thing"><OriginDial name="step-origin"/></StepHeading>
+      <Words>
+        <Want>The trader wants the column they grabbed in their hand, buttons and all, and a gap where it came from that
+          says where the drop will land.</Want>
         <Says>Copying the column would go stale on the next trade, and a copy never has
           the real buttons in it. So nothing is copied: the carried cells themselves move with the
           pointer by <Mdn path="Web/CSS/translate">translate</Mdn>, and the layout box they left
@@ -94,5 +97,5 @@ export const HideOrigin: FC<{headerSource: Sample; cssSource: Sample; buildSourc
           ]}/>
         </Codes>
       </Reveal>
-    </Step>;
+    </DialStep>;
   };

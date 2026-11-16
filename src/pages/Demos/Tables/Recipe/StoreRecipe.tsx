@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {carve, Codes, lines, Reveal, Says, Snippet, Step, Steps, Story, Tell, Words} from '../../Recipe';
+import {carve, Codes, lines, Reveal, Says, Snippet, Step, StepHeading, Steps, Story, Tell, Want, Words} from '../../Recipe';
 import {useControls} from '../../Controls';
 import {Term} from './Term';
 import stateSource from '@components/DragSortableTable/model/table-state.ts?sample';
@@ -21,8 +21,11 @@ import bootSource from '../Frame/boot.ts?sample';
 
 const OneState: FC = () => {
   const {world} = useControls();
-  return <Step title="Two states, two stores">
-    <Words want="A live table is state before it is pixels, and two worlds have to agree on what that state is before either can render it.">
+  return <Step>
+    <StepHeading title="Two states, two stores"/>
+    <Words>
+      <Want>A live table is state before it is pixels, and two worlds have to agree on what that state is before either
+        can render it.</Want>
       <Says>The page’s state is the trades it holds, the candles the charts have asked for, and the arrangement
         it shows the trades in: the columns and the rows, each in the order they stand, and the sort while one
         holds.</Says>
@@ -77,8 +80,11 @@ const OneState: FC = () => {
 };
 
 const ActionsAreData: FC = () =>
-  <Step title="Actions are data, and one reducer takes them in">
-    <Words want="A change must say what happened, not how to poke the state, and it must leave the old value untouched.">
+  <Step>
+    <StepHeading title="Actions are data, and one reducer takes them in"/>
+    <Words>
+      <Want>A change must say what happened, not how to poke the state, and it must leave the old value
+        untouched.</Want>
       <Says>An <Term word="action">action</Term> is a record of what happened: a type and the facts. columnMoved carries
         the column and where it landed. rowMoved carries the row, where it landed and the standing it left, the rows’
         order as shown, ranked while a sort holds.
@@ -133,8 +139,10 @@ const ActionsAreData: FC = () =>
 
 const NamedReads: FC = () => {
   const {world} = useControls();
-  return <Step title="Each question has a named read">
-    <Words want="A component should ask for what it means, not search the state to find it.">
+  return <Step>
+    <StepHeading title="Each question has a named read"/>
+    <Words>
+      <Want>A component should ask for what it means, not search the state to find it.</Want>
       <Says>Each question is a named <Term word="read">read</Term>: columnNamed, positionOfRow, columnTravels,
         neighborOfColumn. The name carries the question, and the state’s shape is known in one
         file.</Says>
@@ -170,8 +178,10 @@ const NamedReads: FC = () => {
 
 const ExchangeIsMiddleware: FC = () => {
   const {world} = useControls();
-  return <Step title="The exchange is middleware">
-    <Words want="Trades must reach the store without any chart or table knowing where they come from.">
+  return <Step>
+    <StepHeading title="The exchange is middleware"/>
+    <Words>
+      <Want>Trades must reach the store without any chart or table knowing where they come from.</Want>
       <Says><Term word="middleware">Middleware</Term> has that same shape. A layer is given a view of the store, its
         state and its dispatch, then the next dispatch, and it returns the dispatch for its place in the chain.</Says>
       <Says>The chain is composed inside the store’s own dispatch, so every action passes through it before the
@@ -221,8 +231,10 @@ const ExchangeIsMiddleware: FC = () => {
 
 const WhoSubscribes: FC = () => {
   const {world} = useControls();
-  return <Step title="Who subscribes">
-    <Words want="The page must follow the state, and each world has its own way to follow.">
+  return <Step>
+    <StepHeading title="Who subscribes"/>
+    <Words>
+      <Want>The page must follow the state, and each world has its own way to follow.</Want>
       <Says>The store gives out one subscribe and never learns who took it.</Says>
       <Says>A listener is told the state before the change, given a way to read the state now, given the dispatch,
         and told the action that made the change.</Says>

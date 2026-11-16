@@ -1,7 +1,7 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC, useId} from 'react';
 import {DemoTopics} from '@pages/Demos';
-import {Codes, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../Recipe';
+import {Codes, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../Recipe';
 import {AThirdFromThePointer} from './Diagrams';
 import workspaceSource from './Workspace.tsx?sample';
 import travelSource from './useChartTravel.ts?sample';
@@ -27,8 +27,10 @@ const WorkspaceStory: FC = () =>
       and down arrows move it one place and focus stays on it. Delete or Backspace removes it. When one chart is left it
       has no grip and no remove button, and the key does nothing, so the workspace always has a chart.</Tell>
     <Steps>
-      <Step title="Read the charts from the address">
-        <Words want="The layout is the trader’s, so it has to come back after a reload and travel in a link.">
+      <Step>
+        <StepHeading title="Read the charts from the address"/>
+        <Words>
+          <Want>The layout is the trader’s, so it has to come back after a reload and travel in a link.</Want>
           <Says>The address’s query string, the part after the question mark, carries a value named charts: a list
             of chart names with commas between them. A name the page doesn’t know is skipped, a name given twice
             counts once, and with no list the page shows one price chart. A new chart goes to the front of the list,
@@ -52,8 +54,11 @@ const WorkspaceStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="A chart swaps once the pointer has moved a third of its height">
-        <Words want="A chart is large and the drag starts at its grip. So the swap is measured from the pointer, not from the chart’s far edge.">
+      <Step>
+        <StepHeading title="A chart swaps once the pointer has moved a third of its height"/>
+        <Words>
+          <Want>A chart is large and the drag starts at its grip. So the swap is measured from the pointer, not from the
+            chart’s far edge.</Want>
           <Says>On dragstart, the <TabLink to={DemoTopics.zIndex}>event</TabLink> the browser sends when a drag begins,
             the code marks where the pointer is on the page and keeps it
             in <code className="monospaced">pointerYAtLastSeat</code>. On every dragover, the event it sends as the
@@ -96,8 +101,10 @@ const WorkspaceStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="The arrow keys move a chart, and Delete or Backspace removes it">
-        <Words want="The grip and the remove button show only under a pointer. A keyboard works on the chart itself.">
+      <Step>
+        <StepHeading title="The arrow keys move a chart, and Delete or Backspace removes it"/>
+        <Words>
+          <Want>The grip and the remove button show only under a pointer. A keyboard works on the chart itself.</Want>
           <Says>Each chart is a link, so Tab reaches it. With a chart in focus, the up and down arrows move it one
             place, stopping at the ends, and focus stays on it, so holding an arrow keeps moving the same chart.
             Delete or Backspace removes it, unless it is the last chart. Focus then moves to the next chart’s link, or
@@ -124,8 +131,10 @@ const WorkspaceStory: FC = () =>
           ]}/>
         </Codes>
       </Step>
-      <Step title="The last chart can’t be removed">
-        <Words want="An empty workspace shows nothing and teaches nothing, so one chart always stays.">
+      <Step>
+        <StepHeading title="The last chart can’t be removed"/>
+        <Words>
+          <Want>An empty workspace shows nothing and teaches nothing, so one chart always stays.</Want>
           <Says>The grip and the remove button are drawn only while there is more than one chart. With one chart left
             there is no grip and no remove button, and Delete or Backspace does nothing. The + is still there.</Says>
         </Words>

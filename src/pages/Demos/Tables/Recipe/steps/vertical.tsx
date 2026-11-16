@@ -1,13 +1,15 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, Step, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {useControls} from '../../../Controls';
 import {Term} from '../Term';
 import {sources} from './sources';
 
 export const CarryVertical: FC<{rowSource: Sample; buildSource: Sample}> = ({rowSource, buildSource}) => {
   const {world} = useControls();
-  return <Step title="Turn the carry vertical">
-    <Words want="A lookback is a row: the same carry on a second axis, and the pointer needs a real thing to hold.">
+  return <Step>
+    <StepHeading title="Turn the carry vertical"/>
+    <Words>
+      <Want>A lookback is a row: the same carry on a second axis, and the pointer needs a real thing to hold.</Want>
       <Says>The second axis should come from substitutions, not new machinery: a real
         button for the pointer, row heights joining the <Term word="survey">survey</Term>, and the under-the-pointer
         question asked downward.</Says>

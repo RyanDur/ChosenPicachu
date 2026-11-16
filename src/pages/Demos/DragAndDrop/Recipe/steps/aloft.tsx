@@ -1,15 +1,17 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '../../../demo-topics';
 import {FC} from 'react';
-import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Mdn, Says, Snippet, Step, StepHeading, Want, Words, lines, carve} from '../../../Recipe';
 import {sources} from './sources';
 
 export const HoldTheAloft: FC = () =>
-  <Step title="Keep which item is held in state, not in the drag’s payload">
-    <Words want={<><Mdn path="Web/API/DataTransfer">dataTransfer</Mdn> is the object a drag event carries its data in,
-      the payload. It exists to carry data between windows, and mid-drag it is locked: a handler
-      for <Mdn path="Web/API/HTMLElement/dragover_event">dragover</Mdn>, the event the browser fires again and again
-      on whatever the pointer is over, may not read what dragstart wrote. So the payload cannot steer the sort.</>}>
+  <Step>
+    <StepHeading title="Keep which item is held in state, not in the drag’s payload"/>
+    <Words>
+      <Want><Mdn path="Web/API/DataTransfer">dataTransfer</Mdn> is the object a drag event carries its data in,
+        the payload. It exists to carry data between windows, and mid-drag it is locked: a handler
+        for <Mdn path="Web/API/HTMLElement/dragover_event">dragover</Mdn>, the event the browser fires again and again
+        on whatever the pointer is over, may not read what dragstart wrote. So the payload cannot steer the sort.</Want>
       <Says>Your first try writes the item into the payload at dragstart and reads it back in dragover, and the read
         comes back empty. That is not a bug: the browser seals the payload during the drag, so a window the pointer
         passes over cannot read data that was never dropped on it.</Says>

@@ -2,7 +2,7 @@ import {FC, ReactNode} from 'react';
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
 import {Entrance, Stack} from '@banners';
-import {Codes, Says, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../Recipe';
+import {Codes, Says, Snippet, Step, DialStep, StepHeading, Steps, Story, Want, Words, Tell, lines, carve} from '../Recipe';
 import {EntranceDial, StackDial, useControls} from '../Controls';
 import bannersSource from '@banners/Banners.tsx?sample';
 import changeSource from '@banners/bannerChange.ts?sample';
@@ -76,8 +76,10 @@ export const MultipleRecipe: FC = () => {
       that has just been added has no earlier value to change from, so a starting style, written @starting-style,
       gives it one.</Tell>
     <Steps>
-      <Step title="Skip a message that is already up">
-        <Words want="The same message twice tells me nothing new.">
+      <Step>
+        <StepHeading title="Skip a message that is already up"/>
+        <Words>
+          <Want>The same message twice tells me nothing new.</Want>
           <Says>A page raises a banner by dispatching <code className="monospaced">bannerChange.raised(message)</code>. <code className="monospaced">bannerChange.raised</code> is an action creator, a function that builds the
             action, and it gives the new banner its id. The site’s news is the banners that are up and where they sit.
             The reducer is the function that takes the news and an action and returns the news that follows. The
@@ -92,8 +94,11 @@ export const MultipleRecipe: FC = () => {
           ]}/>
         </Codes>
       </Step>
-      <Step title="Open a gap in the stack first" dial={<StackDial name="journey-stack"/>}>
-        <Words want="The banners already up should move apart before the new one is seen. It is still a full screen away.">
+      <DialStep>
+        <StepHeading title="Open a gap in the stack first"><StackDial name="journey-stack"/></StepHeading>
+        <Words>
+          <Want>The banners already up should move apart before the new one is seen. It is still a full screen
+            away.</Want>
           <Says>A banner is the list item with the class trouble. Each banner is a grid, a layout of rows and
             columns, with a single row or column, called a track. Here {stackFact[stack]} A track’s size can be given in
             fr, its share of the grid’s room: at 1fr this one track takes all of it, and at 0fr it takes none. The
@@ -123,9 +128,12 @@ export const MultipleRecipe: FC = () => {
             ...carve.unit(bannersCss, '.news-item {')
           ]}/>
         </Codes>
-      </Step>
-      <Step title="Slide in from off screen" id={slideInStep} dial={<EntranceDial name="journey-entrance"/>}>
-        <Words want="A banner that slides in from just beside its place looks like it popped up. The slide has to start off screen.">
+      </DialStep>
+      <DialStep id={slideInStep}>
+        <StepHeading title="Slide in from off screen"><EntranceDial name="journey-entrance"/></StepHeading>
+        <Words>
+          <Want>A banner that slides in from just beside its place looks like it popped up. The slide has to start off
+            screen.</Want>
           <Says>{enterFact[enter]} The distance is
             a <TabLink to={DemoTopics.accordions}>custom property</TabLink>,
             here <code className="monospaced">--arrive</code>: a value named once in the style sheet and read back
@@ -137,9 +145,11 @@ export const MultipleRecipe: FC = () => {
             ...carve.unit(bannersCss, `&.from-${enter} {`)
           ]}/>
         </Codes>
-      </Step>
-      <Step title="Slide out, then close the gap">
-        <Words want="A dismissed banner should slide out first, and only then should the others close the gap.">
+      </DialStep>
+      <Step>
+        <StepHeading title="Slide out, then close the gap"/>
+        <Words>
+          <Want>A dismissed banner should slide out first, and only then should the others close the gap.</Want>
           <Says>Dismissing a banner gives it the class leaving. That rule sends the banner back the way it came at
             once, and holds the track for 0.6 seconds, the time the slide takes, before closing it over 0.3. The code
             takes the banner out of the list only when the track’s transition has ended. Taken out any sooner, it

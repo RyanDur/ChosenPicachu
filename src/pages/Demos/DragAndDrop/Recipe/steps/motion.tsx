@@ -2,12 +2,16 @@ import {FC} from 'react';
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
 import {MotionDial} from '../../../Controls';
-import {Codes, Mdn, Says, Snippet, Step, Words, lines, carve} from '../../../Recipe';
+import {Codes, Mdn, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve} from '../../../Recipe';
 import {sources} from './sources';
 
 export const SlideCrossed: FC = () =>
-  <Step title="Slide the crossed item into place" dial={<MotionDial name="native-motion"/>}>
-    <Words want="An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would swallow the drag’s own events.">
+  <DialStep>
+    <StepHeading title="Slide the crossed item into place"><MotionDial name="native-motion"/></StepHeading>
+    <Words>
+      <Want>An eager swap that jumps is hard to follow. A view transition, the browser’s way of animating a page from
+        one state to the next by taking a picture of both, cannot run during the drag: its capture, that picture, would
+        swallow the drag’s own events.</Want>
       <Says>The swap happens at once. The crossed item gets the
         class <code className="monospaced">sliding-in</code>. Its slide is
         a <Mdn path="Web/CSS/@keyframes">keyframe</Mdn> animation: an @keyframes rule names the states an element passes
@@ -37,4 +41,4 @@ export const SlideCrossed: FC = () =>
         ...carve.unit(sources.sortableListCss, '@keyframes slide-in-again {')
       ]}/>
     </Codes>
-  </Step>;
+  </DialStep>;

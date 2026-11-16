@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Align, Side} from '@banners';
-import {Codes, Mdn, Says, Sample, Snippet, Step, Steps, Story, Words, Tell, lines, carve} from '../Recipe';
+import {Codes, Mdn, Says, Sample, Snippet, Step, DialStep, StepHeading, Steps, Story, Want, Words, Tell, lines, carve} from '../Recipe';
 import {AlignDial, SideDial, useControls} from '../Controls';
 import {partHeadings} from './part-headings';
 import {topLayerStory} from './top-layer-story';
@@ -47,8 +47,11 @@ export const TopLayerRecipe: FC = () => {
       I write the panel last on the page, outside the tab’s content, where its z-index is compared with that content as
       a whole and with the frame around it, never with a card.</Tell>
     <Steps>
-      <Step title="Write the panel last, at the page’s root">
-        <Words want="A bigger number does not get the banner out of a stacking context. The banner has to sit in the page’s own context, beside the tab’s content, not inside it.">
+      <Step>
+        <StepHeading title="Write the panel last, at the page’s root"/>
+        <Words>
+          <Want>A bigger number does not get the banner out of a stacking context. The banner has to sit in the page’s
+            own context, beside the tab’s content, not inside it.</Want>
           <Says>The panel is a section written once, at the root of the site, after the page itself. Its role
             is <Mdn path="Web/Accessibility/ARIA/Reference/Roles/alert_role">alert</Mdn>, so a screen reader
             announces what arrives without being asked.</Says>
@@ -59,8 +62,10 @@ export const TopLayerRecipe: FC = () => {
           ]}/>
         </Codes>
       </Step>
-      <Step title="Show it when there is news">
-        <Words want="The panel should be there when news arrives, and gone when the last of it is dismissed.">
+      <Step>
+        <StepHeading title="Show it when there is news"/>
+        <Words>
+          <Want>The panel should be there when news arrives, and gone when the last of it is dismissed.</Want>
           <Says>The site keeps its banners in a React context, a value React hands to every component inside it. It has
             nothing to do with the stacking contexts above; the two only share the word.</Says>
           <Says>To dispatch is to hand the context an action, a record of what happened. A component raises a banner by
@@ -78,9 +83,13 @@ export const TopLayerRecipe: FC = () => {
           ]}/>
         </Codes>
       </Step>
-      <Step title="Place the panel with two class names"
-        dial={<><SideDial name="station-side"/><AlignDial name="station-align"/></>}>
-        <Words want="Nine places, and no arithmetic: auto margins center the panel.">
+      <DialStep>
+        <StepHeading title="Place the panel with two class names">
+          <SideDial name="station-side"/>
+          <AlignDial name="station-align"/>
+        </StepHeading>
+        <Words>
+          <Want>Nine places, and no arithmetic: auto margins center the panel.</Want>
           <Says>The panel’s own rule gives it a fixed position, inset: 0, margin: auto and a size that fits its content.
             inset: 0 lets the panel reach each edge of the window. It takes only the room its content needs, and the
             auto margins share the rest, which centers it in the window.</Says>
@@ -101,9 +110,11 @@ export const TopLayerRecipe: FC = () => {
             ...carve.unit(alignSheet[align], `.${align} {`)
           ]}/>
         </Codes>
-      </Step>
-      <Step title="Style each banner">
-        <Words want="A banner is read at a glance, by someone busy with something else.">
+      </DialStep>
+      <Step>
+        <StepHeading title="Style each banner"/>
+        <Words>
+          <Want>A banner is read at a glance, by someone busy with something else.</Want>
           <Says>Each message sits in a paragraph with the class news. Its look comes from classes shared across this
             site: field for the background, rounded-corners, floating for the shadow, alarm-ink for the message’s color,
             and hairline-outline for a thin border in that color. The dismiss button is a square of fixed size that does

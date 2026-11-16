@@ -1,12 +1,14 @@
 import {FC} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Words, carve, lines} from '../../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Want, Words, carve, lines} from '../../../Recipe';
 import {DeadZoneFigure} from '../DeadZoneFigure';
 import {Term} from '../Term';
 import {sources} from './sources';
 
 export const DeadZone: FC = () =>
-  <Step title="Find the neighbor under the pointer, with a dead zone" id="step-dead-zone">
-    <Words want="A drift along a boundary must not flip the order back and forth under the pointer.">
+  <Step id="step-dead-zone">
+    <StepHeading title="Find the neighbor under the pointer, with a dead zone"/>
+    <Words>
+      <Want>A drift along a boundary must not flip the order back and forth under the pointer.</Want>
       <Says>Where the pointer is, in table terms, should be arithmetic on the <Term word="survey">survey</Term>,
         not <Mdn path="Web/API/Document/elementFromPoint">elementFromPoint</Mdn> under a moving
         pointer. And a plain boundary fails: switch a narrow column past a wide one at first touch,

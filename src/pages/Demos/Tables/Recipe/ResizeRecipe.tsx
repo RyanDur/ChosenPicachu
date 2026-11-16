@@ -1,5 +1,5 @@
 import {FC, ReactNode} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, Steps, Stories, Story, Tell, Words, lines, carve} from '../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
 import type {World} from '../../Controls';
 import {Term} from './Term';
@@ -178,8 +178,11 @@ const WidenStory: FC = () => {
       per arrow. The handle stops those keys from bubbling too, so the header’s own arrow keys never move the
       column.</Tell>
     <Steps>
-      <Step title="Keep the widths as a zero-sum ledger">
-        <Words want="Absolute pixel widths break the guarantee that the table fills its container: resize one column and the table grows, wraps, or leaves a gap behind.">
+      <Step>
+        <StepHeading title="Keep the widths as a zero-sum ledger"/>
+        <Words>
+          <Want>Absolute pixel widths break the guarantee that the table fills its container: resize one column and the
+            table grows, wraps, or leaves a gap behind.</Want>
           <Says>Widths should be <Term word="share">shares</Term> of a hundred, created by
             measuring the rendered headers when a handle is first pressed or focused; until then, the style sheet owns
             the widths and no ledger exists.</Says>
@@ -214,8 +217,11 @@ const WidenStory: FC = () => {
           {ledgerCodes[world]}
         </Reveal>
       </Step>
-      <Step title="Let each control find the cell’s edge">
-        <Words want="A header cell holds a title, sometimes a menu, sometimes a handle; the controls must sit at the cell’s end edge, and a table cell cannot become a grid without ceasing to be a table cell.">
+      <Step>
+        <StepHeading title="Let each control find the cell’s edge"/>
+        <Words>
+          <Want>A header cell holds a title, sometimes a menu, sometimes a handle; the controls must sit at the cell’s
+            end edge, and a table cell cannot become a grid without ceasing to be a table cell.</Want>
           <Says>No box arranges them. The cell holds its title as text and each control places
             itself: <code className="monospaced"><Mdn path="Web/CSS/position">position</Mdn>: absolute</code> against
             the cell’s end edge, with the cell reserving the room in its own padding.</Says>
@@ -236,8 +242,11 @@ const WidenStory: FC = () => {
           {edgeMarkup[world]}
         </Reveal>
       </Step>
-      <Step title="A handle that is a button">
-        <Words want="The handle must be reachable for everyone: a real control at the column’s edge, not a styled sliver that takes no focus and has no name.">
+      <Step>
+        <StepHeading title="A handle that is a button"/>
+        <Words>
+          <Want>The handle must be reachable for everyone: a real control at the column’s edge, not a styled sliver that
+            takes no focus and has no name.</Want>
           <Says>The handle should be a
             native <Mdn path="Web/HTML/Element/button">button</Mdn>: focus, announcement, and
             activation for free, <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>’s own first rule.
@@ -264,8 +273,11 @@ const WidenStory: FC = () => {
           </Codes>
         </Reveal>
       </Step>
-      <Step title="Trade, never take">
-        <Words want="Dragging one boundary must not change the table’s total width, and it must not starve a column down to nothing.">
+      <Step>
+        <StepHeading title="Trade, never take"/>
+        <Words>
+          <Want>Dragging one boundary must not change the table’s total width, and it must not starve a column down to
+            nothing.</Want>
           <Says>Every resize should be a trade between neighbors. If a trade is the only move
             that exists, the total is safe by construction.</Says>
         </Words>
@@ -283,9 +295,11 @@ const WidenStory: FC = () => {
           </Codes>
         </Reveal>
       </Step>
-      <Step title="Capture the pointer, measure once">
-        <Words want={<>Pointer positions arrive in pixels while the ledger holds shares. <WhatTheDomIs/> Asking it for
-          the table’s width on every move forces a layout each time, since every move changes a width.</>}>
+      <Step>
+        <StepHeading title="Capture the pointer, measure once"/>
+        <Words>
+          <Want>Pointer positions arrive in pixels while the ledger holds shares. <WhatTheDomIs/> Asking it for
+            the table’s width on every move forces a layout each time, since every move changes a width.</Want>
           <Says>Capture on the handle, which is safe here because unlike the sort’s cells the
             handle never moves in the DOM, and measure the table once: pixels per share, the
             resize’s own <Term word="survey">survey</Term>.</Says>
@@ -295,8 +309,11 @@ const WidenStory: FC = () => {
           {captureCodes[world]}
         </Reveal>
       </Step>
-      <Step title="Two gestures, one header">
-        <Words want="The handle lives inside a draggable header, so pressing it would lift the whole column into a drag.">
+      <Step>
+        <StepHeading title="Two gestures, one header"/>
+        <Words>
+          <Want>The handle lives inside a draggable header, so pressing it would lift the whole column into a
+            drag.</Want>
           <Says>The handle should <Mdn path="Web/API/Event/stopPropagation">stop its press from bubbling</Mdn> up to
             the header, and arrow keys on the handle should make the same trade as a drag, a fixed step per arrow. It
             should stop those keys there as well, because the header handles arrow keys by moving the column.</Says>

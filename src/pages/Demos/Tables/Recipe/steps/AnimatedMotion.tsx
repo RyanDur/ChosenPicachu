@@ -1,13 +1,16 @@
 import {FC} from 'react';
 import {MotionDial, useControls} from '../../../Controls';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, DialStep, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {sources} from './sources';
 
 export const AnimatedMotion: FC<{headerSource: Sample; cssSource: Sample; buildSource: Sample}> =
   ({headerSource, cssSource, buildSource}) => {
     const {world} = useControls();
-    return <Step title="Let the column settle" dial={<MotionDial name="step-motion"/>} id="step-motion">
-      <Words want="The trader must see where the column went and what it pushed aside. A column that snaps back to where it started on release, over a neighbor that has already jumped, leaves the reader to work out both.">
+    return <DialStep id="step-motion">
+      <StepHeading title="Let the column settle"><MotionDial name="step-motion"/></StepHeading>
+      <Words>
+        <Want>The trader must see where the column went and what it pushed aside. A column that snaps back to where it
+          started on release, over a neighbor that has already jumped, leaves the reader to work out both.</Want>
         <Says>The reorder has to land instantly for the drag arithmetic to stay true, and the pointer
           carries nothing the moment you let go. What should move is the real thing, from where it is: the
           column you dropped starts where you dropped it and settles into its slot, and every
@@ -86,5 +89,5 @@ export const AnimatedMotion: FC<{headerSource: Sample; cssSource: Sample; buildS
           ]}/>
         </Codes>
       </Reveal>
-    </Step>;
+    </DialStep>;
   };

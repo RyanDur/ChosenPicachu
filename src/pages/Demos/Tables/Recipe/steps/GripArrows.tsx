@@ -1,12 +1,14 @@
 import {FC} from 'react';
-import {Codes, Reveal, Says, Snippet, Step, Words, lines, carve, Sample} from '../../../Recipe';
+import {Codes, Reveal, Says, Snippet, Step, StepHeading, Want, Words, lines, carve, Sample} from '../../../Recipe';
 import {useControls} from '../../../Controls';
 import {sources} from './sources';
 
 export const GripArrows: FC<{rowSource: Sample; buildSource: Sample}> = ({rowSource, buildSource}) => {
   const {world} = useControls();
-  return <Step title="Turn the arrows vertical">
-    <Words want="A row is the same walk turned vertical, and the grip is already a button.">
+  return <Step>
+    <StepHeading title="Turn the arrows vertical"/>
+    <Words>
+      <Want>A row is the same walk turned vertical, and the grip is already a button.</Want>
       <Says>Nothing new should be needed: the grip was focusable from its first appearance, so
         up and down make the vertical walk the way left and right make the horizontal one,
         except that rows have no anchors: any row may move, and a walk stops at the table’s ends.</Says>
