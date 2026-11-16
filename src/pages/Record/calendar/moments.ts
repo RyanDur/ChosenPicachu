@@ -113,10 +113,29 @@ type Headings = typeof headings;
 
 type YearOf<Key extends MomentKey> = Headings[Key]['date']['year'];
 
-type SharedYears =
-  {[Key in MomentKey]: YearOf<Key> extends YearOf<Exclude<MomentKey, Key>> ? YearOf<Key> : never}[MomentKey];
+type MonthMomentKeys = {[Key in MomentKey]: Headings[Key] extends MonthHeading ? Key : never}[MomentKey];
 
-const sharedYears: Record<SharedYears, SharedYear> = {
+type YearMomentKeys = Exclude<MomentKey, MonthMomentKeys>;
+
+type YearsOfMonthMoments = YearOf<MonthMomentKeys>;
+
+type YearsOfYearMoments = YearOf<YearMomentKeys>;
+
+type LoneMonthYears = {
+  [Key in MonthMomentKeys]: YearOf<Key> extends YearOf<Exclude<MonthMomentKeys, Key>> ? never : YearOf<Key>
+}[MonthMomentKeys];
+
+type AMonthMomentNeverStandsAlone = Record<LoneMonthYears, never>;
+
+type AYearMomentNeverJoinsASharedYear = Record<Extract<YearsOfMonthMoments, YearsOfYearMoments>, never>;
+
+type SharedYears = Exclude<Exclude<YearsOfMonthMoments, YearsOfYearMoments>, LoneMonthYears>;
+
+type BriefsOfSharedYears = Record<SharedYears, SharedYear>
+  & AMonthMomentNeverStandsAlone
+  & AYearMomentNeverJoinsASharedYear;
+
+const sharedYears: BriefsOfSharedYears = {
   '1995': {
     inBrief: 'Two concerns moved in 1995. At Netscape, Brendan Eich wrote the interpreter for a scripting language in about ten days, a glue language for web designers beside Java for the components, and the page could respond. At the IETF, the first HTML standard was written after the fact: HTML 2.0, published in November, is the set of tags the browsers already used, collected and defined, because each browser had added its own and the language was becoming ill-defined.'
   },

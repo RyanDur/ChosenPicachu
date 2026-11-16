@@ -32,7 +32,6 @@ import {
 } from './moments';
 import {MomentKey, moments, SharedYear} from './calendar';
 import {concerns} from './concerns';
-import {timelineEntries} from './timelineEntries';
 
 const momentComponents: Record<MomentKey, FC> = {
   need: Need,
@@ -61,7 +60,27 @@ const momentComponents: Record<MomentKey, FC> = {
   elementsArrive: ElementsArrive
 };
 
-const entries = timelineEntries.of(moments.inOrder, moments.headings, moments.sharedYears);
+type Entry = {readonly kind: 'moment'; readonly key: MomentKey}
+  | {
+    readonly kind: 'shared year';
+    readonly year: string;
+    readonly momentsInTheYear: readonly MomentKey[];
+    readonly sharedYear: SharedYear;
+  };
+
+const entries = moments.inOrder.reduce<readonly Entry[]>((entriesSoFar, key) => {
+  const {date} = moments.headings[key];
+  if (date.kind === 'year') return [...entriesSoFar, {kind: 'moment', key}];
+  const {year} = date;
+  return entriesSoFar.some(entry => entry.kind === 'shared year' && entry.year === year)
+    ? entriesSoFar
+    : [...entriesSoFar, {
+      kind: 'shared year',
+      year,
+      momentsInTheYear: moments.inOrder.filter(other => moments.headings[other].date.year === year),
+      sharedYear: moments.sharedYears[year]
+    }];
+}, []);
 
 const TimelineMoment: FC<{moment: MomentKey}> = ({moment}) => {
   const MomentComponent = momentComponents[moment];
