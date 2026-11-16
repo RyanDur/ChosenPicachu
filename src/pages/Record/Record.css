@@ -180,10 +180,12 @@
   }
 
   .bibliography .shelves {
-    display: grid;
+    &::details-content {
+      display: grid;
+    }
 
-    &[open] {
-      gap: var(--base-x-2_5);
+    > .fold-bar + * {
+      margin-top: var(--base-x-2_5);
     }
 
     .fold-bar {
