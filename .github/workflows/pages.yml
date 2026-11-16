@@ -3,6 +3,9 @@ on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
 concurrency:
   group: pages-${{ github.event.pull_request.number }}
   cancel-in-progress: true
@@ -22,6 +25,7 @@ jobs:
       VITE_APP_VAM_PICTURES: https://framemark.vam.ac.uk/collections
       VITE_APP_CLEVELAND_API: https://openaccess-api.clevelandart.org/api/artworks
       VITE_APP_USERS_API: /api/users
+      VITE_APP_FEEDBACK_TOKEN: report-only
       VITE_APP_TRADE_FEED: wss://ws-feed.exchange.coinbase.com
       VITE_APP_TRADE_PRODUCT: BTC-USD
       VITE_APP_TRADE_HISTORY: https://api.exchange.coinbase.com
@@ -36,11 +40,6 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
           registry-url: 'https://npm.pkg.github.com'
-      - name: Build the pull request
-        run: |
-          npm ci
-          npm run build
-          mv build/client "$RUNNER_TEMP/pull"
       - name: Build where the pull request left main
         env:
           BASE: ${{ github.event.pull_request.base.sha }}
@@ -49,10 +48,13 @@ jobs:
           npm ci
           npm run build
           mv build/client "$RUNNER_TEMP/main"
-      - name: Name the pages that changed
+      - name: Build the pull request
         env:
           HEAD: ${{ github.event.pull_request.head.sha }}
         run: |
           git checkout --detach "$HEAD"
           npm ci
-          node scripts/pages-summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"
+          npm run build
+          mv build/client "$RUNNER_TEMP/pull"
+      - name: Name the pages that changed
+        run: node scripts/pages-summary.mjs "$RUNNER_TEMP/main" "$RUNNER_TEMP/pull" >> "$GITHUB_STEP_SUMMARY"
