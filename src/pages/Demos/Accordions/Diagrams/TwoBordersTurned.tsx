@@ -3,7 +3,7 @@ import {Chevron, Diagram, Label} from '../../Recipe/Drawing';
 import './Diagrams.css';
 
 export const TwoBordersTurned: FC = () =>
-  <Diagram title="Two borders, turned" height={100}
+  <Diagram lead="Two borders, turned" height={100}
     says="An empty box with only its top and right borders points right at 45 degrees and down at 135.">
     <Chevron x={90} y={44} turn={45}/>
     <Label x={90} y={88}>closed, 45°</Label>

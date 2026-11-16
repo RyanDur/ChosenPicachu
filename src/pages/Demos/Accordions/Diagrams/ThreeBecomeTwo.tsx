@@ -3,7 +3,7 @@ import {Arrow, Box, Diagram, Label, Part} from '../../Recipe/Drawing';
 import './Diagrams.css';
 
 export const ThreeBecomeTwo: FC = () =>
-  <Diagram title="Three pieces become two" height={130}
+  <Diagram lead="Three pieces become two" height={130}
     says="Summary is the bar and the control at once, so the box and its label fold into it, and the text becomes the details’ content.">
     <Part x={10} y={20} width={50} height={26} kind="unseen" name="input"/>
     <Part x={66} y={20} width={64} height={26} kind="piece" name="label"/>

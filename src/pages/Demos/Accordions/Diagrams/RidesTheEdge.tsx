@@ -3,7 +3,7 @@ import {Box, Diagram, Label, Part} from '../../Recipe/Drawing';
 import './Diagrams.css';
 
 export const RidesTheEdge: FC = () =>
-  <Diagram title="The text rides the row’s edge" height={170}
+  <Diagram lead="The text rides the row’s edge" height={170}
     says="The row grows with the text set at its bottom, so the text’s bottom edge stays on the row’s growing edge.">
     {[{open: 0, stage: 'start'}, {open: 0.5, stage: 'halfway'}, {open: 1, stage: 'open'}].map(({open, stage}, at) => {
       const x = 12 + at * 104;

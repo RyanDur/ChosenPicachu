@@ -3,7 +3,7 @@ import {Arrow, Diagram, Label, Part} from '../../Recipe/Drawing';
 import './Diagrams.css';
 
 export const TheRuleMatchesTheBox: FC = () =>
-  <Diagram title="The rule matches the box" height={110}
+  <Diagram lead="The rule matches the box" height={110}
     says="The rule matches an unchecked box, then reaches forward to the text after it and collapses it. Nothing before the box can be reached.">
     <Label x={160} y={18}>.info-toggle:not(:checked) ~ .info</Label>
     <Part x={16} y={34} width={70} height={26} kind="unseen" name="input"/>

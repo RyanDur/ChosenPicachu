@@ -3,7 +3,7 @@ import {Box, Diagram, Label} from '../../Recipe/Drawing';
 import './Diagrams.css';
 
 export const TheKnownHeight: FC = () =>
-  <Diagram title="The known height" height={150}
+  <Diagram lead="The known height" height={150}
     says="Every panel opens to the same ten lines, so a short fold leaves room under its text and a tall one scrolls inside its panel.">
     <Label x={160} y={18}>height: 10lh</Label>
     <Box x={40} y={30} width={100} height={96} kind="clip"/>
