@@ -1,6 +1,6 @@
 import {existsSync, readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
-import {has} from '@ryandur/sand';
+import {has, not} from '@ryandur/sand';
 import {describe, expect, it} from 'vitest';
 
 const linked = /repository\.(file|directory)\('([^']+)'\)/g;
@@ -16,7 +16,7 @@ describe('a link to the repository', () => {
     expect(links.length).toBeGreaterThan(10);
   });
 
-  it.each(links)('$source links to $path, which exists', ({path}) => {
-    expect(existsSync(path)).toBe(true);
+  it('should point every link at a path that exists', () => {
+    expect(links.filter(({path}) => not(existsSync(path))).map(({source, path}) => `${source} links to ${path}`)).toEqual([]);
   });
 });
