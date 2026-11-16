@@ -21,16 +21,18 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const columnDrift = useTableRead(tableReads.driftOfColumn(column));
   const rowDrift = useTableRead(tableReads.driftOfRow(row));
   const view = useTableRead(whole => whole);
-  const seat = columnSeat ?? rowSeat;
-  const drift = columnDrift ?? rowDrift;
+  const seat = maybe(columnSeat).orElse(rowSeat);
+  const drift = maybe(columnDrift).orElse(rowDrift);
 
   const nudged = (to: number, heights: PixelSizes): void =>
     dispatch(tableActions.rowWalkedTo({row, label}, to, heights, standing));
-  const arrived = (to: number): void => onRowMoved?.({row, to, standing});
+  const arrived = (to: number): void => {
+    maybe(onRowMoved).map(moved => moved({row, to, standing}));
+  };
   const beside = (neighbor: string, bounds: Survey): void => {
     const to = standing.indexOf(neighbor);
     dispatch(tableActions.rowMovedBeside({row, label}, neighbor, bounds.rowHeights, standing));
-    onRowMoved?.({row, to, standing});
+    maybe(onRowMoved).map(moved => moved({row, to, standing}));
   };
 
   const lift = (grab: Grab): void => dispatch(tableActions.lifted({axis: 'row', held: row}, grab));

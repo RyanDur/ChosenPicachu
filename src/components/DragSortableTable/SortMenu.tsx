@@ -3,7 +3,7 @@ import {FC} from 'react';
 import {tableActions, sorting} from './model';
 import {useHeaderEvents} from './useHeaderEvents';
 import {useTableDispatch} from './useTableDispatch';
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import {useHydrated} from '@components';
 
 export const SortMenu: FC<{column: string}> = ({column}) => {
@@ -24,7 +24,7 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
             popoverTarget={`sort-${column}`} popoverTargetAction="hide"
             onClick={() => {
               const direction = sorting.directionOf(choice);
-              onSorted?.({column, direction});
+              maybe(onSorted).map(sorted => sorted({column, direction}));
               dispatch(tableActions.sortChosen(column, direction));
             }}>{choice}</Item>
         </Entry>)}

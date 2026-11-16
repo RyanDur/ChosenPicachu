@@ -58,7 +58,7 @@ export const fromAICPiece = ({data}: AICArtResponse): Art => ({
     src: `${environment.aicPictures}/${data.image_id}/full/843,/0/default.jpg`,
     srcSet: [400, 800, 1200].map(width => `${environment.aicPictures}/${data.image_id}/full/${width},/0/default.jpg ${width}w`).join(', ')
   },
-  altText: data.thumbnail?.alt_text ?? '',
+  altText: maybe(data.thumbnail).mBind(thumbnail => maybe(thumbnail.alt_text)).orElse(''),
   artistInfo: data.artist_display
 });
 
@@ -100,7 +100,7 @@ export const harvardPiece: Art = {
   title: maybe(harvardPieceResponse.title).orElse('Untitled'),
   picture: {src: harvardPieceResponse.primaryimageurl},
   altText: maybe(harvardPieceResponse.title).orElse('Untitled'),
-  artistInfo: harvardPieceResponse.people?.[0].displayname ?? ''
+  artistInfo: maybe(harvardPieceResponse.people).mBind(people => maybe(people[0].displayname)).orElse('')
 };
 
 const harvardRecords = [...Array(info.totalrecordsperquery)].map(harvardToPieceResponse);
@@ -187,7 +187,7 @@ export const fromHarvardArt: AllArt = {
     id: String(piece.id),
     title: maybe(piece.title).orElse('Untitled'),
     picture: {src: piece.primaryimageurl},
-    artistInfo: piece.people?.[0].displayname ?? '',
+    artistInfo: maybe(piece.people).mBind(people => maybe(people[0].displayname)).orElse(''),
     altText: maybe(piece.title).orElse('Untitled')
   }))
 };

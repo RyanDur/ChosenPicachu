@@ -20,7 +20,7 @@ export const ArtPiece = () => {
   const {id} = useParams<{id: string}>();
 
   useEffect(() => museumReply.ask(
-    maybe(id).map(chosen => () => art.get({id: chosen, source: tab ?? opening.museum})),
+    maybe(id).map(chosen => () => art.get({id: chosen, source: maybe(tab).orElse(opening.museum)})),
     dispatch,
     error => dispatchBanner(bannerChange.raised(trouble.with('the museum')(error)))
   ), [id, tab, dispatch, dispatchBanner]);
@@ -29,7 +29,7 @@ export const ArtPiece = () => {
     {museumReply.awaited(easel) && <Loading label="loading piece"/>}
     {easel.reply === 'answered' && <figure className="art-work">
       <Image piece={easel.answer} linkEnabled={false} className="piece hung"/>
-      <figcaption className="artist-display trim hairline-outline italic caption ink">{easel.answer.artistInfo ?? 'Unknown'}</figcaption>
+      <figcaption className="artist-display trim hairline-outline italic caption ink">{maybe(easel.answer.artistInfo).orElse('Unknown')}</figcaption>
     </figure>}
     {easel.reply === 'refused' && <StandIn src={noImage} alt="the museum refused to answer"/>}
   </>;

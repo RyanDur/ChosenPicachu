@@ -21,17 +21,17 @@ const sized = (image?: ClevelandImage | null): string | undefined =>
   has(image) && has(image.width) ? `${image.url} ${image.width}w` : undefined;
 
 const srcSetOf = (record: ClevelandRecord): string | undefined => {
-  const sources = [sized(record.images?.web), sized(record.images?.print)].filter(has);
+  const sources = maybe(record.images).map(({web, print}) => [sized(web), sized(print)]).orElse([]).filter(has);
   return has(sources) ? sources.join(', ') : undefined;
 };
 
 const artistOf = (record: ClevelandRecord): string | null | undefined =>
-  (record.creators ?? []).map(({description}) => description).filter(has).join(', ') || record.tombstone;
+  maybe(record.creators).orElse([]).map(({description}) => description).filter(has).join(', ') || record.tombstone;
 
 const toPiece = (record: ClevelandRecord): Art => ({
   id: String(record.id),
   title: record.title,
-  ...maybe(record.images?.web ?? record.images?.print)
+  ...maybe(record.images).mBind(({web, print}) => maybe(web).or(() => maybe(print)))
     .map(shown => ({picture: {src: shown.url, srcSet: srcSetOf(record)}})).orElse({}),
   ...artFields.attributed(artistOf(record)),
   altText: record.title
@@ -50,7 +50,7 @@ const searched = ({page, search, size = limits.record}: GetAllArtRequest) => htt
 export const cleveland = {
   allArt: (request: GetAllArtRequest) => searched(request)
     .map(({info, data}: ClevelandAllArtResponse): AllArt => {
-      const size = request.size ?? limits.record;
+      const size = maybe(request.size).orElse(limits.record);
       return {
         pagination: {
           total: info.total,

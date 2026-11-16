@@ -5,7 +5,7 @@ import {Paths} from '@navigation';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {recordPage} from '@pages/Record/__test_support/record';
 import {homePage} from '@pages/Home/__test_support/home';
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 
 describe('the 1989 moment', () => {
@@ -628,7 +628,7 @@ describe('the record', () => {
     const works = recordPage.shelvedWorks();
     expect(works.length).toBeGreaterThanOrEqual(25);
     works.forEach(work => expect(recordPage.linksOfWork(work).length).toBeGreaterThan(0));
-    const cited = recordPage.shelvedSources().map(href => href ?? '');
+    const cited = recordPage.shelvedSources().map(href => maybe(href).orElse(''));
     expect(cited.some(href => href.includes('w3.org/Style/LieBos2e'))).toBe(true);
     expect(cited.some(href => href.includes('web.archive.org'))).toBe(true);
     expect(cited.some(href => href.includes('w3.org/History/1989'))).toBe(true);
