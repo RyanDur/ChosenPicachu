@@ -1,5 +1,5 @@
 import {DragEvent, KeyboardEvent, useReducer} from 'react';
-import {Maybe, nothing, some, not} from '@ryandur/sand';
+import {Maybe, maybe, nothing, some, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {crossing} from '../DragAndDrop';
 import {chartTravel} from './chart-travel';
@@ -31,10 +31,10 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
     dispatch(chartTravelChange.lifted(at, event.pageY));
   };
 
-  const boundsOf = (node: Element | null | undefined): Maybe<DOMRect> =>
+  const boundsOf = (node: Element): Maybe<DOMRect> =>
     node instanceof HTMLElement ? some(node.getBoundingClientRect()) : nothing();
 
-  const resting = (node: Element | null | undefined) =>
+  const resting = (node: Element) =>
     node instanceof HTMLElement && not(node.getAnimations().length);
 
   const swap = (held: number, to: number, pointer: number) => {
@@ -45,14 +45,15 @@ export const useChartTravel = ({seats, onSeated, onRemoved}: Travel) => {
   const travel = (event: DragEvent<HTMLElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
-    const places = event.currentTarget.parentElement?.children;
-    aloft.map(held => boundsOf(places?.item(held)).map(bounds => {
+    const places = maybe(event.currentTarget.parentElement).map(parent => parent.children);
+    const placeAt = (at: number): Maybe<Element> => places.mBind(all => maybe(all.item(at)));
+    aloft.map(held => placeAt(held).mBind(boundsOf).map(bounds => {
       const pointer = event.pageY;
       const to = crossing.strayedTo(pointer, pointerYAtLastSeat, bounds.height / 3, held);
       if (to === held || to < 0 || to >= seats) {
         return;
       }
-      if (resting(places?.item(to))) {
+      if (placeAt(to).map(resting).orElse(false)) {
         swap(held, to, pointer);
       }
     }));
