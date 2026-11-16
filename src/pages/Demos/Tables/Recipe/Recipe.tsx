@@ -12,9 +12,9 @@ export const Recipe: FC = () => {
   return <section aria-label="build the drag sort yourself" className="build-steps">
     <Picks label="input track"
       size="paragraph"
-      options={[
-        {display: 'By pointer', value: 'pointer'},
-        {display: 'By keyboard', value: 'keyboard'}
+      choices={[
+        {wording: 'By pointer', value: 'pointer'},
+        {wording: 'By keyboard', value: 'keyboard'}
       ]}
       chosen={track}
       onPicked={next => change({track: next})}/>
