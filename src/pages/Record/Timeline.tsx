@@ -99,11 +99,11 @@ const SharedYearFold: FC<{year: string; momentsInTheYear: readonly MomentKey[]; 
   year,
   momentsInTheYear,
   sharedYear: {inBrief}
-}) =>
-  <li className="moment trim-rail-along">
+}) => {
+  const heading = joinedTitle(momentsInTheYear.map(key => moments.headings[key].title));
+  return <li className="moment trim-rail-along">
     <time dateTime={year} className="year caption bold">{year}</time>
-    <h3
-      className="moment-title sub-title void-dot-before">{joinedTitle(momentsInTheYear.map(key => moments.headings[key].title))}</h3>
+    <h3 className="moment-title sub-title void-dot-before">{heading}</h3>
     <MomentInBrief>{inBrief}</MomentInBrief>
     <FullerStory>
       <ol className="moments-of-a-year timeline" aria-label={year}>
@@ -114,6 +114,7 @@ const SharedYearFold: FC<{year: string; momentsInTheYear: readonly MomentKey[]; 
       </ol>
     </FullerStory>
   </li>;
+};
 
 export const Timeline: FC = () =>
   <section className="record trim-rule-above" aria-labelledby="the-record">
