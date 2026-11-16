@@ -1,5 +1,5 @@
 import {useState, useSyncExternalStore} from 'react';
-import {classNames} from '../classNames';
+import {classNames} from '@components';
 import {TableContext} from './tableContexts';
 import {Labeled, Seated, TableColumn, tableStore} from './model';
 import './Table.css';

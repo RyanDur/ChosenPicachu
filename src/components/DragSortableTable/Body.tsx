@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {classNames} from '../classNames';
+import {classNames} from '@components';
 import {BodyEvents, tableContexts} from './tableContexts';
 
 export const Body: FC<ComponentProps<'tbody'> & BodyEvents> = ({onRowMoved, className, children, ...tbody}) =>

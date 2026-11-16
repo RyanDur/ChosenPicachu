@@ -1,6 +1,6 @@
 import {ComponentProps, FC} from 'react';
 import {Link} from 'react-router';
-import {classNames} from '../classNames';
+import {classNames} from '@components';
 
 export const ItemLink: FC<ComponentProps<typeof Link>> = ({className, ...link}) =>
   <Link {...link}

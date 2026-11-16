@@ -1,6 +1,6 @@
 import {ComponentProps, FC} from 'react';
 import {has} from '@ryandur/sand';
-import {classNames} from '../classNames';
+import {classNames} from '@components';
 import {useBodyEvents} from './useBodyEvents';
 import {useTableDispatch} from './useTableDispatch';
 import {useTableRead} from './useTableRead';
