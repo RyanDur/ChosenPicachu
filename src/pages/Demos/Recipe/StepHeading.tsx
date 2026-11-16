@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren, useContext} from 'react';
 import {useRanks} from './useRanks';
-import {StepName} from './StepName';
+import {StepHeadingId} from './StepHeadingId';
 
 type Props = PropsWithChildren<{
   title: string;
@@ -9,7 +9,7 @@ type Props = PropsWithChildren<{
 export const StepHeading: FC<Props> = ({title, children}) => {
   const {step: Title} = useRanks();
   return <header className="step-heading">
-    <Title className="sub-title" id={useContext(StepName)}>{title}</Title>
+    <Title className="sub-title" id={useContext(StepHeadingId)}>{title}</Title>
     {children}
   </header>;
 };

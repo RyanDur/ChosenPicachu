@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, useContext} from 'react';
-import {StepName} from './StepName';
+import {StepHeadingId} from './StepHeadingId';
 
 export const Words: FC<PropsWithChildren> = ({children}) =>
-  <article className="step-words" aria-labelledby={useContext(StepName)}>{children}</article>;
+  <article className="step-words" aria-labelledby={useContext(StepHeadingId)}>{children}</article>;
