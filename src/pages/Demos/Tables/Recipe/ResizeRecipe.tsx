@@ -80,7 +80,8 @@ const handleSays: Record<World, ReactNode> = {
     exists its label states the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the
     header’s end edge, stretched to the cell’s height, and the button carries no width of its
     own: it is a grid container whose only item is the 8px line its <code className="monospaced">::after</code> paints,
-    so the painted line is the hit area. The <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
+    so the painted line is the hit area.
+    The <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action"><code className="monospaced">touch-action: none</code></Mdn> lets the pointer
     drag it on a touchscreen.</Says>,
   vanilla: <>

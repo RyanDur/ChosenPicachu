@@ -34,30 +34,37 @@ export const PresentationPractice: FC = () =>
       them, and I keep the naming myself.</p>
     <dl className="needs">
       <dt className="paragraph bold">Place</dt>
-      <dd className="paragraph">Structure beside the component, looks in the shared style sheets. The <a className="signpost" href={stylelintConfig}>style sheet lint</a> holds it, refusing a look in a component
+      <dd className="paragraph">Structure beside the component, looks in the shared style sheets.
+        The <a className="signpost" href={stylelintConfig}>style sheet lint</a> holds it, refusing a look in a component
         style sheet, and the <a className="signpost" href={classLint}>class lint</a> holds its other side, reading a
         class only from a style sheet in the element’s own directory or one above it, or from the shared style sheets.
         BEM’s <a className="signpost" href={bemHistory.address}>folder per block</a>, from Yandex in 2009, is where the
         first half comes from.</dd>
       <dt className="paragraph bold">Value</dt>
-      <dd className="paragraph">Every value written once, as a token. The <a className="signpost" href={stylelintConfig}>value lint</a> holds it with two rules: it refuses a number
+      <dd className="paragraph">Every value written once, as a token.
+        The <a className="signpost" href={stylelintConfig}>value lint</a> holds it with two rules: it refuses a number
         where a token belongs, and a token nothing declares. Custom properties are the platform’s
         token.</dd>
       <dt className="paragraph bold">Name</dt>
-      <dd className="paragraph">A look is one word any element can wear, named for the need. The <a className="signpost" href={classLint}>class lint</a> holds what a lint can, refusing a class no style sheet
+      <dd className="paragraph">A look is one word any element can wear, named for the need.
+        The <a className="signpost" href={classLint}>class lint</a> holds what a lint can, refusing a class no style sheet
         reads and a class list that does not put the component’s own class first. The naming is mine to keep.
         Wathan’s <a className="signpost" href={wathan.address}>essay</a> is
         where I agree, and Tailwind’s <a className="signpost" href={utilityFirst.address}>utility-first page</a> is
         where I part.</dd>
       <dt className="paragraph bold">Selector</dt>
-      <dd className="paragraph">Classes, never a tag, outside the reset. The <a className="signpost" href={stylelintConfig}>selector lint</a> holds it. A browser matches a selector
+      <dd className="paragraph">Classes, never a tag, outside the reset.
+        The <a className="signpost" href={stylelintConfig}>selector lint</a> holds it. A browser matches a selector
         from right to left: David Hyatt, writing for Mozilla’s own engineers in 2000, called the rightmost part the
         key selector, <a className="signpost" href={hyatt.address}>“the part that matches the element being matched, rather than its
           ancestors”</a>.
-        So <code className="monospaced">nav a</code> starts from every link on the page, while <code className="monospaced">.home .opening</code> starts from the few elements that carry the class. A
-        class also says more: <code className="monospaced">rail-path</code> says what a link is for, where <code className="monospaced">nav a</code> says only where it is.</dd>
+        So <code className="monospaced">nav a</code> starts from every link on the page,
+        while <code className="monospaced">.home .opening</code> starts from the few elements that carry the class. A
+        class also says more: <code className="monospaced">rail-path</code> says what a link is for,
+        where <code className="monospaced">nav a</code> says only where it is.</dd>
       <dt className="paragraph bold">Order</dt>
-      <dd className="paragraph">The style sheets imported in one order, reset first. The <a className="signpost" href={importList}>import list</a> itself holds it: when two rules tie, the cascade
+      <dd className="paragraph">The style sheets imported in one order, reset first.
+        The <a className="signpost" href={importList}>import list</a> itself holds it: when two rules tie, the cascade
         takes the later one, so the list’s order decides. <a className="signpost" href={layer.address}>@layer</a> is
         the platform’s own way to say that order in a rule.</dd>
     </dl>
@@ -67,19 +74,30 @@ export const PresentationPractice: FC = () =>
       the browser’s margins, padding and borders and evened out its line heights and heading sizes, <a className="signpost" href={resetReloaded.address}>“a starting point for creating your own defaults”</a> in
       2007, and Nicolas Gallagher and Jonathan
       Neal’s <a className="signpost" href={normalizeCss.address}>normalize.css</a> kept the
-      defaults worth keeping instead, to <a className="signpost" href={aboutNormalizeCss.address}>“preserve useful browser defaults rather than erasing
+      defaults worth keeping instead,
+      to <a className="signpost" href={aboutNormalizeCss.address}>“preserve useful browser defaults rather than erasing
         them”</a>,
       in 2012. A preprocessor put the values in a build step, in a language the browser never sees: <a className="signpost" href={libSass.address}>Sass</a>, which Hampton Catlin created and which has been supported
-      since 2006, and <a className="signpost" href={aboutLess.address}>Less</a>, which Alexis Sellier made in 2009. A framework put
+      since 2006,
+      and <a className="signpost" href={aboutLess.address}>Less</a>, which Alexis Sellier made in 2009. A framework put
       the look in the library, taken whole: <a className="signpost" href={aboutBootstrap.address}>Bootstrap</a>, made
       at Twitter and released in 2011. A methodology put it in a convention, held as long as every author keeps it:
-      Nicole Sullivan’s <a className="signpost" href={objectOrientedCss.address}>OOCSS</a>, Jonathan Snook’s <a className="signpost" href={smacss.address}>SMACSS</a> of 2011, <a className="signpost" href={smacss.address}>“more style guide than rigid framework”</a>, and BEM, which has
-      its own paragraph below. CSS in script put it in the component, with a build that scopes the names: <a className="signpost" href={cssModules.address}>CSS Modules</a> from 2015 and <a className="signpost" href={styledComponents.address}>styled-components</a> from 2016; the Record’s <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> tells how that began. Utilities put the theme
-      in the class name: Adam Wathan’s essay of 2017, <a className="signpost" href={wathan.address}>CSS Utility Classes and “Separation of Concerns”</a>, and
+      Nicole Sullivan’s <a className="signpost" href={objectOrientedCss.address}>OOCSS</a>, Jonathan
+      Snook’s <a className="signpost" href={smacss.address}>SMACSS</a> of
+      2011, <a className="signpost" href={smacss.address}>“more style guide than rigid framework”</a>, and BEM, which has
+      its own paragraph below. CSS in script put it in the component, with a build that scopes the
+      names: <a className="signpost" href={cssModules.address}>CSS Modules</a> from 2015
+      and <a className="signpost" href={styledComponents.address}>styled-components</a> from 2016; the Record’s <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> tells how that began. Utilities put the theme
+      in the class name: Adam Wathan’s essay of
+      2017, <a className="signpost" href={wathan.address}>CSS Utility Classes and “Separation of Concerns”</a>, and
       Tailwind after it.</p>
     <p className="paragraph">The platform has since put the values, the order and the scoping in the style sheet itself,
       each native since its date: <a className="signpost" href={customProperties.address}>custom properties</a> since
-      April 2017, <a className="signpost" href={layer.address}>@layer</a> since March 2022, <a className="signpost" href={nestingSelector.address}>nesting</a> since December 2023 and <a className="signpost" href={scope.address}>@scope</a> since March 2026, newly available. <a className="signpost" href={container.address}>Container queries</a>, since February 2023, and <a className="signpost" href={has.address}>:has()</a>, since December 2023, let a rule ask how wide an element’s
+      April 2017, <a className="signpost" href={layer.address}>@layer</a> since March
+      2022, <a className="signpost" href={nestingSelector.address}>nesting</a> since December 2023
+      and <a className="signpost" href={scope.address}>@scope</a> since March 2026, newly
+      available. <a className="signpost" href={container.address}>Container queries</a>, since February 2023,
+      and <a className="signpost" href={has.address}>:has()</a>, since December 2023, let a rule ask how wide an element’s
       container is and what an element contains. A selector alone could not ask either.</p>
     <h3 className="paragraph bold">What this site keeps</h3>
     <p className="paragraph"><a className="signpost" href={bem.address}>BEM</a> is Yandex’s method, and it began at
@@ -102,7 +120,8 @@ export const PresentationPractice: FC = () =>
       state, since a modifier <a className="signpost" href={bemHistory.address}>“defines the appearance, state, and sometimes the behavior of
         the block”</a>.
       I split them, and the class list below says why.</p>
-    <p className="paragraph">Tailwind’s own advice on reuse is the part I agree with most. Its page on <a className="signpost" href={stylingWithUtilities.address}>styling with utility classes</a> says to start with
+    <p className="paragraph">Tailwind’s own advice on reuse is the part I agree with most. Its page
+      on <a className="signpost" href={stylingWithUtilities.address}>styling with utility classes</a> says to start with
       utilities and not to abstract until the duplication is real. A repeat you can fix with one loop or one
       multi-cursor edit earns nothing, since <a className="signpost" href={stylingWithUtilities.address}>“there’s no benefit to introducing any additional
         abstraction”</a>.
@@ -112,12 +131,15 @@ export const PresentationPractice: FC = () =>
       the component rather than the style sheet.</p>
     <h3 className="paragraph bold">Where a rule lives</h3>
     <p className="paragraph">Here is each style sheet in turn, in the
-      order <code className="monospaced">index.css</code> imports them. First the <a className="signpost" href={sheet('reset')}>reset</a>, which zeroes the margins and sizes the browser gives
+      order <code className="monospaced">index.css</code> imports them. First
+      the <a className="signpost" href={sheet('reset')}>reset</a>, which zeroes the margins and sizes the browser gives
       elements, and leaves alone the few whose browser styles do a job: the dialog’s centering, the template and
       datalist that hide themselves, the progress and meter widgets, and the hiding a popover does on any element.</p>
-    <p className="paragraph">Then three token files. A token is a named value, such as <code className="monospaced">--light-box-shadow</code>, that the style sheet reads instead of writing the
+    <p className="paragraph">Then three token files. A token is a named value, such
+      as <code className="monospaced">--light-box-shadow</code>, that the style sheet reads instead of writing the
       number. <a className="signpost" href={sheet('colors')}>colors.css</a> names
-      the raw values first, a palette of named colors, and then the roles a component reads: <code className="monospaced">field</code>, <code className="monospaced">field-inverse</code>, <code className="monospaced">card</code>. A component never reads a raw value, so a change of palette is a change
+      the raw values first, a palette of named colors, and then the roles a component
+      reads: <code className="monospaced">field</code>, <code className="monospaced">field-inverse</code>, <code className="monospaced">card</code>. A component never reads a raw value, so a change of palette is a change
       to one file. <a className="signpost" href={sheet('spacing')}>spacing.css</a> names one base, <code className="monospaced">0.8rem</code>, and most sizes as multiples of the base. Four kinds of size it names
       outside that scale:</p>
     <ul className="practice-list">
@@ -144,25 +166,31 @@ export const PresentationPractice: FC = () =>
     </ul>
     <p className="paragraph">A drawing on these tabs floats only where its width and 45ch of text fit side by side in
       the column.</p>
-    <p className="paragraph">I write inline only the values the code works out at runtime, mostly as <a className="signpost" href={usingCssCustomProperties.address}>custom properties</a> the style sheet already reads: a measured height, a position after a drag, the direction of a slide. Custom
+    <p className="paragraph">I write inline only the values the code works out at runtime, mostly
+      as <a className="signpost" href={usingCssCustomProperties.address}>custom properties</a> the
+      style sheet already reads: a measured height, a position after a drag, the direction of a slide. Custom
       properties are the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink>’s lesson: they took over the
       theme variables that script had held.</p>
-    <p className="paragraph">Then the vocabulary, six files by concern: <a className="signpost" href={sheet('button')}>button</a>, <a className="signpost" href={sheet('typography')}>typography</a>, <a className="signpost" href={sheet('surface')}>surface</a>, <a className="signpost" href={sheet('drawing')}>drawing</a>, <a className="signpost" href={sheet('placement')}>placement</a> and <a className="signpost" href={sheet('glide')}>glide</a>. A word in it is one look under one name that any
+    <p className="paragraph">Then the vocabulary, six files by
+      concern: <a className="signpost" href={sheet('button')}>button</a>, <a className="signpost" href={sheet('typography')}>typography</a>, <a className="signpost" href={sheet('surface')}>surface</a>, <a className="signpost" href={sheet('drawing')}>drawing</a>, <a className="signpost" href={sheet('placement')}>placement</a> and <a className="signpost" href={sheet('glide')}>glide</a>. A word in it is one look under one name that any
       element can wear, resolved through a token. There are about a hundred and fifty. I add a word when a second
       element needs the look, not the first: before that it is structure in the one component’s style sheet.</p>
     <p className="paragraph">Then the component style sheets, which <code className="monospaced">index.css</code> does
       not import, since each component imports its own. A component’s style sheet holds its structure only, the grid and
       placement of that one component, named for it and kept beside it. A family of components shares a style sheet at
       the family’s root, as the
-      tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code> sit at the top of the tables.</p>
-    <p className="paragraph">Stylelint rules hold three of the five: place, value and selector. <code className="monospaced">selector-max-type</code>, for a tag selector outside the reset, prints <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a
-      class”</a>. <code className="monospaced">property-allowed-list</code>, for a look in a component style sheet, prints that the
+      tables’ <code className="monospaced">Aggregations.css</code> and <code className="monospaced">Picks.css</code> sit
+      at the top of the tables.</p>
+    <p className="paragraph">Stylelint rules hold three of the five: place, value and
+      selector. <code className="monospaced">selector-max-type</code>, for a tag selector outside the reset, prints <a className="signpost" href={stylelintConfig}>“a tag is styled only in src/styles/reset.css; give the element a
+        class”</a>. <code className="monospaced">property-allowed-list</code>, for a look in a component style sheet, prints that the
       property <a className="signpost" href={stylelintConfig}>“is a look; a component sheet holds structure, and a look is a word
         in src/styles that the element wears as a class”</a>.
       The rules for a number where a token belongs, and for a token nothing declares, name the property. BEM and SMACSS
       held their lines by convention; this repository holds them by lint rules that fail the commit.</p>
     <WhereARuleLives/>
-    <p className="paragraph">I use neither <code className="monospaced">@layer</code> for the order nor <code className="monospaced">@scope</code> for a rule’s reach, because the import order above gives the cascade
+    <p className="paragraph">I use neither <code className="monospaced">@layer</code> for the order
+      nor <code className="monospaced">@scope</code> for a rule’s reach, because the import order above gives the cascade
       its order and a component’s own classes, with its rules keyed on them, give a rule its reach. The cost is that the
       order lives in <code className="monospaced">index.css</code>, a list a reader has to know to open, rather than in
       a rule that says so. I do nest a rule inside another where it belongs, as most style sheets here do. So I give up
@@ -170,7 +198,8 @@ export const PresentationPractice: FC = () =>
       under its component’s class when it belongs to that component alone; a look any element can wear stays a single
       flat class in the vocabulary.</p>
     <h3 className="paragraph bold">What a class is named for</h3>
-    <p className="paragraph">The vocabulary’s words are the looks every component draws on: <code className="monospaced">lifted</code>, <code className="monospaced">padded</code>, <code className="monospaced">rounded-corners</code>, <code className="monospaced">muted-ink</code>, <code className="monospaced">attentive</code>. A word in the vocabulary is what Tailwind calls a utility. An
+    <p className="paragraph">The vocabulary’s words are the looks every component draws
+      on: <code className="monospaced">lifted</code>, <code className="monospaced">padded</code>, <code className="monospaced">rounded-corners</code>, <code className="monospaced">muted-ink</code>, <code className="monospaced">attentive</code>. A word in the vocabulary is what Tailwind calls a utility. An
       element wears the words for its needs, and I write no new rule.</p>
     <p className="paragraph"><a className="signpost" href={wathan.address}>Compose a look from a shared set of pieces
       rather than write it again</a>:
@@ -183,7 +212,8 @@ export const PresentationPractice: FC = () =>
       style sheet says what lifted means today, through a token. Change the token and every lifted element follows; the
       markup never held the value. That is the separation the <MomentLink to="presentationLeavesHome">1994
         draft</MomentLink> argued for, the look leaving the markup for a
-      style sheet. That separation keeps the style sheet restyleable, which is what the Zen Garden in the <MomentLink to="zenGarden">2003 moment</MomentLink> showed it is for, and it keeps the constraint where Wathan
+      style sheet. That separation keeps the style sheet restyleable, which is what the Zen Garden in
+      the <MomentLink to="zenGarden">2003 moment</MomentLink> showed it is for, and it keeps the constraint where Wathan
       wants it, in one place.</p>
     <p className="paragraph">BEM takes the independent block and gives up sharing. Tailwind takes sharing and gives up
       restyling. I take both, and pay with a vocabulary that has to be kept, and lint rules that hold it.</p>
@@ -194,14 +224,20 @@ export const PresentationPractice: FC = () =>
       beside it, says how that part is laid out. The needs say what the element asks of the design: <code className="monospaced">muted-bar-below</code> and <code className="monospaced">focus-ringed</code> are
       words from the shared style sheets, each resolved through a token, so the style sheet decides what a muted bar or
       a focus ring is today and every element that asks for one follows. The states say what is true right now. The
-      platform already names most of them, such as <code className="monospaced">:hover</code>, <code className="monospaced">:focus</code>, <code className="monospaced">:invalid</code> and <code className="monospaced">:checked</code>, so a rule uses those <a className="signpost" href={pseudoClasses.address}>pseudo-classes</a>, and I
-      write no class. I add a state name only where the platform has no word: <code className="monospaced">carried</code> for the column or row being dragged, <code className="monospaced">settling</code> for the one sliding back into place, <code className="monospaced">shoved</code> for a neighbor pushed aside. One style sheet, the table’s, says what
+      platform already names most of them, such as <code className="monospaced">:hover</code>, <code className="monospaced">:focus</code>, <code className="monospaced">:invalid</code> and <code className="monospaced">:checked</code>, so a rule uses
+      those <a className="signpost" href={pseudoClasses.address}>pseudo-classes</a>, and I
+      write no class. I add a state name only where the platform has no
+      word: <code className="monospaced">carried</code> for the column or row being
+      dragged, <code className="monospaced">settling</code> for the one sliding back into place, <code className="monospaced">shoved</code> for a neighbor pushed aside. One style sheet, the table’s, says what
       each does. Carried and settling use the same rules for a column and a row; only the lengths handed in differ.
       Shoved has a rule per direction: two across for columns, two down for rows.</p>
     <h3 className="paragraph bold">What the style sheet owes the reader</h3>
     <p className="paragraph">Presentation has duties of its own. Motion is a preference the reader can set, so the
-      style sheet checks <a className="signpost" href={prefersReducedMotion.address}>prefers-reduced-motion</a> before it animates. Grid and flex can change the order the eye sees without changing the order a keyboard moves
-      through, so the HTML keeps <a className="signpost" href={meaningfulSequence.address}>the meaningful sequence</a> and the style sheet only changes the picture.</p>
+      style sheet checks <a className="signpost" href={prefersReducedMotion.address}>prefers-reduced-motion</a> before
+      it animates. Grid and flex can change the order the eye sees without changing the order a keyboard moves
+      through, so the HTML
+      keeps <a className="signpost" href={meaningfulSequence.address}>the meaningful sequence</a> and
+      the style sheet only changes the picture.</p>
     <h3 className="paragraph bold">Where the platform catches up</h3>
     <p className="paragraph">Workarounds go away as the platform catches up. I can move a checkbox off screen, where a
       screen reader still reads it and no one sees it. Its label then carries the design, and the checked state

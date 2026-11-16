@@ -73,12 +73,15 @@ export const BehaviorPractice: FC = () =>
       words, <code className="monospaced">'ascending' | 'descending'</code>, and a misspelled direction is an error
       before the page runs. Every field of the table’s state is <code className="monospaced">readonly</code>, so the
       type checker refuses an edit to an old state, and the reducer has to return a new one. The report is missing
-      before anything has moved, and the selector that reads it returns sand’s <code className="monospaced">Maybe</code>.</p>
-    <p className="paragraph">Scott Wlaschin calls this using the type system to <a className="signpost" href={illegalStates}>“make illegal states unrepresentable”</a>, a phrase he credits to
+      before anything has moved, and the selector that reads it returns
+      sand’s <code className="monospaced">Maybe</code>.</p>
+    <p className="paragraph">Scott Wlaschin calls this using the type system
+      to <a className="signpost" href={illegalStates}>“make illegal states unrepresentable”</a>, a phrase he credits to
       Yaron Minsky.</p>
     <p className="paragraph">Names and types like these let the code read as sentences to the next reader, who was not
       there when I wrote it. I wrote small functions so a condition reads in
-      words: <code className="monospaced">has</code>, <code className="monospaced">not</code>, <code className="monospaced">is</code> and <code className="monospaced">notEmpty</code>, from my own library, <a className="signpost" href="https://github.com/RyanDur/sand">sand</a>. Each is a line or two:</p>
+      words: <code className="monospaced">has</code>, <code className="monospaced">not</code>, <code className="monospaced">is</code> and <code className="monospaced">notEmpty</code>, from my own
+      library, <a className="signpost" href="https://github.com/RyanDur/sand">sand</a>. Each is a line or two:</p>
     <PreludeCarve/>
     <p className="paragraph">Here the table asks, in words I would say aloud, whether a drag is under way and a column
       is settling:</p>
@@ -88,7 +91,8 @@ export const BehaviorPractice: FC = () =>
       whether an element holds something, <code className="monospaced">:not()</code> turns a question round,
       and <code className="monospaced">:is()</code> asks whether any of a list is true:</p>
     <SheetQuestionsCarve/>
-    <p className="paragraph">I would rather the next reader meet a word than work out what a <code className="monospaced">!</code> asks. The cost is that they learn sand’s words first.</p>
+    <p className="paragraph">I would rather the next reader meet a word than work out what
+      a <code className="monospaced">!</code> asks. The cost is that they learn sand’s words first.</p>
     <h3 className="paragraph bold">Where the world comes in</h3>
     <p className="paragraph">Not every event starts at the pointer. A reply from a server or a price
       arriving over a socket is an event like any other: it says what happened somewhere else, and the state still
@@ -114,7 +118,9 @@ export const BehaviorPractice: FC = () =>
     <TradeDecoderCarve/>
     <p className="paragraph">A trade passes three gates on its way in. The text has to parse, the parsed value has to
       match the decoder, and its price, size and time, which the feed sends as text, have to read as numbers. The last
-      gate, <code className="monospaced">toTrade</code>, turns what passed into the page’s own <code className="monospaced">Trade</code>. <code className="monospaced">decodeTrade</code> returns a <code className="monospaced">Maybe</code>, a trade or nothing, and it is nothing when any gate fails, so the
+      gate, <code className="monospaced">toTrade</code>, turns what passed into the page’s
+      own <code className="monospaced">Trade</code>. <code className="monospaced">decodeTrade</code> returns
+      a <code className="monospaced">Maybe</code>, a trade or nothing, and it is nothing when any gate fails, so the
       reducer only ever sees a trade:</p>
     <DecodeTradeCarve/>
     <p className="paragraph">The one place this boundary can throw is <code className="monospaced">JSON.parse</code>,
@@ -156,7 +162,8 @@ export const BehaviorPractice: FC = () =>
       both:</p>
     <BuildsCarve/>
     <p className="paragraph">The plain-script build finds its tables by their data attribute and listens for the
-      table’s own events, each named for what happened. A <a className="signpost" href={customEvent}>CustomEvent</a> is how a page names one:</p>
+      table’s own events, each named for what happened.
+      A <a className="signpost" href={customEvent}>CustomEvent</a> is how a page names one:</p>
     <TableEventsCarve/>
     <h3 className="paragraph bold">The platform first</h3>
     <p className="paragraph">The platform comes first here too. The Structure tab’s
@@ -167,14 +174,17 @@ export const BehaviorPractice: FC = () =>
       right a second time, and the <MomentLink to="someoneNeedsComponents">2013 moment</MomentLink> lists what that
       cost when pages rebuilt the back button and scroll restoration by hand.</p>
     <p className="paragraph">Where the platform is new, I write a small fallback and run it only where a browser lacks
-      the feature. The site has one, in the feedback dialog: its <code className="monospaced">closedby</code> attribute closes it on a click outside, and where a browser lacks that, a click handler closes it too. Its
+      the feature. The site has one, in the feedback dialog: its <code className="monospaced">closedby</code> attribute
+      closes it on a click outside, and where a browser lacks that, a click handler closes it too. Its
       buttons open and close it with invoker commands, which every major browser has shipped since December 2025. I
       write for the browsers that have them, so they get no fallback.</p>
     <p className="paragraph">Any other behavior the platform lacks, I attach with script. The plain-script build finds
-      the element that needs it by a data attribute, like the tables demo’s <code className="monospaced">data-drag-sortable</code>, and React uses a component.</p>
+      the element that needs it by a data attribute, like the tables
+      demo’s <code className="monospaced">data-drag-sortable</code>, and React uses a component.</p>
     <h3 className="paragraph bold">Every gesture has a key</h3>
     <p className="paragraph">Every pointer action has a keyboard equivalent: what a pointer can drag, the
-      arrow keys can move, or the feature is not finished. WCAG requires that all functionality is <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a
+      arrow keys can move, or the feature is not finished. WCAG requires that all functionality
+      is <a className="signpost" href="https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html">“operable through a
         keyboard interface”</a>.</p>
     <p className="paragraph">On the tables demo, an arrow key walks a column or a row: each press moves it one place.
       The table names each walk for what happened:</p>
@@ -183,9 +193,11 @@ export const BehaviorPractice: FC = () =>
       a pointer move the other columns by the same rule:</p>
     <WalkCaseCarve/>
     <p className="paragraph">The focus stays on the column or row being walked, so the next key press reaches it
-      again. WCAG 2.4.3 asks that focus moves <a className="signpost" href={focusOrder}>“in an order that preserves meaning and operability”</a>.</p>
+      again. WCAG 2.4.3 asks that focus
+      moves <a className="signpost" href={focusOrder}>“in an order that preserves meaning and operability”</a>.</p>
     <p className="paragraph">The page also says what moved. A sighted reader watches the order change, and a screen
-      reader user hears where the column or row went. The report is a type, and <code className="monospaced">tableReports.move</code> turns it into words:</p>
+      reader user hears where the column or row went. The report is a type,
+      and <code className="monospaced">tableReports.move</code> turns it into words:</p>
     <MoveReportCarve/>
     <p className="paragraph">Both builds write those words into an <code className="monospaced">output</code> named
       move report. An output is a status, and MDN says a screen reader announces what is posted in
@@ -207,7 +219,8 @@ export const BehaviorPractice: FC = () =>
       </li>
       <li className="paragraph">The journeys test the shell, because it touches the world. They drive the tables by
         pointer and by key in three browsers, and check the order a reader sees and the move report a screen reader
-        hears. AGENTS.md sets one rule for them: <a className="signpost" href={repository.file('AGENTS.md')}>“Journeys run as a reader who asks for less
+        hears. AGENTS.md sets one rule for
+        them: <a className="signpost" href={repository.file('AGENTS.md')}>“Journeys run as a reader who asks for less
           motion, and none is retried or skipped.”</a>
       </li>
       <li className="paragraph">Every pull request that changes code runs <code className="monospaced">tsc -b</code> <a className="signpost" href={repository.file('.github/workflows/checks.yml')}>before it can merge</a>, and the

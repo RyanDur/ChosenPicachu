@@ -136,7 +136,8 @@ const RankStory: FC = () => {
         <Reveal>
           <Says>Picture your toggle as the
             middle cell of a three-by-three grid drawn over the page:
-          <Mdn path="Web/CSS/position-area"> <code className="monospaced">position-area</code></Mdn> picks cells. <code className="monospaced">block-end</code> takes the row below the
+          <Mdn path="Web/CSS/position-area"> <code className="monospaced">position-area</code></Mdn> picks
+            cells. <code className="monospaced">block-end</code> takes the row below the
             toggle; <code className="monospaced">span-inline-start</code> starts from the toggle’s
             own column and spreads toward the line’s start: under the toggle, hanging left, in
             this writing
@@ -186,7 +187,8 @@ const RankStory: FC = () => {
             : <Says>The sort is one value in the page’s arrangement, a column name and a direction. When the page
               calls <code className="monospaced">reconcile</code> after a new
               sort, <code className="monospaced">sortMenus.announceChanged</code> walks the columns and
-              calls <code className="monospaced">sortMenus.announce</code> for each one. Given a direction, <code className="monospaced">sortMenus.announce</code> sets <code className="monospaced">aria-sort</code> on that
+              calls <code className="monospaced">sortMenus.announce</code> for each one. Given
+              a direction, <code className="monospaced">sortMenus.announce</code> sets <code className="monospaced">aria-sort</code> on that
               column’s <code className="monospaced">th</code>.
               Given none, it removes the attribute. So the
               sorting <code className="monospaced">th</code> gains <code className="monospaced">aria-sort</code>, and

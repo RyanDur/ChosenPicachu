@@ -38,7 +38,8 @@ export const TopLayerRecipe: FC = () => {
     soThat="no stacking context can bury the news">
     <Tell>I could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the
       term taught above in <a className="signpost" href={`#${partHeadings.stillLoses}`}><cite>Why 9999 still loses</cite></a>.
-      An element around the banner forms a stacking context by the ways <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else forms a stacking
+      An element around the banner forms a stacking context by the
+      ways <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else forms a stacking
         context</cite></a> shows. <code className="monospaced">position: fixed</code>, which pins the banner to the
       window, does not lift it out of that context,
       as <a className="signpost" href={`#${partHeadings.fixedBannerLoses}`}><cite>Why a fixed banner still

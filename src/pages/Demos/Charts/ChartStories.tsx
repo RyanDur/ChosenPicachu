@@ -334,7 +334,8 @@ const PressureStory: FC = () =>
         <Words want="Volume says how much was traded, never who pushed. The split has to survive the grouping.">
           <Says>The decoder accepts a match only if its side is buy or sell. Coinbase marks the side of the order that
             was waiting, so <code className="monospaced">takerSideOf</code> flips the mark to the side of the trader who
-            took the trade: a mark of sell means a buyer took it. Every Trade keeps that as <code className="monospaced">takerSide</code>.</Says>
+            took the trade: a mark of sell means a buyer took it. Every Trade keeps that
+            as <code className="monospaced">takerSide</code>.</Says>
           <Says><code className="monospaced">pressureShapes.buckets</code> groups the trades into minutes and keeps two
             sums for each minute: the size buyers took and the size sellers took. The chart shows up to 60
             minutes.</Says>

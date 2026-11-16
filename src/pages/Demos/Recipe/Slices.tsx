@@ -14,7 +14,8 @@ export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced}) =>
   <section className="phase card rounded-corners lifted" aria-labelledby="phase-stories">
     <h3 id="phase-stories" className="phase-title title">Slice the design into stories</h3>
     <p className="overview paragraph muted-ink">
-      Once the need is heard and the design has answered shape, I split the work into stories. Each is a <a className="signpost"
+      Once the need is heard and the design has answered shape, I split the work into stories. Each is
+      a <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
         rel="noreferrer">user story</a>, a card, a conversation and a confirmation, as

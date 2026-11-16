@@ -31,7 +31,8 @@ export const BannerExplained: FC = () => {
       </li>
       <li className="run">
         <p className="paragraph">The site’s own banner is fixed too. It is written last on the page, outside the tab’s
-          content. The content wears <code className="monospaced">isolation: isolate</code>, as <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else forms a stacking
+          content. The content wears <code className="monospaced">isolation: isolate</code>,
+          as <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else forms a stacking
             context</cite></a> shows, so no card’s z-index is ever compared with the banner’s. The banner’s 3 is
           compared with the content and with the header, the footer, the site’s navigation and the tabs, none of them
           higher than 2. It stays at the window’s edge, over every card on the page, card two included.</p>
