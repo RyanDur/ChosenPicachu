@@ -5,7 +5,7 @@ import {useControls} from './useControls';
 export const TrackDial: FC = () => {
   const {track, change} = useControls();
   return <Picks label="input track"
-    scale="paragraph"
+    typeScale="paragraph"
     choices={[
       {words: 'By pointer', value: 'pointer'},
       {words: 'By keyboard', value: 'keyboard'}
