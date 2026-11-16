@@ -1,6 +1,6 @@
 import {expect, Locator, Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {chartsPage, dragSortTable, siteFrame, tableWorlds} from './__test_support';
+import {arrivalPatience, chartsPage, dragSortTable, siteFrame, tableWorlds} from './__test_support';
 
 const opensFromTheKeyboardClosesOnEscape = async (
   page: Page,
@@ -9,7 +9,7 @@ const opensFromTheKeyboardClosesOnEscape = async (
   menu: Locator
 ): Promise<void> => {
   await page.goto(at);
-  await expect(toggle).toBeVisible({timeout: 30_000});
+  await expect(toggle).toBeVisible({timeout: arrivalPatience});
   await siteFrame(page).hydrated();
 
   await toggle.focus();
