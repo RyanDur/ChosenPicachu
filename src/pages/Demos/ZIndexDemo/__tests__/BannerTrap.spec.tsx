@@ -1,28 +1,24 @@
-import {render, screen, waitFor, within} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {render, waitFor} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support';
-import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
-import {controlsBeforeTheSteps, wayLabelled} from '@pages/Demos/ZIndexDemo/__test_support';
-
-const oldBanner = /^An old banner\./;
+import {appAddress} from '@__test_support/address';
+import {demoPage, demosAt} from '@pages/Demos/__test_support';
+import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {bannerExhibit, controlsBeforeTheSteps, oldBanner, wayLabelled, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 describe('the banner exhibit', () => {
   test('should give its steps before any control', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
-    const banners = await screen.findByRole('figure', {name: /^The banners\./});
+    const banners = await bannerExhibit.find();
 
-    const [steps] = within(banners).getAllByRole('list');
-
-    expect(controlsBeforeTheSteps(steps, within(banners).getAllByRole('button'))).toEqual([]);
+    expect(controlsBeforeTheSteps(bannerExhibit.steps(banners), bannerExhibit.controls(banners))).toEqual([]);
   });
 
   test('should show Raise a banner on both buttons, under the way each is built', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
-    const banners = await screen.findByRole('figure', {name: /^The banners\./});
+    const banners = await bannerExhibit.find();
 
-    const oldWay = within(banners).getByRole('button', {name: 'Raise a banner, the old way'});
-    const sites = within(banners).getByRole('button', {name: 'Raise a banner, the site’s own'});
+    const oldWay = bannerExhibit.button(banners, 'Raise a banner, the old way');
+    const sites = bannerExhibit.button(banners, 'Raise a banner, the site’s own');
 
     expect(wayLabelled(banners, 'The old way')).toContainElement(oldWay);
     expect(wayLabelled(banners, 'The old way')).not.toContainElement(sites);
@@ -36,50 +32,49 @@ describe('the old banner', () => {
   test('should say nothing until it is raised', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    await screen.findByRole('button', {name: 'Raise a banner, the old way'});
+    await oldBanner.findRaiser();
 
-    expect(screen.queryByText(oldBanner)).not.toBeInTheDocument();
+    expect(oldBanner.query()).not.toBeInTheDocument();
   });
 
   test('should be announced when raised from card one', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    await userEvent.click(await screen.findByRole('button', {name: 'Raise a banner, the old way'}));
+    await oldBanner.raise();
 
-    expect(screen.getByText(oldBanner)).toHaveRole('alert');
+    expect(oldBanner.shown()).toHaveRole('alert');
   });
 
   test('should leave when dismissed by keyboard, and give focus back to the button that raised it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
-    (await screen.findByRole('button', {name: 'Raise a banner, the old way'})).focus();
-    await userEvent.keyboard('{Enter}');
-    await userEvent.tab();
-    await userEvent.tab();
-    expect(screen.getByRole('button', {name: 'dismiss the old banner'})).toHaveFocus();
+    await oldBanner.raiseByKeyboard();
+    await oldBanner.tab();
+    await oldBanner.tab();
+    expect(oldBanner.dismissButton()).toHaveFocus();
 
-    await userEvent.keyboard('{Enter}');
+    await oldBanner.pressEnter();
 
-    expect(screen.queryByText(oldBanner)).not.toBeInTheDocument();
-    expect(screen.getByRole('button', {name: 'Raise a banner, the old way'})).toHaveFocus();
+    expect(oldBanner.query()).not.toBeInTheDocument();
+    expect(oldBanner.raiser()).toHaveFocus();
   });
 });
 
 describe('why a fixed banner still loses', () => {
   test('should open the banner tutorial at the step that writes the panel at the page’s root, keeping the reader’s choices', async () => {
     render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
-    const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});
+    const part = await explanation.part('Why a fixed banner still loses');
 
-    await userEvent.click(within(part).getByRole('link', {name: 'the tutorial below'}));
+    await zIndexTab.follow(part, 'the tutorial below');
 
-    expect(screen.getByText('Write the panel last, at the page’s root')).toBeVisible();
-    expect(screen.getByRole('status', {name: 'url search'})).toHaveTextContent('raised=second');
+    expect(demoPage.says('Write the panel last, at the page’s root')).toBeVisible();
+    expect(appAddress.search()).toHaveTextContent('raised=second');
   });
 
   test('should take the keyboard to the story the tutorial below names', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
-    const part = await screen.findByRole('region', {name: 'Why a fixed banner still loses'});
+    const part = await explanation.part('Why a fixed banner still loses');
 
-    await userEvent.click(within(part).getByRole('link', {name: 'the tutorial below'}));
+    await zIndexTab.follow(part, 'the tutorial below');
 
     const story = recipeFolds.story(document.body, 'The user sees the news over the page');
     await waitFor(() => expect(recipeFolds.itemOf(story)).toHaveFocus());
