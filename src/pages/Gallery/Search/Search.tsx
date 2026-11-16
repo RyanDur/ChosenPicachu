@@ -1,7 +1,7 @@
 import {Dispatch, FC, SubmitEvent, useContext, useEffect, useId, useReducer} from 'react';
 import {useNavigate} from 'react-router';
 import {GalleryLinks} from '@pages/Gallery/Links';
-import {classNames} from '@components';
+import {classNames, PropsWithClassName} from '@components';
 import {maybe, Maybe, nothing, some} from '@ryandur/sand';
 import {art, SearchOptions} from '@pages/Gallery/museums';
 import {useGallery} from '@pages/Gallery/Context';
@@ -9,10 +9,6 @@ import {Source} from '@pages/Gallery/source';
 import './Search.css';
 import searchIcon from '../../../assets/icons/search.svg?url';
 import resetIcon from '../../../assets/icons/reset.svg?url';
-
-type Props = {
-  className?: string;
-};
 
 const suggestionPause = 300;
 
@@ -58,7 +54,7 @@ const afterAPause = (ask: () => {cancel: () => void}): () => void => {
   };
 };
 
-export const Search: FC<Props> = ({className}) => {
+export const Search: FC<PropsWithClassName> = ({className}) => {
   const [{typed, suggestions}, dispatch] = useReducer(nextDraft, blank);
   const navigate = useNavigate();
   const {gallery} = useContext(GalleryLinks);

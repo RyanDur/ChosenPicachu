@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren, useContext, useState} from 'react';
 import {Link} from 'react-router';
 import {maybe, Maybe} from '@ryandur/sand';
-import {classNames} from '@components';
+import {classNames, PropsWithClassName} from '@components';
 import {Loading} from '@components/Loading';
 import {queryString} from '@transport';
 import {useGallery} from '@pages/Gallery/Context';
@@ -13,13 +13,12 @@ import {Art} from '@pages/Gallery/museums';
 
 type Arrival = 'arriving' | 'shown' | 'missing';
 
-type ImageProps = {
+type ImageProps = PropsWithClassName<{
   piece: Art;
-  className?: string;
   linkEnabled?: boolean;
   priority?: boolean;
   lazy?: boolean;
-};
+}>;
 
 const Framed: FC<PropsWithChildren<{link: Maybe<string>; title: string}>> = ({link, title, children}) => link.either(
   to => <Link to={to} aria-label={title} className="scrim looking-glassed liftable">{children}</Link>,

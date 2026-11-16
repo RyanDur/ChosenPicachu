@@ -1,17 +1,17 @@
 import {FC, PropsWithChildren} from 'react';
+import {PropsWithClassName} from '@components';
 import {shapes} from './shapes';
 import './shape.css';
 
 const DEPTH_X = 1;
 const DEPTH_Y = 1.5;
 
-type Props = {
+type Props = PropsWithClassName<{
   x: number;
   foot: number;
   width: number;
   height: number;
-  className?: string;
-};
+}>;
 
 export const Bar: FC<PropsWithChildren<Props>> = ({x, foot, width, height, className, children}) =>
   <g className={className}>

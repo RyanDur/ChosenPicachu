@@ -1,18 +1,17 @@
 import {FC, ChangeEvent, PropsWithChildren} from 'react';
-import {classNames} from '@components';
+import {classNames, PropsWithClassName} from '@components';
 import {FancyInput} from './FancyInput';
 import {Consumer} from '@ryandur/sand';
 import './Fancy.css';
 
-type FancySelectProps = {
+type FancySelectProps = PropsWithClassName<{
   optionValues: Set<string>;
   onChange: Consumer<ChangeEvent<HTMLSelectElement>>;
   value?: string;
-  className?: string;
   required?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
-};
+}>;
 
 export const FancySelect: FC<PropsWithChildren<FancySelectProps>> = (
   {

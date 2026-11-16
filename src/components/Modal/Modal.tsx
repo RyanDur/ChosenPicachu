@@ -1,5 +1,6 @@
 import {FC, MouseEvent, PropsWithChildren, SyntheticEvent} from 'react';
 import {not} from '@ryandur/sand';
+import {PropsWithClassName} from '@components';
 
 const lightDismissMissing = (): boolean => not('closedBy' in HTMLDialogElement.prototype);
 
@@ -13,12 +14,11 @@ const closesOnTheVeil = (event: MouseEvent<HTMLDialogElement>) => {
   }
 };
 
-type ModalProps = PropsWithChildren<{
+type ModalProps = PropsWithChildren<PropsWithClassName<{
   id: string;
   labelledBy: string;
-  className?: string;
   onToggle?: (event: SyntheticEvent<HTMLDialogElement>) => void;
-}>;
+}>>;
 
 const closesInPlaceWhenRemoved = (dialog: HTMLDialogElement) => () => dialog.close();
 

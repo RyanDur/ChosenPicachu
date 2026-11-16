@@ -1,14 +1,13 @@
-import {classNames} from '@components';
+import {classNames, PropsWithClassName} from '@components';
 import {FC, ChangeEvent} from 'react';
 import {Consumer} from '@ryandur/sand';
 import './Fancy.css';
 
-type FancyTextareaProps = {
+type FancyTextareaProps = PropsWithClassName<{
   onChange: Consumer<ChangeEvent<HTMLTextAreaElement>>;
   value?: string;
   readOnly?: boolean;
-  className?: string;
-};
+}>;
 
 export const FancyTextarea: FC<FancyTextareaProps> = (
   {
