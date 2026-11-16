@@ -3,7 +3,7 @@ import {Figure} from '../../Recipe';
 import './DeadZoneFigure.css';
 
 export const DeadZoneFigure: FC = () =>
-  <Figure className="dead-zone" viewBox="0 -20 480 150" title="Where a switch counts" says={<>
+  <Figure className="dead-zone" viewBox="0 -20 480 150" lead="Where a switch counts" says={<>
     The carried column is moving right. A dead zone at the near edge of its neighbor holds still: a quarter of the
     neighbor’s width, or more when the neighbor is much the wider. Past it, the two switch. Coming back the other way,
     the dead zone is at the other edge.

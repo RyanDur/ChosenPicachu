@@ -3,7 +3,7 @@ import {Figure} from '../../Recipe';
 import './CrossingFigure.css';
 
 export const CrossingFigure: FC = () =>
-  <Figure className="crossing" viewBox="0 -20 480 150" title="Where a swap counts" says={<>
+  <Figure className="crossing" viewBox="0 -20 480 150" lead="Where a swap counts" says={<>
     The carried item is moving right. The first quarter of its neighbor holds
     still; past it, the two trade places. Coming back the other way, it is the quarter on the other side.
   </>}>
