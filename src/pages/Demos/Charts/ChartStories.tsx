@@ -462,11 +462,11 @@ const PieStory: FC = () =>
   <Story param="graph" id="pie"
     can="The trader can see who owns the session"
     soThat="the whole pot reads in one circle">
-    <Tell>The pie sums up to the last 1,500 trades as a whole: one slice for the size buyers took and one for the size
+    <Tell>The pie sums up to the last 1,500 trades as a whole: one wedge for the size buyers took and one for the size
       sellers took.</Tell>
     <Tell>It counts only the trades that arrive while the page is open. The fetched past is candles, and a candle
       doesn’t say who took a trade.</Tell>
-    <Tell>The circle has to move as the split changes, and move smoothly. So I make each slice from two half-discs that
+    <Tell>The circle has to move as the split changes, and move smoothly. So I make each wedge from two half-discs that
       only ever rotate, and a share is how far they have turned into view.</Tell>
     <Steps>
       <Step>
@@ -503,15 +503,15 @@ const PieStory: FC = () =>
           <Says>A rotation is one angle, and a CSS transition, which moves a property from its old value to its new
             one over a set time, can move it smoothly; the shape is never rebuilt. So I build the
             cut from rotation alone.</Says>
-          <Says>Each slice is two half-discs. Each half-disc sits behind its own window, a
+          <Says>Each wedge is two half-discs. Each half-disc sits behind its own window, a
             nested <Mdn path="Web/SVG/Element/svg">SVG viewport</Mdn>, that shows one half of the circle and hides the
             other.</Says>
-          <Says>The first window shows the first half-turn of the slice, and the second shows the rest. A share is how
-            far the two half-discs have turned into their windows, in degrees. A slice of less than half a turn leaves
+          <Says>The first window shows the first half-turn of the wedge, and the second shows the rest. A share is how
+            far the two half-discs have turned into their windows, in degrees. A wedge of less than half a turn leaves
             its second half-disc turned out of sight.</Says>
           <Says>A side that took everything is both half-discs fully in view. Nothing changes shape. Everything that
             moves is a rotation or a shift, each over 300 milliseconds.</Says>
-          <Says>Each slice is also pushed a little way out from the center, along its own middle, unless it is the whole
+          <Says>Each wedge is also pushed a little way out from the center, along its own middle, unless it is the whole
             pie. And each is drawn twice, once a little lower, which gives the pie its edge.</Says>
           <Says>The markup passes each number to the style sheet as a custom property, such
             as <code className="monospaced">--turn</code>. A custom property is a value set by name on an element and
@@ -519,11 +519,11 @@ const PieStory: FC = () =>
             the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains. The style sheet declares each one
             with <code className="monospaced">@property</code>, a rule that gives a custom property a type and a
             starting value. The turn and the swing are angles, and the push out from the center is two lengths. Before
-            the markup sets them, a slice sits unturned at the center.</Says>
+            the markup sets them, a wedge sits unturned at the center.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
-            ...carve.unit(pieSource, 'const slices ='), lines.blank,
+            ...carve.unit(pieSource, 'const wedges ='), lines.blank,
             ...carve.unit(pieSource, 'const sweepGates =')
           ]}/>
           <Snippet label="TS" lines={[
@@ -534,7 +534,7 @@ const PieStory: FC = () =>
             ...carve.unit(pieCss, '@property --explode-y {'), lines.blank,
             ...carve.unit(pieCss, '@property --turn {'), lines.blank,
             ...carve.unit(pieCss, '@property --swing {'), lines.blank,
-            ...carve.unit(pieCss, '.slice {')
+            ...carve.unit(pieCss, '.wedge {')
           ]}/>
         </Codes>
       </Step>
@@ -542,7 +542,7 @@ const PieStory: FC = () =>
         <StepHeading title="Print each share"/>
         <Words>
           <Want>A circle without numbers is only an impression. The trader wants the split in figures.</Want>
-          <Says>The legend prints each share as a whole percentage, in its slice’s color. The caption says what the pie
+          <Says>The legend prints each share as a whole percentage, in its wedge’s color. The caption says what the pie
             is: the size traded on each side, up to the last 1,500 trades.</Says>
         </Words>
         <Codes>

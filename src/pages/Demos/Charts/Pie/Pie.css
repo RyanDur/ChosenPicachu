@@ -32,7 +32,7 @@
     overflow: visible;
     transform: scaleY(0.82);
 
-    .slice {
+    .wedge {
       transform: translate(var(--explode-x), var(--explode-y));
       transition: transform 300ms ease-out;
 
