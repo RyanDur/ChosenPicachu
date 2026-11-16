@@ -37,7 +37,7 @@ describe('the table controls', () => {
     expect(await tableControls.readout('<EagerTable className="hide animated"/>')).toBeVisible();
   });
 
-  test('read their prompt as settings apart from its readout', async () => {
+  test('read their fold’s name as settings, apart from its readout', async () => {
     render(<TestApp at="/"><TableControls/></TestApp>);
 
     expect(await tableControls.settings()).toHaveTextContent(/^settings \S/);
