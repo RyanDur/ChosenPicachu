@@ -1,5 +1,5 @@
 import {screen, within} from '@testing-library/react';
-import {is, maybe, not} from '@ryandur/sand';
+import {is, not} from '@ryandur/sand';
 import {computeAccessibleName} from 'dom-accessibility-api';
 
 const runWith = (part: HTMLElement, holds: (run: HTMLElement) => boolean, what: string): HTMLElement => {
@@ -39,7 +39,7 @@ const sampleBeside = (part: HTMLElement, words: RegExp): HTMLElement => {
 
 const sourcesIn = (run: HTMLElement): string[] =>
   sampleFiguresIn(run).flatMap(figure => within(figure).queryAllByRole('link', {name: /on GitHub$/}))
-    .map(link => maybe(link.textContent).orElse(''));
+    .map(link => link.textContent);
 
 export const explanation = {
   part: (heading: string): Promise<HTMLElement> => screen.findByRole('region', {name: heading}),
