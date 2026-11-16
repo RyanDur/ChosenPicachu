@@ -11,6 +11,7 @@ on:
 jobs:
   passed:
     runs-on: ubuntu-26.04
+    timeout-minutes: 30
     permissions:
       contents: read
       pull-requests: read
@@ -47,8 +48,11 @@ jobs:
             echo "::error::#$pull's head $head has no checks run to take the site from"
             exit 1
           fi
-          gh run watch "$run" -R "$GITHUB_REPOSITORY" --interval 15 > /dev/null
-          ready=$(gh run view "$run" -R "$GITHUB_REPOSITORY" --json jobs -q '.jobs[] | select(.name == "ready") | .conclusion')
+          ready=
+          until [ -n "$ready" ]; do
+            sleep 15
+            ready=$(gh run view "$run" -R "$GITHUB_REPOSITORY" --json jobs -q '.jobs[] | select(.name == "ready") | .conclusion')
+          done
           if [ "$ready" != success ]; then
             echo "::error::#$pull's head $head did not pass ready, so its site is not taken"
             exit 1
