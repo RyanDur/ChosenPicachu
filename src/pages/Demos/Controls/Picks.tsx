@@ -8,7 +8,7 @@ type Props<T extends string> = PropsWithClassName<{
   choices: readonly Choice<T>[];
   chosen: T;
   onPicked: (value: T) => void;
-  scale?: 'sub-title' | 'paragraph';
+  typeScale?: 'sub-title' | 'paragraph';
 }>;
 
 export const Picks = <T extends string>({
@@ -17,13 +17,13 @@ export const Picks = <T extends string>({
   choices,
   chosen,
   onPicked,
-  scale = 'sub-title'
+  typeScale = 'sub-title'
 }: Props<T>) => {
   const hydrated = useHydrated();
   return <fieldset className={classNames('picks', 'borderless', 'veiled-rule-below', className)}>
     <legend className="off-screen">{label}</legend>
     {choices.map(({words, value}) =>
-      <label key={value} className={classNames('pick', scale, 'choice-underlined', 'focus-ringed')}>
+      <label key={value} className={classNames('pick', typeScale, 'choice-underlined', 'focus-ringed')}>
         {words}
         <input type="radio"
           className="off-screen"
