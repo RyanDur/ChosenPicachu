@@ -72,6 +72,17 @@ describe('the code voice', () => {
     expect(kinds('TS', "type K<T> = T extends 'a' ? 1 : 2;")["'a'"]).toBe('string');
   });
 
+  it('keeps an apostrophe in markup text from opening a string', () => {
+    const found = kinds('HTML', "<p>Don't stop</p><b>it's</b>");
+
+    expect(found.b).toBe('tag');
+    expect(Object.values(found)).not.toContain('string');
+  });
+
+  it('still reads an attribute value in markup as a string', () => {
+    expect(kinds('HTML', '<p class="note">x</p>')['"note"']).toBe('string');
+  });
+
   it('still reads a line comment after code as a comment', () => {
     expect(kinds('TS', 'const at = 0; // where it starts')['// where it starts']).toBe('comment');
   });

@@ -85,7 +85,7 @@ const css: ReadonlyArray<TokenPattern> = [
 
 const html: ReadonlyArray<TokenPattern> = [
   {pattern: /\{\/\*.*?\*\/}|<!--.*?-->/g, kind: 'comment'},
-  {pattern: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
+  {pattern: /(?<=(?:[([{=,:;?!&|+\-*/%<]|=>)\s*)(?:'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")/g, kind: 'string'},
   {pattern: /(?<=<\/?)[\w.-]+/g, kind: 'tag'},
   {pattern: /(?<=<[\w.-]+\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
   {pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
