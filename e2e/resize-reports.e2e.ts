@@ -155,7 +155,7 @@ for (const {name, at, holder} of tablesFrame.stages) {
       await trades.focusHandle('lookback');
       const before = await trades.announcedShare('lookback');
 
-      await trades.fingerCancelledOnHandle('lookback', 40);
+      await trades.fingerCanceledOnHandle('lookback', 40);
 
       const atCancel = await trades.announcedShare('lookback');
       await trades.hoverAcrossHandle('lookback', 60);
