@@ -124,7 +124,7 @@
     gap: var(--base-x-5);
   }
 
-  .arc > .opener {
+  .arc > .fold-bar {
     display: flex;
     align-items: center;
     gap: var(--base-x-2);
@@ -139,7 +139,7 @@
     }
   }
 
-  .arc[open] > .opener::before {
+  .arc[open] > .fold-bar::before {
     rotate: 90deg;
   }
 
