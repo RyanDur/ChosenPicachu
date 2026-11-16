@@ -101,8 +101,10 @@ const grammars = {
   HTML: wholeSample(markup)
 };
 
+export type Label = keyof typeof grammars;
+
 type Highlight = {
-  tokensOf: (label: keyof typeof grammars, lines: readonly string[]) => Token[][];
+  tokensOf: (label: Label, lines: readonly string[]) => Token[][];
 };
 
 export const highlight: Highlight = {
