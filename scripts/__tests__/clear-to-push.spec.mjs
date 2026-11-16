@@ -1,5 +1,7 @@
 import {checksOf, clearToPush, refusals} from '../clear-to-push.mjs';
 
+const check = (name, bucket, workflow = 'Checks') => ({name, bucket, workflow});
+
 const pull = (number, branch, files) => ({number, headRefName: branch, files: files.map(path => ({path}))});
 
 describe('clear to push', () => {
@@ -8,7 +10,7 @@ describe('clear to push', () => {
       branch: 'verify/a',
       changed: ['src/a.ts'],
       pulls: [pull(1, 'verify/a', ['src/a.ts'])],
-      checks: [{name: 'review', bucket: 'pending'}, {name: 'build_test', bucket: 'pass'}]
+      checks: [check('review', 'pending'), check('build_test', 'pass')]
     });
 
     expect(said).toEqual(['#1 is still running review. Push once the run is done, with every fix for it.']);
@@ -19,7 +21,7 @@ describe('clear to push', () => {
       branch: 'verify/a',
       changed: ['src/a.ts'],
       pulls: [pull(1, 'verify/a', ['src/a.ts'])],
-      checks: [{name: 'review', bucket: 'fail'}, {name: 'build_test', bucket: 'pass'}]
+      checks: [check('review', 'fail'), check('build_test', 'pass')]
     })).toEqual([]);
   });
 
@@ -79,9 +81,27 @@ describe('clear to push', () => {
   test('when the checks cannot be read, the push goes through and says so', () => {
     const dropped = (...args) => {
       if (args.includes('checks')) throw Object.assign(new Error('connection reset'), {stdout: '', stderr: 'connection reset'});
-      return args.includes('list') ? '[]' : 'src/a.ts';
+      return args.includes('list') ? JSON.stringify([pull(1, 'verify/a', ['src/a.ts'])]) : 'src/a.ts';
     };
 
     expect(clearToPush('verify/a', 'HEAD', dropped)).toEqual({refused: [], unread: 'connection reset'});
+  });
+
+  test('a report that gates nothing, or a reply to a review, does not hold a push', () => {
+    expect(refusals({
+      branch: 'verify/a',
+      changed: ['src/a.ts'],
+      pulls: [pull(1, 'verify/a', ['src/a.ts'])],
+      checks: [check('pages', 'pending'), check('rerun', 'pending', 'Discuss'), check('review', 'pass')]
+    })).toEqual([]);
+  });
+
+  test('a branch with no pull request yet is checked for shared files without reading any checks', () => {
+    const run = (...args) => {
+      if (args.includes('checks')) throw new Error('checks were read');
+      return args.includes('list') ? JSON.stringify([pull(1, 'verify/a', ['AGENTS.md'])]) : 'AGENTS.md';
+    };
+
+    expect(clearToPush('verify/b', 'HEAD', run)).toEqual({refused: ['#1 already changes AGENTS.md. That work goes to #1’s owner.']});
   });
 });

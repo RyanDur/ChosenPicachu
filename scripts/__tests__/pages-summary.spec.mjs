@@ -73,6 +73,24 @@ describe('the pages summary', () => {
     expect(one('index.html', labeled('open'), labeled('close'))[0].kind).toBe('words');
   });
 
+  test('a control whose label changes has changed its words, even beside an empty alt', () => {
+    const labeled = words => page(`<img src="a.png" alt="" aria-label="${words}">`);
+
+    expect(one('index.html', labeled('a cat'), labeled('a dog'))[0].kind).toBe('words');
+  });
+
+  test('a field whose placeholder changes has changed its words', () => {
+    const field = words => page(`<input placeholder="${words}">`);
+
+    expect(one('index.html', field('search'), field('find'))[0].kind).toBe('words');
+  });
+
+  test('a field whose value changes has changed its words', () => {
+    const field = words => page(`<input value="${words}">`);
+
+    expect(one('index.html', field('one'), field('two'))[0].kind).toBe('words');
+  });
+
   test('a change spread across the page is shown in an excerpt of bounded length', () => {
     const many = Array.from({length: 300}, (_, at) => `w${at}`).join(' ');
     const [change] = one('index.html', page(`<header>old</header><p>${many}</p><footer>old</footer>`),
