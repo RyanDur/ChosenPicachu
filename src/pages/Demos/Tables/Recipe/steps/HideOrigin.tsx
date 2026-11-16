@@ -72,7 +72,7 @@ export const HideOrigin: FC<{headerSource: Sample; cssSource: Sample; buildSourc
               ...carve.unit(headerSource, 'const moved = '), lines.blank,
               ...carve.span(headerSource, 'className={classNames(', '...looks.motionStates(carried'), lines.blank,
               ...carve.unit(sources.looks, 'const motionStates'), lines.blank,
-              ...carve.span(headerSource, "'--seat-x': looks.pixels(seat?.x)", "'--drift-x': looks.pixels(drift?.x)")
+              ...carve.unit(sources.looks, 'const placement = ')
             ]}/>
             : <Snippet label="TS" lines={[
               ...carve.unit(buildSource, 'const moved = '), lines.blank,

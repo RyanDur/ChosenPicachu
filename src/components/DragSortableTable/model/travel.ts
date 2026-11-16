@@ -1,4 +1,5 @@
-import {empty} from '@ryandur/sand';
+import {DOMAttributes} from 'react';
+import {empty, has} from '@ryandur/sand';
 import {survey} from './survey';
 
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
@@ -64,10 +65,24 @@ const pointer = (
   }
 };
 
+type HeldHandlers = Pick<DOMAttributes<Element>, 'onPointerMove' | 'onPointerUp' | 'onPointerCancel' | 'onLostPointerCapture'>;
+
+const held = <Drag>(
+  drag: Drag | undefined,
+  moved: (held: Drag) => (moving: Moving) => void,
+  release: () => void
+): HeldHandlers => has(drag) ? {
+  onPointerMove: pointer(moved(drag), release),
+  onPointerUp: release,
+  onPointerCancel: release,
+  onLostPointerCapture: pointer(moved(drag), release)
+} : {};
+
 export const travel = {
   still,
   drifted,
   eager,
   lazy,
-  pointer
+  pointer,
+  held
 };

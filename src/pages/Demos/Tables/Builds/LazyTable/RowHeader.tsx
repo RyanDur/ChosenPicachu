@@ -54,19 +54,10 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     className={classNames(
       ...looks.rowHeaderCell, className, ...looks.cellNeeds,
       ...looks.motionStates(columnCarried || carried, settlingFrom, shoved))}
-    style={{
-      '--seat-x': looks.pixels(seat?.x), '--seat-y': looks.pixels(seat?.y),
-      '--drift-x': looks.pixels(drift?.x), '--drift-y': looks.pixels(drift?.y),
-      '--settle-x': looks.pixels(settlingFrom?.seat.x), '--settle-y': looks.pixels(settlingFrom?.seat.y),
-      '--settle-drift-x': looks.pixels(settlingFrom?.drift.x), '--settle-drift-y': looks.pixels(settlingFrom?.drift.y),
-      '--shoved-by': looks.shoveDistance(shoved)
-    }}>
+    style={looks.placement({seat, drift, settlingFrom, shove: shoved})}>
     <RowGrip position={position}
       onPointerDown={lifting.row(() => order, () => standing, lift)}
-      onPointerMove={has(drag) ? travel.pointer(moved(drag), release) : undefined}
-      onPointerUp={has(drag) ? release : undefined}
-      onPointerCancel={has(drag) ? release : undefined}
-      onLostPointerCapture={has(drag) ? travel.pointer(moved(drag), release) : undefined}
+      {...travel.held(drag, moved, release)}
       onKeyDown={arrows.row(row, () => standing, {
         nudged: ({to, heights}) => nudged(to, heights),
         moved: ({to}) => arrived(to)

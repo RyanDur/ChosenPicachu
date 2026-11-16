@@ -1,5 +1,7 @@
+import {CSSProperties} from 'react';
 import {has} from '@ryandur/sand';
 import {ColumnShove, RowShove, Settling} from './table-state';
+import {Drift} from './travel';
 
 const pixels = (length?: number): `${number}px` | undefined => has(length) ? `${length}px` : undefined;
 
@@ -8,6 +10,20 @@ const shoveDistance = (shove?: ColumnShove | RowShove): `${number}px` | undefine
 
 const shoved = (shove?: ColumnShove | RowShove): string | false =>
   has(shove) && `shoved-${shove.toward}`;
+
+type Placement = {seat?: Drift; drift?: Drift; settlingFrom?: Settling; shove?: ColumnShove | RowShove};
+
+const placement = ({seat, drift, settlingFrom, shove}: Placement): CSSProperties => ({
+  '--seat-x': pixels(seat?.x),
+  '--seat-y': pixels(seat?.y),
+  '--drift-x': pixels(drift?.x),
+  '--drift-y': pixels(drift?.y),
+  '--settle-x': pixels(settlingFrom?.seat.x),
+  '--settle-y': pixels(settlingFrom?.seat.y),
+  '--settle-drift-x': pixels(settlingFrom?.drift.x),
+  '--settle-drift-y': pixels(settlingFrom?.drift.y),
+  '--shoved-by': shoveDistance(shove)
+});
 
 const rowHeaderCell = ['cell', 'row-header'] as const;
 
@@ -35,9 +51,7 @@ const motionStates = (
 ];
 
 export const looks = {
-  pixels,
-  shoveDistance,
-  shoved,
+  placement,
   rowHeaderCell,
   headerCell,
   headerNeeds,
