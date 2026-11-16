@@ -93,7 +93,7 @@ describe('a keyboard step', () => {
 
     const steppedAgain = dragSort.reduce(settled, dragSortChange.stepped('B', 1));
 
-    expect([stepped, steppedAgain].map(({slideStarts: starts}) => slideStarts.running(starts, 'B').map(({again}) => again).orNull()))
+    expect([stepped, steppedAgain].map(({slideStarts: starts}) => slideStarts.runningSlide(starts, 'B').map(({again}) => again).orNull()))
       .toEqual([false, true]);
   });
 });
