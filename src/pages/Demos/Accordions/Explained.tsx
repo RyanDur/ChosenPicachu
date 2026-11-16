@@ -676,7 +676,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   1fr is exactly as tall as its content needs, and a row of 0fr has no height. The row is 0fr while
                   the fold is closed and 1fr while it is open. A row in fr is a number, so 0fr to 1fr is a number
                   growing, which a transition can move. The row always ends at the text’s own height, so nothing is
-                  guessed, measured or fixed.
+                  guessed, measured or fixed. The site’s reset gives every details’ hidden part a height of 0 while it
+                  is closed, so this one sets its height back to auto and leaves the closing to the row.
                 {{
                   reveal: ' With reveal, the row moves over 300 milliseconds with ease-in-out, and the text shows from its top down. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide.',
                   drawer: ' With the drawer, the row moves on the same 300 milliseconds and sets the text at its bottom, so the text’s bottom edge stays on the fold’s edge as it slides down from under the bar. Content-visibility hides the closed content and has no values between on and off; allow-discrete lets it switch at the end of a close and at the start of an open, which keeps the text visible for the whole slide.',

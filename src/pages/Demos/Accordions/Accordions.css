@@ -14,6 +14,7 @@
     &::details-content {
       display: grid;
       grid-template-rows: 0fr;
+      block-size: auto;
       overflow: hidden;
     }
 
@@ -152,6 +153,7 @@
 
     .info-measured {
       overflow: hidden;
+      interpolate-size: numeric-only;
     }
 
     .drawer & .info-measured {
