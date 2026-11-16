@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {classNames} from '@components';
 import {RowGrip, useBodyEvents, useTableDispatch, useTableRead} from '@components/DragSortableTable';
 import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableReads, looks, travel, arrangements, lifting} from '@components/DragSortableTable/model';
@@ -40,7 +40,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   };
   const release = (): void => {
     if (has(drag)) {
-      const to = has(drag.landing) ? standing.indexOf(drag.landing) : standing.indexOf(row);
+      const to = drag.landing.map(neighbor => standing.indexOf(neighbor)).orElse(standing.indexOf(row));
       const settling = tableReads.settlingOfRowIn(row, arrangements.movedTo(standing, row, to))(view);
       lazyDrop.released(drag, neighbor => beside(neighbor, drag.survey));
       if (has(settling)) {
@@ -57,7 +57,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     style={looks.placement({seat, drift, settlingFrom, shove: shoved})}>
     <RowGrip position={position}
       onPointerDown={lifting.row(() => order, () => standing, lift)}
-      {...travel.whileHeld(drag, moved, release)}
+      {...travel.whileHeld(maybe(drag), moved, release)}
       onKeyDown={arrows.row(row, () => standing, {
         nudged: ({to, heights}) => nudged(to, heights),
         moved: ({to}) => arrived(to)

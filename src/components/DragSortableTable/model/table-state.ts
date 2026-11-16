@@ -1,5 +1,5 @@
 import {Report} from './report';
-import {has, maybe} from '@ryandur/sand';
+import {has, maybe, Maybe, nothing} from '@ryandur/sand';
 import {ColumnWidths, Grip, shares} from './shares';
 import {Direction, SortKey} from './sorting';
 import {Drift, Moving, travel} from './travel';
@@ -48,8 +48,8 @@ type Flying = {
 };
 
 export type Drag = Flying & (
-  | {readonly axis: 'column'; readonly held: string; readonly landing?: string}
-  | {readonly axis: 'row'; readonly held: string; readonly landing?: string}
+  | {readonly axis: 'column'; readonly held: string; readonly landing: Maybe<string>}
+  | {readonly axis: 'row'; readonly held: string; readonly landing: Maybe<string>}
 );
 
 export type ColumnDrag = Extract<Drag, {axis: 'column'}>;
@@ -191,7 +191,7 @@ const flying = (grab: Grab): Flying =>
   ({survey: grab.survey, box: grab.box, origin: grab.at, drift: travel.still});
 
 const dragOf = (carry: Carry, grab: Grab): Drag =>
-  ({...carry, ...flying(grab)});
+  ({...carry, ...flying(grab), landing: nothing()});
 
 const lift = (state: TableState, carry: Carry, grab: Grab): TableState =>
   ({...unmarked(state), drag: dragOf(carry, grab)});
@@ -199,10 +199,10 @@ const lift = (state: TableState, carry: Carry, grab: Grab): TableState =>
 const drift = (state: TableState, moving: Moving): TableState =>
   has(state.drag) ? {...state, drag: {...state.drag, drift: travel.drifted(moving, state.drag.origin)}} : state;
 
-const landColumn = (state: TableState, landing?: string): TableState =>
+const landColumn = (state: TableState, landing: Maybe<string>): TableState =>
   state.drag?.axis === 'column' ? {...state, drag: {...state.drag, landing}} : state;
 
-const landRow = (state: TableState, landing?: string): TableState =>
+const landRow = (state: TableState, landing: Maybe<string>): TableState =>
   state.drag?.axis === 'row' ? {...state, drag: {...state.drag, landing}} : state;
 
 const orderAtLift = (drag: Drag): readonly string[] =>

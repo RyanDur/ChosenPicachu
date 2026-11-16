@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {classNames} from '@components';
 import {useHeaderEvents, useTableDispatch, useTableRead} from '@components/DragSortableTable';
 import {arrangements, arrows, ColumnDrag, Grab, lifting, looks, Moving, PixelSizes, shares, Survey, survey, tableActions, tableReads, travel} from '@components/DragSortableTable/model';
@@ -41,7 +41,8 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   };
   const release = (): void => {
     if (has(drag)) {
-      const to = has(drag.landing) ? survey.interior(order.indexOf(drag.landing), count) : order.indexOf(column);
+      const to = drag.landing.map(neighbor => survey.interior(order.indexOf(neighbor), count))
+        .orElse(order.indexOf(column));
       const settling = tableReads.settlingOfColumnIn(column, arrangements.movedTo(order, column, to))(view);
       lazyDrop.released(drag, neighbor => beside(neighbor, drag.survey));
       if (has(settling)) {
@@ -59,7 +60,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     aria-sort={sorted}
     tabIndex={travels ? 0 : undefined}
     onPointerDown={travels ? lifting.column(column, () => order, () => standing, lift) : undefined}
-    {...travel.whileHeld(drag, moved, release)}
+    {...travel.whileHeld(maybe(drag), moved, release)}
     onKeyDown={travels ? arrows.column(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{

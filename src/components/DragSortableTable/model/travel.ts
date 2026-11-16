@@ -1,5 +1,5 @@
 import {DOMAttributes} from 'react';
-import {empty, has} from '@ryandur/sand';
+import {Maybe} from '@ryandur/sand';
 import {survey} from './survey';
 
 export type DragStyle = 'eager-move' | 'lazy-move' | 'hide-eager-move' | 'hide-lazy-move';
@@ -20,24 +20,16 @@ const drifted = (moving: Moving, from: Drift): Drift =>
   ({x: moving.clientX - from.x, y: moving.clientY - from.y});
 
 const eager = <Seat>(
-  under: (x: number, y: number, held: Seat) => Seat | undefined,
+  under: (x: number, y: number, held: Seat) => Maybe<Seat>,
   held: Seat,
   settle: (struck: Seat) => void
 ) => (moving: Moving): void => {
-  const struck = under(moving.clientX, moving.clientY, held);
-  if (survey.struckAway(held, struck)) {
-    settle(struck);
-  }
+  under(moving.clientX, moving.clientY, held).mBind(struck => survey.struckAway(held, struck)).map(settle);
 };
 
-const lazy = <Seat>(under: (x: number, y: number, held: Seat) => Seat | undefined) =>
-  (held: Seat, moving: Moving, landing: Seat | undefined): Seat | undefined => {
-    const struck = under(moving.clientX, moving.clientY, held);
-    if (empty(struck)) {
-      return landing;
-    }
-    return survey.struckAway(held, struck) ? struck : undefined;
-  };
+const lazy = <Seat>(under: (x: number, y: number, held: Seat) => Maybe<Seat>) =>
+  (held: Seat, moving: Moving, landing: Maybe<Seat>): Maybe<Seat> =>
+    under(moving.clientX, moving.clientY, held).either(struck => survey.struckAway(held, struck), () => landing);
 
 type MoveEvent = {
   buttons: number;
@@ -75,15 +67,15 @@ const notHeld: HeldHandlers = {
 };
 
 const whileHeld = <Drag>(
-  drag: Drag | undefined,
+  drag: Maybe<Drag>,
   moved: (held: Drag) => (moving: Moving) => void,
   release: () => void
-): HeldHandlers => has(drag) ? {
-  onPointerMove: pointer(moved(drag), release),
+): HeldHandlers => drag.map((held): HeldHandlers => ({
+  onPointerMove: pointer(moved(held), release),
   onPointerUp: release,
   onPointerCancel: release,
-  onLostPointerCapture: pointer(moved(drag), release)
-} : notHeld;
+  onLostPointerCapture: pointer(moved(held), release)
+})).orElse(notHeld);
 
 export const travel = {
   still,
