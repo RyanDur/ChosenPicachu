@@ -15,8 +15,6 @@ const findRaiser = (): Promise<HTMLElement> => screen.findByRole('button', {name
 
 export const bannerExhibit = {
   find: (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^The banners\./}),
-  steps: (exhibit: HTMLElement): HTMLElement => within(exhibit).getAllByRole('list')[0],
-  controls: (exhibit: HTMLElement): HTMLElement[] => within(exhibit).getAllByRole('button'),
   button: (exhibit: HTMLElement, name: string): HTMLElement => within(exhibit).getByRole('button', {name})
 };
 
