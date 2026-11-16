@@ -1,14 +1,14 @@
 import {FC} from 'react';
-import {Quotation} from '@components/Quotation';
+import {Attribution, Quotation, Quote} from '@components/Quotation';
 
 export const BehaviorStory: FC = () =>
   <>
-    <Quotation voice="paragraph" source={<a className="signpost"
-      href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">Brendan
-      Eich, in Computerworld’s A-Z of Programming Languages</a>}>
-      With a scripting language like JS that could touch elements of the page, change
-      their properties, and respond to events, we envisioned a much livelier Web
-      consisting of pages that acted more like applications.
+    <Quotation>
+      <Quote voice="paragraph">
+        With a scripting language like JS that could touch elements of the page, change their properties, and respond to
+        events, we envisioned a much livelier Web consisting of pages that acted more like applications.
+      </Quote>
+      <Attribution><a className="signpost" href="https://web.archive.org/web/20191215100745/https://www.computerworld.com/article/3458282/the-a-z-of-programming-languages-javascript.html">Brendan Eich, in Computerworld’s A-Z of Programming Languages</a></Attribution>
     </Quotation>
     <p className="paragraph">Each of Eich’s three verbs is something a script could do once the server had sent the
       page. What follows is how script went from changing that page, at Netscape in 1995, to holding a program’s state
