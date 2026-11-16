@@ -1,7 +1,7 @@
 .disclosure {
   width: 100%;
 
-  > .opener {
+  > .fold-bar {
     display: flex;
     align-items: center;
     gap: var(--base-x-2);
@@ -16,7 +16,7 @@
     }
   }
 
-  &[open] > .opener::before {
+  &[open] > .fold-bar::before {
     rotate: 90deg;
   }
 }
