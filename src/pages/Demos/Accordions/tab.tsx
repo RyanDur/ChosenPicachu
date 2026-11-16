@@ -6,8 +6,8 @@ type Draws = ReturnType<typeof seeded>;
 
 const paragraphs = (count: number, dealt: () => string, {randNumber, randParagraph}: Draws) =>
   Array.from({length: count}, () => ({
-    title: dealt(),
-    text: Array.from({length: randNumber({min: 1, max: 6})}, () => randParagraph()).join(' ')
+    summary: dealt(),
+    body: Array.from({length: randNumber({min: 1, max: 6})}, () => randParagraph()).join(' ')
   }));
 
 const draws = seeded('the accordion exhibits');
