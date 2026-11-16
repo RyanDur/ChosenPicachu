@@ -33,7 +33,7 @@ const dress = (mounted: MountedTable, state: TableState): void => {
 type Carrier = Pick<TableContext, 'store' | 'moved' | 'dropped'>;
 
 const follow = (holder: HTMLElement, {store, moved, dropped}: Carrier): void => {
-  (['pointermove', 'lostpointercapture'] as const).forEach(travelling => holder.addEventListener(travelling, event =>
+  (['pointermove', 'lostpointercapture'] as const).forEach(traveling => holder.addEventListener(traveling, event =>
     has(store.state.drag) ? travel.pointer(moved, dropped)(event) : undefined));
   (['pointerup', 'pointercancel'] as const).forEach(ending => holder.addEventListener(ending, () => dropped()));
 };

@@ -93,7 +93,7 @@ test.describe('a finger on a phone', () => {
     const finger = await charts.fingerOnTheGrip('live trades');
     await expect(charts.seat('live trades')).toHaveAttribute('draggable', 'true');
 
-    await finger.cancelled();
+    await finger.canceled();
     await expect(charts.seat('live trades')).not.toHaveAttribute('draggable', 'true');
   });
 });
