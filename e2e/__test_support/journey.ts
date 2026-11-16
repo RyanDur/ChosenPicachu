@@ -9,15 +9,15 @@ const canceledByLeaving = /due to access control checks\.$/;
 // A late web font lands while a ResizeObserver delivers, so WebKit defers one notification (run 43808186638).
 const fontLandedMidDelivery = 'ResizeObserver loop completed with undelivered notifications.';
 
-const isPlatformNoise = (message: string): boolean =>
+const isWebKitNoise = (message: string): boolean =>
   canceledByLeaving.test(message) || message === fontLandedMidDelivery;
 
 export const test = base.extend<{noUncaughtErrors: void}>({
-  noUncaughtErrors: [async ({context}, use) => {
+  noUncaughtErrors: [async ({context, browserName}, use) => {
     const errors: string[] = [];
     const watch = (page: Page): void => {
       page.on('pageerror', error => {
-        if (not(isPlatformNoise(error.message))) errors.push(`${page.url()}: ${error.message}`);
+        if (not(browserName === 'webkit' && isWebKitNoise(error.message))) errors.push(`${page.url()}: ${error.message}`);
       });
     };
     context.pages().forEach(watch);
