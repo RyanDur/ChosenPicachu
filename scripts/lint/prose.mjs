@@ -2,13 +2,13 @@ import {empty, has, maybe, not} from '@ryandur/sand';
 import {limit} from './wrap.mjs';
 
 const stringTokenTypes = new Set(['String', 'Template']);
-export const spaceClosedAtLineEnd = /^}[ \t]*\n/;
-export const endsInWord = /[^\s<>{}]$/;
-export const startsWithMarkup = /^[<{]/;
-export const lineBreakAhead = /^[ \t]*\n(?:[ \t]*\n)*([ \t]*)/;
-export const indentOfLine = /^[ \t]*/;
-export const lastWordOfLine = /^(.*\S)( +)([^\s<>{}]+)$/;
-export const firstWordOfLine = /^([^\s<>{}]+) +(\S.*)$/;
+const spaceClosedAtLineEnd = /^}[ \t]*\n/;
+const endsInWord = /[^\s<>{}]$/;
+const startsWithMarkup = /^[<{]/;
+const lineBreakAhead = /^[ \t]*\n(?:[ \t]*\n)*([ \t]*)/;
+const indentOfLine = /^[ \t]*/;
+const lastWordOfLine = /^(.*\S)( +)([^\s<>{}]+)$/;
+const firstWordOfLine = /^([^\s<>{}]+) +(\S.*)$/;
 
 /** A space held in `{' '}` at a line's end, which JSX needs only because the break sits beside an element. */
 /** @type {import('eslint').Rule.RuleModule} */
@@ -95,4 +95,15 @@ const breaksBetweenWords = {
   }
 };
 
-export const prose = {rules: {'breaks-between-words': breaksBetweenWords}};
+export const prose = {
+  rules: {'breaks-between-words': breaksBetweenWords},
+  patterns: {
+    spaceClosedAtLineEnd,
+    endsInWord,
+    startsWithMarkup,
+    lineBreakAhead,
+    indentOfLine,
+    lastWordOfLine,
+    firstWordOfLine
+  }
+};
