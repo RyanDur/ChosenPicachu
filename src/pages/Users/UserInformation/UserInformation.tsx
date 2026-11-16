@@ -1,6 +1,6 @@
 import {FC, useReducer} from 'react';
 import {FancyDateInput, FancyInput, FancyTextarea} from '../FancyFormElements';
-import {classNames} from '@components';
+import {classNames, PropsWithClassName} from '@components';
 import {User} from '../profile';
 import {draftActions} from './draftActions';
 import {AddressFields} from './AddressFields';
@@ -46,10 +46,10 @@ const shown = (open: Opened): Maybe<User> => open.mode === 'adding' ? maybe(open
 
 const draftKey = (open: Opened): string => `${open.mode}:${shown(open).map(({id}) => id).orElse('')}`;
 
-export const UserInformation: FC<{className?: string}> = ({className}) =>
+export const UserInformation: FC<PropsWithClassName> = ({className}) =>
   <Draft key={draftKey(useOpened())} className={className}/>;
 
-const Draft: FC<{className?: string}> = ({className}) => {
+const Draft: FC<PropsWithClassName> = ({className}) => {
   const open = useOpened();
   const usersDispatch = useUsersDispatch();
   const hydrated = useHydrated();

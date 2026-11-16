@@ -1,20 +1,19 @@
 import {FC, ChangeEvent, PropsWithChildren} from 'react';
-import {classNames} from '@components';
+import {classNames, PropsWithClassName} from '@components';
 import {format} from 'date-fns';
 import './Fancy.css';
 
-type FancyTextInputProps = {
+type FancyTextInputProps = PropsWithClassName<{
   type?: 'text' | 'email' | 'date';
   required?: boolean;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  className?: string;
   inputClass?: string;
   labelClass?: string;
   value?: string | Date;
   readOnly?: boolean;
   disabled?: boolean;
   pattern?: string;
-};
+}>;
 
 export const FancyInput: FC<PropsWithChildren<FancyTextInputProps>> = (
   {

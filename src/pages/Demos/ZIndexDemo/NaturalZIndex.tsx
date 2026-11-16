@@ -1,8 +1,7 @@
 import {FC, useState} from 'react';
 import {not} from '@ryandur/sand';
 import {PillGlider} from '@components/PillGlider';
-import {PropsWithClassName} from '../props-with-class-name';
-import {classNames} from '@components';
+import {classNames, PropsWithClassName} from '@components';
 import {inOrder, RaisedCard, useControls} from '../Controls';
 import './ZIndexDemo.css';
 

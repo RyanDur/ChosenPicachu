@@ -1,5 +1,5 @@
 import {not} from '@ryandur/sand';
-import {classNames} from '@components';
+import {classNames, PropsWithClassName} from '@components';
 import {useHydrated} from '@components';
 import './Picks.css';
 
@@ -8,14 +8,13 @@ type Option<T extends string> = {
   value: T;
 };
 
-type Props<T extends string> = {
+type Props<T extends string> = PropsWithClassName<{
   label: string;
-  className?: string;
   options: readonly Option<T>[];
   chosen: T;
   onPicked: (value: T) => void;
   size?: 'sub-title' | 'paragraph';
-};
+}>;
 
 export const Picks = <T extends string>({label, className, options, chosen, onPicked, size = 'sub-title'}: Props<T>) => {
   const hydrated = useHydrated();

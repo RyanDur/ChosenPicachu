@@ -1,8 +1,8 @@
 import {FC, PropsWithChildren, ReactNode} from 'react';
 import './RecipeFigure.css';
-import {classNames} from '@components';
+import {classNames, PropsWithClassName} from '@components';
 
-type Props = PropsWithChildren<{viewBox: string; title: string; says: ReactNode; className?: string}>;
+type Props = PropsWithChildren<PropsWithClassName<{viewBox: string; title: string; says: ReactNode}>>;
 
 export const Figure: FC<Props> = ({viewBox, title, says, className, children}) =>
   <figure className={classNames('recipe-figure', className)}>

@@ -1,6 +1,6 @@
 import {FC, PropsWithChildren, useId} from 'react';
 import {FancyInput, FancySelect} from '../../FancyFormElements';
-import {classNames} from '@components';
+import {classNames, PropsWithClassName} from '@components';
 import {stateAbbreviations} from './states';
 import {AddressName} from '../draftActions';
 import {useAddressDraft} from '../useAddressDraft';
@@ -8,11 +8,10 @@ import {useOpened} from '../../useOpened';
 import {not} from '@ryandur/sand';
 import './AddressFields.css';
 
-type AddressFieldsAttributes = {
+type AddressFieldsAttributes = PropsWithClassName<{
   title: string;
-  className?: string;
   name: AddressName;
-};
+}>;
 
 export const AddressFields: FC<PropsWithChildren<AddressFieldsAttributes>> = (
   {
