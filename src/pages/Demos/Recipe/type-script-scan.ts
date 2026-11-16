@@ -14,7 +14,7 @@ export type Scanned = {
 
 type CodeState = {within: 'code'; closesOnBrace: boolean; braces: number};
 type TagState = {within: 'tag'; closing: boolean};
-type MarkupTextState = {within: 'text'; open: number};
+type MarkupTextState = {within: 'text'; openElements: number};
 type TemplateLiteralState = {within: 'template'; from: number};
 type ScanState = CodeState | TagState | MarkupTextState | TemplateLiteralState;
 
@@ -102,8 +102,8 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
     stack.pop();
     const around = innermost();
     if (around.within !== 'text') return;
-    around.open += closing ? -1 : selfClosing ? 0 : 1;
-    if (around.open <= 0) stack.pop();
+    around.openElements += closing ? -1 : selfClosing ? 0 : 1;
+    if (around.openElements <= 0) stack.pop();
   };
   const enterBraces = (at: number): number => {
     stack.push({within: 'code', closesOnBrace: true, braces: 0});
@@ -140,7 +140,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
       return recordRun(at, endOfQuoted(text, at, here), 'string');
     }
     if (here === '<' && opensAnElement(at, before)) {
-      stack.push({within: 'text', open: 0});
+      stack.push({within: 'text', openElements: 0});
       return openTag(at);
     }
     if (here === '}' && frame.braces === 0 && frame.closesOnBrace) return leaveBraces(at);
@@ -210,5 +210,5 @@ type Scan = {
 
 export const scan: Scan = {
   typeScript: text => scanFrom(text, {within: 'code', closesOnBrace: false, braces: 0}),
-  markup: text => scanFrom(text, {within: 'text', open: Number.POSITIVE_INFINITY})
+  markup: text => scanFrom(text, {within: 'text', openElements: Number.POSITIVE_INFINITY})
 };
