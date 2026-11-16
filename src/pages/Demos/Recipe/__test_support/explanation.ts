@@ -21,8 +21,13 @@ const drawingsIn = (part: HTMLElement): HTMLElement[] =>
   within(part).getAllByRole('figure')
     .filter(figure => not(within(figure).queryByRole('code')) && not(within(figure).queryAllByTitle(/./).length));
 
+const sampleFiguresIn = (run: HTMLElement): HTMLElement[] => {
+  const figures = within(run).queryAllByRole('figure');
+  return figures.filter(figure => not(figures.some(other => other !== figure && figure.contains(other))));
+};
+
 const samplesIn = (run: HTMLElement): HTMLElement[] =>
-  within(run).queryAllByRole('figure').flatMap(figure => within(figure).queryAllByRole('code'));
+  sampleFiguresIn(run).flatMap(figure => within(figure).queryAllByRole('code'));
 
 const sampleBeside = (part: HTMLElement, words: RegExp): HTMLElement => {
   const samples = samplesIn(runTelling(part, words));
@@ -33,7 +38,7 @@ const sampleBeside = (part: HTMLElement, words: RegExp): HTMLElement => {
 };
 
 const sourcesIn = (run: HTMLElement): string[] =>
-  within(run).queryAllByRole('figure').flatMap(figure => within(figure).queryAllByRole('link', {name: /on GitHub$/}))
+  sampleFiguresIn(run).flatMap(figure => within(figure).queryAllByRole('link', {name: /on GitHub$/}))
     .map(link => link.textContent ?? '');
 
 export const explanation = {

@@ -21,4 +21,9 @@ describe('a step', () => {
     expect(screen.getByRole('article', {name: 'Slide out'})).toHaveTextContent('the panel slides');
   });
 
+  test('names its code by its heading', () => {
+    twoSteps();
+
+    expect(screen.getByRole('figure', {name: 'Open a gap'})).toHaveTextContent('gap code');
+  });
 });
