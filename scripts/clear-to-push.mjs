@@ -49,7 +49,7 @@ export const refusals = ({branch, changed, pulls, checks}) => {
 /** @typedef {(command: string, ...args: string[]) => string} Run */
 
 /** @type {Run} */
-const outputOf = (command, ...args) => execFileSync(command, args, {encoding: 'utf8', stdio: 'pipe'}).trim();
+const outputOf = (command, ...args) => execFileSync(command, args, {encoding: 'utf8', stdio: 'pipe', timeout: 15_000}).trim();
 
 /**
  * @param {string} branch
@@ -79,7 +79,7 @@ export const clearToPush = (branch, pushed, run = outputOf) => {
     /** @type {Pull[]} */
     const pulls = JSON.parse(run('gh', 'pr', 'list', '--state', 'open', '--json', 'number,headRefName,files'));
     run('git', 'fetch', '--quiet', 'origin', 'main');
-    const changed = run('git', 'diff', '--name-only', `origin/main...${pushed}`).split('\n').filter(path => has(path));
+    const changed = run('git', 'diff', '--name-only', '--no-renames', `origin/main...${pushed}`).split('\n').filter(path => has(path));
     const opened = pulls.some(({headRefName}) => headRefName === branch);
     return {refused: refusals({branch, changed, pulls, checks: opened ? checksOf(branch, run) : []})};
   } catch (error) {

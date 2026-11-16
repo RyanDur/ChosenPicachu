@@ -41,10 +41,16 @@ jobs:
             echo "::error::#$pull's head $head holds a different tree from $GITHUB_SHA, so its site is not this commit's"
             exit 1
           fi
-          run=$(gh run list -R "$GITHUB_REPOSITORY" --workflow checks.yml --commit "$head" --status success --limit 1 \
+          run=$(gh run list -R "$GITHUB_REPOSITORY" --workflow checks.yml --commit "$head" --event pull_request --limit 1 \
             --json databaseId -q '.[0].databaseId // empty')
           if [ -z "$run" ]; then
-            echo "::error::#$pull's head $head has no passing checks run to take the site from"
+            echo "::error::#$pull's head $head has no checks run to take the site from"
+            exit 1
+          fi
+          gh run watch "$run" -R "$GITHUB_REPOSITORY" --interval 15 > /dev/null
+          ready=$(gh run view "$run" -R "$GITHUB_REPOSITORY" --json jobs -q '.jobs[] | select(.name == "ready") | .conclusion')
+          if [ "$ready" != success ]; then
+            echo "::error::#$pull's head $head did not pass ready, so its site is not taken"
             exit 1
           fi
           if [ -z "$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run/artifacts?name=site" -q '.artifacts[] | select(.expired | not) | .id')" ]; then
