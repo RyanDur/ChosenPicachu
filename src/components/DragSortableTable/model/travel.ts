@@ -67,6 +67,13 @@ const pointer = (
 
 type HeldHandlers = Pick<DOMAttributes<Element>, 'onPointerMove' | 'onPointerUp' | 'onPointerCancel' | 'onLostPointerCapture'>;
 
+const notHeld: HeldHandlers = {
+  onPointerMove: undefined,
+  onPointerUp: undefined,
+  onPointerCancel: undefined,
+  onLostPointerCapture: undefined
+};
+
 const held = <Drag>(
   drag: Drag | undefined,
   moved: (held: Drag) => (moving: Moving) => void,
@@ -76,7 +83,7 @@ const held = <Drag>(
   onPointerUp: release,
   onPointerCancel: release,
   onLostPointerCapture: pointer(moved(drag), release)
-} : {};
+} : notHeld;
 
 export const travel = {
   still,
