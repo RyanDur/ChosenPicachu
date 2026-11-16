@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {has, not} from '@ryandur/sand';
 import {classNames} from '@components';
-import {Kind} from './highlight';
+import {Kind, Label} from './highlight';
 import {excerpts} from './excerpts';
 import {CodeFile} from './sample';
 import './Snippet.css';
@@ -13,7 +13,7 @@ export type Line = {
 };
 
 type Props = {
-  label: 'HTML' | 'CSS' | 'TS';
+  label: Label;
   lines: readonly Line[];
 };
 
