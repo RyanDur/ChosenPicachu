@@ -67,4 +67,21 @@ describe('clear to push', () => {
 
     expect(clearToPush('verify/a', 'HEAD', offline)).toEqual({refused: [], unread: 'could not resolve host: api.github.com'});
   });
+
+  test('a branch with no pull request yet has no checks', () => {
+    const none = () => {
+      throw Object.assign(new Error('exit status 1'), {stdout: '', stderr: 'no pull requests found for branch "verify/a"'});
+    };
+
+    expect(checksOf('verify/a', none)).toEqual([]);
+  });
+
+  test('when the checks cannot be read, the push goes through and says so', () => {
+    const dropped = (...args) => {
+      if (args.includes('checks')) throw Object.assign(new Error('connection reset'), {stdout: '', stderr: 'connection reset'});
+      return args.includes('list') ? '[]' : 'src/a.ts';
+    };
+
+    expect(clearToPush('verify/a', 'HEAD', dropped)).toEqual({refused: [], unread: 'connection reset'});
+  });
 });
