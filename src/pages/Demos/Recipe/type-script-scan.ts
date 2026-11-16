@@ -70,21 +70,21 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
   const isCode = Array.from({length: text.length}, () => false);
   const stack: ScanState[] = [first];
   let elementEndedAt = -1;
-  const mark = (start: number, end: number, kind: Run['kind']): number => {
+  const recordRun = (start: number, end: number, kind: Run['kind']): number => {
     runs.push({start, length: end - start, kind});
     return end;
   };
-  const top = (): ScanState => stack[stack.length - 1];
+  const innermost = (): ScanState => stack[stack.length - 1];
   const openTag = (at: number): number => {
     const closing = text[at + 1] === '/';
     stack.push({within: 'tag', closing});
     const nameStart = at + (closing ? 2 : 1);
     const length = nameAt(text, nameStart);
-    return length === 0 ? nameStart : mark(nameStart, nameStart + length, 'tag');
+    return length === 0 ? nameStart : recordRun(nameStart, nameStart + length, 'tag');
   };
   const closeTag = (closing: boolean, selfClosing: boolean): void => {
     stack.pop();
-    const around = top();
+    const around = innermost();
     if (around.within !== 'text') return;
     around.open += closing ? -1 : selfClosing ? 0 : 1;
     if (around.open <= 0) stack.pop();
@@ -95,7 +95,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
   };
   const leaveBraces = (at: number): number => {
     stack.pop();
-    const around = top();
+    const around = innermost();
     if (around.within === 'template') around.from = at;
     return at + 1;
   };
@@ -106,9 +106,9 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
   const inCode = (frame: CodeState, at: number): number => {
     const here = text[at];
     const before = text.slice(startOfLine(text, at), at);
-    if (isJsxComment(text, at)) return mark(at, endOf(text, at + 3, '*/}'), 'comment');
-    if (text.startsWith('//', at)) return mark(at, endOfLine(text, at), 'comment');
-    if (text.startsWith('/*', at)) return mark(at, endOf(text, at + 2, '*/'), 'comment');
+    if (isJsxComment(text, at)) return recordRun(at, endOf(text, at + 3, '*/}'), 'comment');
+    if (text.startsWith('//', at)) return recordRun(at, endOfLine(text, at), 'comment');
+    if (text.startsWith('/*', at)) return recordRun(at, endOf(text, at + 2, '*/'), 'comment');
     if (here === '/' && valueCanStart.test(text.slice(startOfCodeBefore(text, at), at))) {
       return endOfRegularExpression(text, at);
     }
@@ -117,7 +117,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
       return at + 1;
     }
     if ((here === '"' || here === '\'') && at !== elementEndedAt && valueCanStart.test(before)) {
-      return mark(at, endOfQuoted(text, at, here), 'string');
+      return recordRun(at, endOfQuoted(text, at, here), 'string');
     }
     if (here === '<' && opensAnElement(at, before)) {
       stack.push({within: 'text', open: 0});
@@ -134,10 +134,10 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
     if (text[at] === '\\') return at + 2;
     if (text[at] === '`') {
       stack.pop();
-      return mark(frame.from, at + 1, 'string');
+      return recordRun(frame.from, at + 1, 'string');
     }
     if (text.startsWith('${', at)) {
-      mark(frame.from, at + 2, 'string');
+      recordRun(frame.from, at + 2, 'string');
       return enterBraces(at + 1);
     }
     return at + 1;
@@ -152,23 +152,23 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
       elementEndedAt = at + (selfClosing ? 2 : 1);
       return elementEndedAt;
     }
-    if (here === '"' || here === '\'') return mark(at, endOfQuoted(text, at, here), 'string');
+    if (here === '"' || here === '\'') return recordRun(at, endOfQuoted(text, at, here), 'string');
     if (here === '{') return enterBraces(at);
-    if (length > 0 && text[at + length] === '=') return mark(at, at + length, 'attribute');
+    if (length > 0 && text[at + length] === '=') return recordRun(at, at + length, 'attribute');
     return at + Math.max(length, 1);
   };
 
   const inText = (at: number): number => {
     const here = text[at];
-    if (text.startsWith('{/*', at)) return mark(at, endOf(text, at + 3, '*/}'), 'comment');
-    if (text.startsWith('<!--', at)) return mark(at, endOf(text, at + 4, '-->'), 'comment');
+    if (text.startsWith('{/*', at)) return recordRun(at, endOf(text, at + 3, '*/}'), 'comment');
+    if (text.startsWith('<!--', at)) return recordRun(at, endOf(text, at + 4, '-->'), 'comment');
     if (here === '{') return enterBraces(at);
     if (here === '<' && /[A-Za-z/>]/.test(text[at + 1] ?? '')) return openTag(at);
     return at + 1;
   };
 
   const step = (at: number): number => {
-    const frame = top();
+    const frame = innermost();
     if (frame.within === 'code') return inCode(frame, at);
     if (frame.within === 'tag') return inTag(frame, at);
     if (frame.within === 'template') return inTemplate(frame, at);
@@ -177,8 +177,8 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
 
   let at = 0;
   while (at < text.length) at = step(at);
-  const last = top();
-  if (last.within === 'template' && last.from < text.length) mark(last.from, text.length, 'string');
+  const last = innermost();
+  if (last.within === 'template' && last.from < text.length) recordRun(last.from, text.length, 'string');
   return {runs, isCode};
 };
 
