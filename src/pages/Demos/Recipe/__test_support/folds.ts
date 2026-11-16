@@ -17,7 +17,8 @@ export const recipeFolds = {
   },
   stepTitled: (root: HTMLElement, title: string): HTMLElement => within(root).getByRole('heading', {name: title}),
   queryStepTitled: (root: HTMLElement, title: string): HTMLElement | null => within(root).queryByRole('heading', {name: title}),
-  tally: (story: HTMLElement): HTMLElement | null => within(story).queryByText(/^\d+ steps?$/),
+  tally: (story: HTMLElement): HTMLElement => within(story).getByText(/^\d+ steps?$/),
+  queryTally: (story: HTMLElement): HTMLElement | null => within(story).queryByText(/^\d+ steps?$/),
   stepTitles: (story: HTMLElement): string[] => within(within(story).getByRole('list', {name: 'the steps'})).getAllByRole('listitem')
     .map(step => within(step).getAllByRole('heading')[0].textContent),
   press: async (root: HTMLElement, title: string): Promise<HTMLElement> => {

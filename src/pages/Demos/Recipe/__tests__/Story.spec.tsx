@@ -42,7 +42,7 @@ describe('a story card', () => {
       </Story>
     </Stories></TestApp>);
 
-    expect(recipeFolds.tally(card('The reader can read prose alone'))).not.toBeInTheDocument();
+    expect(recipeFolds.queryTally(card('The reader can read prose alone'))).not.toBeInTheDocument();
   });
 
   test('a story that arrival opened closes on one press', async () => {
