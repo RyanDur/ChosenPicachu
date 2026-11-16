@@ -232,7 +232,7 @@ export const Bibliography: FC = () =>
             <a className="signpost" href="https://en.wikipedia.org/wiki/Google_Maps"><cite>Google Maps</cite></a> <span className="provenance caption">Wikipedia</span>
           </li>
           <li>
-            <a className="signpost" href="http://prototypejs.org/"><cite>Prototype JavaScript framework</cite></a> <span className="provenance caption">prototypejs.org</span>
+            <a className="signpost" href="https://prototypejs.org/"><cite>Prototype JavaScript framework</cite></a> <span className="provenance caption">prototypejs.org</span>
           </li>
           <li>
             <a className="signpost" href="https://en.wikipedia.org/wiki/Prototype_JavaScript_Framework"><cite>Prototype
