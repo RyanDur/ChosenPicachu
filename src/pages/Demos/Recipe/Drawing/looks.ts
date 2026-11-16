@@ -1,7 +1,7 @@
 export type Kind = 'piece' | 'native' | 'unseen' | 'clipped' | 'clip' | 'ring' | 'unseen-ring' | 'topmost';
 
 type Looks = {
-  of: (kind: Kind) => string;
+  worn: (kind: Kind) => string;
 };
 
 const looksOf: Record<Kind, string> = {
@@ -16,5 +16,5 @@ const looksOf: Record<Kind, string> = {
 };
 
 export const looks: Looks = {
-  of: kind => `${kind} ${looksOf[kind]}`
+  worn: kind => `${kind} ${looksOf[kind]}`
 };
