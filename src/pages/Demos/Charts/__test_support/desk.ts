@@ -1,4 +1,4 @@
-import {is, maybe} from '@ryandur/sand';
+import {is} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {feedStatus} from '@pages/Demos/__test_support';
@@ -6,8 +6,6 @@ import {feedStatus} from '@pages/Demos/__test_support';
 const addMenus = (): HTMLElement[] => screen.queryAllByLabelText('charts to add');
 
 const theAddMenu = (): HTMLElement => screen.getByLabelText('charts to add');
-
-const textOf = (element: Element): string => maybe(element.textContent).orElse('');
 
 const addChart = async (name: string): Promise<void> =>
   userEvent.click(within(theAddMenu()).getByRole('button', {name, hidden: true}));
@@ -44,7 +42,7 @@ const fingerOn = (chart: string): Finger => {
 };
 
 const captionOf = (chart: string): string =>
-  textOf(within(screen.getByRole('region', {name: chart})).getByText(/candles ·/));
+  within(screen.getByRole('region', {name: chart})).getByText(/candles ·/).textContent;
 
 const chart = (name: string): HTMLElement => screen.getByRole('region', {name});
 
@@ -86,7 +84,7 @@ export const chartsDesk = {
     userEvent.click(within(screen.getByLabelText(`${chart} period by`)).getByRole('button', {name: period, hidden: true})),
   findPeriodShown: (chart: string, period: string): Promise<HTMLElement> => screen.findByRole('button', {name: `${chart} period ${period}`}),
   currentPeriod: (chart: string): string =>
-    textOf(within(screen.getByLabelText(`${chart} period by`)).getByRole('button', {current: true, hidden: true})),
+    within(screen.getByLabelText(`${chart} period by`)).getByRole('button', {current: true, hidden: true}).textContent,
   chart,
   findChart,
   onChart,
@@ -94,7 +92,7 @@ export const chartsDesk = {
   foundOnChart: (name: string, told: string | RegExp): HTMLElement | null => within(chart(name)).queryByText(told),
   findLoadingOn: async (name: string): Promise<HTMLElement> => within(chart(name)).findByRole('progressbar'),
   loadingOn: (name: string): HTMLElement | null => within(chart(name)).queryByRole('progressbar'),
-  ticksOn: (name: string): string[] => within(chart(name)).getAllByRole('time').map(textOf),
+  ticksOn: (name: string): string[] => within(chart(name)).getAllByRole('time').map(tick => tick.textContent),
   missingChart: (name: string): HTMLElement | null => screen.queryByRole('region', {name}),
   chartsNamed: (name: string): HTMLElement[] => screen.getAllByRole('region', {name}),
   recipe: (subject: string): HTMLElement => screen.getByRole('region', {name: `build the ${subject} yourself`}),
@@ -104,7 +102,7 @@ export const chartsDesk = {
   tutorial: (chart: string): HTMLElement => screen.getByRole('article', {name: `${chart} tutorial`}),
   anyTutorial: (): HTMLElement | null => screen.queryByRole('article', {name: /tutorial/}),
   findPieLegend: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pie'})).getByRole('list'),
-  pieShares: (): string[] => within(within(chart('pie')).getByRole('list')).getAllByRole('listitem').map(textOf),
+  pieShares: (): string[] => within(within(chart('pie')).getByRole('list')).getAllByRole('listitem').map(share => share.textContent),
   title: (name: string, level: number): HTMLElement => screen.getByRole('heading', {name, level}),
   findTitle: (name: string | RegExp, level?: number): Promise<HTMLElement> => screen.findByRole('heading', {name, level}),
   titleIn: (holder: HTMLElement, name: string | RegExp, level?: number): HTMLElement => within(holder).getByRole('heading', {name, level}),
