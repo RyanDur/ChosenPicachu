@@ -48,7 +48,7 @@ const keywords = [
 
 const ts: ReadonlyArray<{match: RegExp; kind: Kind}> = [
   {match: /\/\/.*$/g, kind: 'comment'},
-  {match: /\{\/\*.*?\*\/\}/g, kind: 'comment'},
+  {match: /\{\/\*.*?\*\/}/g, kind: 'comment'},
   {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
   {match: /(?<=\w<)[A-Z]\w*(?=,|>[(;)=])/g, kind: 'type'},
   {match: /(?<=<\/?)[A-Za-z][\w.]*/g, kind: 'tag'},
@@ -73,7 +73,7 @@ const css: ReadonlyArray<{match: RegExp; kind: Kind}> = [
 ];
 
 const html: ReadonlyArray<{match: RegExp; kind: Kind}> = [
-  {match: /\{\/\*.*?\*\/\}|<!--.*?-->/g, kind: 'comment'},
+  {match: /\{\/\*.*?\*\/}|<!--.*?-->/g, kind: 'comment'},
   {match: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
   {match: /(?<=<\/?)[\w.-]+/g, kind: 'tag'},
   {match: /(?<=<[\w.-]+\s[^>]*?)\b[a-zA-Z][\w-]*(?==)/g, kind: 'attribute'},
