@@ -17,7 +17,7 @@
 
   &::before {
     grid-area: 1 / 1 / 2 / 2;
-    transition: translate 0.3s ease-in-out;
+    transition: translate 0.15s ease-in-out;
   }
 
   &::after { z-index: -2; }
@@ -33,7 +33,7 @@
     padding: 0 var(--base-x-2);
     white-space: nowrap;
     cursor: pointer;
-    transition: color 0s 0.15s;
+    transition: color 0s 0.075s;
 
     @media (width < 390px) {
       padding: 0 var(--base-x-0_75);
