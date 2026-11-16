@@ -12,21 +12,21 @@ type Found = {
   kind: Kind;
 };
 
-type Rule = {pattern: RegExp; kind: Kind} | {pattern: RegExp; groups: ReadonlyArray<Kind>};
+type TokenPattern = {pattern: RegExp; kind: Kind} | {pattern: RegExp; groups: ReadonlyArray<Kind>};
 
-const kindOf = (rule: Rule, match: RegExpExecArray): Kind => 'kind' in rule
-  ? rule.kind
-  : rule.groups.find(group => has(match.groups?.[group])) ?? 'plain';
+const kindOf = (tokenPattern: TokenPattern, match: RegExpExecArray): Kind => 'kind' in tokenPattern
+  ? tokenPattern.kind
+  : tokenPattern.groups.find(group => has(match.groups?.[group])) ?? 'plain';
 
-const scan = (line: string, rules: ReadonlyArray<Rule>): Token[] => {
+const scan = (line: string, tokenPatterns: ReadonlyArray<TokenPattern>): Token[] => {
   const found: Found[] = [];
-  rules.forEach(rule => {
-    for (const match of line.matchAll(rule.pattern)) {
+  tokenPatterns.forEach(tokenPattern => {
+    for (const match of line.matchAll(tokenPattern.pattern)) {
       const start = match.index;
       const overlaps = found.some(taken =>
         start < taken.start + taken.length && taken.start < start + match[0].length);
       if (not(overlaps) && has(match[0])) {
-        found.push({start, length: match[0].length, kind: kindOf(rule, match)});
+        found.push({start, length: match[0].length, kind: kindOf(tokenPattern, match)});
       }
     }
   });
@@ -55,7 +55,7 @@ const keywords = [
 const stringOrComment =
   /(?<string>(?<!\w)'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*")|(?<comment>\/\/.*$|\{\/\*.*?\*\/})/g;
 
-const ts: ReadonlyArray<Rule> = [
+const ts: ReadonlyArray<TokenPattern> = [
   {pattern: stringOrComment, groups: ['string', 'comment']},
   {pattern: /(?<=\w<)[A-Z]\w*(?=,|>[(;)=])/g, kind: 'type'},
   {pattern: /(?<=<\/?)[A-Za-z][\w.]*/g, kind: 'tag'},
@@ -68,7 +68,7 @@ const ts: ReadonlyArray<Rule> = [
   {pattern: /\b\d+(?:\.\d+)?\b/g, kind: 'number'}
 ];
 
-const css: ReadonlyArray<Rule> = [
+const css: ReadonlyArray<TokenPattern> = [
   {pattern: /\/\*.*?\*\//g, kind: 'comment'},
   {pattern: /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
   {pattern: /@[\w-]+/g, kind: 'keyword'},
@@ -79,7 +79,7 @@ const css: ReadonlyArray<Rule> = [
   {pattern: /[a-z-]+(?=\()/g, kind: 'call'}
 ];
 
-const html: ReadonlyArray<Rule> = [
+const html: ReadonlyArray<TokenPattern> = [
   {pattern: /\{\/\*.*?\*\/}|<!--.*?-->/g, kind: 'comment'},
   {pattern: /'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|"(?:[^"\\]|\\.)*"/g, kind: 'string'},
   {pattern: /(?<=<\/?)[\w.-]+/g, kind: 'tag'},
