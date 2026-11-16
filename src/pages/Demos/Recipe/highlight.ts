@@ -67,8 +67,8 @@ const tsPatterns: ReadonlyArray<TokenPattern> = [
 ];
 
 const ts = (text: string): Token[] => {
-  const {runs, code} = scan.ts(text);
-  return tokensFrom(text, matchesOf(text, tsPatterns, runs, (start, end) => code.slice(start, end).every(Boolean)));
+  const {runs, isCode} = scan.ts(text);
+  return tokensFrom(text, matchesOf(text, tsPatterns, runs, (start, end) => isCode.slice(start, end).every(Boolean)));
 };
 
 const css: ReadonlyArray<TokenPattern> = [

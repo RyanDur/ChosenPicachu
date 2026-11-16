@@ -9,7 +9,7 @@ export type Run = {
 
 export type Scanned = {
   runs: Run[];
-  code: boolean[];
+  isCode: boolean[];
 };
 
 type CodeState = {within: 'code'; closesOnBrace: boolean; braces: number};
@@ -47,7 +47,7 @@ const nameAt = (line: string, from: number): number =>
 
 const scanFrom = (text: string, first: ScanState): Scanned => {
   const runs: Run[] = [];
-  const code = Array.from({length: text.length}, () => false);
+  const isCode = Array.from({length: text.length}, () => false);
   const stack: ScanState[] = [first];
   const mark = (start: number, end: number, kind: Run['kind']): number => {
     runs.push({start, length: end - start, kind});
@@ -100,7 +100,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
     if (here === '}' && frame.braces === 0 && frame.closesOnBrace) return leaveBraces(at);
     if (here === '{') frame.braces += 1;
     if (here === '}') frame.braces -= 1;
-    code[at] = true;
+    isCode[at] = true;
     return at + 1;
   };
 
@@ -153,7 +153,7 @@ const scanFrom = (text: string, first: ScanState): Scanned => {
   while (at < text.length) at = step(at);
   const last = top();
   if (last.within === 'template' && last.from < text.length) mark(last.from, text.length, 'string');
-  return {runs, code};
+  return {runs, isCode};
 };
 
 type Scan = {
