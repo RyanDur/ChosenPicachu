@@ -18,7 +18,7 @@ type Placed = {
 const codeSize = 8;
 const advance = codeSize * 0.6;
 const runSpacing = 5;
-const margin = 4;
+const edgeSpace = 4;
 
 const opening = '<th scope="col" class="';
 const closing = '">trades</th>';
@@ -35,7 +35,10 @@ const lengthOf = (segments: Segment[]): number =>
   segments.reduce((length, segment, at) => length + (at > 0 ? runSpacing : 0) + widthOf(textOf(segment)), 0);
 
 const placedAlong = (segments: Segment[]): Placed[] =>
-  segments.map((segment, at) => ({segment, x: margin + (at > 0 ? lengthOf(segments.slice(0, at)) + runSpacing : 0)}));
+  segments.map((segment, at) => ({
+    segment,
+    x: edgeSpace + (at > 0 ? lengthOf(segments.slice(0, at)) + runSpacing : 0)
+  }));
 
 const Code: FC<Required<PropsWithChildren<{x: number; y: number}>>> = ({x, y, children}) =>
   <text className="monospaced" x={x} y={y} fontSize={codeSize}>{children}</text>;
@@ -54,7 +57,7 @@ const Line: FC<{segments: Segment[]; y: number}> = ({segments, y}) => <>
 </>;
 
 const oneLine: Segment[] = [opening, nouns, needs, states, closing];
-const wideWidth = margin * 2 + lengthOf(oneLine);
+const wideWidth = edgeSpace * 2 + lengthOf(oneLine);
 
 const WideClassList: FC = () =>
   <svg className="class-list-wide ink-filled" viewBox={`0 0 ${wideWidth} 44`} aria-hidden="true">
