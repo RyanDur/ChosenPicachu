@@ -3,10 +3,10 @@ import parser from '@babel/eslint-parser';
 import {join} from 'node:path';
 import {structure} from '../lint/structure.mjs';
 
-const at = path => join(process.cwd(), path);
-const withIndex = at('src/banners/Probe.ts');
-const withoutIndex = at('src/components/NoSuchDirectory/Probe.ts');
-const home = at('src/pages/Home/Probe.tsx');
+const inTheCheckout = path => join(process.cwd(), path);
+const withIndex = inTheCheckout('src/banners/Probe.ts');
+const withoutIndex = inTheCheckout('src/components/NoSuchDirectory/Probe.ts');
+const home = inTheCheckout('src/pages/Home/Probe.tsx');
 
 const tester = new RuleTester({languageOptions: {
   parser,
@@ -26,7 +26,7 @@ tester.run('one-export', structure.rules['one-export'], {
 tester.run('has-index', structure.rules['has-index'], {
   valid: [
     {name: 'should accept a file in a directory with an index', code: 'export const x = 1;', filename: withIndex},
-    {name: 'should ask no index beside a route module', code: 'export default () => null;', filename: at('src/pages/Demos/SavedTab/route.tsx')}
+    {name: 'should ask no index beside a route module', code: 'export default () => null;', filename: inTheCheckout('src/pages/Demos/SavedTab/route.tsx')}
   ],
   invalid: [{name: 'should refuse a file in a directory with no index', code: 'export const x = 1;', filename: withoutIndex, errors: 1}]
 });
@@ -44,15 +44,15 @@ tester.run('through-index', structure.rules['through-index'], {
 tester.run('index-top-level', structure.rules['index-top-level'], {
   valid: [
     {name: 'should not judge a file that is not an index', code: "export * from './placement';", filename: withIndex},
-    {name: 'should count an import of a top-level directory by its bare alias, as src imports http from @transport', code: "export {http} from './http';", filename: at('src/transport/index.ts')}
+    {name: 'should count an import of a top-level directory by its bare alias, as src imports http from @transport', code: "export {http} from './http';", filename: inTheCheckout('src/transport/index.ts')}
   ],
   invalid: [
-    {name: 'should refuse an index that exports everything unnamed', code: "export * from './placement';", filename: at('src/banners/index.ts'), errors: [{messageId: 'broken'}]},
-    {name: 'should refuse an index that exports from a nested directory', code: "export {x} from './__tests__/x';", filename: at('src/banners/index.ts'), errors: 1}
+    {name: 'should refuse an index that exports everything unnamed', code: "export * from './placement';", filename: inTheCheckout('src/banners/index.ts'), errors: [{messageId: 'broken'}]},
+    {name: 'should refuse an index that exports from a nested directory', code: "export {x} from './__tests__/x';", filename: inTheCheckout('src/banners/index.ts'), errors: 1}
   ]
 });
 
 tester.run('by-feature', structure.rules['by-feature'], {
   valid: [{name: 'should accept a directory named for a feature', code: 'export const x = 1;', filename: withIndex}],
-  invalid: [{name: 'should refuse a directory named for a kind of file', code: 'export const x = 1;', filename: at('src/pages/Home/utils/Probe.ts'), errors: 1}]
+  invalid: [{name: 'should refuse a directory named for a kind of file', code: 'export const x = 1;', filename: inTheCheckout('src/pages/Home/utils/Probe.ts'), errors: 1}]
 });

@@ -1,11 +1,5 @@
-import {not} from '@ryandur/sand';
-import {structure} from './structure.mjs';
+import {is, not} from '@ryandur/sand';
 
-const platform = new Set([
-  'window', 'document', 'navigator', 'console', 'globalThis', 'history', 'location', 'Date', 'Math', 'performance',
-  'crypto', 'localStorage', 'sessionStorage'
-]);
-const platformClass = /^(Node|Element|Document|Window|EventTarget|Storage|HTML\w*Element|SVG\w*Element|\w+Observer)$/;
 const runners = new Set(['test', 'it', 'describe']);
 
 /**
@@ -15,52 +9,41 @@ const runners = new Set(['test', 'it', 'describe']);
 const rootOf = node => node.type === 'MemberExpression' ? rootOf(node.object) : node;
 
 /**
- * @param {any} target
- * @returns {boolean}
- */
-const ownedByThePlatform = target => {
-  const root = rootOf(target);
-  if (root.type !== 'Identifier') return false;
-  if (platform.has(root.name)) return true;
-  return platformClass.test(root.name) && target.type === 'MemberExpression' && target.object === root
-    && target.property.name === 'prototype';
-};
-
-/**
- * @param {string} path
- * @returns {boolean}
- */
-const ours = path => path.startsWith('.')
-  || structure.aliases.some(alias => path === alias || path.startsWith(`${alias}/`));
-
-/**
- * @param {any} argument
+ * @param {any} node
  * @returns {string}
  */
-const pathIn = argument => {
-  if (argument.type === 'Literal' && typeof argument.value === 'string') return argument.value;
-  if (argument.type === 'TemplateLiteral' && argument.expressions.length === 0) return argument.quasis[0].value.cooked;
-  if (argument.type === 'ImportExpression') return pathIn(argument.source);
+const spelled = node => {
+  if (not(is(node))) return '';
+  if (node.type === 'Identifier') return node.name;
+  if (node.type === 'Literal') return String(node.value);
+  if (node.type === 'MemberExpression') return `${spelled(node.object)}.${spelled(node.property)}`;
   return '';
 };
+
+/**
+ * The page is read through these alone: console to hear what it reported, and scrollTo, which jsdom does not
+ * carry out, to hear where it scrolled.
+ * @param {any[]} args
+ * @returns {boolean}
+ */
+const onlyListens = ([spiedOn, method]) => spelled(spiedOn) === 'console'
+  || ['window', 'Element.prototype'].includes(spelled(spiedOn)) && spelled(method) === 'scrollTo';
 
 /** @type {import('eslint').Rule.RuleModule} */
 const noDoubleOfOurs = {
   meta: {
     type: 'problem',
     messages: {
-      spied: 'spy on what the platform owns, never on our own code: render the real thing and read what a reader meets',
-      mocked: 'mock what crosses the network, never our own module: {{path}} is ours'
+      spied: 'a spy may only listen, on console or scrollTo; render the real thing and read what a reader meets',
+      mocked: 'the world is stubbed only at its edge, the network through msw; render the real collaborators'
     }
   },
   create: context => ({
     'CallExpression[callee.object.name="vi"][callee.property.name="spyOn"]': node => {
-      if (not(ownedByThePlatform(node.arguments[0]))) context.report({node, messageId: 'spied'});
+      if (not(onlyListens(node.arguments))) context.report({node, messageId: 'spied'});
     },
-    'CallExpression[callee.object.name="vi"][callee.property.name=/^(mock|doMock)$/]': node => {
-      const path = pathIn(node.arguments[0]);
-      if (ours(path)) context.report({node, messageId: 'mocked', data: {path}});
-    }
+    'CallExpression[callee.object.name="vi"][callee.property.name=/^(mock|doMock)$/]': node =>
+      context.report({node, messageId: 'mocked'})
   })
 };
 
