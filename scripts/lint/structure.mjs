@@ -62,7 +62,7 @@ const namesIn = names => names.split(',')
   .filter(name => name !== '');
 
 /** @param {string} file */
-const importsIn = file => [...readFileSync(file, 'utf8').matchAll(/(?:import|export)\s+(?:type\s+)?\{([^}]*)\}\s+from\s+'([^']+)'/g)]
+const importsIn = file => [...readFileSync(file, 'utf8').matchAll(/(?:import|export)\s+(?:type\s+)?\{([^}]*)}\s+from\s+'([^']+)'/g)]
   .map(([, names, specifier]) => ({names: namesIn(names), specifier}));
 
 /** @type {Map<string, Set<string>> | undefined} */
@@ -189,5 +189,6 @@ export const structure = {
     'through-index': throughIndex,
     'index-top-level': indexTopLevel,
     'by-feature': byFeature
-  }
+  },
+  aliases: Object.keys(aliases)
 };

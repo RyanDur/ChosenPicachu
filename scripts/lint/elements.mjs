@@ -1,3 +1,5 @@
+import {has, not} from '@ryandur/sand';
+
 /** @type {import('eslint').Rule.RuleModule} */
 const noDiv = {
   meta: {
@@ -6,22 +8,6 @@ const noDiv = {
   },
   create: context => ({
     'JSXOpeningElement[name.type="JSXIdentifier"][name.name="div"]': node => context.report({node, messageId: 'meaningless'})
-  })
-};
-
-/** @type {import('eslint').Rule.RuleModule} */
-const stepOpensWithItsHeading = {
-  meta: {
-    type: 'problem',
-    messages: {unheaded: 'a step opens with its StepHeading, so a reader moving by headings reaches every step'}
-  },
-  create: context => ({
-    'JSXElement[openingElement.name.name=/^(Dial)?Step$/]': node => {
-      const first = node.children.find(child => child.type !== 'JSXText' || child.value.trim() !== '');
-      const opensWithHeading = first?.type === 'JSXElement' && first.openingElement.name.type === 'JSXIdentifier'
-        && first.openingElement.name.name === 'StepHeading';
-      if (!opensWithHeading) context.report({node: node.openingElement, messageId: 'unheaded'});
-    }
   })
 };
 
@@ -36,7 +22,20 @@ const firstPartOf = node => node.children.find(child => child.type !== 'JSXText'
  * @param {string} name
  * @returns {boolean}
  */
-const isElement = (node, name) => node?.type === 'JSXElement' && node.openingElement.name.name === name;
+const isElement = (node, name) => has(node) && node.type === 'JSXElement' && node.openingElement.name.name === name;
+
+/** @type {import('eslint').Rule.RuleModule} */
+const stepOpensWithItsHeading = {
+  meta: {
+    type: 'problem',
+    messages: {unheaded: 'a step opens with its StepHeading, so a reader moving by headings reaches every step'}
+  },
+  create: context => ({
+    'JSXElement[openingElement.name.name=/^(Dial)?Step$/]': node => {
+      if (not(isElement(firstPartOf(node), 'StepHeading'))) context.report({node: node.openingElement, messageId: 'unheaded'});
+    }
+  })
+};
 
 /** @type {import('eslint').Rule.RuleModule} */
 const fieldsetOpensWithItsLegend = {
@@ -46,7 +45,7 @@ const fieldsetOpensWithItsLegend = {
   },
   create: context => ({
     'JSXElement[openingElement.name.name="fieldset"]': node => {
-      if (!isElement(firstPartOf(node), 'legend')) context.report({node: node.openingElement, messageId: 'unnamed'});
+      if (not(isElement(firstPartOf(node), 'legend'))) context.report({node: node.openingElement, messageId: 'unnamed'});
     }
   })
 };
