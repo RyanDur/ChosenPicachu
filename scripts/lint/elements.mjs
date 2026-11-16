@@ -1,4 +1,4 @@
-import {has, not} from '@ryandur/sand';
+import {is, not} from '@ryandur/sand';
 
 /** @type {import('eslint').Rule.RuleModule} */
 const noDiv = {
@@ -22,7 +22,7 @@ const firstPartOf = node => node.children.find(child => child.type !== 'JSXText'
  * @param {string} name
  * @returns {boolean}
  */
-const isElement = (node, name) => has(node) && node.type === 'JSXElement' && node.openingElement.name.name === name;
+const isElement = (node, name) => is(node) && node.type === 'JSXElement' && node.openingElement.name.name === name;
 
 /** @type {import('eslint').Rule.RuleModule} */
 const stepOpensWithItsHeading = {

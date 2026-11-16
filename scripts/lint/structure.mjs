@@ -189,6 +189,5 @@ export const structure = {
     'through-index': throughIndex,
     'index-top-level': indexTopLevel,
     'by-feature': byFeature
-  },
-  aliases: Object.keys(aliases)
+  }
 };
