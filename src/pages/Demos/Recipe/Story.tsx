@@ -35,7 +35,7 @@ export const Story: FC<Props> = ({param, id, can, soThat, children}) => {
   return <li tabIndex={-1}>
     <details className="arc" open={stories.isOpen(id)} aria-labelledby={storyKeys.anchorOf({param, id})}
       onToggle={matchAddressToFold}>
-      <summary className="opener sub-title-glyph-before" onClick={toggled}>
+      <summary className="fold-bar sub-title-glyph-before" onClick={toggled}>
         <hgroup className="story card rounded-corners lifted">
           <Can className="can paragraph bold" id={storyKeys.anchorOf({param, id})}>{can}</Can>
           <p className="so-that paragraph italic muted-ink">so that {soThat}</p>

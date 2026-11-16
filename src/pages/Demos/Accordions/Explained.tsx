@@ -312,7 +312,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
           </li>
           <li className="part-depth">
             <details aria-labelledby="measured-depth">
-              <summary id="measured-depth" className="opener bold">How this site does it</summary>
+              <summary id="measured-depth" className="fold-bar bold">How this site does it</summary>
               <p className="paragraph">This site builds the same fold in React, and the runs below say what React and
                 state are as they come. What changes is the shape. The plain script listens for the press; the React
                 build redraws the panel from its state, so the measuring runs in two steps React takes before the
@@ -437,7 +437,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         </li>
         <li className="part-depth">
           <details aria-labelledby="known-depth">
-            <summary id="known-depth" className="opener bold">How the known height works</summary>
+            <summary id="known-depth" className="fold-bar bold">How the known height works</summary>
             <ol className="runs">
               <li className="run">
                 <p className="paragraph">The fold is the three parts from “A box remembers the fold, and a rule reads
@@ -637,7 +637,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         </li>
         <li className="part-depth">
           <details aria-labelledby="details-depth">
-            <summary id="details-depth" className="opener bold">How details works</summary>
+            <summary id="details-depth" className="fold-bar bold">How details works</summary>
             <ol className="runs">
               <li className="run">
                 <p className="paragraph">The bar is the same flex row as the label in the {input} build, now on
@@ -766,7 +766,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         </li>
         <li className="part-depth">
           <details aria-labelledby="together-depth">
-            <summary id="together-depth" className="opener bold">How the {input} and the grid row work
+            <summary id="together-depth" className="fold-bar bold">How the {input} and the grid row work
               together</summary>
             <ol className="runs">
               <li className="run">
