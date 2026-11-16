@@ -60,7 +60,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({
     aria-sort={sorted}
     tabIndex={travels ? 0 : undefined}
     onPointerDown={travels ? lifting.column(column, () => order, () => standing, lift) : undefined}
-    {...travel.held(drag, moved, release)}
+    {...travel.whileHeld(drag, moved, release)}
     onKeyDown={travels ? arrows.column(column, () => order, ({
       to,
       widths

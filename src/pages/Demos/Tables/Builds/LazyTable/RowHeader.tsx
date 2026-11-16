@@ -57,7 +57,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     style={looks.placement({seat, drift, settlingFrom, shove: shoved})}>
     <RowGrip position={position}
       onPointerDown={lifting.row(() => order, () => standing, lift)}
-      {...travel.held(drag, moved, release)}
+      {...travel.whileHeld(drag, moved, release)}
       onKeyDown={arrows.row(row, () => standing, {
         nudged: ({to, heights}) => nudged(to, heights),
         moved: ({to}) => arrived(to)
