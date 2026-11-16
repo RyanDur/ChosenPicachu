@@ -197,7 +197,6 @@ export const oldWayFoldLabels = async (page: Page): Promise<(string | undefined)
     .evaluateAll(toggles => toggles.map(toggle =>
       toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? undefined : undefined));
 
-// a part not laid out yet measures as infinitely far, which fails every poll that asks for a small gap
 const unmeasured = Number.POSITIVE_INFINITY;
 
 export const gapUnder = async (around: Locator, inside: Locator): Promise<number> => {
