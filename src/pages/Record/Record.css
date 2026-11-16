@@ -161,7 +161,7 @@
   }
 
   .fuller-story {
-    .prompt {
+    .fold-bar {
       width: fit-content;
     }
 
@@ -183,7 +183,7 @@
     display: grid;
     gap: var(--base-x-2_5);
 
-    .prompt {
+    .fold-bar {
       width: fit-content;
     }
   }
