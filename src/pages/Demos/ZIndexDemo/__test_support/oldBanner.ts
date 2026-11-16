@@ -17,6 +17,6 @@ export const oldBanner = {
   pressEnter: async (): Promise<void> => {
     await userEvent.keyboard('{Enter}');
   },
-  shown: (): HTMLElement => screen.getByText(oldWords),
-  query: (): HTMLElement | null => screen.queryByText(oldWords)
+  raised: (): HTMLElement => screen.getByText(oldWords),
+  standing: (): HTMLElement | null => screen.queryByText(oldWords)
 };
