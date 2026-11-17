@@ -2,17 +2,17 @@ import {FC, startTransition, useEffect, useState} from 'react';
 import {createRoot, hydrateRoot} from 'react-dom/client';
 import {DataRouter, RouterProvider} from 'react-router';
 import {Arrival, arrival, ArrivalDrawn} from '@navigation/arrival';
-import {CurrentLocation} from '@navigation/current-location';
+import {currentLocation} from '@navigation';
 import {Site} from './Site';
 
 type RoutedSiteProps = {router: DataRouter; arrived: Arrival};
 
 const RoutedSite: FC<RoutedSiteProps> = ({router, arrived}) => {
-  const [currentLocation] = useState(() => () => router.state.location);
+  const [readLocation] = useState(() => currentLocation.of(router));
   useEffect(() => arrived.follow(router), [arrived, router]);
-  return <Site><ArrivalDrawn.Provider value={arrived.drawn}><CurrentLocation.Provider value={currentLocation}>
+  return <Site><ArrivalDrawn.Provider value={arrived.drawn}><currentLocation.Read.Provider value={readLocation}>
     <RouterProvider router={router} onError={error => console.error(error)}/>
-  </CurrentLocation.Provider></ArrivalDrawn.Provider></Site>;
+  </currentLocation.Read.Provider></ArrivalDrawn.Provider></Site>;
 };
 
 export const hydrateTheSite = {
