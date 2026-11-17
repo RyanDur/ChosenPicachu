@@ -13,7 +13,7 @@ const mdn = 'https://developer.mozilla.org/en-US/docs/Web/CSS/';
 
 export const WhatElseFormsAStackingContext: FC = () => <>
   <p className="paragraph">A card with no z-index at all can still trap the list inside it. This part shows which
-    properties form a stacking context and which only change how a box looks. It assumes what <PartLink
+    properties form a stacking context, and three common ones that do not. It assumes what <PartLink
     part="why-third-is-on-top"/> and <PartLink part="why-9999-still-loses"/> give: positioned and auto, a stacking context, and a z-index compared only inside its own.</p>
   <ContextChooser/>
   <ol className="runs card rounded-corners lifted padded">
