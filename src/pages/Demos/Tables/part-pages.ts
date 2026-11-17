@@ -89,5 +89,5 @@ export const tableParts = {
   shownAt: (pathname: string): Maybe<TablePart> => maybe(book.find(part => pathname === addressOf(part))),
   inOrder: book,
   featuresStation,
-  inTheBook: book.length
+  count: book.length
 };
