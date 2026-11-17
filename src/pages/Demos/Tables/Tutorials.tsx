@@ -1,12 +1,25 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsObject} from '@navigation/search-params';
-import {DesignAsk, FlowTableRecipe, FeaturesAskedFor, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
+import {DesignAsk, FlowTableRecipe, FeaturesAskedFor, StillTableRecipe, StorySlices} from './Recipe';
 import {Exercise, Station} from '../Recipe';
 import {tableTutorials} from './tutorial-pages';
+import {TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
 import '../Tutorials.css';
 import './Tutorials.css';
+
+const PartEntry: FC<{part: TablePart}> = ({part}) => {
+  const {searchFromShown} = useSearchParamsObject({});
+  const {name, says, minutes} = tableParts.told(part);
+  return <>
+    <h3 className="phase-title title">
+      <Link className="signpost" to={`${tableParts.addressOf(part)}${searchFromShown({})}`}>{name}</Link>
+    </h3>
+    <p className="paragraph">{says}</p>
+    <p className="caption muted-ink"><time dateTime={`PT${minutes}M`}>{`${minutes} minutes to read`}</time></p>
+  </>;
+};
 
 export const Tutorials: FC = () => {
   const {searchFromShown} = useSearchParamsObject({});
@@ -19,7 +32,7 @@ export const Tutorials: FC = () => {
     <WorldNote/>
     <ol className="spine" aria-label="the stations">
       <Station at={1}>
-        <StoryClues/>
+        <PartEntry part="the-need-and-its-clues"/>
       </Station>
       <Station at={2}>
         <DesignAsk/>
