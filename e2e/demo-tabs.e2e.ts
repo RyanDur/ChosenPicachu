@@ -1,12 +1,12 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {chartsPage, rememberedFoldLabels, scriptedMarket, siteFrame} from './__test_support';
+import {chartsPage, rememberedFolds, rememberedFoldLabels, scriptedMarket, siteFrame} from './__test_support';
 
 test('the accordion labels survive a visit to the streaming charts', async ({page}) => {
   await scriptedMarket(page, [50000, 50001]);
   await page.goto('demos/accordions/a-box-remembers-the-fold/?type=exclusive');
   const demos = page.getByRole('navigation', {name: 'demos'});
-  await expect(page.getByRole('region', {name: 'A box remembers the fold, and a rule reads it'}).getByRole('radio').first()).toBeAttached();
+  await expect(rememberedFolds(page).first()).toBeAttached();
   const before = await rememberedFoldLabels(page);
 
   await demos.getByRole('link', {name: 'Charts'}).click();
