@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
-import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {aggregations, tablesTab} from '@pages/Demos/Tables/__test_support';
 
 const theNeed = 'Start with the need, and let it pick the element';
@@ -58,6 +58,14 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().openPart(theNeed);
 
     expect(await appAddress.movedOnFrom(demosAt('tables', '?world=vanilla'))).toBe(demosAt('tables/the-need-and-its-clues', '?world=vanilla'));
+  });
+
+  test('the need’s page leads on to the sketch on the tables tab, by number and title, with the build carried', async () => {
+    render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla')}/>);
+
+    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+      ['Next: 2. Sketch a design from the need', `${demosAt('tables', '?world=vanilla')}#phase-design`]
+    ]);
   });
 
   test('the tables tab leads to the need’s page instead of showing its clues', async () => {
