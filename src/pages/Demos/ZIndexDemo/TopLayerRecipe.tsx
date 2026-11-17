@@ -3,8 +3,7 @@ import {Align, Side} from '@banners';
 import {Codes, Mdn, Says, Sample, Snippet, Step, DialStep, StepHeading, Steps, Story, Want, Words, Tell, lines, carve} from '../Recipe';
 import {AlignDial, SideDial, useControls} from '../Controls';
 import {partHeadings} from './part-headings';
-import {zIndexParts} from './part-pages';
-import {DemoLink} from '@pages/Demos/DemoLink';
+import {PartLink} from './PartLink';
 import {topLayerStory} from './top-layer-story';
 import bannersSource from '@banners/Banners.tsx?sample';
 import providerSource from '@banners/BannerProvider.tsx?sample';
@@ -39,8 +38,7 @@ export const TopLayerRecipe: FC = () => {
     can="The user sees the news over the page"
     soThat="no stacking context can bury the news">
     <Tell>I could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the
-      term taught above in <DemoLink to={zIndexParts.addressOf('why-9999-still-loses')}><cite>Why 9999 still
-        loses</cite></DemoLink>.
+      term taught above in <PartLink part="why-9999-still-loses"/>.
       An element around the banner forms a stacking context by the
       ways <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else forms a stacking
         context</cite></a> shows. <code className="monospaced">position: fixed</code>, which pins the banner to the

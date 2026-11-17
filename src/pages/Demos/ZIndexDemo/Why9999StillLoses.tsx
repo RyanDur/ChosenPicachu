@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {DemoTopics} from '@pages/Demos';
-import {DemoLink} from '@pages/Demos/DemoLink';
 import {TabLink} from '@pages/Demos/TabLink';
 import {carve, lines, Snippet} from '../Recipe';
 import {TrappedMenu} from './TrappedMenu';
@@ -10,14 +9,13 @@ import {partHeadings} from './part-headings';
 import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
-import {zIndexParts} from './part-pages';
+import {PartLink} from './PartLink';
 import {WhyThirdIsOnTopLink} from './WhyThirdIsOnTopLink';
 
 export const Why9999StillLoses: FC = () => <>
   <p className="paragraph">A list with a z-index of 9999 can still open under a card with a z-index of 1. This part
-    shows that happen, and why no bigger number lifts the list out. It assumes what
-    “<DemoLink to={zIndexParts.addressOf('why-third-is-on-top')}>{zIndexParts.titleOf('third-on-top')}</DemoLink>”
-    gives: positioned, auto and stacking order.</p>
+    shows that happen, and why no bigger number lifts the list out. It assumes what <PartLink
+    part="why-third-is-on-top"/> gives: positioned, auto and stacking order.</p>
   <TrappedMenu/>
   <ol className="runs card rounded-corners lifted padded">
     <li className="run">
