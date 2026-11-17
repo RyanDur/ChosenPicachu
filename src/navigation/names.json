@@ -30,7 +30,7 @@
     "the-max-height-guess": {"title": "The max-height guess · Accordions · Chosen Picachu", "description": "When the height isn’t known ahead of time, most of us slid a fold open by moving max-height to a number taller than any fold would need."},
     "the-measured-height": {"title": "The measured height · Accordions · Chosen Picachu", "description": "A script measures the text, and the style sheet slides the panel to that height."},
     "what-the-platform-gives-now": {"title": "What the platform gives now · Accordions · Chosen Picachu", "description": "Details and summary slide to the height the text needs, with no script."},
-    "how-a-sliding-fold-moves": {"title": "How a sliding fold moves · Accordions · Chosen Picachu", "description": "Every fold here moves by transition, never by animation, because a reader may press again before the fold lands."}
+    "how-a-sliding-fold-moves": {"title": "How a sliding fold moves · Accordions · Chosen Picachu", "description": "A fold slides by transition, which turns around when the reader presses again, and stops sliding when the reader asks for less motion."}
   },
   "z-index": {
     "lets-build-this-feature": {"title": "Let’s build this feature · Z-index · Chosen Picachu", "description": "Build the site’s banner from a user’s story: an alert written last on the page, outside the tab’s content, so no card is drawn over it."},

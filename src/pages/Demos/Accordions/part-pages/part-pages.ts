@@ -46,7 +46,7 @@ const listings: Record<AccordionPart, Listing> = {
   'the-max-height-guess': {heading: 'max-height-guess-heading', minutes: 1},
   'the-measured-height': {heading: 'measured-heading', minutes: 5},
   'what-the-platform-gives-now': {heading: 'platform-way-heading', minutes: 7},
-  'how-a-sliding-fold-moves': {heading: 'motion-heading', minutes: 0}
+  'how-a-sliding-fold-moves': {heading: 'motion-heading', minutes: 2}
 };
 
 const tabAddress = demoTab.address(DemoTopics.accordions);
