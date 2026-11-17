@@ -22,7 +22,7 @@ describe('the home page', () => {
     ]);
   });
 
-  test('should show a page pulled apart into its three languages, named by its title and caption', () => {
+  test('should show a figure named by its caption', () => {
     expect(homePage.drawing()).toBeVisible();
   });
 
