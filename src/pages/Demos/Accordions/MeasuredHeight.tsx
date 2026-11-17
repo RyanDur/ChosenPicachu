@@ -47,7 +47,7 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
   const {Accordion: Measured, sample} = measuredBuilds[foldType];
   return <>
     <p className="paragraph">This part builds on two before it on the accordions tab:
-      “<TabPartLink heading="remembers-heading"/>”, for the checkbox and its label, and
+      “<TabPartLink heading="remembers-heading"/>”, for the {input} and its label, and
       “<TabPartLink heading="max-height-guess-heading"/>”, which this part answers.</p>
     <DialGroup>
       <FoldTypeDial/>
