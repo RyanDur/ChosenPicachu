@@ -160,18 +160,14 @@ describe('the banner tutorial’s second story', () => {
 });
 
 describe('the z-index tab’s introduction', () => {
-  test('should link the class it assumes to the accordions part that defines it', async () => {
+  test('should link the tab it assumes, and each term it assumes to the accordions part that defines it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    expect(await demoTabs.assumedLinks('Z-index'))
-      .toContainEqual(['a class', demosAt('accordions/a-box-remembers-the-fold')]);
-  });
-
-  test('should link the custom property it assumes to the accordions part that defines it', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
-
-    expect(await demoTabs.assumedLinks('Z-index'))
-      .toContainEqual(['a custom property', demosAt('accordions/the-measured-height')]);
+    expect(await demoTabs.assumedLinks('Z-index')).toEqual([
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['a class', demosAt('accordions/a-box-remembers-the-fold')],
+      ['a custom property', demosAt('accordions/the-measured-height')]
+    ]);
   });
 });
 
