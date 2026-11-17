@@ -4,8 +4,12 @@ import {is, maybe, not} from '@ryandur/sand';
 
 export const recipeFolds = {
   story: (root: HTMLElement, title: string): HTMLElement => within(root).getByRole('group', {name: title}),
-  itemOf: (story: HTMLElement): HTMLElement | undefined => within(document.body).getAllByRole('listitem').find(item =>
-    item.contains(story) && not(within(item).queryAllByRole('listitem').some(inner => inner.contains(story)))),
+  itemOf: (story: HTMLElement): HTMLElement => maybe(within(document.body).getAllByRole('listitem').find(item =>
+    item.contains(story) && not(within(item).queryAllByRole('listitem').some(inner => inner.contains(story))))).either(
+    item => item,
+    () => {
+      throw new Error('no list item holds the story');
+    }),
   steps: (story: HTMLElement): HTMLElement[] => within(within(story).getByRole('list', {name: 'the steps'})).getAllByRole('listitem'),
   stepHeaded: (root: HTMLElement, title: string): HTMLElement => {
     const headed = within(root).getAllByRole('listitem').filter(item => is(within(item).queryByRole('heading', {name: title})));
