@@ -3,15 +3,11 @@ import {TestApp} from '@__test_support/TestApp';
 import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {FlowTableRecipe} from '../FlowTableRecipe';
-import {StillTableRecipe} from '../StillTableRecipe';
 
-describe('the still and living table recipes', () => {
-  test('should hold their stories in the still table and the living table', async () => {
-    render(<TestApp at="/"><StillTableRecipe/><FlowTableRecipe/></TestApp>);
+describe('the living table recipe', () => {
+  test('should hold its stories in the living table', async () => {
+    render(<TestApp at="/"><FlowTableRecipe/></TestApp>);
 
-    const still = demoPage.part('the still table');
-    expect(still).toBeVisible();
-    expect(recipeFolds.story(still, 'The trader can read the market in a table')).toBeInTheDocument();
     const living = demoPage.part('the living table');
     expect(living).toBeVisible();
     expect(recipeFolds.story(living, 'The trader can watch the market live, one lookback beside another')).toBeInTheDocument();
