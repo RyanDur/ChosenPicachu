@@ -180,6 +180,14 @@ describe('the part on what else forms a stacking context', () => {
     expect(explanation.linkNamed(explanation.runTelling(part, /^The list is placed by/), 'anchor positioning')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning');
   });
 
+  test('should open every MDN page it sends the reader to in a new tab, as the other z-index pages do', async () => {
+    render(<TestApp at={demosAt(whatElseForms)}/>);
+    const part = await explanation.part(heading);
+
+    expect(explanation.linksTo(part, 'https://developer.mozilla.org/').map(link => link.getAttribute('target')))
+      .toEqual(['_blank', '_blank', '_blank', '_blank', '_blank', '_blank', '_blank', '_blank']);
+  });
+
   test('should open its run on MDN’s whole list', async () => {
     render(<TestApp at={demosAt(whatElseForms)}/>);
     const part = await explanation.part(heading);
