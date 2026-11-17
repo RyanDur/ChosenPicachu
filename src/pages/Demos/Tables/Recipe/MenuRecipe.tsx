@@ -71,8 +71,9 @@ const RankStory: FC = () => {
     soThat="the table ranks itself, and the trader still outranks it">
     <TheImplementation react="Builds" vanilla="Frame/table/menus.ts"/>
     <Tell>I could build the popup from divs, but then I would have to build focus, dismissal and
-      stacking myself. So the chooser uses the platform’s popover, and the first steps below collect what that
-      decision gives. Sorting state has its own trap: the glyph, the attribute and the
+      stacking myself. So the chooser uses the platform’s popover, the one
+      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> builds its menu on, and the first steps below collect
+      what that decision gives. Sorting state has its own trap: the glyph, the attribute and the
       ranked rows each want their own copy of which column is chosen, and copies
       drift.</Tell>
     <Tell>And two forces pull at whatever the trader chooses. The data keeps streaming under
