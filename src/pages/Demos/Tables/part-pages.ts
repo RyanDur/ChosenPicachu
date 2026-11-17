@@ -1,6 +1,7 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
+import {designHeading} from '@pages/Demos/Recipe';
 
 export type TablePart = keyof typeof names.tableParts;
 
@@ -9,15 +10,6 @@ type Told = {
   says: string;
   minutes: number;
   ordinal: number;
-};
-
-type Onward = {
-  numbered: string;
-  heading: string;
-};
-
-const onward: Record<TablePart, Onward> = {
-  'the-need-and-its-clues': {numbered: '2. Sketch a design from the need', heading: 'phase-design'}
 };
 
 const book = [
@@ -44,6 +36,25 @@ const listings: Record<TablePart, Listing> = {
 
 const ordinalOf = (part: BookPart): number => book.indexOf(part) + 1;
 
+type TabHeading = {
+  id: string;
+  title: string;
+};
+
+type OnwardPart = {
+  part: BookPart;
+  heading: TabHeading;
+};
+
+const onward: Record<TablePart, OnwardPart> = {
+  'the-need-and-its-clues': {part: 'the-sketch', heading: designHeading}
+};
+
+type Onward = {
+  numbered: string;
+  heading: string;
+};
+
 const all: readonly TablePart[] = ['the-need-and-its-clues'];
 
 const addressOf = (part: TablePart): string => `${demoTab.address(DemoTopics.tables)}${part}/`;
@@ -53,7 +64,10 @@ export const tableParts = {
     const {name, minutes} = listings[part];
     return {name, minutes, ordinal: ordinalOf(part), says: names.tableParts[part].description};
   },
-  onwardOf: (part: TablePart): Onward => onward[part],
+  onwardOf: (part: TablePart): Onward => {
+    const {part: next, heading} = onward[part];
+    return {numbered: `${ordinalOf(next)}. ${heading.title}`, heading: heading.id};
+  },
   addressOf,
   shownAt: (pathname: string): Maybe<TablePart> => maybe(all.find(part => pathname === addressOf(part))),
   inTheBook: book.length

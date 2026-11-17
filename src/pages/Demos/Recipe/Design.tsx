@@ -1,4 +1,5 @@
 import {FC, ReactNode} from 'react';
+import {designHeading} from './design-heading';
 
 type DesignProps = {
   sketch: ReactNode;
@@ -7,8 +8,8 @@ type DesignProps = {
 };
 
 export const Design: FC<DesignProps> = ({sketch, answers, unanswered}) =>
-  <section className="phase card rounded-corners lifted" aria-labelledby="phase-design">
-    <h3 id="phase-design" className="phase-title title">Sketch a design from the need</h3>
+  <section className="phase card rounded-corners lifted" aria-labelledby={designHeading.id}>
+    <h3 id={designHeading.id} className="phase-title title">{designHeading.title}</h3>
     <p className="overview paragraph muted-ink">
       The need has a visual answer, so the next artifact is a design: enough shape to argue
       with, before any code. What the sketch cannot answer goes back to the people asking, as
