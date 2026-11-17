@@ -102,15 +102,15 @@ export const measuredHeightPage = 'demos/accordions/the-measured-height/';
 
 const remembersPage = 'demos/accordions/a-box-remembers-the-fold/';
 
-const tabPage = 'demos/accordions/';
+const platformPage = 'demos/accordions/what-the-platform-gives-now/';
 
 const pageOf: Record<Build, string> = {
   'the measured checkbox build': measuredHeightPage,
   'the measured radio build': measuredHeightPage,
   'the checkbox build': remembersPage,
   'the radio build': remembersPage,
-  'the inclusive details build': tabPage,
-  'the details build': tabPage
+  'the inclusive details build': platformPage,
+  'the details build': platformPage
 };
 
 export const showing = (build: Build, style: 'reveal' | 'drawer' | 'static' = 'reveal'): string =>

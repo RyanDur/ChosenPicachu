@@ -66,14 +66,11 @@ test('a keyboard reader moves through the radio build from its first fold to its
 test('a link to the inclusive type opens the tab on it, and it stays after a reload', async ({page}) => {
   await page.goto('demos/accordions/?type=inclusive');
   const inclusive = page.getByRole('group', {name: 'fold type'}).getByRole('radio', {name: 'Inclusive'});
-  const inclusiveBuild = page.getByRole('heading', {name: 'Inclusive accordion using details elements'});
   await expect(inclusive).toBeChecked();
-  await expect(inclusiveBuild).toBeVisible();
 
   await page.reload();
 
   await expect(inclusive).toBeChecked();
-  await expect(inclusiveBuild).toBeVisible();
 });
 
 test('a keyboard reader tabs from an open part\'s bar into its text and past a closed part', async ({page}) => {
@@ -197,8 +194,8 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
 test.describe('a reader with script turned off', () => {
   test.use({javaScriptEnabled: false});
 
-  test('opens a fold of the details build on the accordions tab and reads its words', async ({page}) => {
-    await page.goto('demos/accordions/');
+  test('opens a fold of the details build on what the platform gives now and reads its words', async ({page}) => {
+    await page.goto('demos/accordions/what-the-platform-gives-now/');
     const fold = accordionsTab(page).partOf('the details build', 0);
 
     await expect(fold.words).toBeHidden();
