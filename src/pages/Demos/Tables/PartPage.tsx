@@ -7,6 +7,7 @@ import {Aggregations} from './Aggregations';
 import {TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
 import {StoryClues} from './Recipe';
+import '../Tutorials.css';
 import './TutorialPage.css';
 
 export const PartPage: FC<{part: TablePart}> = ({part}) => {

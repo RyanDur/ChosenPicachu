@@ -2,8 +2,8 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--base-x-3);
-}
 
-.tutorial-page.tutorials {
-  justify-items: stretch;
+  > .aggregations {
+    justify-self: stretch;
+  }
 }
