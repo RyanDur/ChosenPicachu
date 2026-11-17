@@ -32,7 +32,7 @@ const minutes: Record<Tutorial, number> = {sort: 18, menu: 7, resize: 7};
 
 const addressOf = (tutorial: Tutorial): string => `${demoTab.address(DemoTopics.tables)}${tutorial}/`;
 
-const ordinalOf = (tutorial: Tutorial): number => tableParts.inTheBook + inOrder.indexOf(tutorial) + 1;
+const ordinalOf = (tutorial: Tutorial): number => tableParts.count + inOrder.indexOf(tutorial) + 1;
 
 export const tableTutorials: TableTutorials = {
   all: () => inOrder,
