@@ -1,10 +1,16 @@
 import {FC, useEffect, useReducer} from 'react';
 import {asyncResult, has, maybe} from '@ryandur/sand';
 import {bannerChange, useBannerDispatch} from '@banners';
-import {measured, useMeasuredOnResize} from '../../Stage';
 import {plainFold} from './plain-fold';
-import {plainFoldChange} from './plain-fold-change';
+import {PlainFoldChange, plainFoldChange} from './plain-fold-change';
 import './PlainFold.css';
+
+const measured = (body: HTMLElement, dispatch: (change: PlainFoldChange) => void): void => {
+  const height = Math.ceil(body.getBoundingClientRect().height);
+  if (height > 0) {
+    dispatch(plainFoldChange.grown(height));
+  }
+};
 
 export const PlainFold: FC = () => {
   const dispatchBanner = useBannerDispatch();
@@ -15,13 +21,17 @@ export const PlainFold: FC = () => {
     .onFailure(() => dispatchBanner(bannerChange.raised('the plain fold could not be assembled')))
     .cancel, [dispatchBanner]);
 
-  useMeasuredOnResize(maybe, dispatch, plainFoldChange.grown, body);
+  useEffect(() => maybe(body).map(watched => {
+    const watcher = new ResizeObserver(() => measured(watched, dispatch));
+    watcher.observe(watched);
+    return () => watcher.disconnect();
+  }).orElse(() => undefined), [body]);
 
   return <iframe className="plain-fold" title="A fold measured by plain script"
     style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
     onLoad={event => maybe(event.currentTarget.contentDocument).mBind(({body}) => maybe(body)).map(loaded => {
       dispatch(plainFoldChange.loaded(loaded));
-      measured(maybe(loaded), dispatch, plainFoldChange.grown);
+      measured(loaded, dispatch);
     })}
     srcDoc={foldMarkup}/>;
 };

@@ -4,13 +4,19 @@ import {classNames} from '@components';
 import {useEnvironment} from '@environment';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {useControls} from '../../Controls';
-import {measured, useMeasuredOnResize} from '../../Stage';
 import {tableFrame} from './table-frame';
-import {tableFrameChange} from './table-frame-change';
+import {TableFrameChange, tableFrameChange} from './table-frame-change';
 import './TableFrame.css';
 
 const bodyOf = (frame: HTMLIFrameElement): Maybe<HTMLElement> =>
   maybe(frame.contentDocument).mBind(({body}) => maybe(body));
+
+const measured = (body: HTMLElement, dispatch: (change: TableFrameChange) => void): void => {
+  const height = Math.ceil(body.getBoundingClientRect().height);
+  if (height > 0) {
+    dispatch(tableFrameChange.grown(height));
+  }
+};
 
 export const TableFrame: FC<PropsWithChildren> = ({children}) => {
   const {pace, origin, motion} = useControls();
@@ -25,7 +31,11 @@ export const TableFrame: FC<PropsWithChildren> = ({children}) => {
     .onFailure(() => dispatchBanner(bannerChange.raised('the table could not be assembled')))
     .cancel, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct, dispatchBanner]);
 
-  useMeasuredOnResize(bodyOf, dispatch, tableFrameChange.grown, frame);
+  useEffect(() => maybe(frame).map(watched => {
+    const watcher = new ResizeObserver(() => bodyOf(watched).map(body => measured(body, dispatch)));
+    watcher.observe(watched);
+    return () => watcher.disconnect();
+  }).orElse(() => undefined), [frame]);
 
   const stood = is(frame);
 
@@ -35,7 +45,7 @@ export const TableFrame: FC<PropsWithChildren> = ({children}) => {
       style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
       onLoad={event => {
         dispatch(tableFrameChange.loaded(event.currentTarget));
-        measured(bodyOf(event.currentTarget), dispatch, tableFrameChange.grown);
+        bodyOf(event.currentTarget).map(body => measured(body, dispatch));
       }}
       srcDoc={frameMarkup}/>}
     {not(stood) && children}
