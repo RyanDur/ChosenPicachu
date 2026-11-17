@@ -21,7 +21,7 @@ const resizing = (context: Resizing, column: string, handle: HTMLElement): void 
   handle.addEventListener('pointerdown', event => {
     event.stopPropagation();
     awaken(context);
-    maybe(shares.grippedAt(context.table.getBoundingClientRect().width, event.clientX))
+    shares.grippedAt(context.table.getBoundingClientRect().width, event.clientX)
       .map(grip => saidAfter(context, tableActions.gripped(column, grip)));
     handle.setPointerCapture(event.pointerId);
   });

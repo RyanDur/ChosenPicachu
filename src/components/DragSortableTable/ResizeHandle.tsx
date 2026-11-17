@@ -37,7 +37,7 @@ export const ResizeHandle: FC<{column: string}> = ({column}) => {
       event.currentTarget.setPointerCapture(event.pointerId);
       maybe(event.currentTarget.closest('table')).map(table => {
         awaken(table);
-        maybe(shares.grippedAt(table.getBoundingClientRect().width, event.clientX))
+        shares.grippedAt(table.getBoundingClientRect().width, event.clientX)
           .map(grip => dispatch(tableActions.gripped(column, grip)));
       });
     }}
