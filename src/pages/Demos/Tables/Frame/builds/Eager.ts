@@ -21,7 +21,7 @@ const columnShoving = (context: MountedTable, name: string, to: number, widths: 
   const current = context.order();
   const from = current.indexOf(name);
   tell(context.table, 'column-moved', {column: name, to});
-  settle.shoveColumns(context, survey.displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: widths[name] ?? 0});
+  settle.shoveColumns(context, survey.displacedBetween(current, from, to), {toward: to > from ? 'start' : 'end', by: maybe(widths[name]).orElse(0)});
 };
 
 const columnTo = (context: MountedTable, name: string, to: number, widths: PixelSizes): void => {
@@ -36,12 +36,12 @@ const columnTo = (context: MountedTable, name: string, to: number, widths: Pixel
 const columnBeside = (context: MountedTable, name: string, neighbor: string): void => {
   const current = context.order();
   columnShoving(context, name, survey.interior(current.indexOf(neighbor), current.length),
-    context.store.state.drag?.survey.columnWidths ?? {});
+    maybe(context.store.state.drag).map(drag => drag.survey.columnWidths).orElse({}));
 };
 
 const rowShoving = (context: MountedTable, row: string, before: readonly string[], {to, heights}: Pick<RowNudge, 'to' | 'heights'>): void => {
   const from = before.indexOf(row);
-  settle.shoveRows(context, survey.displacedBetween(before, from, to), {toward: to > from ? 'up' : 'down', by: heights[row] ?? 0});
+  settle.shoveRows(context, survey.displacedBetween(before, from, to), {toward: to > from ? 'up' : 'down', by: maybe(heights[row]).orElse(0)});
 };
 
 const rowNudged = (context: MountedTable, row: string, {from, to, heights}: RowNudge): void => {
@@ -61,7 +61,8 @@ const rowBeside = (context: MountedTable, row: string, neighbor: string): void =
   const before = context.standing();
   const to = before.indexOf(neighbor);
   tell(context.table, 'row-moved', {row, to, standing: before});
-  rowShoving(context, row, before, {to, heights: context.store.state.drag?.survey.rowHeights ?? {}});
+  rowShoving(context, row, before,
+    {to, heights: maybe(context.store.state.drag).map(drag => drag.survey.rowHeights).orElse({})});
 };
 
 const drop = (context: MountedTable): void => {
@@ -83,10 +84,10 @@ const moved = (context: MountedTable, moving: Moving): void => {
   const {store: hand, order, standing} = context;
   hand.dispatch(tableActions.drifted(moving));
   const {drag} = hand.state;
-  if (drag?.axis === 'column') {
+  if (has(drag) && drag.axis === 'column') {
     travel.eager(survey.columnUnder(order(), drag.survey), drag.held,
       neighbor => columnBeside(context, drag.held, neighbor))(moving);
-  } else if (drag?.axis === 'row') {
+  } else if (has(drag) && drag.axis === 'row') {
     travel.eager(survey.rowUnder(standing(), drag.survey), drag.held,
       neighbor => rowBeside(context, drag.held, neighbor))(moving);
   }
