@@ -1,4 +1,4 @@
-.accordion-part, .part-listing {
+.accordion-part {
   display: grid;
   gap: var(--base-x-3);
 }

@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {AccordionPart, accordionParts} from './part-pages';
 import {PartLink} from './PartLink';
+import './PartListing.css';
 
 export const PartListing: FC<{part: AccordionPart}> = ({part}) => {
   const {heading, says, minutes} = accordionParts.told(part);
