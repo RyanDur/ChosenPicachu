@@ -22,6 +22,11 @@ export const tablesTab = () => ({
   tutorialLink,
   follow: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
   backToTheTab: async (): Promise<void> => userEvent.click(await tutorialLink('Tables')),
+  tutorialReadingTimeOf: async (name: string): Promise<HTMLElement> => {
+    const tutorials = await screen.findByRole('list', {name: 'the tutorials'}, untilTheTablesTabRenders);
+    const [entry] = within(tutorials).getAllByRole('listitem').filter(item => within(item).queryByRole('link', {name}));
+    return within(entry).getByText(/to read$/);
+  },
   tutorialsListed: async (): Promise<string[]> =>
     within(await screen.findByRole('list', {name: 'the tutorials'}, untilTheTablesTabRenders)).getAllByRole('link')
       .map(link => computeAccessibleName(link)),

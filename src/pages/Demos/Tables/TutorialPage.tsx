@@ -10,6 +10,7 @@ import {DragSortTutorial} from './DragSort';
 import {MenuRecipe, ResizeRecipe} from './Recipe';
 import {DemoLink} from '@pages/Demos/DemoLink';
 import {tableParts} from './part-pages';
+import {TablesMap} from './TablesMap';
 import './TutorialPage.css';
 
 const recipes: Record<Tutorial, FC> = {
@@ -46,6 +47,7 @@ export const TutorialPage: FC = () => {
         those are new to you, read that part first.
       </p>
       <TutorialRecipe/>
+      <TablesMap/>
     </section>;
   }, () => null);
 };
