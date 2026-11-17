@@ -27,12 +27,12 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const nudged = (to: number, heights: PixelSizes): void =>
     dispatch(tableActions.rowWalkedTo({row, label}, to, heights, standing));
   const arrived = (to: number): void => {
-    maybe(onRowMoved).map(moved => moved({row, to, standing}));
+    maybe(onRowMoved).map(tellMoved => tellMoved({row, to, standing}));
   };
   const beside = (neighbor: string, bounds: Survey): void => {
     const to = standing.indexOf(neighbor);
     dispatch(tableActions.rowMovedBeside({row, label}, neighbor, bounds.rowHeights, standing));
-    maybe(onRowMoved).map(moved => moved({row, to, standing}));
+    maybe(onRowMoved).map(tellMoved => tellMoved({row, to, standing}));
   };
 
   const lift = (grab: Grab): void => dispatch(tableActions.lifted({axis: 'row', held: row}, grab));

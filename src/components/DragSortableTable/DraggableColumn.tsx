@@ -32,12 +32,12 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({
 
   const walkedTo = (to: number, widths: PixelSizes): void => {
     dispatch(tableActions.columnWalkedTo(column, to, widths, order));
-    maybe(onColumnMoved).map(moved => moved({column, to}));
+    maybe(onColumnMoved).map(tellMoved => tellMoved({column, to}));
   };
   const beside = (neighbor: string, bounds: Survey): void => {
     const to = survey.interior(order.indexOf(neighbor), count);
     dispatch(tableActions.columnMovedBeside(column, neighbor, bounds.columnWidths, order));
-    maybe(onColumnMoved).map(moved => moved({column, to}));
+    maybe(onColumnMoved).map(tellMoved => tellMoved({column, to}));
   };
 
   const lift = (grab: Grab): void => dispatch(tableActions.lifted({axis: 'column', held: column}, grab));
