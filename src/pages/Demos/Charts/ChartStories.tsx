@@ -1,7 +1,8 @@
+import {ClassGloss} from '@pages/Demos/Accordions';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {DemoLink} from '@pages/Demos/DemoLink';
-import {accordionParts} from '@pages/Demos/Accordions';
+import {accordionParts} from '@pages/Demos/Accordions/part-pages';
 import {FC, ReactNode} from 'react';
 import {Link} from 'react-router';
 import {DemoTopics} from '@pages/Demos';
@@ -135,8 +136,7 @@ const PriceStory: FC = () =>
           <Says>The period menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece
             of the page, as taught in the z-index part <PartLink part="why-the-popover-wins"/>. They write a menu, an
             li, which is one item of a list, and a button.</Says>
-          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
-            sheet’s rules pick out. Item gives its button the site’s shared classes that set its look. Menu leaves its
+          <Says><ClassGloss/> Item gives its button the site’s shared classes that set its look. Menu leaves its
             own look to whatever draws it, so <code className="monospaced">PeriodMenu</code>, which the price and candle
             charts share, gives Menu its look with three of the site’s shared
             classes, <code className="monospaced">card</code>, <code className="monospaced">rounded-corners</code> and <code className="monospaced">lifted</code>, as the sample shows.</Says>
@@ -252,8 +252,7 @@ const CandlesStory: FC = () =>
           <Says>Prices are placed by the same proportion the price line uses, with the highest high at the top and the
             lowest low at the bottom. Across the chart, <code className="monospaced">bucketPlaces.of</code> gives each candle an equal place and makes the body
             60% of that place wide, so two candles never touch.</Says>
-          <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
-            sheet’s rules pick out. A candle that closed at or above its open gets the
+          <Says><ClassGloss/> A candle that closed at or above its open gets the
             class <code className="monospaced">up</code>, and one that closed lower gets <code className="monospaced">down</code>.</Says>
           <Says>Some of what a candle looks like is shared with the rest of the site. A shared class is a look that
             lives in the site’s shared style sheet and that an element wears by name; the chart’s own style sheet keeps
@@ -420,10 +419,8 @@ const PressureStory: FC = () =>
             dollars.</Want>
           <Says>Each minute is a bar above a thin middle line for bought and a bar below it for sold: green above,
             orange below. The bought bars wear <code className="monospaced">buy-side</code> and the sold
-            bars <code className="monospaced">sell-side</code>. A class, as
-            the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says,
-            is a name a style sheet’s rules pick out. These two are shared classes, looks that live in the site’s
-            shared style sheet.</Says>
+            bars <code className="monospaced">sell-side</code>. <ClassGloss/> These two are shared classes, looks that live
+            in the site’s shared style sheet.</Says>
           <Says>A side class sets a side’s colors as custom properties, which
             the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> explains:
             values a style sheet names once and other rules read. <code className="monospaced">side-face</code> reads the face

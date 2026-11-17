@@ -1,6 +1,6 @@
 import {FC, ReactNode} from 'react';
 import {DemoLink} from '@pages/Demos/DemoLink';
-import {accordionParts} from '@pages/Demos/Accordions';
+import {accordionParts} from '@pages/Demos/Accordions/part-pages';
 import {Entrance, Stack} from '@banners';
 import {Codes, Says, Snippet, Step, DialStep, StepHeading, Steps, Story, Want, Words, Tell, lines, carve} from '../Recipe';
 import {EntranceDial, StackDial, useControls} from '../Controls';

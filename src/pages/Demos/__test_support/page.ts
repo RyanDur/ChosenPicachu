@@ -58,6 +58,7 @@ export const demoPage = {
   findSays: (told: string | RegExp): Promise<HTMLElement> => screen.findByText(told, {}, untilTheTabMounts),
   alertSaying: async (told: string): Promise<HTMLElement> => within(await screen.findByRole('alert')).findByText(told),
   signpost: (name: string): HTMLElement => screen.getByRole('link', {name}),
+  signpostAddresses: (name: string): string[] => screen.getAllByRole('link', {name}).map(hrefOf),
   row: (name: string | RegExp): HTMLElement => screen.getByRole('rowheader', {name}),
   unanswered: (name: string): HTMLElement => screen.getByRole('complementary', {name}),
   wholePage: (): HTMLElement => screen.getByRole('main'),

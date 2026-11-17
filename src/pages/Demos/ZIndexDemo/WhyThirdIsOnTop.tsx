@@ -1,7 +1,8 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
 import {DemoLink} from '@pages/Demos/DemoLink';
-import {accordionParts, tabHeadings} from '@pages/Demos/Accordions';
+import {ClassGloss} from '@pages/Demos/Accordions';
+import {accordionParts} from '@pages/Demos/Accordions/part-pages';
 import {FC} from 'react';
 import {Snippet, lines, carve} from '../Recipe';
 import {NaturalZIndex} from './NaturalZIndex';
@@ -12,9 +13,7 @@ import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 import './ZIndexDemo.css';
 
-const remembersTheFold = 'a-box-remembers-the-fold';
-const remembersTheFoldTitle = accordionParts.told(remembersTheFold).name;
-const remembersTheFoldAt = accordionParts.addressOf(remembersTheFold);
+const remembersTheFoldAt = accordionParts.addressOf('a-box-remembers-the-fold');
 
 export const WhyThirdIsOnTop: FC = () => <>
   <p className="paragraph">Even with no z-index anywhere, one of three overlapping cards ends up on top. This part
@@ -42,14 +41,11 @@ export const WhyThirdIsOnTop: FC = () => <>
     </li>
     <li className="run">
       <p className="paragraph">Choose a card with the pills above the pile, and the page adds the class raised to
-        it. A class is a name a style
-        sheet’s <TabLink to={DemoTopics.accordions} heading={tabHeadings.foldChoices}>rules</TabLink> pick out, as
-        taught in the accordions part <DemoLink to={remembersTheFoldAt}><cite>{remembersTheFoldTitle}</cite></DemoLink>.
-        A rule is a selector, which names the elements it applies to, and the properties it sets. The style sheet gives
-        raised a z-index of 1. A positioned card with a z-index of 1 is painted after every card left at auto, so the
-        raised card lands on top. The others keep their order under it: they are still at auto, and still painted in the
-        order the code lists them. A z-index only shows where cards overlap. Expand the pile, and a raise changes
-        nothing you can see. Collapse it again, and the raised card comes down on top.</p>
+        it. <ClassGloss/> A rule is a selector, which names the elements it applies to, and the properties it sets. The
+        style sheet gives raised a z-index of 1. A positioned card with a z-index of 1 is painted after every card left
+        at auto, so the raised card lands on top. The others keep their order under it: they are still at auto, and
+        still painted in the order the code lists them. A z-index only shows where cards overlap. Expand the pile, and a
+        raise changes nothing you can see. Collapse it again, and the raised card comes down on top.</p>
       <Snippet label="TS" lines={carve.unit(naturalSource, 'const pileCardClasses =')}/>
       <Snippet label="CSS" lines={carve.unit(zIndexCss, '.raised {')}/>
       <OneNumberLiftsOneCard/>

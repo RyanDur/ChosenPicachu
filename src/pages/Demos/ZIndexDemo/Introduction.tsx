@@ -3,7 +3,7 @@ import {FC} from 'react';
 import {PartLink} from './PartLink';
 import {DemoTopics} from '@pages/Demos';
 import {DemoLink} from '@pages/Demos/DemoLink';
-import {accordionParts} from '@pages/Demos/Accordions';
+import {accordionParts} from '@pages/Demos/Accordions/part-pages';
 
 export const ZIndexIntroduction: FC = () =>
   <header className="tab-introduction">
