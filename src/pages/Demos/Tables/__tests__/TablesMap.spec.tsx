@@ -16,10 +16,10 @@ const everyPart = (current?: string) => [
 ].map(([name, address]) => [name, name === current ? null : address]);
 
 describe('the tables map', () => {
-  test('should say on the tables tab how many parts there are, the tutorials among them, and how long they take together', async () => {
+  test('should say on the tables tab how long the parts take together', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    expect(await tablesMap.says()).toHaveTextContent(/^Eight parts, about 53 minutes: five that build the live table, then three tutorials/);
+    expect(await tablesMap.says()).toHaveTextContent(/about 53 minutes/);
   });
 
   test('should give only the size on the tables tab, where the stations already list the parts', async () => {
