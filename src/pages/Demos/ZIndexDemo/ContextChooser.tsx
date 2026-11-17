@@ -59,11 +59,11 @@ export const ContextChooser: FC = () => {
         </label>)}
     </fieldset>
     <ol className="old-way-cards">
-      <li className={classNames('old-way-card card rounded-corners floating', wornAs[worn])}>
+      <li className={classNames('old-way-card drawn-piece', wornAs[worn])}>
         <p className="paragraph">Its list has z-index: 9999.</p>
         <SortMenu onOpened={() => updateOpened(some(worn))}/>
       </li>
-      <li className="old-way-card card rounded-corners floating positioned forms-context">
+      <li className="old-way-card drawn-piece positioned forms-context">
         <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>
       </li>
     </ol>

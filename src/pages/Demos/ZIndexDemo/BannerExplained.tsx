@@ -24,10 +24,10 @@ export const BannerExplained: FC = () => {
           and card one forms a stacking context. So as the page scrolls, plain text passes under the banner, but card
           two, later in the code with its own z-index of 1, passes over it. It is the old menu again, at the window’s
           edge.</p>
-        <Snippet label="CSS" lines={[
+        <Snippet label="CSS" lines={lines.written([
           ...carve.unit(zIndexCss, '.old-banner {'), lines.blank,
           ...carve.unit(zIndexCss, '.forms-context {')
-        ]}/>
+        ])}/>
       </li>
       <li className="run">
         <p className="paragraph">The site’s own banner is fixed too. It is written last on the page, outside the tab’s

@@ -16,6 +16,11 @@
 
 .hollow { fill: none; }
 
+.drawn-piece {
+  background: var(--paper);
+  border: var(--hairline) solid var(--charcoal);
+}
+
 .dashed-drawn { stroke-dasharray: 4 3; }
 
 .buy-side {
