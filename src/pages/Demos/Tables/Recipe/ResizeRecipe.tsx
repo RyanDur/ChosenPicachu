@@ -27,7 +27,7 @@ const ledgerCodes: Record<World, ReactNode> = {
     ]}/>
     <Snippet label="HTML" lines={[
       ...carve.between(headerSource, 'className={classNames(', '...looks.headerNeeds(travels, width)'), lines.blank,
-      ...carve.between(headerSource, "'--share': shares.width(width)", "'--share': shares.width(width)")
+      ...carve.between(headerSource, "'--share': width.map(shares.width)", "'--share': width.map(shares.width)")
     ]}/>
     <Snippet label="CSS" lines={[
       ...carve.unit(baseCss, '.fancy-table.apportioned .header-cell.shared {'), lines.blank,

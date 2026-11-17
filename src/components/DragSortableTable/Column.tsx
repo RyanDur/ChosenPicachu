@@ -14,7 +14,7 @@ export const Column: FC<ComponentProps<'th'> & {column: string}> = ({column, cla
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}
-    style={{'--share': shares.width(width)}}>
+    style={{'--share': width.map(shares.width).orElse(undefined)}}>
     {children}
   </th>;
 };

@@ -14,11 +14,11 @@ const columnNamed = (name: string) => ({columns}: TableView): Maybe<TableColumn<
 
 const unknownColumn = (name: string): TableColumn<Labeled> => ({name, data: {label: name}});
 
-const widthOfColumn = (name: string) => ({state}: TableView): number | undefined =>
-  maybe(state.widths).mBind(widths => maybe(widths[name])).orElse(undefined);
+const widthOfColumn = (name: string) => ({state}: TableView): Maybe<number> =>
+  maybe(state.widths).mBind(widths => maybe(widths[name]));
 
-const namedShareOfColumn = (name: string) => ({state}: TableView): number | undefined =>
-  tableState.namedShare(state, name).orElse(undefined);
+const namedShareOfColumn = (name: string) => ({state}: TableView): Maybe<number> =>
+  tableState.namedShare(state, name);
 
 const columnMarks = (name: string) => ({state}: TableView): Marks<ColumnShove> =>
   maybe(state.columnMarks[name]).orElse({});
