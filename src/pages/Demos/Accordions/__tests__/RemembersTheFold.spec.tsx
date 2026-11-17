@@ -124,6 +124,24 @@ describe('the box that remembers the fold, chosen by type', () => {
   });
 });
 
+describe('the attribute part 2 leans on', () => {
+  test('should, with inclusive chosen, link attribute to where the tab defines it, with the fold choices carried', async () => {
+    render(<TestApp at={demosAt(remembers, '?type=inclusive&style=drawer')}/>);
+
+    const part = await explanation.part(title);
+
+    expect(explanation.linkNamed(part, 'attribute')).toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#html-alone-heading`);
+  });
+
+  test('should, with exclusive chosen, link attribute to where the tab defines it, with the fold choices carried', async () => {
+    render(<TestApp at={demosAt(remembers, '?type=exclusive&style=drawer')}/>);
+
+    const part = await explanation.part(title);
+
+    expect(explanation.linkNamed(part, 'attribute')).toHaveAttribute('href', `${demosAt('accordions', '?type=exclusive&style=drawer')}#html-alone-heading`);
+  });
+});
+
 describe('the rule that reads the box', () => {
   const matchesOnTheInput = /Now a rule has to match on/;
   const mdnLinks = [
