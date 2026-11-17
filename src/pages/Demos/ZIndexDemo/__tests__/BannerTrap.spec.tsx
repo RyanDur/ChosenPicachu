@@ -78,6 +78,15 @@ describe('why a fixed banner still loses', () => {
     const story = recipeFolds.story(document.body, 'The user sees the news over the page');
     await waitFor(() => expect(recipeFolds.itemOf(story)).toHaveFocus());
   });
+
+  test('should link the old menu it compares itself with to that menu’s page, with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+
+    const part = await explanation.part('Why a fixed banner still loses');
+    const run = explanation.saying(part, /It is the old menu in/);
+
+    expect(explanation.linkNamed(run, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
+  });
 });
 
 describe('the gap step, on a term part one defines', () => {

@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {DemoLink} from '@pages/Demos/DemoLink';
 import {carve, lines, Snippet} from '../Recipe';
 import {ContextChooser} from './ContextChooser';
 import {partHeadings} from './part-headings';
@@ -60,8 +61,10 @@ export const FormsContextExplained: FC = () =>
         <p className="paragraph"><a className="signpost" href={`${mdn}z-index`}><code className="monospaced">z-index:
           1</code></a> forms a
           context on a positioned element. It forms one on a grid item too, which card one is here, and on a flex item,
-          a box laid out by a parent whose display is flex. The menu part’s card had position: relative as well, and
-          either is enough. Card two, at 1 and later in the code, is painted over card one.</p>
+          a box laid out by a parent whose display is
+          flex. <DemoLink to={zIndexParts.addressOf('why-9999-still-loses')}>The menu part’s card</DemoLink> had
+          position: relative as well, and either is enough. Card two, at 1 and later in the code, is painted over
+          card one.</p>
         <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(zIndexCss, '.forms-context {'))}/>
       </li>
       <li className="run">
