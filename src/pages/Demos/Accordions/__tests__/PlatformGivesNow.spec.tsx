@@ -45,12 +45,12 @@ describe('what the platform gives now, on its own page', () => {
     expect(accordionsTab.buildsIn(part)).toEqual(['Exclusive accordion using details elements']);
   });
 
-  test('should lead back to part four’s page and on to part six on the tab, by number and title, with the fold choices carried', async () => {
+  test('should lead back to part four’s page and on to part six’s, by number and title, with the fold choices carried', async () => {
     render(<TestApp at={demosAt(platformWay, build)}/>);
 
     expect(await pageFoot.leadsOn('the accordions parts')).toEqual([
       ['Previous: 4. The measured height', demosAt('accordions/the-measured-height', build)],
-      ['Next: 6. How a sliding fold moves', `${demosAt('accordions', build)}#motion-heading`]
+      ['Next: 6. How a sliding fold moves', demosAt('accordions/how-a-sliding-fold-moves', build)]
     ]);
   });
 

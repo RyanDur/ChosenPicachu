@@ -55,3 +55,14 @@ test('a reader follows the measured height’s foot on to what the platform give
   await expect(page).toHaveURL(/demos\/accordions\/what-the-platform-gives-now\/\?type=exclusive&style=drawer$/);
   await expect(page.getByRole('heading', {name: 'Exclusive accordion using details elements', exact: true})).toBeVisible();
 });
+
+test('a reader follows what the platform gives now’s foot on to how a sliding fold moves, with the dials kept', async ({page}) => {
+  await page.goto('demos/accordions/what-the-platform-gives-now/?type=exclusive&style=drawer');
+  await siteFrame(page).hydrated();
+
+  await page.getByRole('navigation', {name: 'the accordions parts'})
+    .getByRole('link', {name: 'Next: 6. How a sliding fold moves'}).click();
+
+  await expect(page).toHaveURL(/demos\/accordions\/how-a-sliding-fold-moves\/\?type=exclusive&style=drawer$/);
+  await expect(accordionsTab(page).partTitle('How a sliding fold moves')).toBeVisible();
+});

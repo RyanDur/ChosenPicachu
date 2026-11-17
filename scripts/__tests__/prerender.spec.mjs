@@ -16,6 +16,7 @@ describe('the pages drawn into the build', () => {
     `${Paths.demos}accordions/the-max-height-guess/`,
     `${Paths.demos}accordions/the-measured-height/`,
     `${Paths.demos}accordions/what-the-platform-gives-now/`,
+    `${Paths.demos}accordions/how-a-sliding-fold-moves/`,
     `${Paths.demos}z-index/why-third-is-on-top/`,
     `${Paths.demos}z-index/why-9999-still-loses/`,
     `${Paths.demos}z-index/what-else-forms-a-stacking-context/`,

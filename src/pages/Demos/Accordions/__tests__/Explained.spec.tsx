@@ -215,6 +215,25 @@ describe('what the platform gives now, on the tab', () => {
   });
 });
 
+describe('how a sliding fold moves, on the tab', () => {
+  test('following how a sliding fold moves opens its page, with the fold choices carried', async () => {
+    const from = demosAt('accordions', '?type=inclusive&style=drawer');
+    render(<TestApp at={from}/>);
+
+    await accordionsTab.openPart('How a sliding fold moves');
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/how-a-sliding-fold-moves', '?type=inclusive&style=drawer'));
+  });
+
+  test('should say how a sliding fold moves, under its title', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const slidingFold = await explanation.part(parts[2]);
+
+    expect(explanation.saying(slidingFold, names.accordions['how-a-sliding-fold-moves'].description)).toBeInTheDocument();
+  });
+});
+
 describe('the accordion in HTML alone', () => {
   test('should hold three folds, basalt, cinder and meadow, in that order', async () => {
     render(<TestApp at={demosAt('accordions')}/>);

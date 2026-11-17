@@ -4,6 +4,7 @@ import {AccordionsExplained} from './Explained';
 import {MaxHeightGuess} from './MaxHeightGuess';
 import {MeasuredHeight} from './MeasuredHeight';
 import {PlatformGivesNow} from './PlatformGivesNow';
+import {SlidingFoldMoves} from './SlidingFoldMoves';
 import {RemembersTheFold} from './RemembersTheFold';
 import {PartPage} from './PartPage';
 import {AccordionPart} from './part-pages';
@@ -27,7 +28,8 @@ const pagesOfParts: Record<AccordionPart, ReactNode> = {
   'a-box-remembers-the-fold': <RemembersTheFold folds={knownFolds}/>,
   'the-max-height-guess': <MaxHeightGuess/>,
   'the-measured-height': <MeasuredHeight folds={measuredFolds}/>,
-  'what-the-platform-gives-now': <PlatformGivesNow folds={platformFolds}/>
+  'what-the-platform-gives-now': <PlatformGivesNow folds={platformFolds}/>,
+  'how-a-sliding-fold-moves': <SlidingFoldMoves/>
 };
 
 export const Room: FC = () => useShownPart().either(
