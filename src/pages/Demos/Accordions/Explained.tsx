@@ -665,7 +665,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   guessed, measured or fixed. The site’s reset gives every details’ hidden part a height of 0 while it
                   is closed, so this one sets its height back to auto and leaves the closing to the row.
                 {{
-                  reveal: ' With reveal, the row moves over 300 milliseconds with ease-in-out, and the text shows from its top down. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide.',
+                  reveal: ' With reveal, the row moves over 300 milliseconds with ease-in-out, and the text shows from its top down. Align-items set to start holds the text at the top of the row while it shrinks. Without it, WebKit snaps a closing fold shut. Content-visibility hides the closed content, and it has no values between on and off. Allow-discrete lets a property like that switch at the end of a close and at the start of an open. That keeps the text visible for the whole slide.',
                   drawer: ' With the drawer, the row moves on the same 300 milliseconds and sets the text at its bottom, so the text’s bottom edge stays on the fold’s edge as it slides down from under the bar. Content-visibility hides the closed content and has no values between on and off; allow-discrete lets it switch at the end of a close and at the start of an open, which keeps the text visible for the whole slide.',
                   static: ' With static, the part a details hides has no transition, so the fold opens at once, in every browser.'
                 }[foldMotion]}</p>
@@ -673,7 +673,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   ...carve.unit(accordionsCss, '&::details-content {'), lines.blank,
                   ...carve.unit(accordionsCss, '&[open]::details-content {'),
                   ...{
-                    reveal: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {')],
+                    reveal: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {'), lines.blank, ...carve.unit(accordionsCss, '.reveal &::details-content {')],
                     drawer: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &::details-content {')],
                     static: []
                   }[foldMotion],
