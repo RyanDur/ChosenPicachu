@@ -6,7 +6,7 @@ import {zIndexParts} from './part-pages';
 const thirdOnTop = 'why-third-is-on-top';
 const told = zIndexParts.told(thirdOnTop);
 
-export const StackingExplained: FC = () =>
+export const ThirdOnTopListing: FC = () =>
   <section aria-labelledby={partHeadings.thirdOnTop} className="stacking-part">
     <h2 id={partHeadings.thirdOnTop} className="title bold">
       <DemoLink to={zIndexParts.addressOf(thirdOnTop)}>{told.name}</DemoLink>
