@@ -11,10 +11,9 @@ type Told = {
   ordinal: number;
 };
 
-const told: Record<TablePart, Told> = {
+const listings: Record<TablePart, Omit<Told, 'says'>> = {
   'the-need-and-its-clues': {
     name: 'Start with the need, and let it pick the element',
-    says: 'A trader says what they need, and its clues show that a table is the element built for it.',
     minutes: 2,
     ordinal: 1
   }
@@ -25,7 +24,7 @@ const all: readonly TablePart[] = ['the-need-and-its-clues'];
 const addressOf = (part: TablePart): string => `${demoTab.address(DemoTopics.tables)}${part}/`;
 
 export const tableParts = {
-  told: (part: TablePart): Told => told[part],
+  told: (part: TablePart): Told => ({...listings[part], says: names.tableParts[part].description}),
   addressOf,
   shownAt: (pathname: string): Maybe<TablePart> => maybe(all.find(part => pathname === addressOf(part))),
   inTheBook: 5
