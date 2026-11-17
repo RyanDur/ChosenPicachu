@@ -134,4 +134,21 @@ describe('a story card', () => {
     expect(appAddress.search()).not.toHaveTextContent('tale=told');
     expect(appAddress.fragment()).toBe('#tale-told-story');
   });
+
+  test('a press that closes a story stays closed when the fold reports its last opening late', async () => {
+    render(<TestApp at="/?tale=told"><Stories>
+      <Story param="tale" id="told" can="The reader can close a story at once" soThat="a late report never reopens it">
+        <p>the told story</p>
+      </Story>
+    </Stories></TestApp>);
+    await appAddress.drawn();
+    const fold = card('The reader can close a story at once');
+
+    await act(async () => {
+      await recipeFolds.press(document.body, 'The reader can close a story at once');
+      fold.dispatchEvent(new Event('toggle'));
+    });
+
+    expect(appAddress.search()).not.toHaveTextContent('tale=told');
+  });
 });

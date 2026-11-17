@@ -30,7 +30,7 @@ export const Story: FC<Props> = ({param, id, can, soThat, children}) => {
     stories.toggle(id);
   };
   const matchAddressToFold = ({currentTarget}: SyntheticEvent<HTMLDetailsElement>) => {
-    stories.setOpen(id, currentTarget.open);
+    if (stories.isOpen(id) !== currentTarget.open) stories.setOpen(id, currentTarget.open);
   };
   return <li tabIndex={-1}>
     <details className="arc" open={stories.isOpen(id)} aria-labelledby={storyKeys.anchorOf({param, id})}
