@@ -2,6 +2,9 @@ import {FC, useState} from 'react';
 import {useHydrated} from '@components';
 import {Maybe, nothing, some, not} from '@ryandur/sand';
 import {classNames} from '@components';
+import {DemoTopics} from '@pages/Demos';
+import {TabLink} from '@pages/Demos/TabLink';
+import {partHeadings} from './part-headings';
 import {SortMenu} from './SortMenu';
 import {TopLayerMenu} from './TopLayerMenu';
 import {CardOne, useControls} from '../Controls';
@@ -24,7 +27,9 @@ export const TrappedMenu: FC = () => {
     <ol className="trap-steps">
       <li className="paragraph">Press Sort by, built the old way, and look where its list opens.</li>
       <li className="paragraph">Uncheck “Card one has z-index: 1”, and press Sort by again.</li>
-      <li className="paragraph">Press Sort by, in the top layer, with the box checked or not.</li>
+      <li className="paragraph">Press Sort by, in
+        the <TabLink to={DemoTopics.zIndex} heading={partHeadings.popoverWins}>top layer</TabLink>, with the box checked
+        or not.</li>
     </ol>
     <ol className="old-way-cards">
       <li className={classNames('old-way-card drawn-piece positioned', cardOne === 'contained' && 'forms-context')}>

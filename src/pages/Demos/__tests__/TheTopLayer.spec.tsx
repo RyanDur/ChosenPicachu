@@ -126,7 +126,7 @@ describe('the banner tutorial’s first story', () => {
     await demoTabs.open('Z-index');
     const news = recipeFolds.story(await zIndexTab.findFeatureStories(), story);
 
-    expect(explanation.linkNamed(news, 'Why 9999 still loses')).toHaveAttribute('href', zIndexTab.fragmentOf('Why 9999 still loses'));
+    expect(explanation.linkNamed(news, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses'));
     expect(explanation.linkNamed(news, 'Why a fixed banner still loses')).toHaveAttribute('href', zIndexTab.fragmentOf('Why a fixed banner still loses'));
     expect(explanation.linkNamed(news, 'What else forms a stacking context')).toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
   });

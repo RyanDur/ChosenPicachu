@@ -1,4 +1,4 @@
-import {is} from '@ryandur/sand';
+import {is, not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -10,6 +10,7 @@ const cardOneHasZIndexBox = (trap: HTMLElement): HTMLElement =>
 export const theTrap = {
   find,
   figure: (): HTMLElement => screen.getByRole('figure', named),
+  missing: (): boolean => not(is(screen.queryByRole('figure', named))),
   cardOne: (trap: HTMLElement): HTMLElement => within(trap).getAllByRole('listitem')
     .filter(card => is(within(card).queryByRole('button', {name: 'Sort by, the old way'})))[0],
   controlIn: (card: HTMLElement, name: string): HTMLElement => within(card).getByRole('button', {name}),

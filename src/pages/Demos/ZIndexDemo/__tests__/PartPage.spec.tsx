@@ -22,11 +22,11 @@ describe('why Third is on top, on its own page', () => {
     expect(stackingPile.card(raised, 'Second')).toBeChecked();
   });
 
-  test('should lead on to the part after it on the tab, by number and title, with the raised card carried', async () => {
+  test('should lead on to the part after it, on its own page, by number and title, with the raised card carried', async () => {
     render(<TestApp at={demosAt(thirdOnTop, '?raised=second')}/>);
 
     expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
-      ['Next: 2. Why 9999 still loses', `${demosAt('z-index', '?raised=second')}#9999-still-loses-heading`]
+      ['Next: 2. Why 9999 still loses', demosAt('z-index/why-9999-still-loses', '?raised=second')]
     ]);
   });
 

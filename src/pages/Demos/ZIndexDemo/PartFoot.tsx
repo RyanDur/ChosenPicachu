@@ -8,7 +8,8 @@ export const PartFoot: FC<{part: ZIndexPart}> = ({part}) => {
   const carried = useCarriedAddress();
   const neighbor = (book: BookPart) => ({
     numbered: zIndexParts.numbered(book),
-    address: carried(demoTab.address(DemoTopics.zIndex), zIndexParts.tabHeadingOf(book))
+    address: zIndexParts.pageOf(book).map(part => carried(zIndexParts.addressOf(part)))
+      .orElse(carried(demoTab.address(DemoTopics.zIndex), zIndexParts.tabHeadingOf(book)))
   });
   return <PageFoot label="the z-index parts"
     previous={zIndexParts.previousOf(part).map(neighbor)}

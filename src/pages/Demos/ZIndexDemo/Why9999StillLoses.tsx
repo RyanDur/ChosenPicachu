@@ -1,0 +1,64 @@
+import {FC} from 'react';
+import {DemoTopics} from '@pages/Demos';
+import {DemoLink} from '@pages/Demos/DemoLink';
+import {TabLink} from '@pages/Demos/TabLink';
+import {carve, lines, Snippet} from '../Recipe';
+import {TrappedMenu} from './TrappedMenu';
+import {ANumberInsideALayer} from './ANumberInsideALayer';
+import {Where9999IsCompared} from './Where9999IsCompared';
+import {partHeadings} from './part-headings';
+import trappedSource from './TrappedMenu.tsx?sample';
+import zIndexCss from './ZIndexDemo.css?sample';
+import '../Runs.css';
+import {zIndexParts} from './part-pages';
+import {WhyThirdIsOnTopLink} from './WhyThirdIsOnTopLink';
+
+export const Why9999StillLoses: FC = () => <>
+  <p className="paragraph">A list with a z-index of 9999 can still open under a card with a z-index of 1. This part
+    shows that happen, and why no bigger number lifts the list out. It assumes what
+    “<DemoLink to={zIndexParts.addressOf('why-third-is-on-top')}>{zIndexParts.titleOf('third-on-top')}</DemoLink>”
+    gives: positioned, auto and stacking order.</p>
+  <TrappedMenu/>
+  <ol className="runs card rounded-corners lifted padded">
+    <li className="run">
+      <p className="paragraph">The list has a z-index of 9999, and card two has a z-index of 1, yet the list
+        opens under card two. Its top shows in the gap between the cards, and its bottom shows below card two.
+        Move through it with the arrow keys. The choice in focus is the one the keys go to, and it moves where you
+        cannot see it, under card two. The menu works. It is drawn in the wrong place.</p>
+      <Snippet label="CSS" lines={lines.fromTheExhibit([
+        ...carve.unit(zIndexCss, '.sort-choices {'), lines.blank,
+        ...carve.unit(zIndexCss, '.old-way-card {'), lines.blank,
+        ...carve.unit(zIndexCss, '.positioned {'), lines.blank,
+        ...carve.unit(zIndexCss, '.forms-context {')
+      ])}/>
+    </li>
+    <li className="run">
+      <p className="paragraph">Card one is <WhyThirdIsOnTopLink>positioned</WhyThirdIsOnTopLink> and has a z-index of
+        1, so it forms a stacking context: a layer the browser paints as one, the card and everything inside it
+        together. Inside that layer, the list’s 9999 puts it above card one’s own face. Outside it, the 9999 counts
+        for nothing.</p>
+      <ANumberInsideALayer/>
+    </li>
+    <li className="run">
+      <p className="paragraph">A z-index is compared only with the others in the same stacking context. The cards are
+        compared in the nearest context that holds them both. Here that is the tab’s content, the area under the tabs
+        that holds every
+        card. <TabLink to={DemoTopics.zIndex} heading={partHeadings.whatElseForms}><cite>What else forms a stacking
+          context</cite></TabLink> shows what makes the tab’s content one.
+        In that context the browser compares card one and card two, 1 against 1, and a tie goes to the one later in
+        the code, so card two is painted over card one, list and all. No number on the list can change that, because
+        the list is never compared with card two.</p>
+      <Where9999IsCompared/>
+    </li>
+    <li className="run">
+      <p className="paragraph">With the box unchecked, card one’s
+        z-index is <WhyThirdIsOnTopLink>auto</WhyThirdIsOnTopLink>. The card is still positioned, but at auto it forms
+        no stacking context, so the list is not kept inside the card’s layer. It joins the context the tab’s content
+        forms, where card two is, and there 9999 is the larger number. With the box checked again, the card forms its
+        layer again, with the list inside it.</p>
+      <Snippet label="TS" lines={lines.fromTheExhibit(
+        carve.between(trappedSource, "<li className={classNames('old-way-card", '</label>')
+      )}/>
+    </li>
+  </ol>
+</>;

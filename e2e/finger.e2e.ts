@@ -43,7 +43,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('the trap\'s menu opens and chooses from a finger that lands just off its controls', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto('demos/z-index/why-9999-still-loses/');
       const menu = trappedMenu(page);
 
       await fingerTap(page, menu.sortBy);
@@ -54,7 +54,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('the menu in the top layer opens and chooses from a finger that lands just off its controls', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto('demos/z-index/why-9999-still-loses/');
       const menu = topLayerMenu(page);
       await menu.sortBy.evaluate(button => button.scrollIntoView({block: 'center'}));
 
@@ -79,7 +79,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('changes the trap with a finger that lands just off the checkbox\'s words', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto('demos/z-index/why-9999-still-loses/');
       const menu = trappedMenu(page);
 
       await fingerTap(page, menu.contextWords);

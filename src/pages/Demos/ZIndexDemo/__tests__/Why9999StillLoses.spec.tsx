@@ -1,0 +1,70 @@
+import {render} from '@testing-library/react';
+import {TestApp} from '@__test_support/TestApp';
+import {demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
+import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+
+const stillLoses = 'z-index/why-9999-still-loses';
+const title = 'Why 9999 still loses';
+
+describe('why 9999 still loses, on its own page', () => {
+  test('should say its place in the z-index book', async () => {
+    render(<TestApp at={demosAt(stillLoses)}/>);
+
+    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 2 of 6');
+  });
+
+  test('should link part one, which it builds on, to its page with the raised card carried', async () => {
+    render(<TestApp at={demosAt(stillLoses, '?raised=second')}/>);
+
+    const part = await explanation.part(title);
+
+    expect(explanation.linkNamed(part, 'Why Third is on top')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
+  });
+
+  test('should link the top layer its menu names to where the tab defines it, with the raised card carried', async () => {
+    render(<TestApp at={demosAt(stillLoses, '?raised=second')}/>);
+
+    const trap = await theTrap.find();
+
+    expect(explanation.linkNamed(trap, 'top layer')).toHaveAttribute('href', `${demosAt('z-index', '?raised=second')}#popover-wins-heading`);
+  });
+
+  test('should lead back to part one’s page and on to part three on the tab, by number and title, with the raised card carried', async () => {
+    render(<TestApp at={demosAt(stillLoses, '?raised=second')}/>);
+
+    expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
+      ['Previous: 1. Why Third is on top', demosAt('z-index/why-third-is-on-top', '?raised=second')],
+      ['Next: 3. What else forms a stacking context', `${demosAt('z-index', '?raised=second')}#what-else-forms-heading`]
+    ]);
+  });
+
+  test('should title the page with the tab and the part', async () => {
+    render(<TestApp at={demosAt(stillLoses)}/>);
+
+    expect(await demoTabs.title('Demos Z-index · Why 9999 still loses')).toBeInTheDocument();
+  });
+
+  test('should keep Z-index as the current tab', async () => {
+    render(<TestApp at={demosAt(stillLoses)}/>);
+
+    expect(await demoTabs.current()).toEqual(['Z-index']);
+  });
+});
+
+describe('why 9999 still loses, on the tab', () => {
+  test('should link its title to its page, with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+
+    const listing = await explanation.part(title);
+
+    expect(explanation.linkNamed(listing, title)).toHaveAttribute('href', demosAt(stillLoses, '?raised=second'));
+  });
+
+  test('should leave its menus to its page', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+    await demoTabs.arrivedOn('Z-index');
+
+    expect(theTrap.missing()).toBe(true);
+  });
+});
