@@ -170,8 +170,8 @@ export const ChartsTutorial: FC = () => {
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
     <h2 id={titled} className="title">let’s build this feature</h2>
-    <ol aria-labelledby={titled}>
-      {chartKinds.all.map(kind => <li key={kind}>
+    <ol className="spine" aria-labelledby={titled}>
+      {chartKinds.all.map(kind => <li key={kind} className="station void-badge-before shadow-rail-along">
         <Link className="signpost" to={chartKinds.address(kind)}>{chartKinds.names[kind]}</Link>
         <p className="paragraph">{told[kind].says}</p>
         <p className="caption muted-ink">
