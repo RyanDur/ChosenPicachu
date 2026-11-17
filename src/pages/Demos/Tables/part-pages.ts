@@ -1,6 +1,6 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
-import {DemoTopics, demoTab} from '@pages/Demos';
+import {demoTab, DemoTopics} from '@pages/Demos';
 
 export type TablePart = keyof typeof names.tableParts;
 
@@ -27,6 +27,6 @@ const addressOf = (part: TablePart): string => `${demoTab.address(DemoTopics.tab
 export const tableParts = {
   told: (part: TablePart): Told => told[part],
   addressOf,
-  at: (pathname: string): Maybe<TablePart> => maybe(all.find(part => pathname === addressOf(part))),
+  shownAt: (pathname: string): Maybe<TablePart> => maybe(all.find(part => pathname === addressOf(part))),
   inTheBook: 5
 };
