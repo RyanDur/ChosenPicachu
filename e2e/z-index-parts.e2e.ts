@@ -1,17 +1,17 @@
-import {expect, Page} from '@playwright/test';
+import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {siteFrame, stackingPile} from './__test_support';
+import {siteFrame, stackingPile, zIndexTab} from './__test_support';
 
-const partLink = (page: Page) =>
-  page.getByRole('heading', {level: 2, name: 'Why Third is on top'}).getByRole('link', {name: 'Why Third is on top', exact: true});
+const whyThirdIsOnTop = 'Why Third is on top';
 
 test('a reader follows why Third is on top from the z-index tab to its page, with the pile at its top and the part’s runs below', async ({page}) => {
   await page.goto('demos/z-index/');
   await siteFrame(page).hydrated();
 
-  await partLink(page).click();
+  await zIndexTab(page).partLink(whyThirdIsOnTop).click();
 
   await expect(page).toHaveURL(/demos\/z-index\/why-third-is-on-top\/$/);
+  await expect(zIndexTab(page).partTitle(whyThirdIsOnTop)).toBeVisible();
   await expect(page.getByText('Z-index · part 1 of 6', {exact: true})).toBeVisible();
   await expect(page.getByRole('figure', {name: /^The pile\./})).toBeVisible();
 });
@@ -21,7 +21,7 @@ test('a card raised on the z-index tab is still raised on the page for why Third
   await stackingPile(page).raise('Second');
   await expect(page).toHaveURL(/\?raised=second$/);
 
-  await partLink(page).click();
+  await zIndexTab(page).partLink(whyThirdIsOnTop).click();
 
   await expect(page).toHaveURL(/demos\/z-index\/why-third-is-on-top\/\?raised=second$/);
   await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Second', 'Third', 'First']);
@@ -31,8 +31,7 @@ test('a reader follows why Third is on top’s foot on to the next part, and lan
   await page.goto('demos/z-index/why-third-is-on-top/?raised=second');
   await siteFrame(page).hydrated();
 
-  await page.getByRole('navigation', {name: 'the z-index parts'})
-    .getByRole('link', {name: 'Next: 2. Why 9999 still loses'}).click();
+  await zIndexTab(page).followsTheFoot('Next: 2. Why 9999 still loses');
 
   await expect(page).toHaveURL(/demos\/z-index\/\?raised=second#9999-still-loses-heading$/);
   await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Second', 'Third', 'First']);
