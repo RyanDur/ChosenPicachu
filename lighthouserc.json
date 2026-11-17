@@ -396,7 +396,36 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 23552
+                "maxNumericValue": 21504
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 268288
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/demos/tables/the\\-need\\-and\\-its\\-clues/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 6144
               }
             ],
             "resource-summary:stylesheet:size": [
@@ -425,7 +454,7 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 23552
+                "maxNumericValue": 21504
               }
             ],
             "resource-summary:stylesheet:size": [

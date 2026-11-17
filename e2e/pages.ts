@@ -30,6 +30,13 @@ export const pages: readonly SitePage[] = [
     budgeted: true
   },
   {
+    name: 'the need and its clues',
+    path: 'demos/tables/the-need-and-its-clues/',
+    ready: 'navigation',
+    loaded: page => page.getByRole('region', {name: 'live aggregations'}).getByRole('columnheader', {name: 'trades'}),
+    budgeted: true
+  },
+  {
     name: 'tables in vanilla',
     path: 'demos/tables/?world=vanilla',
     ready: 'navigation',
