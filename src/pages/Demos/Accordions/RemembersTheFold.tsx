@@ -71,6 +71,10 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
     <KnownHeight className={classNames(looks.exhibit, foldMotion)} folds={folds[foldType]}/>
     <ol className={looks.runs}>
       <li className="run">
+        <p className="paragraph">This build is a disclosure: a bar you press to show the text under it.
+          Everything below is HTML and CSS: what the elements hold, and what a selector can match.</p>
+      </li>
+      <li className="run">
         {foldType === 'inclusive'
           ? <p className="paragraph">To open and close a fold, something has to remember which way it is.
             A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> remembers: it is either
@@ -100,14 +104,9 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
           that says how their elements relate; it picks the siblings that come after the element on its left, the
           elements with the same parent. That is why the order is fixed: the style sheet can only look forward from
           the {input}.
-          While it is not checked, this rule collapses the text. No script is involved.</p>
+          While it is not checked, this rule collapses the text.</p>
         <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'))}/>
         <TheRuleMatchesTheBox/>
-      </li>
-      <li className="run">
-        <p className="paragraph">This build is a disclosure: a bar you press to show the text under it.
-          It has no script. Everything below is HTML and CSS:
-          what the elements hold, and what a selector can match.</p>
       </li>
       <li className="run">
         <p className="paragraph">The way to move a fold evenly with no script is a height you know ahead of time.
