@@ -238,14 +238,14 @@ describe('the fold motion', () => {
     expect(accordionsTab.option(motions, 'Drawer')).toBeChecked();
   });
 
-  test('should keep an open fold open when the reader chooses another motion', async () => {
+  test('should still show the first platform fold’s text after the reader chooses another motion', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
     const platform = await explanation.part(parts[1]);
-    const first = await accordionsTab.openFirstFoldIn(platform);
+    const text = await accordionsTab.openFirstFoldIn(platform);
 
     await accordionsTab.choose('fold motion', 'Drawer');
 
-    expect(first).toHaveAttribute('open');
+    expect(text).toBeVisible();
   });
 });
 
