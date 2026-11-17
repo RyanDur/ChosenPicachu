@@ -30,7 +30,7 @@ describe('why Third is on top, on its own page', () => {
     ]);
   });
 
-  test('should link each term it glosses, and each tab it names, to that tab', async () => {
+  test('should link the accordions tab its opener names', async () => {
     render(<TestApp at={demosAt(thirdOnTop)}/>);
 
     const page = await demoTabs.arrivedOn('Z-index');
