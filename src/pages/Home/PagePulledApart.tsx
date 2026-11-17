@@ -3,21 +3,24 @@ import './PagePulledApart.css';
 
 type Spot = {readonly u: number; readonly v: number};
 type Region = Spot & {readonly across: number; readonly down: number};
-type Label = Spot & {readonly word: string; readonly anchor?: 'end'};
+type Lettered = Spot & {readonly word: string; readonly anchor?: 'end'};
 type Point = {readonly x: number; readonly y: number};
 
-const scale = 2.4;
+const unitsPerStep = 2.4;
 const tilt = 0.42;
 const cosine30 = 0.866;
 const lift = 82;
 const slabDepth = 6;
-const origin: Point = {x: 150, y: 170};
+const projectionStart: Point = {x: 150, y: 170};
 const plate: Region = {u: 0, v: 0, across: 112, down: 70};
 
 const heights = {structure: 0, presentation: lift, behavior: lift * 2};
 
 const projected = ({u, v}: Spot, height: number): Point =>
-  ({x: (origin.x + (u - v) * cosine30) * scale, y: (origin.y + (u + v) * tilt - height) * scale});
+  ({
+    x: (projectionStart.x + (u - v) * cosine30) * unitsPerStep,
+    y: (projectionStart.y + (u + v) * tilt - height) * unitsPerStep
+  });
 
 const pointsOf = (corners: readonly Point[]): string => corners.map(({x, y}) => `${x},${y}`).join(' ');
 
@@ -39,9 +42,9 @@ const slabRegions: Readonly<Record<string, Region>> = {
 
 const dialog: Region = {u: 6, v: 22, across: 32, down: 26};
 
-const click: Spot = {u: 33, v: 57};
+const clickSpot: Spot = {u: 33, v: 57};
 
-const regionLabels: readonly Label[] = [
+const regionLabels: readonly Lettered[] = [
   {word: 'header', u: 22, v: 14},
   {word: 'section', u: -2, v: 58, anchor: 'end'},
   {word: 'nav', u: 22.5, v: 42},
@@ -49,15 +52,15 @@ const regionLabels: readonly Label[] = [
   {word: 'main', u: 60.5, v: 50}
 ];
 
-const classLabels: readonly Label[] = [
+const classLabels: readonly Lettered[] = [
   {word: '.field', u: -2, v: 58, anchor: 'end'},
   {word: '.paragraph', u: 121, v: 72},
   {word: '.signpost', u: 132, v: 83}
 ];
 
-const scriptLabels: readonly Label[] = [
+const scriptLabels: readonly Lettered[] = [
   {word: 'dialog', u: 19.5, v: 44.5},
-  {word: 'click', u: click.u + 3, v: click.v + 1}
+  {word: 'click', u: clickSpot.u + 3, v: clickSpot.v + 1}
 ];
 
 const backCorner: Spot = {u: 0, v: 0};
@@ -75,7 +78,7 @@ const languages = [
   {word: 'structure', height: heights.structure}
 ];
 
-const Lettering: FC<{labels: readonly Label[]; height: number}> = ({labels, height}) => <>
+const Lettering: FC<{labels: readonly Lettered[]; height: number}> = ({labels, height}) => <>
   {labels.map(label => <text key={label.word} className="drawn-caption monospaced ink-filled"
     {...projected(label, height)} textAnchor={label.anchor}>
     {label.word}
@@ -83,10 +86,11 @@ const Lettering: FC<{labels: readonly Label[]; height: number}> = ({labels, heig
 </>;
 
 export const PagePulledApart: FC = () => {
-  const clickPoint = projected(click, heights.behavior);
+  const clickPoint = projected(clickSpot, heights.behavior);
   return <figure className="page-pulled-apart">
-    <svg className="drawing center" viewBox={`${50 * scale} 0 ${200 * scale} ${258 * scale}`} width={200 * scale}
-      height={258 * scale} aria-hidden="true">
+    <svg className="drawing center" viewBox={`${50 * unitsPerStep} 0 ${200 * unitsPerStep} ${258 * unitsPerStep}`}
+      width={200 * unitsPerStep}
+      height={258 * unitsPerStep} aria-hidden="true">
       <defs>
         <pattern id="page-pulled-apart-hatch" patternUnits="userSpaceOnUse" width="7" height="7"
           patternTransform="rotate(135)">
@@ -108,14 +112,15 @@ export const PagePulledApart: FC = () => {
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, heights.behavior)}/>
       <polygon className="drawn-line drawn hollow" points={regionPoints(dialog, heights.behavior)}/>
       <DroppedLine spot={frontCorner}/>
-      <DroppedLine spot={click}/>
-      <circle className="drawn-filled" cx={clickPoint.x} cy={clickPoint.y} r={1.6 * scale}/>
+      <DroppedLine spot={clickSpot}/>
+      <circle className="drawn-filled" cx={clickPoint.x} cy={clickPoint.y} r={1.6 * unitsPerStep}/>
       <Lettering labels={regionLabels} height={heights.structure}/>
       <Lettering labels={classLabels} height={heights.presentation}/>
       <Lettering labels={scriptLabels} height={heights.behavior}/>
       {languages.map(({word, height}) => {
         const {x, y} = projected({u: 0, v: plate.down / 2}, height);
-        return <text key={word} className="drawn-caption uppercase ink-filled" x={x - 6 * scale} y={y + 2 * scale}
+        return <text key={word} className="drawn-caption uppercase ink-filled" x={x - 6 * unitsPerStep}
+          y={y + 2 * unitsPerStep}
           textAnchor="end">{word}</text>;
       })}
     </svg>
