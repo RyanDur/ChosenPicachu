@@ -44,6 +44,7 @@ import {looks} from './looks';
 import {accordionParts} from './part-pages';
 import '../Runs.css';
 import './Explained.css';
+import './PartDepth.css';
 
 export type FoldLists = {
   measured: Record<FoldType, Fold[]>;
