@@ -388,6 +388,16 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(recipeFolds.story(demoPage.part(theLiveTable), theStoreStory)).toHaveAttribute('open');
   });
 
+  test('the live table’s page opens only the story its address names', async () => {
+    render(<TestApp at={demosAt('tables/the-live-table-and-the-store', '?living=flow')}/>);
+
+    await tablesTab().partPlace();
+
+    const live = demoPage.part(theLiveTable);
+    expect(recipeFolds.story(live, theFlowStory)).toHaveAttribute('open');
+    expect(recipeFolds.story(live, theStoreStory)).not.toHaveAttribute('open');
+  });
+
   test('the live table’s page names its section by its title', async () => {
     render(<TestApp at={theLiveTablesPage}/>);
 
