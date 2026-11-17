@@ -12,7 +12,9 @@ const Read = createContext<() => Location>(() => {
 
 const withoutBasename = (pathname: string, basename: string): string => {
   const start = basename.endsWith('/') ? basename.length - 1 : basename.length;
-  return pathname.startsWith(basename.slice(0, start)) ? pathname.slice(start) || '/' : pathname;
+  const underBasename = pathname.toLowerCase().startsWith(basename.slice(0, start).toLowerCase())
+    && ['', '/'].includes(pathname.charAt(start));
+  return underBasename ? pathname.slice(start) || '/' : pathname;
 };
 
 // the router's location keeps the basename; useLocation and ScrollRestoration's getKey both see it stripped
