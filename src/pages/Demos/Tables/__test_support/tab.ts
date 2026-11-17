@@ -20,8 +20,7 @@ export const tablesTab = () => ({
   titleShown: (name: string): HTMLElement | null => screen.queryByRole('heading', {name}),
   recipe,
   tutorialLink,
-  openTutorial: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
-  openPart: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
+  follow: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
   backToTheTab: async (): Promise<void> => userEvent.click(await tutorialLink('Tables')),
   readTheStationFirst: async (): Promise<void> => userEvent.click(await tutorialLink(/^station \d+ of the tables tab$/)),
   tutorialsListed: async (): Promise<string[]> =>
