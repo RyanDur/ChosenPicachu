@@ -296,7 +296,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   end, the arrow at the other. The arrow is an empty box drawn after the label’s words, with only its
                   top and right borders, from the shared class <code className="monospaced">corner-after</code>; the
                   style sheet sizes it and turns it 45 degrees so the corner points right. The borders are drawn in
-                  currentcolor, the element’s own text color, so the arrow changes color with the words. When
+                  currentcolor, the element’s own text color, so the arrow is drawn in the words’ color. When
                   the {input} is checked, the ~
                   combinator picks the label after it, and the corner turns to 135 degrees and points down. The turn
                   is a transition, and a transform: a transform moves pixels the browser has already painted without
@@ -326,8 +326,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   color, ink for its words and a ring inside its edge. The browser treats hovering a label as hovering
                   its {input}, so the class’s :hover rule lights the bar too. That rule sits inside a media
                   query, <code className="monospaced">(hover: hover)</code>, which applies its rules only on a device
-                  whose pointer can hover, so a tap on a phone does not leave the bar lit. In both, the arrow’s borders
-                  take the ink color with the words.</p>
+                  whose pointer can hover, so a tap on a phone does not leave the bar lit.</p>
                 <Snippet label="CSS" lines={[
                   ...carve.unit(surfaceCss, '@media (hover: hover) {\n  :hover ~ .prior-approached'), lines.blank,
                   ...carve.unit(surfaceCss, ':focus-visible ~ .prior-approached {')
