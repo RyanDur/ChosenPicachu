@@ -1,35 +1,31 @@
-import {Browser, Locator, Page, expect} from '@playwright/test';
+import {Browser, expect, Locator, Page} from '@playwright/test';
 import {execFile} from 'node:child_process';
 import {mkdir, readdir, rm} from 'node:fs/promises';
 import {homedir} from 'node:os';
 import {dirname, join} from 'node:path';
 import {promisify} from 'node:util';
-import {has, maybe} from '@ryandur/sand';
+import {maybe, Maybe} from '@ryandur/sand';
 import {boxOf} from '../__test_support';
 
 const run = promisify(execFile);
 
 // playwright ships its own ffmpeg; the reels are cropped to the table with it
-const ffmpegIn = async (cache: string): Promise<string | undefined> => {
+const ffmpegIn = async (cache: string): Promise<Maybe<string>> => {
   const entries = await readdir(cache, {withFileTypes: true}).catch(() => []);
-  const home = entries.find(entry => entry.isDirectory() && entry.name.startsWith('ffmpeg-'));
-  if (home) {
-    const binaries = await readdir(join(cache, home.name));
-    const binary = binaries.find(name => name.startsWith('ffmpeg'));
-    return has(binary) ? join(cache, home.name, binary) : undefined;
-  }
-  return undefined;
+  const home = maybe(entries.find(entry => entry.isDirectory() && entry.name.startsWith('ffmpeg-')));
+  const binaries = await home.map(({name}) => readdir(join(cache, name))).orElse(Promise.resolve([]));
+  return home.mBind(({name}) => maybe(binaries.find(binary => binary.startsWith('ffmpeg')))
+    .map(binary => join(cache, name, binary)));
 };
 
 const ffmpegPath = async (): Promise<string> => {
   const caches = [join(homedir(), 'Library/Caches/ms-playwright'), join(homedir(), '.cache/ms-playwright')];
-  for (const cache of caches) {
-    const found = await ffmpegIn(cache);
-    if (has(found)) {
-      return found;
-    }
-  }
-  throw new Error('playwright\'s ffmpeg is not installed; run npx playwright install');
+  const found = await Promise.all(caches.map(ffmpegIn));
+  return found.reduce((first, next) => first.or(() => next)).either(
+    path => path,
+    () => {
+      throw new Error('playwright\'s ffmpeg is not installed; run npx playwright install');
+    });
 };
 
 export const mediaRoot = 'src/pages/Demos/Tables/media';
