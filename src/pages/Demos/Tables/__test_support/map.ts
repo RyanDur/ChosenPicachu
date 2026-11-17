@@ -11,5 +11,5 @@ export const tablesMap = {
     within(await theMap()).getAllByRole('listitem').map(entry =>
       [entry.textContent, within(entry).queryByRole('link')?.getAttribute('href') ?? null]),
   current: async (): Promise<HTMLElement> =>
-    within(await theMap()).getByText((_, element) => element?.getAttribute('aria-current') === 'page')
+    within(await theMap()).getByRole('link', {current: 'page'})
 };
