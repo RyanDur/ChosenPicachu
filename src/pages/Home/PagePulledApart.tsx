@@ -3,7 +3,7 @@ import './PagePulledApart.css';
 
 type Spot = {readonly u: number; readonly v: number};
 type Region = Spot & {readonly across: number; readonly down: number};
-type Mark = Spot & {readonly word: string; readonly anchor?: 'end'};
+type Mark = Spot & {readonly word: string; readonly anchor?: 'middle' | 'end'};
 type Point = {readonly x: number; readonly y: number};
 
 const scale = 2.4;
@@ -38,8 +38,8 @@ const regions: Readonly<Record<string, Region>> = {
 
 const regionNames: readonly Mark[] = [
   {word: 'header', u: 22, v: 14},
-  {word: 'nav', u: 18, v: 36},
-  {word: 'main', u: 45, v: 30},
+  {word: 'nav', u: 23.5, v: 41.5},
+  {word: 'main', u: 54.5, v: 44},
   {word: 'button', u: 30, v: 57.5, anchor: 'end'},
   {word: 'dialog', u: 69, v: 58}
 ];
@@ -54,7 +54,7 @@ const commands: readonly Spot[] = [{u: 33, v: 57}, {u: 100, v: 52}];
 
 const commandNames: readonly Mark[] = [
   {word: 'show-modal', u: 36, v: 58},
-  {word: 'close', u: 90, v: 45, anchor: 'end'}
+  {word: 'close', u: 96.5, v: 48.5, anchor: 'middle'}
 ];
 
 const plateCorners: readonly Spot[] = [{u: 0, v: 0}, {u: plate.across, v: plate.down}];
