@@ -6,10 +6,10 @@ import {test as journey} from './journey';
 const recordEachWrite = (): void => {
   // Chromium keeps 10 frames, which can stop inside React's event handling before the code that asked for the write
   Error.stackTraceLimit = 50;
-  const record: unknown = Reflect.get(globalThis, 'recordHistoryWrite');
   for (const method of ['pushState', 'replaceState'] as const) {
     const write = history[method].bind(history);
     history[method] = (data, unused, url) => {
+      const record: unknown = Reflect.get(globalThis, 'recordHistoryWrite');
       if (typeof record === 'function') record({method, url: String(url ?? location.href), stack: new Error().stack});
       write(data, unused, url);
     };
