@@ -75,6 +75,24 @@ describe('a box remembers the fold, on its own page', () => {
     expect(await demoTabs.current()).toEqual(['Accordions']);
   });
 
+  test('should link part one on the tab, with the fold choices carried', async () => {
+    render(<TestApp at={demosAt(remembers, '?type=inclusive&style=drawer')}/>);
+
+    const page = await demoTabs.arrivedOn('Accordions');
+
+    expect(explanation.linkNamed(page, 'An accordion in HTML alone'))
+      .toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#html-alone-heading`);
+  });
+
+  test('should link the fold choices on the tab, with the fold choices carried', async () => {
+    render(<TestApp at={demosAt(remembers, '?type=inclusive&style=drawer')}/>);
+
+    const page = await demoTabs.arrivedOn('Accordions');
+
+    expect(explanation.linkNamed(page, 'the fold choices'))
+      .toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#fold-choices-heading`);
+  });
+
   test('should link each term it glosses, and each tab it names, to that tab', async () => {
     render(<TestApp at={demosAt(remembers)}/>);
 
