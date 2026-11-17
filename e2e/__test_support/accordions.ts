@@ -161,16 +161,7 @@ export const accordionsTab = (page: Page) => {
       await pressedOnceItStartsMoving(partOf(build, 0).fold, pressesOfTheFirstPart(build).opens,
         page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: motion}));
     },
-    partsOf,
-    partsNotHidingTheirText: async (build: Build): Promise<number[]> => {
-      const notHiding: number[] = [];
-      for (const [index, part] of (await partsOf(build)).entries()) {
-        if (await textOf(part).count() === 0 || await part.showsText()) {
-          notHiding.push(index + 1);
-        }
-      }
-      return notHiding;
-    }
+    partsOf
   };
 };
 
