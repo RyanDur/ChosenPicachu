@@ -9,6 +9,7 @@ import {ExclusiveMeasuredAccordion} from './ExclusiveMeasuredAccordion';
 import {InclusiveMeasuredAccordion} from './InclusiveMeasuredAccordion';
 import {foldInput} from './fold-input';
 import {looks} from './looks';
+import {accordionParts} from './part-pages';
 import {PlainFold} from './Plain';
 import exclusiveMeasuredAccordionSource from './ExclusiveMeasuredAccordion.tsx?sample';
 import inclusiveMeasuredAccordionSource from './InclusiveMeasuredAccordion.tsx?sample';
@@ -41,6 +42,11 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
   const input = foldInput.of(foldType);
   const {Accordion: Measured, sample} = measuredBuilds[foldType];
   return <>
+    <p className="paragraph">This part builds on two before it on the accordions tab: “<TabLink
+      to={DemoTopics.accordions} at="remembers-heading">{accordionParts.titleOf('remembers-heading')}</TabLink>”, for the
+      checkbox and its label, and “<TabLink to={DemoTopics.accordions}
+      at="max-height-guess-heading">{accordionParts.titleOf('max-height-guess-heading')}</TabLink>”, which this part
+      answers.</p>
     <figure className={looks.exhibit}>
       <PlainFold/>
       <figcaption className="caption">This fold is a separate page, placed inside this one. The accordions tab’s fold
