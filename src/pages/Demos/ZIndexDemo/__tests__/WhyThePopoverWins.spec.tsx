@@ -23,10 +23,13 @@ describe('why the popover wins, on its own page', () => {
     expect(explanation.linkNamed(opener, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
   });
 
-  test('should show the two Sort by menus it explains', async () => {
+  test('should show the two Sort by menus it explains, side by side', async () => {
     render(<TestApp at={demosAt(popoverWins)}/>);
 
-    expect(await theTrap.find()).toBeInTheDocument();
+    const trap = await theTrap.find();
+
+    expect(theTrap.controlIn(trap, 'Sort by, the old way')).toBeInTheDocument();
+    expect(theTrap.controlIn(trap, 'Sort by, in the top layer')).toBeInTheDocument();
   });
 
   test('should lead back to part three’s page and on to part five on the tab, by number and title, with the raised card carried', async () => {
