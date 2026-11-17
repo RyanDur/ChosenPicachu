@@ -32,6 +32,11 @@
       transition: none;
     }
 
+    /* start, not the default stretch: without it WebKit snaps a closing reveal shut instead of sliding it */
+    .reveal &::details-content {
+      align-items: start;
+    }
+
     .drawer &::details-content {
       align-content: end;
       align-items: end;
