@@ -238,6 +238,18 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(demoPage.sliceLinks()).toEqual([station(4), station(5), station(6), station(6), station(6)]);
   });
 
+  test('the tables tab holds every station the slices on their page point at', async () => {
+    const {unmount} = render(<TestApp at={theSlicesPage}/>);
+    await tablesTab().partPlace();
+    const stations = demoPage.sliceStations();
+    unmount();
+
+    render(<TestApp at={demosAt('tables')}/>);
+    await demoPage.findTitle('let’s build this feature');
+
+    expect(demoPage.missing(stations)).toEqual([]);
+  });
+
   test('the slices’ page leads back to the sketch’s page and on to the still table on the tables tab, by number and title, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-slices', '?world=vanilla')}/>);
 
