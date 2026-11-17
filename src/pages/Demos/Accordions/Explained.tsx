@@ -60,7 +60,6 @@ const radioFold = [
   lines.plain('  </section>'),
   lines.plain('</li>')
 ];
-const {runs} = looks;
 const toldRun = 'run card rounded-corners lifted padded';
 
 type HtmlAloneBuild = {
@@ -124,7 +123,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
     </header>
     <section aria-labelledby="html-alone-heading" className="accordion-part snapping">
       <h2 id="html-alone-heading" className="title bold">An accordion in HTML alone</h2>
-      <ol className={runs}>
+      <ol className={looks.runs}>
         <li className="run">
           <HtmlAlone/>
           <Snippet label="HTML" lines={carve.between(htmlAloneSource, '<ul>', '</ul>')}/>
@@ -172,7 +171,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
     </section>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h2 id="old-way-heading" className="title bold">How we used to build a fold</h2>
-      <section className={runs} aria-labelledby="remembers-heading">
+      <section className={looks.runs} aria-labelledby="remembers-heading">
         <h3 id="remembers-heading" className="run-title sub-title bold">A box remembers the fold, and a rule reads
           it</h3>
         <ol className="runs">
@@ -244,7 +243,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         </p>
       </section>
       <KnownHeight className={exhibitMoving} folds={foldLists.known[foldType]}/>
-      <ol className={runs}>
+      <ol className={looks.runs}>
         <li className="run">
           <p className="paragraph">This build is a disclosure: a bar you press to show the text under it.
             It has no script. Everything below is HTML and CSS:
@@ -441,7 +440,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
     <section aria-labelledby="platform-way-heading" className="accordion-part">
       <h2 id="platform-way-heading" className="title bold">What the platform gives now</h2>
       <Platform className={exhibitMoving} folds={foldLists.platform[foldType]}/>
-      <ol className={runs}>
+      <ol className={looks.runs}>
         <li className="run">
           <p className="paragraph">This build uses details and summary, the two elements from the first accordion. Each
             piece of the {input} build has a native
@@ -537,7 +536,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
     </section>
     <section aria-labelledby="motion-heading" className="accordion-part">
       <h2 id="motion-heading" className="title bold">How a sliding fold moves</h2>
-      <ol className={runs}>
+      <ol className={looks.runs}>
         <li className="run">
           <p className="paragraph">Every fold on this tab that slides moves by transition, never by animation, because a
             reader may press again before the fold lands. If they do,
