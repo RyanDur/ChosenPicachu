@@ -1,5 +1,5 @@
 import {Report} from './report';
-import {has, maybe, Maybe, not} from '@ryandur/sand';
+import {has, maybe, Maybe, not, nothing} from '@ryandur/sand';
 import {shares} from './shares';
 import {TableColumn, ColumnDrag, ColumnShove, Labeled, Marks, RowDrag, RowShove, Settling, TableView, tableState} from './table-state';
 import {survey} from './survey';
@@ -51,14 +51,14 @@ const report = ({state}: TableView): Maybe<Report> => maybe(state.report);
 
 const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 
-const seatOffset = (view: TableView): Drift | undefined =>
-  tableState.seatOffset(view.state, order(view), standing(view)).orElse(undefined);
+const seatOffset = (view: TableView): Maybe<Drift> =>
+  tableState.seatOffset(view.state, order(view), standing(view));
 
-const seatOfColumn = (name: string) => (view: TableView): Drift | undefined =>
-  columnHeld(name)(view) ? seatOffset(view) : undefined;
+const seatOfColumn = (name: string) => (view: TableView): Maybe<Drift> =>
+  columnHeld(name)(view) ? seatOffset(view) : nothing();
 
-const seatOfRow = (key: string) => (view: TableView): Drift | undefined =>
-  rowHeld(key)(view) ? seatOffset(view) : undefined;
+const seatOfRow = (key: string) => (view: TableView): Maybe<Drift> =>
+  rowHeld(key)(view) ? seatOffset(view) : nothing();
 
 const driftOfColumn = (name: string) => (view: TableView): Drift | undefined =>
   maybe(columnDrag(name)(view)).map(drag => drag.drift).orElse(undefined);
