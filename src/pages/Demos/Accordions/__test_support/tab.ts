@@ -21,7 +21,7 @@ export const accordionsTab = {
   openFirstFoldIn: async (part: HTMLElement): Promise<HTMLElement> => {
     const fold = within(part).getAllByRole('group')[0];
     await userEvent.click(within(fold).getAllByText(/^\w+$/)[0]);
-    return fold;
+    return within(fold).getByRole('paragraph');
   },
   partsHolding: async (element: HTMLElement, parts: string[]): Promise<string[]> => {
     const holding = await Promise.all(parts.map(async name => (await screen.findByRole('region', {name})).contains(element)));
