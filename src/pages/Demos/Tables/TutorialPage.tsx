@@ -49,7 +49,7 @@ export const TutorialPage: FC = () => {
       </p>
       <TutorialRecipe/>
       <TablesMap/>
-      <PartFoot address={tableTutorials.addressOf(tutorial)}/>
+      <PartFoot part={tutorial}/>
     </section>;
   }, () => null);
 };
