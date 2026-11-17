@@ -31,11 +31,18 @@ const entries: Record<AccordionPart, Entry> = {
   'the-measured-height': {heading: 'measured-heading', minutes: 9}
 };
 
-const parts = Object.keys(entries).filter((key): key is AccordionPart => key in entries);
-
 const headings = Object.keys(titles);
 
-const addressOf = (part: AccordionPart): string => `${demoTab.address(DemoTopics.accordions)}${part}/`;
+const tabAddress = demoTab.address(DemoTopics.accordions);
+
+const addressOf = (part: AccordionPart): string => `${tabAddress}${part}/`;
+
+const isPart = (name: string): name is AccordionPart => Object.keys(entries).includes(name);
+
+const partAt = (pathname: string): Maybe<AccordionPart> => {
+  const named = pathname.slice(tabAddress.length, -1);
+  return maybe(isPart(named) && pathname === addressOf(named) ? named : undefined);
+};
 
 export const accordionParts: AccordionParts = {
   told: part => {
@@ -48,7 +55,7 @@ export const accordionParts: AccordionParts = {
     };
   },
   addressOf,
-  at: pathname => maybe(parts.find(part => pathname === addressOf(part))),
+  at: partAt,
   titleOf: heading => titles[heading],
   inTheBook: headings.length
 };
