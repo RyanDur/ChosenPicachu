@@ -5,14 +5,14 @@ import {useEnvironment} from '@environment';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {useControls} from '../../Controls';
 import {tableFrame} from './table-frame';
-import {tableFrameChange} from './table-frame-change';
+import {TableFrameChange, tableFrameChange} from './table-frame-change';
 import './TableFrame.css';
 
-const measured = (frame: HTMLIFrameElement, grown: (height: number) => void): void => {
+const measured = (frame: HTMLIFrameElement, dispatch: (change: TableFrameChange) => void): void => {
   maybe(frame.contentDocument).map(inner => {
     const height = Math.ceil(inner.body.getBoundingClientRect().height);
     if (height > 0) {
-      grown(height);
+      dispatch(tableFrameChange.grown(height));
     }
   });
 };
@@ -31,7 +31,7 @@ export const TableFrame: FC<PropsWithChildren> = ({children}) => {
     .cancel, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct, dispatchBanner]);
 
   useEffect(() => maybe(frame).map(watched => {
-    const watcher = new ResizeObserver(() => measured(watched, height => dispatch(tableFrameChange.grown(height))));
+    const watcher = new ResizeObserver(() => measured(watched, dispatch));
     watcher.observe(watched);
     return () => watcher.disconnect();
   }).orElse(() => undefined), [frame]);
@@ -44,7 +44,7 @@ export const TableFrame: FC<PropsWithChildren> = ({children}) => {
       style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
       onLoad={event => {
         dispatch(tableFrameChange.loaded(event.currentTarget));
-        measured(event.currentTarget, height => dispatch(tableFrameChange.grown(height)));
+        measured(event.currentTarget, dispatch);
       }}
       srcDoc={frameMarkup}/>}
     {not(stood) && children}
