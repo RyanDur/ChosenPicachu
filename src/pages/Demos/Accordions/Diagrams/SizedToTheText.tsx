@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {Diagram, Label, Part} from '../../Recipe/Drawing';
-import './Diagrams.css';
 
 export const SizedToTheText: FC = () =>
   <Diagram lead="Sized to the text" height={146}

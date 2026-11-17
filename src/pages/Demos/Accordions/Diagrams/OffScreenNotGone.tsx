@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {Arrow, Box, Diagram, Label, Part} from '../../Recipe/Drawing';
-import './Diagrams.css';
 
 export const OffScreenNotGone: FC = () =>
   <Diagram lead="Off screen, not gone" height={120}

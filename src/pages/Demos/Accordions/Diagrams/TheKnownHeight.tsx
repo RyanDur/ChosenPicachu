@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {Box, Diagram, Label} from '../../Recipe/Drawing';
-import './Diagrams.css';
 
 export const TheKnownHeight: FC = () =>
   <Diagram lead="The known height" height={150}

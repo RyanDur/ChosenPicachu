@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {Arrow, Diagram, Label, Part} from '../../Recipe/Drawing';
-import './Diagrams.css';
 
 export const TheRuleMatchesTheBox: FC = () =>
   <Diagram lead="The rule matches the box" height={110}

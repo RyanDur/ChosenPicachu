@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {Arrow, Box, Diagram, Label} from '../../Recipe/Drawing';
-import './Diagrams.css';
 
 export const FocusOnTheBar: FC = () =>
   <Diagram lead="Focus on the box, drawn on the bar" height={110}

@@ -8,8 +8,7 @@ import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
 
 const htmlAlone = 'An accordion in HTML alone';
 
-const togetherHeading = (type: string): string => `A ${type === 'exclusive' ? 'radio' : 'checkbox'} and a grid row: the old control, the new slide`;
-const parts = ['How we used to build a fold', 'What the platform gives now', togetherHeading('exclusive'), 'How a sliding fold moves'];
+const parts = ['How we used to build a fold', 'What the platform gives now', 'How a sliding fold moves'];
 
 const drawingsTitled = (part: HTMLElement, titles: string[]): HTMLElement[] =>
   titles.map(title => explanation.drawingNamed(part, new RegExp(`^${title}\\.`)));
@@ -33,7 +32,7 @@ describe('the accordions tab', () => {
     expect(names.filter((name, at) => names.indexOf(name) !== at)).toEqual([]);
   });
 
-  test('should start with HTML alone, then the fold choices, then tell the old way, the platform, the two together, and how a sliding fold moves', async () => {
+  test('should start with HTML alone, then the fold choices, then tell the old way, the platform, and how a sliding fold moves', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
@@ -77,14 +76,6 @@ describe('the accordions tab', () => {
     expect(accordionsTab.buildsIn(explained)).toEqual(['Inclusive accordion using details elements']);
   });
 
-  test('should show, with inclusive chosen, the checkbox build under the two together', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
-
-    const explained = await explanation.part(togetherHeading('inclusive'));
-
-    expect(accordionsTab.buildsIn(explained)).toEqual(['Inclusive accordion using checkboxes']);
-  });
-
   test('should show, with exclusive chosen, the two radio group builds under the old way', async () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
@@ -99,14 +90,6 @@ describe('the accordions tab', () => {
     const explained = await explanation.part(parts[1]);
 
     expect(accordionsTab.buildsIn(explained)).toEqual(['Exclusive accordion using details elements']);
-  });
-
-  test('should show, with exclusive chosen, the radio group build under the two together', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
-
-    const explained = await explanation.part(togetherHeading('exclusive'));
-
-    expect(accordionsTab.buildsIn(explained)).toEqual(['Exclusive accordion using radio group']);
   });
 });
 
@@ -257,36 +240,12 @@ describe('the fold motion', () => {
 
   test('should keep an open fold open when the reader chooses another motion', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
-    const together = await explanation.part(parts[2]);
-    const first = await accordionsTab.openFirstFold(together);
+    const platform = await explanation.part(parts[1]);
+    const first = await accordionsTab.openFirstFoldIn(platform);
 
     await accordionsTab.choose('fold motion', 'Drawer');
 
-    expect(first).toBeChecked();
-  });
-
-  test('should draw, with reveal chosen, under the two together, the row that grows and the padding inside the clip, in order', async () => {
-    render(<TestApp at={demosAt('accordions', '?style=reveal')}/>);
-
-    const together = await explanation.part(parts[2]);
-
-    expect(drawingsTitled(together, ['A row that grows to its content', 'The padding inside the clip'])).toEqual(explanation.drawingsIn(together));
-  });
-
-  test('should draw, with drawer chosen, under the two together, the row that grows, the padding inside the clip, then the text riding the row’s edge', async () => {
-    render(<TestApp at={demosAt('accordions', '?style=drawer')}/>);
-
-    const together = await explanation.part(parts[2]);
-
-    expect(drawingsTitled(together, ['A row that grows to its content', 'The padding inside the clip', 'The text rides the row’s edge'])).toEqual(explanation.drawingsIn(together));
-  });
-
-  test('should draw, with static chosen, under the two together, the row that grows and the padding inside the clip, in order', async () => {
-    render(<TestApp at={demosAt('accordions', '?style=static')}/>);
-
-    const together = await explanation.part(parts[2]);
-
-    expect(drawingsTitled(together, ['A row that grows to its content', 'The padding inside the clip'])).toEqual(explanation.drawingsIn(together));
+    expect(first).toHaveAttribute('open');
   });
 });
 
@@ -398,28 +357,6 @@ describe('the depth of each part', () => {
   test('should show, with exclusive chosen, what the closed fold "How details works" holds once its bar is pressed', async () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
     const fold = recipeFolds.story(await explanation.part(parts[1]), 'How details works');
-    const depth = explanation.runsIn(fold)[0];
-    expect(depth).not.toBeVisible();
-
-    await accordionsTab.openFold(fold);
-
-    expect(depth).toBeVisible();
-  });
-
-  test('should show, with exclusive chosen, what the closed fold "How the radio and the grid row work together" holds once its bar is pressed', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
-    const fold = recipeFolds.story(await explanation.part(togetherHeading('exclusive')), 'How the radio and the grid row work together');
-    const depth = explanation.runsIn(fold)[0];
-    expect(depth).not.toBeVisible();
-
-    await accordionsTab.openFold(fold);
-
-    expect(depth).toBeVisible();
-  });
-
-  test('should show, with inclusive chosen, what the closed fold "How the checkbox and the grid row work together" holds once its bar is pressed', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
-    const fold = recipeFolds.story(await explanation.part(togetherHeading('inclusive')), 'How the checkbox and the grid row work together');
     const depth = explanation.runsIn(fold)[0];
     expect(depth).not.toBeVisible();
 

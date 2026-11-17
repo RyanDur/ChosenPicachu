@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {Circle, Diagram, Label} from '../../Recipe/Drawing';
-import './Diagrams.css';
 
 export const OneNameOneChoice: FC = () =>
   <Diagram lead="One name, one choice" height={150}
