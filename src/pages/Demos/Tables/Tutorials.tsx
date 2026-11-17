@@ -1,8 +1,8 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsObject} from '@navigation/search-params';
-import {FlowTableRecipe, FeaturesAskedFor, StillTableRecipe, StorySlices} from './Recipe';
-import {Exercise, Station} from '../Recipe';
+import {FlowTableRecipe, FeaturesAskedFor, StillTableRecipe} from './Recipe';
+import {Station} from '../Recipe';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
@@ -38,8 +38,7 @@ export const Tutorials: FC = () => {
         <PartEntry part="the-sketch"/>
       </Station>
       <Station at={3}>
-        <StorySlices/>
-        <Exercise/>
+        <PartEntry part="the-slices"/>
       </Station>
       <Station at={4}>
         <StillTableRecipe/>

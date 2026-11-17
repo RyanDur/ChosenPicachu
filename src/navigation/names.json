@@ -46,7 +46,8 @@
   },
   "tableParts": {
     "the-need-and-its-clues": {"title": "The need and its clues · Tables · Chosen Picachu", "description": "A trader says what they need, and its clues show that a table is the element built for it."},
-    "the-sketch": {"title": "The sketch · Tables · Chosen Picachu", "description": "A sketch of the table, drawn from the need before any code."}
+    "the-sketch": {"title": "The sketch · Tables · Chosen Picachu", "description": "A sketch of the table, drawn from the need before any code."},
+    "the-slices": {"title": "The slices · Tables · Chosen Picachu", "description": "The story is too big to build at once, so it is cut into slices, the smallest table first."}
   },
   "users": {
     "title": "Users · Chosen Picachu",
