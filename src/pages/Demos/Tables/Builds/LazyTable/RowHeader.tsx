@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {has, maybe} from '@ryandur/sand';
+import {maybe} from '@ryandur/sand';
 import {classNames} from '@components';
 import {RowGrip, useBodyEvents, useTableDispatch, useTableRead} from '@components/DragSortableTable';
 import {Grab, Moving, PixelSizes, arrows, RowDrag, Survey, tableActions, tableReads, looks, travel, arrangements, lifting} from '@components/DragSortableTable/model';
@@ -41,14 +41,13 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     dispatch(tableActions.rowLandingFound(lazyDrop.row(standing, moving)(held)));
   };
   const release = (): void => {
-    if (has(drag)) {
-      const to = drag.landing.map(neighbor => standing.indexOf(neighbor)).orElse(standing.indexOf(row));
+    drag.map(held => {
+      const to = held.landing.map(neighbor => standing.indexOf(neighbor)).orElse(standing.indexOf(row));
       const settling = tableReads.settlingOfRowIn(row, arrangements.movedTo(standing, row, to))(view);
-      lazyDrop.released(drag, neighbor => beside(neighbor, drag.survey));
-      if (has(settling)) {
-        dispatch(tableActions.dropped({axis: 'row', held: row}, settling, {name: label, order: arrangements.movedTo(standing, row, to)}));
-      }
-    }
+      lazyDrop.released(held, neighbor => beside(neighbor, held.survey));
+      return settling.map(settled => dispatch(tableActions.dropped(
+        {axis: 'row', held: row}, settled, {name: label, order: arrangements.movedTo(standing, row, to)})));
+    });
   };
 
   return <th {...th} scope="row" aria-label={label}
@@ -59,7 +58,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     style={looks.placement({seat, drift, settlingFrom, shove: shoved})}>
     <RowGrip position={position}
       onPointerDown={lifting.row(() => order, () => standing, lift)}
-      {...travel.whileHeld(maybe(drag), moved, release)}
+      {...travel.whileHeld(drag, moved, release)}
       onKeyDown={arrows.row(row, () => standing, {
         nudged: ({to, heights}) => nudged(to, heights),
         moved: ({to}) => arrived(to)

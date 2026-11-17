@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {has, maybe} from '@ryandur/sand';
+import {maybe} from '@ryandur/sand';
 import {classNames} from '@components';
 import {useBodyEvents} from './useBodyEvents';
 import {useTableDispatch} from './useTableDispatch';
@@ -43,9 +43,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     travel.eager(survey.rowUnder(standing, held.survey), row, neighbor => beside(neighbor, held.survey))(moving);
   };
   const release = (): void => {
-    if (has(drag) && has(settling)) {
-      dispatch(tableActions.dropped({axis: 'row', held: row}, settling, {name: label, order: standing}));
-    }
+    settling.map(settled => dispatch(tableActions.dropped({axis: 'row', held: row}, settled, {name: label, order: standing})));
   };
 
   return <th {...th} scope="row" aria-label={label}
@@ -56,7 +54,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     style={looks.placement({seat, drift, settlingFrom, shove: shoved})}>
     <RowGrip position={position}
       onPointerDown={lifting.row(() => order, () => standing, lift)}
-      {...travel.whileHeld(maybe(drag), moved, release)}
+      {...travel.whileHeld(drag, moved, release)}
       onKeyDown={arrows.row(row, () => standing, {
         nudged: ({to, heights}) => nudged(to, heights),
         moved: ({to}) => arrived(to)

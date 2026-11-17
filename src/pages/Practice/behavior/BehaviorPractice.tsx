@@ -83,8 +83,8 @@ export const BehaviorPractice: FC = () =>
       words: <code className="monospaced">has</code>, <code className="monospaced">not</code>, <code className="monospaced">is</code> and <code className="monospaced">notEmpty</code>, from my own
       library, <a className="signpost" href="https://github.com/RyanDur/sand">sand</a>. Each is a line or two:</p>
     <PreludeCarve/>
-    <p className="paragraph">Here the table asks, in words I would say aloud, whether a drag is under way and a column
-      is settling:</p>
+    <p className="paragraph">Here the feedback form asks, in words I would say aloud, whether Enter was pressed on its
+      own and no word is still being composed:</p>
     <ConditionCarve/>
     <p className="paragraph">The style sheet asks its questions in the same
       words. <code className="monospaced">:has()</code> asks
