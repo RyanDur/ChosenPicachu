@@ -2,6 +2,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos/demo-topics';
 import {FC, ReactNode} from 'react';
 import {maybe} from '@ryandur/sand';
+import {needHeading} from './need-heading';
 
 type CluesProps = {
   quote: string;
@@ -13,9 +14,9 @@ type CluesProps = {
 };
 
 export const Clues: FC<CluesProps> = ({quote, by, clues, verdict, headedByPage = false, 'aria-labelledby': titledBy}) => <>
-  <section className="phase card rounded-corners lifted" aria-labelledby={maybe(titledBy).orElse('phase-need')}>
+  <section className="phase card rounded-corners lifted" aria-labelledby={maybe(titledBy).orElse(needHeading.id)}>
     {headedByPage ? null
-      : <h3 id="phase-need" className="phase-title title">Start with the need, and let it pick the element</h3>}
+      : <h3 id={needHeading.id} className="phase-title title">{needHeading.title}</h3>}
     <p className="overview paragraph muted-ink">
       Before any code, and before any story, someone needs something. Listen for what they say and name each clue, a
       line of it and what it commits the build to, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> shows;

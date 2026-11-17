@@ -1,7 +1,7 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
-import {designHeading} from '@pages/Demos/Recipe';
+import {designHeading, needHeading} from '@pages/Demos/Recipe';
 
 export type TablePart = keyof typeof names.tableParts;
 
@@ -29,7 +29,7 @@ type Listing = {
 
 const listings: Record<TablePart, Listing> = {
   'the-need-and-its-clues': {
-    name: 'Start with the need, and let it pick the element',
+    name: needHeading.title,
     minutes: 2
   }
 };

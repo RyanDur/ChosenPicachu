@@ -16,6 +16,7 @@ export {Says} from './Says';
 export {Reveal} from './Reveal';
 export {Defined} from './Defined';
 export {Clues} from './Clues';
+export {needHeading} from './need-heading';
 export {Design} from './Design';
 export {designHeading} from './design-heading';
 export {Slices} from './Slices';
