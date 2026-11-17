@@ -1,19 +1,9 @@
-import {tableParts} from './part-pages';
+import {PartPlace, tableParts} from './part-pages';
 import {tableTutorials} from './tutorial-pages';
 
-type Entry = {
-  title: string;
-  to: string;
-  heading?: string;
-  search?: Record<string, string>;
-};
+const parts: PartPlace[] = tableParts.inOrder.map(tableParts.placeOf);
 
-const parts: Entry[] = tableParts.inOrder.map(part => {
-  const {name, ordinal} = tableParts.told(part);
-  return {title: `${ordinal}. ${name}`, ...tableParts.whereIs(ordinal)};
-});
-
-const tutorials: Entry[] = tableTutorials.all().map(tutorial => ({
+const tutorials: PartPlace[] = tableTutorials.all().map(tutorial => ({
   title: `${tableParts.inTheBook + tableTutorials.placeOf(tutorial).ordinal}. ${tableTutorials.nameOf(tutorial)}`,
   to: tableTutorials.addressOf(tutorial)
 }));
