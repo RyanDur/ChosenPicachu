@@ -67,9 +67,10 @@ const backCorner: Spot = {u: 0, v: 0};
 const frontCorner: Spot = {u: plate.across, v: plate.down};
 
 const DroppedLine: FC<{spot: Spot}> = ({spot}) => {
-  const top = projected(spot, elevations.behavior);
-  const bottom = projected(spot, elevations.structure);
-  return <line className="drawn-line drawn dashed-drawn" x1={top.x} y1={top.y} x2={bottom.x} y2={bottom.y}/>;
+  const onTheScript = projected(spot, elevations.behavior);
+  const onTheSlab = projected(spot, elevations.structure);
+  return <line className="drawn-line drawn dashed-drawn" x1={onTheScript.x} y1={onTheScript.y} x2={onTheSlab.x}
+    y2={onTheSlab.y}/>;
 };
 
 const languages = [
