@@ -44,7 +44,7 @@ const dialog: Region = {u: 6, v: 22, across: 32, down: 26};
 
 const clickSpot: Spot = {u: 33, v: 57};
 
-const regionLabels: readonly Lettered[] = [
+const regionLettering: readonly Lettered[] = [
   {word: 'header', u: 22, v: 14},
   {word: 'section', u: -2, v: 58, anchor: 'end'},
   {word: 'nav', u: 22.5, v: 42},
@@ -52,13 +52,13 @@ const regionLabels: readonly Lettered[] = [
   {word: 'main', u: 60.5, v: 50}
 ];
 
-const classLabels: readonly Lettered[] = [
+const classLettering: readonly Lettered[] = [
   {word: '.field', u: -2, v: 58, anchor: 'end'},
   {word: '.paragraph', u: 121, v: 72},
   {word: '.signpost', u: 132, v: 83}
 ];
 
-const scriptLabels: readonly Lettered[] = [
+const scriptLettering: readonly Lettered[] = [
   {word: 'dialog', u: 19.5, v: 44.5},
   {word: 'click', u: clickSpot.u + 3, v: clickSpot.v + 1}
 ];
@@ -78,10 +78,10 @@ const languages = [
   {word: 'structure', elevation: elevations.structure}
 ];
 
-const Lettering: FC<{labels: readonly Lettered[]; elevation: number}> = ({labels, elevation}) => <>
-  {labels.map(label => <text key={label.word} className="drawn-caption monospaced ink-filled"
-    {...projected(label, elevation)} textAnchor={label.anchor}>
-    {label.word}
+const Lettering: FC<{lettering: readonly Lettered[]; elevation: number}> = ({lettering, elevation}) => <>
+  {lettering.map(lettered => <text key={lettered.word} className="drawn-caption monospaced ink-filled"
+    {...projected(lettered, elevation)} textAnchor={lettered.anchor}>
+    {lettered.word}
   </text>)}
 </>;
 
@@ -114,9 +114,9 @@ export const PagePulledApart: FC = () => {
       <DroppedLine spot={frontCorner}/>
       <DroppedLine spot={clickSpot}/>
       <circle className="drawn-filled" cx={clickPoint.x} cy={clickPoint.y} r={1.6 * unitsPerStep}/>
-      <Lettering labels={regionLabels} elevation={elevations.structure}/>
-      <Lettering labels={classLabels} elevation={elevations.presentation}/>
-      <Lettering labels={scriptLabels} elevation={elevations.behavior}/>
+      <Lettering lettering={regionLettering} elevation={elevations.structure}/>
+      <Lettering lettering={classLettering} elevation={elevations.presentation}/>
+      <Lettering lettering={scriptLettering} elevation={elevations.behavior}/>
       {languages.map(({word, elevation}) => {
         const {x, y} = projected({u: 0, v: plate.down / 2}, elevation);
         return <text key={word} className="drawn-caption uppercase ink-filled" x={x - 6 * unitsPerStep}
