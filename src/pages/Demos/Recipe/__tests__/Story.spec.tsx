@@ -117,10 +117,10 @@ describe('a story card', () => {
     expect(appAddress.search()).toHaveTextContent('tale=told');
   });
 
-  test('a press on a story a followed link opened, before the page has caught up, closes it', async () => {
+  test('a press on a story drawn closed opens it, though a followed link has opened it before the page caught up', async () => {
     render(<TestApp at="/"><Stories>
       <Link to={{search: '?tale=told', hash: '#tale-told-story'}}>the tale below</Link>
-      <Story param="tale" id="told" can="The reader can close a story a link opened" soThat="a press always answers">
+      <Story param="tale" id="told" can="The reader can open a story a link opened" soThat="a press answers what they saw">
         <p>the told story</p>
       </Story>
     </Stories></TestApp>);
@@ -128,10 +128,10 @@ describe('a story card', () => {
 
     await act(async () => {
       await appAddress.follow('the tale below');
-      await recipeFolds.press(document.body, 'The reader can close a story a link opened');
+      await recipeFolds.press(document.body, 'The reader can open a story a link opened');
     });
 
-    expect(appAddress.search()).not.toHaveTextContent('tale=told');
+    expect(appAddress.search()).toHaveTextContent('tale=told');
     expect(appAddress.fragment()).toBe('#tale-told-story');
   });
 

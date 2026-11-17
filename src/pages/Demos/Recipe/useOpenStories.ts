@@ -23,6 +23,5 @@ export const useOpenStories = (param: string): OpenStories => {
     void navigate({search: `?${storyKeys.toggledIn(address, {param, id})}`, hash: location.hash},
       {replace: true, preventScrollReset: true, state: scrollPlace.keptFrom(location)});
   };
-  const openNow = (id: string): boolean => storyKeys.openIn(new URLSearchParams(readLocation().search), param).has(id);
-  return {isOpen, toggle: id => setOpen(id, not(openNow(id))), setOpen};
+  return {isOpen, toggle: id => setOpen(id, not(isOpen(id))), setOpen};
 };
