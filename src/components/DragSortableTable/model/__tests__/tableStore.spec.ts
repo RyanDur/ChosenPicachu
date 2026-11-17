@@ -1,4 +1,4 @@
-import {maybe, some} from '@ryandur/sand';
+import {Maybe, maybe, nothing, some} from '@ryandur/sand';
 import {TableMiddleware, tableStore} from '../store';
 import {columnShares} from '../../__test_support';
 import {tableActions} from '../actions';
@@ -138,7 +138,7 @@ describe('the table store', () => {
 
 describe('the arrangement', () => {
   const trades: Readonly<Record<string, number>> = {'this minute': 3, 'this hour': 9, session: 5};
-  const valueOf = (row: string, column: string) => column === 'trades' ? trades[row] : undefined;
+  const valueOf = (row: string, column: string): Maybe<number> => column === 'trades' ? maybe(trades[row]) : nothing();
   const arranged = arrangements.of(['lookback', 'trades', 'buys'], ['this minute', 'this hour']);
 
   test('keys that arrive later sit after the ones still seated, and the sort ranks them all', () => {

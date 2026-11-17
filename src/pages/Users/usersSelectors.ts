@@ -11,7 +11,7 @@ const inOrder = (users: readonly User[], order: readonly string[]): readonly Use
   order.flatMap(id => users.filter(user => user.id === id));
 
 const valueOf = (users: readonly User[]) => (row: string, column: string) =>
-  maybe(userColumns.seated(users).find(({key}) => key === row)).map(seated => seated.values[column]).orElse(undefined);
+  maybe(userColumns.seated(users).find(({key}) => key === row)).mBind(seated => maybe(seated.values[column]));
 
 type UsersSelectors = {
   users: (state: UsersState) => readonly User[];
