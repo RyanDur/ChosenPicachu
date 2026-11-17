@@ -58,6 +58,16 @@ describe('why Third is on top, on its own page', () => {
       .toContainEqual(['A box remembers the fold, and a rule reads it', demosAt('accordions/a-box-remembers-the-fold')]);
   });
 
+  test('should send its gloss of rule to the fold choices with the raised card carried', async () => {
+    render(<TestApp at={demosAt(thirdOnTop, '?raised=second')}/>);
+
+    const page = await demoTabs.arrivedOn('Z-index');
+
+    expect(demoPage.linksToPageIn(page, `${demosAt('accordions')}#fold-choices-heading`)).toEqual([
+      ['accordions tab', `${demosAt('accordions')}#fold-choices-heading`]
+    ]);
+  });
+
   test('should send its gloss of rule to the accordions tab’s fold choices, where a rule is defined', async () => {
     render(<TestApp at={demosAt(thirdOnTop)}/>);
 
