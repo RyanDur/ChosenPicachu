@@ -802,6 +802,39 @@ describe('the charts tab’s parts', () => {
   });
 });
 
+describe('a chart page’s foot', () => {
+  test('should lead to the chart before it and the chart after it, by number and title', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
+    await chartsDesk.findTitle('candles tutorial', 2);
+
+    expect(demoPage.leadsOn('the chart pages')).toEqual([
+      ['Previous: 1. Price line', chartPageAt('price')],
+      ['Next: 3. Pressure', chartPageAt('pressure')]
+    ]);
+  });
+
+  test('should lead only onward from the first chart', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await chartsDesk.findTitle('price line tutorial', 2);
+
+    expect(demoPage.leadsOn('the chart pages')).toEqual([
+      ['Next: 2. Candles', chartPageAt('candles')]
+    ]);
+  });
+
+  test('should lead only back from the last chart', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
+    await chartsDesk.findTitle('pie tutorial', 2);
+
+    expect(demoPage.leadsOn('the chart pages')).toEqual([
+      ['Previous: 3. Pressure', chartPageAt('pressure')]
+    ]);
+  });
+});
+
 describe('the workspace’s doorways', () => {
   test('should link the price line doorway to the price line page', async () => {
     const feed = await listeningFeed();

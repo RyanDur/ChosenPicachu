@@ -27,6 +27,10 @@ const parts = (name: string): (string | null)[][] =>
   within(screen.getByRole('list', {name})).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')]);
 
+const leadsOn = (name: string): (string | null)[][] =>
+  within(screen.getByRole('navigation', {name})).getAllByRole('link')
+    .map(link => [link.textContent, link.getAttribute('href')]);
+
 export const demoPage = {
   assumedLinks: (): (string | null)[][] => assumedLinksIn(document.body),
   part: (name: string): HTMLElement => screen.getByRole('region', {name}),
@@ -41,6 +45,7 @@ export const demoPage = {
   wholePage: (): HTMLElement => screen.getByRole('main'),
   linksToTabsIn,
   parts,
+  leadsOn,
   linksToTabs: (): string[][] => toTabs(linksOffTheRail()),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   sliceLinks: (): (string | null)[] => within(slices()).getAllByRole('link').map(link => link.getAttribute('href')),
