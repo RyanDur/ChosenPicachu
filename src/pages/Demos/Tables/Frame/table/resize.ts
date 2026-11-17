@@ -1,4 +1,4 @@
-import {maybe} from '@ryandur/sand';
+import {maybe, some} from '@ryandur/sand';
 import {shares, tableState} from '@components/DragSortableTable/model';
 import {MountedTable} from './table-state';
 
@@ -8,7 +8,7 @@ const dressColumn = (table: HTMLTableElement, column: string, share: number, nam
       header.classList.add('shared');
       header.style.setProperty('--share', `${share}%`);
       maybe(header.querySelector('[data-resize-handle]')).map(handle =>
-        handle.setAttribute('aria-label', shares.resizeLabel(column, named)));
+        handle.setAttribute('aria-label', shares.resizeLabel(column, some(named))));
     }
   });
 };

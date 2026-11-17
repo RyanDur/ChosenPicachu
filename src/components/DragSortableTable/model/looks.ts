@@ -1,5 +1,5 @@
 import {CSSProperties} from 'react';
-import {has, maybe, Maybe} from '@ryandur/sand';
+import {has, maybe, Maybe, not} from '@ryandur/sand';
 import {ColumnShove, RowShove, Settling} from './table-state';
 import {Drift} from './travel';
 
@@ -35,12 +35,12 @@ const rowHeaderCell = ['cell', 'row-header'] as const;
 
 const headerCell = ['cell', 'header-cell'] as const;
 
-const headerNeeds = (travels: boolean, width?: number): readonly (string | false)[] => [
+const headerNeeds = (travels: boolean, width: Maybe<number>): readonly (string | false)[] => [
   'muted-rule-after',
   'muted-bar-below',
   'focus-ringed',
   travels && 'grabbable',
-  has(width) && 'shared'
+  not(width.isNothing) && 'shared'
 ];
 
 const cellNeeds = ['muted-rule-after', 'muted-rule-below'] as const;

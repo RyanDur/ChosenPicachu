@@ -1,4 +1,4 @@
-import {has, maybe} from '@ryandur/sand';
+import {has, maybe, Maybe} from '@ryandur/sand';
 const SLIMMEST = 5;
 
 export type ColumnWidths = Readonly<Record<string, number>>;
@@ -47,13 +47,12 @@ export type Grip = Readonly<{fromX: number; pxPerShare: number}>;
 
 const sought = ({fromX, pxPerShare}: Grip, clientX: number): number => (clientX - fromX) / pxPerShare;
 
-const width = (share?: number): string | undefined =>
-  has(share) ? `${share}%` : undefined;
+const width = (share: number): `${number}%` => `${share}%`;
 
 const wholePercent = (share: number): number => Math.round(share);
 
-const resizeLabel = (column: string, share?: number): string =>
-  has(share) ? `resize ${column}, ${wholePercent(share)}%` : `resize ${column}`;
+const resizeLabel = (column: string, share: Maybe<number>): string =>
+  share.either(named => `resize ${column}, ${wholePercent(named)}%`, () => `resize ${column}`);
 
 const grippedAt = (width: number, clientX: number): Grip | undefined => {
   const pxPerShare = width / 100;

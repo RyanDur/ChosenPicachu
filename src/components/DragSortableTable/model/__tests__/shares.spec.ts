@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest';
+import {nothing, some} from '@ryandur/sand';
 import {shares} from '../shares';
 
 describe('the shares vocabulary', () => {
@@ -16,7 +17,7 @@ describe('the shares vocabulary', () => {
   });
 
   it('speaks the resize announcement, with the share once the ledger exists', () => {
-    expect(shares.resizeLabel('trades', 24.4)).toBe('resize trades, 24%');
-    expect(shares.resizeLabel('trades', undefined)).toBe('resize trades');
+    expect(shares.resizeLabel('trades', some(24.4))).toBe('resize trades, 24%');
+    expect(shares.resizeLabel('trades', nothing())).toBe('resize trades');
   });
 });
