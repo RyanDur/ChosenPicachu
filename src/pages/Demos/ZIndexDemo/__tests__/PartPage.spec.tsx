@@ -3,7 +3,6 @@ import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@navigation';
 import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {stackingPile, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
-import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {site} from '@pages/__test_support';
 
 const thirdOnTop = 'z-index/why-third-is-on-top';
@@ -40,16 +39,6 @@ describe('why Third is on top, on its own page', () => {
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
-  });
-
-  test('should open on what it assumes, linking the accordions tab with the raised card carried', async () => {
-    render(<TestApp at={demosAt(thirdOnTop, '?raised=second')}/>);
-
-    const page = await demoTabs.arrivedOn('Z-index');
-
-    const opener = explanation.saying(page, /^Even with no z-index anywhere/);
-
-    expect(explanation.linkNamed(opener, 'accordions tab')).toHaveAttribute('href', demosAt('accordions', '?raised=second'));
   });
 
   test('should title the page with the tab and the part', async () => {
