@@ -40,14 +40,19 @@ const output = 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output
 
 export const BehaviorPractice: FC = () =>
   <>
-    <h3 className="paragraph bold">What is true and what happened</h3>
+    <h3 className="paragraph bold">What organizing behavior has to solve</h3>
     <p className="paragraph">Behavior splits into what is true and what happened. The state is what is
       true: the order the rows are in, the choice the reader made, the thing being dragged. It holds only what
       the code cannot work out from something else. Events are what happened, so I name them in the past tense:
       lifted, dropped, chosen. Each event goes to a pure function that takes the current state and returns the next.
       I keep the state in one place, and replacing it is the only way anything on screen changes.</p>
-    <p className="paragraph">A reducer is that pure function, and its type says so: it takes the state and an event and
-      returns the state.</p>
+    <p className="paragraph">Two more rules follow from that split. A value from outside is decoded once, where it
+      enters, so nothing untyped reaches the state, and the types refuse what the design forbids. And a condition reads
+      as a sentence, in the script and in the style sheet. The rest of this tab shows each of those in the code that
+      runs here.</p>
+    <h3 className="paragraph bold">What is true and what happened</h3>
+    <p className="paragraph">A reducer is the pure function each event goes to, and its type says so: it takes the state
+      and an event and returns the state.</p>
     <ReducerCarve/>
     <p className="paragraph">Two events come from the reader’s hands, and one from a server:</p>
     <EventsCarve/>
