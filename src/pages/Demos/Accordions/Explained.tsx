@@ -369,7 +369,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 <Snippet label="CSS" lines={[
                   ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info-text {\n      overflow-y')), lines.blank,
                   ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info-paragraph {')), lines.blank,
-                  ...carve.unit(surfaceCss, '.foot-shadowed {'),
+                  ...lines.fromTheExhibit(carve.unit(surfaceCss, '.foot-shadowed {')),
                   ...{
                     reveal: [],
                     drawer: [
