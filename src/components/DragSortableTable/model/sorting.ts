@@ -1,4 +1,4 @@
-import {Maybe, maybe} from '@ryandur/sand';
+import {Maybe, maybe, nothing, some} from '@ryandur/sand';
 
 export type Direction = 'ascending' | 'descending';
 
@@ -10,7 +10,7 @@ const choices: readonly Choice[] = ['ascending', 'descending', 'reset'];
 
 const choiceOf = (named: string): Maybe<Choice> => maybe(choices.find(choice => choice === named));
 
-const directionOf = (choice: Choice): Direction | undefined => choice === 'reset' ? undefined : choice;
+const directionOf = (choice: Choice): Maybe<Direction> => choice === 'reset' ? nothing() : some(choice);
 
 const ranked = <Seat>(
   seats: readonly Seat[],

@@ -1,4 +1,4 @@
-import {has, maybe} from '@ryandur/sand';
+import {has, maybe, Maybe} from '@ryandur/sand';
 import {Direction, Labeled, TableColumn, sorting} from '@components/DragSortableTable/model';
 import {MountedTable, mountedTable} from './table-state';
 import {tell} from './events';
@@ -22,7 +22,8 @@ const announceChanged = ({table, columns}: Pick<MountedTable, 'table' | 'columns
   }
 };
 
-const choose = ({table, report}: Pick<MountedTable, 'table' | 'report'>, column: string, direction?: Direction): void => {
+const choose = ({table, report}: Pick<MountedTable, 'table' | 'report'>, column: string, chosen: Maybe<Direction>): void => {
+  const direction = chosen.orElse(undefined);
   tell(table, 'sorted', {column, direction});
   report({about: 'sort', name: column, direction});
 };
