@@ -3,6 +3,7 @@ import {Link, useLocation} from 'react-router';
 import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {tablesContents} from './contents';
 import {TablesSize} from './TablesSize';
+import './TablesMap.css';
 
 export const TablesMap: FC = () => {
   const {pathname} = useLocation();
@@ -12,8 +13,8 @@ export const TablesMap: FC = () => {
     <ol className="paragraph">
       {tablesContents.entries.map(({title, to, heading, search}) => <li key={title}>
         {pathname === to
-          ? <span aria-current="page">{title}</span>
-          : <Link className="signpost" to={carried(to, heading, search)}>{title}</Link>}
+          ? <span className="map-entry" aria-current="page">{title}</span>
+          : <Link className="map-entry signpost" to={carried(to, heading, search)}>{title}</Link>}
       </li>)}
     </ol>
   </nav>;
