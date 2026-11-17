@@ -62,9 +62,9 @@ const Neighbors: FC<Props> = ({kind}) => {
   const at = chartKinds.all.indexOf(kind);
   return <nav className="chart-neighbors" aria-label="the chart pages">
     {maybe(chartKinds.all[at - 1]).map(before =>
-      <Link key={before} className="signpost" rel="prev" to={chartKinds.address(before)}>{`Previous: ${numbered(before)}`}</Link>).orNull()}
+      <Link key={before} className="reachable signpost" rel="prev" to={chartKinds.address(before)}>{`Previous: ${numbered(before)}`}</Link>).orNull()}
     {maybe(chartKinds.all[at + 1]).map(after =>
-      <Link key={after} className="onward signpost" rel="next" to={chartKinds.address(after)}>{`Next: ${numbered(after)}`}</Link>).orNull()}
+      <Link key={after} className="onward reachable signpost" rel="next" to={chartKinds.address(after)}>{`Next: ${numbered(after)}`}</Link>).orNull()}
   </nav>;
 };
 
