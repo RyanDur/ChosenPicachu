@@ -30,8 +30,7 @@ export const tablesTab = () => ({
   tutorialsListed: async (): Promise<string[]> =>
     within(await screen.findByRole('list', {name: 'the tutorials'}, untilTheTablesTabRenders)).getAllByRole('link')
       .map(link => computeAccessibleName(link)),
-  place: (): Promise<HTMLElement> => screen.findByText(/tutorial \d+ of \d+/),
-  partPlace: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
+  place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   readingTimeOf: async (title: string): Promise<HTMLElement> => {
     await tutorialLink(title);
     const [entry] = screen.getAllByRole('listitem').filter(item => within(item).queryByRole('heading', {name: title}));

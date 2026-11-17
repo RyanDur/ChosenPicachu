@@ -30,14 +30,14 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().follow(theNeed);
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(theNeedsPage);
-    expect(await tablesTab().partPlace()).toBeVisible();
+    expect(await tablesTab().place()).toBeVisible();
     expect(tablesTab().table('the clues').rows).toHaveLength(5);
   });
 
   test('the need’s page shows the live table, then only the need and its clues', async () => {
     render(<TestApp at={theNeedsPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(aggregations.card()).toBeVisible();
     const clues = tablesTab().table('the clues');
@@ -49,13 +49,13 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the need’s page says its place among the parts', async () => {
     render(<TestApp at={theNeedsPage}/>);
 
-    expect(await tablesTab().partPlace()).toHaveTextContent('Tables · part 1 of 5');
+    expect(await tablesTab().place()).toHaveTextContent('Tables · part 1 of 8');
   });
 
   test('the need’s page heads the need once, as its title', async () => {
     render(<TestApp at={theNeedsPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(tablesTab().titles(theNeed, 2)).toHaveLength(1);
     expect(tablesTab().titles(theNeed)).toHaveLength(1);
@@ -64,7 +64,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the need’s page links the tab its clues name', async () => {
     render(<TestApp at={theNeedsPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(demoPage.linksToTabsIn(demoPage.part(theNeed))).toContainEqual(['z-index tab', demosAt('z-index')]);
   });
@@ -111,14 +111,14 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().follow(theSketch);
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(theSketchsPage);
-    expect(await tablesTab().partPlace()).toBeVisible();
+    expect(await tablesTab().place()).toBeVisible();
     expect(tablesTab().titleShown(unanswered)).toBeVisible();
   });
 
   test('the sketch’s page shows the live table, then only the sketch', async () => {
     render(<TestApp at={theSketchsPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(aggregations.card()).toBeVisible();
     expect(tablesTab().titleShown(unanswered)).toBeVisible();
@@ -129,7 +129,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the sketch’s table names its rows and columns', async () => {
     render(<TestApp at={theSketchsPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(tablesTab().columnsIn(theSketch)).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
     expect(tablesTab().headersIn(theSketch).rows).toHaveLength(5);
@@ -138,13 +138,13 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the sketch’s page says its place among the parts', async () => {
     render(<TestApp at={theSketchsPage}/>);
 
-    expect(await tablesTab().partPlace()).toHaveTextContent('Tables · part 2 of 5');
+    expect(await tablesTab().place()).toHaveTextContent('Tables · part 2 of 8');
   });
 
   test('the sketch’s page heads the sketch once, as its title', async () => {
     render(<TestApp at={theSketchsPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(tablesTab().titles(theSketch, 2)).toHaveLength(1);
     expect(tablesTab().titles(theSketch)).toHaveLength(1);
@@ -153,7 +153,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the sketch’s page heads what a design cannot tell you one level under its title', async () => {
     render(<TestApp at={theSketchsPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(tablesTab().titles('what a design cannot tell you', 3)).toHaveLength(1);
   });
@@ -199,14 +199,14 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().follow(theSlices);
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(theSlicesPage);
-    expect(await tablesTab().partPlace()).toBeVisible();
+    expect(await tablesTab().place()).toBeVisible();
     expect(demoPage.title(theStory)).toBeVisible();
   });
 
   test('the slices’ page shows the live table, then only the story and its slices', async () => {
     render(<TestApp at={theSlicesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(aggregations.card()).toBeVisible();
     expect(demoPage.title(theStory)).toBeVisible();
@@ -217,7 +217,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the slices’ page links the tab its story names', async () => {
     render(<TestApp at={theSlicesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(demoPage.linksToTabsIn(demoPage.part(theSlices))).toContainEqual(['z-index tab', demosAt('z-index')]);
   });
@@ -225,13 +225,13 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the slices’ page says its place among the parts', async () => {
     render(<TestApp at={theSlicesPage}/>);
 
-    expect(await tablesTab().partPlace()).toHaveTextContent('Tables · part 3 of 5');
+    expect(await tablesTab().place()).toHaveTextContent('Tables · part 3 of 8');
   });
 
   test('the slices’ page heads the slices once, as its title', async () => {
     render(<TestApp at={theSlicesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(tablesTab().titles(theSlices, 2)).toHaveLength(1);
     expect(tablesTab().titles(theSlices)).toHaveLength(1);
@@ -240,7 +240,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the slices’ page heads its story one level under its title', async () => {
     render(<TestApp at={theSlicesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(tablesTab().titles('The trader can watch the live market over lookbacks they arrange', 3)).toHaveLength(1);
   });
@@ -248,7 +248,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the slices on their page point at the still table’s and the live table’s pages and the later stations on the tables tab, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-slices', '?world=vanilla')}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     const station = (at: number) => `${demosAt('tables', '?world=vanilla')}#station-${at}`;
     expect(demoPage.sliceLinks()).toEqual([
@@ -260,7 +260,7 @@ describe('the tables tab’s parts, each on its own page', () => {
 
   test('the tables tab holds every station the slices on their page point at', async () => {
     const {unmount} = render(<TestApp at={theSlicesPage}/>);
-    await tablesTab().partPlace();
+    await tablesTab().place();
     const stations = demoPage.sliceStationsOn(demosAt('tables'));
     unmount();
 
@@ -305,14 +305,14 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().follow(theStillTable);
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(demosAt('tables/the-still-table', '?living=still'));
-    await tablesTab().partPlace();
+    await tablesTab().place();
     expect(recipeFolds.story(demoPage.part(theStillTable), theStillStory)).toHaveAttribute('open');
   });
 
   test('the still table’s page names its section by its title', async () => {
     render(<TestApp at={theStillTablesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(demoPage.part(theStillTable)).toBeVisible();
   });
@@ -320,7 +320,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the still table’s page shows the live table, then only the still table', async () => {
     render(<TestApp at={theStillTablesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(aggregations.card()).toBeVisible();
     expect(demoPage.part(theStillTable)).toBeVisible();
@@ -331,7 +331,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the still table’s page links each term it glosses, and each tab it names, to that tab', async () => {
     render(<TestApp at={theStillTablesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(demoPage.linksToTabsIn(demoPage.part(theStillTable))).toEqual([
       ['accordions tab', demosAt('accordions')],
@@ -342,13 +342,13 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the still table’s page says its place among the parts', async () => {
     render(<TestApp at={theStillTablesPage}/>);
 
-    expect(await tablesTab().partPlace()).toHaveTextContent('Tables · part 4 of 5');
+    expect(await tablesTab().place()).toHaveTextContent('Tables · part 4 of 8');
   });
 
   test('the still table’s page heads the still table once, as its title', async () => {
     render(<TestApp at={theStillTablesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(tablesTab().titles(theStillTable, 2)).toHaveLength(1);
     expect(tablesTab().titles(theStillTable)).toHaveLength(1);
@@ -383,7 +383,7 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().follow(theLiveTable);
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(demosAt('tables/the-live-table-and-the-store', `?${bothStoriesOpen}`));
-    await tablesTab().partPlace();
+    await tablesTab().place();
     expect(recipeFolds.story(demoPage.part(theLiveTable), theFlowStory)).toHaveAttribute('open');
     expect(recipeFolds.story(demoPage.part(theLiveTable), theStoreStory)).toHaveAttribute('open');
   });
@@ -391,7 +391,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the live table’s page opens only the story its address names', async () => {
     render(<TestApp at={demosAt('tables/the-live-table-and-the-store', '?living=flow')}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     const live = demoPage.part(theLiveTable);
     expect(recipeFolds.story(live, theFlowStory)).toHaveAttribute('open');
@@ -401,7 +401,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the live table’s page names its section by its title', async () => {
     render(<TestApp at={theLiveTablesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(demoPage.part(theLiveTable)).toBeVisible();
   });
@@ -409,7 +409,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the live table’s page shows the live table, then only the live table and the store', async () => {
     render(<TestApp at={theLiveTablesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(aggregations.card()).toBeVisible();
     const live = demoPage.part(theLiveTable);
@@ -422,7 +422,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the live table’s page links each term it glosses, and each tab it names, to that tab', async () => {
     render(<TestApp at={theLiveTablesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(demoPage.linksToTabsIn(demoPage.part(theLiveTable))).toEqual([
       ['charts tab', demosAt('charts')]
@@ -438,13 +438,13 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the live table’s page says its place among the parts', async () => {
     render(<TestApp at={theLiveTablesPage}/>);
 
-    expect(await tablesTab().partPlace()).toHaveTextContent('Tables · part 5 of 5');
+    expect(await tablesTab().place()).toHaveTextContent('Tables · part 5 of 8');
   });
 
   test('the live table’s page heads the live table once, as its title', async () => {
     render(<TestApp at={theLiveTablesPage}/>);
 
-    await tablesTab().partPlace();
+    await tablesTab().place();
 
     expect(tablesTab().titles(theLiveTable, 2)).toHaveLength(1);
     expect(tablesTab().titles(theLiveTable)).toHaveLength(1);

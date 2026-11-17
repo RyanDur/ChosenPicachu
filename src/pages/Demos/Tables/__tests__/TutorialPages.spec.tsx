@@ -69,10 +69,10 @@ describe('the table tutorials, each on its own page', () => {
     expect(await appAddress.movedOnFrom(demosAt('tables/menu'))).toBe(demosAt('tables'));
   });
 
-  test('a tutorial’s page says its place among the tutorials', async () => {
+  test('a tutorial’s page says its place in the book', async () => {
     render(<TestApp at={demosAt('tables/menu')}/>);
 
-    expect(await tablesTab().place()).toHaveTextContent('Tables · tutorial 2 of 3');
+    expect(await tablesTab().place()).toHaveTextContent('Tables · part 7 of 8');
   });
 
   test('the build chosen on a tutorial’s page carries back to the tables tab', async () => {
