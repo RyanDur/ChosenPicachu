@@ -1,5 +1,6 @@
 import {matchOn} from '@ryandur/sand';
-import {demoTab, DemoTopics} from '@pages/Demos';
+import {generatePath} from 'react-router';
+import {Paths} from '@navigation';
 
 export type ChartKind = 'price' | 'candles' | 'pressure' | 'pie';
 
@@ -19,6 +20,7 @@ const is = (kind?: string): kind is ChartKind =>
 
 const match = matchOn([...all]);
 
-const address = (kind: ChartKind): string => `${demoTab.address(DemoTopics.charts)}${kind}/`;
+// generatePath drops the route's trailing slash, and the prerendered pages live at the slashed address.
+const address = (kind: ChartKind): string => `${generatePath(Paths.chartTutorial, {kind})}/`;
 
 export const chartKinds = {all, is, match, names, address};
