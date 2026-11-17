@@ -46,7 +46,7 @@ const theirNumbers = [
 
 export const WhichCardIsOnTop: FC = () =>
   <section aria-labelledby={partHeadings.whichCardIsOnTop} className="stacking-part">
-    <h2 id={partHeadings.whichCardIsOnTop} className="title bold">Which card is on top?</h2>
+    <h3 id={partHeadings.whichCardIsOnTop} className="sub-title bold">Which card is on top?</h3>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
         <p className="paragraph">Three cards sit over the same spot. Card one has a z-index of 1, and the list inside it

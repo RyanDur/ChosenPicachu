@@ -44,6 +44,12 @@ describe('why a fixed banner still loses, on its own page', () => {
     expect(await explanation.part('Which card is on top?')).toBeInTheDocument();
   });
 
+  test('should title which card is on top as a section of the part, a level below the part’s title', async () => {
+    render(<TestApp at={demosAt(fixedBanner)}/>);
+
+    expect(explanation.sectionTitles(await explanation.part(title))).toContain('Which card is on top?');
+  });
+
   test('should lead back to part four’s page and on to part six on the tab, by number and title, with the raised card carried', async () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
