@@ -6,7 +6,12 @@ import {computeAccessibleName} from 'dom-accessibility-api';
 const choice = (dial: string): Promise<HTMLElement> => screen.findByRole('group', {name: dial});
 const option = (holder: HTMLElement, name: string): HTMLElement => within(holder).getByRole('radio', {name});
 
+const namesAndAddressesIn = (holder: HTMLElement): (string | null)[][] =>
+  within(holder).getAllByRole('link').map(link => [link.textContent, link.getAttribute('href')]);
+
 export const accordionsTab = {
+  leadsOn: async (name: string): Promise<(string | null)[][]> =>
+    namesAndAddressesIn(await screen.findByRole('navigation', {name})),
   choice,
   choiceIn: (holder: HTMLElement, dial: string): HTMLElement => within(holder).getByRole('group', {name: dial}),
   choiceRow: async (dial: string): Promise<HTMLElement> => {

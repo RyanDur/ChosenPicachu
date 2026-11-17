@@ -51,6 +51,15 @@ describe('the measured height, on its own page', () => {
     expect(accordionsTab.buildsIn(measured)).toEqual(['Accordion using a radio group and a measured height']);
   });
 
+  test('should lead back to the part before it and on to the part after it on the tab, by number and title, with the fold choices carried', async () => {
+    render(<TestApp at={demosAt(measuredHeight, '?type=inclusive&style=drawer')}/>);
+
+    expect(await accordionsTab.leadsOn('the accordions parts')).toEqual([
+      ['Previous: 3. The max-height guess', `${demosAt('accordions', '?type=inclusive&style=drawer')}#max-height-guess-heading`],
+      ['Next: 5. What the platform gives now', `${demosAt('accordions', '?type=inclusive&style=drawer')}#platform-way-heading`]
+    ]);
+  });
+
   test('should link the run that tells the two layout effects to the React build’s source on GitHub', async () => {
     render(<TestApp at={demosAt(measuredHeight)}/>);
 
