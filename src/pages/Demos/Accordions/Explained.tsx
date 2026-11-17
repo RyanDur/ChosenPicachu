@@ -105,10 +105,10 @@ export const AccordionsExplained: FC<Props> = ({folds}) => {
     </section>
     <section aria-labelledby="fold-choices-heading" className="fold-choices">
       <h2 id="fold-choices-heading" className="off-screen">fold choices</h2>
-      <p className="paragraph">Two choices, the fold type and the fold motion, set the other accordions below. Each
-        choice is a dial, a control on the page that sets how a build behaves, with a line beside it saying what it
-        does. The fold type also reaches the accordion above: with exclusive, its details share a name and opening one
-        closes the others.</p>
+      <p className="paragraph">Two choices, the fold type and the fold motion, set the accordion below and the builds
+        on each part’s own page. Each choice is a dial, a control on the page that sets how a build behaves, with a line
+        beside it saying what it does. The fold type also reaches the accordion above: with exclusive, its details
+        share a name and opening one closes the others.</p>
       <p className="paragraph">The fold motion is set in a style sheet. A style sheet is a file of rules. A rule has a
         selector, which names the elements it applies to. It also has properties. A property is one aspect of a look,
         like a height or a color, given a value.</p>
