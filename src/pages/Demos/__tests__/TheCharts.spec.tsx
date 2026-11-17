@@ -10,7 +10,7 @@ import {
   tradeFrame,
   tradeFrameWith
 } from '@pages/Demos/__test_support/feed';
-import {chartsDesk} from '@pages/Demos/Charts/__test_support';
+import {chartPage, chartsDesk} from '@pages/Demos/Charts/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
 import {tradeHistoryRefuses} from '@__test_support/server';
@@ -793,7 +793,7 @@ describe('the charts tab’s parts', () => {
     render(<TestApp at={demosAt('charts')}/>);
     await demoTabs.arrivedOn('Charts');
 
-    expect(demoPage.parts('let’s build this feature')).toEqual([
+    expect(chartPage.parts('let’s build this feature')).toEqual([
       ['Price line', chartPageAt('price')],
       ['Candles', chartPageAt('candles')],
       ['Pressure', chartPageAt('pressure')],
@@ -808,7 +808,7 @@ describe('a chart page’s foot', () => {
     render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
     await chartsDesk.findTitle('candles tutorial', 2);
 
-    expect(demoPage.leadsOn('the chart pages')).toEqual([
+    expect(chartPage.leadsOn('the chart pages')).toEqual([
       ['Previous: 1. Price line', chartPageAt('price')],
       ['Next: 3. Pressure', chartPageAt('pressure')]
     ]);
@@ -819,7 +819,7 @@ describe('a chart page’s foot', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await chartsDesk.findTitle('price line tutorial', 2);
 
-    expect(demoPage.leadsOn('the chart pages')).toEqual([
+    expect(chartPage.leadsOn('the chart pages')).toEqual([
       ['Next: 2. Candles', chartPageAt('candles')]
     ]);
   });
@@ -829,7 +829,7 @@ describe('a chart page’s foot', () => {
     render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
     await chartsDesk.findTitle('pie tutorial', 2);
 
-    expect(demoPage.leadsOn('the chart pages')).toEqual([
+    expect(chartPage.leadsOn('the chart pages')).toEqual([
       ['Previous: 3. Pressure', chartPageAt('pressure')]
     ]);
   });
