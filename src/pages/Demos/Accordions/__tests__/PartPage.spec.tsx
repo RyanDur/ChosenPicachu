@@ -35,6 +35,14 @@ describe('the measured height, on its own page', () => {
     expect(await accordionsTab.place()).toHaveTextContent('Accordions · part 4 of 6');
   });
 
+  test('the measured height’s page links class to part 2’s page, where it is defined, with the fold choices carried', async () => {
+    render(<TestApp at={demosAt(measuredHeight, '?type=inclusive&style=drawer')}/>);
+
+    const measured = await explanation.part('The measured height');
+
+    expect(explanation.linkNamed(measured, 'class')).toHaveAttribute('href', demosAt('accordions/a-box-remembers-the-fold', '?type=inclusive&style=drawer'));
+  });
+
   test('the measured height’s page shows the fold measured by plain script under its title', async () => {
     render(<TestApp at={demosAt(measuredHeight)}/>);
 
