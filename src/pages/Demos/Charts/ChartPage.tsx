@@ -1,5 +1,6 @@
 import {FC} from 'react';
-import {Navigate, useParams} from 'react-router';
+import {Link, Navigate, useParams} from 'react-router';
+import {maybe} from '@ryandur/sand';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PriceChart} from './PriceChart';
@@ -55,6 +56,18 @@ const features: Record<ChartKind, Feature> = {
 
 type Props = {kind: ChartKind};
 
+const numbered = (kind: ChartKind): string => `${chartKinds.all.indexOf(kind) + 1}. ${chartKinds.names[kind]}`;
+
+const Neighbors: FC<Props> = ({kind}) => {
+  const at = chartKinds.all.indexOf(kind);
+  return <nav className="chart-neighbors" aria-label="the chart pages">
+    {maybe(chartKinds.all[at - 1]).map(before =>
+      <Link key={before} className="signpost" rel="prev" to={chartKinds.address(before)}>{`Previous: ${numbered(before)}`}</Link>).orNull()}
+    {maybe(chartKinds.all[at + 1]).map(after =>
+      <Link key={after} className="onward signpost" rel="next" to={chartKinds.address(after)}>{`Next: ${numbered(after)}`}</Link>).orNull()}
+  </nav>;
+};
+
 const ChartKindTutorial: FC<Props> = ({kind}) => {
   const {name, reference, quote, chart: Chart} = features[kind];
   return <article aria-labelledby={`tutorial-${kind}`} className="chart-page tutorials">
@@ -87,6 +100,7 @@ const ChartKindTutorial: FC<Props> = ({kind}) => {
         <ChartStories kind={kind}/>
       </StoryDepth.Provider>
     </section>
+    <Neighbors kind={kind}/>
   </article>;
 };
 
