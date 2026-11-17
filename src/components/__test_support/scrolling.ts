@@ -1,4 +1,4 @@
-import {maybe} from '@ryandur/sand';
+import {maybe, Maybe, some} from '@ryandur/sand';
 import * as schema from 'schemawax';
 import {onTestFinished, vi} from 'vitest';
 
@@ -6,17 +6,17 @@ export type Landing = {where: 'page' | 'elsewhere'; x: number; y: number};
 
 const options = schema.object({required: {left: schema.number, top: schema.number}});
 
-const placeOf = ([first, second]: unknown[]): [number, number] | undefined =>
+const placeOf = ([first, second]: unknown[]): Maybe<[number, number]> =>
   typeof first === 'number' && typeof second === 'number'
-    ? [first, second]
-    : maybe(options.decode(first)).map(({left, top}): [number, number] => [left, top]).orElse(undefined);
+    ? some<[number, number]>([first, second])
+    : maybe(options.decode(first)).map(({left, top}): [number, number] => [left, top]);
 
 const whereIs = (scrolled: unknown): Landing['where'] => scrolled === window ? 'page' : 'elsewhere';
 
 const recordLandings = (): readonly Landing[] => {
   const landings: Landing[] = [];
   const record = function (this: unknown, ...args: unknown[]): void {
-    maybe(placeOf(args)).map(([x, y]) => landings.push({where: whereIs(this), x, y}));
+    placeOf(args).map(([x, y]) => landings.push({where: whereIs(this), x, y}));
   };
   const page = vi.spyOn(window, 'scrollTo').mockImplementation(record);
   const scrollers = vi.spyOn(Element.prototype, 'scrollTo').mockImplementation(record);
