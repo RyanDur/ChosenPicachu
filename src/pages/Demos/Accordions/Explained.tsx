@@ -125,10 +125,10 @@ export const AccordionsExplained: FC<Props> = ({folds}) => {
       <PartListing part="a-box-remembers-the-fold"/>
       <section className={toldRun} aria-labelledby="max-height-guess-heading">
         <h3 id="max-height-guess-heading" className="run-title sub-title bold">{accordionParts.titleOf('max-height-guess-heading')}</h3>
-        <p className="paragraph">When the height isn’t known ahead of time, most of us slid a fold open with a guess. A transition is CSS
-          moving a property from its old value to its new one over a set time. It can move a height to a number but not
-          to auto, the height the text needs, so we moved <RemembersTheFoldLink>the
-            panel</RemembersTheFoldLink>’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead,
+        <p className="paragraph">When the height isn’t known ahead of time, most of us slid a fold open with a
+          guess. A <RemembersTheFoldLink>transition</RemembersTheFoldLink> moves a property over a set time, but it
+          can’t move a height to auto, the height the text needs, so we moved the
+          panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead,
           from 0 to a number taller than any fold would need, such as 1000px. The panel stopped at its own text, so
           nothing scrolled. The cost was the timing. The transition spent its whole time crossing the guess, so a short
           fold opened in a rush and then sat still, and on closing it waited, unmoving, until the guess fell to its

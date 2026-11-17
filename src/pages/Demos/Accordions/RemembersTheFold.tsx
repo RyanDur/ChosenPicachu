@@ -105,9 +105,11 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
         <TheRuleMatchesTheBox/>
       </li>
       <li className="run">
-        <p className="paragraph">The way to move a fold evenly with no script is a height you know ahead of time.
-          Here every panel is the same height, so every fold travels the same distance, and a short fold moves like a
-          tall one. The cost is that a short fold leaves room under its text, and a tall one makes you scroll.</p>
+        <p className="paragraph">A transition is CSS moving a property from its old value to its new one over a set
+          time. It can move a height to a number but not to auto, the height the text needs, so a fold that slides with
+          no script needs a height known ahead of time. Here every panel is the same height, so every fold travels the
+          same distance, and a short fold moves like a tall one. The cost is that a short fold leaves room under its
+          text, and a tall one makes you scroll.</p>
         <TheKnownHeight/>
       </li>
       <li className="part-depth">
@@ -161,7 +163,7 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
                 laying the page out again, so it is cheap.
               {foldMotion === 'static'
                 ? ' With static the turn has no transition, so the corner turns at once.'
-                : ' With reveal and the drawer, a transition sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}</p>
+                : ' With reveal and the drawer, a transition sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease, a timing that starts slowly, speeds up, and slows again at the end.'}</p>
               <Snippet label="CSS" lines={[
                 ...lines.fromTheExhibit(carve.unit(accordionsCss, '&:not(.close) .info-label {')), lines.blank,
                 ...lines.fromTheExhibit(carve.unit(accordionsCss, '.opening-arrow::after {')), lines.blank,

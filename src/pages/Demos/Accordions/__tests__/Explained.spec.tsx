@@ -274,12 +274,12 @@ describe('the tab’s words on the build part 2 shows', () => {
   const build = '?type=inclusive&style=drawer';
   const remembers = demosAt('accordions/a-box-remembers-the-fold', build);
 
-  test('should link the panel the max-height guess moves to part 2’s page, with the fold choices carried', async () => {
+  test('should link transition in the max-height guess to part 2’s page, where it is defined, with the fold choices carried', async () => {
     render(<TestApp at={demosAt('accordions', build)}/>);
 
     const oldWay = await explanation.part(parts[0]);
 
-    expect(explanation.linkNamed(oldWay, 'the panel')).toHaveAttribute('href', remembers);
+    expect(explanation.linkNamed(oldWay, 'transition')).toHaveAttribute('href', remembers);
   });
 
   test('should link the checkbox build, at its first use in what the platform gives and in How details works, to part 2’s page', async () => {
