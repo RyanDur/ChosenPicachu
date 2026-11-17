@@ -29,7 +29,7 @@ export const BannerTrap: FC = () => {
         <ul className="trap-ways">
           <li className="trap-way">
             <p className="caption">The old way</p>
-            <button data-raiser type="button" tabIndex={0} className="button drawn-piece reachable" aria-label="Raise a banner, the old way"
+            <button data-raiser type="button" tabIndex={0} className="button drawn-piece attentive reachable" aria-label="Raise a banner, the old way"
               onClick={() => updateRaised(true)}>Raise a banner</button>
           </li>
           <li className="trap-way">
