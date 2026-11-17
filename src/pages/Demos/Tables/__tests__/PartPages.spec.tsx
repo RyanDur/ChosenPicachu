@@ -60,12 +60,12 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titles(theNeed)).toHaveLength(1);
   });
 
-  test('the need’s page links the tab its clues name', async () => {
+  test('the need’s page links the page where the z-index tab names its clues', async () => {
     render(<TestApp at={theNeedsPage}/>);
 
     await tablesTab().place();
 
-    expect(demoPage.linksToTabsIn(demoPage.part(theNeed))).toContainEqual(['z-index tab', demosAt('z-index')]);
+    expect(demoPage.linksToPageIn(demoPage.part(theNeed), demosAt('z-index/lets-build-this-feature'))).toEqual([['z-index tab', demosAt('z-index/lets-build-this-feature')]]);
   });
 
   test('the build chosen on the tables tab carries into the part it opens', async () => {

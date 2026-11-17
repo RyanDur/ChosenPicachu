@@ -8,21 +8,30 @@ import {useControls} from '../Controls';
 import {BannerControls} from './BannerControls';
 import {TopLayerRecipe} from './TopLayerRecipe';
 import {MultipleRecipe} from './MultipleRecipe';
-import {partHeadings} from './part-headings';
+import {PartLink} from './PartLink';
 import '../Recipe/Recipe.css';
+import '../Tutorials.css';
 
 const nextNews = decked(news);
 
-export const TopLayerTutorial: FC = () => {
+export const LetsBuildThisFeature: FC = () => {
   const {side, align, enter, stack, change} = useControls();
   const dispatchBanner = useBannerDispatch();
 
-  return <section aria-labelledby={partHeadings.buildThisFeature} className="tutorials">
-    <h2 id={partHeadings.buildThisFeature} className="title">let’s build this feature</h2>
+  return <>
+    <p className="overview paragraph">This tutorial assumes the parts before it: where a z-index stops counting,
+      from <PartLink part="why-9999-still-loses"/> through <PartLink part="why-a-fixed-banner-still-loses"/>, and the
+      component, state and event that <PartLink part="why-the-popover-wins"/> explains.</p>
+    <BannerControls side={side} align={align} enter={enter} stack={stack}
+      onSideChosen={next => change({side: next})}
+      onAlignChosen={next => change({align: next})}
+      onEnterChosen={next => change({enter: next})}
+      onStackChosen={next => change({stack: next})}
+      onRaise={() => dispatchBanner(bannerChange.raised(nextNews()))}/>
     <p className="overview paragraph">
       We are going to build this site’s banner: the panel that carries the news, whatever
-      the news is. Elsewhere on this site it reports real trouble. On this page, Raise a banner beside the dials below
-      raises random nonsense so you can watch the mechanics.
+      the news is. Elsewhere on this site it reports real trouble. On this page, Raise a banner beside the dials raises
+      random nonsense so you can watch the mechanics.
     </p>
     <p className="overview paragraph">The earlier parts show what a z-index does and where it stops counting. The
       banner uses both: it sets a z-index, and where it sits decides what that number is compared with.</p>
@@ -56,7 +65,7 @@ export const TopLayerTutorial: FC = () => {
     </p>
     <p className="overview paragraph">
       The user’s words left open where on the window the note sits, how it arrives, and how several stand at once. The
-      dials below are those answers, and the cards below settle them one at a time.
+      dials are those answers, and the cards below settle them one at a time.
     </p>
     <p className="overview paragraph">The confirmation is two lines a reader can check against the page.</p>
     <ul className="confirmation" aria-label="the confirmation">
@@ -70,21 +79,15 @@ export const TopLayerTutorial: FC = () => {
     <p className="overview paragraph">
       Every card below is one of those stories, shortened. Its headline says who gets what and its second line says why;
       the steps inside say what each conversation settled, with the real code from this site, so what you read is what
-      runs. Its confirmation is a journey this site runs. The <TabLink to={DemoTopics.accordions}>dials</TabLink> below
-      place the stack, choose its entrance and pick how it grows. Where a step depends on a dial, that dial sits on the
+      runs. Its confirmation is a journey this site runs. The <TabLink to={DemoTopics.accordions}>dials</TabLink> place
+      the stack, choose its entrance and pick how it grows. Where a step depends on a dial, that dial sits on the
       step. The links go to MDN, if you want more.
     </p>
-    <BannerControls side={side} align={align} enter={enter} stack={stack}
-      onSideChosen={next => change({side: next})}
-      onAlignChosen={next => change({align: next})}
-      onEnterChosen={next => change({enter: next})}
-      onStackChosen={next => change({stack: next})}
-      onRaise={() => dispatchBanner(bannerChange.raised(nextNews()))}/>
     <section aria-label="build the banners yourself" className="build-steps">
       <Stories>
         <TopLayerRecipe/>
         <MultipleRecipe/>
       </Stories>
     </section>
-  </section>;
+  </>;
 };

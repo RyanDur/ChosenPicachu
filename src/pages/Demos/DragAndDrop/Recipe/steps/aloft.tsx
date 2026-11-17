@@ -1,6 +1,4 @@
-import {TabLink} from '@pages/Demos/TabLink';
 import {PartTermLink} from '@pages/Demos/ZIndexDemo';
-import {DemoTopics} from '@pages/Demos';
 import {FC} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, StepHeading, Want, Words, lines, carve} from '../../../Recipe';
 import {sources} from './sources';
@@ -18,14 +16,15 @@ export const HoldTheAloft: FC = () =>
         passes over cannot read data that was never dropped on it.</Says>
       <Says>Keep it in state instead. <PartTermLink part="why-the-popover-wins">State</PartTermLink> is the data a
         render draws from. React keeps the list’s state and hands every change to
-        a <TabLink to={DemoTopics.zIndex}>reducer</TabLink>, a function that takes the state and an action and returns
-        the next state. An action is an object that names what happened, such
-        as <code className="monospaced">lifted</code>. A <TabLink to={DemoTopics.zIndex}>context</TabLink> hands the
-        state to every part of the list without passing it through each one.</Says>
-      <Says>To <TabLink to={DemoTopics.zIndex}>dispatch</TabLink> is to send the reducer an action. The lift dispatches <code className="monospaced">lifted</code> with the item’s name, and the reducer records
-        the item as <code className="monospaced">held</code>. The release clears it, and every handler in between reads
-        the same value the render does. The payload is still there for the case where another window needs the
-        data.</Says>
+        a <PartTermLink part="lets-build-this-feature">reducer</PartTermLink>, a function that takes the state and an
+        action and returns the next state. An action is an object that names what happened, such
+        as <code className="monospaced">lifted</code>.
+        A <PartTermLink part="lets-build-this-feature">context</PartTermLink> hands the state to every part of the list
+        without passing it through each one.</Says>
+      <Says>To <PartTermLink part="lets-build-this-feature">dispatch</PartTermLink> is to send the reducer an action.
+        The lift dispatches <code className="monospaced">lifted</code> with the item’s name, and the reducer records the
+        item as <code className="monospaced">held</code>. The release clears it, and every handler in between reads the
+        same value the render does. The payload is still there for the case where another window needs the data.</Says>
     </Words>
     <Codes>
       <Snippet label="TS" lines={[

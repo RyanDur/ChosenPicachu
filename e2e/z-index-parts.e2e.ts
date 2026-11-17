@@ -7,6 +7,7 @@ const whyNineNineNineStillLoses = 'Why 9999 still loses';
 const whatElseForms = 'What else forms a stacking context';
 const whyThePopoverWins = 'Why the popover wins';
 const whyAFixedBannerStillLoses = 'Why a fixed banner still loses';
+const letsBuildThisFeature = 'Let’s build this feature';
 
 test('a reader follows why Third is on top from the z-index tab to its page and finds its pile', async ({page}) => {
   await page.goto('demos/z-index/');
@@ -115,4 +116,25 @@ test('a reader follows why the popover wins’s foot on to the next part’s pag
 
   await expect(page).toHaveURL(/demos\/z-index\/why-a-fixed-banner-still-loses\/\?wears=opacity$/);
   await expect(zIndexTab(page).partTitle(whyAFixedBannerStillLoses)).toBeVisible();
+});
+
+test('a reader follows let’s build this feature from the z-index tab to its page and finds the dials it builds with', async ({page}) => {
+  await page.goto('demos/z-index/');
+  await siteFrame(page).hydrated();
+
+  await zIndexTab(page).partLink(letsBuildThisFeature).click();
+
+  await expect(page).toHaveURL(/demos\/z-index\/lets-build-this-feature\/$/);
+  await expect(page.getByText('Z-index · part 6 of 6', {exact: true})).toBeVisible();
+  await expect(page.getByRole('region', {name: 'banner controls'})).toBeVisible();
+});
+
+test('a reader follows why a fixed banner still loses’s foot on to the last part’s page, with the wear kept in the address', async ({page}) => {
+  await page.goto('demos/z-index/why-a-fixed-banner-still-loses/?wears=opacity');
+  await siteFrame(page).hydrated();
+
+  await zIndexTab(page).followsTheFoot('Next: 6. Let’s build this feature');
+
+  await expect(page).toHaveURL(/demos\/z-index\/lets-build-this-feature\/\?wears=opacity$/);
+  await expect(zIndexTab(page).partTitle(letsBuildThisFeature)).toBeVisible();
 });

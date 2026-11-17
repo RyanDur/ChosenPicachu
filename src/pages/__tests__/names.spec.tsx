@@ -111,6 +111,13 @@ describe('each page is named where a search shows it', () => {
     expect(described()).toBe(names['z-index']['why-a-fixed-banner-still-loses'].description);
   });
 
+  test('should give the page for let’s build this feature its own title and description', async () => {
+    render(<TestApp at={demosAt('z-index/lets-build-this-feature')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names['z-index']['lets-build-this-feature'].title));
+    expect(described()).toBe(names['z-index']['lets-build-this-feature'].description);
+  });
+
   test('should give the drag sort tutorial its own title and description', async () => {
     render(<TestApp at={demosAt('tables/sort')}/>);
 

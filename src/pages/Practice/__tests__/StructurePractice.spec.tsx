@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths, repository} from '@navigation';
-import {DemoTopics, demoTab} from '@pages/Demos';
+import {demosAt} from '@pages/Demos/__test_support';
 import {recordAddress} from '@pages/Record';
 import {practiceAt, practicePage} from '@pages/Practice/__test_support/practice';
 
@@ -88,14 +88,14 @@ describe('the Structure practice tab', () => {
     expect(practicePage.linkUnder('The styles-off test', /^“obsolete element/)).toHaveAttribute('href', repository.file('stylelint.config.cjs'));
   });
 
-  test('should send the old-style banner to the z-index tab that raises it', async () => {
+  test('should send the old-style banner to the z-index page that raises it', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linkUnder('ARIA last', 'z-index tab')).toHaveAttribute('href', demoTab.address(DemoTopics.zIndex));
+    expect(practicePage.linkUnder('ARIA last', 'z-index tab')).toHaveAttribute('href', demosAt('z-index/why-a-fixed-banner-still-loses'));
   });
 
-  test('should send each part of the drag-sortable table to its source, and the menu’s three components to the z-index tab', async () => {
+  test('should send each part of the drag-sortable table to its source, and the menu’s three components to the z-index page that defines a component', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
@@ -104,7 +104,7 @@ describe('the Structure practice tab', () => {
       ['ResizeHandle', `${Paths.repo}/blob/main/src/components/DragSortableTable/ResizeHandle.tsx`],
       ['SortMenu', `${Paths.repo}/blob/main/src/components/DragSortableTable/SortMenu.tsx`],
       ['DraggableColumn', `${Paths.repo}/blob/main/src/components/DragSortableTable/DraggableColumn.tsx`],
-      ['z-index tab', demoTab.address(DemoTopics.zIndex)]
+      ['z-index tab', demosAt('z-index/why-the-popover-wins')]
     ]));
   });
 
@@ -163,12 +163,12 @@ describe('the Structure practice tab', () => {
     ]));
   });
 
-  test('should send the banners’ role to the z-index tab that builds it', async () => {
+  test('should send the banners’ role to the z-index page that builds it', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.linksUnder('The skeleton, and a name where a landmark repeats')).toEqual(expect.arrayContaining([
-      ['z-index tab', demoTab.address(DemoTopics.zIndex)]
+      ['z-index tab', demosAt('z-index/lets-build-this-feature')]
     ]));
   });
 

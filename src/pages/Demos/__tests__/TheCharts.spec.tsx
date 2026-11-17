@@ -898,7 +898,7 @@ describe('the workspace story', () => {
 });
 
 describe('the links to other tabs', () => {
-  test('should link each tab it names, and each term a tab teaches, to that tab', async () => {
+  test('should link each tab it names to that tab', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -910,9 +910,20 @@ describe('the links to other tabs', () => {
       ['z-index tab', `${Paths.demos}z-index/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`],
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['dispatches', `${Paths.demos}z-index/`],
-      ['reducer', `${Paths.demos}z-index/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`]
+    ]);
+  });
+
+  test('should link each term let’s build this feature defines to that part’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    const tab = await demoTabs.arrivedOn('Charts');
+
+    expect(demoPage.linksToPageIn(tab, `${Paths.demos}z-index/lets-build-this-feature/`)).toEqual([
+      ['dispatches', `${Paths.demos}z-index/lets-build-this-feature/`],
+      ['reducer', `${Paths.demos}z-index/lets-build-this-feature/`]
     ]);
   });
 

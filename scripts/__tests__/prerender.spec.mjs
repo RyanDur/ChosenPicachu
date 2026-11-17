@@ -19,6 +19,7 @@ describe('the pages drawn into the build', () => {
     `${Paths.demos}z-index/what-else-forms-a-stacking-context/`,
     `${Paths.demos}z-index/why-the-popover-wins/`,
     `${Paths.demos}z-index/why-a-fixed-banner-still-loses/`,
+    `${Paths.demos}z-index/lets-build-this-feature/`,
     `${Paths.demos}tables/the-need-and-its-clues/`,
     `${Paths.demos}tables/the-sketch/`,
     `${Paths.demos}tables/the-slices/`,

@@ -61,6 +61,15 @@ describe('the old banner', () => {
 });
 
 describe('why a fixed banner still loses', () => {
+  test('should link Let’s build this feature to its page with the banner’s story opened, keeping the reader’s choices', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
+
+    const part = await explanation.part('Why a fixed banner still loses');
+
+    expect(explanation.linkNamed(part, 'Let’s build this feature'))
+      .toHaveAttribute('href', `${demosAt('z-index/lets-build-this-feature', '?raised=second&news=top')}#news-top-story`);
+  });
+
   test('should open the banner tutorial at the step that writes the panel at the page’s root, keeping the reader’s choices', async () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
     const part = await explanation.part('Why a fixed banner still loses');
@@ -103,7 +112,7 @@ describe('why a fixed banner still loses', () => {
 
 describe('the gap step, on a term part one defines', () => {
   test('should link selector, with the stack growing downward, to part one’s page with the raised card carried', async () => {
-    render(<TestApp at={demosAt('z-index', '?raised=second&stack=down')}/>);
+    render(<TestApp at={demosAt('z-index/lets-build-this-feature', '?raised=second&stack=down')}/>);
 
     const step = await recipeSteps.findWords('Open a gap in the stack first');
 
@@ -111,7 +120,7 @@ describe('the gap step, on a term part one defines', () => {
   });
 
   test('should link selector, with the stack growing leftward, to part one’s page with the raised card carried', async () => {
-    render(<TestApp at={demosAt('z-index', '?raised=second&stack=left')}/>);
+    render(<TestApp at={demosAt('z-index/lets-build-this-feature', '?raised=second&stack=left')}/>);
 
     const step = await recipeSteps.findWords('Open a gap in the stack first');
 
