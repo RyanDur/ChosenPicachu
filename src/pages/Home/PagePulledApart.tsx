@@ -54,8 +54,8 @@ const regionLettering: readonly Lettered[] = [
 
 const classLettering: readonly Lettered[] = [
   {word: '.field', u: -4, v: 58, anchor: 'end'},
-  {word: '.paragraph', u: 121, v: 72},
-  {word: '.signpost', u: 132, v: 83}
+  {word: '.paragraph', u: 124, v: 75},
+  {word: '.signpost', u: 138, v: 89}
 ];
 
 const scriptLettering: readonly Lettered[] = [
