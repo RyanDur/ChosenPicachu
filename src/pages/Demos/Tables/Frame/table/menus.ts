@@ -23,9 +23,8 @@ const announceChanged = ({table, columns}: Pick<MountedTable, 'table' | 'columns
 };
 
 const choose = ({table, report}: Pick<MountedTable, 'table' | 'report'>, column: string, chosen: Maybe<Direction>): void => {
-  const direction = chosen.orElse(undefined);
-  tell(table, 'sorted', {column, direction});
-  report({about: 'sort', name: column, direction});
+  tell(table, 'sorted', {column, direction: chosen});
+  report({about: 'sort', name: column, direction: chosen});
 };
 
 const choosing = (context: Pick<MountedTable, 'table' | 'report'>, column: string, item: HTMLButtonElement): void => {

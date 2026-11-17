@@ -1,12 +1,12 @@
 import {shares} from './shares';
-import {Maybe, has, nothing, some} from '@ryandur/sand';
+import {Maybe, nothing, some} from '@ryandur/sand';
 import {Direction} from './sorting';
 
 export type Report =
   | {readonly about: 'column'; readonly name: string; readonly landedAt: number; readonly outOf: number}
   | {readonly about: 'row'; readonly name: string; readonly landedAt: number; readonly outOf: number}
   | {readonly about: 'share'; readonly name: string; readonly share: number}
-  | {readonly about: 'sort'; readonly name: string; readonly direction?: Direction};
+  | {readonly about: 'sort'; readonly name: string; readonly direction: Maybe<Direction>};
 
 const move = (report: Report): string => {
   switch (report.about) {
@@ -17,7 +17,7 @@ const move = (report: Report): string => {
     case 'share':
       return `${report.name} resized to ${shares.wholePercent(report.share)}%`;
     case 'sort':
-      return has(report.direction) ? `${report.name} sorted ${report.direction}` : `${report.name} sort reset`;
+      return report.direction.map(direction => `${report.name} sorted ${direction}`).orElse(`${report.name} sort reset`);
   }
 };
 

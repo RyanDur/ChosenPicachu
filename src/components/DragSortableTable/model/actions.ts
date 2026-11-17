@@ -31,7 +31,7 @@ export type TableAction =
   | {readonly type: 'columnWalkedTo'; readonly name: string; readonly to: number; readonly widths: PixelSizes; readonly order: readonly string[]}
   | {readonly type: 'rowMovedBeside'; readonly row: string; readonly label: string; readonly neighbor: string; readonly heights: PixelSizes; readonly standing: readonly string[]}
   | {readonly type: 'rowWalkedTo'; readonly row: string; readonly label: string; readonly to: number; readonly heights: PixelSizes; readonly standing: readonly string[]}
-  | {readonly type: 'sortChosen'; readonly column: string; readonly direction?: Direction};
+  | {readonly type: 'sortChosen'; readonly column: string; readonly direction: Maybe<Direction>};
 
 type Action = TableAction;
 
@@ -108,7 +108,7 @@ const rowWalkedTo = (
   standing: readonly string[]
 ): Action =>
   ({type: 'rowWalkedTo', row, label, to, heights, standing});
-const sortChosen = (column: string, direction?: Direction): Action => ({type: 'sortChosen', column, direction});
+const sortChosen = (column: string, direction: Maybe<Direction>): Action => ({type: 'sortChosen', column, direction});
 
 export const tableActions = {
   recognizes,

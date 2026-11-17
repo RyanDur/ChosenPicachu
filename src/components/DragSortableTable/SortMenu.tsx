@@ -23,7 +23,7 @@ export const SortMenu: FC<{column: string}> = ({column}) => {
           <Item tabIndex={0} className="sub-title" value={choice}
             popoverTarget={`sort-${column}`} popoverTargetAction="hide"
             onClick={() => {
-              const direction = sorting.directionOf(choice).orElse(undefined);
+              const direction = sorting.directionOf(choice);
               maybe(onSorted).map(sorted => sorted({column, direction}));
               dispatch(tableActions.sortChosen(column, direction));
             }}>{choice}</Item>
