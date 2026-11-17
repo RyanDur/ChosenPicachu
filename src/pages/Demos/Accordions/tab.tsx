@@ -16,14 +16,14 @@ const paragraphs = (count: number, dealt: () => string, {randNumber, randParagra
 
 const draws = seeded('the accordion exhibits');
 const dealt = draws.wordDeck();
+const measuredFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
 const foldLists = {
-  measured: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
   known: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
   platform: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)}
 };
 
 const bodies: Record<AccordionPart, ReactNode> = {
-  'the-measured-height': <MeasuredHeight folds={foldLists.measured}/>
+  'the-measured-height': <MeasuredHeight folds={measuredFolds}/>
 };
 
 export const Room: FC = () => useShownPart().either(
