@@ -97,9 +97,9 @@ const rowUnder = (seats: readonly string[], bounds: Survey) =>
     if (x >= bounds.left && x <= bounds.left + bounds.width) {
       const {top, height, rowHeights} = bounds;
       let edge = top + height -
-                seats.reduce((total, row) => total + rowHeights[row], 0);
+                seats.reduce((total, row) => total + sizeOf(rowHeights, row), 0);
       const measuredSeats = seats.map((row, at) => {
-        const size = rowHeights[row];
+        const size = sizeOf(rowHeights, row);
         edge += size;
         return {holds: row, at, size, start: edge - size, end: edge};
       });

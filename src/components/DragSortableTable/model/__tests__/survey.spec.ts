@@ -21,4 +21,12 @@ describe('the pointer vocabulary', () => {
     expect(under(140 + 360 / 3, 50, 'trades').orNull()).toBeNull();
     expect(under(140 + 360 / 2, 50, 'trades').orNull()).toBe('buys');
   });
+
+  it('finds the row under the pointer when a row had no height measured at the lift', () => {
+    const under = survey.rowUnder(['day', 'week', 'month'], {
+      left: 0, top: 0, width: 400, height: 100, columnWidths: {}, rowHeights: {day: 50, month: 50}
+    });
+
+    expect(under(200, 90, 'day').orNull()).toBe('month');
+  });
 });
