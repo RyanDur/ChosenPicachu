@@ -7,19 +7,23 @@ const untilTheTabMounts = {timeout: 5000};
 
 const tabAddresses = Object.values(DemoTopics).map(demoTab.address);
 
+const hrefOf = (link: HTMLElement): string => maybe(link.getAttribute('href')).orElse('');
+
+const addressOf = (link: HTMLElement): URL => new URL(hrefOf(link), 'http://site');
+
 const toTabs = (links: HTMLElement[]): string[][] => links
-  .map(link => [link.textContent, maybe(link.getAttribute('href')).orElse('')])
+  .map(link => [link.textContent, hrefOf(link)])
   .filter(([, address]) => tabAddresses.includes(address));
 
 const linksToTabsIn = (holder: HTMLElement): string[][] => toTabs(within(holder).getAllByRole('link'));
 
-const pageAndPlaceOf = (href: string): string => {
-  const {pathname, hash} = new URL(href, 'http://site');
+const pageAndPlaceOf = (link: HTMLElement): string => {
+  const {pathname, hash} = addressOf(link);
   return `${pathname}${hash}`;
 };
 
 const linksToPageIn = (holder: HTMLElement, address: string): string[][] => within(holder).getAllByRole('link')
-  .map(link => [link.textContent, pageAndPlaceOf(maybe(link.getAttribute('href')).orElse(''))])
+  .map(link => [link.textContent, pageAndPlaceOf(link)])
   .filter(([, href]) => href === address);
 
 const linksOffTheRail = (): HTMLElement[] => {
@@ -31,6 +35,12 @@ export const assumedLinksIn = (holder: HTMLElement): (string | null)[][] =>
   within(within(holder).getByText(/^This tab assumes/)).getAllByRole('link').map(link => [link.textContent, link.getAttribute('href')]);
 
 const slices = (): HTMLElement => screen.getByRole('list', {name: 'the slices'});
+
+const stationOf = (link: HTMLElement): string => addressOf(link).hash.replace(/^#/, '');
+
+const sliceStations = (): string[] => within(slices()).getAllByRole('link').map(stationOf);
+
+const missing = (stations: string[]): string[] => stations.filter(station => not(document.getElementById(station)));
 
 export const demoPage = {
   assumedLinks: (): (string | null)[][] => assumedLinksIn(document.body),
@@ -49,7 +59,7 @@ export const demoPage = {
   linksToTabs: (): string[][] => toTabs(linksOffTheRail()),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   sliceLinks: (): (string | null)[] => within(slices()).getAllByRole('link').map(link => link.getAttribute('href')),
-  sliceLinksLandingNowhere: (): string[] => within(slices()).getAllByRole('link')
-    .map(link => maybe(link.getAttribute('href')).orElse(''))
-    .filter(address => not(document.getElementById(address.replace(/^#/, ''))))
+  sliceStations,
+  missing,
+  sliceLinksLandingNowhere: (): string[] => missing(sliceStations())
 };
