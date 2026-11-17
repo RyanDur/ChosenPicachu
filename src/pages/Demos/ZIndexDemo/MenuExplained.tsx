@@ -47,9 +47,9 @@ export const MenuExplained: FC = () =>
           but at auto it forms no stacking context, so the list is not kept inside the card’s layer. It joins the
           context the tab’s content forms, where card two is, and there 9999 is the larger number. With the box checked
           again, the card forms its layer again, with the list inside it.</p>
-        <Snippet label="HTML" lines={lines.fromTheExhibit([
-          ...carve.between(trappedSource, "<li className={classNames('old-way-card", '</label>')
-        ])}/>
+        <Snippet label="TS" lines={lines.fromTheExhibit(
+          carve.between(trappedSource, "<li className={classNames('old-way-card", '</label>')
+        )}/>
       </li>
     </ol>
   </section>;
