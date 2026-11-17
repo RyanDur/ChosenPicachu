@@ -317,11 +317,7 @@
 
 .field-after::after { background: var(--field); }
 
-.field-inverse { background: var(--field-inverse); }
-
 .faded-mint { background: var(--faded-mint); }
-
-.field-ink { color: var(--field); }
 
 .field-outlined { border: var(--hairline) solid var(--field); }
 
