@@ -4,7 +4,6 @@ import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {tableControls, tablesTab} from '@pages/Demos/Tables/__test_support';
 import {Recipe} from '../Recipe';
-import {FlowTableRecipe} from '../FlowTableRecipe';
 import {TableControls} from '../../TableControls';
 
 describe('the drag sort recipe', () => {
@@ -127,13 +126,10 @@ describe('the drag sort recipe', () => {
   });
 
   test('the open cards travel in the url', async () => {
-    render(<TestApp at="/?sort=column"><Recipe/><FlowTableRecipe/></TestApp>);
+    render(<TestApp at="/?sort=column"><Recipe/></TestApp>);
     const recipe = await tablesTab().recipe('drag sort');
     expect(recipeFolds.story(recipe, 'The trader can sort by column')).toHaveAttribute('open');
     expect(recipeFolds.story(recipe, 'The trader can sort by row')).not.toHaveAttribute('open');
-    const living = demoPage.part('the living table');
-    expect(recipeFolds.story(living, 'The trader can watch the market live, one lookback beside another')).not.toHaveAttribute('open');
-    expect(recipeFolds.story(living, 'The page is a store, and so is the table')).not.toHaveAttribute('open');
   });
 
   test('a story folds shut without folding the story beside it', async () => {

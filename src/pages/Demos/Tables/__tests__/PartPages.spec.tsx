@@ -383,8 +383,16 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(demosAt('tables/the-live-table-and-the-store', `?${bothStoriesOpen}`));
     await tablesTab().partPlace();
-    expect(recipeFolds.story(demoPage.part('the living table'), theFlowStory)).toHaveAttribute('open');
-    expect(recipeFolds.story(demoPage.part('the living table'), theStoreStory)).toHaveAttribute('open');
+    expect(recipeFolds.story(demoPage.part(theLiveTable), theFlowStory)).toHaveAttribute('open');
+    expect(recipeFolds.story(demoPage.part(theLiveTable), theStoreStory)).toHaveAttribute('open');
+  });
+
+  test('the live table’s page names its section by its title', async () => {
+    render(<TestApp at={theLiveTablesPage}/>);
+
+    await tablesTab().partPlace();
+
+    expect(demoPage.part(theLiveTable)).toBeVisible();
   });
 
   test('the live table’s page shows the live table, then only the live table and the store', async () => {
@@ -393,7 +401,7 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().partPlace();
 
     expect(aggregations.card()).toBeVisible();
-    expect(demoPage.part('the living table')).toBeVisible();
+    expect(demoPage.part(theLiveTable)).toBeVisible();
     expect(tablesTab().titleShown(theStillStory)).not.toBeInTheDocument();
   });
 
@@ -402,9 +410,15 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     await tablesTab().partPlace();
 
-    expect(demoPage.linksToTabsIn(demoPage.part('the living table'))).toEqual([
+    expect(demoPage.linksToTabsIn(demoPage.part(theLiveTable))).toEqual([
       ['charts tab', demosAt('charts')]
     ]);
+  });
+
+  test('the live table’s page tells its stories in the html world', async () => {
+    render(<TestApp at={demosAt('tables/the-live-table-and-the-store', '?world=vanilla')}/>);
+
+    expect(await demoPage.findTitle(theFlowStory)).toBeInTheDocument();
   });
 
   test('the live table’s page says its place among the parts', async () => {
