@@ -61,7 +61,7 @@ const whereIs = (station: number): Place =>
     part => ({to: addressOf(part), ...maybe(opens[part]).map(ids => ({search: {[livingStories.param]: ids.join(',')}})).orElse({})}),
     () => ({to: tabAddress, heading: stations.idOf(station)}));
 
-const neighborOf = (part: TablePart): PartPlace =>
+const placeOf = (part: TablePart): PartPlace =>
   ({title: `${ordinalOf(part)}. ${titles[part]}`, ...whereIs(ordinalOf(part))});
 
 const featuresStation = book.length + 1;
@@ -69,7 +69,7 @@ const featuresStation = book.length + 1;
 const theFeatures: PartPlace = {title: featuresHeading.title, ...whereIs(featuresStation)};
 
 const besides = (part: TablePart, step: number): Maybe<PartPlace> =>
-  maybe(book[ordinalOf(part) - 1 + step]).map(neighborOf);
+  maybe(book[ordinalOf(part) - 1 + step]).map(placeOf);
 
 export const tableParts = {
   told: (part: TablePart): Told => ({
@@ -81,6 +81,7 @@ export const tableParts = {
   previousOf: (part: TablePart): Maybe<PartPlace> => besides(part, -1),
   nextOf: (part: TablePart): Maybe<PartPlace> => maybe(besides(part, 1).orElse(theFeatures)),
   addressOf,
+  placeOf,
   whereIs,
   shownAt: (pathname: string): Maybe<TablePart> => maybe(book.find(part => pathname === addressOf(part))),
   inOrder: book,
