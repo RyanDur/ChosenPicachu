@@ -472,6 +472,35 @@
           }
         },
         {
+          "matchingUrlPattern": "/ChosenPicachu/demos/tables/the\\-sketch/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 6144
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 268288
+              }
+            ]
+          }
+        },
+        {
           "matchingUrlPattern": "/ChosenPicachu/demos/tables/\\?world=vanilla$",
           "assertions": {
             "categories:accessibility": [
