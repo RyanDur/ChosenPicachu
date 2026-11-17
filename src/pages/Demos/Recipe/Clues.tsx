@@ -8,14 +8,14 @@ type CluesProps = {
   by: string;
   clues: [string, string][];
   verdict: ReactNode;
+  headedByPage?: boolean;
   'aria-labelledby'?: string;
 };
 
-export const Clues: FC<CluesProps> = ({quote, by, clues, verdict, 'aria-labelledby': titledBy}) => <>
+export const Clues: FC<CluesProps> = ({quote, by, clues, verdict, headedByPage = false, 'aria-labelledby': titledBy}) => <>
   <section className="phase card rounded-corners lifted" aria-labelledby={maybe(titledBy).orElse('phase-need')}>
-    {maybe(titledBy).either(
-      () => null,
-      () => <h3 id="phase-need" className="phase-title title">Start with the need, and let it pick the element</h3>)}
+    {headedByPage ? null
+      : <h3 id="phase-need" className="phase-title title">Start with the need, and let it pick the element</h3>}
     <p className="overview paragraph muted-ink">
       Before any code, and before any story, someone needs something. Listen for what they say and name each clue, a
       line of it and what it commits the build to, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> shows;
