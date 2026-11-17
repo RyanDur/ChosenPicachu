@@ -1,5 +1,5 @@
 import {FC, ReactNode} from 'react';
-import {designHeading} from './design-heading';
+import {designHeading} from '@pages/Demos/headings';
 
 type DesignProps = {
   sketch: ReactNode;

@@ -1,7 +1,7 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
-import {designHeading, needHeading} from '@pages/Demos/Recipe';
+import {designHeading, needHeading} from '@pages/Demos/headings';
 
 export type TablePart = keyof typeof names.tableParts;
 
