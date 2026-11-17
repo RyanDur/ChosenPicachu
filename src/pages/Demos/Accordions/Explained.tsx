@@ -20,7 +20,7 @@ import {OneGuessTwoFolds, OneJobTwoWays, SizedToTheText, ThreeBecomeTwo} from '.
 import {foldInput} from './fold-input';
 import {looks} from './looks';
 import {accordionParts} from './part-pages';
-import {foldChoicesHeading} from './fold-choices-heading';
+import {tabHeadings} from './tab-headings';
 import {PartListing} from './PartListing';
 import {RemembersTheFoldLink} from './RemembersTheFoldLink';
 import '../Runs.css';
@@ -105,8 +105,8 @@ export const AccordionsExplained: FC<Props> = ({folds}) => {
         </li>
       </ol>
     </section>
-    <section aria-labelledby={foldChoicesHeading} className="fold-choices">
-      <h2 id={foldChoicesHeading} className="off-screen">fold choices</h2>
+    <section aria-labelledby={tabHeadings.foldChoices} className="fold-choices">
+      <h2 id={tabHeadings.foldChoices} className="off-screen">fold choices</h2>
       <p className="paragraph">Two choices, the fold type and the fold motion, set the accordion below and the builds
         on each part’s own page. Each choice is a dial, a control on the page that sets how a build behaves, with a line
         beside it saying what it does. The fold type also reaches the accordion above: with exclusive, its details
