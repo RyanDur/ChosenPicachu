@@ -3,10 +3,10 @@ import {classNames} from '@components';
 import {DialGroup, FoldType, useControls} from '../Controls';
 import {FoldMotionDial} from './FoldMotionDial';
 import {FoldTypeDial} from './FoldTypeDial';
-import {AccordionProps, Fold} from './accordion-props';
+import {Fold} from './accordion-props';
 import {ExclusiveToggleAccordion} from './ExclusiveToggleAccordion';
 import {InclusiveToggleAccordion} from './InclusiveToggleAccordion';
-import {carve, Line, lines, Mdn, Sample, Snippet} from '../Recipe';
+import {carve, lines, Mdn, Sample, Snippet} from '../Recipe';
 import exclusiveToggleAccordionSource from './ExclusiveToggleAccordion.tsx?sample';
 import inclusiveToggleAccordionSource from './InclusiveToggleAccordion.tsx?sample';
 import accordionsCss from './Accordions.css?sample';
@@ -24,6 +24,7 @@ import {PartListing} from './PartListing';
 import {RemembersTheFoldLink} from './RemembersTheFoldLink';
 import '../Runs.css';
 import './Explained.css';
+import {Build} from './build';
 import './PartDepth.css';
 
 export type FoldLists = {
@@ -40,11 +41,6 @@ type HtmlAloneBuild = {
 const htmlAloneBuilds: Record<FoldType, HtmlAloneBuild> = {
   inclusive: {Accordion: InclusiveHtmlAloneAccordion, source: inclusiveHtmlAloneSource},
   exclusive: {Accordion: ExclusiveHtmlAloneAccordion, source: exclusiveHtmlAloneSource}
-};
-
-type Build = {
-  readonly Accordion: FC<AccordionProps>;
-  readonly sample: Line[];
 };
 
 const platformBuilds: Record<FoldType, Build> = {

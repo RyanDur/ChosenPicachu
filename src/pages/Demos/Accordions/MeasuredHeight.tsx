@@ -4,7 +4,7 @@ import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {DialGroup, FoldType, useControls} from '../Controls';
 import {carve, Line, lines, Sample, Snippet} from '../Recipe';
-import {AccordionProps, Fold} from './accordion-props';
+import {Fold} from './accordion-props';
 import {ExclusiveMeasuredAccordion} from './ExclusiveMeasuredAccordion';
 import {InclusiveMeasuredAccordion} from './InclusiveMeasuredAccordion';
 import {FoldMotionDial} from './FoldMotionDial';
@@ -22,12 +22,8 @@ import foldSource from './Plain/fold.main.ts?sample';
 import accordionsCss from './Accordions.css?sample';
 import oldWayMotionCss from './OldWayMotion.css?sample';
 import '../Runs.css';
+import {Build} from './build';
 import './PartDepth.css';
-
-type Build = {
-  readonly Accordion: FC<AccordionProps>;
-  readonly sample: Line[];
-};
 
 const sharedOpenFolds = (source: Sample): Line[] =>
   lines.fromTheExhibit(carve.elided(carve.between(source, 'const [open, dispatch] = useReducer(', '</OpenFolds.Provider>;'), '<article', '</OpenFolds.Provider>;', '{/* …the folds */}'));
