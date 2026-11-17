@@ -24,8 +24,9 @@ const StationLink: FC<{station: number; at?: string}> = ({station, at}) => {
     () => <a className="slice-station signpost caption upright" href={`#${id}`}>station {station}</a>);
 };
 
-export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, headedBy, stationsAt}) =>
-  <section className="phase card rounded-corners lifted" aria-labelledby={maybe(headedBy).orElse(storiesHeading.id)}>
+export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, headedBy, stationsAt}) => {
+  const Can: 'h3' | 'h4' = maybe(headedBy).either(() => 'h3', () => 'h4');
+  return <section className="phase card rounded-corners lifted" aria-labelledby={maybe(headedBy).orElse(storiesHeading.id)}>
     {maybe(headedBy).either(
       () => null,
       () => <h3 id={storiesHeading.id} className="phase-title title">{storiesHeading.title}</h3>)}
@@ -39,7 +40,7 @@ export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, headedBy, 
       through. The whole of it reads as one:
     </p>
     <hgroup className="story arriving card rounded-corners lifted">
-      <h4 className="can paragraph bold">{can}</h4>
+      <Can className="can paragraph bold">{can}</Can>
       <p className="so-that paragraph italic muted-ink">{soThat}</p>
     </hgroup>
     <p className="overview paragraph muted-ink">{slices}</p>
@@ -51,3 +52,4 @@ export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, headedBy, 
         </li>)}
     </ul>
   </section>;
+};
