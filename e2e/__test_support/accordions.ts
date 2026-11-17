@@ -192,10 +192,10 @@ export const accordionsTab = (page: Page) => {
 
 export const textOf = (part: Part): Locator => part.fold.getByRole('paragraph', {includeHidden: true});
 
-export const oldWayFoldLabels = async (page: Page): Promise<(string | undefined)[]> =>
+export const oldWayFoldLabels = async (page: Page): Promise<string[]> =>
   page.getByRole('region', {name: 'How we used to build a fold'}).getByRole('radio')
     .evaluateAll(toggles => toggles.map(toggle =>
-      toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? undefined : undefined));
+      toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? '' : ''));
 
 export const gapUnder = async (around: Locator, inside: Locator): Promise<number> => {
   const [outer, inner] = await Promise.all([boxOf(around), boxOf(inside)]);
