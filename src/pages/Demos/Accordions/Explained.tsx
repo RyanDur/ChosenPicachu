@@ -88,13 +88,14 @@ export const AccordionsExplained: FC<Props> = ({folds}) => {
         <li className="run">
           <p className="paragraph">A <Mdn path="Web/HTML/Element/details">details</Mdn> element holds
             a <Mdn path="Web/HTML/Element/summary">summary</Mdn> and the content it hides. The summary is the bar. Press
-            it and the browser shows the rest. Press it again and the browser hides it.</p>
+            it and the browser shows the rest. Press it again and the browser hides it. When a details is open, the
+            browser marks it with an open attribute. An attribute is a name, often with a value, written inside an
+            element’s opening tag.</p>
         </li>
         {foldType === 'exclusive' && <li className="run">
           <p className="paragraph">Each of these details carries
-            a <Mdn path="Web/HTML/Element/details#name">name</Mdn> attribute, a setting written inside the element’s
-            opening tag, and details that share a name close one another: open one and the browser shuts the rest. It
-            needs no CSS and no script.</p>
+            a <Mdn path="Web/HTML/Element/details#name">name</Mdn> attribute, and details that share a name close one
+            another: open one and the browser shuts the rest. It needs no CSS and no script.</p>
         </li>}
         <li className="run">
           <p className="paragraph">The browser also remembers whether each fold is open, and says so to a screen reader,
