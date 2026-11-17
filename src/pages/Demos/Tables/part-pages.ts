@@ -36,14 +36,14 @@ const listings: Record<TablePart, Listing> = {
 
 const ordinalOf = (part: BookPart): number => book.indexOf(part) + 1;
 
-type TabHeading = {
+type StationHeading = {
   id: string;
   title: string;
 };
 
 type OnwardPart = {
   part: BookPart;
-  heading: TabHeading;
+  heading: StationHeading;
 };
 
 const onward: Record<TablePart, OnwardPart> = {
@@ -52,7 +52,7 @@ const onward: Record<TablePart, OnwardPart> = {
 
 type Onward = {
   numbered: string;
-  heading: TabHeading;
+  heading: StationHeading;
 };
 
 const isListed = (part: BookPart): part is TablePart => Object.keys(listings).includes(part);
