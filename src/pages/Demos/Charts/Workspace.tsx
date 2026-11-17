@@ -1,9 +1,8 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {FC, useState} from 'react';
-import {generatePath, Link} from 'react-router';
+import {Link} from 'react-router';
 import {maybe, Maybe, has} from '@ryandur/sand';
-import {Paths} from '@navigation';
-import {ChartKind, chartKinds} from './chart-kinds';
+import {chartKinds} from './chart-kinds';
 import {feedStatus} from './feed-status';
 import {classNames} from '@components';
 import {marketReads} from '../Market';
@@ -19,15 +18,6 @@ import {Pressure} from './Pressure';
 import {Pie} from './Pie';
 import './Workspace.css';
 
-const chartNames: Record<ChartKind, string> = {
-  price: 'Price line',
-  candles: 'Candles',
-  pressure: 'Pressure',
-  pie: 'Pie'
-};
-
-const doorway = (kind: ChartKind): string => generatePath(Paths.chartTutorial, {kind});
-
 const doorwayAt = (at: number, pressed: Element): Maybe<HTMLElement> =>
   maybe(pressed.closest('li'))
     .mBind(removed => maybe(removed.parentElement))
@@ -42,7 +32,7 @@ export const Workspace: FC<Props> = ({product}) => {
   const status = useMarketRead(marketReads.feedStatus);
   const {seats, absentKinds, add, remove, reorder} = useDesk();
   const [report, setReport] = useState('');
-  const nameAt = (at: number): string => chartNames[seats[at].kind];
+  const nameAt = (at: number): string => chartKinds.names[seats[at].kind];
   const removed = (at: number, pressed: Element): void => {
     desk.atAfterRemoval(at, seats.length).mBind(next => doorwayAt(next, pressed)).map(link => link.focus());
     remove(at);
@@ -78,8 +68,8 @@ export const Workspace: FC<Props> = ({product}) => {
                     popoverTarget="add-chart" popoverTargetAction="hide"
                     onClick={() => {
                       add(kind);
-                      setReport(`${chartNames[kind]} added`);
-                    }}>{chartNames[kind]}</Item>
+                      setReport(`${chartKinds.names[kind]} added`);
+                    }}>{chartKinds.names[kind]}</Item>
                 </Entry>)}
             </Menu>
           </>}
@@ -94,8 +84,8 @@ export const Workspace: FC<Props> = ({product}) => {
         onDragOver={travel}
         onDrop={event => event.preventDefault()}
         onDragEnd={release}>
-        <Link className="doorway focal" to={doorway(kind)} onKeyDown={keys(at)}>
-          <span className="off-screen">{`${chartNames[kind]} tutorial`}</span>
+        <Link className="doorway focal" to={chartKinds.address(kind)} onKeyDown={keys(at)}>
+          <span className="off-screen">{`${chartKinds.names[kind]} tutorial`}</span>
         </Link>
         {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
         {chartKinds.match(kind, {
