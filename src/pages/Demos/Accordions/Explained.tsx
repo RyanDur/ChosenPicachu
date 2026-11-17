@@ -21,6 +21,7 @@ import {foldInput} from './fold-input';
 import {looks} from './looks';
 import {accordionParts} from './part-pages';
 import {PartListing} from './PartListing';
+import {RemembersTheFoldLink} from './RemembersTheFoldLink';
 import '../Runs.css';
 import './Explained.css';
 import './PartDepth.css';
@@ -134,8 +135,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         <h3 id="max-height-guess-heading" className="run-title sub-title bold">{accordionParts.titleOf('max-height-guess-heading')}</h3>
         <p className="paragraph">When the height isn’t known ahead of time, most of us slid a fold open with a guess. A transition is CSS
           moving a property from its old value to its new one over a set time. It can move a height to a number but not
-          to auto, the height the text needs, so we moved the
-          panel’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead,
+          to auto, the height the text needs, so we moved <RemembersTheFoldLink>the
+            panel</RemembersTheFoldLink>’s <Mdn path="Web/CSS/max-height">max-height</Mdn> instead,
           from 0 to a number taller than any fold would need, such as 1000px. The panel stopped at its own text, so
           nothing scrolled. The cost was the timing. The transition spent its whole time crossing the guess, so a short
           fold opened in a rush and then sat still, and on closing it waited, unmoving, until the guess fell to its
@@ -161,12 +162,13 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
       <ol className={looks.runs}>
         <li className="run">
           <p className="paragraph">This build uses details and summary, the two elements from the first accordion. Each
-            piece of the {input} build has a native
+            piece of <RemembersTheFoldLink>the {input} build</RemembersTheFoldLink> has a native
             piece in its place. Summary is the bar and the control at once, so nothing has to tie a label to a
             hidden {input}. Details remembers whether it is open, so there is no {input} to hide and no rule that reads
             it. The keyboard comes with it, and a screen reader announces the bar as a disclosure, collapsed or
             expanded.
-          {foldType === 'inclusive' && ' With nothing more, each fold opens and closes on its own, as the checkbox build’s folds do.'}
+          {foldType === 'inclusive' && <> With nothing more, each fold opens and closes on its own,
+            as <RemembersTheFoldLink>the checkbox build’s folds</RemembersTheFoldLink> do.</>}
           {foldType === 'exclusive' && ' Every details here shares a name, as the first accordion’s details do above. Pressing the open one closes it, so the list needs no Close bar.'} This build replaces the
             three old ways: the max-height guess, the height measured by script, and the known height.</p>
           <Snippet label="TS" lines={platform.sample}/>
@@ -178,7 +180,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
             <summary id="details-depth" className="fold-bar bold">How details works</summary>
             <ol className="runs">
               <li className="run">
-                <p className="paragraph">The bar is the same flex row as the label in the {input} build, now on
+                <p className="paragraph">The bar is the same flex row as the label
+                  in <RemembersTheFoldLink>the {input} build</RemembersTheFoldLink>, now on
                   summary. Its classes are the site’s own: <code className="monospaced">inverse-filled</code> for its
                   colors, <code className="monospaced">attentive</code> for
                   the approach color, the ring and a glow while it is pressed,
@@ -196,7 +199,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 <p className="paragraph">Summary also draws its own arrow, called a marker, where the {input} build
                   drew one from two borders. The browser gives a summary the display of a list item, and draws a marker
                   only on a list item. This bar’s display is flex, a row, so the browser draws no marker. The bar draws
-                  the same arrow as the known-height build’s bars in its place.</p>
+                  the same arrow as <RemembersTheFoldLink>the known-height build’s bars</RemembersTheFoldLink> in its
+                  place.</p>
               </li>
               <li className="run">
                 <p className="paragraph">The arrow points right while the fold is closed. When the fold opens, the

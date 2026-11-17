@@ -270,6 +270,43 @@ describe('the name that makes the first accordion exclusive', () => {
   });
 });
 
+describe('the tab’s words on the build part 2 shows', () => {
+  const build = '?type=inclusive&style=drawer';
+  const remembers = demosAt('accordions/a-box-remembers-the-fold', build);
+
+  test('should link the panel the max-height guess moves to part 2’s page, with the fold choices carried', async () => {
+    render(<TestApp at={demosAt('accordions', build)}/>);
+
+    const oldWay = await explanation.part(parts[0]);
+
+    expect(explanation.linkNamed(oldWay, 'the panel')).toHaveAttribute('href', remembers);
+  });
+
+  test('should link the checkbox build, at its first use in what the platform gives and in How details works, to part 2’s page', async () => {
+    render(<TestApp at={demosAt('accordions', build)}/>);
+
+    const platformWay = await explanation.part(parts[1]);
+
+    expect(explanation.linksNamed(platformWay, 'the checkbox build').map(link => link.getAttribute('href'))).toEqual([remembers, remembers]);
+  });
+
+  test('should, with inclusive chosen, link the checkbox build’s folds to part 2’s page', async () => {
+    render(<TestApp at={demosAt('accordions', build)}/>);
+
+    const platformWay = await explanation.part(parts[1]);
+
+    expect(explanation.linkNamed(platformWay, 'the checkbox build’s folds')).toHaveAttribute('href', remembers);
+  });
+
+  test('should link the known-height build’s bars to part 2’s page', async () => {
+    render(<TestApp at={demosAt('accordions', build)}/>);
+
+    const platformWay = await explanation.part(parts[1]);
+
+    expect(explanation.linkNamed(platformWay, 'the known-height build’s bars')).toHaveAttribute('href', remembers);
+  });
+});
+
 describe('the depth of each part', () => {
 
   test('should show, with exclusive chosen, what the closed fold "How details works" holds once its bar is pressed', async () => {
