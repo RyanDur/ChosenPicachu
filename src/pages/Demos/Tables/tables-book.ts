@@ -1,23 +1,28 @@
 import {Maybe, maybe} from '@ryandur/sand';
-import {PartPlace, tableParts} from './part-pages';
-import {tableTutorials} from './tutorial-pages';
+import {PartPlace, TablePart, tableParts} from './part-pages';
+import {Tutorial, tableTutorials} from './tutorial-pages';
 
-const signposts: PartPlace[] = [
-  ...tableParts.inOrder.map(tableParts.placeOf),
-  ...tableTutorials.all().map(tableTutorials.placeOf)
+export type BookPart = TablePart | Tutorial;
+
+type Signposted = {part: BookPart; place: PartPlace};
+
+const inOrder: readonly Signposted[] = [
+  ...tableParts.inOrder.map(part => ({part, place: tableParts.placeOf(part)})),
+  ...tableTutorials.all().map(tutorial => ({part: tutorial, place: tableTutorials.placeOf(tutorial)}))
 ];
+
+const signposts: PartPlace[] = inOrder.map(({place}) => place);
 
 const minutes = tableParts.inOrder.reduce((sum, part) => sum + tableParts.told(part).minutes, 0) +
   tableTutorials.all().reduce((sum, tutorial) => sum + tableTutorials.minutesOf(tutorial), 0);
 
-const besides = (address: string, step: number): Maybe<PartPlace> =>
-  maybe(signposts.find(({to}) => to === address))
-    .mBind(here => maybe(signposts[signposts.indexOf(here) + step]));
+const besides = (part: BookPart, step: number): Maybe<PartPlace> =>
+  maybe(signposts[inOrder.findIndex(signposted => signposted.part === part) + step]);
 
 export const tablesBook = {
   signposts,
   minutes,
   inTheBook: signposts.length,
-  previousOf: (address: string): Maybe<PartPlace> => besides(address, -1),
-  nextOf: (address: string): Maybe<PartPlace> => besides(address, 1)
+  previousOf: (part: BookPart): Maybe<PartPlace> => besides(part, -1),
+  nextOf: (part: BookPart): Maybe<PartPlace> => besides(part, 1)
 };

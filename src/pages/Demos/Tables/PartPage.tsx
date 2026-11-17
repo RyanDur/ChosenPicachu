@@ -32,6 +32,6 @@ export const PartPage: FC<{part: TablePart}> = ({part}) => {
     <WorldNote/>
     <Part headedBy={titled}/>
     <TablesMap/>
-    <PartFoot address={tableParts.addressOf(part)}/>
+    <PartFoot part={part}/>
   </article>;
 };

@@ -22,9 +22,9 @@ const book = [
   'the-live-table-and-the-store'
 ] as const satisfies readonly TablePart[];
 
-type BookPart = typeof book[number];
+type BuildPart = typeof book[number];
 
-const titles: Record<BookPart, string> = {
+const titles: Record<BuildPart, string> = {
   'the-need-and-its-clues': needHeading.title,
   'the-sketch': designHeading.title,
   'the-slices': storiesHeading.title,
@@ -32,7 +32,7 @@ const titles: Record<BookPart, string> = {
   'the-live-table-and-the-store': 'Make the table live'
 };
 
-const minutes: Record<BookPart, number> = {
+const minutes: Record<BuildPart, number> = {
   'the-need-and-its-clues': 1,
   'the-sketch': 1,
   'the-slices': 2,
