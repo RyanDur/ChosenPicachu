@@ -95,6 +95,35 @@
           }
         },
         {
+          "matchingUrlPattern": "/ChosenPicachu/demos/accordions/the\\-max\\-height\\-guess/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 5120
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 185344
+              }
+            ]
+          }
+        },
+        {
           "matchingUrlPattern": "/ChosenPicachu/demos/drag\\-and\\-drop/$",
           "assertions": {
             "categories:accessibility": [

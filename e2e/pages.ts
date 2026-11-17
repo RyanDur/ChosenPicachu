@@ -20,6 +20,7 @@ export const pages: readonly SitePage[] = [
   {name: 'demos', path: 'demos/accordions/', ready: 'navigation', budgeted: true},
   {name: 'demos, inclusive folds', path: 'demos/accordions/?type=inclusive', ready: 'navigation'},
   {name: 'a box remembers the fold', path: 'demos/accordions/a-box-remembers-the-fold/', ready: 'navigation', budgeted: true},
+  {name: 'the max-height guess', path: 'demos/accordions/the-max-height-guess/', ready: 'navigation', budgeted: true},
   {name: 'the measured height', path: 'demos/accordions/the-measured-height/', ready: 'navigation', budgeted: true},
   {name: 'z-index', path: 'demos/z-index/', ready: 'navigation', budgeted: true},
   {name: 'why Third is on top', path: 'demos/z-index/why-third-is-on-top/', ready: 'navigation', budgeted: true},
