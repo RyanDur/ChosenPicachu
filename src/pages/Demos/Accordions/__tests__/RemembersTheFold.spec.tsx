@@ -105,12 +105,13 @@ describe('a box remembers the fold, on its own page', () => {
 });
 
 describe('the box that remembers the fold, chosen by type', () => {
-  test('should, with inclusive chosen, link the run on the box to the plain fold’s HTML on GitHub', async () => {
+  test('should, with inclusive chosen, show a sample beside the run on the box that links no file on GitHub', async () => {
     render(<TestApp at={demosAt(remembers, '?type=inclusive')}/>);
 
     const part = await explanation.part(title);
 
-    expect(explanation.sourcesBeside(part, /To open and close a fold/)).toEqual(['Plain/fold.html on GitHub']);
+    expect(explanation.codeBeside(part, /To open and close a fold/)).toBeInTheDocument();
+    expect(explanation.sourcesBeside(part, /To open and close a fold/)).toEqual([]);
   });
 
   test('should, with exclusive chosen, show a sample beside the run on the box that links no file on GitHub', async () => {

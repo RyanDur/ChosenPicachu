@@ -15,7 +15,6 @@ import {looks} from './looks';
 import {TabPartLink} from './TabPartLink';
 import exclusiveAccordionSource from './ExclusiveAccordion.tsx?sample';
 import inclusiveAccordionSource from './InclusiveAccordion.tsx?sample';
-import foldHtmlSource from './Plain/fold.html?sample';
 import accordionsCss from './Accordions.css?sample';
 import oldWayMotionCss from './OldWayMotion.css?sample';
 import placementCss from '../../../styles/placement.css?sample';
@@ -24,15 +23,22 @@ import drawingCss from '../../../styles/drawing.css?sample';
 import '../Runs.css';
 import './PartDepth.css';
 
-const radioFold = [
+const foldOf = (input: 'checkbox' | 'radio', typed: string): Line[] => [
   lines.plain('<li class="fold">'),
-  lines.plain('  <input id="measured-fold-0-radio" class="info-toggle off-screen" type="radio" name="measured-group">'),
-  lines.plain('  <label id="measured-fold-0-radio-label" class="info-label" for="measured-fold-0-radio">measured</label>'),
-  lines.plain('  <section class="info-measured" aria-labelledby="measured-fold-0-radio-label">'),
-  lines.plain('    <p class="info-paragraph">…</p>'),
-  lines.plain('  </section>'),
+  lines.plain(`  <input id="fold-0-${input}" class="info-toggle off-screen" ${typed}>`),
+  lines.plain(`  <label id="fold-0-${input}-label" class="info-label" for="fold-0-${input}">…</label>`),
+  lines.plain('  <div class="info">'),
+  lines.plain(`    <section class="info-text" aria-labelledby="fold-0-${input}-label">`),
+  lines.plain('      <p class="info-paragraph">…</p>'),
+  lines.plain('    </section>'),
+  lines.plain('  </div>'),
   lines.plain('</li>')
 ];
+
+const plainFolds: Record<FoldType, Line[]> = {
+  inclusive: foldOf('checkbox', 'type="checkbox"'),
+  exclusive: foldOf('radio', 'type="radio" name="group"')
+};
 
 type Build = {
   readonly Accordion: FC<AccordionProps>;
@@ -84,7 +90,7 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
             label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the radio’s id. That link makes
             a press anywhere on the label press the radio. Each id includes the fold’s place in the list, so no two
             radios share one.</p>}
-        <Snippet label="HTML" lines={foldType === 'inclusive' ? carve.between(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
+        <Snippet label="HTML" lines={plainFolds[foldType]}/>
       </li>
       <li className="run">
         <p className="paragraph">Now a rule has to match on whether the {input} is
