@@ -93,8 +93,8 @@ test('a reader who follows Let’s build this feature with motion allowed lands 
   await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
 });
 
-test('on the z-index tab, a reader chooses an entrance and raises a banner beside the dials', async ({page}) => {
-  await page.goto('demos/z-index/');
+test('on let’s build this feature’s page, a reader chooses an entrance and raises a banner beside the dials', async ({page}) => {
+  await page.goto('demos/z-index/lets-build-this-feature/');
   await pillSwitch(page, 'entrance').choose('Left');
 
   await zIndexTab(page).raisesABanner();
@@ -106,7 +106,7 @@ const lessMotionEntrance = 'If your system asks for less motion, a new banner ap
 
 test('the entrance reads the chosen side, and reads that a new banner appears in place once the reader asks for less motion', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
-  await page.goto('demos/z-index/?enter=right');
+  await page.goto('demos/z-index/lets-build-this-feature/?enter=right');
   const {reading} = dialRow(page, 'entrance');
   await reading.scrollIntoViewIfNeeded();
 

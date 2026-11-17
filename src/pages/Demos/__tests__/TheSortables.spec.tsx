@@ -316,13 +316,22 @@ describe('the links to other tabs', () => {
       ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['dials', `${Paths.demos}accordions/`],
-      ['reducer', `${Paths.demos}z-index/`],
-      ['context', `${Paths.demos}z-index/`],
-      ['dispatch', `${Paths.demos}z-index/`],
       ['custom property', `${Paths.demos}accordions/`],
       ['Tables demo', `${Paths.demos}tables/`]
+    ]);
+  });
+
+  test('should link each term let’s build this feature defines, and the clues it names, to that part’s page', async () => {
+    render(<TestApp at={demosAt('drag-and-drop')}/>);
+
+    const tab = await demoTabs.arrivedOn('Drag sort');
+
+    expect(demoPage.linksToPageIn(tab, `${Paths.demos}z-index/lets-build-this-feature/`)).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/lets-build-this-feature/`],
+      ['reducer', `${Paths.demos}z-index/lets-build-this-feature/`],
+      ['context', `${Paths.demos}z-index/lets-build-this-feature/`],
+      ['dispatch', `${Paths.demos}z-index/lets-build-this-feature/`]
     ]);
   });
 

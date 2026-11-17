@@ -91,8 +91,8 @@ const WorkspaceStory: FC = () =>
             it isn’t. <code className="monospaced">boundsOf</code> answers with a Maybe, a value that may be missing, and <code className="monospaced">map</code> uses the value only when
             there is one. With nothing, <code className="monospaced">travel</code> neither compares the pointer with the mark
             nor swaps.</Says>
-          <Says><code className="monospaced">swap</code> <TabLink to={DemoTopics.zIndex}>dispatches</TabLink> <code className="monospaced">swapped</code>. To dispatch is to send
-            a <TabLink to={DemoTopics.zIndex}>reducer</TabLink> an action, an object that names what happened, and a
+          <Says><code className="monospaced">swap</code> <PartTermLink part="lets-build-this-feature">dispatches</PartTermLink> <code className="monospaced">swapped</code>. To dispatch is to send
+            a <PartTermLink part="lets-build-this-feature">reducer</PartTermLink> an action, an object that names what happened, and a
             reducer is a function that takes the state and an action and returns the next state. The chart’s reducer,
             in <code className="monospaced">chart-travel.ts</code>, answers <code className="monospaced">swapped</code> by
             setting the mark again to where the pointer is, noting which way the neighbor slides, and holding the chart

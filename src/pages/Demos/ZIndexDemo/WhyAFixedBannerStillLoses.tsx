@@ -1,7 +1,6 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsOnceHydrated} from '@navigation/search-params';
-import {demoTab, DemoTopics} from '@pages/Demos';
 import {carve, lines, Snippet, storyKeys} from '../Recipe';
 import {BannerTrap} from './BannerTrap';
 import {topLayerStory} from './top-layer-story';
@@ -46,7 +45,7 @@ export const WhyAFixedBannerStillLoses: FC = () => {
       </li>
       <li className="run">
         <p className="paragraph">To build this banner yourself, go to <Link className="signpost" to={{
-          pathname: demoTab.address(DemoTopics.zIndex),
+          pathname: zIndexParts.addressOf('lets-build-this-feature'),
           search: `?${storyKeys.openedIn(searchParams, topLayerStory)}`,
           hash: storyKeys.anchorOf(topLayerStory)
         }}><cite>{zIndexParts.titleOf('build-this-feature')}</cite></Link>. It opens at the step where the panel is

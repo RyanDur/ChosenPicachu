@@ -10,6 +10,8 @@ import {siteBanners, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 beforeEach(() => seed('top-layer'));
 
+const buildThisFeature = 'z-index/lets-build-this-feature';
+
 describe('the top layer', () => {
   test('the z-index tab opens on its six parts, in order, in the heading outline', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
@@ -19,7 +21,7 @@ describe('the top layer', () => {
 
     expect(explanation.partTitles(tab).slice(0, 6)).toEqual([
       'Why Third is on top', 'Why 9999 still loses', 'What else forms a stacking context', 'Why the popover wins',
-      'Why a fixed banner still loses', 'let’s build this feature'
+      'Why a fixed banner still loses', 'Let’s build this feature'
     ]);
   });
 
@@ -42,15 +44,13 @@ describe('the top layer', () => {
   });
 
   test('should head a story The user can have multiple banners', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
+    render(<TestApp at={demosAt(buildThisFeature)}/>);
 
     expect(await demoPage.findTitle('The user can have multiple banners')).toBeVisible();
   });
 
   test('the dials explain themselves and say their url', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
+    render(<TestApp at={demosAt(buildThisFeature)}/>);
     const controls = await zIndexTab.findBannerControls();
 
     await zIndexTab.choose(controls, 'side', 'Bottom');
@@ -63,8 +63,7 @@ describe('the top layer', () => {
   });
 
   test('the tutorial follows the dials', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
+    render(<TestApp at={demosAt(buildThisFeature)}/>);
     const controls = await zIndexTab.findBannerControls();
 
     const many = recipeFolds.story(await zIndexTab.findFeatureStories(), 'The user can have multiple banners');
@@ -95,8 +94,7 @@ describe('the top layer', () => {
 
 describe('the banner tutorial’s walked-through story', () => {
   const arriveAtTheTutorial = async (): Promise<HTMLElement> => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
+    render(<TestApp at={demosAt(buildThisFeature)}/>);
     return zIndexTab.findFeatureStories();
   };
 
@@ -120,8 +118,7 @@ describe('the banner tutorial’s first story', () => {
   const story = 'The user sees the news over the page';
 
   test('should link the first story up to Why 9999 still loses, Why a fixed banner still loses and What else forms a stacking context', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
+    render(<TestApp at={demosAt(buildThisFeature)}/>);
     const news = recipeFolds.story(await zIndexTab.findFeatureStories(), story);
 
     expect(explanation.linkNamed(news, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses'));
@@ -130,8 +127,7 @@ describe('the banner tutorial’s first story', () => {
   });
 
   test('should head each step with what happens', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
+    render(<TestApp at={demosAt(buildThisFeature)}/>);
     const news = await recipeFolds.press(await zIndexTab.findFeatureStories(), story);
 
     expect(recipeFolds.stepTitles(news))
@@ -144,7 +140,7 @@ describe('the banner tutorial’s second story', () => {
   const story = 'The user can have multiple banners';
 
   test('should head each step with what happens', async () => {
-    render(<TestApp at={demosAt('z-index', '?stack=left')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?stack=left')}/>);
     const many = await recipeFolds.press(await zIndexTab.findFeatureStories(), story);
 
     expect(recipeFolds.stepTitles(many)).toEqual([
@@ -171,104 +167,113 @@ describe('the z-index tab’s introduction', () => {
 
 describe('the banner dials’ readings', () => {
   test('should read, with side=top chosen, “The panel holds to the window’s top edge.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?side=top')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?side=top')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'side')).toHaveTextContent('The panel holds to the window’s top edge.');
   });
 
   test('should read, with side=middle chosen, “The panel sits in the window’s middle.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?side=middle')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?side=middle')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'side')).toHaveTextContent('The panel sits in the window’s middle.');
   });
 
   test('should read, with side=bottom chosen, “The panel holds to the window’s bottom edge.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?side=bottom')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?side=bottom')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'side')).toHaveTextContent('The panel holds to the window’s bottom edge.');
   });
 
   test('should read, with align=left chosen, “The panel holds to the window’s left edge.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?align=left')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?align=left')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'align')).toHaveTextContent('The panel holds to the window’s left edge.');
   });
 
   test('should read, with align=center chosen, “The browser centers the panel across the window.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?align=center')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?align=center')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'align')).toHaveTextContent('The browser centers the panel across the window.');
   });
 
   test('should read, with align=right chosen, “The panel holds to the window’s right edge.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?align=right')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?align=right')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'align')).toHaveTextContent('The panel holds to the window’s right edge.');
   });
 
   test('should read, with enter=above chosen, “A new banner slides in from above the window’s top edge.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?enter=above')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?enter=above')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'entrance')).toHaveTextContent('A new banner slides in from above the window’s top edge.');
   });
 
   test('should read, with enter=below chosen, “A new banner slides in from below the window’s bottom edge.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?enter=below')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?enter=below')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'entrance')).toHaveTextContent('A new banner slides in from below the window’s bottom edge.');
   });
 
   test('should read, with enter=left chosen, “A new banner slides in from past the window’s left edge.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?enter=left')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?enter=left')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'entrance')).toHaveTextContent('A new banner slides in from past the window’s left edge.');
   });
 
   test('should read, with enter=right chosen, “A new banner slides in from past the window’s right edge.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?enter=right')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?enter=right')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'entrance')).toHaveTextContent('A new banner slides in from past the window’s right edge.');
   });
 
   test('should read, with stack=down chosen, “Each new banner goes below the ones already up.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?stack=down')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?stack=down')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'stack')).toHaveTextContent('Each new banner goes below the ones already up.');
   });
 
   test('should read, with stack=up chosen, “Each new banner goes above the ones already up.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?stack=up')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?stack=up')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'stack')).toHaveTextContent('Each new banner goes above the ones already up.');
   });
 
   test('should read, with stack=left chosen, “The stack grows leftward, with the newest banner at the left.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?stack=left')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?stack=left')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'stack')).toHaveTextContent('The stack grows leftward, with the newest banner at the left.');
   });
 
   test('should read, with stack=right chosen, “The stack grows rightward, with the newest banner at the right.”', async () => {
-    render(<TestApp at={demosAt('z-index', '?stack=right')}/>);
+    render(<TestApp at={demosAt(buildThisFeature, '?stack=right')}/>);
 
     expect(zIndexTab.readingOf(await zIndexTab.findBannerControls(), 'stack')).toHaveTextContent('The stack grows rightward, with the newest banner at the right.');
   });
 });
 
 describe('the links to other tabs', () => {
-  test('should link the accordions tab it names, and the dials it glosses, to that tab', async () => {
+  test('should link the accordions tab it names to that tab', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
     const tab = await demoTabs.arrivedOn('Z-index');
 
     expect(demoPage.linksToTabsIn(tab)).toEqual([
-      ['accordions tab', `${Paths.demos}accordions/`],
+      ['accordions tab', `${Paths.demos}accordions/`]
+    ]);
+  });
+
+  test('should link, on let’s build this feature’s page, the dials it glosses to the tab that defines them', async () => {
+    render(<TestApp at={demosAt(buildThisFeature)}/>);
+
+    const tab = await demoTabs.arrivedOn('Z-index');
+
+    expect(demoPage.linksToTabsIn(tab)).toEqual([
       ['dials', `${Paths.demos}accordions/`]
     ]);
   });
 
   test('should link custom property, where the banner’s steps gloss it, to the accordions part that defines it', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(buildThisFeature)}/>);
 
     const tab = await demoTabs.arrivedOn('Z-index');
 

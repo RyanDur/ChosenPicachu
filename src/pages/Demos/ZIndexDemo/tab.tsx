@@ -2,7 +2,6 @@ import {FC, ReactNode, useEffect} from 'react';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {useControls} from '../Controls';
 import {PartListing} from './PartListing';
-import {TopLayerTutorial} from './Tutorial';
 import {ZIndexIntroduction} from './Introduction';
 import {NaturalZIndex} from './NaturalZIndex';
 import {PartPage} from './PartPage';
@@ -13,6 +12,7 @@ import {Why9999StillLoses} from './Why9999StillLoses';
 import {WhatElseFormsAStackingContext} from './WhatElseFormsAStackingContext';
 import {WhyThePopoverWins} from './WhyThePopoverWins';
 import {WhyAFixedBannerStillLoses} from './WhyAFixedBannerStillLoses';
+import {LetsBuildThisFeature} from './LetsBuildThisFeature';
 
 const usePlacingTheBanners = (): void => {
   const {side, align, enter, stack} = useControls();
@@ -24,17 +24,19 @@ const usePlacingTheBanners = (): void => {
 };
 
 const pagesOfParts: Record<ZIndexPart, ReactNode> = {
-  'why-third-is-on-top': <WhyThirdIsOnTop/>,
-  'why-9999-still-loses': <Why9999StillLoses/>,
-  'what-else-forms-a-stacking-context': <WhatElseFormsAStackingContext/>,
-  'why-the-popover-wins': <WhyThePopoverWins/>,
-  'why-a-fixed-banner-still-loses': <WhyAFixedBannerStillLoses/>
+  'why-third-is-on-top': <PartPage part="why-third-is-on-top"><WhyThirdIsOnTop/></PartPage>,
+  'why-9999-still-loses': <PartPage part="why-9999-still-loses"><Why9999StillLoses/></PartPage>,
+  'what-else-forms-a-stacking-context':
+    <PartPage part="what-else-forms-a-stacking-context"><WhatElseFormsAStackingContext/></PartPage>,
+  'why-the-popover-wins': <PartPage part="why-the-popover-wins"><WhyThePopoverWins/></PartPage>,
+  'why-a-fixed-banner-still-loses': <PartPage part="why-a-fixed-banner-still-loses"><WhyAFixedBannerStillLoses/></PartPage>,
+  'lets-build-this-feature': <PartPage part="lets-build-this-feature" className="tutorials"><LetsBuildThisFeature/></PartPage>
 };
 
 export const Room: FC = () => {
   usePlacingTheBanners();
 
-  return useShownPart().either(part => <PartPage part={part}>{pagesOfParts[part]}</PartPage>, () => <>
+  return useShownPart().either(part => pagesOfParts[part], () => <>
     <ZIndexIntroduction/>
     <NaturalZIndex className="card rounded-corners lifted padded"/>
     <PartListing part="why-third-is-on-top"/>
@@ -42,6 +44,6 @@ export const Room: FC = () => {
     <PartListing part="what-else-forms-a-stacking-context"/>
     <PartListing part="why-the-popover-wins"/>
     <PartListing part="why-a-fixed-banner-still-loses"/>
-    <TopLayerTutorial/>
+    <PartListing part="lets-build-this-feature"/>
   </>);
 };

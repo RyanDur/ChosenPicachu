@@ -53,25 +53,25 @@ for (const {reader, device} of [
     });
 
     test('every side pill on the z-index demo is chosen by a finger that lands just off its middle', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto('demos/z-index/lets-build-this-feature/');
 
       expect(await pillsAFingerCannotChoose(page, 'side')).toEqual([]);
     });
 
     test('every align pill on the z-index demo is chosen by a finger that lands just off its middle', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto('demos/z-index/lets-build-this-feature/');
 
       expect(await pillsAFingerCannotChoose(page, 'align')).toEqual([]);
     });
 
     test('every entrance pill on the z-index demo is chosen by a finger that lands just off its middle', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto('demos/z-index/lets-build-this-feature/');
 
       expect(await pillsAFingerCannotChoose(page, 'entrance')).toEqual([]);
     });
 
     test('every stack pill on the z-index demo is chosen by a finger that lands just off its middle', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto('demos/z-index/lets-build-this-feature/');
 
       expect(await pillsAFingerCannotChoose(page, 'stack')).toEqual([]);
     });

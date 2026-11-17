@@ -5,7 +5,7 @@ import {readingOf} from '@pages/Demos/Controls/__test_support/reading';
 const findExpand = (): Promise<HTMLElement> => screen.findByRole('button', {name: 'Expand', expanded: false});
 
 export const zIndexTab = {
-  findFeatureStories: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'let’s build this feature'}),
+  findFeatureStories: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'Let’s build this feature'}),
   fragmentOf: (heading: string): string => `#${screen.getByRole('heading', {name: heading}).id}`,
   follow: async (holder: HTMLElement, name: string): Promise<void> => userEvent.click(within(holder).getByRole('link', {name})),
   findBannerControls: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'banner controls'}),
