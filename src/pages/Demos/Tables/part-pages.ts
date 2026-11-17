@@ -55,7 +55,9 @@ type Onward = {
   heading: string;
 };
 
-const all: readonly TablePart[] = ['the-need-and-its-clues'];
+const isListed = (part: BookPart): part is TablePart => Object.keys(listings).includes(part);
+
+const all: readonly TablePart[] = book.filter(isListed);
 
 const addressOf = (part: TablePart): string => `${demoTab.address(DemoTopics.tables)}${part}/`;
 
