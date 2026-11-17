@@ -17,7 +17,7 @@ describe('the menu built the new way', () => {
 
 describe('why the popover wins', () => {
   test('should link Why 9999 still loses to its page, where its menus are, with the raised card carried', async () => {
-    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins', '?raised=second')}/>);
 
     const part = await explanation.part('Why the popover wins');
     const run = explanation.saying(part, /^The top-layer Sort by/);
@@ -26,7 +26,7 @@ describe('why the popover wins', () => {
   });
 
   test('should link the trap the toggle lets speak to its page, with the raised card carried', async () => {
-    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins', '?raised=second')}/>);
 
     const part = await explanation.part('Why the popover wins');
     const run = explanation.saying(part, /^Script adds two things/);
@@ -35,27 +35,18 @@ describe('why the popover wins', () => {
   });
 
   test('should link the run on the menu’s placement to card one’s list in What else forms a stacking context', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
 
     const part = await explanation.part('Why the popover wins');
     const run = explanation.saying(part, /The menu’s own style sheet places it/);
 
     expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context'));
   });
-
-  test('should link the run on the top layer to the page whose cards it means, with the raised card carried', async () => {
-    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
-
-    const part = await explanation.part('Why the popover wins');
-    const run = explanation.saying(part, /^The top layer is not inside any stacking context/);
-
-    expect(explanation.linkNamed(run, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
-  });
 });
 
 describe('why the popover wins, on a term part one defines', () => {
   test('should link rule, at its first use, to part one’s page with the raised card carried', async () => {
-    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins', '?raised=second')}/>);
 
     const popover = await explanation.part('Why the popover wins');
 

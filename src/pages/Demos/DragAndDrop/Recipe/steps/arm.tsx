@@ -1,5 +1,4 @@
-import {TabLink} from '@pages/Demos/TabLink';
-import {DemoTopics} from '@pages/Demos';
+import {PartTermLink} from '@pages/Demos/ZIndexDemo';
 import {FC} from 'react';
 import {Codes, Mdn, Says, Snippet, Step, StepHeading, Want, Words, carve, Sample} from '../../../Recipe';
 
@@ -11,7 +10,7 @@ export const ArmTheDrag: FC<{itemSource: Sample}> = ({itemSource}) =>
         and stops text selection inside it.</Want>
       <Says><code className="monospaced">draggable</code> is an attribute, a setting written on the element, and the
         grip turns it on. An event is the browser telling the page that something happened.
-        The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says more about events. On pointerdown, the event for
+        The <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says more about events. On pointerdown, the event for
         a mouse button, a pen or a finger pressing down, the list records the pressed item as gripped, and the card
         renders <code className="monospaced">draggable</code> only while it is the gripped one.</Says>
       <Says>Then the browser fires <Mdn path="Web/API/HTMLElement/dragstart_event">dragstart</Mdn>, the event for a drag

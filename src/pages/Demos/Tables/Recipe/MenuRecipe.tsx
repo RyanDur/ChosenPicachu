@@ -1,4 +1,5 @@
 import {TabLink} from '@pages/Demos/TabLink';
+import {PartTermLink} from '@pages/Demos/ZIndexDemo';
 import {DemoTopics} from '@pages/Demos';
 import {FC} from 'react';
 import {useControls} from '../../Controls';
@@ -72,7 +73,7 @@ const RankStory: FC = () => {
     <TheImplementation react="Builds" vanilla="Frame/table/menus.ts"/>
     <Tell>I could build the popup from divs, but then I would have to build focus, dismissal and
       stacking myself. So the chooser uses the platform’s popover, the one
-      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> builds its menu on, and the first steps below collect
+      the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> builds its menu on, and the first steps below collect
       what that decision gives. Sorting state has its own trap: the glyph, the attribute and the
       ranked rows each want their own copy of which column is chosen, and copies
       drift.</Tell>
@@ -111,7 +112,7 @@ const RankStory: FC = () => {
             z-index you have ever lost to; light-dismiss on outside click or Escape; one auto
             popover open at a time.</Says>
           <Says>In the React world the sample is built from Menu, Entry and Item. Each is a component, a function that
-            writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says, and each
+            writes a piece of the page, as the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says, and each
             writes one element.</Says>
           {world === 'react'
             ? <Says>Item gives its button the site’s shared classes, looks that live in the site’s shared style sheet

@@ -93,13 +93,13 @@ describe('a box remembers the fold, on its own page', () => {
       .toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#fold-choices-heading`);
   });
 
-  test('should link each term it glosses, and each tab it names, to that tab', async () => {
+  test('should link React to the z-index part that defines it', async () => {
     render(<TestApp at={demosAt(remembers)}/>);
 
     const page = await demoTabs.arrivedOn('Accordions');
 
-    expect(demoPage.linksToTabsIn(page)).toEqual([
-      ['React', `${Paths.demos}z-index/`]
+    expect(demoPage.linksToPageIn(page, `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
+      ['React', `${Paths.demos}z-index/why-the-popover-wins/`]
     ]);
   });
 });

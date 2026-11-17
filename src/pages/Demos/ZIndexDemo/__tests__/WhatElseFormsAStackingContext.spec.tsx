@@ -39,12 +39,12 @@ describe('what else forms a stacking context, on its own page', () => {
     expect(explanation.linkNamed(part, 'The menu part’s card')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?wears=opacity'));
   });
 
-  test('should lead back to part two’s page and on to part four on the tab, by number and title, with the wear carried', async () => {
+  test('should lead back to part two’s page and on to part four’s page, by number and title, with the wear carried', async () => {
     render(<TestApp at={demosAt(whatElseForms, '?wears=opacity')}/>);
 
     expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
       ['Previous: 2. Why 9999 still loses', demosAt('z-index/why-9999-still-loses', '?wears=opacity')],
-      ['Next: 4. Why the popover wins', `${demosAt('z-index', '?wears=opacity')}#popover-wins-heading`]
+      ['Next: 4. Why the popover wins', demosAt('z-index/why-the-popover-wins', '?wears=opacity')]
     ]);
   });
 

@@ -909,9 +909,7 @@ describe('the links to other tabs', () => {
       ['accordions tab', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['event', `${Paths.demos}z-index/`],
       ['dispatches', `${Paths.demos}z-index/`],
       ['reducer', `${Paths.demos}z-index/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`]
@@ -926,10 +924,6 @@ describe('the links to other tabs', () => {
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
       ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
@@ -943,9 +937,7 @@ describe('the links to other tabs', () => {
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
       ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
   });
@@ -960,8 +952,7 @@ describe('the links to other tabs', () => {
       ['accordions tab', `${Paths.demos}accordions/`],
       ['Maybe', `${Paths.demos}charts/`],
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['accordions tab', `${Paths.demos}accordions/`],
-      ['z-index tab', `${Paths.demos}z-index/`]
+      ['accordions tab', `${Paths.demos}accordions/`]
     ]);
   });
 
@@ -975,6 +966,53 @@ describe('the links to other tabs', () => {
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
+    ]);
+  });
+
+  test('should link each term the z-index part on the popover defines to that part’s page, on the tab', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    const tab = await demoTabs.arrivedOn('Charts');
+
+    expect(demoPage.linksToPageIn(tab, `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['event', `${Paths.demos}z-index/why-the-popover-wins/`]
+    ]);
+  });
+
+  test('should link each term the z-index part on the popover defines to that part’s page, on the price chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(demoPage.linksToPageIn(demoPage.wholePage(), `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`]
+    ]);
+  });
+
+  test('should link each term the z-index part on the popover defines to that part’s page, on the candles chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(demoPage.linksToPageIn(demoPage.wholePage(), `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`]
+    ]);
+  });
+
+  test('should link each term the z-index part on the popover defines to that part’s page, on the pressure chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('pressure')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(demoPage.linksToPageIn(demoPage.wholePage(), `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`]
     ]);
   });
 });

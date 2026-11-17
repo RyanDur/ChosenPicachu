@@ -307,13 +307,22 @@ describe('the links to other tabs', () => {
       ['z-index tab', `${Paths.demos}z-index/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['dials', `${Paths.demos}accordions/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['State', `${Paths.demos}z-index/`],
       ['reducer', `${Paths.demos}z-index/`],
       ['context', `${Paths.demos}z-index/`],
       ['dispatch', `${Paths.demos}z-index/`],
       ['custom property', `${Paths.demos}accordions/`],
       ['Tables demo', `${Paths.demos}tables/`]
+    ]);
+  });
+
+  test('should link each term the z-index part on the popover defines to that part’s page', async () => {
+    render(<TestApp at={demosAt('drag-and-drop')}/>);
+
+    const tab = await demoTabs.arrivedOn('Drag sort');
+
+    expect(demoPage.linksToPageIn(tab, `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['State', `${Paths.demos}z-index/why-the-popover-wins/`]
     ]);
   });
 });
