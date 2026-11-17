@@ -2,7 +2,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos/demo-topics';
 import {FC, ReactNode} from 'react';
 import {maybe} from '@ryandur/sand';
-import {needHeading} from './need-heading';
+import {needHeading} from '@pages/Demos/headings';
 
 type CluesProps = {
   quote: string;
