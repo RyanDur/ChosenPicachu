@@ -2,11 +2,13 @@ import {FC} from 'react';
 import {classNames} from '@components';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
-import {FoldType, useControls} from '../Controls';
+import {DialGroup, FoldType, useControls} from '../Controls';
 import {carve, Line, lines, Sample, Snippet} from '../Recipe';
 import {AccordionProps, Fold} from './accordion-props';
 import {ExclusiveMeasuredAccordion} from './ExclusiveMeasuredAccordion';
 import {InclusiveMeasuredAccordion} from './InclusiveMeasuredAccordion';
+import {FoldMotionDial} from './FoldMotionDial';
+import {FoldTypeDial} from './FoldTypeDial';
 import {foldInput} from './fold-input';
 import {looks} from './looks';
 import {accordionParts} from './part-pages';
@@ -49,6 +51,10 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
       checkbox and its label, and “<TabLink to={DemoTopics.accordions}
       heading="max-height-guess-heading">{accordionParts.titleOf('max-height-guess-heading')}</TabLink>”, which this part
       answers.</p>
+    <DialGroup>
+      <FoldTypeDial/>
+      <FoldMotionDial/>
+    </DialGroup>
     <figure className={looks.exhibit}>
       <PlainFold/>
       <figcaption className="caption">This fold is a separate page, placed inside this one, so the choices the address

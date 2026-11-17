@@ -59,6 +59,15 @@ describe('the measured height, on its own page', () => {
     expect(accordionsTab.buildsIn(measured)).toEqual(['Accordion using checkboxes and a measured height']);
   });
 
+  test('a reader who arrives with no fold type in the address can choose exclusive on the page, and gets the exclusive build', async () => {
+    render(<TestApp at={demosAt(measuredHeight)}/>);
+    const measured = await explanation.part('The measured height');
+
+    await accordionsTab.choose('fold type', 'Exclusive');
+
+    expect(accordionsTab.buildsIn(measured)).toEqual(['Accordion using a radio group and a measured height']);
+  });
+
   test('should link the run that tells the two layout effects to the React build’s source on GitHub', async () => {
     render(<TestApp at={demosAt(measuredHeight)}/>);
 
