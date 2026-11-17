@@ -18,11 +18,11 @@ import {artFields} from '@pages/Gallery/museums/artFields';
 const clevelandFields = ['id', 'title', 'creators', 'tombstone', 'images'].join();
 
 const sized = (image: Maybe<ClevelandImage>): string[] =>
-  image.mBind(({url, width}) => maybe(width, has).map(across => [`${url} ${across}w`])).orElse([]);
+  image.mBind(({url, width: given}) => maybe(given, has).map(width => [`${url} ${width}w`])).orElse([]);
 
 const srcSetOf = (record: ClevelandRecord): Maybe<string> => maybe(record.images)
   .map(({web, print}) => [...sized(maybe(web)), ...sized(maybe(print))].join(', '))
-  .mBind(sources => maybe(sources, has));
+  .mBind(srcSet => maybe(srcSet, has));
 
 const described = (record: ClevelandRecord): string[] =>
   maybe(record.creators).orElse([]).map(({description}) => description).filter(has);
