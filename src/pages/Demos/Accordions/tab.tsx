@@ -1,6 +1,8 @@
 import {FC} from 'react';
 import {seeded} from '@components/fibs';
 import {AccordionsExplained} from './Explained';
+import {PartPage} from './PartPage';
+import {useShownPart} from './useShownPart';
 
 type Draws = ReturnType<typeof seeded>;
 
@@ -18,4 +20,6 @@ const foldLists = {
   platform: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)}
 };
 
-export const Room: FC = () => <AccordionsExplained foldLists={foldLists}/>;
+export const Room: FC = () => useShownPart().either(
+  part => <PartPage part={part} folds={foldLists.measured}/>,
+  () => <AccordionsExplained foldLists={foldLists}/>);

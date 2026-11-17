@@ -12,6 +12,7 @@ describe('the pages drawn into the build', () => {
   test.each([
     ...Object.values(Paths).filter(/** @param {string} path */ path => path.startsWith('/') && not(path.includes(':'))),
     ...Object.values(DemoTopics).map(demoTab.address),
+    `${Paths.demos}accordions/the-measured-height/`,
     ...chartKinds.all.map(kind => `${Paths.demos}charts/${kind}/`),
     ...concerns.inOrder.map(practiceAddress.of)
   ])('include %s', address => {

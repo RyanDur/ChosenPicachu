@@ -1,1 +1,1 @@
-export {};
+export {accordionParts} from './part-pages';

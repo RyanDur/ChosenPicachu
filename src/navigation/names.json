@@ -25,6 +25,9 @@
       "description": "A trader’s table that keeps itself current, built in React and in vanilla script, step by step from the need."
     }
   },
+  "accordions": {
+    "the-measured-height": {"title": "The measured height · Accordions · Chosen Picachu", "description": "A script measures the text, and the style sheet slides the panel to that height."}
+  },
   "charts": {
     "price": {"title": "Price line · Charts · Chosen Picachu", "description": "The trader can watch the price move, live."},
     "candles": {"title": "Candles · Charts · Chosen Picachu", "description": "The trader can read the same trades as candles."},

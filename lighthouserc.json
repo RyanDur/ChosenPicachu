@@ -19,7 +19,36 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 31744
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 185344
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/demos/accordions/the\\-measured\\-height/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 11264
               }
             ],
             "resource-summary:stylesheet:size": [

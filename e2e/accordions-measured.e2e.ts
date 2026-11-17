@@ -5,6 +5,7 @@ import {
   gapUnder,
   heightOnceSettled,
   measuredBuilds,
+  measuredHeightPage,
   plainFold,
   siteFrame,
   textOf,
@@ -85,18 +86,6 @@ for (const build of measuredBuilds) {
   test.describe('a desktop', () => {
     test.use(desktop);
 
-    test(`an opening part of ${build} switched to Static mid-motion still ends at its text after the window narrows`, async ({page}) => {
-      await page.emulateMedia({reducedMotion: 'no-preference'});
-      await accordionsTab(page).goTo(build);
-      const part = accordionsTab(page).firstPartOf(build);
-      await expect(part.fold).toBeVisible();
-
-      await accordionsTab(page).opensTheFirstPartThenChoosesOnceItStartsMoving(build, 'Static');
-      await page.setViewportSize({width: 390, height: 900});
-
-      await settlesWithinRounding(() => gapUnderItsText(part));
-    });
-
     test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, async ({page}) => {
       await page.emulateMedia({reducedMotion: 'no-preference'});
       await accordionsTab(page).goTo(build);
@@ -155,7 +144,7 @@ test.describe('the fold measured by plain script', () => {
     await expect(fold.text).toBeHidden();
   });
 
-  test('reached by its tab link, with its document assembled after the frame first loads, grows to its opened text', async ({page}) => {
+  test('reached by its link on the accordions tab, with its document assembled after the frame first loads, grows to its opened text', async ({page}) => {
     const assembly = Promise.withResolvers<void>();
     await page.route(/\/assemble-[^/]*\.js$/, async route => {
       await assembly.promise;
@@ -163,9 +152,9 @@ test.describe('the fold measured by plain script', () => {
     });
     const fold = plainFold(page);
     await fold.countsFrameLoads();
-    await page.goto('demos/z-index/');
+    await page.goto('demos/accordions/');
     await siteFrame(page).hydrated();
-    await page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'}).click();
+    await accordionsTab(page).partLink('The measured height').click();
     await expect.poll(fold.frameLoaded).toBe(true);
     assembly.resolve();
 
@@ -175,10 +164,10 @@ test.describe('the fold measured by plain script', () => {
   });
 });
 
-test('the Accordions tab says the plain fold could not be assembled when its script never arrives', async ({page}) => {
+test('the measured height’s page says the plain fold could not be assembled when its script never arrives', async ({page}) => {
   await page.route('**/assets/assemble-*.js', route => route.abort());
 
-  await page.goto('demos/accordions/');
+  await page.goto(measuredHeightPage);
 
   await expect(page.getByRole('alert')).toContainText('the plain fold could not be assembled');
 });

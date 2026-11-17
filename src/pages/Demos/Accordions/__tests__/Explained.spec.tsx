@@ -60,12 +60,12 @@ describe('the accordions tab', () => {
     expect(accordionsTab.option(types, 'Inclusive')).toBeChecked();
   });
 
-  test('should show, with inclusive chosen, the two checkbox builds under the old way', async () => {
+  test('should show, with inclusive chosen, the known-height checkbox build under the old way', async () => {
     render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
     const explained = await explanation.part(parts[0]);
 
-    expect(accordionsTab.buildsIn(explained)).toEqual(['Accordion using checkboxes and a measured height', 'Accordion using checkboxes and a known height']);
+    expect(accordionsTab.buildsIn(explained)).toEqual(['Accordion using checkboxes and a known height']);
   });
 
   test('should show, with inclusive chosen, the inclusive details build under the platform', async () => {
@@ -76,12 +76,12 @@ describe('the accordions tab', () => {
     expect(accordionsTab.buildsIn(explained)).toEqual(['Inclusive accordion using details elements']);
   });
 
-  test('should show, with exclusive chosen, the two radio group builds under the old way', async () => {
+  test('should show, with exclusive chosen, the known-height radio group build under the old way', async () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const explained = await explanation.part(parts[0]);
 
-    expect(accordionsTab.buildsIn(explained)).toEqual(['Accordion using a radio group and a measured height', 'Accordion using a radio group and a known height']);
+    expect(accordionsTab.buildsIn(explained)).toEqual(['Accordion using a radio group and a known height']);
   });
 
   test('should show, with exclusive chosen, the exclusive details build under the platform', async () => {
@@ -127,32 +127,6 @@ describe('what the platform gives now', () => {
     const explained = await explanation.part(parts[1]);
 
     expect(explanation.sourcesBeside(explained, /This build uses details and summary/)).toEqual(['Accordions/ExclusiveToggleAccordion.tsx on GitHub']);
-  });
-});
-
-describe('the measured build', () => {
-  test('should show the fold measured by plain script under the heading "The measured height"', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    const measured = await explanation.part('The measured height');
-
-    expect(await accordionsTab.foldMeasuredByPlainScript(measured)).toBeInTheDocument();
-  });
-
-  test('should link the run that tells the two layout effects to the React build’s source on GitHub', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    const explained = await explanation.part(parts[0]);
-
-    expect(explanation.sourcesBeside(explained, /The script makes the moves in two layout effects/)).toEqual(['Accordions/MeasuredPanel.tsx on GitHub']);
-  });
-
-  test('should link the run that turns a fold around to the React build’s source on GitHub', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    const explained = await explanation.part(parts[0]);
-
-    expect(explanation.sourcesBeside(explained, /turns around from where it is/)).toEqual(['Accordions/MeasuredPanel.tsx on GitHub']);
   });
 });
 
@@ -291,7 +265,7 @@ describe('the max-height guess', () => {
 
     const oldWay = await explanation.part(parts[0]);
 
-    expect(explanation.sectionTitles(oldWay)).toEqual(['A box remembers the fold, and a rule reads it', 'The max-height guess', 'The measured height', 'Accordion using checkboxes and a measured height', 'Accordion using checkboxes and a known height']);
+    expect(explanation.sectionTitles(oldWay)).toEqual(['A box remembers the fold, and a rule reads it', 'The max-height guess', 'The measured height', 'Accordion using checkboxes and a known height']);
   });
 
   test('should outline part one, with exclusive chosen, as what a fold remembers, the guess, the measured height, then the known height', async () => {
@@ -299,7 +273,7 @@ describe('the max-height guess', () => {
 
     const oldWay = await explanation.part(parts[0]);
 
-    expect(explanation.sectionTitles(oldWay)).toEqual(['A box remembers the fold, and a rule reads it', 'The max-height guess', 'The measured height', 'Accordion using a radio group and a measured height', 'Accordion using a radio group and a known height']);
+    expect(explanation.sectionTitles(oldWay)).toEqual(['A box remembers the fold, and a rule reads it', 'The max-height guess', 'The measured height', 'Accordion using a radio group and a known height']);
   });
 });
 
@@ -332,17 +306,6 @@ describe('the name that makes the first accordion exclusive', () => {
 });
 
 describe('the depth of each part', () => {
-  test('should show, with exclusive chosen, what the closed fold "How this site does it" holds once its bar is pressed', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
-    const fold = recipeFolds.story(await explanation.part(parts[0]), 'How this site does it');
-    const depth = explanation.runsIn(fold)[0];
-    expect(depth).not.toBeVisible();
-
-    await accordionsTab.openFold(fold);
-
-    expect(depth).toBeVisible();
-  });
-
   test('should show, with exclusive chosen, what the closed fold "How the known height works" holds once its bar is pressed', async () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
     const fold = recipeFolds.story(await explanation.part(parts[0]), 'How the known height works');
@@ -418,7 +381,6 @@ describe('the links to other tabs', () => {
     const tab = await demoTabs.arrivedOn('Accordions');
 
     expect(demoPage.linksToTabsIn(tab)).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['React', `${Paths.demos}z-index/`]
     ]);
   });
