@@ -22,8 +22,8 @@ export const TutorialPage: FC = () => {
   const {searchFromShown} = useSearchParamsObject({});
   const titled = `tutorial${useId()}`;
   const carried = useCarriedAddress();
-  const {name, ordinal} = tableParts.told(tableTutorials.startingPart);
-  const startingAt = {name, ordinal, ...tableParts.whereIs(ordinal)};
+  const startingAt = tableParts.told(tableTutorials.startingPart);
+  const {to, search} = tableParts.whereIs(startingAt.ordinal);
   return useShownTutorial().either(tutorial => {
     const {ordinal, outOf} = tableTutorials.placeOf(tutorial);
     const TutorialRecipe = recipes[tutorial];
@@ -42,7 +42,7 @@ export const TutorialPage: FC = () => {
       <WorldNote/>
       <p className="paragraph">
         This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
-        “<Link className="signpost" to={carried(startingAt.to, undefined, startingAt.search)}>{startingAt.name}</Link>”, ends,
+        “<Link className="signpost" to={carried(to, undefined, search)}>{startingAt.name}</Link>”, ends,
         with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
         those are new to you, read that part first.
       </p>
