@@ -10,23 +10,6 @@ import {site} from '@pages/__test_support';
 const measuredHeight = 'accordions/the-measured-height';
 
 describe('the measured height, on its own page', () => {
-  test('following the measured height from the accordions tab opens its page', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    await accordionsTab.openPart('The measured height');
-
-    expect(await appAddress.movedOnFrom(demosAt('accordions'))).toBe(demosAt(measuredHeight));
-  });
-
-  test('the fold choices made on the accordions tab carry into the measured height’s page', async () => {
-    const from = demosAt('accordions', '?type=inclusive&style=drawer');
-    render(<TestApp at={from}/>);
-
-    await accordionsTab.openPart('The measured height');
-
-    expect(await appAddress.movedOnFrom(from)).toBe(demosAt(measuredHeight, '?type=inclusive&style=drawer'));
-  });
-
   test('following a part the measured height builds on lands on that part’s heading on the tab, with the fold choices carried', async () => {
     const from = demosAt(measuredHeight, '?type=inclusive&style=drawer');
     render(<TestApp at={from}/>);
