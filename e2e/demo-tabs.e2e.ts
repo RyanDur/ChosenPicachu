@@ -1,19 +1,19 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {chartsPage, oldWayFoldLabels, scriptedMarket, siteFrame} from './__test_support';
+import {chartsPage, rememberedFoldLabels, scriptedMarket, siteFrame} from './__test_support';
 
 test('the accordion labels survive a visit to the streaming charts', async ({page}) => {
   await scriptedMarket(page, [50000, 50001]);
-  await page.goto('demos/accordions/');
+  await page.goto('demos/accordions/a-box-remembers-the-fold/?type=exclusive');
   const demos = page.getByRole('navigation', {name: 'demos'});
-  await expect(page.getByRole('region', {name: 'How we used to build a fold'}).getByRole('radio').first()).toBeAttached();
-  const before = await oldWayFoldLabels(page);
+  await expect(page.getByRole('region', {name: 'A box remembers the fold, and a rule reads it'}).getByRole('radio').first()).toBeAttached();
+  const before = await rememberedFoldLabels(page);
 
   await demos.getByRole('link', {name: 'Charts'}).click();
   await expect(chartsPage(page).priceCard.getByText('$50,001.00')).toBeVisible();
-  await demos.getByRole('link', {name: 'Accordions'}).click();
+  await page.goBack();
 
-  await expect.poll(() => oldWayFoldLabels(page)).toEqual(before);
+  await expect.poll(() => rememberedFoldLabels(page)).toEqual(before);
 });
 
 test('a tab on a page reached with a dial carries the dial along once the script runs', async ({page}) => {
