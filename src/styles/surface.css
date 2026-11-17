@@ -321,8 +321,6 @@
 
 .field-outlined { border: var(--hairline) solid var(--field); }
 
-.charcoal-outlined { border: var(--hairline) solid var(--charcoal); }
-
 .corner-after::after {
   border-top: var(--hairline-x-2) solid currentcolor;
   border-right: var(--hairline-x-2) solid currentcolor;

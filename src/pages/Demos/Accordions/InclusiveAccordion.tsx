@@ -22,7 +22,7 @@ export const InclusiveAccordion: FC<AccordionProps> = ({
             className="info-label opening-arrow drawn-piece prior-approached corner-after"
             htmlFor={`fold-${id}-checkbox`}>{heading}</label>
           <div className="info">
-            <section className="info-text charcoal-outlined foot-shadowed focus-ringed" tabIndex={0}
+            <section className="info-text foot-shadowed focus-ringed" tabIndex={0}
               aria-labelledby={`fold-${id}-checkbox-label`}>
               <p className="info-paragraph">{story}</p>
             </section>
