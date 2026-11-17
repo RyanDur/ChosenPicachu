@@ -5,7 +5,7 @@ const theMap = (): Promise<HTMLElement> =>
   screen.findByRole('navigation', {name: 'the tables map'}, untilTheTablesTabRenders);
 
 export const tablesMap = {
-  says: (): Promise<HTMLElement> => screen.findByText(/^\w+ parts, about/, {}, untilTheTablesTabRenders),
+  says: (): Promise<HTMLElement> => screen.findByText(/about \d+ minutes/, {}, untilTheTablesTabRenders),
   listed: (): HTMLElement | null => screen.queryByRole('navigation', {name: 'the tables map'}),
   entries: async (): Promise<(string | null)[][]> =>
     within(await theMap()).getAllByRole('listitem').map(entry =>
