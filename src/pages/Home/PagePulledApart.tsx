@@ -14,23 +14,23 @@ const slabDepth = 6;
 const projectionStart: Point = {x: 150, y: 170};
 const plate: Region = {u: 0, v: 0, across: 112, down: 70};
 
-const heights = {structure: 0, presentation: lift, behavior: lift * 2};
+const elevations = {structure: 0, presentation: lift, behavior: lift * 2};
 
-const projected = ({u, v}: Spot, height: number): Point =>
+const projected = ({u, v}: Spot, elevation: number): Point =>
   ({
     x: (projectionStart.x + (u - v) * cosine30) * unitsPerStep,
-    y: (projectionStart.y + (u + v) * tilt - height) * unitsPerStep
+    y: (projectionStart.y + (u + v) * tilt - elevation) * unitsPerStep
   });
 
 const pointsOf = (corners: readonly Point[]): string => corners.map(({x, y}) => `${x},${y}`).join(' ');
 
-const regionPoints = ({u, v, across, down}: Region, height: number): string => pointsOf(
+const regionPoints = ({u, v, across, down}: Region, elevation: number): string => pointsOf(
   [{u, v}, {u: u + across, v}, {u: u + across, v: v + down}, {u, v: v + down}]
-    .map(corner => projected(corner, height)));
+    .map(corner => projected(corner, elevation)));
 
 const face = (from: Spot, to: Spot): string => pointsOf([
-  projected(from, heights.structure), projected(to, heights.structure),
-  projected(to, heights.structure - slabDepth), projected(from, heights.structure - slabDepth)]);
+  projected(from, elevations.structure), projected(to, elevations.structure),
+  projected(to, elevations.structure - slabDepth), projected(from, elevations.structure - slabDepth)]);
 
 const slabRegions: Readonly<Record<string, Region>> = {
   header: {u: 6, v: 6, across: 102, down: 12},
@@ -67,26 +67,26 @@ const backCorner: Spot = {u: 0, v: 0};
 const frontCorner: Spot = {u: plate.across, v: plate.down};
 
 const DroppedLine: FC<{spot: Spot}> = ({spot}) => {
-  const top = projected(spot, heights.behavior);
-  const bottom = projected(spot, heights.structure);
+  const top = projected(spot, elevations.behavior);
+  const bottom = projected(spot, elevations.structure);
   return <line className="drawn-line drawn dashed-drawn" x1={top.x} y1={top.y} x2={bottom.x} y2={bottom.y}/>;
 };
 
 const languages = [
-  {word: 'behavior', height: heights.behavior},
-  {word: 'presentation', height: heights.presentation},
-  {word: 'structure', height: heights.structure}
+  {word: 'behavior', elevation: elevations.behavior},
+  {word: 'presentation', elevation: elevations.presentation},
+  {word: 'structure', elevation: elevations.structure}
 ];
 
-const Lettering: FC<{labels: readonly Lettered[]; height: number}> = ({labels, height}) => <>
+const Lettering: FC<{labels: readonly Lettered[]; elevation: number}> = ({labels, elevation}) => <>
   {labels.map(label => <text key={label.word} className="drawn-caption monospaced ink-filled"
-    {...projected(label, height)} textAnchor={label.anchor}>
+    {...projected(label, elevation)} textAnchor={label.anchor}>
     {label.word}
   </text>)}
 </>;
 
 export const PagePulledApart: FC = () => {
-  const clickPoint = projected(clickSpot, heights.behavior);
+  const clickPoint = projected(clickSpot, elevations.behavior);
   return <figure className="page-pulled-apart">
     <svg className="drawing center" viewBox={`${25 * unitsPerStep} 0 ${230 * unitsPerStep} ${258 * unitsPerStep}`}
       width={230 * unitsPerStep}
@@ -102,23 +102,23 @@ export const PagePulledApart: FC = () => {
         points={face({u: 0, v: plate.down}, {u: plate.across, v: plate.down})}/>
       <polygon className="slab-line drawn paper-filled"
         points={face({u: plate.across, v: 0}, {u: plate.across, v: plate.down})}/>
-      <polygon className="slab-line drawn paper-filled" points={regionPoints(plate, heights.structure)}/>
+      <polygon className="slab-line drawn paper-filled" points={regionPoints(plate, elevations.structure)}/>
       {Object.entries(slabRegions).map(([name, region]) =>
-        <polygon key={name} className="drawn-line drawn hollow" points={regionPoints(region, heights.structure)}/>)}
-      <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, heights.presentation)}/>
+        <polygon key={name} className="drawn-line drawn hollow" points={regionPoints(region, elevations.structure)}/>)}
+      <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.presentation)}/>
       {Object.entries(slabRegions).map(([name, region]) =>
         <polygon key={name} className="drawn-line drawn pulled-apart-hatched"
-          points={regionPoints(region, heights.presentation)}/>)}
-      <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, heights.behavior)}/>
-      <polygon className="drawn-line drawn hollow" points={regionPoints(dialog, heights.behavior)}/>
+          points={regionPoints(region, elevations.presentation)}/>)}
+      <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.behavior)}/>
+      <polygon className="drawn-line drawn hollow" points={regionPoints(dialog, elevations.behavior)}/>
       <DroppedLine spot={frontCorner}/>
       <DroppedLine spot={clickSpot}/>
       <circle className="drawn-filled" cx={clickPoint.x} cy={clickPoint.y} r={1.6 * unitsPerStep}/>
-      <Lettering labels={regionLabels} height={heights.structure}/>
-      <Lettering labels={classLabels} height={heights.presentation}/>
-      <Lettering labels={scriptLabels} height={heights.behavior}/>
-      {languages.map(({word, height}) => {
-        const {x, y} = projected({u: 0, v: plate.down / 2}, height);
+      <Lettering labels={regionLabels} elevation={elevations.structure}/>
+      <Lettering labels={classLabels} elevation={elevations.presentation}/>
+      <Lettering labels={scriptLabels} elevation={elevations.behavior}/>
+      {languages.map(({word, elevation}) => {
+        const {x, y} = projected({u: 0, v: plate.down / 2}, elevation);
         return <text key={word} className="drawn-caption uppercase ink-filled" x={x - 6 * unitsPerStep}
           y={y + 2 * unitsPerStep}
           textAnchor="end">{word}</text>;
