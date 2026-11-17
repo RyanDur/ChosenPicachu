@@ -113,8 +113,8 @@ export const AccordionsExplained: FC = () => {
       <h2 id="motion-heading" className="title bold">{accordionParts.titleOf('motion-heading')}</h2>
       <ol className={looks.runs}>
         <li className="run">
-          <p className="paragraph">Every fold on this tab that slides moves by transition, never by animation, because a
-            reader may press again before the fold lands. If they do,
+          <p className="paragraph">Every fold in this book that slides moves by transition, never by animation, because
+            a reader may press again before the fold lands. If they do,
             a <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> turns around from wherever it is.
             An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays a set of keyframes on its own clock, whatever
             the state does.</p>
