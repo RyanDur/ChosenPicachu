@@ -18,7 +18,7 @@ const widthOfColumn = (name: string) => ({state}: TableView): number | undefined
   maybe(state.widths).mBind(widths => maybe(widths[name])).orElse(undefined);
 
 const namedShareOfColumn = (name: string) => ({state}: TableView): number | undefined =>
-  tableState.namedShare(state, name);
+  tableState.namedShare(state, name).orElse(undefined);
 
 const columnMarks = (name: string) => ({state}: TableView): Marks<ColumnShove> =>
   maybe(state.columnMarks[name]).orElse({});
@@ -52,7 +52,7 @@ const report = ({state}: TableView): Maybe<Report> => maybe(state.report);
 const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
 
 const seatOffset = (view: TableView): Drift | undefined =>
-  tableState.seatOffset(view.state, order(view), standing(view));
+  tableState.seatOffset(view.state, order(view), standing(view)).orElse(undefined);
 
 const seatOfColumn = (name: string) => (view: TableView): Drift | undefined =>
   columnHeld(name)(view) ? seatOffset(view) : undefined;

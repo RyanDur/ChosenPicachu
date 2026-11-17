@@ -7,7 +7,8 @@ import {arrangements} from '../arrangement';
 
 const noFloors = {};
 
-const widths = (state: typeof tableState.resting): readonly number[] => Object.values(tableState.widthsOf(state) ?? {});
+const widths = (state: typeof tableState.resting): readonly number[] =>
+  Object.values(tableState.widthsOf(state).orElse({}));
 
 describe('the table store', () => {
   test('a dispatch applies the reducer and every subscriber hears it once', () => {
@@ -200,7 +201,7 @@ describe('a sizing', () => {
       tableActions.arrowLifted('lookback'),
       tableActions.handleDragged('lookback', 'trades', 120));
 
-    expect(tableState.widthsOf(dragged)?.lookback).toBe(16);
+    expect(tableState.widthsOf(dragged).map(widths => widths.lookback).orNull()).toBe(16);
   });
 
   test('a pointer moving while an arrow holds the resize trades nothing', () => {
@@ -209,7 +210,7 @@ describe('a sizing', () => {
       tableActions.tradedBy('lookback', 'trades', 1),
       tableActions.handleDragged('lookback', 'trades', 200));
 
-    expect(tableState.widthsOf(keyed)?.lookback).toBe(14);
+    expect(tableState.widthsOf(keyed).map(widths => widths.lookback).orNull()).toBe(14);
   });
 
   test('a pointer move on a handle that holds no grip trades nothing', () => {
@@ -218,7 +219,7 @@ describe('a sizing', () => {
       tableActions.gripped('lookback', {fromX: 100, pxPerShare: 10}),
       tableActions.handleDragged('trades', 'buys', 120));
 
-    expect(tableState.widthsOf(elsewhere)).toEqual({lookback: 13, trades: 40, buys: 47});
+    expect(tableState.widthsOf(elsewhere).orNull()).toEqual({lookback: 13, trades: 40, buys: 47});
   });
 
   test('a release on another handle leaves the grip under way', () => {
@@ -228,7 +229,7 @@ describe('a sizing', () => {
       tableActions.handleReleased('trades'),
       tableActions.handleDragged('lookback', 'trades', 120));
 
-    expect(tableState.widthsOf(dragged)?.lookback).toBe(15);
+    expect(tableState.widthsOf(dragged).map(widths => widths.lookback).orNull()).toBe(15);
   });
 
   test('a release on the gripped handle ends the grip and says its new share', () => {
@@ -239,7 +240,7 @@ describe('a sizing', () => {
       tableActions.handleReleased('lookback'),
       tableActions.handleDragged('lookback', 'trades', 200));
 
-    expect(tableState.widthsOf(released)?.lookback).toBe(15);
+    expect(tableState.widthsOf(released).map(widths => widths.lookback).orNull()).toBe(15);
     expect(released.report).toEqual({about: 'share', name: 'lookback', share: 15});
   });
 });
