@@ -65,7 +65,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{
       '--share': width.map(shares.width).orElse(undefined),
-      ...looks.placement({seat: seat.orElse(undefined), drift, settlingFrom, shove: shoved})
+      ...looks.placement({seat, drift, settlingFrom, shove: shoved})
     }}>
     {children}
   </th>;

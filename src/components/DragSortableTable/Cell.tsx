@@ -14,13 +14,13 @@ export const Cell: FC<ComponentProps<'td'> & {column: string; row: string}> = ({
   const columnDrift = useTableRead(tableReads.driftOfColumn(column));
   const rowDrift = useTableRead(tableReads.driftOfRow(row));
   const seat = columnSeat.or(() => rowSeat);
-  const drift = columnDrift ?? rowDrift;
+  const drift = columnDrift.or(() => rowDrift);
   const from = columnFrom ?? rowFrom;
   const shove = columnShove ?? rowShove;
 
   return <td {...td}
     className={classNames('cell', className, ...looks.cellNeeds, ...looks.motionStates(columnCarried || rowCarried, from, shove))}
-    style={looks.placement({seat: seat.orElse(undefined), drift, settlingFrom: from, shove})}>
+    style={looks.placement({seat, drift, settlingFrom: from, shove})}>
     {children}
   </td>;
 };
