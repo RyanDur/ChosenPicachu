@@ -3,8 +3,11 @@ import {nothing, some} from '@ryandur/sand';
 import {shares} from '../shares';
 
 describe('the shares vocabulary', () => {
-  it('seeds the grip from the table width, or nothing from no width', () => {
+  it('seeds the grip from the table width', () => {
     expect(shares.grippedAt(700, 120).orNull()).toEqual({fromX: 120, pxPerShare: 7});
+  });
+
+  it('seeds no grip from a table with no width', () => {
     expect(shares.grippedAt(0, 120).orNull()).toBeNull();
   });
 
