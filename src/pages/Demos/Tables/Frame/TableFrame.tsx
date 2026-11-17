@@ -30,13 +30,11 @@ export const TableFrame: FC<PropsWithChildren> = ({children}) => {
     .onFailure(() => dispatchBanner(bannerChange.raised('the table could not be assembled')))
     .cancel, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct, dispatchBanner]);
 
-  useEffect(() => {
-    if (frame) {
-      const watcher = new ResizeObserver(() => measured(frame, to => dispatch(tableFrameChange.grown(to))));
-      watcher.observe(frame);
-      return () => watcher.disconnect();
-    }
-  }, [frame]);
+  useEffect(() => maybe(frame).map(watched => {
+    const watcher = new ResizeObserver(() => measured(watched, to => dispatch(tableFrameChange.grown(to))));
+    watcher.observe(watched);
+    return () => watcher.disconnect();
+  }).orElse(() => undefined), [frame]);
 
   const stood = not(maybe(frame).isNothing);
 
