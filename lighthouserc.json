@@ -657,7 +657,7 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 18432
+                "maxNumericValue": 17408
               }
             ],
             "resource-summary:stylesheet:size": [
@@ -716,6 +716,35 @@
               "error",
               {
                 "maxNumericValue": 7168
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 177152
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/demos/z\\-index/what\\-else\\-forms\\-a\\-stacking\\-context/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 6144
               }
             ],
             "resource-summary:stylesheet:size": [
