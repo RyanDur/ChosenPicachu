@@ -184,8 +184,11 @@ export const accordionsTab = (page: Page) => {
 
 export const textOf = (part: Part): Locator => part.fold.getByRole('paragraph', {includeHidden: true});
 
+export const rememberedFolds = (page: Page): Locator =>
+  page.getByRole('article').filter({has: page.getByRole('heading', {name: /and a known height$/})}).getByRole('radio');
+
 export const rememberedFoldLabels = async (page: Page): Promise<string[]> =>
-  page.getByRole('region', {name: 'A box remembers the fold, and a rule reads it'}).getByRole('radio')
+  rememberedFolds(page)
     .evaluateAll(toggles => toggles.map(toggle =>
       toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? '' : ''));
 
