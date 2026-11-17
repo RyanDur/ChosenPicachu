@@ -15,8 +15,7 @@ export const PopoverExplained: FC = () =>
     <h2 id={partHeadings.popoverWins} className="title bold">{zIndexParts.titleOf('popover-wins')}</h2>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
-        <p className="paragraph">The top-layer Sort by
-          in <PartLink part="why-9999-still-loses"/> opens over
+        <p className="paragraph">The top-layer Sort by in <PartLink part="why-9999-still-loses"/> opens over
           everything around it every time, with the box checked or not. It is a popover. A popover is shown in
           the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a layer the browser keeps above the
           whole page for popovers, dialogs and elements shown full screen.</p>
