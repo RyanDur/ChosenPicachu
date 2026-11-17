@@ -31,9 +31,9 @@ describe('the tables tab’s introduction', () => {
     render(<TestApp at="/"><TablesIntroduction/></TestApp>);
 
     expect(demoPage.linksToPageIn(document.body, `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`],
       ['events', `${Paths.demos}z-index/why-the-popover-wins/`],
-      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`]
+      ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`]
     ]);
   });
 });

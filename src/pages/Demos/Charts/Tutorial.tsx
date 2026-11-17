@@ -1,5 +1,5 @@
 import {TabLink} from '@pages/Demos/TabLink';
-import {PartTermLink} from '@pages/Demos/ZIndexDemo';
+import {PartLink, PartTermLink} from '@pages/Demos/ZIndexDemo';
 import {FC, useId} from 'react';
 import {DemoTopics} from '@pages/Demos';
 import {Codes, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../Recipe';
@@ -56,7 +56,7 @@ const WorkspaceStory: FC = () =>
             page.</Says>
           <Says>A name may carry its period after a colon, candles:day; the hour is the default and is left off.</Says>
           <Says>That menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece of the
-            page, as the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says.</Says>
+            page, as taught in the z-index part <PartLink part="why-the-popover-wins"/>.</Says>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
             sheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu
             the menu’s own, as the sample shows.</Says>

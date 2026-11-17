@@ -335,7 +335,7 @@ describe('a list of charts', () => {
     test('should link where it names the combinator to the accordions part that explains it, with the query carried', async () => {
       await priceStory();
 
-      expect(demoPage.signpost('the accordions tab explains')).toHaveAttribute('href', demosAt('accordions/a-box-remembers-the-fold', '?graph=price'));
+      expect(demoPage.signpost('A box remembers the fold, and a rule reads it')).toHaveAttribute('href', demosAt('accordions/a-box-remembers-the-fold', '?graph=price'));
     });
 
     test('should head each step with what happens', async () => {
@@ -977,7 +977,7 @@ describe('the links to other tabs', () => {
     const tab = await demoTabs.arrivedOn('Charts');
 
     expect(demoPage.linksToPageIn(tab, `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`],
       ['event', `${Paths.demos}z-index/why-the-popover-wins/`]
     ]);
   });
@@ -988,10 +988,10 @@ describe('the links to other tabs', () => {
     await feedIsSubscribed(feed);
 
     expect(demoPage.linksToPageIn(demoPage.wholePage(), `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
-      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
-      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
-      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`]
+      ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`]
     ]);
   });
 
@@ -1001,8 +1001,8 @@ describe('the links to other tabs', () => {
     await feedIsSubscribed(feed);
 
     expect(demoPage.linksToPageIn(demoPage.wholePage(), `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
-      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`]
+      ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`]
     ]);
   });
 
@@ -1012,7 +1012,7 @@ describe('the links to other tabs', () => {
     await feedIsSubscribed(feed);
 
     expect(demoPage.linksToPageIn(demoPage.wholePage(), `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`]
+      ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`]
     ]);
   });
 });
