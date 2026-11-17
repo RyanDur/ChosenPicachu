@@ -1,4 +1,6 @@
-import {useLocation, useNavigate} from 'react-router';
+import {useContext} from 'react';
+import {useNavigate} from 'react-router';
+import {CurrentLocation} from '@navigation/current-location';
 import {useSearchParamsOnceHydrated} from '@navigation/search-params';
 import {not} from '@ryandur/sand';
 import {scrollPlace} from '@navigation';
@@ -12,10 +14,11 @@ type OpenStories = {
 
 export const useOpenStories = (param: string): OpenStories => {
   const [shown] = useSearchParamsOnceHydrated();
-  const location = useLocation();
+  const currentLocation = useContext(CurrentLocation);
   const navigate = useNavigate();
   const isOpen: OpenStories['isOpen'] = id => storyKeys.openIn(shown, param).has(id);
   const setOpen: OpenStories['setOpen'] = (id, open) => {
+    const location = currentLocation();
     const address = new URLSearchParams(location.search);
     if (storyKeys.openIn(address, param).has(id) === open) return;
     void navigate({search: `?${storyKeys.toggledIn(address, {param, id})}`, hash: location.hash},

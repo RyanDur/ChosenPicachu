@@ -1,6 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
-import {render, waitFor} from '@testing-library/react';
+import {act, render, screen, waitFor} from '@testing-library/react';
+import {Link} from 'react-router';
 import {Step, StepHeading, Steps, Stories, Story} from '@pages/Demos/Recipe';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 
@@ -94,5 +95,26 @@ describe('a story card', () => {
 
     await waitFor(() => expect(appAddress.search()).toHaveTextContent('next'));
     expect(appAddress.fragment()).toBe('#told-first');
+  });
+
+  test('a reader who follows a link to a story keeps its fragment when the fold opens before the page has caught up', async () => {
+    render(<TestApp at="/"><Stories>
+      <Link to={{search: '?tale=told', hash: '#tale-told-story'}}>the tale below</Link>
+      <Story param="tale" id="told" can="The reader can follow a link to a story" soThat="the link lands on it">
+        <p>the told story</p>
+      </Story>
+    </Stories></TestApp>);
+    await appAddress.drawn();
+    const fold = card('The reader can follow a link to a story');
+
+    await act(async () => {
+      screen.getByRole('link', {name: 'the tale below'}).click();
+      await Promise.resolve();
+      fold.toggleAttribute('open', true);
+      fold.dispatchEvent(new Event('toggle'));
+    });
+
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent('tale=told'));
+    expect(appAddress.fragment()).toBe('#tale-told-story');
   });
 });
