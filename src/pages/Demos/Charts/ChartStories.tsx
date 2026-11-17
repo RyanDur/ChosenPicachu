@@ -37,7 +37,9 @@ import axesSource from './Axes/Axes.tsx?sample';
 import axesCss from './Axes/Axes.css?sample';
 import '../Recipe/Recipe.css';
 
-const remembersTheFoldTitle = accordionParts.titleOf('remembers-heading');
+const remembersTheFold = 'a-box-remembers-the-fold';
+const remembersTheFoldTitle = accordionParts.told(remembersTheFold).name;
+const remembersTheFoldAt = accordionParts.addressOf(remembersTheFold);
 
 const PriceStory: FC = () =>
   <Story param="graph" id="price"
@@ -193,7 +195,7 @@ const PriceStory: FC = () =>
             className="monospaced">.y-labels ~ :has(~ .x-labels)</code> picks each part that comes after the price
             labels and has the time marks still after it. The <code className="monospaced">~</code> is the
             combinator that picks the siblings that come later, as taught in the accordions
-            part <DemoLink to={accordionParts.addressOf('a-box-remembers-the-fold')}><cite>{remembersTheFoldTitle}</cite></DemoLink>.</Says>
+            part <DemoLink to={remembersTheFoldAt}><cite>{remembersTheFoldTitle}</cite></DemoLink>.</Says>
           <Says>How far apart the time marks sit comes from the period: every ten minutes on the hour chart, every hour
             on the day chart, every day on the week chart.</Says>
         </Words>

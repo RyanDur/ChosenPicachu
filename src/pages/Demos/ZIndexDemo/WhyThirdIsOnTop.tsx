@@ -12,8 +12,9 @@ import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 import './ZIndexDemo.css';
 
-const remembersTheFoldTitle = accordionParts.titleOf('remembers-heading');
-const remembersTheFoldAt = accordionParts.addressOf('a-box-remembers-the-fold');
+const remembersTheFold = 'a-box-remembers-the-fold';
+const remembersTheFoldTitle = accordionParts.told(remembersTheFold).name;
+const remembersTheFoldAt = accordionParts.addressOf(remembersTheFold);
 
 export const WhyThirdIsOnTop: FC = () => <>
   <p className="paragraph">Even with no z-index anywhere, one of three overlapping cards ends up on top. This part
