@@ -29,7 +29,7 @@ const tabHeadings: Record<BookPart, string> = {
 
 type Listing = {book: BookPart; minutes: number};
 
-type Told = {name: string; minutes: number; ordinal: number; says: string};
+type Told = {heading: string; name: string; minutes: number; ordinal: number; says: string};
 
 type ZIndexParts = {
   told: (part: ZIndexPart) => Told;
@@ -67,6 +67,7 @@ export const zIndexParts: ZIndexParts = {
   told: part => {
     const {book, minutes} = listings[part];
     return {
+      heading: tabHeadings[book],
       name: titles[book],
       minutes,
       ordinal: placeOf(book) + 1,
