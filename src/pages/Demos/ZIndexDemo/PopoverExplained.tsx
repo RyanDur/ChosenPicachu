@@ -68,8 +68,7 @@ export const PopoverExplained: FC = () =>
         <p className="paragraph">Script adds two things, and both wait for an event. An event is the browser telling the
           page that something happened, such as a click, a key or a popover opening, and script can ask to hear it. A
           click on each choice keeps the pick, so the button can name it. A toggle on the menu, the event for a popover
-          opening or closing, lets the trap in <PartLink part="why-9999-still-loses"/> say where the list
-          opened.</p>
+          opening or closing, lets the trap in <PartLink part="why-9999-still-loses"/> say where the list opened.</p>
       </li>
       <li className="run">
         <p className="paragraph">With the old way, any card around the menu that forms a stacking context traps it, and
