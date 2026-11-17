@@ -33,14 +33,14 @@ describe('the tables map', () => {
   test('should mark the part the reader is on, and lead to every other part', async () => {
     render(<TestApp at={demosAt('tables/the-slices', vanilla)}/>);
 
-    expect(await tablesMap.entries()).toEqual(everyPart('3. Slice the design into stories'));
+    expect(await tablesMap.signposts()).toEqual(everyPart('3. Slice the design into stories'));
     expect(await tablesMap.current()).toHaveTextContent('3. Slice the design into stories');
   });
 
   test('should mark a tutorial as the part the reader is on', async () => {
     render(<TestApp at={demosAt('tables/menu', vanilla)}/>);
 
-    expect(await tablesMap.entries()).toEqual(everyPart('7. Sort menu'));
+    expect(await tablesMap.signposts()).toEqual(everyPart('7. Sort menu'));
     expect(await tablesMap.current()).toHaveTextContent('7. Sort menu');
   });
 
