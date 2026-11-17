@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@navigation';
-import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {stackingPile, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 import {site} from '@pages/__test_support';
 
@@ -20,6 +20,14 @@ describe('why Third is on top, on its own page', () => {
     const raised = await stackingPile.findCardRaised();
 
     expect(stackingPile.card(raised, 'Second')).toBeChecked();
+  });
+
+  test('should lead on to the part after it on the tab, by number and title, with the raised card carried', async () => {
+    render(<TestApp at={demosAt(thirdOnTop, '?raised=second')}/>);
+
+    expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
+      ['Next: 2. Why 9999 still loses', `${demosAt('z-index', '?raised=second')}#9999-still-loses-heading`]
+    ]);
   });
 
   test('should link each term it glosses, and each tab it names, to that tab', async () => {

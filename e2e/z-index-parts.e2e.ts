@@ -26,3 +26,14 @@ test('a card raised on the z-index tab is still raised on the page for why Third
   await expect(page).toHaveURL(/demos\/z-index\/why-third-is-on-top\/\?raised=second$/);
   await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Second', 'Third', 'First']);
 });
+
+test('a reader follows why Third is on top’s foot on to the next part, and lands on its heading on the tab with the raised card kept', async ({page}) => {
+  await page.goto('demos/z-index/why-third-is-on-top/?raised=second');
+  await siteFrame(page).hydrated();
+
+  await page.getByRole('navigation', {name: 'the z-index parts'})
+    .getByRole('link', {name: 'Next: 2. Why 9999 still loses'}).click();
+
+  await expect(page).toHaveURL(/demos\/z-index\/\?raised=second#9999-still-loses-heading$/);
+  await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Second', 'Third', 'First']);
+});

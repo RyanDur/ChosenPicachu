@@ -1,19 +1,19 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
-import {FC, useId} from 'react';
+import {FC} from 'react';
 import {Stories} from '../Recipe';
 import {useControls} from '../Controls';
 import {BannerControls} from './BannerControls';
 import {TopLayerRecipe} from './TopLayerRecipe';
 import {MultipleRecipe} from './MultipleRecipe';
+import {partHeadings} from './part-headings';
 import '../Recipe/Recipe.css';
 
 export const TopLayerTutorial: FC = () => {
   const {side, align, enter, stack, change} = useControls();
 
-  const titled = `tutorials${useId()}`;
-  return <section aria-labelledby={titled} className="tutorials">
-    <h2 id={titled} className="title">let’s build this feature</h2>
+  return <section aria-labelledby={partHeadings.buildThisFeature} className="tutorials">
+    <h2 id={partHeadings.buildThisFeature} className="title">let’s build this feature</h2>
     <p className="overview paragraph">
       We are going to build this site’s banner: the panel that carries the news, whatever
       the news is. Elsewhere on this site it reports real trouble. On this page the button raises random nonsense so you
