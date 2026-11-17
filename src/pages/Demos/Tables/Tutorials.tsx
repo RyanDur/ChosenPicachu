@@ -33,7 +33,7 @@ export const Tutorials: FC = () => {
     </header>
     <WorldNote/>
     <ol className="spine" aria-label="the stations">
-      {tableParts.parts.map((part, index) =>
+      {tableParts.inOrder.map((part, index) =>
         <Station key={part} at={index + 1}>
           <PartEntry part={part}/>
         </Station>)}
