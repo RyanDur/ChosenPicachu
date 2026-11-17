@@ -80,6 +80,24 @@ describe('why a fixed banner still loses', () => {
   });
 });
 
+describe('the gap step, on a term part one defines', () => {
+  test('should link selector, with the stack growing downward, to part one’s page with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second&stack=down')}/>);
+
+    const step = await recipeSteps.findWords('Open a gap in the stack first');
+
+    expect(explanation.linkNamed(step, 'selector')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second&stack=down'));
+  });
+
+  test('should link selector, with the stack growing leftward, to part one’s page with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second&stack=left')}/>);
+
+    const step = await recipeSteps.findWords('Open a gap in the stack first');
+
+    expect(explanation.linkNamed(step, 'selector')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second&stack=left'));
+  });
+});
+
 describe('the gap step, with the stack growing sideways', () => {
   test('should keep the linked selector apart from the word after it', async () => {
     render(<TestApp at={demosAt('z-index', '?stack=left')}/>);

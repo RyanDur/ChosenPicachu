@@ -33,3 +33,13 @@ describe('why the popover wins', () => {
     expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
   });
 });
+
+describe('why the popover wins, on a term part one defines', () => {
+  test('should link rule, at its first use, to part one’s page with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+
+    const popover = await explanation.part('Why the popover wins');
+
+    expect(explanation.linkNamed(popover, 'rule')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
+  });
+});
