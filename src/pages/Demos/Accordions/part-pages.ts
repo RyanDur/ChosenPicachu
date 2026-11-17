@@ -4,7 +4,7 @@ import {demoTab, DemoTopics} from '@pages/Demos';
 
 export type AccordionPart = keyof typeof names.accordions;
 
-const contents = {
+const titles = {
   'html-alone-heading': 'An accordion in HTML alone',
   'remembers-heading': 'A box remembers the fold, and a rule reads it',
   'max-height-guess-heading': 'The max-height guess',
@@ -13,7 +13,7 @@ const contents = {
   'motion-heading': 'How a sliding fold moves'
 };
 
-export type TabHeading = keyof typeof contents;
+export type TabHeading = keyof typeof titles;
 
 type Entry = {heading: TabHeading; minutes: number};
 
@@ -33,7 +33,7 @@ const entries: Record<AccordionPart, Entry> = {
 
 const parts = Object.keys(entries).filter((key): key is AccordionPart => key in entries);
 
-const headings = Object.keys(contents);
+const headings = Object.keys(titles);
 
 const addressOf = (part: AccordionPart): string => `${demoTab.address(DemoTopics.accordions)}${part}/`;
 
@@ -41,7 +41,7 @@ export const accordionParts: AccordionParts = {
   told: part => {
     const {heading, minutes} = entries[part];
     return {
-      name: contents[heading],
+      name: titles[heading],
       minutes,
       ordinal: headings.indexOf(heading) + 1,
       says: names.accordions[part].description
@@ -49,6 +49,6 @@ export const accordionParts: AccordionParts = {
   },
   addressOf,
   at: pathname => maybe(parts.find(part => pathname === addressOf(part))),
-  titleOf: heading => contents[heading],
+  titleOf: heading => titles[heading],
   inTheBook: headings.length
 };
