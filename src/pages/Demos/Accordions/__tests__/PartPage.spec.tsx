@@ -2,7 +2,7 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {Paths} from '@navigation';
-import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
 import {site} from '@pages/__test_support';
@@ -54,7 +54,7 @@ describe('the measured height, on its own page', () => {
   test('should lead back to the part before it and on to the part after it on the tab, by number and title, with the fold choices carried', async () => {
     render(<TestApp at={demosAt(measuredHeight, '?type=inclusive&style=drawer')}/>);
 
-    expect(await accordionsTab.leadsOn('the accordions parts')).toEqual([
+    expect(await pageFoot.leadsOn('the accordions parts')).toEqual([
       ['Previous: 3. The max-height guess', `${demosAt('accordions', '?type=inclusive&style=drawer')}#max-height-guess-heading`],
       ['Next: 5. What the platform gives now', `${demosAt('accordions', '?type=inclusive&style=drawer')}#platform-way-heading`]
     ]);

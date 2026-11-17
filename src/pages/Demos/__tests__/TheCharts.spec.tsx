@@ -1,6 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@navigation';
-import {chartPageAt, demoPage, demosAt, demoTabs, feedIsLive, feedIsSubscribed} from '@pages/Demos/__test_support';
+import {chartPageAt, demoPage, demosAt, demoTabs, feedIsLive, feedIsSubscribed, pageFoot} from '@pages/Demos/__test_support';
 import {render, waitFor} from '@testing-library/react';
 import {
   broadcast,
@@ -808,7 +808,7 @@ describe('a chart page’s foot', () => {
     render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
     await chartsDesk.findTitle('candles tutorial', 2);
 
-    expect(chartPage.leadsOn('the chart pages')).toEqual([
+    expect(await pageFoot.leadsOn('the chart pages')).toEqual([
       ['Previous: 1. Price line', chartPageAt('price')],
       ['Next: 3. Pressure', chartPageAt('pressure')]
     ]);
@@ -819,7 +819,7 @@ describe('a chart page’s foot', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await chartsDesk.findTitle('price line tutorial', 2);
 
-    expect(chartPage.leadsOn('the chart pages')).toEqual([
+    expect(await pageFoot.leadsOn('the chart pages')).toEqual([
       ['Next: 2. Candles', chartPageAt('candles')]
     ]);
   });
@@ -829,7 +829,7 @@ describe('a chart page’s foot', () => {
     render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
     await chartsDesk.findTitle('pie tutorial', 2);
 
-    expect(chartPage.leadsOn('the chart pages')).toEqual([
+    expect(await pageFoot.leadsOn('the chart pages')).toEqual([
       ['Previous: 3. Pressure', chartPageAt('pressure')]
     ]);
   });
