@@ -55,7 +55,7 @@ for (const {reader, use} of desks) {
     });
 
     test('a tab switch keeps the tabs where they were on screen', async ({page}) => {
-      await page.goto('demos/tables/the-live-table-and-the-store/');
+      await page.goto('demos/tables/the-live-table-and-the-store/?living=flow%2Cstore');
       await page.getByRole('group').filter({has: page.getByText(/^so that /)}).nth(1).scrollIntoViewIfNeeded();
       await expect.poll(() => documentScrollY(page)).toBeGreaterThan(0);
       const tabs = page.getByRole('navigation', {name: 'demos'});
@@ -98,10 +98,11 @@ test.describe('a desktop, where only the search changes', () => {
   test.use({viewport: desktop.viewport});
 
   test('a story opened on a recipe leaves the page where it was', async ({page}) => {
-    await page.goto('demos/tables/the-live-table-and-the-store/');
+    await page.goto('demos/tables/the-live-table-and-the-store/?living=flow');
     const tables = tablesDemo(page);
     await tables.storyAt(1).scrollIntoViewIfNeeded();
     const where = await documentScrollY(page);
+    expect(where).toBeGreaterThan(0);
     const address = page.url();
 
     await tables.openStoryAt(1);
