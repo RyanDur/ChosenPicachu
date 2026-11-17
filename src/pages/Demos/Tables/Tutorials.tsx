@@ -7,6 +7,8 @@ import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
 import {DemoLink} from '@pages/Demos/DemoLink';
+import {ReadingTime} from './ReadingTime';
+import {TablesMap} from './TablesMap';
 import {featuresHeading} from './features-heading';
 import '../Tutorials.css';
 import './Tutorials.css';
@@ -19,7 +21,7 @@ const PartEntry: FC<{part: TablePart}> = ({part}) => {
       <DemoLink to={to} search={search}>{name}</DemoLink>
     </h3>
     <p className="paragraph">{says}</p>
-    <p className="caption muted-ink"><time dateTime={`PT${minutes}M`}>{`${minutes} ${minutes === 1 ? 'minute' : 'minutes'} to read`}</time></p>
+    <ReadingTime minutes={minutes}/>
   </>;
 };
 
@@ -32,6 +34,7 @@ export const Tutorials: FC = () => {
       <WorldGlider/>
     </header>
     <WorldNote/>
+    <TablesMap/>
     <ol className="spine" aria-label="the stations">
       {tableParts.inOrder.map((part, index) =>
         <Station key={part} at={index + 1}>
@@ -47,6 +50,7 @@ export const Tutorials: FC = () => {
         <ol className="tutorial-links" aria-label="the tutorials">
           {tableTutorials.all().map(tutorial => <li key={tutorial}>
             <Link className="tutorial-link signpost reachable" to={`${tableTutorials.addressOf(tutorial)}${searchFromShown({})}`}>{tableTutorials.nameOf(tutorial)}</Link>
+            <ReadingTime minutes={tableTutorials.minutesOf(tutorial)}/>
           </li>)}
         </ol>
       </Station>

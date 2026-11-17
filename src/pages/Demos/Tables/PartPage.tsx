@@ -5,6 +5,7 @@ import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {Aggregations} from './Aggregations';
 import {PartPlace, TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
+import {TablesMap} from './TablesMap';
 import {DesignAsk, FlowTableRecipe, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
 import '../Tutorials.css';
 import './TutorialPage.css';
@@ -32,6 +33,7 @@ export const PartPage: FC<{part: TablePart}> = ({part}) => {
     <WorldGlider/>
     <WorldNote/>
     <Part headedBy={titled}/>
+    <TablesMap/>
     <PageFoot label="the tables parts"
       previous={tableParts.previousOf(part).map(linked)}
       next={tableParts.nextOf(part).map(linked)}/>
