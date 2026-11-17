@@ -204,7 +204,7 @@ describe('the sortable list demo', () => {
       .toHaveAttribute('href', '/demos/tables/?native=sort');
   });
 
-  const byHandStoryDialledLazyKeep = async (): Promise<HTMLElement> => {
+  const byHandStoryDialedLazyKeep = async (): Promise<HTMLElement> => {
     const recipe = await nativeRecipe();
     await dragSortTab.press(recipe, /The user can arrange the list by hand/);
     await dragSortTab.chooseIn(recipe, 'Lazy');
@@ -213,7 +213,7 @@ describe('the sortable list demo', () => {
   };
 
   test('the recipe teaches whatever the dials are set to', async () => {
-    const recipe = await byHandStoryDialledLazyKeep();
+    const recipe = await byHandStoryDialedLazyKeep();
 
     expect(recipeFolds.stepTitled(recipe, 'Stash the landing, settle after the drag')).toBeInTheDocument();
     expect(recipeFolds.stepTitled(recipe, 'Leave the lifted card where it was')).toBeInTheDocument();
@@ -222,7 +222,7 @@ describe('the sortable list demo', () => {
   });
 
   test("turning a dial in the recipe turns the list's own controls", async () => {
-    await byHandStoryDialledLazyKeep();
+    await byHandStoryDialedLazyKeep();
 
     expect(listControls.option('Lazy')).toBeChecked();
     expect(listControls.option('Keep')).toBeChecked();
