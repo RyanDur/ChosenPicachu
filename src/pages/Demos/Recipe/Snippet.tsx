@@ -53,6 +53,10 @@ const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
   call: 'call-ink'
 };
 
+const unlinkedSaying = (lines: readonly Line[]): string => lines.some(({exhibit = false}) => exhibit)
+  ? 'Taken from the exhibit on this page. The rest of the site doesn’t use it.'
+  : 'Written for this page, not taken from the site’s code.';
+
 export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
   const indented = lines.map(({text}) => splitIndent(text));
@@ -75,7 +79,7 @@ export const Snippet: FC<Props> = ({label, lines}) => {
         ? sources.map(({path, url, owner, first, last}) =>
           <a className="signpost reachable" href={`${url}#L${first}-L${last}`} target="_blank" rel="noreferrer"
             key={path}>{nameOf(path, owner)} on GitHub</a>)
-        : 'Written for this page, not taken from the site’s code.'}
+        : unlinkedSaying(lines)}
     </figcaption>
   </figure>;
 };
