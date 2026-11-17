@@ -1,6 +1,4 @@
 import {FC} from 'react';
-import {DemoTopics} from '@pages/Demos';
-import {TabLink} from '@pages/Demos/TabLink';
 import {carve, lines, Snippet} from '../Recipe';
 import {TrappedMenu} from './TrappedMenu';
 import {ANumberInsideALayer} from './ANumberInsideALayer';
@@ -9,17 +7,14 @@ import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 import {PartLink} from './PartLink';
-import {zIndexParts} from './part-pages';
-import {partHeadings} from './part-headings';
 import {WhyThirdIsOnTopLink} from './WhyThirdIsOnTopLink';
 
 export const Why9999StillLoses: FC = () => <>
   <p className="paragraph">A list with a z-index of 9999 can still open under a card with a z-index of 1. This part
     shows that happen, and why no bigger number lifts the list out. It
     assumes what <PartLink part="why-third-is-on-top"/> gives: positioned, auto and stacking order. The second Sort by
-    opens its list in the top layer, a layer the browser draws above the whole
-    page, which <TabLink to={DemoTopics.zIndex}
-    heading={partHeadings.popoverWins}><cite>{zIndexParts.titleOf('popover-wins')}</cite></TabLink> explains.</p>
+    opens its list in the top layer, a layer the browser draws above the whole page,
+    which <PartLink part="why-the-popover-wins"/> explains.</p>
   <TrappedMenu/>
   <ol className="runs card rounded-corners lifted padded">
     <li className="run">

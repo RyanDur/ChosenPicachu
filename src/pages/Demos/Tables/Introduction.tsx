@@ -1,4 +1,5 @@
 import {TabLink} from '@pages/Demos/TabLink';
+import {PartTermLink} from '@pages/Demos/ZIndexDemo';
 import {FC} from 'react';
 import {DemoTopics} from '@pages/Demos';
 
@@ -16,15 +17,15 @@ export const TablesIntroduction: FC = () =>
       back when a row updates, a drag that stutters because the page is measured on every move, a sort that undoes a
       move or a move that undoes a sort.</p>
     <p className="paragraph">State is the values a page holds and draws from, as
-      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. This
+      the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says. This
       page’s view is that the columns and the rows’ order are the state, and the data never moves: a trade rewrites a
       row’s values under the id the row keeps, the arrangement is a separate thing the reader owns, and everything a
       drag needs is measured once, at the grab.</p>
     <p className="paragraph">Every pixel of the drag is drawn from pointer events, the
-      browser’s <TabLink to={DemoTopics.zIndex}>events</TabLink> for a mouse, a finger and a pen
+      browser’s <PartTermLink part="why-the-popover-wins">events</PartTermLink> for a mouse, a finger and a pen
       alike, with no drag-and-drop library. The table is built twice, once with HTML, CSS and JavaScript raw and once in
       React, and the same state sits under both. React is the library this site’s script is written in, as
-      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</p>
+      the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says.</p>
     <p className="paragraph">By the end you can drag a column or a row with the pointer or the arrow keys while trades
       keep landing, resize a column by drag or by keyboard, sort and end a sort by moving a row, and say why the table
       never fights the data. The exhibit below is live; grab a header between the first and the last, or any row’s grip,

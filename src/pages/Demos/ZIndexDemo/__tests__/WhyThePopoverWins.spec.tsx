@@ -1,0 +1,62 @@
+import {render} from '@testing-library/react';
+import {TestApp} from '@__test_support/TestApp';
+import {demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
+import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+
+const popoverWins = 'z-index/why-the-popover-wins';
+const title = 'Why the popover wins';
+
+describe('why the popover wins, on its own page', () => {
+  test('should say its place in the z-index book', async () => {
+    render(<TestApp at={demosAt(popoverWins)}/>);
+
+    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 4 of 6');
+  });
+
+  test('should link part two, which it builds on, to its page with the raised card carried', async () => {
+    render(<TestApp at={demosAt(popoverWins, '?raised=second')}/>);
+
+    const part = await explanation.part(title);
+    const opener = explanation.saying(part, /^A menu opened as a popover shows over every card/);
+
+    expect(explanation.linkNamed(opener, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
+  });
+
+  test('should show the two Sort by menus it explains', async () => {
+    render(<TestApp at={demosAt(popoverWins)}/>);
+
+    expect(await theTrap.find()).toBeInTheDocument();
+  });
+
+  test('should lead back to part three’s page and on to part five on the tab, by number and title, with the raised card carried', async () => {
+    render(<TestApp at={demosAt(popoverWins, '?raised=second')}/>);
+
+    expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
+      ['Previous: 3. What else forms a stacking context', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second')],
+      ['Next: 5. Why a fixed banner still loses', `${demosAt('z-index', '?raised=second')}#fixed-banner-loses-heading`]
+    ]);
+  });
+
+  test('should title the page with the tab and the part', async () => {
+    render(<TestApp at={demosAt(popoverWins)}/>);
+
+    expect(await demoTabs.title('Demos Z-index · Why the popover wins')).toBeInTheDocument();
+  });
+
+  test('should keep Z-index as the current tab', async () => {
+    render(<TestApp at={demosAt(popoverWins)}/>);
+
+    expect(await demoTabs.current()).toEqual(['Z-index']);
+  });
+});
+
+describe('why the popover wins, on the tab', () => {
+  test('should link its title to its page, with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+
+    const listing = await explanation.part(title);
+
+    expect(explanation.linkNamed(listing, title)).toHaveAttribute('href', demosAt(popoverWins, '?raised=second'));
+  });
+});

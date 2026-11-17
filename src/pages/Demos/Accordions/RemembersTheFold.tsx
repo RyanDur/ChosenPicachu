@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {PartTermLink} from '@pages/Demos/ZIndexDemo';
 import {classNames} from '@components';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
@@ -121,7 +122,7 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
             <li className="run">
               <p className="paragraph">The fold is the three parts from the runs above: the {input}, its label and
                 the text. The sample beside this run is the same fold
-                in <TabLink to={DemoTopics.zIndex}>React</TabLink>, the library
+                in <PartTermLink part="why-the-popover-wins">React</PartTermLink>, the library
                 this site’s script is written in, which writes class
                 as <code className="monospaced">className</code> and for
                 as <code className="monospaced">htmlFor</code>.</p>

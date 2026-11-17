@@ -1,4 +1,5 @@
 import {TabLink} from '@pages/Demos/TabLink';
+import {PartTermLink} from '@pages/Demos/ZIndexDemo';
 import {FC, useId} from 'react';
 import {DemoTopics} from '@pages/Demos';
 import {Codes, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../Recipe';
@@ -55,7 +56,7 @@ const WorkspaceStory: FC = () =>
             page.</Says>
           <Says>A name may carry its period after a colon, candles:day; the hour is the default and is left off.</Says>
           <Says>That menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece of the
-            page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says.</Says>
+            page, as the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says.</Says>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
             sheet’s rules pick out. Item gives its button the shared classes that set its look, and the page passes Menu
             the menu’s own, as the sample shows.</Says>
@@ -76,7 +77,7 @@ const WorkspaceStory: FC = () =>
         <Words>
           <Want>A chart is large and the drag starts at its grip. So the swap is measured from the pointer, not from the
             chart’s far edge.</Want>
-          <Says>On dragstart, the <TabLink to={DemoTopics.zIndex}>event</TabLink> the browser sends when a drag begins,
+          <Says>On dragstart, the <PartTermLink part="why-the-popover-wins">event</PartTermLink> the browser sends when a drag begins,
             the code marks where the pointer is on the page and keeps it
             in <code className="monospaced">pointerYAtLastSeat</code>. On every dragover, the event it sends as the
             pointer moves over a chart, the code compares the pointer with that mark. A third of the held chart’s

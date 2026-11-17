@@ -23,10 +23,17 @@ describe('the tables tab’s introduction', () => {
       ['charts tab', `${Paths.demos}charts/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`],
       ['z-index tab', `${Paths.demos}z-index/`],
-      ['accordions tab', `${Paths.demos}accordions/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
-      ['events', `${Paths.demos}z-index/`],
-      ['z-index tab', `${Paths.demos}z-index/`]
+      ['accordions tab', `${Paths.demos}accordions/`]
+    ]);
+  });
+
+  test('should link each term the z-index part on the popover defines to that part’s page', () => {
+    render(<TestApp at="/"><TablesIntroduction/></TestApp>);
+
+    expect(demoPage.linksToPageIn(document.body, `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
+      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['events', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`]
     ]);
   });
 });
