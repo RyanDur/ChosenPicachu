@@ -45,8 +45,8 @@ type ZIndexParts = {
 };
 
 const listings: Record<ZIndexPart, Listing> = {
-  'why-third-is-on-top': {book: 'third-on-top', minutes: 3},
-  'why-9999-still-loses': {book: 'still-loses', minutes: 3}
+  'why-third-is-on-top': {book: 'third-on-top', minutes: 2},
+  'why-9999-still-loses': {book: 'still-loses', minutes: 2}
 };
 
 const tabAddress = demoTab.address(DemoTopics.zIndex);
