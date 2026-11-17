@@ -12,6 +12,7 @@ import {FoldTypeDial} from './FoldTypeDial';
 import {foldInput} from './fold-input';
 import {looks} from './looks';
 import {PartLink} from './PartLink';
+import {RemembersTheFoldLink} from './RemembersTheFoldLink';
 import {TabPartLink} from './TabPartLink';
 import {PlainFold} from './Plain';
 import exclusiveMeasuredAccordionSource from './ExclusiveMeasuredAccordion.tsx?sample';
@@ -71,10 +72,10 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
       <li className="run">
         <p className="paragraph">The script hands the height to the style sheet as a custom property
           named <code className="monospaced unbroken">--measured-height</code>. A custom property is a value the
-          style sheet can read. The script also marks the panel with a
-          class, <code className="monospaced">sized</code>. A class is a name an element wears so
-          a rule can pick it out. While <code className="monospaced">sized</code> is on, a rule reads the
-          number.</p>
+          style sheet can read. The script also marks the panel with
+          a <RemembersTheFoldLink>class</RemembersTheFoldLink>, a name a rule picks it out
+          by: <code className="monospaced">sized</code>. While <code className="monospaced">sized</code> is on, a rule
+          reads the number.</p>
         <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'))}/>
       </li>
       <li className="run">
