@@ -186,6 +186,12 @@ describe('http', () => {
       expect(await sent().map(answered => answered.orElse('no body')).orNull()).toEqual(testObject);
     });
 
+    test('gives back nothing when the server answers created with a null body', async () => {
+      respondWith('PUT', 201, 'null');
+
+      expect(await sent().map(answered => answered.orElse('no body')).orNull()).toEqual('no body');
+    });
+
     test('fails as forbidden when the server refuses', async () => {
       respondWith('PUT', 403, JSON.stringify(testObject));
 
