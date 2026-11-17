@@ -80,6 +80,6 @@ describe('what else forms a stacking context, on the tab', () => {
     render(<TestApp at={demosAt('z-index')}/>);
     await demoTabs.arrivedOn('Z-index');
 
-    expect(wearsChooser.missing()).toBe(true);
+    expect(wearsChooser.query()).not.toBeInTheDocument();
   });
 });
