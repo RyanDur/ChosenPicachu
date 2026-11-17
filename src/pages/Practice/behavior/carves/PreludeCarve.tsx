@@ -7,7 +7,7 @@ const sandUtil: CodeFile = {
   owner: 'sand',
   url: 'https://github.com/RyanDur/sand/blob/65821220fe38666bfad429a6a1b4cfbb65b4c463/src/lib/util/index.ts'
 };
-const sandLine = (line: number, text: string): Line => ({text, from: {file: sandUtil, line}});
+const sandLine = (line: number, text: string): Line => ({text, from: {file: sandUtil, line, kind: 'site'}});
 
 export const PreludeCarve: FC = () => <Snippet label="TS" lines={[
   sandLine(77, 'export const not = (value: unknown): boolean => !value;'),

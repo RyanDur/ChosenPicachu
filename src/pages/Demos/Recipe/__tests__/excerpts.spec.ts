@@ -5,7 +5,7 @@ import {CodeFile, Line} from '../sample';
 const store: CodeFile = {path: 'src/store.ts', url: 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/store.ts'};
 const shared: CodeFile = {path: 'src/shared.ts', url: 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/shared.ts'};
 
-const carved = (text: string, file: CodeFile, line: number): Line => ({text, from: {file, line}});
+const carved = (text: string, file: CodeFile, line: number): Line => ({text, from: {file, line, kind: 'site'}});
 
 const kindOfConst = (tokens: {text: string; kind: string}[]): string | undefined =>
   tokens.find(({text}) => text === 'const')?.kind;

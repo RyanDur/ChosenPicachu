@@ -12,7 +12,7 @@ const dedented = (lines: string[], from: Sample, firstLine: number): Line[] => {
   const commonIndent = Math.min(...lines
     .filter(line => has(line.trim()))
     .map(line => line.length - line.trimStart().length));
-  return lines.map((line, at) => ({text: line.slice(commonIndent), from: {file: from, line: firstLine + at}}));
+  return lines.map((line, at) => ({text: line.slice(commonIndent), from: {file: from, line: firstLine + at, kind: 'site'}}));
 };
 
 const closesTheUnit = (source: string, at: number, closer: Exclude<Closer, ']'>): boolean =>

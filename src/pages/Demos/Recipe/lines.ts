@@ -1,4 +1,8 @@
+import {maybe} from '@ryandur/sand';
 import {Line} from './sample';
+
+const fromTheExhibit = ({from, ...line}: Line): Line =>
+  maybe(from).map((origin): Line => ({...line, from: {...origin, kind: 'exhibit'}})).orElse(line);
 
 type Lines = {
   plain: (text: string) => Line;
@@ -11,5 +15,5 @@ export const lines: Lines = {
   plain: text => ({text}),
   blank: {text: ' '},
   aside: text => ({text, dim: true}),
-  fromTheExhibit: carved => carved.map(({text, dim}) => ({text, dim, exhibit: true}))
+  fromTheExhibit: carved => carved.map(fromTheExhibit)
 };
