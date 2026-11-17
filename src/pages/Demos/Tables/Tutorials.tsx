@@ -1,7 +1,7 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsObject} from '@navigation/search-params';
-import {FlowTableRecipe, FeaturesAskedFor, StillTableRecipe} from './Recipe';
+import {FlowTableRecipe, FeaturesAskedFor} from './Recipe';
 import {Station} from '../Recipe';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
@@ -11,10 +11,11 @@ import '../Tutorials.css';
 import './Tutorials.css';
 
 const PartEntry: FC<{part: TablePart}> = ({part}) => {
-  const {name, says, minutes} = tableParts.told(part);
+  const {name, says, minutes, ordinal} = tableParts.told(part);
+  const {to, search} = tableParts.whereIs(ordinal);
   return <>
     <h3 className="phase-title title">
-      <DemoLink to={tableParts.addressOf(part)}>{name}</DemoLink>
+      <DemoLink to={to} search={search}>{name}</DemoLink>
     </h3>
     <p className="paragraph">{says}</p>
     <p className="caption muted-ink"><time dateTime={`PT${minutes}M`}>{`${minutes} ${minutes === 1 ? 'minute' : 'minutes'} to read`}</time></p>
@@ -41,7 +42,7 @@ export const Tutorials: FC = () => {
         <PartEntry part="the-slices"/>
       </Station>
       <Station at={4}>
-        <StillTableRecipe/>
+        <PartEntry part="the-still-table"/>
       </Station>
       <Station at={tableTutorials.startingStation}>
         <FlowTableRecipe/>

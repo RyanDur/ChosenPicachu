@@ -2,6 +2,7 @@ import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {designHeading, needHeading, stations, storiesHeading} from '@pages/Demos/headings';
+import {stillStory} from './still-story';
 
 export type TablePart = keyof typeof names.tableParts;
 
@@ -33,15 +34,21 @@ const titles: Record<BookPart, string> = {
 const minutes: Record<TablePart, number> = {
   'the-need-and-its-clues': 1,
   'the-sketch': 1,
-  'the-slices': 2
+  'the-slices': 2,
+  'the-still-table': 5
+};
+
+const opens: Partial<Record<TablePart, typeof stillStory>> = {
+  'the-still-table': stillStory
 };
 
 type Place = {
   to: string;
   heading?: string;
+  search?: Record<string, string>;
 };
 
-type PartPlace = Place & {
+export type PartPlace = Place & {
   numbered: string;
 };
 
@@ -57,7 +64,7 @@ const all: readonly TablePart[] = book.filter(isListed);
 
 const whereIs = (station: number): Place =>
   maybe(book[station - 1]).mBind(part => maybe(isListed(part) ? part : undefined)).either(
-    part => ({to: addressOf(part)}),
+    part => ({to: addressOf(part), ...maybe(opens[part]).map(({param, id}) => ({search: {[param]: id}})).orElse({})}),
     () => ({to: tabAddress, heading: stations.idOf(station)}));
 
 const neighborOf = (part: BookPart): PartPlace =>

@@ -16,15 +16,15 @@ type SlicesProps = {
 
 type PartPage = {
   headedBy: string;
-  whereIs: (station: number) => {to: string; heading?: string};
+  whereIs: (station: number) => {to: string; heading?: string; search?: Record<string, string>};
 };
 
 const StationLink: FC<{station: number; partPage?: PartPage}> = ({station, partPage}) => {
   const carried = useCarriedAddress();
   return maybe(partPage).either(
     ({whereIs}) => {
-      const {to, heading} = whereIs(station);
-      return <Link className="slice-station signpost caption upright" to={carried(to, heading)}>station {station}</Link>;
+      const {to, heading, search} = whereIs(station);
+      return <Link className="slice-station signpost caption upright" to={carried(to, heading, search)}>station {station}</Link>;
     },
     () => <a className="slice-station signpost caption upright" href={`#${stations.idOf(station)}`}>station {station}</a>);
 };

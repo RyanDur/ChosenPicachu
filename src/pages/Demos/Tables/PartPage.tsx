@@ -3,16 +3,17 @@ import {DemoTopics, demoTab} from '@pages/Demos';
 import {PageFoot} from '@pages/Demos/PageFoot';
 import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {Aggregations} from './Aggregations';
-import {TablePart, tableParts} from './part-pages';
+import {PartPlace, TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
-import {DesignAsk, StoryClues, StorySlices} from './Recipe';
+import {DesignAsk, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
 import '../Tutorials.css';
 import './TutorialPage.css';
 
 const parts: Record<TablePart, FC<{headedBy: string}>> = {
   'the-need-and-its-clues': StoryClues,
   'the-sketch': DesignAsk,
-  'the-slices': StorySlices
+  'the-slices': StorySlices,
+  'the-still-table': StillTableRecipe
 };
 
 export const PartPage: FC<{part: TablePart}> = ({part}) => {
@@ -20,8 +21,7 @@ export const PartPage: FC<{part: TablePart}> = ({part}) => {
   const {name, ordinal} = tableParts.told(part);
   const carried = useCarriedAddress();
   const Part = parts[part];
-  const linked = ({numbered, to, heading}: {numbered: string; to: string; heading?: string}) =>
-    ({numbered, address: carried(to, heading)});
+  const linked = ({numbered, to, heading, search}: PartPlace) => ({numbered, address: carried(to, heading, search)});
   return <article aria-labelledby={titled} className="tutorial-page tutorials">
     <hgroup>
       <p className="caption">{`${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tableParts.inTheBook}`}</p>

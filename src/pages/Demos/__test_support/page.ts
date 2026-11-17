@@ -38,7 +38,7 @@ const slices = (): HTMLElement => screen.getByRole('list', {name: 'the slices'})
 
 const stationOf = (link: HTMLElement): string => addressOf(link).hash.replace(/^#/, '');
 
-const sliceStations = (): string[] => within(slices()).getAllByRole('link').map(stationOf);
+const sliceStations = (): string[] => within(slices()).getAllByRole('link').map(stationOf).filter(station => station !== '');
 
 const missing = (stations: string[]): string[] => stations.filter(station => not(document.getElementById(station)));
 
