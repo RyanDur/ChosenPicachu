@@ -1,4 +1,5 @@
 import {Dispatch, createContext} from 'react';
+import {Maybe} from '@ryandur/sand';
 import {Direction, TableAction, TableView, tableState} from './model';
 
 export type TableContext = TableView & {
@@ -7,7 +8,7 @@ export type TableContext = TableView & {
 
 export type ColumnMoved = {readonly column: string; readonly to: number};
 export type RowMoved = {readonly row: string; readonly to: number; readonly standing: readonly string[]};
-export type Sorted = {readonly column: string; readonly direction?: Direction};
+export type Sorted = {readonly column: string; readonly direction: Maybe<Direction>};
 
 export type HeaderEvents = {
   readonly onColumnMoved?: (moved: ColumnMoved) => void;

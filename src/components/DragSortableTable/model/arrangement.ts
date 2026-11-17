@@ -1,4 +1,4 @@
-import {has, not} from '@ryandur/sand';
+import {has, Maybe, not} from '@ryandur/sand';
 import {array} from '@components/arrays';
 import {Direction, SortKey, sorting} from './sorting';
 import {Sort} from './table-state';
@@ -12,12 +12,12 @@ export type Arrangement = {
 export type ArrangementAction =
   | {readonly type: 'columnMoved'; readonly column: string; readonly to: number}
   | {readonly type: 'rowMoved'; readonly row: string; readonly to: number; readonly standing: readonly string[]}
-  | {readonly type: 'sorted'; readonly column: string; readonly direction?: Direction}
+  | {readonly type: 'sorted'; readonly column: string; readonly direction: Maybe<Direction>}
   | {readonly type: 'arrived'; readonly keys: readonly string[]};
 
 const columnMoved = (column: string, to: number): ArrangementAction => ({type: 'columnMoved', column, to});
 const rowMoved = (row: string, to: number, standing: readonly string[]): ArrangementAction => ({type: 'rowMoved', row, to, standing});
-const sorted = (column: string, direction?: Direction): ArrangementAction => ({type: 'sorted', column, direction});
+const sorted = (column: string, direction: Maybe<Direction>): ArrangementAction => ({type: 'sorted', column, direction});
 const arrived = (keys: readonly string[]): ArrangementAction => ({type: 'arrived', keys});
 
 const of = (columns: readonly string[], rows: readonly string[] = []): Arrangement =>
@@ -54,7 +54,9 @@ const answering = (arrangement: Arrangement, action: ArrangementAction): Arrange
   switch (action.type) {
     case 'columnMoved': return {...arrangement, columns: movedTo(arrangement.columns, action.column, action.to)};
     case 'rowMoved': return {...sortEnded(arrangement, action.standing), rows: movedTo(action.standing, action.row, action.to)};
-    case 'sorted': return has(action.direction) ? {...arrangement, sort: {column: action.column, direction: action.direction}} : unsorted(arrangement);
+    case 'sorted': return action.direction
+      .map((direction): Arrangement => ({...arrangement, sort: {column: action.column, direction}}))
+      .orElse(unsorted(arrangement));
     case 'arrived': return {...arrangement, rows: seatingOf(arrangement.rows, action.keys)};
     default: return arrangement;
   }

@@ -1,7 +1,8 @@
-import {maybe} from '@ryandur/sand';
+import {maybe, some} from '@ryandur/sand';
 import {TableMiddleware, tableStore} from '../store';
 import {columnShares} from '../../__test_support';
 import {tableActions} from '../actions';
+import {Direction} from '../sorting';
 import {tableReducer} from '../reducer';
 import {tableState} from '../table-state';
 import {arrangements} from '../arrangement';
@@ -141,7 +142,7 @@ describe('the arrangement', () => {
   const arranged = arrangements.of(['lookback', 'trades', 'buys'], ['this minute', 'this hour']);
 
   test('keys that arrive later sit after the ones still seated, and the sort ranks them all', () => {
-    const byTrades = arrangements.reducer(arranged, arrangements.sorted('trades', 'descending'));
+    const byTrades = arrangements.reducer(arranged, arrangements.sorted('trades', some<Direction>('descending')));
 
     const more = arrangements.reducer(byTrades, arrangements.arrived(['this minute', 'this hour', 'session']));
 
