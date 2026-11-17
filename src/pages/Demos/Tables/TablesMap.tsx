@@ -13,8 +13,8 @@ export const TablesMap: FC = () => {
     <ol className="paragraph">
       {tablesBook.signposts.map(({title, to, heading, search}) => <li key={title}>
         {pathname === to
-          ? <span className="map-entry" aria-current="page">{title}</span>
-          : <Link className="map-entry signpost" to={carried(to, heading, search)}>{title}</Link>}
+          ? <span className="map-entry reachable" aria-current="page">{title}</span>
+          : <Link className="map-entry signpost reachable" to={carried(to, heading, search)}>{title}</Link>}
       </li>)}
     </ol>
   </nav>;
