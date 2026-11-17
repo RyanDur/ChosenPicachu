@@ -7,7 +7,7 @@ import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 import {PartLink} from './PartLink';
-import {WhyThirdIsOnTopLink} from './WhyThirdIsOnTopLink';
+import {PartTermLink} from './PartTermLink';
 
 export const Why9999StillLoses: FC = () => <>
   <p className="paragraph">A list with a z-index of 9999 can still open under a card with a z-index of 1. This part
@@ -30,9 +30,9 @@ export const Why9999StillLoses: FC = () => <>
       ])}/>
     </li>
     <li className="run">
-      <p className="paragraph">Card one is <WhyThirdIsOnTopLink>positioned</WhyThirdIsOnTopLink> and has a z-index of
-        1, so it forms a stacking context: a layer the browser paints as one, the card and everything inside it
-        together. Inside that layer, the list’s 9999 puts it above card one’s own face. Outside it, the 9999 counts
+      <p className="paragraph">Card one is <PartTermLink part="why-third-is-on-top">positioned</PartTermLink> and has a
+        z-index of 1, so it forms a stacking context: a layer the browser paints as one, the card and everything inside
+        it together. Inside that layer, the list’s 9999 puts it above card one’s own face. Outside it, the 9999 counts
         for nothing.</p>
       <ANumberInsideALayer/>
     </li>
@@ -46,11 +46,11 @@ export const Why9999StillLoses: FC = () => <>
       <Where9999IsCompared/>
     </li>
     <li className="run">
-      <p className="paragraph">With the box unchecked, card one’s
-        z-index is <WhyThirdIsOnTopLink>auto</WhyThirdIsOnTopLink>. The card is still positioned, but at auto it forms
-        no stacking context, so the list is not kept inside the card’s layer. It joins the context the tab’s content
-        forms, where card two is, and there 9999 is the larger number. With the box checked again, the card forms its
-        layer again, with the list inside it.</p>
+      <p className="paragraph">With the box unchecked, card one’s z-index
+        is <PartTermLink part="why-third-is-on-top">auto</PartTermLink>. The card is still positioned, but at auto it
+        forms no stacking context, so the list is not kept inside the card’s layer. It joins the context the tab’s
+        content forms, where card two is, and there 9999 is the larger number. With the box checked again, the card
+        forms its layer again, with the list inside it.</p>
       <Snippet label="TS" lines={lines.fromTheExhibit(
         carve.between(trappedSource, "<li className={classNames('old-way-card", '</label>')
       )}/>

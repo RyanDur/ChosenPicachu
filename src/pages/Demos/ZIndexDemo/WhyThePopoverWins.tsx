@@ -7,7 +7,7 @@ import menuCss from '@components/Menu/Menu.css?sample';
 import itemSource from '@components/Menu/Item.tsx?sample';
 import '../Runs.css';
 import {PartLink} from './PartLink';
-import {WhyThirdIsOnTopLink} from './WhyThirdIsOnTopLink';
+import {PartTermLink} from './PartTermLink';
 
 export const WhyThePopoverWins: FC = () => <>
   <p className="paragraph">A menu opened as a popover shows over every card, whatever stacking context sits around it.
@@ -82,7 +82,7 @@ export const WhyThePopoverWins: FC = () => <>
         In the style sheet the placement sits under <code className="monospaced">&amp;[popover]</code>, which reads as
         a menu that is also a popover. The placement is measured from an anchor, and a popover’s anchor is the button
         that opened it. A menu that is not a popover gets no anchor from the button that opens it, so
-        the <WhyThirdIsOnTopLink>rule</WhyThirdIsOnTopLink> leaves
+        the <PartTermLink part="why-third-is-on-top">rule</PartTermLink> leaves
         that menu out. Card one’s list in <PartLink part="what-else-forms-a-stacking-context"/> names
         its own anchor.</p>
       <Snippet label="CSS" lines={[
