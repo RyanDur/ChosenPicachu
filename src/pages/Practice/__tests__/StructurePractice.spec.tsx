@@ -92,7 +92,22 @@ describe('the Structure practice tab', () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
-    expect(practicePage.linkUnder('ARIA last', 'z-index tab')).toHaveAttribute('href', demosAt('z-index/why-a-fixed-banner-still-loses'));
+    expect(practicePage.linkUnder('ARIA last', 'Why a fixed banner still loses'))
+      .toHaveAttribute('href', demosAt('z-index/why-a-fixed-banner-still-loses'));
+  });
+
+  test('should send the old-way menu to the z-index page where script opens it', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linkUnder('ARIA last', 'Why the popover wins')).toHaveAttribute('href', demosAt('z-index/why-the-popover-wins'));
+  });
+
+  test('should send the pile’s Expand button to the z-index page that draws the pile', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linkUnder('ARIA last', 'Why Third is on top')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top'));
   });
 
   test('should send each part of the drag-sortable table to its source, and the menu’s three components to the z-index page that defines a component', async () => {
@@ -104,7 +119,7 @@ describe('the Structure practice tab', () => {
       ['ResizeHandle', `${Paths.repo}/blob/main/src/components/DragSortableTable/ResizeHandle.tsx`],
       ['SortMenu', `${Paths.repo}/blob/main/src/components/DragSortableTable/SortMenu.tsx`],
       ['DraggableColumn', `${Paths.repo}/blob/main/src/components/DragSortableTable/DraggableColumn.tsx`],
-      ['z-index tab', demosAt('z-index/why-the-popover-wins')]
+      ['Why the popover wins', demosAt('z-index/why-the-popover-wins')]
     ]));
   });
 
