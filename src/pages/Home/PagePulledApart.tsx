@@ -60,7 +60,7 @@ const classLettering: readonly Lettered[] = [
 
 const scriptLettering: readonly Lettered[] = [
   {word: 'dialog', u: 19.5, v: 44.5},
-  {word: 'click', u: clickSpot.u + 3, v: clickSpot.v + 1}
+  {word: 'click', u: clickSpot.u + 7, v: clickSpot.v + 3}
 ];
 
 const backCorner: Spot = {u: 0, v: 0};
