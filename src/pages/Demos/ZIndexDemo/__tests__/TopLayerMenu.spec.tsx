@@ -42,6 +42,15 @@ describe('why the popover wins', () => {
 
     expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
   });
+
+  test('should link the run on the top layer to the page whose cards it means, with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+
+    const part = await explanation.part('Why the popover wins');
+    const run = explanation.saying(part, /^The top layer is not inside any stacking context/);
+
+    expect(explanation.linkNamed(run, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
+  });
 });
 
 describe('why the popover wins, on a term part one defines', () => {
