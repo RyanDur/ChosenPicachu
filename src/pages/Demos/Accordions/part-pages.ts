@@ -1,10 +1,12 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
-import {DemoTopics, demoTab} from '@pages/Demos';
+import {demoTab, DemoTopics} from '@pages/Demos';
 
 export type AccordionPart = keyof typeof names.accordions;
 
-type Told = {name: string; says: string; minutes: number; ordinal: number};
+type Entry = {name: string; minutes: number; ordinal: number};
+
+type Told = Entry & {says: string};
 
 type AccordionParts = {
   told: (part: AccordionPart) => Told;
@@ -13,21 +15,20 @@ type AccordionParts = {
   inTheBook: number;
 };
 
-const told: Record<AccordionPart, Told> = {
+const entries: Record<AccordionPart, Entry> = {
   'the-measured-height': {
     name: 'The measured height',
-    says: 'A script measures the text, and the style sheet slides the panel to that height.',
     minutes: 9,
     ordinal: 4
   }
 };
 
-const parts = Object.keys(told).filter((key): key is AccordionPart => key in told);
+const parts = Object.keys(entries).filter((key): key is AccordionPart => key in entries);
 
 const addressOf = (part: AccordionPart): string => `${demoTab.address(DemoTopics.accordions)}${part}/`;
 
 export const accordionParts: AccordionParts = {
-  told: part => told[part],
+  told: part => ({...entries[part], says: names.accordions[part].description}),
   addressOf,
   at: pathname => maybe(parts.find(part => pathname === addressOf(part))),
   inTheBook: 6
