@@ -5,12 +5,15 @@ import {Place} from '@pages/Demos/useCarriedAddress';
 import {Exercise, Slices} from '../../Recipe';
 import {TabLink} from '@pages/Demos/TabLink';
 
+const stillTable = tableParts.told('the-still-table').ordinal;
+const liveTable = tableParts.told('the-live-table-and-the-store').ordinal;
+
 const slicedAt: [string, number][] = [
-  ['The trader can read the market in a table', 4],
-  ['The trader can watch the market live, one lookback beside another', 5],
-  ['The trader can sort by column, and by row', 6],
-  ['The trader can sort the lookbacks by any measure, or take the order back', 6],
-  ['The trader can widen a column', 6]
+  ['The trader can read the market in a table', stillTable],
+  ['The trader can watch the market live, one lookback beside another', liveTable],
+  ['The trader can sort by column, and by row', tableParts.featuresStation],
+  ['The trader can sort the lookbacks by any measure, or take the order back', tableParts.featuresStation],
+  ['The trader can widen a column', tableParts.featuresStation]
 ];
 
 const placed = slicedAt.map(([slice, station]): [string, number, Place] =>
