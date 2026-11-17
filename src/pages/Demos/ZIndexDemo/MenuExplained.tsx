@@ -8,6 +8,9 @@ import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 import {zIndexParts} from './part-pages';
+import {DemoLink} from '@pages/Demos/DemoLink';
+
+const whyThirdIsOnTop = zIndexParts.addressOf('why-third-is-on-top');
 
 export const MenuExplained: FC = () =>
   <section aria-labelledby={partHeadings.stillLoses} className="stacking-part">
@@ -27,7 +30,7 @@ export const MenuExplained: FC = () =>
         ])}/>
       </li>
       <li className="run">
-        <p className="paragraph">Card one is positioned and has a z-index of 1, so it forms a stacking context: a
+        <p className="paragraph">Card one is <DemoLink to={whyThirdIsOnTop}>positioned</DemoLink> and has a z-index of 1, so it forms a stacking context: a
           layer the browser paints as one, the card and everything inside it together. Inside that layer, the
           list’s 9999 puts it above card one’s own face. Outside it, the 9999 counts for nothing.</p>
         <ANumberInsideALayer/>
@@ -44,7 +47,7 @@ export const MenuExplained: FC = () =>
         <Where9999IsCompared/>
       </li>
       <li className="run">
-        <p className="paragraph">With the box unchecked, card one’s z-index is auto. The card is still positioned,
+        <p className="paragraph">With the box unchecked, card one’s z-index is <DemoLink to={whyThirdIsOnTop}>auto</DemoLink>. The card is still positioned,
           but at auto it forms no stacking context, so the list is not kept inside the card’s layer. It joins the
           context the tab’s content forms, where card two is, and there 9999 is the larger number. With the box checked
           again, the card forms its layer again, with the list inside it.</p>
