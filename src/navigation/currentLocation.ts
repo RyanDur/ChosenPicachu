@@ -10,6 +10,15 @@ const Read = createContext<() => Location>(() => {
   throw new Error('the current location is read from a router, and none provides it');
 });
 
-const of: CurrentLocation['of'] = router => () => router.state.location;
+const withoutBasename = (pathname: string, basename: string): string => {
+  const start = basename.endsWith('/') ? basename.length - 1 : basename.length;
+  return pathname.startsWith(basename.slice(0, start)) ? pathname.slice(start) || '/' : pathname;
+};
+
+// the router's location keeps the basename; useLocation and ScrollRestoration's getKey both see it stripped
+const of: CurrentLocation['of'] = router => () => {
+  const {location} = router.state;
+  return {...location, pathname: withoutBasename(location.pathname, router.basename ?? '/')};
+};
 
 export const currentLocation: CurrentLocation = {Read, of};
