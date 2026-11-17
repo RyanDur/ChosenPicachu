@@ -281,7 +281,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
               </li>
               <li className="run">
                 <p className="paragraph">The bar looks like the site’s diagrams: a paper ground with a charcoal hairline
-                  around it. The diagrams use that look too, so I keep it out of the bar’s own style sheet.
+                  around it. The old way on the z-index tab wears that look too, so I keep it out of the bar’s own style
+                  sheet.
                   It is a class in a shared style sheet, <code className="monospaced">drawn-piece</code>, and the bar
                   wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own style
                   sheet keeps the structure, the row, the padding and the height. The samples that follow show both, the
