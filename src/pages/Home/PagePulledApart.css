@@ -1,5 +1,5 @@
 .page-pulled-apart {
-  --drawn-width: 480px;
+  --drawn-width: 552px;
 
   display: grid;
   gap: var(--base);
