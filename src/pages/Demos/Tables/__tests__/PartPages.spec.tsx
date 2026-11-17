@@ -20,6 +20,7 @@ const theLiveTable = 'Make the table live';
 const theFlowStory = 'The trader can watch the market live, one lookback beside another';
 const theStoreStory = 'The page is a store, and so is the table';
 const theLiveTablesPage = demosAt('tables/the-live-table-and-the-store');
+const theFeatures = 'Add features, in the order they were asked for';
 const bothStoriesOpen = 'living=flow%2Cstore';
 
 describe('the tables tab’s parts, each on its own page', () => {
@@ -401,8 +402,11 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().partPlace();
 
     expect(aggregations.card()).toBeVisible();
-    expect(demoPage.part(theLiveTable)).toBeVisible();
+    const live = demoPage.part(theLiveTable);
+    expect(recipeFolds.story(live, theFlowStory)).toBeInTheDocument();
+    expect(recipeFolds.story(live, theStoreStory)).toBeInTheDocument();
     expect(tablesTab().titleShown(theStillStory)).not.toBeInTheDocument();
+    expect(tablesTab().titleShown(theFeatures)).not.toBeInTheDocument();
   });
 
   test('the live table’s page links each term it glosses, and each tab it names, to that tab', async () => {
