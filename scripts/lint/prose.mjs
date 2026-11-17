@@ -95,36 +95,55 @@ const breaksBetweenWords = {
   }
 };
 
-const ourWords = ['armour', 'behaviour', 'colour', 'favour', 'flavour', 'harbour', 'honour', 'humour', 'labour',
-  'neighbour', 'odour', 'parlour', 'rumour', 'savour', 'splendour', 'valour', 'vapour'];
-const verbsEndingIse = ['apolog', 'custom', 'emphas', 'final', 'initial', 'maxim', 'minim', 'normal', 'optim', 'organ',
-  'priorit', 'real', 'recogn', 'serial', 'summar', 'util', 'visual'];
+const roots = {
+  aluminium: 'aluminum', amongst: 'among', artefact: 'artifact', behaviour: 'behavior', centre: 'center',
+  cheque: 'check', colour: 'color', cosy: 'cozy', defence: 'defense', favour: 'favor', flavour: 'flavor',
+  focussed: 'focused', honour: 'honor', judgement: 'judgment', labour: 'labor', licence: 'license', litre: 'liter',
+  metre: 'meter', mould: 'mold', neighbour: 'neighbor', offence: 'offense', programme: 'program',
+  sceptical: 'skeptical', theatre: 'theater', tyre: 'tire', whilst: 'while'
+};
+const verbsEndingIse = ['apologise', 'customise', 'emphasise', 'finalise', 'initialise', 'maximise', 'minimise',
+  'normalise', 'optimise', 'organise', 'prioritise', 'realise', 'recognise', 'serialise', 'summarise', 'utilise',
+  'visualise'];
 const doubledL = ['cancel', 'channel', 'dial', 'duel', 'fuel', 'funnel', 'label', 'level', 'model', 'quarrel', 'signal',
   'total', 'travel', 'tunnel'];
-const reEndings = {re: 'er', res: 'ers', red: 'ered', ring: 'ering'};
-
-/** @type {[RegExp, string | ((found: string, ...parts: string[]) => string)][]} */
-const britishSpellings = [
-  [new RegExp(`(${ourWords.map(word => word.slice(0, -2)).join('|')})ur`), '$1r'],
-  [new RegExp(`(${verbsEndingIse.join('|')})is(e|ed|es|ing|er|ers|ation|ations)$`), '$1iz$2'],
-  [/analys(e|ed|ing|er)$/, 'analyz$1'],
-  [new RegExp(`(${doubledL.join('|')})l(ed|ing|er|ers)$`), '$1$2'],
-  [/(cent|fib|lit|met|spect|theat)(re|res|red|ring)$/, (_, root, end) => root + reEndings[/** @type {keyof typeof reEndings} */ (end)]],
-  [/grey/, 'gray'], [/mould/, 'mold'], [/focuss/, 'focus'], [/aluminium/, 'aluminum'], [/amongst$/, 'among'],
-  [/whilst$/, 'while'], [/artefact/, 'artifact'], [/cheque/, 'check'], [/cosy/, 'cozy'], [/(de|of)fence/, '$1fense'],
-  [/licence/, 'license'], [/judgement/, 'judgment'], [/programme/, 'program'], [/sceptic/, 'skeptic'],
-  [/tyre/, 'tire'], [/analogue/, 'analog'], [/catalogu(ed|ing)$/, 'catalog$1'],
-  [/catalogue/, 'catalog'],
-  [/enrol(s|ment)?$/, 'enroll$1'], [/fulfil(s|ment)?$/, 'fulfill$1'], [/practis(e|ed|es|ing)$/, 'practic$1']
-];
+const irregularSpellings = {
+  analyse: 'analyze', analysed: 'analyzed', analysing: 'analyzing', analyser: 'analyzer',
+  analogue: 'analog', analogues: 'analogs', catalogue: 'catalog', catalogues: 'catalogs', catalogued: 'cataloged',
+  cataloguing: 'cataloging', enrol: 'enroll', enrols: 'enrolls', enrolment: 'enrollment', fulfil: 'fulfill',
+  fulfils: 'fulfills', fulfilment: 'fulfillment', grey: 'gray', greys: 'grays', greyed: 'grayed', greying: 'graying',
+  greyish: 'grayish', practise: 'practice', practised: 'practiced', practises: 'practices', practising: 'practicing'
+};
 
 /**
- * @param {string} word
- * @returns {import('@ryandur/sand').Maybe<string>}
+ * @param {string} british
+ * @param {string} american
+ * @param {[string, string][]} endings
+ * @returns {[string, string][]}
  */
-const americanFor = word => maybe(britishSpellings.find(([british]) => british.test(word)))
-  .map(([british, american]) => word.replace(british, /** @type {any} */ (american)));
+const ending = (british, american, endings) => endings.map(([ours, theirs]) => [british + ours, american + theirs]);
+const sharedEndings = (/** @type {string[]} */ ...endings) =>
+  endings.map(end => /** @type {[string, string]} */ ([end, end]));
 
+/**
+ * @param {[string, string]} root
+ * @returns {[string, string][]}
+ */
+const family = ([british, american]) => {
+  if (british.endsWith('our'))
+    return ending(british, american, sharedEndings('', 's', 'ed', 'ing', 'ful', 'less', 'able', 'ite', 'ites'));
+  if (british.endsWith('re') && american.endsWith('er'))
+    return ending(british.slice(0, -2), american.slice(0, -2),
+      [['re', 'er'], ['res', 'ers'], ['red', 'ered'], ['ring', 'ering']]);
+  return ending(british, american, sharedEndings('', 's'));
+};
+const american = Object.fromEntries([
+  ...Object.entries(roots).flatMap(family),
+  ...verbsEndingIse.flatMap(verb => ending(verb.slice(0, -1), `${verb.slice(0, -2)}z`,
+    sharedEndings('e', 'ed', 'es', 'ing', 'er', 'ers', 'ation', 'ations'))),
+  ...doubledL.flatMap(root => ending(root, root, [['led', 'ed'], ['ling', 'ing'], ['ler', 'er'], ['lers', 'ers']])),
+  ...Object.entries(irregularSpellings)
+]);
 const wordsIn = /[A-Z]?[a-z]+|[A-Z]+(?![a-z])/g;
 const ariaLabelledBy = /labelled-?by/gi;
 
@@ -138,8 +157,8 @@ const americanSpelling = {
      */
     const reportBritishWordsIn = (node, name) => [...new Set(maybe(name.replace(ariaLabelledBy, '').match(wordsIn))
       .orElse([]).map(word => word.toLowerCase()))]
-      .forEach(british => americanFor(british)
-        .map(american => context.report({node, messageId: 'british', data: {british, american}})));
+      .filter(word => Object.hasOwn(american, word))
+      .forEach(british => context.report({node, messageId: 'british', data: {british, american: american[british]}}));
     return {
       Identifier: node => reportBritishWordsIn(node, node.name),
       JSXIdentifier: node => reportBritishWordsIn(node, node.name)
