@@ -1,6 +1,7 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
 import {FC, ReactNode} from 'react';
+import {maybe} from '@ryandur/sand';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
 import type {World} from '../../Controls';
@@ -163,6 +164,8 @@ const StillStory: FC = () => {
   </Story>;
 };
 
-export const StillTableRecipe: FC = () => <section aria-label="the still table" className="build-steps">
-  <Stories><StillStory/></Stories>
-</section>;
+export const StillTableRecipe: FC<{headedBy?: string}> = ({headedBy}) =>
+  <section aria-labelledby={headedBy} aria-label={maybe(headedBy).either(() => undefined, () => 'the still table')}
+    className="build-steps">
+    <Stories><StillStory/></Stories>
+  </section>;
