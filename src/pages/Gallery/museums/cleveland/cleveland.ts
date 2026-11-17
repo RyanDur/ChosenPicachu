@@ -22,15 +22,13 @@ const sized = (image: Maybe<ClevelandImage>): string[] =>
 
 const srcSetOf = (record: ClevelandRecord): Maybe<string> => maybe(record.images)
   .map(({web, print}) => [...sized(maybe(web)), ...sized(maybe(print))].join(', '))
-  .mBind(sources => maybe(sources, written));
-
-const written = (words: string): boolean => words !== '';
+  .mBind(sources => maybe(sources, has));
 
 const described = (record: ClevelandRecord): string[] =>
-  maybe(record.creators).orElse([]).map(({description}) => description).filter(has).filter(written);
+  maybe(record.creators).orElse([]).map(({description}) => description).filter(has);
 
 const artistOf = (record: ClevelandRecord): Maybe<string> =>
-  maybe(described(record).join(', '), written).or(() => maybe(record.tombstone));
+  maybe(described(record).join(', '), has).or(() => maybe(record.tombstone, has));
 
 const toPiece = (record: ClevelandRecord): Art => ({
   id: String(record.id),
