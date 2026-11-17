@@ -32,6 +32,7 @@ type AccordionParts = {
   told: (part: AccordionPart) => Told;
   addressOf: (part: AccordionPart) => string;
   shownAt: (pathname: string) => Maybe<AccordionPart>;
+  pageOf: (heading: TabHeading) => Maybe<AccordionPart>;
   titleOf: (heading: TabHeading) => string;
   numbered: (heading: TabHeading) => string;
   previousOf: (part: AccordionPart) => Maybe<TabHeading>;
@@ -41,6 +42,7 @@ type AccordionParts = {
 
 const listings: Record<AccordionPart, Listing> = {
   'a-box-remembers-the-fold': {heading: 'remembers-heading', minutes: 8},
+  'the-max-height-guess': {heading: 'max-height-guess-heading', minutes: 0},
   'the-measured-height': {heading: 'measured-heading', minutes: 5}
 };
 
@@ -54,6 +56,8 @@ const besidePart = (part: AccordionPart, step: number): Maybe<TabHeading> =>
   maybe(headings[placeOf(listings[part].heading) + step]);
 
 const isPart = (name: string): name is AccordionPart => Object.keys(listings).includes(name);
+
+const parts = Object.keys(listings).filter(isPart);
 
 const partAt = (pathname: string): Maybe<AccordionPart> => {
   const named = pathname.slice(tabAddress.length, -1);
@@ -73,6 +77,7 @@ export const accordionParts: AccordionParts = {
   },
   addressOf,
   shownAt: partAt,
+  pageOf: heading => maybe(parts.find(part => listings[part].heading === heading)),
   titleOf: heading => titles[heading],
   numbered: heading => `${placeOf(heading) + 1}. ${titles[heading]}`,
   previousOf: part => besidePart(part, -1),

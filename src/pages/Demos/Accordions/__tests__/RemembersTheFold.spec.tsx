@@ -54,12 +54,12 @@ describe('a box remembers the fold, on its own page', () => {
     expect(accordionsTab.buildsIn(part)).toEqual(['Accordion using a radio group and a known height']);
   });
 
-  test('should lead back to part one and on to part three on the tab, by number and title, with the fold choices carried', async () => {
+  test('should lead back to part one on the tab and on to part three’s page, by number and title, with the fold choices carried', async () => {
     render(<TestApp at={demosAt(remembers, '?type=inclusive&style=drawer')}/>);
 
     expect(await pageFoot.leadsOn('the accordions parts')).toEqual([
       ['Previous: 1. An accordion in HTML alone', `${demosAt('accordions', '?type=inclusive&style=drawer')}#html-alone-heading`],
-      ['Next: 3. The max-height guess', `${demosAt('accordions', '?type=inclusive&style=drawer')}#max-height-guess-heading`]
+      ['Next: 3. The max-height guess', demosAt('accordions/the-max-height-guess', '?type=inclusive&style=drawer')]
     ]);
   });
 

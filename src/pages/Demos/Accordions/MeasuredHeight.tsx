@@ -13,7 +13,6 @@ import {foldInput} from './fold-input';
 import {looks} from './looks';
 import {PartLink} from './PartLink';
 import {RemembersTheFoldLink} from './RemembersTheFoldLink';
-import {TabPartLink} from './TabPartLink';
 import {PlainFold} from './Plain';
 import exclusiveMeasuredAccordionSource from './ExclusiveMeasuredAccordion.tsx?sample';
 import inclusiveMeasuredAccordionSource from './InclusiveMeasuredAccordion.tsx?sample';
@@ -46,7 +45,7 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
   return <>
     <p className="paragraph">This part builds on two before it:
       “<PartLink part="a-box-remembers-the-fold"/>”, for the {input} and its label, and
-      “<TabPartLink heading="max-height-guess-heading"/>”, which this part answers.</p>
+      “<PartLink part="the-max-height-guess"/>”, which this part answers.</p>
     <DialGroup>
       <FoldTypeDial/>
       <FoldMotionDial/>

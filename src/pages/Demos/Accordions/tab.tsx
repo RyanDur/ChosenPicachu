@@ -1,6 +1,7 @@
 import {FC, ReactNode} from 'react';
 import {seeded} from '@components/fibs';
 import {AccordionsExplained} from './Explained';
+import {MaxHeightGuess} from './MaxHeightGuess';
 import {MeasuredHeight} from './MeasuredHeight';
 import {RemembersTheFold} from './RemembersTheFold';
 import {PartPage} from './PartPage';
@@ -23,6 +24,7 @@ const platformFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragr
 
 const pagesOfParts: Record<AccordionPart, ReactNode> = {
   'a-box-remembers-the-fold': <RemembersTheFold folds={knownFolds}/>,
+  'the-max-height-guess': <MaxHeightGuess/>,
   'the-measured-height': <MeasuredHeight folds={measuredFolds}/>
 };
 

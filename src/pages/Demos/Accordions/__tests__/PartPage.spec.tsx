@@ -10,14 +10,13 @@ import {site} from '@pages/__test_support';
 const measuredHeight = 'accordions/the-measured-height';
 
 describe('the measured height, on its own page', () => {
-  test('following a part the measured height builds on lands on that part’s heading on the tab, with the fold choices carried', async () => {
+  test('following the part the measured height answers opens that part’s page, with the fold choices carried', async () => {
     const from = demosAt(measuredHeight, '?type=inclusive&style=drawer');
     render(<TestApp at={from}/>);
 
     await accordionsTab.openPart('The max-height guess');
 
-    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions', '?type=inclusive&style=drawer'));
-    expect(appAddress.fragment()).toBe('#max-height-guess-heading');
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/the-max-height-guess', '?type=inclusive&style=drawer'));
   });
 
   test('following the part it builds on for the input and its label opens that part’s page, with the fold choices carried', async () => {
@@ -68,11 +67,11 @@ describe('the measured height, on its own page', () => {
     expect(accordionsTab.buildsIn(measured)).toEqual(['Accordion using a radio group and a measured height']);
   });
 
-  test('should lead back to the part before it and on to the part after it on the tab, by number and title, with the fold choices carried', async () => {
+  test('should lead back to part three’s page and on to part five on the tab, by number and title, with the fold choices carried', async () => {
     render(<TestApp at={demosAt(measuredHeight, '?type=inclusive&style=drawer')}/>);
 
     expect(await pageFoot.leadsOn('the accordions parts')).toEqual([
-      ['Previous: 3. The max-height guess', `${demosAt('accordions', '?type=inclusive&style=drawer')}#max-height-guess-heading`],
+      ['Previous: 3. The max-height guess', demosAt('accordions/the-max-height-guess', '?type=inclusive&style=drawer')],
       ['Next: 5. What the platform gives now', `${demosAt('accordions', '?type=inclusive&style=drawer')}#platform-way-heading`]
     ]);
   });

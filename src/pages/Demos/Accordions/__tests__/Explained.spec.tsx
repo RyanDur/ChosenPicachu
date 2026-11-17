@@ -190,14 +190,6 @@ describe('the fold motion', () => {
 });
 
 describe('the accordions diagrams', () => {
-  test('should draw under the old way only the guess, now that the box and the known height have a page of their own', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    const oldWay = await explanation.part(parts[0]);
-
-    expect(drawingsTitled(oldWay, ['One guess, two folds'])).toEqual(explanation.drawingsIn(oldWay));
-  });
-
   test('should draw, with inclusive chosen, under the platform, each mechanism in order, found by its name', async () => {
     render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
@@ -240,6 +232,23 @@ describe('the old way', () => {
 
     expect(explanation.saying(oldWay, names.accordions['a-box-remembers-the-fold'].description)).toBeInTheDocument();
   });
+
+  test('following the max-height guess opens its page, with the fold choices carried', async () => {
+    const from = demosAt('accordions', '?type=inclusive&style=drawer');
+    render(<TestApp at={from}/>);
+
+    await accordionsTab.openPart('The max-height guess');
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/the-max-height-guess', '?type=inclusive&style=drawer'));
+  });
+
+  test('should say what the max-height guess does, under its title', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const oldWay = await explanation.part(parts[0]);
+
+    expect(explanation.saying(oldWay, names.accordions['the-max-height-guess'].description)).toBeInTheDocument();
+  });
 });
 
 describe('the accordion in HTML alone', () => {
@@ -273,14 +282,6 @@ describe('the name that makes the first accordion exclusive', () => {
 describe('the tab’s words on the build part 2 shows', () => {
   const build = '?type=inclusive&style=drawer';
   const remembers = demosAt('accordions/a-box-remembers-the-fold', build);
-
-  test('should link transition in the max-height guess to part 2’s page, where it is defined, with the fold choices carried', async () => {
-    render(<TestApp at={demosAt('accordions', build)}/>);
-
-    const oldWay = await explanation.part(parts[0]);
-
-    expect(explanation.linkNamed(oldWay, 'transition')).toHaveAttribute('href', remembers);
-  });
 
   test('should link the checkbox build, at its first use in what the platform gives and in How details works, to part 2’s page', async () => {
     render(<TestApp at={demosAt('accordions', build)}/>);

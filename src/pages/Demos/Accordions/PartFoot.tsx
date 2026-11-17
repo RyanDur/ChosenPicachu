@@ -8,7 +8,9 @@ export const PartFoot: FC<{part: AccordionPart}> = ({part}) => {
   const carried = useCarriedAddress();
   const neighbor = (heading: TabHeading) => ({
     title: accordionParts.numbered(heading),
-    address: carried(demoTab.address(DemoTopics.accordions), heading)
+    address: accordionParts.pageOf(heading)
+      .map(page => carried(accordionParts.addressOf(page)))
+      .orElse(carried(demoTab.address(DemoTopics.accordions), heading))
   });
   return <PageFoot label="the accordions parts"
     previous={accordionParts.previousOf(part).map(neighbor)}
