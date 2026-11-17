@@ -24,12 +24,12 @@ export const BannerTrap: FC = () => {
       <li className="paragraph">Press Raise a banner, the site’s own, and scroll again.</li>
     </ol>
     <ol className="old-way-cards">
-      <li className="old-way-card card rounded-corners floating positioned forms-context">
+      <li className="old-way-card drawn-piece positioned forms-context">
         <p className="paragraph">Card one has z-index: 1.</p>
         <ul className="trap-ways">
           <li className="trap-way">
             <p className="caption">The old way</p>
-            <button data-raiser type="button" tabIndex={0} className="button primary reachable" aria-label="Raise a banner, the old way"
+            <button data-raiser type="button" tabIndex={0} className="button drawn-piece reachable" aria-label="Raise a banner, the old way"
               onClick={() => updateRaised(true)}>Raise a banner</button>
           </li>
           <li className="trap-way">
@@ -38,12 +38,12 @@ export const BannerTrap: FC = () => {
               onClick={() => dispatchBanner(bannerChange.raised(nextNews()))}>Raise a banner</button>
           </li>
         </ul>
-        {raised && <p role="alert" className="old-banner field rounded-corners floating hairline-outline alarm-ink">
+        {raised && <p role="alert" className="old-banner drawn-piece">
           An old banner. It is fixed to the window, with z-index: 9999.
           <button type="button" tabIndex={0} className="dismiss borderless attentive reachable" aria-label="dismiss the old banner" onClick={dismissed}>×</button>
         </p>}
       </li>
-      <li className="old-way-card card rounded-corners floating positioned forms-context">
+      <li className="old-way-card drawn-piece positioned forms-context">
         <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>
       </li>
     </ol>

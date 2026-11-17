@@ -70,13 +70,13 @@ export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
   const words = sortChoices.byWords(chosen);
 
   return <>
-    <button id={buttonId} type="button" className="button primary reachable" aria-haspopup="menu" aria-expanded={open}
+    <button id={buttonId} type="button" className="button drawn-piece reachable" aria-haspopup="menu" aria-expanded={open}
       aria-controls={open ? menuId : undefined}
       aria-label={`${words}, the old way`}
       onMouseDown={event => event.preventDefault()}
       onClick={({currentTarget}) => open ? closesOnto(currentTarget) : opens(currentTarget)}
       onKeyDown={onButtonKey}>{words}</button>
-    {open && <Menu id={menuId} role="menu" aria-labelledby={buttonId} className="sort-choices card rounded-corners lifted" onBlur={onListBlur}>
+    {open && <Menu id={menuId} role="menu" aria-labelledby={buttonId} className="sort-choices drawn-piece" onBlur={onListBlur}>
       {sortChoices.all.map((choice, at) =>
         <Entry key={choice} role="none">
           <Item role="menuitem" tabIndex={-1} className="sub-title reachable"
