@@ -17,7 +17,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
     test.use(device);
 
     test('choosing each thing card one wears in turn opens the menu over card two for the three that form no context, and under it for the four that do', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto('demos/z-index/what-else-forms-a-stacking-context/');
 
       expect(await wearsReportedWrong(page, whereTheListOpens)).toEqual([]);
     });
@@ -25,7 +25,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
 }
 
 test('going back past a choice takes back the sentence, which no longer matches the cards', async ({page}) => {
-  await page.goto('demos/z-index/');
+  await page.goto('demos/z-index/what-else-forms-a-stacking-context/');
   const chooser = contextChooser(page);
   await chooser.wearing('opacity: 0.9').click();
   await chooser.open();

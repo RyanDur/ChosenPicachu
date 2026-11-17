@@ -82,8 +82,7 @@ export const PopoverExplained: FC = () =>
           a menu that is also a popover. The placement is measured from an anchor, and a popover’s anchor is the button
           that opened it. A menu that is not a popover gets no anchor from the button that opens it, so
           the <WhyThirdIsOnTopLink>rule</WhyThirdIsOnTopLink> leaves
-          that menu out. Card one’s list in <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else
-            forms a stacking context</cite></a> names
+          that menu out. Card one’s list in <PartLink part="what-else-forms-a-stacking-context"/> names
           its own anchor.</p>
         <Snippet label="CSS" lines={[
           ...carve.between(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'), lines.blank,

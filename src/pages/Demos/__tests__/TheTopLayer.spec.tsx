@@ -128,7 +128,7 @@ describe('the banner tutorial’s first story', () => {
 
     expect(explanation.linkNamed(news, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses'));
     expect(explanation.linkNamed(news, 'Why a fixed banner still loses')).toHaveAttribute('href', zIndexTab.fragmentOf('Why a fixed banner still loses'));
-    expect(explanation.linkNamed(news, 'What else forms a stacking context')).toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
+    expect(explanation.linkNamed(news, 'What else forms a stacking context')).toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context'));
   });
 
   test('should head each step with what happens', async () => {

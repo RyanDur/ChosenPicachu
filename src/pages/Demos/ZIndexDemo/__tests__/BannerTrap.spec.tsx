@@ -69,6 +69,15 @@ describe('why a fixed banner still loses', () => {
     expect(appAddress.search()).toHaveTextContent('raised=second');
   });
 
+  test('should link What else forms a stacking context to its page, with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+
+    const part = await explanation.part('Why a fixed banner still loses');
+
+    expect(explanation.linkNamed(part, 'What else forms a stacking context'))
+      .toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'));
+  });
+
   test('should take the keyboard to the story the tutorial below names', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
     const part = await explanation.part('Why a fixed banner still loses');

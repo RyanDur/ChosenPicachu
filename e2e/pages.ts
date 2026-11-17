@@ -24,6 +24,7 @@ export const pages: readonly SitePage[] = [
   {name: 'z-index', path: 'demos/z-index/', ready: 'navigation', budgeted: true},
   {name: 'why Third is on top', path: 'demos/z-index/why-third-is-on-top/', ready: 'navigation', budgeted: true},
   {name: 'why 9999 still loses', path: 'demos/z-index/why-9999-still-loses/', ready: 'navigation', budgeted: true},
+  {name: 'what else forms a stacking context', path: 'demos/z-index/what-else-forms-a-stacking-context/', ready: 'navigation', budgeted: true},
   {name: 'charts', path: 'demos/charts/', ready: 'navigation', loaded: page => chartsPage(page).priceDelta},
   {
     name: 'tables',

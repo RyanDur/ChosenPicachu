@@ -1,9 +1,10 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {siteFrame, stackingPile, trappedMenu, zIndexTab} from './__test_support';
+import {contextChooser, siteFrame, stackingPile, trappedMenu, zIndexTab} from './__test_support';
 
 const whyThirdIsOnTop = 'Why Third is on top';
 const whyNineNineNineStillLoses = 'Why 9999 still loses';
+const whatElseForms = 'What else forms a stacking context';
 
 test('a reader follows why Third is on top from the z-index tab to its page and finds its pile', async ({page}) => {
   await page.goto('demos/z-index/');
@@ -48,4 +49,25 @@ test('a reader follows why 9999 still loses from the z-index tab to its page and
   await expect(zIndexTab(page).partTitle(whyNineNineNineStillLoses)).toBeVisible();
   await expect(page.getByText('Z-index · part 2 of 6', {exact: true})).toBeVisible();
   await expect(trappedMenu(page).sortBy).toBeVisible();
+});
+
+test('a reader follows what else forms a stacking context from the z-index tab to its page, with the wear in the address kept on the chooser', async ({page}) => {
+  await page.goto('demos/z-index/?wears=opacity');
+  await siteFrame(page).hydrated();
+
+  await zIndexTab(page).partLink(whatElseForms).click();
+
+  await expect(page).toHaveURL(/demos\/z-index\/what-else-forms-a-stacking-context\/\?wears=opacity$/);
+  await expect(page.getByText('Z-index · part 3 of 6', {exact: true})).toBeVisible();
+  await expect(contextChooser(page).chosen('opacity: 0.9')).toBeVisible();
+});
+
+test('a reader follows why 9999 still loses’s foot on to the next part’s page, with the raised card kept in the address', async ({page}) => {
+  await page.goto('demos/z-index/why-9999-still-loses/?raised=second');
+  await siteFrame(page).hydrated();
+
+  await zIndexTab(page).followsTheFoot('Next: 3. What else forms a stacking context');
+
+  await expect(page).toHaveURL(/demos\/z-index\/what-else-forms-a-stacking-context\/\?raised=second$/);
+  await expect(zIndexTab(page).partTitle(whatElseForms)).toBeVisible();
 });

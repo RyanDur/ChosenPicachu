@@ -5,12 +5,12 @@ import {carve, lines, Snippet} from '../Recipe';
 import {TrappedMenu} from './TrappedMenu';
 import {ANumberInsideALayer} from './ANumberInsideALayer';
 import {Where9999IsCompared} from './Where9999IsCompared';
-import {partHeadings} from './part-headings';
 import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 import {PartLink} from './PartLink';
 import {zIndexParts} from './part-pages';
+import {partHeadings} from './part-headings';
 import {WhyThirdIsOnTopLink} from './WhyThirdIsOnTopLink';
 
 export const Why9999StillLoses: FC = () => <>
@@ -44,9 +44,8 @@ export const Why9999StillLoses: FC = () => <>
     <li className="run">
       <p className="paragraph">A z-index is compared only with the others in the same stacking context. The cards are
         compared in the nearest context that holds them both. Here that is the tab’s content, the area under the tabs
-        that holds every card. <TabLink to={DemoTopics.zIndex}
-        heading={partHeadings.whatElseForms}><cite>{zIndexParts.titleOf('what-else-forms')}</cite></TabLink> shows
-        what makes the tab’s content one.
+        that holds every
+        card. <PartLink part="what-else-forms-a-stacking-context"/> shows what makes the tab’s content one.
         In that context the browser compares card one and card two, 1 against 1, and a tie goes to the one later in
         the code, so card two is painted over card one, list and all. No number on the list can change that, because
         the list is never compared with card two.</p>

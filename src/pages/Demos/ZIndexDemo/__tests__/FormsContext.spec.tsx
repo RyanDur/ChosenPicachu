@@ -5,10 +5,11 @@ import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {theTrap, wearsChooser} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const heading = 'What else forms a stacking context';
+const whatElseForms = 'z-index/what-else-forms-a-stacking-context';
 
 describe('the part on what else forms a stacking context', () => {
   test('should offer, in order, the seven things card one can wear, with nothing chosen at first', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
 
     const chooser = await wearsChooser.find();
 
@@ -19,7 +20,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should say nothing until Sort by is pressed', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
 
     const chooser = await wearsChooser.find();
 
@@ -27,7 +28,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should say the list opened over card two once card one wears nothing and Sort by is pressed', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
     const chooser = await wearsChooser.find();
     await wearsChooser.putOn(chooser, 'nothing');
 
@@ -37,7 +38,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should say the list opened over card two once card one wears position: relative and Sort by is pressed', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
     const chooser = await wearsChooser.find();
     await wearsChooser.putOn(chooser, 'position: relative');
 
@@ -47,7 +48,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should say the list opened over card two once card one wears an outline and Sort by is pressed', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
     const chooser = await wearsChooser.find();
     await wearsChooser.putOn(chooser, 'outline');
 
@@ -57,7 +58,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should say the list opened under card two once card one wears z-index: 1 and Sort by is pressed', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
     const chooser = await wearsChooser.find();
     await wearsChooser.putOn(chooser, 'z-index: 1');
 
@@ -67,7 +68,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should say the list opened under card two once card one wears opacity: 0.9 and Sort by is pressed', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
     const chooser = await wearsChooser.find();
     await wearsChooser.putOn(chooser, 'opacity: 0.9');
 
@@ -77,7 +78,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should say the list opened under card two once card one wears a transform and Sort by is pressed', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
     const chooser = await wearsChooser.find();
     await wearsChooser.putOn(chooser, 'transform: rotate(-1deg)');
 
@@ -87,7 +88,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should say the list opened under card two once card one wears isolation: isolate and Sort by is pressed', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
     const chooser = await wearsChooser.find();
     await wearsChooser.putOn(chooser, 'isolation: isolate');
 
@@ -97,7 +98,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should go quiet when another choice is made after Sort by was pressed', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
     const chooser = await wearsChooser.find();
     await wearsChooser.pressSortBy(chooser);
     await wearsChooser.closeTheList();
@@ -108,12 +109,12 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should write the choice into the address, and bring it back from there', async () => {
-    const {unmount} = render(<TestApp at={demosAt('z-index')}/>);
+    const {unmount} = render(<TestApp at={demosAt(whatElseForms)}/>);
     await wearsChooser.putOn(await wearsChooser.find(), 'transform: rotate(-1deg)');
     expect(demoPage.urlSearch()).toHaveTextContent('wears=transform');
     unmount();
 
-    render(<TestApp at={demosAt('z-index', '?wears=transform')}/>);
+    render(<TestApp at={demosAt(whatElseForms, '?wears=transform')}/>);
 
     expect(wearsChooser.wear(await wearsChooser.find(), 'transform: rotate(-1deg)')).toBeChecked();
   });
@@ -125,7 +126,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should send position: relative to its page at MDN', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
 
     const part = await explanation.part(heading);
 
@@ -133,7 +134,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should send outline to its page at MDN', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
 
     const part = await explanation.part(heading);
 
@@ -141,7 +142,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should send z-index: 1 to its page at MDN', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
 
     const part = await explanation.part(heading);
 
@@ -149,7 +150,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should send opacity: 0.9 to its page at MDN', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
 
     const part = await explanation.part(heading);
 
@@ -157,7 +158,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should send transform: rotate(-1deg) to its page at MDN', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
 
     const part = await explanation.part(heading);
 
@@ -165,7 +166,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should send isolation: isolate to its page at MDN', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
 
     const part = await explanation.part(heading);
 
@@ -173,25 +174,17 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should link anchor positioning to MDN', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
     const part = await explanation.part(heading);
 
     expect(explanation.linkNamed(explanation.runTelling(part, /^The list is placed by/), 'anchor positioning')).toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning');
   });
 
   test('should open its run on MDN’s whole list', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(whatElseForms)}/>);
     const part = await explanation.part(heading);
 
     expect(explanation.linkNamed(part, 'the whole list'))
       .toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Stacking_context');
-  });
-
-  test('should link the menu part’s card to its page, with the raised card carried', async () => {
-    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
-
-    const part = await explanation.part(heading);
-
-    expect(explanation.linkNamed(part, 'The menu part’s card')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
   });
 });

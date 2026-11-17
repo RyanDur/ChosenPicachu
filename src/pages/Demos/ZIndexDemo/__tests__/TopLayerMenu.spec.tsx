@@ -2,7 +2,7 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {theTrap} from '@pages/Demos/ZIndexDemo/__test_support';
 
 describe('the menu built the new way', () => {
   test('should sit in card one, beside Sort by', async () => {
@@ -40,7 +40,7 @@ describe('why the popover wins', () => {
     const part = await explanation.part('Why the popover wins');
     const run = explanation.saying(part, /The menu’s own style sheet places it/);
 
-    expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
+    expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context'));
   });
 
   test('should link the run on the top layer to the page whose cards it means, with the raised card carried', async () => {
