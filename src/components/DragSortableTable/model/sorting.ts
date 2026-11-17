@@ -14,17 +14,21 @@ const directionOf = (choice: Choice): Maybe<Direction> => choice === 'reset' ? n
 
 const ranked = <Seat>(
   seats: readonly Seat[],
-  sortKeyOf: (seat: Seat) => SortKey | undefined,
+  sortKeyOf: (seat: Seat) => Maybe<SortKey>,
   direction: Direction
 ): Seat[] =>
   [...seats].sort((left, right) => {
     const first = sortKeyOf(left);
     const second = sortKeyOf(right);
-    const difference = typeof first === 'string' || typeof second === 'string'
-      ? String(maybe(first).orElse('')).localeCompare(String(maybe(second).orElse('')))
-      : maybe(first).orElse(Number.NEGATIVE_INFINITY) - maybe(second).orElse(Number.NEGATIVE_INFINITY);
+    const difference = worded(first) || worded(second)
+      ? wordOf(first).localeCompare(wordOf(second))
+      : numberOf(first) - numberOf(second);
     return direction === 'ascending' ? difference : -difference;
   });
+
+const worded = (key: Maybe<SortKey>): boolean => key.map(value => typeof value === 'string').orElse(false);
+const wordOf = (key: Maybe<SortKey>): string => key.map(String).orElse('');
+const numberOf = (key: Maybe<SortKey>): number => key.map(Number).orElse(Number.NEGATIVE_INFINITY);
 
 export const sorting = {
   choices,

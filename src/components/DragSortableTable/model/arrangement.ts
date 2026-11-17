@@ -31,7 +31,7 @@ const movedTo = (list: readonly string[], item: string, to: number): readonly st
 
 const standingOf = (
   {rows, sort}: Arrangement,
-  sortKeyOf: (row: string, column: string) => SortKey | undefined
+  sortKeyOf: (row: string, column: string) => Maybe<SortKey>
 ): readonly string[] =>
   has(sort) ? sorting.ranked(rows, row => sortKeyOf(row, sort.column), sort.direction) : rows;
 
