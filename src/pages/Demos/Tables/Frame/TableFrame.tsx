@@ -31,7 +31,7 @@ export const TableFrame: FC<PropsWithChildren> = ({children}) => {
     .cancel, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct, dispatchBanner]);
 
   useEffect(() => maybe(frame).map(watched => {
-    const watcher = new ResizeObserver(() => measured(watched, to => dispatch(tableFrameChange.grown(to))));
+    const watcher = new ResizeObserver(() => measured(watched, height => dispatch(tableFrameChange.grown(height))));
     watcher.observe(watched);
     return () => watcher.disconnect();
   }).orElse(() => undefined), [frame]);
@@ -44,7 +44,7 @@ export const TableFrame: FC<PropsWithChildren> = ({children}) => {
       style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
       onLoad={event => {
         dispatch(tableFrameChange.loaded(event.currentTarget));
-        measured(event.currentTarget, to => dispatch(tableFrameChange.grown(to)));
+        measured(event.currentTarget, height => dispatch(tableFrameChange.grown(height)));
       }}
       srcDoc={frameMarkup}/>}
     {not(stood) && children}
