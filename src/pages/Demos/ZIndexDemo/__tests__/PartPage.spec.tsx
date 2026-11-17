@@ -40,14 +40,22 @@ describe('why Third is on top, on its own page', () => {
     ]);
   });
 
-  test('should send its gloss of class to the accordions part that defines it', async () => {
+  test('should send the class its opener assumes to the accordions part that defines it', async () => {
     render(<TestApp at={demosAt(thirdOnTop)}/>);
 
     const page = await demoTabs.arrivedOn('Z-index');
 
-    expect(demoPage.linksToPageIn(page, demosAt('accordions/a-box-remembers-the-fold'))).toEqual([
-      ['accordions tab', demosAt('accordions/a-box-remembers-the-fold')]
-    ]);
+    expect(demoPage.linksToPageIn(page, demosAt('accordions/a-box-remembers-the-fold')))
+      .toContainEqual(['a class', demosAt('accordions/a-box-remembers-the-fold')]);
+  });
+
+  test('should send its gloss of class to the accordions part that defines it, by the part’s title', async () => {
+    render(<TestApp at={demosAt(thirdOnTop)}/>);
+
+    const page = await demoTabs.arrivedOn('Z-index');
+
+    expect(demoPage.linksToPageIn(page, demosAt('accordions/a-box-remembers-the-fold')))
+      .toContainEqual(['A box remembers the fold, and a rule reads it', demosAt('accordions/a-box-remembers-the-fold')]);
   });
 
   test('should send its gloss of rule to the accordions tab’s fold choices, where a rule is defined', async () => {
