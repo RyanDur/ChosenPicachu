@@ -45,6 +45,7 @@ export const roomsOpenedBy = (open: Opener): RouteObject[] => [
     ...open('pages/Demos/route.tsx'),
     children: [
       ...Object.entries(demoTabs).map(([topic, file]) => ({path: `${Paths.demos}${topic}/`, ...open(file)})),
+      {path: `${Paths.demos}accordions/:part/`, ...open(demoTabs.accordions)},
       {path: `${Paths.demos}tables/:tutorial/`, ...open(demoTabs.tables)}
     ]
   },

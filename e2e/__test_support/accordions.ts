@@ -88,28 +88,16 @@ const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
 
 const exclusiveBuilds: Build[] = ['the measured radio build', 'the radio build', 'the details build'];
 
+export const measuredHeightPage = 'demos/accordions/the-measured-height/';
+
+const pageOf = (build: Build): string => measuredBuilds.includes(build) ? measuredHeightPage : 'demos/accordions/';
+
 export const showing = (build: Build, style: 'reveal' | 'drawer' | 'static' = 'reveal'): string =>
-  `demos/accordions/?type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}&style=${style}`;
+  `${pageOf(build)}?type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}&style=${style}`;
 
 const detailsBuilds: Build[] = ['the inclusive details build', 'the details build'];
 
 const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' || build === 'the measured radio build' ? 1 : 0;
-
-const pressedOnceItStartsMoving = async (fold: Locator, first: Locator, second: Locator): Promise<void> =>
-  fold.evaluate((element, {firstPress, secondPress}) => new Promise<void>((resolve, reject) => {
-    if (!(element instanceof HTMLElement && firstPress instanceof HTMLElement && secondPress instanceof HTMLElement)) {
-      reject(new Error('the fold or a press is not an element that can be clicked'));
-      return;
-    }
-    const started = (event: TransitionEvent): void => {
-      if (event.propertyName !== 'height') return;
-      element.removeEventListener('transitionstart', started);
-      secondPress.click();
-      resolve();
-    };
-    element.addEventListener('transitionstart', started);
-    firstPress.click();
-  }), {firstPress: await first.elementHandle(), secondPress: await second.elementHandle()});
 
 export const accordionsTab = (page: Page) => {
   const built = (build: Build): Locator =>
@@ -132,6 +120,8 @@ export const accordionsTab = (page: Page) => {
   const partsOf = async (build: Build): Promise<Part[]> =>
     (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map((_fold, index) => partOf(build, index));
   return {
+    partLink: (name: string): Locator => page.getByRole('region', {name: 'Accordions'}).getByRole('link', {name, exact: true}),
+    partTitle: (name: string): Locator => page.getByRole('heading', {level: 2, name, exact: true}),
     goTo: async (build: Build): Promise<void> => {
       await page.goto(showing(build));
       await siteFrame(page).hydrated();
@@ -155,11 +145,6 @@ export const accordionsTab = (page: Page) => {
         shut.click();
         open.click();
       }, await opens.elementHandle());
-    },
-    opensTheFirstPartThenChoosesOnceItStartsMoving: async (build: Build, motion: 'Static'): Promise<void> => {
-      await siteFrame(page).hydrated();
-      await pressedOnceItStartsMoving(partOf(build, 0).fold, pressesOfTheFirstPart(build).opens,
-        page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: motion}));
     },
     partsOf
   };
@@ -199,7 +184,7 @@ export const plainFold = (page: Page) => {
     },
     frameLoaded: (): Promise<boolean> => page.evaluate(() => Number(Reflect.get(window, 'plainFoldLoads') ?? 0) > 0),
     goTo: async (): Promise<void> => {
-      await page.goto('demos/accordions/');
+      await page.goto(measuredHeightPage);
       await panel.evaluate(() => new Promise<void>(loaded => {
         if (document.readyState === 'complete') loaded();
         else window.addEventListener('load', () => loaded());

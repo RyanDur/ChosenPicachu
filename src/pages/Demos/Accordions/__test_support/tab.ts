@@ -29,5 +29,7 @@ export const accordionsTab = {
   },
   buildsIn: (part: HTMLElement): string[] =>
     within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
+  openPart: async (name: string): Promise<void> => userEvent.click(await screen.findByRole('link', {name})),
+  place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   foldMeasuredByPlainScript: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByTitle('A fold measured by plain script')
 };

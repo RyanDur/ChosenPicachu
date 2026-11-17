@@ -9,6 +9,7 @@ import {demoTab} from './demo-tab';
 import {DemosPage} from './DemosPage';
 import {Trading} from './Market/Trading';
 import {tableTutorials} from './Tables';
+import {accordionParts} from './Accordions';
 
 type ShownDemo = {topic: DemoTopics; title: string; listed: Listing};
 
@@ -18,6 +19,11 @@ const shownDemoAt = (pathname: string): Maybe<ShownDemo> => tableTutorials.at(pa
     title: `Demos ${demoTab.names[DemoTopics.tables]} · ${tableTutorials.nameOf(tutorial)}`,
     listed: names.tables[tutorial]
   }))
+  .or(() => accordionParts.at(pathname).map((part): ShownDemo => ({
+    topic: DemoTopics.accordions,
+    title: `Demos ${demoTab.names[DemoTopics.accordions]} · ${accordionParts.told(part).name}`,
+    listed: names.accordions[part]
+  })))
   .or(() => maybe(Object.values(DemoTopics).find(topic => pathname === demoTab.address(topic)))
     .map((topic): ShownDemo => ({topic, title: `Demos ${demoTab.names[topic]}`, listed: names.demos[topic]})));
 

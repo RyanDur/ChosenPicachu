@@ -62,6 +62,13 @@ describe('each page is named where a search shows it', () => {
     expect(described()).toBe(names.demos.tables.description);
   });
 
+  test('should give the measured height’s page its own title and description', async () => {
+    render(<TestApp at={demosAt('accordions/the-measured-height')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.accordions['the-measured-height'].title));
+    expect(described()).toBe(names.accordions['the-measured-height'].description);
+  });
+
   test('should give the drag sort tutorial its own title and description', async () => {
     render(<TestApp at={demosAt('tables/sort')}/>);
 
