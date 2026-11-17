@@ -4,7 +4,6 @@ import {useControls} from '../Controls';
 import {PartListing} from './PartListing';
 import {TopLayerTutorial} from './Tutorial';
 import {ZIndexIntroduction} from './Introduction';
-import {WhichCardIsOnTop} from './WhichCardIsOnTop';
 import {NaturalZIndex} from './NaturalZIndex';
 import {PartPage} from './PartPage';
 import {ZIndexPart} from './part-pages';
@@ -43,7 +42,6 @@ export const Room: FC = () => {
     <PartListing part="what-else-forms-a-stacking-context"/>
     <PartListing part="why-the-popover-wins"/>
     <PartListing part="why-a-fixed-banner-still-loses"/>
-    <WhichCardIsOnTop/>
     <TopLayerTutorial/>
   </>);
 };

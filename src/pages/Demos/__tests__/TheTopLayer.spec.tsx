@@ -19,7 +19,7 @@ describe('the top layer', () => {
 
     expect(explanation.partTitles(tab).slice(0, 6)).toEqual([
       'Why Third is on top', 'Why 9999 still loses', 'What else forms a stacking context', 'Why the popover wins',
-      'Why a fixed banner still loses', 'Which card is on top?'
+      'Why a fixed banner still loses', 'let’s build this feature'
     ]);
   });
 

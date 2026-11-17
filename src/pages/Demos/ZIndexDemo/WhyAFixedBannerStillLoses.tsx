@@ -10,6 +10,7 @@ import bannersSource from '@banners/Banners.tsx?sample';
 import bannersCss from '@banners/Banners.css?sample';
 import '../Runs.css';
 import {PartLink} from './PartLink';
+import {WhichCardIsOnTop} from './WhichCardIsOnTop';
 import {zIndexParts} from './part-pages';
 
 export const WhyAFixedBannerStillLoses: FC = () => {
@@ -52,5 +53,6 @@ export const WhyAFixedBannerStillLoses: FC = () => {
           written at the page’s root.</p>
       </li>
     </ol>
+    <WhichCardIsOnTop/>
   </>;
 };

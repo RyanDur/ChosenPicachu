@@ -58,7 +58,7 @@ test('Second raised while the pile is spread comes down on top when it is collap
 
 test('the reader asks for the answer to which card is on top from the keyboard, and hears the question, the answer, then the drawing', async ({page}) => {
   const asking = whichCardIsOnTop(page);
-  await page.goto('demos/z-index/');
+  await page.goto('demos/z-index/why-a-fixed-banner-still-loses/');
   await siteFrame(page).hydrated();
   await expect(asking.answer).toBeHidden();
 
