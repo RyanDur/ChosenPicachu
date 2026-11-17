@@ -1,4 +1,4 @@
-import {has, maybe} from '@ryandur/sand';
+import {has} from '@ryandur/sand';
 import {TableState, tableState, travel} from '@components/DragSortableTable/model';
 import {MountedTable} from './table-state';
 import {settle} from './settle';
@@ -19,8 +19,7 @@ const dress = (mounted: MountedTable, state: TableState): void => {
       ['--seat-x', '--seat-y', '--drift-x', '--drift-y'].forEach(property => cell.style.removeProperty(property));
     }
   });
-  const seat = tableState.seatOffset(state, mounted.order(), mounted.standing()).orElse(travel.still);
-  const drift = maybe(state.drag).map(drag => drag.drift).orElse(travel.still);
+  const {seat, drift} = tableState.settlingAt(state, mounted.order(), mounted.standing());
   carriedCells(mounted, state).forEach(cell => {
     settle.changeMotion(cell, {on: ['carried']});
     cell.style.setProperty('--seat-x', `${seat.x}px`);
