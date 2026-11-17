@@ -1,4 +1,4 @@
-import {has, maybe} from '@ryandur/sand';
+import {has, Maybe, maybe} from '@ryandur/sand';
 import {
   ClevelandAllArtResponse,
   ClevelandArtResponse,
@@ -17,23 +17,25 @@ import {artFields} from '@pages/Gallery/museums/artFields';
 
 const clevelandFields = ['id', 'title', 'creators', 'tombstone', 'images'].join();
 
-const sized = (image?: ClevelandImage | null): string | undefined =>
-  has(image) && has(image.width) ? `${image.url} ${image.width}w` : undefined;
+const sized = (image: Maybe<ClevelandImage>): string[] =>
+  image.mBind(({url, width}) => maybe(width).map(across => [`${url} ${across}w`])).orElse([]);
 
-const srcSetOf = (record: ClevelandRecord): string | undefined => {
-  const sources = maybe(record.images).map(({web, print}) => [sized(web), sized(print)]).orElse([]).filter(has);
-  return has(sources) ? sources.join(', ') : undefined;
-};
+const srcSetOf = (record: ClevelandRecord): Maybe<string> => maybe(record.images)
+  .map(({web, print}) => [...sized(maybe(web)), ...sized(maybe(print))].join(', '))
+  .mBind(sources => maybe(sources, written));
 
-const artistOf = (record: ClevelandRecord): string | null | undefined =>
-  maybe(record.creators).orElse([]).map(({description}) => description).filter(has).join(', ') || record.tombstone;
+const written = (words: string): boolean => words !== '';
+
+const artistOf = (record: ClevelandRecord): Maybe<string> =>
+  maybe(maybe(record.creators).orElse([]).flatMap(({description}) => maybe(description).map(said => [said]).orElse([])).join(', '), written)
+    .or(() => maybe(record.tombstone));
 
 const toPiece = (record: ClevelandRecord): Art => ({
   id: String(record.id),
   title: record.title,
   ...maybe(record.images).mBind(({web, print}) => maybe(web).or(() => maybe(print)))
-    .map(shown => ({picture: {src: shown.url, srcSet: srcSetOf(record)}})).orElse({}),
-  ...artFields.attributed(artistOf(record)),
+    .map(shown => ({picture: {src: shown.url, ...srcSetOf(record).map(srcSet => ({srcSet})).orElse({})}})).orElse({}),
+  ...artistOf(record).map(artFields.attributed).orElse({}),
   altText: record.title
 });
 

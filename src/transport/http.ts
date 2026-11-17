@@ -1,4 +1,4 @@
-import {asyncFailure, asyncResult, asyncSuccess, maybe, requesting, Result} from '@ryandur/sand';
+import {asyncFailure, asyncResult, asyncSuccess, Maybe, maybe, nothing, requesting, Result, some} from '@ryandur/sand';
 import {HTTPError} from './HTTPError';
 
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -30,10 +30,10 @@ export const http = {
       maybe(response, isOk).or(() => maybe(response, isCreated)).map(bodyResult)
         .orElse(fail(response))),
 
-  put: <T>(endpoint: string, body: unknown): Result.Async<T | undefined, HTTPError> =>
+  put: <T>(endpoint: string, body: unknown): Result.Async<Maybe<T>, HTTPError> =>
     request(endpoint, 'PUT', {body}).mBind(response =>
-      maybe(response, isNoContent).map(emptySuccess)
-        .or(() => maybe(response, isCreated).map(bodyResult))
+      maybe(response, isNoContent).map(noBody<T>)
+        .or(() => maybe(response, isCreated).map(someBody<T>))
         .orElse(fail(response))),
 
   delete: (endpoint: string): Result.Async<undefined, HTTPError> =>
@@ -45,6 +45,8 @@ export const http = {
 const bodyResult = (response: Response) =>
   asyncResult(response.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR));
 const emptySuccess = () => asyncSuccess<undefined, HTTPError>(undefined);
+const noBody = <T>() => asyncSuccess<Maybe<T>, HTTPError>(nothing());
+const someBody = <T>(response: Response) => bodyResult(response).map((body: T) => some(body));
 
 type RequestOptions = {body?: unknown; cache?: RequestCache; headers?: Record<string, string>};
 
