@@ -2,6 +2,7 @@ import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {designHeading, needHeading, storiesHeading} from '@pages/Demos/headings';
+import {stations} from '@pages/Demos/Recipe';
 
 export type TablePart = keyof typeof names.tableParts;
 
@@ -30,14 +31,16 @@ type StationHeading = {
 const headings = {
   'the-need-and-its-clues': needHeading,
   'the-sketch': designHeading,
-  'the-slices': storiesHeading
+  'the-slices': storiesHeading,
+  'the-still-table': {id: stations.idOf(4), title: 'Build the still table'}
 } satisfies Partial<Record<BookPart, StationHeading>>;
 
 type HeadedPart = keyof typeof headings;
 
 const minutes: Record<TablePart, number> = {
   'the-need-and-its-clues': 2,
-  'the-sketch': 1
+  'the-sketch': 1,
+  'the-slices': 2
 };
 
 type PartPlace = {

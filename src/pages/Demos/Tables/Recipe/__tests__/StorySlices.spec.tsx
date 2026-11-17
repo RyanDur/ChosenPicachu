@@ -5,7 +5,7 @@ import {StorySlices} from '../StorySlices';
 
 describe('the story slices', () => {
   test('the recipe links out to the user story', async () => {
-    render(<TestApp at="/"><StorySlices/></TestApp>);
+    render(<TestApp at="/"><StorySlices headedBy="the-slices"/></TestApp>);
 
     expect(demoPage.signpost('user story')).toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
   });

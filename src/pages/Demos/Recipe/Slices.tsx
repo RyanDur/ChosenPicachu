@@ -1,6 +1,9 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos/demo-topics';
 import {FC, ReactNode} from 'react';
+import {Link} from 'react-router';
+import {maybe} from '@ryandur/sand';
+import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {stations} from './stations';
 import {storiesHeading} from '@pages/Demos/headings';
 
@@ -9,11 +12,23 @@ type SlicesProps = {
   soThat: string;
   slices: ReactNode;
   sliced: [string, number][];
+  headedBy?: string;
+  stationsAt?: string;
 };
 
-export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced}) =>
-  <section className="phase card rounded-corners lifted" aria-labelledby={storiesHeading.id}>
-    <h3 id={storiesHeading.id} className="phase-title title">{storiesHeading.title}</h3>
+const StationLink: FC<{station: number; at?: string}> = ({station, at}) => {
+  const carried = useCarriedAddress();
+  const id = stations.idOf(station);
+  return maybe(at).either(
+    tab => <Link className="slice-station signpost caption upright" to={carried(tab, id)}>station {station}</Link>,
+    () => <a className="slice-station signpost caption upright" href={`#${id}`}>station {station}</a>);
+};
+
+export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, headedBy, stationsAt}) =>
+  <section className="phase card rounded-corners lifted" aria-labelledby={maybe(headedBy).orElse(storiesHeading.id)}>
+    {maybe(headedBy).either(
+      () => null,
+      () => <h3 id={storiesHeading.id} className="phase-title title">{storiesHeading.title}</h3>)}
     <p className="overview paragraph muted-ink">
       Once the need is heard and the design has answered shape, I split the work into stories. Each is
       a <a className="signpost"
@@ -32,7 +47,7 @@ export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced}) =>
       {sliced.map(([slice, station]) =>
         <li className="italic muted-ink" key={slice}>
           <span>{slice}</span>
-          <a className="slice-station signpost caption upright" href={`#${stations.idOf(station)}`}>station {station}</a>
+          <StationLink station={station} at={stationsAt}/>
         </li>)}
     </ul>
   </section>;

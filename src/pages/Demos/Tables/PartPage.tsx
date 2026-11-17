@@ -5,13 +5,14 @@ import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {Aggregations} from './Aggregations';
 import {TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
-import {DesignAsk, StoryClues} from './Recipe';
+import {DesignAsk, StoryClues, StorySlices} from './Recipe';
 import '../Tutorials.css';
 import './TutorialPage.css';
 
 const parts: Record<TablePart, FC<{headedBy: string}>> = {
   'the-need-and-its-clues': StoryClues,
-  'the-sketch': DesignAsk
+  'the-sketch': DesignAsk,
+  'the-slices': StorySlices
 };
 
 export const PartPage: FC<{part: TablePart}> = ({part}) => {

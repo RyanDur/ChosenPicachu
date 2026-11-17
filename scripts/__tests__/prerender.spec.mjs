@@ -18,6 +18,7 @@ describe('the pages drawn into the build', () => {
     `${Paths.demos}z-index/why-9999-still-loses/`,
     `${Paths.demos}tables/the-need-and-its-clues/`,
     `${Paths.demos}tables/the-sketch/`,
+    `${Paths.demos}tables/the-slices/`,
     ...chartKinds.all.map(kind => `${Paths.demos}charts/${kind}/`),
     ...concerns.inOrder.map(practiceAddress.of)
   ])('include %s', address => {

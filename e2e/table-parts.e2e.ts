@@ -12,3 +12,13 @@ test('a reader follows the need and its clues’ foot on to the sketch’s page 
   await expect(page).toHaveURL(/demos\/tables\/the-sketch\/\?world=vanilla$/);
   await expect(pillSwitch(page, 'world').pill('Vanilla')).toBeChecked();
 });
+
+test('a reader follows a slice from the slices’ page to its station on the tables tab with the build kept', async ({page}) => {
+  await page.goto('demos/tables/the-slices/?world=vanilla');
+  await siteFrame(page).hydrated();
+
+  await page.getByRole('list', {name: 'the slices'}).getByRole('link', {name: 'station 4'}).click();
+
+  await expect(page).toHaveURL(/demos\/tables\/\?world=vanilla#station-4$/);
+  await expect(pillSwitch(page, 'world').pill('Vanilla')).toBeChecked();
+});

@@ -12,7 +12,6 @@ describe('the table tutorials', () => {
 
     expect(demoPage.title('let’s build this feature')).toBeVisible();
     expect(demoPage.title('Start with the need, and let it pick the element')).toBeVisible();
-    expect(demoPage.title('The trader can watch the live market over lookbacks they arrange')).toBeVisible();
     expect(demoPage.title('Sketch a design from the need')).toBeVisible();
   });
 
@@ -23,15 +22,6 @@ describe('the table tutorials', () => {
     const features = tablesTab().table('the features');
     expect(features.columns).toHaveLength(4);
     expect(features.rows).toHaveLength(4);
-  });
-
-  test('the slices point at their stations', async () => {
-    render(<TestApp at="/"><Tutorials/></TestApp>);
-    await demoPage.findTitle('let’s build this feature');
-
-    expect(demoPage.title('Slice the design into stories')).toBeVisible();
-    expect(demoPage.sliceLinks()).toEqual(['#station-4', '#station-5', '#station-6', '#station-6', '#station-6']);
-    expect(demoPage.sliceLinksLandingNowhere()).toEqual([]);
   });
 
   test('should head the features with both their axes', async () => {
@@ -48,7 +38,6 @@ describe('the table tutorials', () => {
     await demoPage.findTitle('let’s build this feature');
 
     expect(demoPage.linksToTabs()).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['charts tab', `${Paths.demos}charts/`]

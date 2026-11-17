@@ -1,8 +1,9 @@
 import {FC} from 'react';
-import {Slices} from '../../Recipe';
+import {demoTab, DemoTopics} from '@pages/Demos';
+import {Exercise, Slices} from '../../Recipe';
 
-export const StorySlices: FC = () =>
-  <Slices can="The trader can watch the live market over lookbacks they arrange"
+export const StorySlices: FC<{headedBy: string}> = ({headedBy}) => <>
+  <Slices headedBy={headedBy} stationsAt={demoTab.address(DemoTopics.tables)} can="The trader can watch the live market over lookbacks they arrange"
     soThat="so that what they compare sits side by side, and what matters most sits on top"
     slices="Too big to build in one motion, so I slice it: the smallest table that honors the shape first, then the flow of data, then each arrangement the trader asked for. The first two slices are stations of their own; the rest are cards in the last station, and each opens into its build. Station 5 ends with a
       story told from the code’s side, the store the two worlds share."
@@ -12,4 +13,10 @@ export const StorySlices: FC = () =>
       ['The trader can sort by column, and by row', 6],
       ['The trader can sort the lookbacks by any measure, or take the order back', 6],
       ['The trader can widen a column', 6]
-    ]}/>;
+    ]}/>
+  <Exercise>
+    If you want the exercise, stop here and build the story yourself first. The table at the top of this page is my
+    interpretation of that; the parts that follow break the interpretation into features. Read them to see how I built
+    it, or to compare it with yours. The links go to MDN, Mozilla’s web reference, if you want more.
+  </Exercise>
+</>;

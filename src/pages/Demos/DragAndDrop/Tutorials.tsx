@@ -52,7 +52,12 @@ export const ListTutorials: FC = () => {
             ['The user can arrange the list by hand', 4],
             ['The user can arrange the list from the keyboard', 4]
           ]}/>
-        <Exercise/>
+        <Exercise>
+          If you want the exercise, stop here and build the story yourself first. What you see above
+          is my interpretation of that; the cards below break the interpretation into features.
+          Open one to see how I built it, or to compare it with yours. The links go to MDN, Mozilla’s web reference, if
+          you want more.
+        </Exercise>
       </Station>
       <Station at={4}>
         <h3 className="phase-title title">Add features, in the order they were asked for</h3>
