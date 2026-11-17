@@ -54,7 +54,9 @@ const breaksBetweenWords = {
      * @param {any} node
      * @returns {boolean}
      */
-    const showsWords = node => node?.type === 'JSXElement' && not(node.openingElement.selfClosing);
+    const showsWords = node => maybe(node)
+      .map(({type, openingElement}) => type === 'JSXElement' && not(openingElement.selfClosing))
+      .orElse(false);
     return {
       JSXText: text => {
         const siblings = text.parent.children;
