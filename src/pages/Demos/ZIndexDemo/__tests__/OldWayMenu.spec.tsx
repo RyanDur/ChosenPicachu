@@ -191,3 +191,25 @@ describe('why 9999 still loses', () => {
       .toHaveAttribute('href', zIndexTab.fragmentOf('What else forms a stacking context'));
   });
 });
+
+describe('the terms part one defines, met again in why 9999 still loses', () => {
+  test('should link positioned, at its first use, to part one’s page with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+
+    const stillLoses = await explanation.part('Why 9999 still loses');
+
+    expect(explanation.linksBeside(stillLoses, /so it forms a stacking context/)).toEqual([
+      ['positioned', demosAt('z-index/why-third-is-on-top', '?raised=second')]
+    ]);
+  });
+
+  test('should link auto, at its first use, to part one’s page with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+
+    const stillLoses = await explanation.part('Why 9999 still loses');
+
+    expect(explanation.linksBeside(stillLoses, /^With the box unchecked/)).toEqual([
+      ['auto', demosAt('z-index/why-third-is-on-top', '?raised=second')]
+    ]);
+  });
+});
