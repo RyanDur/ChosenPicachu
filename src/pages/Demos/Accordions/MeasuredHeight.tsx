@@ -11,7 +11,7 @@ import {FoldMotionDial} from './FoldMotionDial';
 import {FoldTypeDial} from './FoldTypeDial';
 import {foldInput} from './fold-input';
 import {looks} from './looks';
-import {accordionParts} from './part-pages';
+import {TabPartLink} from './TabPartLink';
 import {PlainFold} from './Plain';
 import exclusiveMeasuredAccordionSource from './ExclusiveMeasuredAccordion.tsx?sample';
 import inclusiveMeasuredAccordionSource from './InclusiveMeasuredAccordion.tsx?sample';
@@ -46,11 +46,9 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
   const input = foldInput.of(foldType);
   const {Accordion: Measured, sample} = measuredBuilds[foldType];
   return <>
-    <p className="paragraph">This part builds on two before it on the accordions tab: “<TabLink
-      to={DemoTopics.accordions} heading="remembers-heading">{accordionParts.titleOf('remembers-heading')}</TabLink>”, for the
-      checkbox and its label, and “<TabLink to={DemoTopics.accordions}
-      heading="max-height-guess-heading">{accordionParts.titleOf('max-height-guess-heading')}</TabLink>”, which this part
-      answers.</p>
+    <p className="paragraph">This part builds on two before it on the accordions tab:
+      “<TabPartLink heading="remembers-heading"/>”, for the checkbox and its label, and
+      “<TabPartLink heading="max-height-guess-heading"/>”, which this part answers.</p>
     <DialGroup>
       <FoldTypeDial/>
       <FoldMotionDial/>
