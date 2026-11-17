@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {has, maybe} from '@ryandur/sand';
+import {maybe} from '@ryandur/sand';
 import {classNames} from '@components';
 import {useHeaderEvents} from './useHeaderEvents';
 import {useTableDispatch} from './useTableDispatch';
@@ -46,9 +46,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({
     travel.eager(survey.columnUnder(order, held.survey), column, neighbor => beside(neighbor, held.survey))(moving);
   };
   const release = (): void => {
-    if (has(drag) && has(settling)) {
-      dispatch(tableActions.dropped({axis: 'column', held: column}, settling, {name: column, order}));
-    }
+    settling.map(settled => dispatch(tableActions.dropped({axis: 'column', held: column}, settled, {name: column, order})));
   };
 
   return <th {...th}
@@ -60,7 +58,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({
     aria-sort={sorted}
     tabIndex={travels ? 0 : undefined}
     onPointerDown={travels ? lifting.column(column, () => order, () => standing, lift) : undefined}
-    {...travel.whileHeld(maybe(drag), moved, release)}
+    {...travel.whileHeld(drag, moved, release)}
     onKeyDown={travels ? arrows.column(column, () => order, ({
       to,
       widths

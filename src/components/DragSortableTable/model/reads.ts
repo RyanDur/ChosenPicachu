@@ -1,5 +1,5 @@
 import {Report} from './report';
-import {has, maybe, Maybe, not, nothing} from '@ryandur/sand';
+import {maybe, Maybe, not, nothing, some} from '@ryandur/sand';
 import {shares} from './shares';
 import {TableColumn, ColumnDrag, ColumnShove, Labeled, Marks, RowDrag, RowShove, Settling, TableView, tableState} from './table-state';
 import {survey} from './survey';
@@ -37,19 +37,19 @@ const columnTravels = (name: string) => (view: TableView): boolean =>
 
 const neighborOfColumn = (name: string) => (view: TableView): string => shares.neighborOf(order(view), name);
 
-const columnDrag = (name: string) => ({state}: TableView): ColumnDrag | undefined =>
-  has(state.drag) && state.drag.axis === 'column' && state.drag.held === name ? state.drag : undefined;
+const columnDrag = (name: string) => ({state}: TableView): Maybe<ColumnDrag> =>
+  maybe(state.drag).mBind(drag => drag.axis === 'column' && drag.held === name ? some(drag) : nothing());
 
-const rowDrag = (key: string) => ({state}: TableView): RowDrag | undefined =>
-  has(state.drag) && state.drag.axis === 'row' && state.drag.held === key ? state.drag : undefined;
+const rowDrag = (key: string) => ({state}: TableView): Maybe<RowDrag> =>
+  maybe(state.drag).mBind(drag => drag.axis === 'row' && drag.held === key ? some(drag) : nothing());
 
-const columnHeld = (name: string) => (view: TableView): boolean => has(columnDrag(name)(view));
+const columnHeld = (name: string) => (view: TableView): boolean => not(columnDrag(name)(view).isNothing);
 
 const columnGripped = (name: string) => ({state}: TableView): boolean => tableState.pointerHolds(state, name);
 
 const report = ({state}: TableView): Maybe<Report> => maybe(state.report);
 
-const rowHeld = (key: string) => (view: TableView): boolean => has(rowDrag(key)(view));
+const rowHeld = (key: string) => (view: TableView): boolean => not(rowDrag(key)(view).isNothing);
 
 const seatOffset = (view: TableView): Maybe<Drift> =>
   tableState.seatOffset(view.state, order(view), standing(view));
@@ -61,16 +61,16 @@ const seatOfRow = (key: string) => (view: TableView): Maybe<Drift> =>
   rowHeld(key)(view) ? seatOffset(view) : nothing();
 
 const driftOfColumn = (name: string) => (view: TableView): Maybe<Drift> =>
-  maybe(columnDrag(name)(view)).map(drag => drag.drift);
+  columnDrag(name)(view).map(drag => drag.drift);
 
 const driftOfRow = (key: string) => (view: TableView): Maybe<Drift> =>
-  maybe(rowDrag(key)(view)).map(drag => drag.drift);
+  rowDrag(key)(view).map(drag => drag.drift);
 
-const settlingOfColumnIn = (name: string, order: readonly string[]) => (view: TableView): Settling | undefined =>
-  columnHeld(name)(view) ? tableState.settlingAt(view.state, order, standing(view)) : undefined;
+const settlingOfColumnIn = (name: string, order: readonly string[]) => (view: TableView): Maybe<Settling> =>
+  columnDrag(name)(view).map(() => tableState.settlingAt(view.state, order, standing(view)));
 
-const settlingOfRowIn = (key: string, standing: readonly string[]) => (view: TableView): Settling | undefined =>
-  rowHeld(key)(view) ? tableState.settlingAt(view.state, order(view), standing) : undefined;
+const settlingOfRowIn = (key: string, standing: readonly string[]) => (view: TableView): Maybe<Settling> =>
+  rowDrag(key)(view).map(() => tableState.settlingAt(view.state, order(view), standing));
 
 export const tableReads = {
   order,

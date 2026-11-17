@@ -1,8 +1,8 @@
 import {FC} from 'react';
-import draggableColumnSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
+import feedbackSource from '@feedback/Feedback.tsx?sample';
 import {carve, Snippet} from '@pages/Demos/Recipe';
 
-const tableCondition = 'if (has(drag) && has(settling))';
+const enterCondition = "if (event.key === 'Enter' && not(event.shiftKey) && not(event.nativeEvent.isComposing))";
 
 export const ConditionCarve: FC = () =>
-  <Snippet label="TS" lines={carve.between(draggableColumnSource, tableCondition, tableCondition)}/>;
+  <Snippet label="TS" lines={carve.between(feedbackSource, enterCondition, enterCondition)}/>;

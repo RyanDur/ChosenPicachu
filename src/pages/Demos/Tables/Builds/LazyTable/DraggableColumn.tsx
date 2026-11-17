@@ -1,5 +1,5 @@
 import {ComponentProps, FC} from 'react';
-import {has, maybe} from '@ryandur/sand';
+import {maybe} from '@ryandur/sand';
 import {classNames} from '@components';
 import {useHeaderEvents, useTableDispatch, useTableRead} from '@components/DragSortableTable';
 import {arrangements, arrows, ColumnDrag, Grab, lifting, looks, Moving, PixelSizes, shares, Survey, survey, tableActions, tableReads, travel} from '@components/DragSortableTable/model';
@@ -40,15 +40,14 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     dispatch(tableActions.columnLandingFound(lazyDrop.column(order, moving)(held)));
   };
   const release = (): void => {
-    if (has(drag)) {
-      const to = drag.landing.map(neighbor => survey.interior(order.indexOf(neighbor), count))
+    drag.map(held => {
+      const to = held.landing.map(neighbor => survey.interior(order.indexOf(neighbor), count))
         .orElse(order.indexOf(column));
       const settling = tableReads.settlingOfColumnIn(column, arrangements.movedTo(order, column, to))(view);
-      lazyDrop.released(drag, neighbor => beside(neighbor, drag.survey));
-      if (has(settling)) {
-        dispatch(tableActions.dropped({axis: 'column', held: column}, settling, {name: column, order: arrangements.movedTo(order, column, to)}));
-      }
-    }
+      lazyDrop.released(held, neighbor => beside(neighbor, held.survey));
+      return settling.map(settled => dispatch(tableActions.dropped(
+        {axis: 'column', held: column}, settled, {name: column, order: arrangements.movedTo(order, column, to)})));
+    });
   };
 
   return <th {...th}
@@ -60,7 +59,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
     aria-sort={sorted}
     tabIndex={travels ? 0 : undefined}
     onPointerDown={travels ? lifting.column(column, () => order, () => standing, lift) : undefined}
-    {...travel.whileHeld(maybe(drag), moved, release)}
+    {...travel.whileHeld(drag, moved, release)}
     onKeyDown={travels ? arrows.column(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{
