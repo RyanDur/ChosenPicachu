@@ -19,8 +19,8 @@ export const TopLayerTutorial: FC = () => {
       the news is. Elsewhere on this site it reports real trouble. On this page the button raises random nonsense so you
       can watch the mechanics.
     </p>
-    <p className="overview paragraph">The parts above show what a z-index does and where it stops counting. The banner
-      uses both: it sets a z-index, and where it sits decides what that number is compared with.</p>
+    <p className="overview paragraph">The earlier parts show what a z-index does and where it stops counting. The
+      banner uses both: it sets a z-index, and where it sits decides what that number is compared with.</p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">
         When something breaks, tell me. Do not make me guess why the chart went quiet,
