@@ -90,6 +90,13 @@ describe('each page is named where a search shows it', () => {
     expect(described()).toBe(names['z-index']['why-9999-still-loses'].description);
   });
 
+  test('should give the page for what else forms a stacking context its own title and description', async () => {
+    render(<TestApp at={demosAt('z-index/what-else-forms-a-stacking-context')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names['z-index']['what-else-forms-a-stacking-context'].title));
+    expect(described()).toBe(names['z-index']['what-else-forms-a-stacking-context'].description);
+  });
+
   test('should give the drag sort tutorial its own title and description', async () => {
     render(<TestApp at={demosAt('tables/sort')}/>);
 
