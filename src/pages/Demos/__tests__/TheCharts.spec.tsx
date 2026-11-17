@@ -780,6 +780,36 @@ describe('the charts tab’s introduction', () => {
   });
 });
 
+describe('the charts tab’s parts', () => {
+  test('should list the four chart pages in order, each a link to its page', async () => {
+    render(<TestApp at={demosAt('charts')}/>);
+    await demoTabs.arrivedOn('Charts');
+
+    expect(demoPage.parts('let’s build this feature')).toEqual([
+      ['Price line', chartPageAt('price')],
+      ['Candles', chartPageAt('candles')],
+      ['Pressure', chartPageAt('pressure')],
+      ['Pie', chartPageAt('pie')]
+    ]);
+  });
+});
+
+describe('the workspace’s doorways', () => {
+  test('should link each chart to its page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await chartsDesk.findChart('live trades');
+
+    expect(['Price line', 'Candles', 'Pressure', 'Pie'].map(chart => chartsDesk.doorway(chart).getAttribute('href'))).toEqual([
+      chartPageAt('price'),
+      chartPageAt('candles'),
+      chartPageAt('pressure'),
+      chartPageAt('pie')
+    ]);
+  });
+});
+
 describe('the workspace story', () => {
   const workspaceStory = async (): Promise<HTMLElement> => {
     const feed = await listeningFeed();

@@ -11,6 +11,33 @@ import kindsSource from './chart-kinds.ts?sample';
 import crossingSource from '../DragAndDrop/crossing.ts?sample';
 import workspaceCss from './Workspace.css?sample';
 import '../Recipe/Recipe.css';
+import {Part, Parts} from '../Parts';
+import {ChartKind, chartKinds} from './chart-kinds';
+
+const told: Record<ChartKind, Pick<Part, 'says' | 'reading'>> = {
+  price: {
+    says: 'A line shows whether the market is climbing, stalling or rolling over, without a digit to read.',
+    reading: '8 minutes'
+  },
+  candles: {
+    says: 'Each bucket of time answers for itself: where it opened and closed, how far it reached, and how much conviction was underneath.',
+    reading: '7 minutes'
+  },
+  pressure: {
+    says: 'Bars show whether buyers drove the price there or the sellers stepped away.',
+    reading: '5 minutes'
+  },
+  pie: {
+    says: 'One circle at the session’s end shows who owned it.',
+    reading: '5 minutes'
+  }
+};
+
+const chartPages: readonly Part[] = chartKinds.all.map(kind => ({
+  title: chartKinds.names[kind],
+  to: chartKinds.address(kind),
+  ...told[kind]
+}));
 
 const WorkspaceStory: FC = () =>
   <Story param="graph" id="workspace"
@@ -153,6 +180,7 @@ export const ChartsTutorial: FC = () => {
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
     <h2 id={titled} className="title">let’s build this feature</h2>
+    <Parts labelledBy={titled} parts={chartPages}/>
     <p className="overview paragraph">
       We are going to build this site’s live charts, feature by feature. Here is how to use this page: the card below is
       the workspace, told as a <a className="signpost"
