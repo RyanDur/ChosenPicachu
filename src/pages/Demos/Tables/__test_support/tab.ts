@@ -28,7 +28,11 @@ export const tablesTab = () => ({
       .map(link => computeAccessibleName(link)),
   place: (): Promise<HTMLElement> => screen.findByText(/tutorial \d+ of \d+/),
   partPlace: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
-  readingTime: (said: string): Promise<HTMLElement> => screen.findByText(said, {}, untilTheTablesTabRenders),
+  readingTimeOf: async (title: string): Promise<HTMLElement> => {
+    await tutorialLink(title);
+    const [entry] = screen.getAllByRole('listitem').filter(item => within(item).queryByRole('heading', {name: title}));
+    return within(entry).getByText(/to read$/);
+  },
   titles: (name: string, level?: number): HTMLElement[] => screen.queryAllByRole('heading', {name, level}),
   tableShown: (name: string): HTMLElement | null => screen.queryByRole('table', {name}),
   recipeShown: (build: string): HTMLElement | null => screen.queryByRole('region', {name: `build the ${build} yourself`}),

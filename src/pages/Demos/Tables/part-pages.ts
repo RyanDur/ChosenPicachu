@@ -38,7 +38,7 @@ const headings = {
 type HeadedPart = keyof typeof headings;
 
 const minutes: Record<TablePart, number> = {
-  'the-need-and-its-clues': 2,
+  'the-need-and-its-clues': 1,
   'the-sketch': 1,
   'the-slices': 2
 };
