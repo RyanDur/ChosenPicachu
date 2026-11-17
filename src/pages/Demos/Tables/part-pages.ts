@@ -14,7 +14,7 @@ type Told = {
   ordinal: number;
 };
 
-const book = [
+const buildParts = [
   'the-need-and-its-clues',
   'the-sketch',
   'the-slices',
@@ -22,7 +22,7 @@ const book = [
   'the-live-table-and-the-store'
 ] as const satisfies readonly TablePart[];
 
-type BuildPart = typeof book[number];
+type BuildPart = typeof buildParts[number];
 
 const titles: Record<BuildPart, string> = {
   'the-need-and-its-clues': needHeading.title,
@@ -53,10 +53,10 @@ const tabAddress = demoTab.address(DemoTopics.tables);
 
 const addressOf = (part: TablePart): string => `${tabAddress}${part}/`;
 
-const ordinalOf = (part: TablePart): number => book.indexOf(part) + 1;
+const ordinalOf = (part: TablePart): number => buildParts.indexOf(part) + 1;
 
 const whereIs = (station: number): Place =>
-  maybe(book[station - 1]).either(
+  maybe(buildParts[station - 1]).either(
     part => ({to: addressOf(part), ...maybe(opens[part]).map(ids => ({search: {[livingStories.param]: ids.join(',')}})).orElse({})}),
     () => ({to: tabAddress, heading: stations.idOf(station)}));
 
@@ -65,7 +65,7 @@ const numbered = (ordinal: number, title: string): string => `${ordinal}. ${titl
 const placeOf = (part: TablePart): PartPlace =>
   ({title: numbered(ordinalOf(part), titles[part]), ...whereIs(ordinalOf(part))});
 
-const featuresStation = book.length + 1;
+const featuresStation = buildParts.length + 1;
 
 export const tableParts = {
   told: (part: TablePart): Told => ({
@@ -78,8 +78,8 @@ export const tableParts = {
   placeOf,
   numbered,
   whereIs,
-  shownAt: (pathname: string): Maybe<TablePart> => maybe(book.find(part => pathname === addressOf(part))),
-  inOrder: book,
+  shownAt: (pathname: string): Maybe<TablePart> => maybe(buildParts.find(part => pathname === addressOf(part))),
+  inOrder: buildParts,
   featuresStation,
-  count: book.length
+  count: buildParts.length
 };
