@@ -23,6 +23,7 @@ export const pages: readonly SitePage[] = [
   {name: 'the max-height guess', path: 'demos/accordions/the-max-height-guess/', ready: 'navigation', budgeted: true},
   {name: 'the measured height', path: 'demos/accordions/the-measured-height/', ready: 'navigation', budgeted: true},
   {name: 'what the platform gives now', path: 'demos/accordions/what-the-platform-gives-now/', ready: 'navigation', budgeted: true},
+  {name: 'how a sliding fold moves', path: 'demos/accordions/how-a-sliding-fold-moves/', ready: 'navigation', budgeted: true},
   {name: 'z-index', path: 'demos/z-index/', ready: 'navigation', budgeted: true},
   {name: 'why Third is on top', path: 'demos/z-index/why-third-is-on-top/', ready: 'navigation', budgeted: true},
   {name: 'why 9999 still loses', path: 'demos/z-index/why-9999-still-loses/', ready: 'navigation', budgeted: true},
