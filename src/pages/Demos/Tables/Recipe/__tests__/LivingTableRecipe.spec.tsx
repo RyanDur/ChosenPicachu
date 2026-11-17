@@ -1,6 +1,7 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demoPage} from '@pages/Demos/__test_support';
+import {demoPage, demosAt} from '@pages/Demos/__test_support';
+import {tablesTab} from '@pages/Demos/Tables/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {FlowTableRecipe} from '../FlowTableRecipe';
 import {StillTableRecipe} from '../StillTableRecipe';
@@ -16,6 +17,13 @@ describe('the still and living table recipes', () => {
     expect(living).toBeVisible();
     expect(recipeFolds.story(living, 'The trader can watch the market live, one lookback beside another')).toBeInTheDocument();
     expect(recipeFolds.story(living, 'The page is a store, and so is the table')).toBeInTheDocument();
+  });
+
+  test('should link the stream to the charts tab that draws the same feed', async () => {
+    render(<TestApp at="/"><FlowTableRecipe/></TestApp>);
+
+    expect(await tablesTab().linkInSentence(/The exchange offers a stream, the same feed the/, 'charts tab'))
+      .toHaveAttribute('href', demosAt('charts'));
   });
 
   test('the tutorial stands unchanged in the html world', async () => {

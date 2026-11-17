@@ -1,3 +1,5 @@
+import {TabLink} from '@pages/Demos/TabLink';
+import {DemoTopics} from '@pages/Demos';
 import {FC, ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
@@ -57,9 +59,9 @@ const FlowStory: FC = () => {
     soThat="the numbers stay current without a single refresh">
     <Tell>The still becomes a stream. The trader arrives mid-session, so the page starts with
       one plain fetch of the recent history. And the numbers have to keep themselves current:
-      polling is always a little late and mostly wasted requests. The exchange offers a stream,
-      so a socket comes next, and from then on the trades arrive on their own, kept under a cap
-      so a long session cannot grow forever. {refolds[world]}</Tell>
+      polling is always a little late and mostly wasted requests. The exchange offers a stream, the same feed
+      the <TabLink to={DemoTopics.charts}>charts tab</TabLink> draws, so a socket comes next, and from then on the
+      trades arrive on their own, kept under a cap so a long session cannot grow forever. {refolds[world]}</Tell>
     <DataPath/>
     <Steps>
       <Step>

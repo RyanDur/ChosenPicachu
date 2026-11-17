@@ -1,3 +1,5 @@
+import {TabLink} from '@pages/Demos/TabLink';
+import {DemoTopics} from '@pages/Demos';
 import {FC} from 'react';
 import {carve, Codes, lines, Reveal, Sample, Says, Snippet, Step, StepHeading, Want, Words} from '../../../Recipe';
 import {useControls} from '../../../Controls';
@@ -16,10 +18,10 @@ export const CarryVertical: FC<{rowSource: Sample; buildSource: Sample}> = ({row
     </Words>
     <Reveal>
       <Says>Rows reuse the machinery the columns built, with three substitutions. The grip is a
-        real button, so the pointer has a target and the keyboard will later get one for free. The
-        survey learns row heights at lift, measured once like everything else. And rowUnder
-        reports which seat sits under the pointer, columnUnder turned vertical. One more word:
-        the <Term word="seats">seats</Term> are the seating chart, the rows’ order; a row keeps its key as the seats
+        real button, like the <TabLink to={DemoTopics.dragAndDrop}>drag sort tab</TabLink>’s grip, so the pointer
+        has a target and the keyboard will later get one for free. The survey learns row heights at lift, measured
+        once like everything else. And rowUnder reports which seat sits under the pointer, columnUnder turned
+        vertical. One more word: the <Term word="seats">seats</Term> are the seating chart, the rows’ order; a row keeps its key as the seats
         shuffle. The settle is the same story: the moved row takes its new seat, and the rest
         carry over.</Says>
       {world === 'react'

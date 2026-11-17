@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demoPage} from '@pages/Demos/__test_support';
+import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {tableControls, tablesTab} from '@pages/Demos/Tables/__test_support';
 import {Recipe} from '../Recipe';
@@ -8,6 +8,13 @@ import {FlowTableRecipe} from '../FlowTableRecipe';
 import {TableControls} from '../../TableControls';
 
 describe('the drag sort recipe', () => {
+  test('should link the row grip to the drag sort tab’s grip where it explains it', async () => {
+    render(<TestApp at="/"><Recipe/></TestApp>);
+
+    expect(await tablesTab().linkInSentence(/The grip is a real button, like the/, 'drag sort tab'))
+      .toHaveAttribute('href', demosAt('drag-and-drop'));
+  });
+
   test('should open the recipe with its stories closed', async () => {
     render(<TestApp at="/"><Recipe/></TestApp>);
     const recipe = await tablesTab().recipe('drag sort');

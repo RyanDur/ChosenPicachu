@@ -54,7 +54,8 @@ describe('the table tutorials', () => {
     expect(demoPage.linksToTabs()).toEqual([
       ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['z-index tab', `${Paths.demos}z-index/`]
+      ['z-index tab', `${Paths.demos}z-index/`],
+      ['charts tab', `${Paths.demos}charts/`]
     ]);
   });
 

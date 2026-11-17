@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demoPage} from '@pages/Demos/__test_support';
+import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {tablesTab} from '@pages/Demos/Tables/__test_support';
 import {MenuRecipe} from '../MenuRecipe';
 
@@ -9,6 +9,13 @@ describe('the sort menu recipe', () => {
     render(<TestApp at="/?world=vanilla"><MenuRecipe/></TestApp>);
 
     expect(await demoPage.findTitle('The trader can sort the lookbacks by any measure, or take the order back')).toBeInTheDocument();
+  });
+
+  test('should link the popover to the z-index tab that builds its menu on it', async () => {
+    render(<TestApp at="/"><MenuRecipe/></TestApp>);
+
+    expect(await tablesTab().linkInSentence(/So the chooser uses the platform’s popover, the one the/, 'z-index tab'))
+      .toHaveAttribute('href', demosAt('z-index'));
   });
 
   test('should link position-area to MDN', async () => {
