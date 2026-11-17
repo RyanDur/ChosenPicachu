@@ -103,7 +103,7 @@ export const PagePulledApart: FC = () => {
         <polygon key={name} className="drawn-line drawn hollow" points={regionPoints(region, heights.structure)}/>)}
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, heights.presentation)}/>
       {Object.entries(slabRegions).map(([name, region]) =>
-        <polygon key={name} className="drawn-line drawn hatched-filled"
+        <polygon key={name} className="drawn-line drawn pulled-apart-hatched"
           points={regionPoints(region, heights.presentation)}/>)}
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, heights.behavior)}/>
       <polygon className="drawn-line drawn hollow" points={regionPoints(dialog, heights.behavior)}/>
