@@ -25,7 +25,7 @@ export const TutorialPage: FC = () => {
   const startingAt = tableParts.told(tableTutorials.startingPart);
   const {to, search} = tableParts.whereIs(startingAt.ordinal);
   return useShownTutorial().either(tutorial => {
-    const {ordinal, outOf} = tableTutorials.placeOf(tutorial);
+    const {ordinal, outOf} = tableTutorials.positionOf(tutorial);
     const TutorialRecipe = recipes[tutorial];
     return <section aria-labelledby={titled} className="tutorial-page">
       <hgroup>

@@ -5,14 +5,14 @@ import {TablePart} from './part-pages';
 
 export type Tutorial = keyof typeof names.tables;
 
-type Place = {ordinal: number; outOf: number};
+type Position = {ordinal: number; outOf: number};
 
 type TableTutorials = {
   all: () => readonly Tutorial[];
   nameOf: (tutorial: Tutorial) => string;
   minutesOf: (tutorial: Tutorial) => number;
   addressOf: (tutorial: Tutorial) => string;
-  placeOf: (tutorial: Tutorial) => Place;
+  positionOf: (tutorial: Tutorial) => Position;
   at: (pathname: string) => Maybe<Tutorial>;
   startingPart: TablePart;
 };
@@ -38,7 +38,7 @@ export const tableTutorials: TableTutorials = {
   nameOf: tutorial => named[tutorial],
   minutesOf: tutorial => minutes[tutorial],
   addressOf,
-  placeOf: tutorial => ({ordinal: inOrder.indexOf(tutorial) + 1, outOf: inOrder.length}),
+  positionOf: tutorial => ({ordinal: inOrder.indexOf(tutorial) + 1, outOf: inOrder.length}),
   at: pathname => maybe(inOrder.find(tutorial => pathname === addressOf(tutorial))),
   startingPart: 'the-live-table-and-the-store'
 };
