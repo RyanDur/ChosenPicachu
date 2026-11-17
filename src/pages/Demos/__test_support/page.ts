@@ -13,8 +13,13 @@ const toTabs = (links: HTMLElement[]): string[][] => links
 
 const linksToTabsIn = (holder: HTMLElement): string[][] => toTabs(within(holder).getAllByRole('link'));
 
+const pageAndPlaceOf = (href: string): string => {
+  const {pathname, hash} = new URL(href, 'http://site');
+  return `${pathname}${hash}`;
+};
+
 const linksToPageIn = (holder: HTMLElement, address: string): string[][] => within(holder).getAllByRole('link')
-  .map(link => [link.textContent, maybe(link.getAttribute('href')).orElse('').split('?')[0]])
+  .map(link => [link.textContent, pageAndPlaceOf(maybe(link.getAttribute('href')).orElse(''))])
   .filter(([, href]) => href === address);
 
 const linksOffTheRail = (): HTMLElement[] => {
