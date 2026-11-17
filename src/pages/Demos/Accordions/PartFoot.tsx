@@ -1,16 +1,16 @@
 import {FC} from 'react';
-import {DemoTopics} from '@pages/Demos';
-import {TabLink} from '@pages/Demos/TabLink';
-import {AccordionPart, accordionParts} from './part-pages';
+import {demoTab, DemoTopics} from '@pages/Demos';
+import {PageFoot} from '@pages/Demos/PageFoot';
+import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
+import {AccordionPart, accordionParts, TabHeading} from './part-pages';
 
-export const PartFoot: FC<{part: AccordionPart}> = ({part}) =>
-  <nav className="part-neighbors" aria-label="the accordions parts">
-    {accordionParts.previousOf(part).map(heading =>
-      <TabLink key={heading} to={DemoTopics.accordions} heading={heading} rel="prev" className="reachable">
-        {`Previous: ${accordionParts.numbered(heading)}`}
-      </TabLink>).orNull()}
-    {accordionParts.nextOf(part).map(heading =>
-      <TabLink key={heading} to={DemoTopics.accordions} heading={heading} rel="next" className="onward reachable">
-        {`Next: ${accordionParts.numbered(heading)}`}
-      </TabLink>).orNull()}
-  </nav>;
+export const PartFoot: FC<{part: AccordionPart}> = ({part}) => {
+  const carried = useCarriedAddress();
+  const neighbor = (heading: TabHeading) => ({
+    numbered: accordionParts.numbered(heading),
+    address: carried(demoTab.address(DemoTopics.accordions), heading)
+  });
+  return <PageFoot label="the accordions parts"
+    previous={accordionParts.previousOf(part).map(neighbor)}
+    next={accordionParts.nextOf(part).map(neighbor)}/>;
+};

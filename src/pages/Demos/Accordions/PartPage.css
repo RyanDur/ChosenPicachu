@@ -3,15 +3,3 @@
   grid-template-columns: minmax(0, 1fr);
   gap: var(--base-x-3);
 }
-
-.part-neighbors {
-  justify-self: stretch;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--base-x-2);
-
-  .onward {
-    margin-inline-start: auto;
-  }
-}

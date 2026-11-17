@@ -1,0 +1,11 @@
+.page-foot {
+  justify-self: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--base-x-2);
+
+  .onward {
+    margin-inline-start: auto;
+  }
+}

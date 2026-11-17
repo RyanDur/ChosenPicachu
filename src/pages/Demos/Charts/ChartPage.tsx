@@ -1,7 +1,8 @@
 import {FC} from 'react';
-import {Link, Navigate, useParams} from 'react-router';
+import {Navigate, useParams} from 'react-router';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
+import {PageFoot} from '@pages/Demos/PageFoot';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {Pressure} from './Pressure';
@@ -55,17 +56,7 @@ const features: Record<ChartKind, Feature> = {
 
 type Props = {kind: ChartKind};
 
-const Neighbors: FC<Props> = ({kind}) =>
-  <nav className="chart-neighbors" aria-label="the chart pages">
-    {chartKinds.previous(kind).map(previousKind =>
-      <Link key={previousKind} className="reachable signpost" rel="prev" to={chartKinds.address(previousKind)}>
-        {`Previous: ${chartKinds.numbered(previousKind)}`}
-      </Link>).orNull()}
-    {chartKinds.next(kind).map(nextKind =>
-      <Link key={nextKind} className="onward reachable signpost" rel="next" to={chartKinds.address(nextKind)}>
-        {`Next: ${chartKinds.numbered(nextKind)}`}
-      </Link>).orNull()}
-  </nav>;
+const neighbor = (kind: ChartKind) => ({numbered: chartKinds.numbered(kind), address: chartKinds.address(kind)});
 
 const ChartKindTutorial: FC<Props> = ({kind}) => {
   const {name, reference, quote, chart: Chart} = features[kind];
@@ -99,7 +90,8 @@ const ChartKindTutorial: FC<Props> = ({kind}) => {
         <ChartStories kind={kind}/>
       </StoryDepth.Provider>
     </section>
-    <Neighbors kind={kind}/>
+    <PageFoot label="the chart pages" previous={chartKinds.previous(kind).map(neighbor)}
+      next={chartKinds.next(kind).map(neighbor)}/>
   </article>;
 };
 
