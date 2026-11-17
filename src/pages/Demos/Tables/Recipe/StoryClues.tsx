@@ -9,8 +9,8 @@ const clues: [string, string][] = [
   ['it should just happen', 'No submit, no reload. A sort takes effect the moment it is chosen.']
 ];
 
-export const StoryClues: FC<{headedByPage?: boolean; 'aria-labelledby'?: string}> = ({headedByPage, 'aria-labelledby': titledBy}) =>
-  <Clues headedByPage={headedByPage} aria-labelledby={titledBy} quote="I watch the market all day. I need the numbers to keep themselves current, and I need them arranged the way I think: what I am comparing side by side, what matters most on top. When I sort something, it should just happen."
+export const StoryClues: FC<{headedBy?: string}> = ({headedBy}) =>
+  <Clues headedBy={headedBy} quote="I watch the market all day. I need the numbers to keep themselves current, and I need them arranged the way I think: what I am comparing side by side, what matters most on top. When I sort something, it should just happen."
     by="a trader"
     clues={clues}
     verdict="Measures compared across a shared set of lookbacks is tabular data, and a table is the element built for it: one dimension per axis, headers that name both, and a reading order assistive tech already understands."/>;

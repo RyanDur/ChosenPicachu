@@ -23,7 +23,7 @@ export const PartPage: FC<{part: TablePart}> = ({part}) => {
     <Aggregations/>
     <WorldGlider/>
     <WorldNote/>
-    <StoryClues headedByPage aria-labelledby={titled}/>
+    <StoryClues headedBy={titled}/>
     <PageFoot label="the tables parts" previous={nothing()}
       next={some({numbered, address: carried(demoTab.address(DemoTopics.tables), heading.id)})}/>
   </article>;
