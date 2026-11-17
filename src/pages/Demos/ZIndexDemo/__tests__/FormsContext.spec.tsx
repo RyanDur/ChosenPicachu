@@ -118,7 +118,7 @@ describe('the part on what else forms a stacking context', () => {
     expect(wearsChooser.wear(await wearsChooser.find(), 'transform: rotate(-1deg)')).toBeChecked();
   });
 
-  test('should leave the menu part’s own checkbox as it was, with the wear carried to its page', async () => {
+  test('should leave the trap’s checkbox checked when the address names a wear', async () => {
     render(<TestApp at={demosAt('z-index/why-9999-still-loses', '?wears=opacity')}/>);
 
     expect(theTrap.cardOneHasZIndexBox(await theTrap.find())).toBeChecked();
