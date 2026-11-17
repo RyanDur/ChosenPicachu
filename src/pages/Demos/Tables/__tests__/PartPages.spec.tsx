@@ -41,7 +41,8 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     await tablesTab().partPlace();
 
-    expect(tablesTab().titleLevels(theNeed)).toEqual([2]);
+    expect(tablesTab().titles(theNeed, 2)).toHaveLength(1);
+    expect(tablesTab().titles(theNeed)).toHaveLength(1);
   });
 
   test('the need’s page links the tab its clues name', async () => {

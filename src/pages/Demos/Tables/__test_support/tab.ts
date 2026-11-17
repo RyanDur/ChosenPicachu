@@ -28,8 +28,7 @@ export const tablesTab = () => ({
       .map(link => computeAccessibleName(link)),
   place: (): Promise<HTMLElement> => screen.findByText(/tutorial \d+ of \d+/),
   partPlace: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
-  titleLevels: (name: string): number[] =>
-    screen.queryAllByRole('heading', {name}).map(heading => Number(heading.tagName.slice(1))),
+  titles: (name: string, level?: number): HTMLElement[] => screen.queryAllByRole('heading', {name, level}),
   tableShown: (name: string): HTMLElement | null => screen.queryByRole('table', {name}),
   recipeShown: (build: string): HTMLElement | null => screen.queryByRole('region', {name: `build the ${build} yourself`}),
   frame: (): HTMLElement | null => screen.queryByTitle('the living table, in vanilla'),
