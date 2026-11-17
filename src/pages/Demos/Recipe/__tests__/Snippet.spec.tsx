@@ -61,6 +61,18 @@ describe('a code sample', () => {
     expect(codeSample.fileNames()).toEqual([]);
   });
 
+  test('should say a sample written for the page was written for it', () => {
+    render(<Snippet label="CSS" lines={[lines.plain('.fold {'), lines.plain('}')]}/>);
+
+    expect(codeSample.source()).toBe('Written for this page, not taken from the site’s code.');
+  });
+
+  test('should say a sample carved from the page’s exhibit was taken from it, linking to no file', () => {
+    render(<Snippet label="TS" lines={lines.fromTheExhibit(carve.between(store, 'export const store', 'export const more'))}/>);
+
+    expect(codeSample.source()).toBe('Taken from the exhibit on this page. The rest of the site doesn’t use it.');
+  });
+
   test('should name what a lowercase folder sits inside, since it is a module of that component', () => {
     const survey = aSample('export const survey = 1;\n', 'src/components/DragSortableTable/model/survey.ts');
     render(<Snippet label="TS" lines={carve.between(survey, 'export const survey', 'export const survey')}/>);
