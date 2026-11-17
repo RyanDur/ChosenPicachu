@@ -16,8 +16,8 @@ export const HoldTheAloft: FC = () =>
       <Says>Your first try writes the item into the payload at dragstart and reads it back in dragover, and the read
         comes back empty. That is not a bug: the browser seals the payload during the drag, so a window the pointer
         passes over cannot read data that was never dropped on it.</Says>
-      <Says>Keep it in state instead. <PartTermLink part="why-the-popover-wins">State</PartTermLink> is the data a render draws from.
-        React keeps the list’s state and hands every change to
+      <Says>Keep it in state instead. <PartTermLink part="why-the-popover-wins">State</PartTermLink> is the data a
+        render draws from. React keeps the list’s state and hands every change to
         a <TabLink to={DemoTopics.zIndex}>reducer</TabLink>, a function that takes the state and an action and returns
         the next state. An action is an object that names what happened, such
         as <code className="monospaced">lifted</code>. A <TabLink to={DemoTopics.zIndex}>context</TabLink> hands the

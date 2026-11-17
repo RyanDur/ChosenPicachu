@@ -17,9 +17,9 @@ export const WhyThePopoverWins: FC = () => <>
   <TrappedMenu/>
   <ol className="runs card rounded-corners lifted padded">
     <li className="run">
-      <p className="paragraph">The top-layer Sort by opens over everything around it every time, with the box checked
-        or not. It is a popover. A popover is shown in the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a layer the browser keeps above the
-        whole page for popovers, dialogs and elements shown full screen.</p>
+      <p className="paragraph">The top-layer Sort by opens over everything around it every time, with the box checked or
+        not. It is a popover. A popover is shown in the <Mdn path="Glossary/Top_layer">top layer</Mdn>, a layer the
+        browser keeps above the whole page for popovers, dialogs and elements shown full screen.</p>
     </li>
     <li className="run">
       <p className="paragraph">The top layer is not inside any stacking context, not even the page’s own, the one
