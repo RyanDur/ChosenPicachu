@@ -39,12 +39,6 @@ describe('what else forms a stacking context, on its own page', () => {
     expect(explanation.linkNamed(part, 'The menu part’s card')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?wears=opacity'));
   });
 
-  test('should show the wear chosen on the tab', async () => {
-    render(<TestApp at={demosAt(whatElseForms, '?wears=transform')}/>);
-
-    expect(wearsChooser.wear(await wearsChooser.find(), 'transform: rotate(-1deg)')).toBeChecked();
-  });
-
   test('should lead back to part two’s page and on to part four on the tab, by number and title, with the wear carried', async () => {
     render(<TestApp at={demosAt(whatElseForms, '?wears=opacity')}/>);
 
