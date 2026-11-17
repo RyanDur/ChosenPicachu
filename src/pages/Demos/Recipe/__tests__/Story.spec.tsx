@@ -125,11 +125,10 @@ describe('a story card', () => {
       </Story>
     </Stories></TestApp>);
     await appAddress.drawn();
-    const bar = recipeFolds.stepTitled(document.body, 'The reader can close a story a link opened');
 
     await act(async () => {
       await appAddress.follow('the tale below');
-      bar.click();
+      await recipeFolds.press(document.body, 'The reader can close a story a link opened');
     });
 
     await waitFor(() => expect(appAddress.fragment()).toBe('#tale-told-story'));
