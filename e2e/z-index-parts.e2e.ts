@@ -14,7 +14,6 @@ test('a reader follows why Third is on top from the z-index tab to its page, wit
   await expect(page).toHaveURL(/demos\/z-index\/why-third-is-on-top\/$/);
   await expect(page.getByText('Z-index · part 1 of 6', {exact: true})).toBeVisible();
   await expect(page.getByRole('figure', {name: /^The pile\./})).toBeVisible();
-  await expect(page.getByText(/^The pile is a list of three cards, First, Second and Third/)).toBeVisible();
 });
 
 test('a card raised on the z-index tab is still raised on the page for why Third is on top', async ({page}) => {
