@@ -38,24 +38,32 @@ const regions: Readonly<Record<string, Region>> = {
 
 const regionNames: readonly Mark[] = [
   {word: 'header', u: 22, v: 14},
-  {word: 'nav', u: 9, v: 36},
+  {word: 'nav', u: 18, v: 36},
   {word: 'main', u: 45, v: 30},
-  {word: 'button', u: 10, v: 59.5},
-  {word: 'dialog', u: 70, v: 53}
+  {word: 'button', u: 30, v: 57.5, anchor: 'end'},
+  {word: 'dialog', u: 69, v: 58}
 ];
 
 const classNames: readonly Mark[] = [
   {word: '.paragraph', u: 62, v: -4},
-  {word: '.signpost', u: 62, v: 56},
+  {word: '.signpost', u: 114, v: 46},
   {word: '.field', u: -2, v: 58, anchor: 'end'}
 ];
 
-const commands: readonly Mark[] = [
-  {word: 'show-modal', u: 33, v: 57},
-  {word: 'close', u: 100, v: 52}
+const commands: readonly Spot[] = [{u: 33, v: 57}, {u: 100, v: 52}];
+
+const commandNames: readonly Mark[] = [
+  {word: 'show-modal', u: 36, v: 58},
+  {word: 'close', u: 90, v: 45, anchor: 'end'}
 ];
 
-const assemblyLines: readonly Spot[] = [...commands, {u: 0, v: 0}, {u: plate.across, v: plate.down}];
+const plateCorners: readonly Spot[] = [{u: 0, v: 0}, {u: plate.across, v: plate.down}];
+
+const DroppedLine: FC<{spot: Spot}> = ({spot}) => {
+  const top = at(spot, heights.behavior);
+  const bottom = at(spot, heights.structure);
+  return <line className="drawn-line drawn dashed-drawn" x1={top.x} y1={top.y} x2={bottom.x} y2={bottom.y}/>;
+};
 
 const languages = [
   {word: 'behavior', height: heights.behavior},
@@ -80,6 +88,7 @@ export const PagePulledApart: FC = () =>
           <line className="drawn-line drawn" x1="0" y1="0" x2="0" y2="7"/>
         </pattern>
       </defs>
+      {plateCorners.map(corner => <DroppedLine key={`${corner.u},${corner.v}`} spot={corner}/>)}
       <polygon className="slab-line drawn paper-filled"
         points={face({u: 0, v: plate.down}, {u: plate.across, v: plate.down})}/>
       <polygon className="slab-line drawn paper-filled"
@@ -92,20 +101,14 @@ export const PagePulledApart: FC = () =>
         <polygon key={name} className={`drawn-line drawn ${name === 'main' ? 'hollow' : 'hatched-filled'}`}
           points={outline(region, heights.presentation)}/>)}
       <polygon className="drawn-line drawn paper-filled" points={outline(plate, heights.behavior)}/>
-      {assemblyLines.map(spot => {
-        const top = at(spot, heights.behavior);
-        const bottom = at(spot, heights.structure);
-        return <line key={`${spot.u},${spot.v}`} className="drawn-line drawn dashed-drawn"
-          x1={top.x} y1={top.y} x2={bottom.x} y2={bottom.y}/>;
-      })}
+      {commands.map(command => <DroppedLine key={`${command.u},${command.v}`} spot={command}/>)}
       {commands.map(command => {
         const {x, y} = at(command, heights.behavior);
-        return <circle key={command.word} className="drawn-filled" cx={x} cy={y} r={1.6 * scale}/>;
+        return <circle key={`${command.u},${command.v}`} className="drawn-filled" cx={x} cy={y} r={1.6 * scale}/>;
       })}
       <Lettering marks={regionNames} height={heights.structure}/>
       <Lettering marks={classNames} height={heights.presentation}/>
-      <Lettering marks={commands.map(command => ({...command, u: command.u + 3, v: command.v + 1}))}
-        height={heights.behavior}/>
+      <Lettering marks={commandNames} height={heights.behavior}/>
       {languages.map(({word, height}) => {
         const {x, y} = at({u: 0, v: plate.down / 2}, height);
         return <text key={word} className="drawn-caption uppercase ink-filled" x={x - 6 * scale} y={y + 2 * scale}
