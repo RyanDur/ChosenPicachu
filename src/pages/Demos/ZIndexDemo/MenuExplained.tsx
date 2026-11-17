@@ -28,9 +28,10 @@ export const MenuExplained: FC = () =>
         ])}/>
       </li>
       <li className="run">
-        <p className="paragraph">Card one is <WhyThirdIsOnTopLink>positioned</WhyThirdIsOnTopLink> and has a z-index of 1, so it forms a stacking context: a
-          layer the browser paints as one, the card and everything inside it together. Inside that layer, the
-          list’s 9999 puts it above card one’s own face. Outside it, the 9999 counts for nothing.</p>
+        <p className="paragraph">Card one is <WhyThirdIsOnTopLink>positioned</WhyThirdIsOnTopLink> and has a z-index of
+          1, so it forms a stacking context: a layer the browser paints as one, the card and everything inside it
+          together. Inside that layer, the list’s 9999 puts it above card one’s own face. Outside it, the 9999 counts
+          for nothing.</p>
         <ANumberInsideALayer/>
       </li>
       <li className="run">
@@ -45,10 +46,11 @@ export const MenuExplained: FC = () =>
         <Where9999IsCompared/>
       </li>
       <li className="run">
-        <p className="paragraph">With the box unchecked, card one’s z-index is <WhyThirdIsOnTopLink>auto</WhyThirdIsOnTopLink>. The card is still positioned,
-          but at auto it forms no stacking context, so the list is not kept inside the card’s layer. It joins the
-          context the tab’s content forms, where card two is, and there 9999 is the larger number. With the box checked
-          again, the card forms its layer again, with the list inside it.</p>
+        <p className="paragraph">With the box unchecked, card one’s
+          z-index is <WhyThirdIsOnTopLink>auto</WhyThirdIsOnTopLink>. The card is still positioned, but at auto it forms
+          no stacking context, so the list is not kept inside the card’s layer. It joins the context the tab’s content
+          forms, where card two is, and there 9999 is the larger number. With the box checked again, the card forms its
+          layer again, with the list inside it.</p>
         <Snippet label="TS" lines={lines.fromTheExhibit(
           carve.between(trappedSource, "<li className={classNames('old-way-card", '</label>')
         )}/>
