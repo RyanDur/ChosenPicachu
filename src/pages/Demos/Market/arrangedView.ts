@@ -11,8 +11,7 @@ export const arrangedView: ArrangedView = {
   columnsOf: arrangement => arrangement.columns.map(name => ({
     name,
     data: {label: name},
-    ...maybe(arrangement.sort).mBind(sort => maybe(sort, ({column}) => column === name))
-      .map(({direction}) => ({sorted: direction})).orElse({})
+    sorted: arrangement.sort?.column === name ? arrangement.sort.direction : undefined
   })),
   rowsOf: (arrangement, aggregates) => {
     const shown = cells.seated(aggregates);
