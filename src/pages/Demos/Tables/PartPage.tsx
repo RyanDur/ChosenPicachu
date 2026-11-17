@@ -9,7 +9,7 @@ import {DesignAsk, StoryClues} from './Recipe';
 import '../Tutorials.css';
 import './TutorialPage.css';
 
-const contents: Record<TablePart, FC<{headedBy: string}>> = {
+const parts: Record<TablePart, FC<{headedBy: string}>> = {
   'the-need-and-its-clues': StoryClues,
   'the-sketch': DesignAsk
 };
@@ -18,7 +18,7 @@ export const PartPage: FC<{part: TablePart}> = ({part}) => {
   const titled = `part${useId()}`;
   const {name, ordinal} = tableParts.told(part);
   const carried = useCarriedAddress();
-  const Contents = contents[part];
+  const Part = parts[part];
   const linked = ({numbered, to, heading}: {numbered: string; to: string; heading?: string}) =>
     ({numbered, address: carried(to, heading)});
   return <article aria-labelledby={titled} className="tutorial-page tutorials">
@@ -29,7 +29,7 @@ export const PartPage: FC<{part: TablePart}> = ({part}) => {
     <Aggregations/>
     <WorldGlider/>
     <WorldNote/>
-    <Contents headedBy={titled}/>
+    <Part headedBy={titled}/>
     <PageFoot label="the tables parts"
       previous={tableParts.previousOf(part).map(linked)}
       next={tableParts.nextOf(part).map(linked)}/>
