@@ -5,6 +5,7 @@ import {chartsPage, rememberedFolds, rememberedFoldLabels, scriptedMarket, siteF
 test('the accordion labels survive a visit to the streaming charts', async ({page}) => {
   await scriptedMarket(page, [50000, 50001]);
   await page.goto('demos/accordions/a-box-remembers-the-fold/?type=exclusive');
+  await siteFrame(page).hydrated();
   const demos = page.getByRole('navigation', {name: 'demos'});
   await expect(rememberedFolds(page).first()).toBeAttached();
   const before = await rememberedFoldLabels(page);
