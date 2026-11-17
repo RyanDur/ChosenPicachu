@@ -7,10 +7,11 @@ import {partHeadings} from './part-headings';
 import trappedSource from './TrappedMenu.tsx?sample';
 import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
+import {zIndexParts} from './part-pages';
 
 export const MenuExplained: FC = () =>
   <section aria-labelledby={partHeadings.stillLoses} className="stacking-part">
-    <h2 id={partHeadings.stillLoses} className="title bold">Why 9999 still loses</h2>
+    <h2 id={partHeadings.stillLoses} className="title bold">{zIndexParts.titleOf('still-loses')}</h2>
     <TrappedMenu/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">

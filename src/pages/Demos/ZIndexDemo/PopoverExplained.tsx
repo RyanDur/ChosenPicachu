@@ -6,10 +6,11 @@ import topLayerSource from './TopLayerMenu.tsx?sample';
 import menuCss from '@components/Menu/Menu.css?sample';
 import itemSource from '@components/Menu/Item.tsx?sample';
 import '../Runs.css';
+import {zIndexParts} from './part-pages';
 
 export const PopoverExplained: FC = () =>
   <section aria-labelledby={partHeadings.popoverWins} className="stacking-part">
-    <h2 id={partHeadings.popoverWins} className="title bold">Why the popover wins</h2>
+    <h2 id={partHeadings.popoverWins} className="title bold">{zIndexParts.titleOf('popover-wins')}</h2>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
         <p className="paragraph">The top-layer Sort by

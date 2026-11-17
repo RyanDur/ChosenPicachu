@@ -1,4 +1,4 @@
-import {FC, useEffect} from 'react';
+import {FC, ReactNode, useEffect} from 'react';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {useControls} from '../Controls';
 import {BannerExplained} from './BannerExplained';
@@ -9,6 +9,11 @@ import {StackingExplained} from './Explained';
 import {TopLayerTutorial} from './Tutorial';
 import {ZIndexIntroduction} from './Introduction';
 import {WhichCardIsOnTop} from './WhichCardIsOnTop';
+import {NaturalZIndex} from './NaturalZIndex';
+import {PartPage} from './PartPage';
+import {ZIndexPart} from './part-pages';
+import {useShownPart} from './useShownPart';
+import {WhyThirdIsOnTop} from './WhyThirdIsOnTop';
 
 const usePlacingTheBanners = (): void => {
   const {side, align, enter, stack} = useControls();
@@ -19,11 +24,16 @@ const usePlacingTheBanners = (): void => {
   useEffect(() => () => dispatchBanner(bannerChange.unplaced()), [dispatchBanner]);
 };
 
+const pagesOfParts: Record<ZIndexPart, ReactNode> = {
+  'why-third-is-on-top': <WhyThirdIsOnTop/>
+};
+
 export const Room: FC = () => {
   usePlacingTheBanners();
 
-  return <>
+  return useShownPart().either(part => <PartPage part={part}>{pagesOfParts[part]}</PartPage>, () => <>
     <ZIndexIntroduction/>
+    <NaturalZIndex className="card rounded-corners lifted padded"/>
     <StackingExplained/>
     <MenuExplained/>
     <FormsContextExplained/>
@@ -31,5 +41,5 @@ export const Room: FC = () => {
     <BannerExplained/>
     <WhichCardIsOnTop/>
     <TopLayerTutorial/>
-  </>;
+  </>);
 };

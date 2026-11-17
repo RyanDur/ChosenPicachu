@@ -17,6 +17,7 @@ const pages = [
   ...fixed,
   ...tabsOf(Paths.demos, names.demos),
   ...tabsOf(`${Paths.demos}accordions/`, names.accordions),
+  ...tabsOf(`${Paths.demos}z-index/`, names['z-index']),
   ...tabsOf(`${Paths.demos}charts/`, names.charts),
   ...tabsOf(`${Paths.demos}tables/`, names.tables),
   ...tabsOf(`${Paths.demos}tables/`, names.tableParts),

@@ -9,12 +9,13 @@ import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@banners/Banners.tsx?sample';
 import bannersCss from '@banners/Banners.css?sample';
 import '../Runs.css';
+import {zIndexParts} from './part-pages';
 
 export const BannerExplained: FC = () => {
   const [searchParams] = useSearchParamsOnceHydrated();
 
   return <section aria-labelledby={partHeadings.fixedBannerLoses} className="stacking-part">
-    <h2 id={partHeadings.fixedBannerLoses} className="title bold">Why a fixed banner still loses</h2>
+    <h2 id={partHeadings.fixedBannerLoses} className="title bold">{zIndexParts.titleOf('fixed-banner-loses')}</h2>
     <BannerTrap/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
