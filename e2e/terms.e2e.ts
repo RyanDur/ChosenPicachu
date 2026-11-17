@@ -14,7 +14,7 @@ const aTapShowsTheDefinition = async (page: Page, tab: string, story: string, te
 test.describe('a phone', () => {
   test.use(iPhone);
 
-  test('a tap on ledger shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables', 'The trader can read the market in a table', 'ledger'));
+  test('a tap on ledger shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables/the-still-table', 'The trader can read the market in a table', 'ledger'));
 
   test('a tap on store shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables', 'The page is a store, and so is the table', 'store'));
 
