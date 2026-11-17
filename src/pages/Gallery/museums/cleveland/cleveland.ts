@@ -8,10 +8,8 @@ import {
   clevelandSchema
 } from './types';
 import {limits} from '@pages/Gallery/limits';
-import {environment, queryString} from '@transport';
+import {decoded, environment, http, queryString} from '@transport';
 import {AllArt, Art, Door, SearchOptions} from '@pages/Gallery/museums/types';
-import {decoded} from '@transport';
-import {http} from '@transport';
 import {GetAllArtRequest} from '@pages/Gallery/museums/requests';
 import {artFields} from '@pages/Gallery/museums/artFields';
 
@@ -35,7 +33,7 @@ const toPiece = (record: ClevelandRecord): Art => ({
   title: record.title,
   ...maybe(record.images).mBind(({web, print}) => maybe(web).or(() => maybe(print)))
     .map(shown => ({picture: {src: shown.url, ...srcSetOf(record).map(srcSet => ({srcSet})).orElse({})}})).orElse({}),
-  ...artistOf(record).map(artFields.attributed).orElse({}),
+  ...artistOf(record).map(artist => artFields.attributed(artist)).orElse({}),
   altText: record.title
 });
 
