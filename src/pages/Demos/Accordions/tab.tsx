@@ -3,6 +3,7 @@ import {seeded} from '@components/fibs';
 import {AccordionsExplained} from './Explained';
 import {MaxHeightGuess} from './MaxHeightGuess';
 import {MeasuredHeight} from './MeasuredHeight';
+import {PlatformGivesNow} from './PlatformGivesNow';
 import {RemembersTheFold} from './RemembersTheFold';
 import {PartPage} from './PartPage';
 import {AccordionPart} from './part-pages';
@@ -25,9 +26,10 @@ const platformFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragr
 const pagesOfParts: Record<AccordionPart, ReactNode> = {
   'a-box-remembers-the-fold': <RemembersTheFold folds={knownFolds}/>,
   'the-max-height-guess': <MaxHeightGuess/>,
-  'the-measured-height': <MeasuredHeight folds={measuredFolds}/>
+  'the-measured-height': <MeasuredHeight folds={measuredFolds}/>,
+  'what-the-platform-gives-now': <PlatformGivesNow folds={platformFolds}/>
 };
 
 export const Room: FC = () => useShownPart().either(
   part => <PartPage part={part}>{pagesOfParts[part]}</PartPage>,
-  () => <AccordionsExplained folds={platformFolds}/>);
+  () => <AccordionsExplained/>);

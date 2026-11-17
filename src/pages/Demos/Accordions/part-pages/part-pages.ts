@@ -44,7 +44,8 @@ type AccordionParts = {
 const listings: Record<AccordionPart, Listing> = {
   'a-box-remembers-the-fold': {heading: 'remembers-heading', minutes: 8},
   'the-max-height-guess': {heading: 'max-height-guess-heading', minutes: 1},
-  'the-measured-height': {heading: 'measured-heading', minutes: 5}
+  'the-measured-height': {heading: 'measured-heading', minutes: 5},
+  'what-the-platform-gives-now': {heading: 'platform-way-heading', minutes: 0}
 };
 
 const tabAddress = demoTab.address(DemoTopics.accordions);

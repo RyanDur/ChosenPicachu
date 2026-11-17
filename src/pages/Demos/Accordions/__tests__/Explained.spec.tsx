@@ -4,15 +4,12 @@ import names from '@navigation/names.json';
 import {appAddress} from '@__test_support/address';
 import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
-import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
 
 const htmlAlone = 'An accordion in HTML alone';
 
 const parts = ['How we used to build a fold', 'What the platform gives now', 'How a sliding fold moves'];
-
-const drawingsTitled = (part: HTMLElement, titles: string[]): HTMLElement[] =>
-  titles.map(title => explanation.drawingNamed(part, new RegExp(`^${title}\\.`)));
 
 describe('the accordions tab', () => {
   test('should name no two regions the same, with inclusive chosen, so every landmark is its own', async () => {
@@ -61,39 +58,6 @@ describe('the accordions tab', () => {
     expect(accordionsTab.option(types, 'Inclusive')).toBeChecked();
   });
 
-  test('should show, with inclusive chosen, the inclusive details build under the platform', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
-
-    const explained = await explanation.part(parts[1]);
-
-    expect(accordionsTab.buildsIn(explained)).toEqual(['Inclusive accordion using details elements']);
-  });
-
-  test('should show, with exclusive chosen, the exclusive details build under the platform', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
-
-    const explained = await explanation.part(parts[1]);
-
-    expect(accordionsTab.buildsIn(explained)).toEqual(['Exclusive accordion using details elements']);
-  });
-});
-
-describe('what the platform gives now', () => {
-  test('should link, with inclusive chosen, the run that introduces details to the build’s source on GitHub', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
-
-    const explained = await explanation.part(parts[1]);
-
-    expect(explanation.sourcesBeside(explained, /This build uses details and summary/)).toEqual(['Accordions/InclusiveToggleAccordion.tsx on GitHub']);
-  });
-
-  test('should link, with exclusive chosen, the run that introduces details to the build’s source on GitHub', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
-
-    const explained = await explanation.part(parts[1]);
-
-    expect(explanation.sourcesBeside(explained, /This build uses details and summary/)).toEqual(['Accordions/ExclusiveToggleAccordion.tsx on GitHub']);
-  });
 });
 
 describe('the fold choices', () => {
@@ -178,33 +142,6 @@ describe('the fold motion', () => {
     expect(accordionsTab.option(motions, 'Drawer')).toBeChecked();
   });
 
-  test('should still show the first platform fold’s text after the reader chooses another motion', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    const platform = await explanation.part(parts[1]);
-    const text = await accordionsTab.openFirstFoldIn(platform);
-
-    await accordionsTab.choose('fold motion', 'Drawer');
-
-    expect(text).toBeVisible();
-  });
-});
-
-describe('the accordions diagrams', () => {
-  test('should draw, with inclusive chosen, under the platform, each mechanism in order, found by its name', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
-
-    const platform = await explanation.part(parts[1]);
-
-    expect(drawingsTitled(platform, ['One job, two ways', 'Three pieces become two', 'Sized to the text'])).toEqual(explanation.drawingsIn(platform));
-  });
-
-  test('should draw, with exclusive chosen, under the platform, each mechanism in order, found by its name', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
-
-    const platform = await explanation.part(parts[1]);
-
-    expect(drawingsTitled(platform, ['One job, two ways', 'Three pieces become two', 'Sized to the text'])).toEqual(explanation.drawingsIn(platform));
-  });
 });
 
 describe('the old way', () => {
@@ -250,6 +187,23 @@ describe('the old way', () => {
     expect(explanation.saying(guess, '1 minute to read')).toBeInTheDocument();
   });
 
+  test('following what the platform gives now opens its page, with the fold choices carried', async () => {
+    const from = demosAt('accordions', '?type=inclusive&style=drawer');
+    render(<TestApp at={from}/>);
+
+    await accordionsTab.openPart('What the platform gives now');
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/what-the-platform-gives-now', '?type=inclusive&style=drawer'));
+  });
+
+  test('should say what the platform gives now, under its title', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const platformWay = await explanation.part(parts[1]);
+
+    expect(explanation.saying(platformWay, names.accordions['what-the-platform-gives-now'].description)).toBeInTheDocument();
+  });
+
   test('should say what the max-height guess does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
@@ -284,56 +238,5 @@ describe('the name that makes the first accordion exclusive', () => {
     const first = await explanation.part(htmlAlone);
 
     expect(explanation.linksBeside(first, /^Each of these details carries/)).toEqual([['name', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details#name']]);
-  });
-});
-
-describe('the tab’s words on the build part 2 shows', () => {
-  const build = '?type=inclusive&style=drawer';
-  const remembers = demosAt('accordions/a-box-remembers-the-fold', build);
-
-  test('should link the checkbox build, at its first use in what the platform gives and in How details works, to part 2’s page', async () => {
-    render(<TestApp at={demosAt('accordions', build)}/>);
-
-    const platformWay = await explanation.part(parts[1]);
-
-    expect(explanation.linksNamed(platformWay, 'the checkbox build').map(link => link.getAttribute('href'))).toEqual([remembers, remembers]);
-  });
-
-  test('should, with inclusive chosen, link the checkbox build’s folds to part 2’s page', async () => {
-    render(<TestApp at={demosAt('accordions', build)}/>);
-
-    const platformWay = await explanation.part(parts[1]);
-
-    expect(explanation.linkNamed(platformWay, 'the checkbox build’s folds')).toHaveAttribute('href', remembers);
-  });
-
-  test('should link classes in How details works to part 2’s page, where class is defined', async () => {
-    render(<TestApp at={demosAt('accordions', build)}/>);
-
-    const platformWay = await explanation.part(parts[1]);
-
-    expect(explanation.linkNamed(platformWay, 'classes')).toHaveAttribute('href', remembers);
-  });
-
-  test('should link the known-height build’s bars to part 2’s page', async () => {
-    render(<TestApp at={demosAt('accordions', build)}/>);
-
-    const platformWay = await explanation.part(parts[1]);
-
-    expect(explanation.linkNamed(platformWay, 'the known-height build’s bars')).toHaveAttribute('href', remembers);
-  });
-});
-
-describe('the depth of each part', () => {
-
-  test('should show, with exclusive chosen, what the closed fold "How details works" holds once its bar is pressed', async () => {
-    render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
-    const fold = recipeFolds.story(await explanation.part(parts[1]), 'How details works');
-    const depth = explanation.runsIn(fold)[0];
-    expect(depth).not.toBeVisible();
-
-    await accordionsTab.openFold(fold);
-
-    expect(depth).toBeVisible();
   });
 });

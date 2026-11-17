@@ -67,12 +67,12 @@ describe('the measured height, on its own page', () => {
     expect(accordionsTab.buildsIn(measured)).toEqual(['Accordion using a radio group and a measured height']);
   });
 
-  test('should lead back to part three’s page and on to part five on the tab, by number and title, with the fold choices carried', async () => {
+  test('should lead back to part three’s page and on to part five’s, by number and title, with the fold choices carried', async () => {
     render(<TestApp at={demosAt(measuredHeight, '?type=inclusive&style=drawer')}/>);
 
     expect(await pageFoot.leadsOn('the accordions parts')).toEqual([
       ['Previous: 3. The max-height guess', demosAt('accordions/the-max-height-guess', '?type=inclusive&style=drawer')],
-      ['Next: 5. What the platform gives now', `${demosAt('accordions', '?type=inclusive&style=drawer')}#platform-way-heading`]
+      ['Next: 5. What the platform gives now', demosAt('accordions/what-the-platform-gives-now', '?type=inclusive&style=drawer')]
     ]);
   });
 
