@@ -1,5 +1,5 @@
 import {http as handle, HttpResponse} from 'msw';
-import {HTTPError} from '../HTTPError';
+import {HTTPError} from '..';
 import {http, HTTPMethod} from '../http';
 import {faker} from '@faker-js/faker';
 import {failure, Result} from '@ryandur/sand';
@@ -177,13 +177,13 @@ describe('http', () => {
     test('gives back nothing when the server answers with no content', async () => {
       respondWith('PUT', 204, null);
 
-      expect(await sent().orNull()).toEqual(undefined);
+      expect(await sent().map(answered => answered.orElse('no body')).orNull()).toEqual('no body');
     });
 
     test('gives back the body the server answered created with', async () => {
       respondWith('PUT', 201, JSON.stringify(testObject));
 
-      expect(await sent().orNull()).toEqual(testObject);
+      expect(await sent().map(answered => answered.orElse('no body')).orNull()).toEqual(testObject);
     });
 
     test('fails as forbidden when the server refuses', async () => {
