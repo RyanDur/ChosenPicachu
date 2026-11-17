@@ -475,8 +475,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 <p className="paragraph">Summary also draws its own arrow, called a marker, where the {input} build
                   drew one from two borders. The browser gives a summary the display of a list item, and draws a marker
                   only on a list item. This bar’s display is flex, a row, so the browser draws no marker. The bar draws
-                  the {input} build’s arrow in its place, so it reads the same as the bars of
-                  the known-height and measured builds.</p>
+                  the {input} build’s arrow in its place, so it reads the same as the
+                  known-height build’s bars.</p>
               </li>
               <li className="run">
                 <p className="paragraph">The arrow points right while the fold is closed. When the fold opens, the
