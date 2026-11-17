@@ -6,15 +6,15 @@ import {Exercise, Station} from '../Recipe';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
+import {DemoLink} from '@pages/Demos/DemoLink';
 import '../Tutorials.css';
 import './Tutorials.css';
 
 const PartEntry: FC<{part: TablePart}> = ({part}) => {
-  const {searchFromShown} = useSearchParamsObject({});
   const {name, says, minutes} = tableParts.told(part);
   return <>
     <h3 className="phase-title title">
-      <Link className="signpost" to={`${tableParts.addressOf(part)}${searchFromShown({})}`}>{name}</Link>
+      <DemoLink to={tableParts.addressOf(part)}>{name}</DemoLink>
     </h3>
     <p className="paragraph">{says}</p>
     <p className="caption muted-ink"><time dateTime={`PT${minutes}M`}>{`${minutes} minutes to read`}</time></p>
