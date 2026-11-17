@@ -18,7 +18,7 @@ test('the measured height’s page builds its fold with the fold type chosen on 
   await siteFrame(page).hydrated();
 
   await accordionsTab(page).partLink('The measured height').click();
-  await page.getByText('How this site does it', {exact: true}).click();
+  await page.getByText('How this page builds it', {exact: true}).click();
 
   await expect(page).toHaveURL(/demos\/accordions\/the-measured-height\/\?type=inclusive&style=drawer$/);
   await expect(page.getByRole('heading', {name: 'Accordion using checkboxes and a measured height', exact: true})).toBeVisible();

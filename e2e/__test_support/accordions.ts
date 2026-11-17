@@ -142,7 +142,7 @@ export const accordionsTab = (page: Page) => {
       await page.goto(showing(build));
       await siteFrame(page).hydrated();
       if (measuredBuilds.includes(build)) {
-        await page.getByText('How this site does it', {exact: true}).click();
+        await page.getByText('How this page builds it', {exact: true}).click();
       }
     },
     partOf,

@@ -101,8 +101,8 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
       </li>
       <li className="part-depth">
         <details aria-labelledby="measured-depth">
-          <summary id="measured-depth" className="fold-bar bold">How this site does it</summary>
-          <p className="paragraph">This site builds the same fold in React, and the runs below say what React and
+          <summary id="measured-depth" className="fold-bar bold">How this page builds it</summary>
+          <p className="paragraph">This page builds the same fold in React for its exhibit, and the runs below say what React and
             state are as they come. What changes is the shape. The plain script listens for the press; the React
             build redraws the panel from its state, so the measuring runs in two steps React takes before the
             browser paints: the first pins where the motion starts, and the second sets where it ends.</p>

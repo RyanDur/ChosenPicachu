@@ -76,9 +76,9 @@ describe('the measured height, on its own page', () => {
     expect(explanation.sampleCaptionsBeside(measured, /turns around from where it is/)).toEqual(['Taken from the exhibit on this page. The rest of the site doesn’t use it.']);
   });
 
-  test('should show, with exclusive chosen, what the closed fold "How this site does it" holds once its bar is pressed', async () => {
+  test('should show, with exclusive chosen, what the closed fold "How this page builds it" holds once its bar is pressed', async () => {
     render(<TestApp at={demosAt(measuredHeight, '?type=exclusive')}/>);
-    const fold = recipeFolds.story(await explanation.part('The measured height'), 'How this site does it');
+    const fold = recipeFolds.story(await explanation.part('The measured height'), 'How this page builds it');
     const depth = explanation.runsIn(fold)[0];
     expect(depth).not.toBeVisible();
 
