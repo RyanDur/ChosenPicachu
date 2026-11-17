@@ -13,12 +13,33 @@ const page = `/${'x'.repeat(60)}`;
 
 tester.run('breaks-between-words', prose.rules['breaks-between-words'], {
   valid: [
-    {name: 'should accept prose that breaks between two words', code: 'const said = <p>\n  read the\n  <a href="/">record</a> first\n</p>;'},
+    {name: 'should accept prose that breaks between two words', code: 'const said = <p>\n  read the record\n  first, then <a href="/">the rest</a>\n</p>;'},
+    {name: 'should accept a word beside a self-closing element, which shows no words of its own', code: 'const said = <label>\n  <input type="checkbox"/>\n  Card one has z-index: 1\n</label>;'},
+    {name: 'should accept punctuation that starts the line after an element', code: 'const said = <p>\n  read the <a href="/">record</a>\n  , then the rest\n</p>;'},
+    {name: 'should accept a quotation mark that ends the line before an element', code: 'const said = <p>\n  read “\n  <a href="/">the record</a>”\n</p>;'},
     {name: 'should accept a space held mid-line', code: 'const said = <p>\n  read the{\' \'}<a href="/">record</a>\n</p>;'},
     {name: 'should accept a line break held at a line\'s end, which a code sample keeps', code: 'const sample = <span>\n  x =&gt;{\'\\n\'}\n</span>;'},
     {name: 'should leave a space held as an attribute value alone', code: 'export const said = <abbr title={\' \'}\n  className="term"/>;'}
   ],
   invalid: [
+    {
+      name: 'should refuse a word that starts the line after an element, since the break drops the space before it',
+      code: 'const said = <p>\n  the rule’s <a href="/">selector</a>\n  that matches\n</p>;',
+      output: null,
+      errors: [{messageId: 'joined'}]
+    },
+    {
+      name: 'should refuse a word after an element inside a fragment held in an object',
+      code: 'const facts = {sideways: <>the rule’s <a href="/">selector</a>\n    that matches</>};',
+      output: null,
+      errors: [{messageId: 'joined'}]
+    },
+    {
+      name: 'should refuse a word that ends the line before an element, since the break drops the space after it',
+      code: 'const said = <p>\n  read the\n  <a href="/">record</a> first\n</p>;',
+      output: null,
+      errors: [{messageId: 'joined'}]
+    },
     {
       name: 'should join an element up onto the line where it fits',
       code: 'const said = <p>\n  read the{\' \'}\n  <a href="/">record</a> first\n</p>;',

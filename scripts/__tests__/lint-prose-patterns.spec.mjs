@@ -12,6 +12,34 @@ describe('the prose rule\'s patterns', () => {
     });
   });
 
+  describe('breakThenWord', () => {
+    it('should find a word on the line after a break', () => {
+      expect(prose.patterns.breakThenWord.test(' \n    that matches')).toBe(true);
+    });
+
+    it('should refuse a word on the same line, which keeps its space', () => {
+      expect(prose.patterns.breakThenWord.test(' that matches')).toBe(false);
+    });
+
+    it('should refuse punctuation on the line after a break', () => {
+      expect(prose.patterns.breakThenWord.test('\n    , then')).toBe(false);
+    });
+  });
+
+  describe('wordThenBreak', () => {
+    it('should find a word before a break', () => {
+      expect(prose.patterns.wordThenBreak.test('  read the\n  ')).toBe(true);
+    });
+
+    it('should refuse a word with no break after it', () => {
+      expect(prose.patterns.wordThenBreak.test('  read the ')).toBe(false);
+    });
+
+    it('should refuse punctuation before a break', () => {
+      expect(prose.patterns.wordThenBreak.test('  read “\n  ')).toBe(false);
+    });
+  });
+
   describe('endsInWord', () => {
     it('should find a line ending in a word', () => {
       expect(prose.patterns.endsInWord.test('  read the record,')).toBe(true);

@@ -9,6 +9,8 @@ const lineBreakAhead = /^[ \t]*\n(?:[ \t]*\n)*([ \t]*)/;
 const indentOfLine = /^[ \t]*/;
 const lastWordOfLine = /^(.*\S)( +)([^\s<>{}]+)$/;
 const firstWordOfLine = /^([^\s<>{}]+) +(\S.*)$/;
+const breakThenWord = /^[ \t]*\n\s*[\p{L}\p{N}]/u;
+const wordThenBreak = /[\p{L}\p{N}][ \t]*\n\s*$/u;
 
 /** A space held in `{' '}` at a line's end, which JSX needs only because the break sits beside an element. */
 /** @type {import('eslint').Rule.RuleModule} */
@@ -17,7 +19,10 @@ const breaksBetweenWords = {
     type: 'layout',
     fixable: 'whitespace',
     schema: [],
-    messages: {beside: 'prose breaks between two words, never beside an element; join the line or move a word across the break'}
+    messages: {
+      beside: 'prose breaks between two words, never beside an element; join the line or move a word across the break',
+      joined: 'a line break beside an element drops the space between it and this word; keep the word on the element\'s line'
+    }
   },
   create(context) {
     const source = context.sourceCode;
@@ -45,7 +50,19 @@ const breaksBetweenWords = {
      * @returns {boolean}
      */
     const fits = (text, exemptLine) => text.length <= limit || exemptLine;
+    /**
+     * @param {any} node
+     * @returns {boolean}
+     */
+    const showsWords = node => node?.type === 'JSXElement' && not(node.openingElement.selfClosing);
     return {
+      JSXText: text => {
+        const siblings = text.parent.children;
+        const at = siblings.indexOf(text);
+        const joinedAfter = showsWords(siblings[at - 1]) && breakThenWord.test(text.value);
+        const joinedBefore = showsWords(siblings[at + 1]) && wordThenBreak.test(text.value);
+        if (joinedAfter || joinedBefore) context.report({node: text, messageId: 'joined'});
+      },
       JSXExpressionContainer: held => {
         const {expression, parent} = held;
         if (expression.type !== 'Literal' || expression.value !== ' ') return;
@@ -176,6 +193,8 @@ export const prose = {
     lineBreakAhead,
     indentOfLine,
     lastWordOfLine,
-    firstWordOfLine
+    firstWordOfLine,
+    breakThenWord,
+    wordThenBreak
   }
 };
