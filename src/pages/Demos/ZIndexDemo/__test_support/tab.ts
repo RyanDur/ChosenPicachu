@@ -11,6 +11,7 @@ export const zIndexTab = {
   findBannerControls: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'banner controls'}),
   choose: async (controls: HTMLElement, dial: string, option: string): Promise<void> =>
     userEvent.click(within(within(controls).getByRole('group', {name: dial})).getByRole('radio', {name: option})),
+  place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   readingOf,
   findExpand,
   expandCards: async (): Promise<void> => userEvent.click(await findExpand()),

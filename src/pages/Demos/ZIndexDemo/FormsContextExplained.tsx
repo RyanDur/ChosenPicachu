@@ -6,12 +6,13 @@ import zIndexCss from './ZIndexDemo.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
 import tabsCss from '@navigation/Tabs/Tabs.css?sample';
 import '../Runs.css';
+import {zIndexParts} from './part-pages';
 
 const mdn = 'https://developer.mozilla.org/en-US/docs/Web/CSS/';
 
 export const FormsContextExplained: FC = () =>
   <section aria-labelledby={partHeadings.whatElseForms} className="stacking-part">
-    <h2 id={partHeadings.whatElseForms} className="title bold">What else forms a stacking context</h2>
+    <h2 id={partHeadings.whatElseForms} className="title bold">{zIndexParts.titleOf('what-else-forms')}</h2>
     <ContextChooser/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">

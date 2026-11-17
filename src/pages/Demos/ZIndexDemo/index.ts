@@ -1,1 +1,1 @@
-export {};
+export {zIndexParts} from './part-pages';

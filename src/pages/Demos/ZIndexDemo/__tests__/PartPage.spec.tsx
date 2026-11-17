@@ -1,0 +1,52 @@
+import {render} from '@testing-library/react';
+import {TestApp} from '@__test_support/TestApp';
+import {Paths} from '@navigation';
+import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {stackingPile, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {site} from '@pages/__test_support';
+
+const thirdOnTop = 'z-index/why-third-is-on-top';
+
+describe('why Third is on top, on its own page', () => {
+  test('should say its place in the z-index book', async () => {
+    render(<TestApp at={demosAt(thirdOnTop)}/>);
+
+    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 1 of 6');
+  });
+
+  test('should raise the card the address names in its pile', async () => {
+    render(<TestApp at={demosAt(thirdOnTop, '?raised=second')}/>);
+
+    const raised = await stackingPile.findCardRaised();
+
+    expect(stackingPile.card(raised, 'Second')).toBeChecked();
+  });
+
+  test('should link each term it glosses, and each tab it names, to that tab', async () => {
+    render(<TestApp at={demosAt(thirdOnTop)}/>);
+
+    const page = await demoTabs.arrivedOn('Z-index');
+
+    expect(demoPage.linksToTabsIn(page)).toEqual([
+      ['accordions tab', `${Paths.demos}accordions/`]
+    ]);
+  });
+
+  test('should title the page with the tab and the part', async () => {
+    render(<TestApp at={demosAt(thirdOnTop)}/>);
+
+    expect(await demoTabs.title('Demos Z-index · Why Third is on top')).toBeInTheDocument();
+  });
+
+  test('should keep Z-index as the current tab', async () => {
+    render(<TestApp at={demosAt(thirdOnTop)}/>);
+
+    expect(await demoTabs.current()).toEqual(['Z-index']);
+  });
+
+  test('an address naming no part of the z-index tab says there is no room there', async () => {
+    render(<TestApp at={demosAt('z-index/why-first-is-on-top')}/>);
+
+    expect(await site.roomSays('There is no room at this address.')).toBeVisible();
+  });
+});
