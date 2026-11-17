@@ -14,6 +14,7 @@ const listed = {
   'games/': names.games,
   ...Object.fromEntries(Object.entries(names.demos).map(([tab, listing]) => [`demos/${tab}/`, listing])),
   ...Object.fromEntries(Object.entries(names.charts).map(([kind, listing]) => [`demos/charts/${kind}/`, listing])),
+  ...Object.fromEntries(Object.entries(names.tableParts).map(([part, listing]) => [`demos/tables/${part}/`, listing])),
   ...Object.fromEntries(Object.entries(names.accordions).map(([part, listing]) => [`demos/accordions/${part}/`, listing])),
   ...Object.fromEntries(Object.entries(names.practice).map(([tab, listing]) => [`practice/${tab}/`, listing]))
 };
