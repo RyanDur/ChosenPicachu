@@ -3,7 +3,7 @@ import './PagePulledApart.css';
 
 type Spot = {readonly u: number; readonly v: number};
 type Region = Spot & {readonly across: number; readonly down: number};
-type Lettered = Spot & {readonly word: string; readonly anchor?: 'end'};
+type Lettered = Spot & {readonly word: string; readonly anchor?: 'middle' | 'end'};
 type Point = {readonly x: number; readonly y: number};
 
 const unitsPerStep = 2.4;
@@ -40,7 +40,7 @@ const slabRegions: Readonly<Record<string, Region>> = {
   main: {u: 42, v: 22, across: 66, down: 42}
 };
 
-const dialog: Region = {u: 6, v: 22, across: 32, down: 26};
+const dialog: Region = {u: 64, v: 6, across: 44, down: 46};
 
 const clickSpot: Spot = {u: 33, v: 57};
 
@@ -59,7 +59,7 @@ const classLettering: readonly Lettered[] = [
 ];
 
 const scriptLettering: readonly Lettered[] = [
-  {word: 'dialog', u: 19.5, v: 44.5},
+  {word: 'dialog', u: 88, v: 31, anchor: 'middle'},
   {word: 'click', u: clickSpot.u + 7, v: clickSpot.v + 3}
 ];
 
