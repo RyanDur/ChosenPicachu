@@ -14,14 +14,14 @@ export const InclusiveAccordion: FC<AccordionProps> = ({
   </hgroup>
   <fieldset>
     <legend className="off-screen">folds</legend>
-    <ul className="accordion trim">
+    <ul className="accordion">
       {folds.map(({heading, story}, id) =>
         <li key={heading} className="fold">
           <input id={`fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
           <label id={`fold-${id}-checkbox-label`}
             className="info-label opening-arrow drawn-piece prior-approached corner-after"
             htmlFor={`fold-${id}-checkbox`}>{heading}</label>
-          <div className="info">
+          <div className="info drawn-piece">
             <section className="info-text foot-shadowed focus-ringed" tabIndex={0}
               aria-labelledby={`fold-${id}-checkbox-label`}>
               <p className="info-paragraph">{story}</p>

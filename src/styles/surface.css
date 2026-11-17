@@ -345,9 +345,9 @@
 }
 
 .foot-shadowed {
-  background-color: var(--trim);
+  background-color: var(--paper);
   background-image:
-    linear-gradient(var(--trim), var(--trim)),
+    linear-gradient(var(--paper), var(--paper)),
     linear-gradient(to top, var(--charcoal), transparent);
   background-position: bottom;
   background-size: 100% calc(var(--base-x-4) + var(--base-x-2)), 100% var(--base-x-2);
