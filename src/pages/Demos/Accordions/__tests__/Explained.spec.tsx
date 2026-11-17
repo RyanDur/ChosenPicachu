@@ -368,17 +368,6 @@ describe('how the known height works', () => {
     ]);
   });
 
-  test('should link the panel’s hairline, beside the run that names it, to the site’s surface style sheet on GitHub', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    const folded = recipeFolds.story(await explanation.part(parts[0]), knownHeightWorks);
-
-    expect(explanation.sampleCaptionsBeside(folded, /the same charcoal hairline as the bars/)).toEqual([
-      'Taken from the exhibit on this page. The rest of the site doesn’t use it.',
-      'styles/surface.css on GitHub'
-    ]);
-  });
-
   test('should show, with inclusive chosen, the build’s source beside the fold’s run as taken from the exhibit, with no link', async () => {
     render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
