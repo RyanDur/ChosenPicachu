@@ -795,18 +795,40 @@ describe('the charts tab’s parts', () => {
 });
 
 describe('the workspace’s doorways', () => {
-  test('should link each chart to its page', async () => {
+  test('should link the price line doorway to the price line page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
-    expect(['Price line', 'Candles', 'Pressure', 'Pie'].map(chart => chartsDesk.doorway(chart).getAttribute('href'))).toEqual([
-      chartPageAt('price'),
-      chartPageAt('candles'),
-      chartPageAt('pressure'),
-      chartPageAt('pie')
-    ]);
+    expect(chartsDesk.doorway('Price line')).toHaveAttribute('href', chartPageAt('price'));
+  });
+
+  test('should link the candles doorway to the candles page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await chartsDesk.findChart('live trades');
+
+    expect(chartsDesk.doorway('Candles')).toHaveAttribute('href', chartPageAt('candles'));
+  });
+
+  test('should link the pressure doorway to the pressure page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await chartsDesk.findChart('live trades');
+
+    expect(chartsDesk.doorway('Pressure')).toHaveAttribute('href', chartPageAt('pressure'));
+  });
+
+  test('should link the pie doorway to the pie page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await chartsDesk.findChart('live trades');
+
+    expect(chartsDesk.doorway('Pie')).toHaveAttribute('href', chartPageAt('pie'));
   });
 });
 
