@@ -160,13 +160,18 @@ describe('the banner tutorial’s second story', () => {
 });
 
 describe('the z-index tab’s introduction', () => {
-  test('should say what it assumes from earlier tabs, linking each tab it names, and class to the part that defines it', async () => {
+  test('should link the class it assumes to the accordions part that defines it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    expect(await demoTabs.assumedLinks('Z-index')).toEqual([
-      ['accordions tab', `${Paths.demos}accordions/`],
-      ['a class', demosAt('accordions/a-box-remembers-the-fold')]
-    ]);
+    expect(await demoTabs.assumedLinks('Z-index'))
+      .toContainEqual(['a class', demosAt('accordions/a-box-remembers-the-fold')]);
+  });
+
+  test('should link the custom property it assumes to the accordions part that defines it', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    expect(await demoTabs.assumedLinks('Z-index'))
+      .toContainEqual(['a custom property', demosAt('accordions/the-measured-height')]);
   });
 });
 
@@ -264,8 +269,16 @@ describe('the links to other tabs', () => {
 
     expect(demoPage.linksToTabsIn(tab)).toEqual([
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['dials', `${Paths.demos}accordions/`],
-      ['custom property', `${Paths.demos}accordions/`]
+      ['dials', `${Paths.demos}accordions/`]
     ]);
+  });
+
+  test('should link custom property, where the banner’s steps gloss it, to the accordions part that defines it', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    const tab = await demoTabs.arrivedOn('Z-index');
+
+    expect(demoPage.linksToPageIn(tab, demosAt('accordions/the-measured-height')))
+      .toContainEqual(['custom property', demosAt('accordions/the-measured-height')]);
   });
 });

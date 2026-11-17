@@ -1,6 +1,6 @@
 import {FC, ReactNode} from 'react';
-import {TabLink} from '@pages/Demos/TabLink';
-import {DemoTopics} from '@pages/Demos';
+import {DemoLink} from '@pages/Demos/DemoLink';
+import {accordionParts} from '@pages/Demos/Accordions';
 import {Entrance, Stack} from '@banners';
 import {Codes, Says, Snippet, Step, DialStep, StepHeading, Steps, Story, Want, Words, Tell, lines, carve} from '../Recipe';
 import {EntranceDial, StackDial, useControls} from '../Controls';
@@ -137,7 +137,7 @@ export const MultipleRecipe: FC = () => {
           <Want>A banner that slides in from just beside its place looks like it popped up. The slide has to start off
             screen.</Want>
           <Says>{enterFact[enter]} The distance is
-            a <TabLink to={DemoTopics.accordions}>custom property</TabLink>,
+            a <DemoLink to={accordionParts.addressOf('the-measured-height')}>custom property</DemoLink>,
             here <code className="monospaced">--arrive</code>: a value named once in the style sheet and read back
             with <code className="monospaced">var()</code> wherever it is needed. The starting style reads it to place
             the banner before the slide, and the leaving rule reads it again to send the banner back.</Says>
