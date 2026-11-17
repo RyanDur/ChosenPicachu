@@ -81,10 +81,8 @@ export const FormsContextExplained: FC = () =>
           a context and does nothing more. Use it to keep the z-indexes of one part of the page inside it on purpose,
           instead of as a side effect of opacity or a transform. I use it that way here: the tab’s content wears it, in
           Tabs.css, so no z-index inside a tab is ever compared with one outside it.</p>
-        <Snippet label="CSS" lines={[
-          ...lines.fromTheExhibit(carve.unit(zIndexCss, '.isolated {')), lines.blank,
-          ...carve.unit(tabsCss, '.tabs ~ * {')
-        ]}/>
+        <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(zIndexCss, '.isolated {'))}/>
+        <Snippet label="CSS" lines={carve.unit(tabsCss, '.tabs ~ * {')}/>
       </li>
     </ol>
   </section>;
