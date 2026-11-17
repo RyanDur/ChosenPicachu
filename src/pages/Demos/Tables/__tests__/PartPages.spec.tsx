@@ -165,6 +165,12 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titleShown(unanswered)).not.toBeInTheDocument();
   });
 
+  test('the tables tab says the need takes one minute to read', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    expect(await tablesTab().readingTimeOf(theNeed)).toHaveTextContent(/^1 minute to read$/);
+  });
+
   test('the tables tab says the sketch takes one minute to read', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
@@ -265,6 +271,12 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().tutorialLink(theSlices);
 
     expect(tablesTab().titleShown(theStory)).not.toBeInTheDocument();
+  });
+
+  test('the tables tab says the slices take two minutes to read', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    expect(await tablesTab().readingTimeOf(theSlices)).toHaveTextContent(/^2 minutes to read$/);
   });
 
   test('should title the slices’ page with the tab and the part', async () => {
