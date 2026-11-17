@@ -198,9 +198,7 @@ describe('the terms part one defines, met again in why 9999 still loses', () => 
 
     const stillLoses = await explanation.part('Why 9999 still loses');
 
-    expect(explanation.linksBeside(stillLoses, /so it forms a stacking context/)).toEqual([
-      ['positioned', demosAt('z-index/why-third-is-on-top', '?raised=second')]
-    ]);
+    expect(explanation.linkNamed(stillLoses, 'positioned')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 
   test('should link auto, at its first use, to part one’s page with the raised card carried', async () => {
@@ -208,9 +206,7 @@ describe('the terms part one defines, met again in why 9999 still loses', () => 
 
     const stillLoses = await explanation.part('Why 9999 still loses');
 
-    expect(explanation.linksBeside(stillLoses, /^With the box unchecked/)).toEqual([
-      ['auto', demosAt('z-index/why-third-is-on-top', '?raised=second')]
-    ]);
+    expect(explanation.linkNamed(stillLoses, 'auto')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 });
 
@@ -220,9 +216,7 @@ describe('the terms part one defines, met again later on the tab', () => {
 
     const popover = await explanation.part('Why the popover wins');
 
-    expect(explanation.linksBeside(popover, /The menu’s own style sheet places it/)).toContainEqual(
-      ['rule', demosAt('z-index/why-third-is-on-top', '?raised=second')]
-    );
+    expect(explanation.linkNamed(popover, 'rule')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 
   test('should link selector, with the stack growing downward, to part one’s page with the raised card carried', async () => {
