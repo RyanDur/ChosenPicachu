@@ -5,6 +5,8 @@ import {Tutorials} from './Tutorials';
 import {TutorialPage} from './TutorialPage';
 import {useShownTutorial} from './useShownTutorial';
 import {ToTutorialNamed} from './ToTutorialNamed';
+import {PartPage} from './PartPage';
+import {useShownPart} from './useShownPart';
 
 const TabContents: FC = () => <>
   <ToTutorialNamed/>
@@ -13,6 +15,9 @@ const TabContents: FC = () => <>
   <Tutorials/>
 </>;
 
-export const Room: FC = () => useShownTutorial().either(
-  () => <TutorialPage/>,
-  () => <TabContents/>);
+export const Room: FC = () => {
+  const part = useShownPart();
+  return useShownTutorial().either(
+    () => <TutorialPage/>,
+    () => part.either(shown => <PartPage part={shown}/>, () => <TabContents/>));
+};

@@ -19,6 +19,7 @@ const pages = [
   ...tabsOf(`${Paths.demos}accordions/`, names.accordions),
   ...tabsOf(`${Paths.demos}charts/`, names.charts),
   ...tabsOf(`${Paths.demos}tables/`, names.tables),
+  ...tabsOf(`${Paths.demos}tables/`, names.tableParts),
   ...tabsOf(Paths.practice, names.practice)
 ];
 

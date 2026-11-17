@@ -21,12 +21,17 @@ export const tablesTab = () => ({
   recipe,
   tutorialLink,
   openTutorial: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
+  openPart: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
   backToTheTab: async (): Promise<void> => userEvent.click(await tutorialLink('Tables')),
   readTheStationFirst: async (): Promise<void> => userEvent.click(await tutorialLink(/^station \d+ of the tables tab$/)),
   tutorialsListed: async (): Promise<string[]> =>
     within(await screen.findByRole('list', {name: 'the tutorials'}, untilTheTablesTabRenders)).getAllByRole('link')
       .map(link => computeAccessibleName(link)),
   place: (): Promise<HTMLElement> => screen.findByText(/tutorial \d+ of \d+/),
+  partPlace: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
+  titleLevels: (name: string): number[] =>
+    screen.queryAllByRole('heading', {name}).map(heading => Number(heading.tagName.slice(1))),
+  tableShown: (name: string): HTMLElement | null => screen.queryByRole('table', {name}),
   recipeShown: (build: string): HTMLElement | null => screen.queryByRole('region', {name: `build the ${build} yourself`}),
   frame: (): HTMLElement | null => screen.queryByTitle('the living table, in vanilla'),
   findRadios: (name: string): Promise<HTMLElement[]> => screen.findAllByRole('radio', {name, hidden: true}),

@@ -90,6 +90,13 @@ describe('each page is named where a search shows it', () => {
     expect(described()).toBe(names.tables.resize.description);
   });
 
+  test('should give the need and its clues its own title and description', async () => {
+    render(<TestApp at={demosAt('tables/the-need-and-its-clues')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.tableParts['the-need-and-its-clues'].title));
+    expect(described()).toBe(names.tableParts['the-need-and-its-clues'].description);
+  });
+
   test('should give the price line’s page its own title and description', async () => {
     render(<TestApp at={chartPageAt('price')}/>);
 
