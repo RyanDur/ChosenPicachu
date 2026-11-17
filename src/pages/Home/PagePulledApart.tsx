@@ -3,7 +3,7 @@ import './PagePulledApart.css';
 
 type Spot = {readonly u: number; readonly v: number};
 type Region = Spot & {readonly across: number; readonly down: number};
-type Mark = Spot & {readonly word: string; readonly anchor?: 'middle' | 'end'};
+type Label = Spot & {readonly word: string; readonly anchor?: 'end'};
 type Point = {readonly x: number; readonly y: number};
 
 const scale = 2.4;
@@ -16,52 +16,56 @@ const plate: Region = {u: 0, v: 0, across: 112, down: 70};
 
 const heights = {structure: 0, presentation: lift, behavior: lift * 2};
 
-const at = ({u, v}: Spot, height: number): Point =>
+const projected = ({u, v}: Spot, height: number): Point =>
   ({x: (origin.x + (u - v) * cosine30) * scale, y: (origin.y + (u + v) * tilt - height) * scale});
 
 const pointsOf = (corners: readonly Point[]): string => corners.map(({x, y}) => `${x},${y}`).join(' ');
 
-const outline = ({u, v, across, down}: Region, height: number): string => pointsOf(
-  [{u, v}, {u: u + across, v}, {u: u + across, v: v + down}, {u, v: v + down}].map(corner => at(corner, height)));
+const regionPoints = ({u, v, across, down}: Region, height: number): string => pointsOf(
+  [{u, v}, {u: u + across, v}, {u: u + across, v: v + down}, {u, v: v + down}]
+    .map(corner => projected(corner, height)));
 
 const face = (from: Spot, to: Spot): string => pointsOf([
-  at(from, heights.structure), at(to, heights.structure),
-  at(to, heights.structure - slabDepth), at(from, heights.structure - slabDepth)]);
+  projected(from, heights.structure), projected(to, heights.structure),
+  projected(to, heights.structure - slabDepth), projected(from, heights.structure - slabDepth)]);
 
-const regions: Readonly<Record<string, Region>> = {
+const slabRegions: Readonly<Record<string, Region>> = {
   header: {u: 6, v: 6, across: 102, down: 12},
-  nav: {u: 6, v: 22, across: 32, down: 42},
-  main: {u: 42, v: 22, across: 66, down: 42},
+  section: {u: 6, v: 22, across: 32, down: 42},
+  nav: {u: 8, v: 24, across: 28, down: 25},
   button: {u: 8, v: 52, across: 28, down: 10},
-  dialog: {u: 68, v: 44, across: 36, down: 16}
+  main: {u: 42, v: 22, across: 66, down: 42}
 };
 
-const regionNames: readonly Mark[] = [
+const dialog: Region = {u: 6, v: 22, across: 32, down: 26};
+
+const click: Spot = {u: 33, v: 57};
+
+const regionLabels: readonly Label[] = [
   {word: 'header', u: 22, v: 14},
-  {word: 'nav', u: 23.5, v: 41.5},
-  {word: 'main', u: 54.5, v: 44},
+  {word: 'section', u: -2, v: 58, anchor: 'end'},
+  {word: 'nav', u: 22.5, v: 42},
   {word: 'button', u: 30, v: 57.5, anchor: 'end'},
-  {word: 'dialog', u: 69, v: 58}
+  {word: 'main', u: 60.5, v: 50}
 ];
 
-const classNames: readonly Mark[] = [
-  {word: '.paragraph', u: 62, v: -4},
-  {word: '.signpost', u: 114, v: 46},
-  {word: '.field', u: -2, v: 58, anchor: 'end'}
+const classLabels: readonly Label[] = [
+  {word: '.field', u: -2, v: 58, anchor: 'end'},
+  {word: '.paragraph', u: 121, v: 72},
+  {word: '.signpost', u: 132, v: 83}
 ];
 
-const commands: readonly Spot[] = [{u: 33, v: 57}, {u: 100, v: 52}];
-
-const commandNames: readonly Mark[] = [
-  {word: 'show-modal', u: 36, v: 58},
-  {word: 'close', u: 96.5, v: 48.5, anchor: 'middle'}
+const scriptLabels: readonly Label[] = [
+  {word: 'dialog', u: 19.5, v: 44.5},
+  {word: 'click', u: click.u + 3, v: click.v + 1}
 ];
 
-const plateCorners: readonly Spot[] = [{u: 0, v: 0}, {u: plate.across, v: plate.down}];
+const backCorner: Spot = {u: 0, v: 0};
+const frontCorner: Spot = {u: plate.across, v: plate.down};
 
 const DroppedLine: FC<{spot: Spot}> = ({spot}) => {
-  const top = at(spot, heights.behavior);
-  const bottom = at(spot, heights.structure);
+  const top = projected(spot, heights.behavior);
+  const bottom = projected(spot, heights.structure);
   return <line className="drawn-line drawn dashed-drawn" x1={top.x} y1={top.y} x2={bottom.x} y2={bottom.y}/>;
 };
 
@@ -71,16 +75,17 @@ const languages = [
   {word: 'structure', height: heights.structure}
 ];
 
-const Lettering: FC<{marks: readonly Mark[]; height: number}> = ({marks, height}) => <>
-  {marks.map(mark => <text key={mark.word} className="drawn-caption monospaced ink-filled" {...at(mark, height)}
-    textAnchor={mark.anchor}>
-    {mark.word}
+const Lettering: FC<{labels: readonly Label[]; height: number}> = ({labels, height}) => <>
+  {labels.map(label => <text key={label.word} className="drawn-caption monospaced ink-filled"
+    {...projected(label, height)} textAnchor={label.anchor}>
+    {label.word}
   </text>)}
 </>;
 
-export const PagePulledApart: FC = () =>
-  <figure className="page-pulled-apart">
-    <svg className="drawing" viewBox={`${50 * scale} 0 ${200 * scale} ${258 * scale}`} width={200 * scale}
+export const PagePulledApart: FC = () => {
+  const clickPoint = projected(click, heights.behavior);
+  return <figure className="page-pulled-apart">
+    <svg className="drawing center" viewBox={`${50 * scale} 0 ${200 * scale} ${258 * scale}`} width={200 * scale}
       height={258 * scale} aria-hidden="true">
       <defs>
         <pattern id="page-pulled-apart-hatch" patternUnits="userSpaceOnUse" width="7" height="7"
@@ -88,36 +93,36 @@ export const PagePulledApart: FC = () =>
           <line className="drawn-line drawn" x1="0" y1="0" x2="0" y2="7"/>
         </pattern>
       </defs>
-      {plateCorners.map(corner => <DroppedLine key={`${corner.u},${corner.v}`} spot={corner}/>)}
+      <DroppedLine spot={backCorner}/>
       <polygon className="slab-line drawn paper-filled"
         points={face({u: 0, v: plate.down}, {u: plate.across, v: plate.down})}/>
       <polygon className="slab-line drawn paper-filled"
         points={face({u: plate.across, v: 0}, {u: plate.across, v: plate.down})}/>
-      <polygon className="slab-line drawn paper-filled" points={outline(plate, heights.structure)}/>
-      {Object.entries(regions).map(([name, region]) =>
-        <polygon key={name} className="drawn-line drawn hollow" points={outline(region, heights.structure)}/>)}
-      <polygon className="drawn-line drawn paper-filled" points={outline(plate, heights.presentation)}/>
-      {Object.entries(regions).map(([name, region]) =>
-        <polygon key={name} className={`drawn-line drawn ${name === 'main' ? 'hollow' : 'hatched-filled'}`}
-          points={outline(region, heights.presentation)}/>)}
-      <polygon className="drawn-line drawn paper-filled" points={outline(plate, heights.behavior)}/>
-      {commands.map(command => <DroppedLine key={`${command.u},${command.v}`} spot={command}/>)}
-      {commands.map(command => {
-        const {x, y} = at(command, heights.behavior);
-        return <circle key={`${command.u},${command.v}`} className="drawn-filled" cx={x} cy={y} r={1.6 * scale}/>;
-      })}
-      <Lettering marks={regionNames} height={heights.structure}/>
-      <Lettering marks={classNames} height={heights.presentation}/>
-      <Lettering marks={commandNames} height={heights.behavior}/>
+      <polygon className="slab-line drawn paper-filled" points={regionPoints(plate, heights.structure)}/>
+      {Object.entries(slabRegions).map(([name, region]) =>
+        <polygon key={name} className="drawn-line drawn hollow" points={regionPoints(region, heights.structure)}/>)}
+      <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, heights.presentation)}/>
+      {Object.entries(slabRegions).map(([name, region]) =>
+        <polygon key={name} className="drawn-line drawn hatched-filled"
+          points={regionPoints(region, heights.presentation)}/>)}
+      <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, heights.behavior)}/>
+      <polygon className="drawn-line drawn hollow" points={regionPoints(dialog, heights.behavior)}/>
+      <DroppedLine spot={frontCorner}/>
+      <DroppedLine spot={click}/>
+      <circle className="drawn-filled" cx={clickPoint.x} cy={clickPoint.y} r={1.6 * scale}/>
+      <Lettering labels={regionLabels} height={heights.structure}/>
+      <Lettering labels={classLabels} height={heights.presentation}/>
+      <Lettering labels={scriptLabels} height={heights.behavior}/>
       {languages.map(({word, height}) => {
-        const {x, y} = at({u: 0, v: plate.down / 2}, height);
+        const {x, y} = projected({u: 0, v: plate.down / 2}, height);
         return <text key={word} className="drawn-caption uppercase ink-filled" x={x - 6 * scale} y={y + 2 * scale}
           textAnchor="end">{word}</text>;
       })}
     </svg>
     <figcaption className="caption"><strong className="bold">A page, pulled apart.</strong> The markup is the slab, the
-      one plate that is a page on its own. The style sheet dresses every region of it. The script touches two points.
-      Lift the style sheet or the script off and the page still stands: that is separate. Set them back and every mark
-      lands on its element: that is together.
+      one plate that is a page on its own. The style sheet dresses every region of it. The script answers the button
+      and adds the dialog. Lift the style sheet or the script off and the page still stands: that is separate. Set them
+      back and every mark lands on its element: that is together.
     </figcaption>
   </figure>;
+};
