@@ -119,6 +119,7 @@ tester.run('american-spelling', prose.rules['american-spelling'], {
   invalid: [
     {name: 'should refuse a British name', code: 'const colour = 1;', errors: british('colour', 'color')},
     {name: 'should refuse a British word inside a camel-cased name', code: 'const wayLabelled = 1;', errors: british('labelled', 'labeled')},
+    {name: 'should refuse labelled by when it is not ARIA’s', code: 'const labelledByHand = 1;', errors: british('labelled', 'labeled')},
     {name: 'should refuse a British word in capitals', code: 'const COLOUR = 1;', errors: british('colour', 'color')},
     {name: 'should refuse a British JSX name', code: '<Colour />;', errors: british('colour', 'color')},
     {name: 'should report a word said twice in one name once', code: 'const colourOnColour = 1;', errors: british('colour', 'color')},

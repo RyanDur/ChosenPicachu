@@ -16,14 +16,14 @@ const closesOnTheVeil = (event: MouseEvent<HTMLDialogElement>) => {
 
 type ModalProps = PropsWithChildren<PropsWithClassName<{
   id: string;
-  labelledBy: string;
+  'aria-labelledby': string;
   onToggle?: (event: SyntheticEvent<HTMLDialogElement>) => void;
 }>>;
 
 const closesInPlaceWhenRemoved = (dialog: HTMLDialogElement) => () => dialog.close();
 
-export const Modal: FC<ModalProps> = ({id, labelledBy, className, onToggle, children}) =>
-  <dialog id={id} ref={closesInPlaceWhenRemoved} className={className} closedby="any" aria-labelledby={labelledBy}
+export const Modal: FC<ModalProps> = ({id, 'aria-labelledby': ariaLabelledBy, className, onToggle, children}) =>
+  <dialog id={id} ref={closesInPlaceWhenRemoved} className={className} closedby="any" aria-labelledby={ariaLabelledBy}
     onClick={closesOnTheVeil} onToggle={onToggle}>
     {children}
   </dialog>;

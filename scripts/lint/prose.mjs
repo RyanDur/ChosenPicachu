@@ -146,7 +146,7 @@ const americanFor = Object.fromEntries([
   ...Object.entries(irregularSpellings)
 ]);
 const wordsIn = /[A-Z]?[a-z]+|[A-Z]+(?![a-z])/g;
-const ariaLabelledBy = /labelled-?by/gi;
+const ariaLabelledBy = /aria-?labelled-?by/gi;
 
 /** @type {import('eslint').Rule.RuleModule} */
 const americanSpelling = {
