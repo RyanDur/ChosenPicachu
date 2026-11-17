@@ -14,7 +14,6 @@ describe('the table tutorials', () => {
     expect(demoPage.title('Start with the need, and let it pick the element')).toBeVisible();
     expect(demoPage.title('The trader can watch the live market over lookbacks they arrange')).toBeVisible();
     expect(demoPage.title('Sketch a design from the need')).toBeVisible();
-    expect(demoPage.unanswered('what a design cannot tell you')).toBeVisible();
   });
 
   test('the recipe’s tables name their rows and columns', async () => {
@@ -24,9 +23,6 @@ describe('the table tutorials', () => {
     const features = tablesTab().table('the features');
     expect(features.columns).toHaveLength(4);
     expect(features.rows).toHaveLength(4);
-    expect(tablesTab().columnsIn('Sketch a design from the need')).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-    const sketch = tablesTab().headersIn('Sketch a design from the need');
-    expect(sketch.rows).toHaveLength(5);
   });
 
   test('the slices point at their stations', async () => {

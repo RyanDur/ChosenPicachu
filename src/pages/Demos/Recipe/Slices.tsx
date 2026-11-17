@@ -2,6 +2,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos/demo-topics';
 import {FC, ReactNode} from 'react';
 import {stations} from './stations';
+import {storiesHeading} from '@pages/Demos/headings';
 
 type SlicesProps = {
   can: string;
@@ -11,8 +12,8 @@ type SlicesProps = {
 };
 
 export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced}) =>
-  <section className="phase card rounded-corners lifted" aria-labelledby="phase-stories">
-    <h3 id="phase-stories" className="phase-title title">Slice the design into stories</h3>
+  <section className="phase card rounded-corners lifted" aria-labelledby={storiesHeading.id}>
+    <h3 id={storiesHeading.id} className="phase-title title">{storiesHeading.title}</h3>
     <p className="overview paragraph muted-ink">
       Once the need is heard and the design has answered shape, I split the work into stories. Each is
       a <a className="signpost"

@@ -45,7 +45,8 @@
     "resize": {"title": "Drag resize · Tables · Chosen Picachu", "description": "The trader can widen a column, and its neighbor gives up the room."}
   },
   "tableParts": {
-    "the-need-and-its-clues": {"title": "The need and its clues · Tables · Chosen Picachu", "description": "A trader says what they need, and its clues show that a table is the element built for it."}
+    "the-need-and-its-clues": {"title": "The need and its clues · Tables · Chosen Picachu", "description": "A trader says what they need, and its clues show that a table is the element built for it."},
+    "the-sketch": {"title": "The sketch · Tables · Chosen Picachu", "description": "A sketch of the table, drawn from the need before any code."}
   },
   "users": {
     "title": "Users · Chosen Picachu",

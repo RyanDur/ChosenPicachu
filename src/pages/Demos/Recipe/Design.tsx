@@ -1,15 +1,19 @@
 import {FC, ReactNode} from 'react';
+import {maybe} from '@ryandur/sand';
 import {designHeading} from '@pages/Demos/headings';
 
 type DesignProps = {
   sketch: ReactNode;
   answers: string;
   unanswered: string[];
+  headedBy?: string;
 };
 
-export const Design: FC<DesignProps> = ({sketch, answers, unanswered}) =>
-  <section className="phase card rounded-corners lifted" aria-labelledby={designHeading.id}>
-    <h3 id={designHeading.id} className="phase-title title">{designHeading.title}</h3>
+export const Design: FC<DesignProps> = ({sketch, answers, unanswered, headedBy}) =>
+  <section className="phase card rounded-corners lifted" aria-labelledby={maybe(headedBy).orElse(designHeading.id)}>
+    {maybe(headedBy).either(
+      () => null,
+      () => <h3 id={designHeading.id} className="phase-title title">{designHeading.title}</h3>)}
     <p className="overview paragraph muted-ink">
       The need has a visual answer, so the next artifact is a design: enough shape to argue
       with, before any code. What the sketch cannot answer goes back to the people asking, as

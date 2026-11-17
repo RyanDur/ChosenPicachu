@@ -1,7 +1,7 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsObject} from '@navigation/search-params';
-import {DesignAsk, FlowTableRecipe, FeaturesAskedFor, StillTableRecipe, StorySlices} from './Recipe';
+import {FlowTableRecipe, FeaturesAskedFor, StillTableRecipe, StorySlices} from './Recipe';
 import {Exercise, Station} from '../Recipe';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
@@ -17,7 +17,7 @@ const PartEntry: FC<{part: TablePart}> = ({part}) => {
       <DemoLink to={tableParts.addressOf(part)}>{name}</DemoLink>
     </h3>
     <p className="paragraph">{says}</p>
-    <p className="caption muted-ink"><time dateTime={`PT${minutes}M`}>{`${minutes} minutes to read`}</time></p>
+    <p className="caption muted-ink"><time dateTime={`PT${minutes}M`}>{`${minutes} ${minutes === 1 ? 'minute' : 'minutes'} to read`}</time></p>
   </>;
 };
 
@@ -35,7 +35,7 @@ export const Tutorials: FC = () => {
         <PartEntry part="the-need-and-its-clues"/>
       </Station>
       <Station at={2}>
-        <DesignAsk/>
+        <PartEntry part="the-sketch"/>
       </Station>
       <Station at={3}>
         <StorySlices/>
