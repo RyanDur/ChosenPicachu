@@ -78,14 +78,13 @@ describe('the table tutorials, each on its own page', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables', '?world=vanilla'));
   });
 
-  test('a tutorial’s page links to station 5 of the tables tab, carrying the chosen build', async () => {
+  test('a tutorial’s page links to the live table’s page, where it starts, with the build carried and both stories open', async () => {
     const from = demosAt('tables/menu', '?world=vanilla');
     render(<TestApp at={from}/>);
 
-    await tablesTab().readTheStationFirst();
+    await tablesTab().follow('Make the table live');
 
-    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables', '?world=vanilla'));
-    expect(appAddress.fragment()).toBe('#station-5');
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables/the-live-table-and-the-store', '?world=vanilla&living=flow%2Cstore'));
   });
 
   test('the build chosen on the tables tab carries into the tutorial it opens', async () => {

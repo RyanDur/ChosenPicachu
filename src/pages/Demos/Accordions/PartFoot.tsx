@@ -7,7 +7,7 @@ import {AccordionPart, accordionParts, TabHeading} from './part-pages';
 export const PartFoot: FC<{part: AccordionPart}> = ({part}) => {
   const carried = useCarriedAddress();
   const neighbor = (heading: TabHeading) => ({
-    numbered: accordionParts.numbered(heading),
+    title: accordionParts.numbered(heading),
     address: carried(demoTab.address(DemoTopics.accordions), heading)
   });
   return <PageFoot label="the accordions parts"

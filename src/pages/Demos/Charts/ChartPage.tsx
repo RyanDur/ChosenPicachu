@@ -56,7 +56,7 @@ const features: Record<ChartKind, Feature> = {
 
 type Props = {kind: ChartKind};
 
-const neighbor = (kind: ChartKind) => ({numbered: chartKinds.numbered(kind), address: chartKinds.address(kind)});
+const neighbor = (kind: ChartKind) => ({title: chartKinds.numbered(kind), address: chartKinds.address(kind)});
 
 const ChartKindTutorial: FC<Props> = ({kind}) => {
   const {name, reference, quote, chart: Chart} = features[kind];

@@ -1,9 +1,9 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
-import {designHeading, needHeading, stations, storiesHeading} from '@pages/Demos/headings';
+import {designHeading, featuresHeading, needHeading, stations, storiesHeading} from '@pages/Demos/headings';
 import type {Place} from '@pages/Demos/useCarriedAddress';
-import {stillStory} from './still-story';
+import {livingStories} from './living-stories';
 
 export type TablePart = keyof typeof names.tableParts;
 
@@ -36,15 +36,17 @@ const minutes: Record<TablePart, number> = {
   'the-need-and-its-clues': 1,
   'the-sketch': 1,
   'the-slices': 2,
-  'the-still-table': 5
+  'the-still-table': 5,
+  'the-live-table-and-the-store': 13
 };
 
-const opens: Partial<Record<TablePart, typeof stillStory>> = {
-  'the-still-table': stillStory
+const opens: Partial<Record<TablePart, string[]>> = {
+  'the-still-table': [livingStories.ids.still],
+  'the-live-table-and-the-store': [livingStories.ids.flow, livingStories.ids.store]
 };
 
 export type PartPlace = Place & {
-  numbered: string;
+  title: string;
 };
 
 const tabAddress = demoTab.address(DemoTopics.tables);
@@ -59,11 +61,13 @@ const all: readonly TablePart[] = book.filter(isListed);
 
 const whereIs = (station: number): Place =>
   maybe(book[station - 1]).mBind(part => maybe(isListed(part) ? part : undefined)).either(
-    part => ({to: addressOf(part), ...maybe(opens[part]).map(({param, id}) => ({search: {[param]: id}})).orElse({})}),
+    part => ({to: addressOf(part), ...maybe(opens[part]).map(ids => ({search: {[livingStories.param]: ids.join(',')}})).orElse({})}),
     () => ({to: tabAddress, heading: stations.idOf(station)}));
 
 const neighborOf = (part: BookPart): PartPlace =>
-  ({numbered: `${ordinalOf(part)}. ${titles[part]}`, ...whereIs(ordinalOf(part))});
+  ({title: `${ordinalOf(part)}. ${titles[part]}`, ...whereIs(ordinalOf(part))});
+
+const theFeatures: PartPlace = {title: featuresHeading.title, ...whereIs(book.length + 1)};
 
 const besides = (part: TablePart, step: number): Maybe<PartPlace> =>
   maybe(book[ordinalOf(part) - 1 + step]).map(neighborOf);
@@ -76,7 +80,7 @@ export const tableParts = {
     says: names.tableParts[part].description
   }),
   previousOf: (part: TablePart): Maybe<PartPlace> => besides(part, -1),
-  nextOf: (part: TablePart): Maybe<PartPlace> => besides(part, 1),
+  nextOf: (part: TablePart): Maybe<PartPlace> => maybe(besides(part, 1).orElse(theFeatures)),
   addressOf,
   whereIs,
   shownAt: (pathname: string): Maybe<TablePart> => maybe(all.find(part => pathname === addressOf(part))),

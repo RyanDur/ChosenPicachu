@@ -1,6 +1,5 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {Paths} from '@navigation';
 import {demoPage} from '@pages/Demos/__test_support';
 import {tablesTab} from '@pages/Demos/Tables/__test_support';
 import {Tutorials} from '../Tutorials';
@@ -31,15 +30,6 @@ describe('the table tutorials', () => {
     expect(demoPage.title('Add features, in the order they were asked for')).toBeVisible();
     expect(tablesTab().columnHeader('by keyboard')).toBeVisible();
     expect(demoPage.row('Widen a column')).toBeVisible();
-  });
-
-  test('should link each term it glosses, and each tab it names, to that tab', async () => {
-    render(<TestApp at="/"><Tutorials/></TestApp>);
-    await demoPage.findTitle('let’s build this feature');
-
-    expect(demoPage.linksToTabs()).toEqual([
-      ['charts tab', `${Paths.demos}charts/`]
-    ]);
   });
 
 });

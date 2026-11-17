@@ -1,12 +1,13 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsObject} from '@navigation/search-params';
-import {FlowTableRecipe, FeaturesAskedFor} from './Recipe';
+import {FeaturesAskedFor} from './Recipe';
 import {Station} from '../Recipe';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
 import {DemoLink} from '@pages/Demos/DemoLink';
+import {featuresHeading} from '@pages/Demos/headings';
 import '../Tutorials.css';
 import './Tutorials.css';
 
@@ -44,11 +45,11 @@ export const Tutorials: FC = () => {
       <Station at={4}>
         <PartEntry part="the-still-table"/>
       </Station>
-      <Station at={tableTutorials.startingStation}>
-        <FlowTableRecipe/>
+      <Station at={5}>
+        <PartEntry part="the-live-table-and-the-store"/>
       </Station>
       <Station at={6}>
-        <h3 className="phase-title title">Add features, in the order they were asked for</h3>
+        <h3 className="phase-title title">{featuresHeading.title}</h3>
         <FeaturesAskedFor/>
         <p className="paragraph">
           Drag sort builds the first two features, moving a column and moving a row. Sort menu builds the third,

@@ -8,7 +8,8 @@ import {WorldGlider, WorldNote} from './World';
 import {useShownTutorial} from './useShownTutorial';
 import {DragSortTutorial} from './DragSort';
 import {MenuRecipe, ResizeRecipe} from './Recipe';
-import {stations} from '@pages/Demos/headings';
+import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
+import {tableParts} from './part-pages';
 import './TutorialPage.css';
 
 const recipes: Record<Tutorial, FC> = {
@@ -20,6 +21,9 @@ const recipes: Record<Tutorial, FC> = {
 export const TutorialPage: FC = () => {
   const {searchFromShown} = useSearchParamsObject({});
   const titled = `tutorial${useId()}`;
+  const carried = useCarriedAddress();
+  const {name, ordinal} = tableParts.told(tableTutorials.startingPart);
+  const startingAt = {name, ordinal, ...tableParts.whereIs(ordinal)};
   return useShownTutorial().either(tutorial => {
     const {ordinal, outOf} = tableTutorials.placeOf(tutorial);
     const TutorialRecipe = recipes[tutorial];
@@ -37,15 +41,10 @@ export const TutorialPage: FC = () => {
       <WorldGlider/>
       <WorldNote/>
       <p className="paragraph">
-        This tutorial builds on the live table above. It starts where <Link className="signpost" to={{
-          pathname: demoTab.address(DemoTopics.tables),
-          search: searchFromShown({}),
-          hash: stations.idOf(tableTutorials.startingStation)
-        }}>
-          station {tableTutorials.startingStation} of the tables tab
-        </Link> ends,
+        This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
+        “<Link className="signpost" to={carried(startingAt.to, undefined, startingAt.search)}>{startingAt.name}</Link>”, ends,
         with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
-        those are new to you, read that station first.
+        those are new to you, read that part first.
       </p>
       <TutorialRecipe/>
     </section>;

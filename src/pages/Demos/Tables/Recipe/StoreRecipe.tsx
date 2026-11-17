@@ -18,6 +18,7 @@ import openingSource from '@pages/Demos/Market/Trading/useExchange.ts?sample';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
 import buildSource from '../Frame/builds/Eager.ts?sample';
 import bootSource from '../Frame/boot.ts?sample';
+import {livingStories} from '../living-stories';
 
 const OneState: FC = () => {
   const {world} = useControls();
@@ -285,7 +286,7 @@ const WhoSubscribes: FC = () => {
 };
 
 export const StoreStory: FC = () =>
-  <Story param="living" id="store"
+  <Story param={livingStories.param} id={livingStories.ids.store}
     can="The page is a store, and so is the table"
     soThat="the charts and the tables read one stream, the page owns the order it shows, and both worlds write them one way">
     <Tell>I could let each chart and each table keep its own copy of the trades. They would drift from each other

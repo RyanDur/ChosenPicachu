@@ -7,7 +7,7 @@ import {BookPart, ZIndexPart, zIndexParts} from './part-pages';
 export const PartFoot: FC<{part: ZIndexPart}> = ({part}) => {
   const carried = useCarriedAddress();
   const neighbor = (book: BookPart) => ({
-    numbered: zIndexParts.numbered(book),
+    title: zIndexParts.numbered(book),
     address: zIndexParts.pageOf(book).map(part => carried(zIndexParts.addressOf(part)))
       .orElse(carried(demoTab.address(DemoTopics.zIndex), zIndexParts.tabHeadingOf(book)))
   });

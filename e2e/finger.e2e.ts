@@ -113,8 +113,8 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
       await opensFromAFinger(page, settings);
     });
 
-    test('opens every how I built it fold in an open story on the tables tab from a finger that lands just off its bar', async ({page}) => {
-      await page.goto('demos/tables/');
+    test('opens every how I built it fold in an open story on the live table’s page from a finger that lands just off its bar', async ({page}) => {
+      await page.goto('demos/tables/the-live-table-and-the-store/');
       const reveals = await tablesDemo(page).howIBuiltItInTheFirstStory();
       await expect(reveals.first()).toBeVisible();
 

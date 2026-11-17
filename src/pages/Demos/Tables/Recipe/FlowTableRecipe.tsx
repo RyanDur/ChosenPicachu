@@ -5,6 +5,7 @@ import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, St
 import {useControls} from '../../Controls';
 import type {World} from '../../Controls';
 import {StoreStory} from './StoreRecipe';
+import {livingStories} from '../living-stories';
 import exchangeSource from '@pages/Demos/Market/exchange.ts?sample';
 import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
 import tradeTotalsSource from '@pages/Demos/Market/trade-totals.ts?sample';
@@ -54,7 +55,7 @@ const refolds: Record<World, string> = {
 
 const FlowStory: FC = () => {
   const {world} = useControls();
-  return <Story param="living" id="flow"
+  return <Story param={livingStories.param} id={livingStories.ids.flow}
     can="The trader can watch the market live, one lookback beside another"
     soThat="the numbers stay current without a single refresh">
     <Tell>The still becomes a stream. The trader arrives mid-session, so the page starts with
