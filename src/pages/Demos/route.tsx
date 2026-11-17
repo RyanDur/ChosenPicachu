@@ -19,7 +19,7 @@ const shownDemoAt = (pathname: string): Maybe<ShownDemo> => tableTutorials.at(pa
     title: `Demos ${demoTab.names[DemoTopics.tables]} · ${tableTutorials.nameOf(tutorial)}`,
     listed: names.tables[tutorial]
   }))
-  .or(() => accordionParts.at(pathname).map((part): ShownDemo => ({
+  .or(() => accordionParts.shownAt(pathname).map((part): ShownDemo => ({
     topic: DemoTopics.accordions,
     title: `Demos ${demoTab.names[DemoTopics.accordions]} · ${accordionParts.told(part).name}`,
     listed: names.accordions[part]

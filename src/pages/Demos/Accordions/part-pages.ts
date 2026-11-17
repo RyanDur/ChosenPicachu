@@ -15,19 +15,19 @@ const titles = {
 
 export type TabHeading = keyof typeof titles;
 
-type Entry = {heading: TabHeading; minutes: number};
+type Listing = {heading: TabHeading; minutes: number};
 
 type Told = {name: string; minutes: number; ordinal: number; says: string};
 
 type AccordionParts = {
   told: (part: AccordionPart) => Told;
   addressOf: (part: AccordionPart) => string;
-  at: (pathname: string) => Maybe<AccordionPart>;
+  shownAt: (pathname: string) => Maybe<AccordionPart>;
   titleOf: (heading: TabHeading) => string;
   inTheBook: number;
 };
 
-const entries: Record<AccordionPart, Entry> = {
+const listings: Record<AccordionPart, Listing> = {
   'the-measured-height': {heading: 'measured-heading', minutes: 9}
 };
 
@@ -37,7 +37,7 @@ const tabAddress = demoTab.address(DemoTopics.accordions);
 
 const addressOf = (part: AccordionPart): string => `${tabAddress}${part}/`;
 
-const isPart = (name: string): name is AccordionPart => Object.keys(entries).includes(name);
+const isPart = (name: string): name is AccordionPart => Object.keys(listings).includes(name);
 
 const partAt = (pathname: string): Maybe<AccordionPart> => {
   const named = pathname.slice(tabAddress.length, -1);
@@ -46,7 +46,7 @@ const partAt = (pathname: string): Maybe<AccordionPart> => {
 
 export const accordionParts: AccordionParts = {
   told: part => {
-    const {heading, minutes} = entries[part];
+    const {heading, minutes} = listings[part];
     return {
       name: titles[heading],
       minutes,
@@ -55,7 +55,7 @@ export const accordionParts: AccordionParts = {
     };
   },
   addressOf,
-  at: partAt,
+  shownAt: partAt,
   titleOf: heading => titles[heading],
   inTheBook: headings.length
 };

@@ -22,10 +22,10 @@ const foldLists = {
   platform: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)}
 };
 
-const bodies: Record<AccordionPart, ReactNode> = {
+const pagesOfParts: Record<AccordionPart, ReactNode> = {
   'the-measured-height': <MeasuredHeight folds={measuredFolds}/>
 };
 
 export const Room: FC = () => useShownPart().either(
-  part => <PartPage part={part}>{bodies[part]}</PartPage>,
+  part => <PartPage part={part}>{pagesOfParts[part]}</PartPage>,
   () => <AccordionsExplained foldLists={foldLists}/>);
