@@ -1,3 +1,4 @@
+import {maybe} from '@ryandur/sand';
 import {TableMiddleware, tableStore} from '../store';
 import {columnShares} from '../../__test_support';
 import {tableActions} from '../actions';
@@ -201,7 +202,7 @@ describe('a sizing', () => {
       tableActions.arrowLifted('lookback'),
       tableActions.handleDragged('lookback', 'trades', 120));
 
-    expect(tableState.widthsOf(dragged).map(widths => widths.lookback).orNull()).toBe(16);
+    expect(tableState.widthsOf(dragged).mBind(({lookback}) => maybe(lookback)).orNull()).toBe(16);
   });
 
   test('a pointer moving while an arrow holds the resize trades nothing', () => {
@@ -210,7 +211,7 @@ describe('a sizing', () => {
       tableActions.tradedBy('lookback', 'trades', 1),
       tableActions.handleDragged('lookback', 'trades', 200));
 
-    expect(tableState.widthsOf(keyed).map(widths => widths.lookback).orNull()).toBe(14);
+    expect(tableState.widthsOf(keyed).mBind(({lookback}) => maybe(lookback)).orNull()).toBe(14);
   });
 
   test('a pointer move on a handle that holds no grip trades nothing', () => {
@@ -229,7 +230,7 @@ describe('a sizing', () => {
       tableActions.handleReleased('trades'),
       tableActions.handleDragged('lookback', 'trades', 120));
 
-    expect(tableState.widthsOf(dragged).map(widths => widths.lookback).orNull()).toBe(15);
+    expect(tableState.widthsOf(dragged).mBind(({lookback}) => maybe(lookback)).orNull()).toBe(15);
   });
 
   test('a release on the gripped handle ends the grip and says its new share', () => {
@@ -240,7 +241,7 @@ describe('a sizing', () => {
       tableActions.handleReleased('lookback'),
       tableActions.handleDragged('lookback', 'trades', 200));
 
-    expect(tableState.widthsOf(released).map(widths => widths.lookback).orNull()).toBe(15);
+    expect(tableState.widthsOf(released).mBind(({lookback}) => maybe(lookback)).orNull()).toBe(15);
     expect(released.report).toEqual({about: 'share', name: 'lookback', share: 15});
   });
 });
