@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
@@ -66,5 +66,14 @@ describe('why 9999 still loses, on the tab', () => {
     await demoTabs.arrivedOn('Z-index');
 
     expect(theTrap.query()).not.toBeInTheDocument();
+  });
+
+  test('should link the tab’s introduction, where it names the menu, to this page with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+    await demoTabs.arrivedOn('Z-index');
+
+    const introduction = demoPage.says(/^This tab also explains/);
+
+    expect(explanation.linkNamed(introduction, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
   });
 });
