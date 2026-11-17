@@ -25,8 +25,8 @@ export const ExclusiveAccordion: FC<AccordionProps> = ({
           <label id={`fold-${id}-radio-label`}
             className="info-label opening-arrow drawn-piece prior-approached corner-after"
             htmlFor={`fold-${id}-radio`}>{heading}</label>
-          <div className="info drawn-piece">
-            <section className="info-text foot-shadowed focus-ringed" tabIndex={0}
+          <div className="info">
+            <section className="info-text charcoal-outlined foot-shadowed focus-ringed" tabIndex={0}
               aria-labelledby={`fold-${id}-radio-label`}>
               <p className="info-paragraph">{story}</p>
             </section>
