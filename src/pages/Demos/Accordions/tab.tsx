@@ -1,7 +1,9 @@
-import {FC} from 'react';
+import {FC, ReactNode} from 'react';
 import {seeded} from '@components/fibs';
 import {AccordionsExplained} from './Explained';
+import {MeasuredHeight} from './MeasuredHeight';
 import {PartPage} from './PartPage';
+import {AccordionPart} from './part-pages';
 import {useShownPart} from './useShownPart';
 
 type Draws = ReturnType<typeof seeded>;
@@ -20,6 +22,10 @@ const foldLists = {
   platform: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)}
 };
 
+const bodies: Record<AccordionPart, ReactNode> = {
+  'the-measured-height': <MeasuredHeight folds={foldLists.measured}/>
+};
+
 export const Room: FC = () => useShownPart().either(
-  part => <PartPage part={part} folds={foldLists.measured}/>,
+  part => <PartPage part={part}>{bodies[part]}</PartPage>,
   () => <AccordionsExplained foldLists={foldLists}/>);
