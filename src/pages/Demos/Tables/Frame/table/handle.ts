@@ -11,7 +11,8 @@ const saidAfter = ({store, report}: Pick<MountedTable, 'store' | 'report'>, happ
 };
 
 const awaken = ({table, store, order}: Resizing): void => {
-  const widths = tableState.widthsOf(store.state) ?? shares.measuredWidths(order(), table);
+  const widths = tableState.widthsOf(store.state)
+    .either(measured => measured, () => shares.measuredWidths(order(), table));
   store.dispatch(tableActions.measured(widths, shares.measuredFloors(order(), table)));
 };
 

@@ -14,9 +14,9 @@ const dressColumn = (table: HTMLTableElement, column: string, share: number, nam
 };
 
 export const dressWidths = ({table, store, order}: Pick<MountedTable, 'table' | 'store' | 'order'>): void => {
-  maybe(tableState.widthsOf(store.state)).map(widths => {
+  tableState.widthsOf(store.state).map(widths => {
     table.classList.add('apportioned');
     order().forEach(column =>
-      dressColumn(table, column, widths[column], tableState.namedShare(store.state, column) ?? widths[column]));
+      dressColumn(table, column, widths[column], tableState.namedShare(store.state, column).orElse(widths[column])));
   });
 };

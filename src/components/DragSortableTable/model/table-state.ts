@@ -93,7 +93,7 @@ const measure = (state: TableState, widths: ColumnWidths, floors: ColumnWidths):
 const awaken = (state: TableState, widths: ColumnWidths, floors: ColumnWidths): TableState =>
   has(state.widths) ? {...state, floors} : measure(state, widths, floors);
 
-const widthsOf = ({widths}: TableState): ColumnWidths | undefined => widths;
+const widthsOf = ({widths}: TableState): Maybe<ColumnWidths> => maybe(widths);
 
 const trade = (state: TableState, column: string, neighbor: string, delta: number): TableState =>
   maybe(state.widths)
@@ -129,17 +129,17 @@ const grip = (state: TableState, column: string, at: Grip): TableState => {
     .orElse(ours);
 };
 
-const pointerSizing = (sizing?: Sizing): PointerSizing | undefined =>
-  has(sizing) && sizing.stage === 'keyed' ? undefined : sizing;
+const pointerSizing = (sizing: Sizing): Maybe<PointerSizing> =>
+  sizing.stage === 'keyed' ? nothing() : some(sizing);
 
-const gripOf = (state: TableState, column: string): PointerSizing | undefined =>
-  ownSizing(state, column).map(pointerSizing).orElse(undefined);
+const gripOf = (state: TableState, column: string): Maybe<PointerSizing> =>
+  ownSizing(state, column).mBind(pointerSizing);
 
 const pointerHolds = (state: TableState, column: string): boolean =>
-  maybe(gripOf(state, column)).map(() => true).orElse(false);
+  gripOf(state, column).map(() => true).orElse(false);
 
 const dragHandle = (state: TableState, column: string, neighbor: string, clientX: number): TableState =>
-  maybe(gripOf(state, column))
+  gripOf(state, column)
     .map((sizing): TableState => {
       const sought = shares.soughtTrade(sizing.grip, clientX, sizing.stage === 'dragging' ? sizing.carried : 0);
       return {...trade(state, column, neighbor, sought.delta), sizing: {...sizing, stage: 'dragging', carried: sought.carried}};
@@ -147,7 +147,7 @@ const dragHandle = (state: TableState, column: string, neighbor: string, clientX
     .orElse(state);
 
 const ungripOf = (state: TableState, column: string): TableState =>
-  maybe(gripOf(state, column)).map(() => endSizing(state)).orElse(state);
+  gripOf(state, column).map(() => endSizing(state)).orElse(state);
 
 const endKeyedSizingOf = (state: TableState, column: string): TableState =>
   ownSizing(state, column).map(sizing => sizing.stage === 'keyed' ? endSizing(state) : state).orElse(state);
@@ -155,8 +155,8 @@ const endKeyedSizingOf = (state: TableState, column: string): TableState =>
 const endSizingOf = (state: TableState, column: string): TableState =>
   ownSizing(state, column).map(() => endSizing(state)).orElse(state);
 
-const namedShare = (state: TableState, column: string): number | undefined =>
-  startedAt(state, column).orElse(undefined);
+const namedShare = (state: TableState, column: string): Maybe<number> =>
+  startedAt(state, column);
 
 const unmarked = (state: TableState): TableState => ({...state, columnMarks: {}, rowMarks: {}});
 
@@ -218,19 +218,14 @@ const seatOffset = (
   state: TableState,
   order: readonly string[],
   standing: readonly string[]
-): Drift | undefined => {
-  const {drag} = state;
-  if (has(drag)) {
-    return drag.axis === 'column'
-      ? {x: drag.box.x - survey.columnLeft(order, drag.survey)(drag.held), y: 0}
-      : {x: 0, y: drag.box.y - survey.rowTop(standing, drag.survey)(drag.held)};
-  }
-  return undefined;
-};
+): Maybe<Drift> =>
+  maybe(state.drag).map(drag => drag.axis === 'column'
+    ? {x: drag.box.x - survey.columnLeft(order, drag.survey)(drag.held), y: 0}
+    : {x: 0, y: drag.box.y - survey.rowTop(standing, drag.survey)(drag.held)});
 
 const settlingAt = (state: TableState, order: readonly string[], standing: readonly string[]): Settling =>
   ({
-    seat: maybe(seatOffset(state, order, standing)).orElse(travel.still),
+    seat: seatOffset(state, order, standing).orElse(travel.still),
     drift: maybe(state.drag).map(drag => drag.drift).orElse(travel.still)
   });
 
