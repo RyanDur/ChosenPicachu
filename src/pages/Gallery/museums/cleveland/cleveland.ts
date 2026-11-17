@@ -15,24 +15,23 @@ import {artFields} from '@pages/Gallery/museums/artFields';
 
 const clevelandFields = ['id', 'title', 'creators', 'tombstone', 'images'].join();
 
-const sized = (image: Maybe<ClevelandImage>): string[] =>
+const srcSetCandidates = (image: Maybe<ClevelandImage>): string[] =>
   image.mBind(({url, width: given}) => maybe(given, has).map(width => [`${url} ${width}w`])).orElse([]);
 
-const srcSetOf = (record: ClevelandRecord): Maybe<string> => maybe(record.images)
-  .map(({web, print}) => [...sized(maybe(web)), ...sized(maybe(print))].join(', '))
-  .mBind(srcSet => maybe(srcSet, has));
+const srcSetOf = ({web, print}: NonNullable<ClevelandRecord['images']>): Maybe<string> =>
+  maybe([...srcSetCandidates(maybe(web)), ...srcSetCandidates(maybe(print))].join(', '), has);
 
-const described = (record: ClevelandRecord): string[] =>
+const creatorDescriptions = (record: ClevelandRecord): string[] =>
   maybe(record.creators).orElse([]).map(({description}) => description).filter(has);
 
 const artistOf = (record: ClevelandRecord): Maybe<string> =>
-  maybe(described(record).join(', '), has).or(() => maybe(record.tombstone, has));
+  maybe(creatorDescriptions(record).join(', '), has).or(() => maybe(record.tombstone, has));
 
 const toPiece = (record: ClevelandRecord): Art => ({
   id: String(record.id),
   title: record.title,
-  ...maybe(record.images).mBind(({web, print}) => maybe(web).or(() => maybe(print)))
-    .map(shown => ({picture: {src: shown.url, ...srcSetOf(record).map(srcSet => ({srcSet})).orElse({})}})).orElse({}),
+  ...maybe(record.images).mBind(images => maybe(images.web).or(() => maybe(images.print))
+    .map(shown => ({picture: {src: shown.url, ...srcSetOf(images).map(srcSet => ({srcSet})).orElse({})}}))).orElse({}),
   ...artistOf(record).map(artist => artFields.attributed(artist)).orElse({}),
   altText: record.title
 });
