@@ -94,8 +94,8 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
         <Snippet label="HTML" lines={plainFolds[foldType]}/>
       </li>
       <li className="run">
-        <p className="paragraph">Now a rule has to match on whether the {input} is
-          checked. <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
+        <p className="paragraph">Now a rule has to match on whether the {input} is checked. A class is a name an
+          element wears so a rule can pick it out. <Mdn path="Web/CSS/:checked">:checked</Mdn> is a pseudo-class, a selector that picks an element
           by its state: here, a checked {input}. The ~ is
           a <Mdn path="Web/CSS/Subsequent-sibling_combinator">combinator</Mdn>, a symbol between two selectors
           that says how their elements relate; it picks the siblings that come after the element on its left, the
@@ -123,8 +123,7 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
                 in <TabLink to={DemoTopics.zIndex}>React</TabLink>, the library
                 this site’s script is written in, which writes class
                 as <code className="monospaced">className</code> and for
-                as <code className="monospaced">htmlFor</code>. A class is a name an element wears so a rule can
-                pick it out.</p>
+                as <code className="monospaced">htmlFor</code>.</p>
               <Snippet label="TS" lines={sample}/>
             </li>
             <li className="run">
