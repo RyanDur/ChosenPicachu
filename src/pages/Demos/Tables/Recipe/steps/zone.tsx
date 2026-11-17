@@ -30,7 +30,7 @@ export const DeadZone: FC = () =>
         unchanged.</Says>
       <Says>struckPast answers with a Maybe, as the <TabLink to={DemoTopics.charts}>Charts tab</TabLink> explains. It
         holds the column that counts as under the pointer, or nothing while the pointer is still in a dead zone or past
-        the table’s edge.</Says>
+        the table’s far edge.</Says>
       <DeadZoneFigure/>
       <Codes>
         <Snippet label="TS" lines={[
