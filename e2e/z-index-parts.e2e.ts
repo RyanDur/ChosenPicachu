@@ -4,7 +4,7 @@ import {siteFrame, stackingPile, zIndexTab} from './__test_support';
 
 const whyThirdIsOnTop = 'Why Third is on top';
 
-test('a reader follows why Third is on top from the z-index tab to its page, with the pile at its top and the part’s runs below', async ({page}) => {
+test('a reader follows why Third is on top from the z-index tab to its page and finds its pile', async ({page}) => {
   await page.goto('demos/z-index/');
   await siteFrame(page).hydrated();
 
