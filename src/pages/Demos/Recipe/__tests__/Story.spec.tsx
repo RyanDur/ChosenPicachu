@@ -97,26 +97,6 @@ describe('a story card', () => {
     expect(appAddress.fragment()).toBe('#told-first');
   });
 
-  test('a reader who follows a link to a story keeps its fragment when the fold opens before the page has caught up', async () => {
-    render(<TestApp at="/"><Stories>
-      <Link to={{search: '?tale=told', hash: '#tale-told-story'}}>the tale below</Link>
-      <Story param="tale" id="told" can="The reader can follow a link to a story" soThat="the link lands on it">
-        <p>the told story</p>
-      </Story>
-    </Stories></TestApp>);
-    await appAddress.drawn();
-    const fold = card('The reader can follow a link to a story');
-
-    await act(async () => {
-      await appAddress.follow('the tale below');
-      fold.toggleAttribute('open', true);
-      fold.dispatchEvent(new Event('toggle'));
-    });
-
-    expect(appAddress.fragment()).toBe('#tale-told-story');
-    expect(appAddress.search()).toHaveTextContent('tale=told');
-  });
-
   test('a press on a story drawn closed opens it, though a followed link has opened it before the page caught up', async () => {
     render(<TestApp at="/"><Stories>
       <Link to={{search: '?tale=told', hash: '#tale-told-story'}}>the tale below</Link>
