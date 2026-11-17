@@ -1,5 +1,7 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
+import {DemoLink} from '@pages/Demos/DemoLink';
+import {accordionParts} from '@pages/Demos/Accordions';
 import {FC} from 'react';
 import {Snippet, lines, carve} from '../Recipe';
 import {NaturalZIndex} from './NaturalZIndex';
@@ -35,13 +37,13 @@ export const WhyThirdIsOnTop: FC = () => <>
     </li>
     <li className="run">
       <p className="paragraph">Choose a card with the pills above the pile, and the page adds the class raised to
-        it. A class is a name a style sheet’s rules pick out, as the <TabLink to={DemoTopics.accordions}>accordions
-          tab</TabLink> says. A rule is a selector, which
-        names the elements it applies to, and the properties it sets on them. The style sheet gives raised a z-index
-        of 1. A positioned card with a z-index of 1 is painted after every
-        card left at auto, so the raised card lands on top. The others keep their order under it: they are
-        still at auto, and still painted in the order the code lists them. A z-index only shows where cards
-        overlap. Expand the pile, and a raise changes nothing you can see. Collapse it again, and the raised
+        it. A class is a name a style sheet’s rules pick out, as the <DemoLink
+        to={accordionParts.addressOf('a-box-remembers-the-fold')}>accordions tab</DemoLink> says. The <TabLink
+        to={DemoTopics.accordions} heading="fold-choices-heading">accordions tab</TabLink> says what a rule is: a
+        selector and the properties it sets. The style sheet gives raised a z-index of 1. A positioned card with a
+        z-index of 1 is painted after every card left at auto, so the raised card lands on top. The others keep their
+        order under it: they are still at auto, and still painted in the order the code lists them. A z-index only shows
+        where cards overlap. Expand the pile, and a raise changes nothing you can see. Collapse it again, and the raised
         card comes down on top.</p>
       <Snippet label="TS" lines={carve.unit(naturalSource, 'const pileCardClasses =')}/>
       <Snippet label="CSS" lines={carve.unit(zIndexCss, '.raised {')}/>
