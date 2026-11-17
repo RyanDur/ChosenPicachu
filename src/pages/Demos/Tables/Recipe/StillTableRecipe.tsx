@@ -13,6 +13,7 @@ import frameTable from '../Frame/table.html?sample';
 import '../../Recipe/Recipe.css';
 import {Term} from './Term';
 import {elidedHeaders} from './elidedHeaders';
+import {stillStory} from '../still-story';
 
 const dealPlans: Record<World, ReactNode> = {
   react: <>
@@ -122,7 +123,7 @@ const dealCodes: Record<World, ReactNode> = {
 
 const StillStory: FC = () => {
   const {world} = useControls();
-  return <Story param="living" id="still"
+  return <Story param={stillStory.param} id={stillStory.id}
     can="The trader can read the market in a table"
     soThat="the shape is right before anything moves">
     <TheImplementation react="Aggregations" vanilla="Frame/frame.main.ts"/>

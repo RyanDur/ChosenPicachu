@@ -54,6 +54,13 @@ export const pages: readonly SitePage[] = [
     budgeted: true
   },
   {
+    name: 'the still table',
+    path: 'demos/tables/the-still-table/',
+    ready: 'navigation',
+    loaded: page => page.getByRole('region', {name: 'live aggregations'}).getByRole('columnheader', {name: 'trades'}),
+    budgeted: true
+  },
+  {
     name: 'tables in vanilla',
     path: 'demos/tables/?world=vanilla',
     ready: 'navigation',

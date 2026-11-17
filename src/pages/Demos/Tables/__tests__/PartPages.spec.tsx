@@ -3,6 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {aggregations, tablesTab} from '@pages/Demos/Tables/__test_support';
+import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 
 const theNeed = 'Start with the need, and let it pick the element';
 const theNeedsPage = demosAt('tables/the-need-and-its-clues');
@@ -11,6 +12,9 @@ const theSketchsPage = demosAt('tables/the-sketch');
 const unanswered = 'what a design cannot tell you';
 const theSlices = 'Slice the design into stories';
 const theSlicesPage = demosAt('tables/the-slices');
+const theStillTable = 'Build the still table';
+const theStillStory = 'The trader can read the market in a table';
+const theStillTablesPage = demosAt('tables/the-still-table');
 const theStory = 'The trader can watch the live market over lookbacks they arrange';
 
 describe('the tables tab’s parts, each on its own page', () => {
@@ -235,13 +239,15 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titles('The trader can watch the live market over lookbacks they arrange', 3)).toHaveLength(1);
   });
 
-  test('the slices on their page point at their stations on the tables tab, with the build carried', async () => {
+  test('the slices on their page point at the still table’s page and the later stations on the tables tab, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-slices', '?world=vanilla')}/>);
 
     await tablesTab().partPlace();
 
     const station = (at: number) => `${demosAt('tables', '?world=vanilla')}#station-${at}`;
-    expect(demoPage.sliceLinks()).toEqual([station(4), station(5), station(6), station(6), station(6)]);
+    expect(demoPage.sliceLinks()).toEqual([
+      demosAt('tables/the-still-table', '?world=vanilla&living=still'), station(5), station(6), station(6), station(6)
+    ]);
   });
 
   test('the tables tab holds every station the slices on their page point at', async () => {
@@ -256,12 +262,12 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(demoPage.missing(stations)).toEqual([]);
   });
 
-  test('the slices’ page leads back to the sketch’s page and on to the still table on the tables tab, by number and title, with the build carried', async () => {
+  test('the slices’ page leads back to the sketch’s page and on to the still table’s page, by number and title, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-slices', '?world=vanilla')}/>);
 
     expect(await pageFoot.leadsOn('the tables parts')).toEqual([
       ['Previous: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')],
-      ['Next: 4. Build the still table', `${demosAt('tables', '?world=vanilla')}#station-4`]
+      ['Next: 4. Build the still table', demosAt('tables/the-still-table', '?world=vanilla&living=still')]
     ]);
   });
 
@@ -283,5 +289,75 @@ describe('the tables tab’s parts, each on its own page', () => {
     render(<TestApp at={theSlicesPage}/>);
 
     expect(await demoTabs.title(`Demos Tables · ${theSlices}`)).toBeInTheDocument();
+  });
+
+  test('following the still table from the tables tab opens its page with its story open', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    await tablesTab().follow(theStillTable);
+
+    expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(demosAt('tables/the-still-table', '?living=still'));
+    await tablesTab().partPlace();
+    expect(recipeFolds.story(demoPage.part('the still table'), theStillStory)).toHaveAttribute('open');
+  });
+
+  test('the still table’s page shows the live table, then only the still table', async () => {
+    render(<TestApp at={theStillTablesPage}/>);
+
+    await tablesTab().partPlace();
+
+    expect(aggregations.card()).toBeVisible();
+    expect(demoPage.part('the still table')).toBeVisible();
+    expect(tablesTab().titleShown(theStory)).not.toBeInTheDocument();
+    expect(tablesTab().titleShown('The trader can watch the market live, one lookback beside another')).not.toBeInTheDocument();
+  });
+
+  test('the still table’s page links each term it glosses, and each tab it names, to that tab', async () => {
+    render(<TestApp at={theStillTablesPage}/>);
+
+    await tablesTab().partPlace();
+
+    expect(demoPage.linksToTabsIn(demoPage.part('the still table'))).toEqual([
+      ['accordions tab', demosAt('accordions')],
+      ['z-index tab', demosAt('z-index')]
+    ]);
+  });
+
+  test('the still table’s page says its place among the parts', async () => {
+    render(<TestApp at={theStillTablesPage}/>);
+
+    expect(await tablesTab().partPlace()).toHaveTextContent('Tables · part 4 of 5');
+  });
+
+  test('the still table’s page heads the still table once, as its title', async () => {
+    render(<TestApp at={theStillTablesPage}/>);
+
+    await tablesTab().partPlace();
+
+    expect(tablesTab().titles(theStillTable, 2)).toHaveLength(1);
+    expect(tablesTab().titles(theStillTable)).toHaveLength(1);
+  });
+
+  test('the still table’s page leads back to the slices’ page and on to the live table on the tables tab, by number and title, with the build carried', async () => {
+    render(<TestApp at={demosAt('tables/the-still-table', '?world=vanilla')}/>);
+
+    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+      ['Previous: 3. Slice the design into stories', demosAt('tables/the-slices', '?world=vanilla')],
+      ['Next: 5. Make the table live', `${demosAt('tables', '?world=vanilla')}#station-5`]
+    ]);
+  });
+
+  test('the tables tab leads to the still table’s page instead of showing the still table', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    await tablesTab().tutorialLink(theStillTable);
+
+    expect(tablesTab().titleShown(theStillStory)).not.toBeInTheDocument();
+  });
+
+  test('should title the still table’s page with the tab and the part', async () => {
+    render(<TestApp at={theStillTablesPage}/>);
+
+    expect(await demoTabs.title(`Demos Tables · ${theStillTable}`)).toBeInTheDocument();
   });
 });

@@ -38,8 +38,6 @@ describe('the table tutorials', () => {
     await demoPage.findTitle('let’s build this feature');
 
     expect(demoPage.linksToTabs()).toEqual([
-      ['accordions tab', `${Paths.demos}accordions/`],
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['charts tab', `${Paths.demos}charts/`]
     ]);
   });
