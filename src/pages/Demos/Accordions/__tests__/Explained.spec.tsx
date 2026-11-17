@@ -94,12 +94,12 @@ describe('the accordions tab', () => {
 });
 
 describe('the words and the code chosen by type', () => {
-  test('should, with inclusive chosen, link the run on the box to the plain fold’s HTML on GitHub', async () => {
+  test('should, with inclusive chosen, show the plain fold’s HTML beside the run on the box as taken from the exhibit, with no link', async () => {
     render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
     const oldWay = await explanation.part(parts[0]);
 
-    expect(explanation.sourcesBeside(oldWay, /To open and close a fold/)).toEqual(['Plain/fold.html on GitHub']);
+    expect(explanation.sampleCaptionsBeside(oldWay, /To open and close a fold/)).toEqual(['Taken from the exhibit on this page. The rest of the site doesn’t use it.']);
   });
 
   test('should, with exclusive chosen, show a sample beside the run on the box that links no file on GitHub', async () => {
@@ -357,20 +357,28 @@ describe('how the known height works', () => {
   const knownHeightWorks = 'How the known height works';
   const threeParts = /^The fold is the three parts from/;
 
-  test('should link, with inclusive chosen, the fold’s run to the build’s source on GitHub', async () => {
+  test('should link the bar’s shared look, beside the run that names it, to the site’s drawing style sheet on GitHub', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const folded = recipeFolds.story(await explanation.part(parts[0]), knownHeightWorks);
+
+    expect(explanation.sourcesBeside(folded, /The bar looks like the site’s diagrams/)).toEqual(['styles/drawing.css on GitHub']);
+  });
+
+  test('should show, with inclusive chosen, the build’s source beside the fold’s run as taken from the exhibit, with no link', async () => {
     render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
     const folded = recipeFolds.story(await explanation.part(parts[0]), knownHeightWorks);
 
-    expect(explanation.sourcesBeside(folded, threeParts)).toEqual(['Accordions/InclusiveAccordion.tsx on GitHub']);
+    expect(explanation.sampleCaptionsBeside(folded, threeParts)).toEqual(['Taken from the exhibit on this page. The rest of the site doesn’t use it.']);
   });
 
-  test('should link, with exclusive chosen, the fold’s run to the build’s source on GitHub', async () => {
+  test('should show, with exclusive chosen, the build’s source beside the fold’s run as taken from the exhibit, with no link', async () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
     const folded = recipeFolds.story(await explanation.part(parts[0]), knownHeightWorks);
 
-    expect(explanation.sourcesBeside(folded, threeParts)).toEqual(['Accordions/ExclusiveAccordion.tsx on GitHub']);
+    expect(explanation.sampleCaptionsBeside(folded, threeParts)).toEqual(['Taken from the exhibit on this page. The rest of the site doesn’t use it.']);
   });
 });
 

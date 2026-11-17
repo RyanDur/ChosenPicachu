@@ -15,15 +15,15 @@ export const ExclusiveAccordion: FC<AccordionProps> = ({
   <fieldset>
     <legend className="off-screen">folds</legend>
     <ul className="accordion trim">
-      <li className="fold close field-inverse">
+      <li className="fold close drawn-piece">
         <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
-        <label className="info-label field-ink prior-approached" htmlFor="close-radio">Close</label>
+        <label className="info-label prior-approached" htmlFor="close-radio">Close</label>
       </li>
       {folds.map(({heading, story}, id) =>
         <li className="fold" key={heading}>
           <input id={`fold-${id}-radio`} className="info-toggle off-screen" type="radio" name="group"/>
           <label id={`fold-${id}-radio-label`}
-            className="info-label opening-arrow inverse-filled prior-approached corner-after"
+            className="info-label opening-arrow drawn-piece prior-approached corner-after"
             htmlFor={`fold-${id}-radio`}>{heading}</label>
           <div className="info">
             <section className="info-text foot-shadowed focus-ringed" tabIndex={0}

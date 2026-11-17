@@ -29,7 +29,7 @@ type Build = {
 };
 
 const sharedOpenFolds = (source: Sample): Line[] =>
-  carve.elided(carve.between(source, 'const [open, dispatch] = useReducer(', '</OpenFolds.Provider>;'), '<article', '</OpenFolds.Provider>;', '{/* …the folds */}');
+  lines.fromTheExhibit(carve.elided(carve.between(source, 'const [open, dispatch] = useReducer(', '</OpenFolds.Provider>;'), '<article', '</OpenFolds.Provider>;', '{/* …the folds */}'));
 
 const measuredBuilds: Record<FoldType, Build> = {
   inclusive: {Accordion: InclusiveMeasuredAccordion, sample: sharedOpenFolds(inclusiveMeasuredAccordionSource)},
@@ -69,7 +69,7 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
           ends, the script takes the number away, and the panel is auto again. A number left in place goes
           stale: narrow the window, the text wraps onto more lines, and a fixed height cuts it off. The script
           beside this run is the whole script, with no library.</p>
-        <Snippet label="TS" lines={carve.withoutImports(foldSource)}/>
+        <Snippet label="TS" lines={lines.fromTheExhibit(carve.withoutImports(foldSource))}/>
       </li>
       <li className="run">
         <p className="paragraph">The script hands the height to the style sheet as a custom property
@@ -78,7 +78,7 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
           class, <code className="monospaced">sized</code>. A class is a name an element wears so
           a rule can pick it out. While <code className="monospaced">sized</code> is on, a rule reads the
           number.</p>
-        <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
+        <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'))}/>
       </li>
       <li className="run">
         <p className="paragraph">On a press that moves the panel, the script first pins where the slide starts. It
@@ -88,16 +88,16 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
           browser apply the pinned start before it draws. Then it
           takes <code className="monospaced">unmoving</code> off and sets the end, and the
           style sheet slides between the two.</p>
-        <Snippet label="CSS" lines={carve.unit(oldWayMotionCss, '.info-toggle ~ .info-measured.unmoving {')}/>
+        <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(oldWayMotionCss, '.info-toggle ~ .info-measured.unmoving {'))}/>
       </li>
       <li className="run">
         <p className="paragraph">The cost was script. The motion needs it, but whether a fold is open does not:
           the checkbox and the style sheet own that, so if the script fails, a fold still opens and closes, at
           once.</p>
-        <Snippet label="CSS" lines={[
+        <Snippet label="CSS" lines={lines.fromTheExhibit([
           ...carve.unit(oldWayMotionCss, ':is(.reveal, .drawer) & .info-measured {'), lines.blank,
           ...carve.unit(accordionsCss, '.info-toggle:not(:checked) ~ .info-measured {')
-        ]}/>
+        ])}/>
       </li>
       <li className="part-depth">
         <details aria-labelledby="measured-depth">
@@ -118,33 +118,33 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
                 accordion hands that state to every panel inside through a context, and each panel reads from it
                 whether its own fold is open. The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains
                 state and context in full.</p>
-              <Snippet label="TS" lines={[
+              <Snippet label="TS" lines={lines.fromTheExhibit([
                 ...sample, lines.blank,
                 ...carve.unit(openFoldsSource, 'export const openFolds')
-              ]}/>
+              ])}/>
             </li>
             <li className="run">
               <p className="paragraph">A panel keeps state of its own too: whether it is shown and, while it moves,
                 the height the motion starts from, the height it ends at, and whether it has started. It changes
                 that state through a reducer, sending each change with <code className="monospaced">dispatch</code>,
                 as the z-index tab shows.</p>
-              <Snippet label="TS" lines={[
+              <Snippet label="TS" lines={lines.fromTheExhibit([
                 ...carve.unit(panelSource, 'type Motion ='), lines.blank,
                 ...carve.unit(panelSource, 'type Panel ='), lines.blank,
                 ...carve.unit(panelSource, 'type PanelChange ='), lines.blank,
                 ...carve.between(panelSource, 'const open = useOpenFolds()', 'const [{shown, motion}, dispatch] = useReducer(')
-              ]}/>
+              ])}/>
             </li>
             <li className="run">
               <p className="paragraph">A ref is a handle on the element itself. The script uses the panel’s one ref
                 only to measure: the text’s height, the height the panel stands at, and whether the style sheet
                 gives the height a transition at all.</p>
-              <Snippet label="TS" lines={[
+              <Snippet label="TS" lines={lines.fromTheExhibit([
                 ...carve.between(panelSource, 'const panel = useRef<HTMLElement>(null);', 'const panel = useRef<HTMLElement>(null);'), lines.blank,
                 ...carve.unit(panelSource, 'const textHeight'), lines.blank,
                 ...carve.unit(panelSource, 'const standing'), lines.blank,
                 ...carve.unit(panelSource, 'const moves')
-              ]}/>
+              ])}/>
             </li>
             <li className="run">
               <p className="paragraph">The script makes the moves in two layout effects, code React runs after it
@@ -154,13 +154,13 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
                 actions, <code className="monospaced">pressed</code>, <code className="monospaced">pinned</code> and <code className="monospaced">settled</code>,
                 and the reducer, <code className="monospaced">nextPanel</code>, makes the panel’s next state from
                 each. So the script measures the panel and pins its start with no frame showing in between.</p>
-              <Snippet label="TS" lines={[
+              <Snippet label="TS" lines={lines.fromTheExhibit([
                 ...carve.unit(panelSource, 'const motionOnPress'), lines.blank,
                 ...carve.unit(panelSource, 'const panelChange = {'), lines.blank,
                 ...carve.unit(panelSource, 'const nextPanel'), lines.blank,
                 ...carve.between(panelSource, 'useLayoutEffect(() => {\n    const measured', '}, [motion, open]);'), lines.blank,
                 ...carve.unit(panelSource, 'const settled')
-              ]}/>
+              ])}/>
             </li>
             <li className="run">
               <p className="paragraph">The React build hands each height to the style sheet through the
@@ -168,13 +168,13 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
                 property with <code className="monospaced">@property</code>, a rule that tells the browser what kind
                 of value a custom property holds and what it is until something sets it: here a length or auto,
                 starting as auto.</p>
-              <Snippet label="CSS" lines={carve.unit(accordionsCss, '@property --measured-height {')}/>
+              <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '@property --measured-height {'))}/>
             </li>
             <li className="run">
               <p className="paragraph">The React build marks the panel <code className="monospaced">sized</code> as
                 the plain one does. While <code className="monospaced">sized</code> is on, the panel’s height
                 reads <code className="monospaced unbroken">--measured-height</code>.</p>
-              <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-toggle ~ .info-measured.sized {')}/>
+              <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '.info-toggle ~ .info-measured.sized {'))}/>
             </li>
             <li className="run">
               <p className="paragraph">Closing runs the other way: the script sets the open height as the start and
@@ -183,20 +183,20 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
                 no other. By the time it fires, Firefox and Safari have already applied the pressed box’s new style.
                 So the script pins the start first, with <code className="monospaced">unmoving</code>, as the plain
                 script does.</p>
-              <Snippet label="TS" lines={[
+              <Snippet label="TS" lines={lines.fromTheExhibit([
                 ...carve.between(panelSource, "useLayoutEffect(() => {\n    const measured = panel.current;\n    if (motion.kind === 'pinned'", '}, [motion, open]);'), lines.blank,
                 ...carve.unit(panelSource, 'return <section ref={panel}')
-              ]}/>
-              <Snippet label="CSS" lines={carve.unit(oldWayMotionCss, '.info-toggle ~ .info-measured.unmoving {')}/>
+              ])}/>
+              <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(oldWayMotionCss, '.info-toggle ~ .info-measured.unmoving {'))}/>
             </li>
             <li className="run">
               <p className="paragraph">A press while the panel moves
                 keeps <code className="monospaced">sized</code> on and only sets a new end, so the
                 panel turns around from where it is. If that end is where the panel already stands, no motion is
                 left to run, and the script takes the number away at once.</p>
-              <Snippet label="TS" lines={[
+              <Snippet label="TS" lines={lines.fromTheExhibit([
                 ...carve.unit(panelSource, 'const movingTo')
-              ]}/>
+              ])}/>
             </li>
             {foldType === 'exclusive' && <li className="run">
               <p className="paragraph">A radio that loses its check gets no event at all. The change event the
@@ -204,7 +204,7 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
                 item around the radio handles it by dispatching <code className="monospaced">opened</code> with the bar
                 that names its fold. The accordion’s reducer keeps that one fold open and closes the rest, and each
                 panel reads from the context whether its fold is still the open one.</p>
-              <Snippet label="TS" lines={carve.between(exclusiveMeasuredAccordionSource, '<li className="fold" key={heading} onChange={() => dispatch(', '<MeasuredPanel namedBy={barOf(id)}>')}/>
+              <Snippet label="TS" lines={lines.fromTheExhibit(carve.between(exclusiveMeasuredAccordionSource, '<li className="fold" key={heading} onChange={() => dispatch(', '<MeasuredPanel namedBy={barOf(id)}>'))}/>
             </li>}
           </ol>
         </details>
