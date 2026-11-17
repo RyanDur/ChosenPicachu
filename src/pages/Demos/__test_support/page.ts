@@ -13,6 +13,10 @@ const toTabs = (links: HTMLElement[]): string[][] => links
 
 const linksToTabsIn = (holder: HTMLElement): string[][] => toTabs(within(holder).getAllByRole('link'));
 
+const linksToPageIn = (holder: HTMLElement, address: string): string[][] => within(holder).getAllByRole('link')
+  .map(link => [link.textContent, maybe(link.getAttribute('href')).orElse('').split('?')[0]])
+  .filter(([, href]) => href === address);
+
 const linksOffTheRail = (): HTMLElement[] => {
   const rail = screen.getByRole('region', {name: 'pages and feedback'});
   return screen.getAllByRole('link').filter(link => not(rail.contains(link)));
@@ -36,6 +40,7 @@ export const demoPage = {
   unanswered: (name: string): HTMLElement => screen.getByRole('complementary', {name}),
   wholePage: (): HTMLElement => screen.getByRole('main'),
   linksToTabsIn,
+  linksToPageIn,
   linksToTabs: (): string[][] => toTabs(linksOffTheRail()),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   sliceLinks: (): (string | null)[] => within(slices()).getAllByRole('link').map(link => link.getAttribute('href')),

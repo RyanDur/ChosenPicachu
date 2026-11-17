@@ -36,8 +36,27 @@ describe('why Third is on top, on its own page', () => {
     const page = await demoTabs.arrivedOn('Z-index');
 
     expect(demoPage.linksToTabsIn(page)).toEqual([
-      ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
+    ]);
+  });
+
+  test('should send its gloss of class to the accordions part that defines it', async () => {
+    render(<TestApp at={demosAt(thirdOnTop)}/>);
+
+    const page = await demoTabs.arrivedOn('Z-index');
+
+    expect(demoPage.linksToPageIn(page, demosAt('accordions/a-box-remembers-the-fold'))).toEqual([
+      ['accordions tab', demosAt('accordions/a-box-remembers-the-fold')]
+    ]);
+  });
+
+  test('should send its gloss of rule to the accordions tab’s fold choices, where a rule is defined', async () => {
+    render(<TestApp at={demosAt(thirdOnTop)}/>);
+
+    const page = await demoTabs.arrivedOn('Z-index');
+
+    expect(demoPage.linksToPageIn(page, `${demosAt('accordions')}#fold-choices-heading`)).toEqual([
+      ['accordions tab', `${demosAt('accordions')}#fold-choices-heading`]
     ]);
   });
 

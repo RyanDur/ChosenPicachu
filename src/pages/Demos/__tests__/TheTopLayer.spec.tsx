@@ -160,11 +160,12 @@ describe('the banner tutorial’s second story', () => {
 });
 
 describe('the z-index tab’s introduction', () => {
-  test('should say what it assumes from earlier tabs, linking each tab it names', async () => {
+  test('should say what it assumes from earlier tabs, linking each tab it names, and class to the part that defines it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
     expect(await demoTabs.assumedLinks('Z-index')).toEqual([
-      ['accordions tab', `${Paths.demos}accordions/`]
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['a class', demosAt('accordions/a-box-remembers-the-fold')]
     ]);
   });
 });
