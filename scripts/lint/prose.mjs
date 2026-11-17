@@ -95,27 +95,52 @@ const breaksBetweenWords = {
   }
 };
 
-const american = {
-  aluminium: 'aluminum', amongst: 'among', analogue: 'analog', analyse: 'analyze', analysed: 'analyzed',
-  apologise: 'apologize', artefact: 'artifact', artefacts: 'artifacts', behaviour: 'behavior', behaviours: 'behaviors',
-  cancelled: 'canceled', cancelling: 'canceling', catalogue: 'catalog', centre: 'center', centred: 'centered',
-  centres: 'centers', cheque: 'check', colour: 'color', coloured: 'colored', colours: 'colors', cosy: 'cozy',
-  customise: 'customize', defence: 'defense', emphasise: 'emphasize', enrol: 'enroll', favour: 'favor',
-  favourite: 'favorite', finalise: 'finalize', flavour: 'flavor', focussed: 'focused', fulfil: 'fulfill',
-  fuelled: 'fueled', grey: 'gray', honour: 'honor', initialise: 'initialize', judgement: 'judgment',
-  labelled: 'labeled', labelling: 'labeling', labour: 'labor', levelled: 'leveled', licence: 'license',
-  litre: 'liter', maximise: 'maximize', metre: 'meter', minimise: 'minimize', modelled: 'modeled',
-  modelling: 'modeling', mould: 'mold', neighbour: 'neighbor', neighbours: 'neighbors', normalise: 'normalize',
-  offence: 'offense', optimisation: 'optimization', optimise: 'optimize', optimised: 'optimized',
-  organisation: 'organization', organise: 'organize', organised: 'organized', practise: 'practice',
-  prioritise: 'prioritize', programme: 'program', realise: 'realize', realised: 'realized', recognise: 'recognize',
-  recognised: 'recognized', sceptical: 'skeptical', serialise: 'serialize', signalled: 'signaled',
-  summarise: 'summarize', theatre: 'theater', travelled: 'traveled', travelling: 'traveling', tyre: 'tire',
-  utilise: 'utilize', visualise: 'visualize', whilst: 'while'
+const roots = {
+  aluminium: 'aluminum', amongst: 'among', analogue: 'analog', analyse: 'analyze', apologise: 'apologize',
+  artefact: 'artifact', behaviour: 'behavior', catalogue: 'catalog', centre: 'center', cheque: 'check',
+  colour: 'color', cosy: 'cozy', customise: 'customize', defence: 'defense', emphasise: 'emphasize', enrol: 'enroll',
+  favour: 'favor', finalise: 'finalize', flavour: 'flavor', focussed: 'focused', fulfil: 'fulfill', grey: 'gray',
+  honour: 'honor', initialise: 'initialize', judgement: 'judgment', labour: 'labor', licence: 'license',
+  litre: 'liter', maximise: 'maximize', metre: 'meter', minimise: 'minimize', mould: 'mold', neighbour: 'neighbor',
+  normalise: 'normalize', offence: 'offense', optimise: 'optimize', organise: 'organize', practise: 'practice',
+  prioritise: 'prioritize', programme: 'program', realise: 'realize', recognise: 'recognize', sceptical: 'skeptical',
+  serialise: 'serialize', summarise: 'summarize', theatre: 'theater', tyre: 'tire', utilise: 'utilize',
+  visualise: 'visualize', whilst: 'while'
 };
-const quoting = new Set(['Quotation', 'blockquote', 'q']);
+const doubledL = ['cancel', 'channel', 'dial', 'duel', 'fuel', 'funnel', 'label', 'level', 'model', 'quarrel', 'signal',
+  'total', 'travel', 'tunnel'];
+
+/**
+ * @param {string} british
+ * @param {string} american
+ * @param {[string, string][]} endings
+ * @returns {[string, string][]}
+ */
+const ending = (british, american, endings) => endings.map(([ours, theirs]) => [british + ours, american + theirs]);
+const same = (/** @type {string[]} */ ...endings) => endings.map(end => /** @type {[string, string]} */ ([end, end]));
+
+/**
+ * A root's British forms beside its American ones: initialise gives initialised and initialisation,
+ * colour gives coloured and colourful, centre gives centred.
+ * @param {[string, string]} root
+ * @returns {[string, string][]}
+ */
+const family = ([british, american]) => {
+  if (british.endsWith('ise') && american.endsWith('ize'))
+    return ending(british.slice(0, -1), american.slice(0, -1), same('e', 'ed', 'es', 'ing', 'er', 'ers', 'ation', 'ations'));
+  if (british.endsWith('re') && american.endsWith('er'))
+    return ending(british.slice(0, -2), american.slice(0, -2), [['re', 'er'], ['res', 'ers'], ['red', 'ered']]);
+  return ending(british, american, same('', 's', 'ed', 'ing', 'er', 'ish', 'ful', 'less', 'able'));
+};
+const american = Object.fromEntries([
+  ...Object.entries(roots).flatMap(family),
+  ...doubledL.flatMap(root => ending(root, root, [['led', 'ed'], ['ling', 'ing'], ['ler', 'er'], ['lers', 'ers']]))
+]);
+const quoting = new Set(['Quotation', 'Attribution', 'blockquote', 'q', 'cite']);
 const wordsIn = /[A-Z]?[a-z]+|[A-Z]+(?![a-z])/g;
-const quotedWords = /“[^”]*”/g;
+const curlyQuoted = /“[^”]*”|‘[^‘’]*(?:’[a-z][^‘’]*)*’(?![a-z])/gi;
+const straightQuoted = /"[^"\n]*"/g;
+const address = /\bhttps?:\/\/[^\s"'`<>)]+/g;
 const ariaLabelledBy = /labelled-?by/gi;
 
 /**
@@ -126,39 +151,51 @@ const quoted = node => has(node)
   && (node.type === 'JSXElement' && quoting.has(node.openingElement.name.name) || quoted(node.parent));
 
 /**
- * A word spelled the British way, outside a quotation, which keeps its source's spelling,
- * and outside ARIA's labelledby.
+ * @param {string} text
+ * @param {RegExp} pattern
+ */
+const blank = (text, pattern) => text.replace(pattern, found => ' '.repeat(found.length));
+
+/**
+ * A word spelled the British way, outside a quotation, which keeps its source's spelling, outside an address,
+ * which can't be respelled, and outside ARIA's labelledby. A curly quotation is read across the whole file,
+ * so one that holds markup or a placeholder still counts.
  */
 /** @type {import('eslint').Rule.RuleModule} */
 const americanSpelling = {
   meta: {type: 'suggestion', schema: [], messages: {british: 'spell it the American way: {{american}}, not {{british}}'}},
   create(context) {
+    const source = context.sourceCode.text;
+    const quotations = [...source.matchAll(curlyQuoted)].map(found => [found.index, found.index + found[0].length]);
+    const inQuotation = (/** @type {number} */ at) => quotations.some(([from, to]) => from <= at && at < to);
     /**
      * @param {object} node
-     * @param {string} text
+     * @param {[number, number]} range
      */
-    const check = (node, text) => {
-      const ours = text.replace(quotedWords, '').replace(ariaLabelledBy, '');
-      [...new Set(maybe(ours.match(wordsIn)).orElse([]).map(word => word.toLowerCase()))]
+    const check = (node, [from, to]) => {
+      const text = [straightQuoted, address, ariaLabelledBy].reduce(blank, source.slice(from, to));
+      [...new Set([...text.matchAll(wordsIn)]
+        .filter(found => not(inQuotation(from + found.index)))
+        .map(found => found[0].toLowerCase()))]
         .filter(word => Object.hasOwn(american, word))
         .forEach(british => context.report({node, messageId: 'british', data: {british, american: american[british]}}));
     };
     /**
      * @param {any} node
-     * @param {string} text
+     * @param {[number, number]} range
      */
-    const unlessQuoted = (node, text) => {
-      if (not(quoted(node))) check(node, text);
+    const unlessQuoted = (node, range) => {
+      if (not(quoted(node))) check(node, range);
     };
     return {
-      Program: () => context.sourceCode.getAllComments().forEach(comment => check(comment, comment.value)),
-      Identifier: node => check(node, node.name),
-      JSXIdentifier: node => check(node, node.name),
-      JSXText: node => unlessQuoted(node, node.value),
+      Program: () => context.sourceCode.getAllComments().forEach(comment => check(comment, comment.range)),
+      Identifier: node => check(node, node.range),
+      JSXIdentifier: node => check(node, node.range),
+      JSXText: node => unlessQuoted(node, node.range),
       Literal: node => {
-        if (typeof node.value === 'string') unlessQuoted(node, node.value);
+        if (typeof node.value === 'string') unlessQuoted(node, [node.range[0] + 1, node.range[1] - 1]);
       },
-      TemplateElement: node => unlessQuoted(node, maybe(node.value.cooked).orElse(''))
+      TemplateElement: node => unlessQuoted(node, node.range)
     };
   }
 };
