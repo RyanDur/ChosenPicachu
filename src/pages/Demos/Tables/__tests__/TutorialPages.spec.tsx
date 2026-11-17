@@ -9,7 +9,7 @@ describe('the table tutorials, each on its own page', () => {
   test('following a tutorial from the tables tab opens that tutorial’s page', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    await tablesTab().openTutorial('Sort menu');
+    await tablesTab().follow('Sort menu');
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(demosAt('tables/menu'));
     expect(await tablesTab().recipe('sort menu')).toBeVisible();
@@ -91,7 +91,7 @@ describe('the table tutorials, each on its own page', () => {
   test('the build chosen on the tables tab carries into the tutorial it opens', async () => {
     render(<TestApp at={demosAt('tables', '?world=vanilla')}/>);
 
-    await tablesTab().openTutorial('Drag resize');
+    await tablesTab().follow('Drag resize');
 
     expect(await appAddress.movedOnFrom(demosAt('tables', '?world=vanilla'))).toBe(demosAt('tables/resize', '?world=vanilla'));
   });
