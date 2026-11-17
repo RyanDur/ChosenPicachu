@@ -4,7 +4,7 @@ import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {DialGroup, FoldType, useControls} from '../Controls';
 import {carve, Line, lines, Mdn, Snippet} from '../Recipe';
-import {AccordionProps, Fold} from './accordion-props';
+import {Fold} from './accordion-props';
 import {ExclusiveAccordion} from './ExclusiveAccordion';
 import {InclusiveAccordion} from './InclusiveAccordion';
 import {FoldMotionDial} from './FoldMotionDial';
@@ -21,6 +21,7 @@ import placementCss from '../../../styles/placement.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
 import drawingCss from '../../../styles/drawing.css?sample';
 import '../Runs.css';
+import {Build} from './build';
 import './PartDepth.css';
 
 const foldOf = (input: 'checkbox' | 'radio', typed: string): Line[] => [
@@ -38,11 +39,6 @@ const foldOf = (input: 'checkbox' | 'radio', typed: string): Line[] => [
 const plainFolds: Record<FoldType, Line[]> = {
   inclusive: foldOf('checkbox', 'type="checkbox"'),
   exclusive: foldOf('radio', 'type="radio" name="group"')
-};
-
-type Build = {
-  readonly Accordion: FC<AccordionProps>;
-  readonly sample: Line[];
 };
 
 const knownHeightBuilds: Record<FoldType, Build> = {
