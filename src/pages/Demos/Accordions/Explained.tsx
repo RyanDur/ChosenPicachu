@@ -122,7 +122,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         alone.</p>
     </header>
     <section aria-labelledby="html-alone-heading" className="accordion-part snapping">
-      <h2 id="html-alone-heading" className="title bold">An accordion in HTML alone</h2>
+      <h2 id="html-alone-heading" className="title bold">{accordionParts.titleOf('html-alone-heading')}</h2>
       <ol className={looks.runs}>
         <li className="run">
           <HtmlAlone/>
@@ -172,8 +172,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h2 id="old-way-heading" className="title bold">How we used to build a fold</h2>
       <section className={looks.runs} aria-labelledby="remembers-heading">
-        <h3 id="remembers-heading" className="run-title sub-title bold">A box remembers the fold, and a rule reads
-          it</h3>
+        <h3 id="remembers-heading" className="run-title sub-title bold">{accordionParts.titleOf('remembers-heading')}</h3>
         <ol className="runs">
           <li className="run">
             {foldType === 'inclusive'
@@ -211,7 +210,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
         </ol>
       </section>
       <section className={toldRun} aria-labelledby="max-height-guess-heading">
-        <h3 id="max-height-guess-heading" className="run-title sub-title bold">The max-height guess</h3>
+        <h3 id="max-height-guess-heading" className="run-title sub-title bold">{accordionParts.titleOf('max-height-guess-heading')}</h3>
         <p className="paragraph">Before a known height, most of us slid a fold open with a guess. A transition is CSS
           moving a property from its old value to its new one over a set time. It can move a height to a number but not
           to auto, the height the text needs, so we moved the
@@ -438,7 +437,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
       </ol>
     </section>
     <section aria-labelledby="platform-way-heading" className="accordion-part">
-      <h2 id="platform-way-heading" className="title bold">What the platform gives now</h2>
+      <h2 id="platform-way-heading" className="title bold">{accordionParts.titleOf('platform-way-heading')}</h2>
       <Platform className={exhibitMoving} folds={foldLists.platform[foldType]}/>
       <ol className={looks.runs}>
         <li className="run">
@@ -535,7 +534,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
       </ol>
     </section>
     <section aria-labelledby="motion-heading" className="accordion-part">
-      <h2 id="motion-heading" className="title bold">How a sliding fold moves</h2>
+      <h2 id="motion-heading" className="title bold">{accordionParts.titleOf('motion-heading')}</h2>
       <ol className={looks.runs}>
         <li className="run">
           <p className="paragraph">Every fold on this tab that slides moves by transition, never by animation, because a
