@@ -45,9 +45,9 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
   const {Accordion: Measured, sample} = measuredBuilds[foldType];
   return <>
     <p className="paragraph">This part builds on two before it on the accordions tab: “<TabLink
-      to={DemoTopics.accordions} at="remembers-heading">{accordionParts.titleOf('remembers-heading')}</TabLink>”, for the
+      to={DemoTopics.accordions} heading="remembers-heading">{accordionParts.titleOf('remembers-heading')}</TabLink>”, for the
       checkbox and its label, and “<TabLink to={DemoTopics.accordions}
-      at="max-height-guess-heading">{accordionParts.titleOf('max-height-guess-heading')}</TabLink>”, which this part
+      heading="max-height-guess-heading">{accordionParts.titleOf('max-height-guess-heading')}</TabLink>”, which this part
       answers.</p>
     <figure className={looks.exhibit}>
       <PlainFold/>
