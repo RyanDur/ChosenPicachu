@@ -1,6 +1,5 @@
-import {TabLink} from '@pages/Demos/TabLink';
+import {ClassGloss} from '@pages/Demos/Accordions';
 import {PartLink} from '@pages/Demos/ZIndexDemo';
-import {DemoTopics} from '@pages/Demos';
 import {FC, ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, DrawnStory, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
@@ -18,12 +17,11 @@ import {livingStories} from '../living-stories';
 
 const dealPlans: Record<World, ReactNode> = {
   react: <>
-    <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style sheet’s
-      rules pick out. The columns are declared once, each with a name and a class; how wide they open is CSS. You could
-      let the browser size the columns by their content, but a live table would never hold still: a column sized by its
-      content widens with a longer number and moves every column beside it. Each time, the browser redoes its layout,
-      the work of deciding every box’s size and place. And you could carry widths in the data, but they are layout, not
-      data. So I deal the opening widths from the page’s style sheet.
+    <Says><ClassGloss/> The columns are declared once, each with a name and a class; how wide they open is CSS. You
+      could let the browser size the columns by their content, but a live table would never hold still: a column sized
+      by its content widens with a longer number and moves every column beside it. Each time, the browser redoes its
+      layout, the work of deciding every box’s size and place. And you could carry widths in the data, but they are
+      layout, not data. So I deal the opening widths from the page’s style sheet.
       With <Mdn path="Web/CSS/table-layout">table-layout</Mdn>: fixed the header widths govern their whole columns, so
       the table always fills its container and the columns hold still while the values change.</Says>
     <Says>No JavaScript knows these widths, because nothing needs the size until you touch something. The first
@@ -31,8 +29,7 @@ const dealPlans: Record<World, ReactNode> = {
       the <Term word="ledger">ledger</Term> from them; the drag measures them at the lift. A value that changes at
       runtime is state, and until then nothing has changed.</Says>
   </>,
-  vanilla: <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
-    sheet’s rules pick out. The columns are declared once, each a header cell with a name and a class; how wide they
+  vanilla: <Says><ClassGloss/> The columns are declared once, each a header cell with a name and a class; how wide they
     open is CSS. You could let the browser size the columns by their content, but a live table would never hold still: a
     column sized by its content widens with a longer number and moves every column beside it. Each time, the browser
     redoes its layout, the work of deciding every box’s size and place. And you could carry widths in the markup, but

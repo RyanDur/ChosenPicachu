@@ -332,10 +332,11 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can watch the price move, live');
     };
 
-    test('should link where it names the combinator to the accordions part that explains it, leaving the chart’s story behind', async () => {
+    test('should link where it glosses class and where it names the combinator to the accordions part that teaches both, leaving the chart’s story behind', async () => {
       await priceStory();
+      const remembersTheFold = demosAt('accordions/a-box-remembers-the-fold');
 
-      expect(demoPage.signpost('A box remembers the fold, and a rule reads it')).toHaveAttribute('href', demosAt('accordions/a-box-remembers-the-fold'));
+      expect(demoPage.signpostAddresses('A box remembers the fold, and a rule reads it')).toEqual([remembersTheFold, remembersTheFold]);
     });
 
     test('should head each step with what happens', async () => {
@@ -909,7 +910,6 @@ describe('the links to other tabs', () => {
       ['accordions tab', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`],
-      ['accordions tab', `${Paths.demos}accordions/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`]
     ]);
   });
@@ -934,7 +934,6 @@ describe('the links to other tabs', () => {
 
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
   });
@@ -945,7 +944,6 @@ describe('the links to other tabs', () => {
     await feedIsSubscribed(feed);
 
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
-      ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
@@ -959,9 +957,46 @@ describe('the links to other tabs', () => {
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
       ['accordions tab', `${Paths.demos}accordions/`],
       ['Maybe', `${Paths.demos}charts/`],
-      ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
+  });
+
+  test('should gloss class with the accordions part that teaches it, on the price chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(demoPage.linksToPageIn(demoPage.wholePage(), `${Paths.demos}accordions/a-box-remembers-the-fold/`))
+      .toContainEqual(['A box remembers the fold, and a rule reads it', `${Paths.demos}accordions/a-box-remembers-the-fold/`]);
+  });
+
+  test('should gloss class with the accordions part that teaches it, on the candles chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(demoPage.linksToPageIn(demoPage.wholePage(), `${Paths.demos}accordions/a-box-remembers-the-fold/`))
+      .toContainEqual(['A box remembers the fold, and a rule reads it', `${Paths.demos}accordions/a-box-remembers-the-fold/`]);
+  });
+
+  test('should gloss class with the accordions part that teaches it, on the pressure chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('pressure')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(demoPage.linksToPageIn(demoPage.wholePage(), `${Paths.demos}accordions/a-box-remembers-the-fold/`))
+      .toContainEqual(['A box remembers the fold, and a rule reads it', `${Paths.demos}accordions/a-box-remembers-the-fold/`]);
+  });
+
+  test('should gloss class with the accordions part that teaches it, on the tab', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    const tab = await demoTabs.arrivedOn('Charts');
+
+    expect(demoPage.linksToPageIn(tab, `${Paths.demos}accordions/a-box-remembers-the-fold/`))
+      .toContainEqual(['A box remembers the fold, and a rule reads it', `${Paths.demos}accordions/a-box-remembers-the-fold/`]);
   });
 
   test('should cite the z-index part that teaches a user story, on a chart’s page', async () => {

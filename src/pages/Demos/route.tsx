@@ -9,7 +9,7 @@ import {demoTab} from './demo-tab';
 import {DemosPage} from './DemosPage';
 import {Trading} from './Market/Trading';
 import {tableParts, tableTutorials} from './Tables';
-import {accordionParts} from './Accordions';
+import {accordionParts} from './Accordions/part-pages';
 import {zIndexParts} from './ZIndexDemo/part-pages';
 
 type ShownDemo = {topic: DemoTopics; title: string; listed: Listing};

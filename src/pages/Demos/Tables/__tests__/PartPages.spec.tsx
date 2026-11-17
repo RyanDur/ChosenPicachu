@@ -328,14 +328,22 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titleShown(theFlowStory)).not.toBeInTheDocument();
   });
 
-  test('the still table’s page links each term it glosses, and each tab it names, to that tab', async () => {
+  test('the still table’s page glosses class with the accordions part that teaches it, in React', async () => {
     render(<TestApp at={theStillTablesPage}/>);
 
     await tablesTab().place();
 
-    expect(demoPage.linksToTabsIn(demoPage.part(theStillTable))).toEqual([
-      ['accordions tab', demosAt('accordions')]
-    ]);
+    expect(demoPage.linksToPageIn(demoPage.part(theStillTable), demosAt('accordions/a-box-remembers-the-fold')))
+      .toEqual([['A box remembers the fold, and a rule reads it', demosAt('accordions/a-box-remembers-the-fold')]]);
+  });
+
+  test('the still table’s page glosses class with the accordions part that teaches it, in vanilla', async () => {
+    render(<TestApp at={demosAt('tables/the-still-table', '?world=vanilla')}/>);
+
+    await tablesTab().place();
+
+    expect(demoPage.linksToPageIn(demoPage.part(theStillTable), demosAt('accordions/a-box-remembers-the-fold')))
+      .toEqual([['A box remembers the fold, and a rule reads it', demosAt('accordions/a-box-remembers-the-fold')]]);
   });
 
   test('the still table’s page cites the z-index part that defines a component', async () => {
