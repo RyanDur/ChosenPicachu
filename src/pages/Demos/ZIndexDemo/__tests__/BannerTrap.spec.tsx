@@ -2,7 +2,7 @@ import {render, waitFor} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {demoPage, demosAt} from '@pages/Demos/__test_support';
-import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {explanation, recipeFolds, recipeSteps} from '@pages/Demos/Recipe/__test_support';
 import {bannerExhibit, exhibit, oldBanner, wayLabeled, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 describe('the banner exhibit', () => {
@@ -77,5 +77,13 @@ describe('why a fixed banner still loses', () => {
 
     const story = recipeFolds.story(document.body, 'The user sees the news over the page');
     await waitFor(() => expect(recipeFolds.itemOf(story)).toHaveFocus());
+  });
+});
+
+describe('the gap step, with the stack growing sideways', () => {
+  test('should keep the linked selector apart from the word after it', async () => {
+    render(<TestApp at={demosAt('z-index', '?stack=left')}/>);
+
+    expect(await recipeSteps.findWords('Open a gap in the stack first')).toHaveTextContent('the rule’s selector that matches');
   });
 });

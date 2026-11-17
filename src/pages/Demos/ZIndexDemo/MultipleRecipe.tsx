@@ -27,8 +27,8 @@ const axisFact: Record<Axis, ReactNode> = {
     the <code className="monospaced">grid-template-rows</code> rule
     once for the downward and upward stacks, and the <code className="monospaced">grid-template-columns</code> rule once
     for the two sideways stacks.</>,
-  sideways: <><code className="monospaced">:where(.stack-left, .stack-right)</code> is the part of the rule’s <WhyThirdIsOnTopLink>selector</WhyThirdIsOnTopLink>
-    that matches the panel with either class, and the rule applies to each banner in it. So I write
+  sideways: <><code className="monospaced">:where(.stack-left, .stack-right)</code> is the part of the rule’s <WhyThirdIsOnTopLink>selector</WhyThirdIsOnTopLink> that
+    matches the panel with either class, and the rule applies to each banner in it. So I write
     the <code className="monospaced">grid-template-columns</code> rule once for the leftward and rightward stacks, and
     the <code className="monospaced">grid-template-rows</code> rule once for the two vertical stacks.</>
 };
