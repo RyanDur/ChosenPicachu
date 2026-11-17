@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Snippet, lines, carve} from '../Recipe';
+import {carve, lines, Snippet} from '../Recipe';
 import {TrappedMenu} from './TrappedMenu';
 import {ANumberInsideALayer} from './ANumberInsideALayer';
 import {Where9999IsCompared} from './Where9999IsCompared';
@@ -18,7 +18,7 @@ export const MenuExplained: FC = () =>
           opens under card two. Its top shows in the gap between the cards, and its bottom shows below card two.
           Move through it with the arrow keys. The choice in focus is the one the keys go to, and it moves where you
           cannot see it, under card two. The menu works. It is drawn in the wrong place.</p>
-        <Snippet label="CSS" lines={lines.written([
+        <Snippet label="CSS" lines={lines.fromTheExhibit([
           ...carve.unit(zIndexCss, '.sort-choices {'), lines.blank,
           ...carve.unit(zIndexCss, '.old-way-card {'), lines.blank,
           ...carve.unit(zIndexCss, '.positioned {'), lines.blank,
@@ -47,7 +47,7 @@ export const MenuExplained: FC = () =>
           but at auto it forms no stacking context, so the list is not kept inside the card’s layer. It joins the
           context the tab’s content forms, where card two is, and there 9999 is the larger number. With the box checked
           again, the card forms its layer again, with the list inside it.</p>
-        <Snippet label="HTML" lines={lines.written([
+        <Snippet label="HTML" lines={lines.fromTheExhibit([
           ...carve.between(trappedSource, "<li className={classNames('old-way-card", '</label>')
         ])}/>
       </li>

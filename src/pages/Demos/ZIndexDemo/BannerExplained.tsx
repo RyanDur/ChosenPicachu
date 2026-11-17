@@ -1,10 +1,9 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsOnceHydrated} from '@navigation/search-params';
-import {Snippet, lines, carve} from '../Recipe';
+import {carve, lines, Snippet, storyKeys} from '../Recipe';
 import {BannerTrap} from './BannerTrap';
 import {partHeadings} from './part-headings';
-import {storyKeys} from '../Recipe';
 import {topLayerStory} from './top-layer-story';
 import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@banners/Banners.tsx?sample';
@@ -24,7 +23,7 @@ export const BannerExplained: FC = () => {
           and card one forms a stacking context. So as the page scrolls, plain text passes under the banner, but card
           two, later in the code with its own z-index of 1, passes over it. It is the old menu again, at the window’s
           edge.</p>
-        <Snippet label="CSS" lines={lines.written([
+        <Snippet label="CSS" lines={lines.fromTheExhibit([
           ...carve.unit(zIndexCss, '.old-banner {'), lines.blank,
           ...carve.unit(zIndexCss, '.forms-context {')
         ])}/>

@@ -15,4 +15,5 @@ export type Line = {
   text: string;
   dim?: boolean;
   from?: {file: CodeFile; line: number};
+  exhibit?: boolean;
 };
