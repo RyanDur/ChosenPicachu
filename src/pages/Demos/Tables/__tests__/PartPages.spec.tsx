@@ -298,7 +298,15 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(demosAt('tables/the-still-table', '?living=still'));
     await tablesTab().partPlace();
-    expect(recipeFolds.story(demoPage.part('the still table'), theStillStory)).toHaveAttribute('open');
+    expect(recipeFolds.story(demoPage.part(theStillTable), theStillStory)).toHaveAttribute('open');
+  });
+
+  test('the still table’s page names its section by its title', async () => {
+    render(<TestApp at={theStillTablesPage}/>);
+
+    await tablesTab().partPlace();
+
+    expect(demoPage.part(theStillTable)).toBeVisible();
   });
 
   test('the still table’s page shows the live table, then only the still table', async () => {
@@ -307,7 +315,7 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().partPlace();
 
     expect(aggregations.card()).toBeVisible();
-    expect(demoPage.part('the still table')).toBeVisible();
+    expect(demoPage.part(theStillTable)).toBeVisible();
     expect(tablesTab().titleShown(theStory)).not.toBeInTheDocument();
     expect(tablesTab().titleShown('The trader can watch the market live, one lookback beside another')).not.toBeInTheDocument();
   });
@@ -317,7 +325,7 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     await tablesTab().partPlace();
 
-    expect(demoPage.linksToTabsIn(demoPage.part('the still table'))).toEqual([
+    expect(demoPage.linksToTabsIn(demoPage.part(theStillTable))).toEqual([
       ['accordions tab', demosAt('accordions')],
       ['z-index tab', demosAt('z-index')]
     ]);
