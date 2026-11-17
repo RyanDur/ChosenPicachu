@@ -15,6 +15,7 @@ tester.run('breaks-between-words', prose.rules['breaks-between-words'], {
   valid: [
     {name: 'should accept prose that breaks between two words', code: 'const said = <p>\n  read the record\n  first, then <a href="/">the rest</a>\n</p>;'},
     {name: 'should accept a word beside a self-closing element, which shows no words of its own', code: 'const said = <label>\n  <input type="checkbox"/>\n  Card one has z-index: 1\n</label>;'},
+    {name: 'should accept a word ending the line before a self-closing element', code: 'const header = <th>\n  trades\n  <SortMenu/>\n</th>;'},
     {name: 'should accept punctuation that starts the line after an element', code: 'const said = <p>\n  read the <a href="/">record</a>\n  , then the rest\n</p>;'},
     {name: 'should accept a quotation mark that ends the line before an element', code: 'const said = <p>\n  read “\n  <a href="/">the record</a>”\n</p>;'},
     {name: 'should accept a space held mid-line', code: 'const said = <p>\n  read the{\' \'}<a href="/">record</a>\n</p>;'},
