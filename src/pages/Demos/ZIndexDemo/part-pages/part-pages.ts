@@ -1,7 +1,7 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
-import {partHeadings} from './part-headings';
+import {partHeadings} from '../part-headings';
 
 export type ZIndexPart = keyof typeof names['z-index'];
 
