@@ -1,7 +1,6 @@
+import {DemoLink} from '@pages/Demos/DemoLink';
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
-import {Link} from 'react-router';
-import {useSearchParamsObject} from '@navigation/search-params';
 import {classNames} from '@components';
 import {DemoTopics} from '@pages/Demos';
 import {DialGroup, FoldType, useControls} from '../Controls';
@@ -47,7 +46,6 @@ import './Explained.css';
 import './PartDepth.css';
 
 export type FoldLists = {
-  measured: Record<FoldType, Fold[]>;
   known: Record<FoldType, Fold[]>;
   platform: Record<FoldType, Fold[]>;
 };
@@ -104,7 +102,6 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
   const platform = platformBuilds[foldType];
   const {Accordion: KnownHeight} = knownHeight;
   const {Accordion: Platform} = platform;
-  const {searchFromShown} = useSearchParamsObject({});
   return <>
     <header className="tab-introduction">
       <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
@@ -235,7 +232,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
       </section>
       <section className="measured-part" aria-labelledby="measured-heading">
         <h3 id="measured-heading" className="sub-title bold">
-          <Link className="signpost" to={`${accordionParts.addressOf(measuredPart)}${searchFromShown({})}`}>{measuredTold.name}</Link>
+          <DemoLink to={accordionParts.addressOf(measuredPart)}>{measuredTold.name}</DemoLink>
         </h3>
         <p className="paragraph">{measuredTold.says}</p>
         <p className="caption muted-ink">
