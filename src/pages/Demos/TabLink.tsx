@@ -3,7 +3,6 @@ import {DemoTopics} from '@pages/Demos/demo-topics';
 import {demoTab} from '@pages/Demos/demo-tab';
 import {DemoLink} from '@pages/Demos/DemoLink';
 
-type Props = PropsWithChildren<{to: DemoTopics; heading?: string}>;
+type Props = PropsWithChildren<{to: DemoTopics; heading?: string; rel?: string; className?: string}>;
 
-export const TabLink: FC<Props> = ({to, heading, children}) =>
-  <DemoLink to={demoTab.address(to)} heading={heading}>{children}</DemoLink>;
+export const TabLink: FC<Props> = ({to, ...link}) => <DemoLink to={demoTab.address(to)} {...link}/>;

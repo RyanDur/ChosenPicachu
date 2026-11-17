@@ -23,3 +23,14 @@ test('the measured height’s page builds its fold with the fold type chosen on 
   await expect(page).toHaveURL(/demos\/accordions\/the-measured-height\/\?type=inclusive&style=drawer$/);
   await expect(page.getByRole('heading', {name: 'Accordion using checkboxes and a measured height', exact: true})).toBeVisible();
 });
+
+test('a reader follows the measured height’s foot on to the next part, and lands on its heading on the tab with the dials kept', async ({page}) => {
+  await page.goto('demos/accordions/the-measured-height/?type=exclusive&style=drawer');
+  await siteFrame(page).hydrated();
+
+  await page.getByRole('navigation', {name: 'the accordions parts'})
+    .getByRole('link', {name: 'Next: 5. What the platform gives now'}).click();
+
+  await expect(page).toHaveURL(/demos\/accordions\/\?type=exclusive&style=drawer#platform-way-heading$/);
+  await expect(page.getByRole('group', {name: 'fold type'}).getByRole('radio', {name: 'Exclusive'})).toBeChecked();
+});
