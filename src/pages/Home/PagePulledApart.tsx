@@ -46,14 +46,14 @@ const clickSpot: Spot = {u: 33, v: 57};
 
 const regionLettering: readonly Lettered[] = [
   {word: 'header', u: 8, v: 18},
-  {word: 'section', u: -2, v: 58, anchor: 'end'},
+  {word: 'section', u: -4, v: 58, anchor: 'end'},
   {word: 'nav', u: 22.5, v: 42},
   {word: 'button', u: 30, v: 57.5, anchor: 'end'},
   {word: 'main', u: 60.5, v: 50}
 ];
 
 const classLettering: readonly Lettered[] = [
-  {word: '.field', u: -2, v: 58, anchor: 'end'},
+  {word: '.field', u: -4, v: 58, anchor: 'end'},
   {word: '.paragraph', u: 121, v: 72},
   {word: '.signpost', u: 132, v: 83}
 ];
@@ -121,7 +121,7 @@ export const PagePulledApart: FC = () => {
       {languages.map(({word, elevation}) => {
         const {x, y} = projected({u: 0, v: plate.down / 2}, elevation);
         return <text key={word} className="drawn-caption uppercase ink-filled" x={x - 6 * unitsPerStep}
-          y={y + 2 * unitsPerStep}
+          y={y - 6 * unitsPerStep}
           textAnchor="end">{word}</text>;
       })}
     </svg>
