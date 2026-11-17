@@ -450,12 +450,12 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titles(theLiveTable)).toHaveLength(1);
   });
 
-  test('the live table’s page leads back to the still table’s page and on to the features on the tables tab, with the build carried', async () => {
+  test('the live table’s page leads back to the still table’s page and on to the first tutorial, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-live-table-and-the-store', '?world=vanilla')}/>);
 
     expect(await pageFoot.leadsOn('the tables parts')).toEqual([
       ['Previous: 4. Build the still table', demosAt('tables/the-still-table', '?world=vanilla&living=still')],
-      ['Next: Add features, in the order they were asked for', `${demosAt('tables', '?world=vanilla')}#station-6`]
+      ['Next: 6. Drag sort', demosAt('tables/sort', '?world=vanilla')]
     ]);
   });
 

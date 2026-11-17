@@ -11,6 +11,7 @@ import {MenuRecipe, ResizeRecipe} from './Recipe';
 import {DemoLink} from '@pages/Demos/DemoLink';
 import {tableParts} from './part-pages';
 import {tablesBook} from './tables-book';
+import {PartFoot} from './PartFoot';
 import {TablesMap} from './TablesMap';
 import './TutorialPage.css';
 
@@ -48,6 +49,7 @@ export const TutorialPage: FC = () => {
       </p>
       <TutorialRecipe/>
       <TablesMap/>
+      <PartFoot address={tableTutorials.addressOf(tutorial)}/>
     </section>;
   }, () => null);
 };

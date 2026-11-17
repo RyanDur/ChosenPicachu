@@ -1,9 +1,8 @@
 import {FC, useId} from 'react';
 import {DemoTopics, demoTab} from '@pages/Demos';
-import {PageFoot} from '@pages/Demos/PageFoot';
-import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {Aggregations} from './Aggregations';
-import {PartPlace, TablePart, tableParts} from './part-pages';
+import {TablePart, tableParts} from './part-pages';
+import {PartFoot} from './PartFoot';
 import {tablesBook} from './tables-book';
 import {WorldGlider, WorldNote} from './World';
 import {TablesMap} from './TablesMap';
@@ -22,9 +21,7 @@ const parts: Record<TablePart, FC<{headedBy: string}>> = {
 export const PartPage: FC<{part: TablePart}> = ({part}) => {
   const titled = `part${useId()}`;
   const {name, ordinal} = tableParts.told(part);
-  const carried = useCarriedAddress();
   const Part = parts[part];
-  const linked = ({title, to, heading, search}: PartPlace) => ({title, address: carried(to, heading, search)});
   return <article aria-labelledby={titled} className="tutorial-page tutorials">
     <hgroup>
       <p className="caption">{`${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`}</p>
@@ -35,8 +32,6 @@ export const PartPage: FC<{part: TablePart}> = ({part}) => {
     <WorldNote/>
     <Part headedBy={titled}/>
     <TablesMap/>
-    <PageFoot label="the tables parts"
-      previous={tableParts.previousOf(part).map(linked)}
-      next={tableParts.nextOf(part).map(linked)}/>
+    <PartFoot address={tableParts.addressOf(part)}/>
   </article>;
 };

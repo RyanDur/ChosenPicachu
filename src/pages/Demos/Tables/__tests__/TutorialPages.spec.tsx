@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
-import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {aggregations, tableControls, tablesTab} from '@pages/Demos/Tables/__test_support';
 import {site} from '@pages/__test_support';
 
@@ -73,6 +73,32 @@ describe('the table tutorials, each on its own page', () => {
     render(<TestApp at={demosAt('tables/menu')}/>);
 
     expect(await tablesTab().place()).toHaveTextContent('Tables · part 7 of 8');
+  });
+
+  test('the first tutorial’s page leads back to the live table’s page and on to the next tutorial, with the build carried', async () => {
+    render(<TestApp at={demosAt('tables/sort', '?world=vanilla')}/>);
+
+    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+      ['Previous: 5. Make the table live', demosAt('tables/the-live-table-and-the-store', '?world=vanilla&living=flow%2Cstore')],
+      ['Next: 7. Sort menu', demosAt('tables/menu', '?world=vanilla')]
+    ]);
+  });
+
+  test('a tutorial’s page leads back to the tutorial before it and on to the one after it', async () => {
+    render(<TestApp at={demosAt('tables/menu', '?world=vanilla')}/>);
+
+    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+      ['Previous: 6. Drag sort', demosAt('tables/sort', '?world=vanilla')],
+      ['Next: 8. Drag resize', demosAt('tables/resize', '?world=vanilla')]
+    ]);
+  });
+
+  test('the last tutorial’s page leads back and nowhere on, as the last part of every book does', async () => {
+    render(<TestApp at={demosAt('tables/resize', '?world=vanilla')}/>);
+
+    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+      ['Previous: 7. Sort menu', demosAt('tables/menu', '?world=vanilla')]
+    ]);
   });
 
   test('the build chosen on a tutorial’s page carries back to the tables tab', async () => {
