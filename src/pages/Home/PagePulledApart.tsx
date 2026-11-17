@@ -45,7 +45,7 @@ const dialog: Region = {u: 6, v: 22, across: 32, down: 26};
 const clickSpot: Spot = {u: 33, v: 57};
 
 const regionLettering: readonly Lettered[] = [
-  {word: 'header', u: 22, v: 14},
+  {word: 'header', u: 8, v: 18},
   {word: 'section', u: -2, v: 58, anchor: 'end'},
   {word: 'nav', u: 22.5, v: 42},
   {word: 'button', u: 30, v: 57.5, anchor: 'end'},
