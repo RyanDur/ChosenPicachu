@@ -8,7 +8,7 @@ import {TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
 import {DemoLink} from '@pages/Demos/DemoLink';
 import {ReadingTime} from './ReadingTime';
-import {TablesMap} from './TablesMap';
+import {TablesSize} from './TablesSize';
 import {featuresHeading} from './features-heading';
 import '../Tutorials.css';
 import './Tutorials.css';
@@ -34,7 +34,7 @@ export const Tutorials: FC = () => {
       <WorldGlider/>
     </header>
     <WorldNote/>
-    <TablesMap/>
+    <TablesSize/>
     <ol className="spine" aria-label="the stations">
       {tableParts.inOrder.map((part, index) =>
         <Station key={part} at={index + 1}>

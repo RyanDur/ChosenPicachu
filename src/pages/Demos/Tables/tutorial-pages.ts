@@ -29,7 +29,7 @@ const named: Record<Tutorial, string> = {
   resize: 'Drag resize'
 };
 
-const minutes: Record<Tutorial, number> = {sort: 20, menu: 9, resize: 9};
+const minutes: Record<Tutorial, number> = {sort: 18, menu: 7, resize: 7};
 
 const addressOf = (tutorial: Tutorial): string => `${demoTab.address(DemoTopics.tables)}${tutorial}/`;
 
