@@ -48,7 +48,7 @@ const listings: Record<ZIndexPart, Listing> = {
   'why-third-is-on-top': {book: 'third-on-top', minutes: 2},
   'why-9999-still-loses': {book: 'still-loses', minutes: 2},
   'what-else-forms-a-stacking-context': {book: 'what-else-forms', minutes: 3},
-  'why-the-popover-wins': {book: 'popover-wins', minutes: 3}
+  'why-the-popover-wins': {book: 'popover-wins', minutes: 4}
 };
 
 const tabAddress = demoTab.address(DemoTopics.zIndex);
