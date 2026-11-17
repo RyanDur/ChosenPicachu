@@ -344,6 +344,14 @@ describe('a list of charts', () => {
     });
   });
 
+  test('should link the pressure chart’s story to the candles chart’s steps', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('pressure', '?graph=pressure')} feed={feed}/>);
+    await chartsDesk.findTitle('pressure tutorial', 2);
+
+    expect(demoPage.signpost('the candles chart’s steps')).toHaveAttribute('href', chartPageAt('candles'));
+  });
+
   describe('the candles’ story', () => {
     const candlesStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
