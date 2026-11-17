@@ -9,8 +9,7 @@ const openerLinkElements = (): HTMLElement[] => within(screen.getByRole('article
 
 export const homePage = {
   drawing,
-  paragraphOpening: (opening: RegExp): HTMLElement =>
-    within(article()).getByText((_, element) => element?.tagName === 'P' && opening.test(element.textContent)),
+  openerLink: (name: string): HTMLElement => within(article()).getByRole('link', {name}),
   letteringHeard: (): string[] => Array.from(drawing().querySelectorAll('text'))
     .filter(text => not(isInaccessible(text)))
     .map(text => text.textContent ?? ''),
