@@ -66,6 +66,24 @@ describe('Cleveland as a source of art', () => {
 
       expect(actual).not.toHaveProperty('artistInfo');
     });
+
+    test('names the artist from the creators that have a description', async () => {
+      const creators = [{description: 'Ana'}, {description: ''}, {description: null}, {}, {description: 'Bo'}];
+      anyRequestRespondsWith(JSON.stringify({data: {...clevelandPieceResponse.data, creators}}));
+
+      const actual = await art.get({id: fromClevelandToPiece.id, source: Source.CLEVELAND}).orNull();
+
+      expect(actual).toHaveProperty('artistInfo', 'Ana, Bo');
+    });
+
+    test('leaves the srcset out when Cleveland gives no image a width', async () => {
+      const url = faker.internet.url();
+      anyRequestRespondsWith(JSON.stringify({data: {...clevelandPieceResponse.data, images: {web: {url, width: ''}, print: {url}}}}));
+
+      const actual = await art.get({id: fromClevelandToPiece.id, source: Source.CLEVELAND}).orNull();
+
+      expect(actual).toHaveProperty('picture', {src: url});
+    });
   });
 
   describe('suggestions', () => {
