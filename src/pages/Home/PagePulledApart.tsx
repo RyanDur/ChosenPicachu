@@ -90,7 +90,7 @@ export const PagePulledApart: FC = () => {
       <defs>
         <pattern id="page-pulled-apart-hatch" patternUnits="userSpaceOnUse" width="7" height="7"
           patternTransform="rotate(135)">
-          <line className="drawn-line drawn" x1="0" y1="0" x2="0" y2="7"/>
+          <line className="drawn-line drawn" x1="3.5" y1="0" x2="3.5" y2="7"/>
         </pattern>
       </defs>
       <DroppedLine spot={backCorner}/>
