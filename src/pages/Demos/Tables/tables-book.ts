@@ -9,4 +9,4 @@ const signposts: PartPlace[] = [
 const minutes = tableParts.inOrder.reduce((sum, part) => sum + tableParts.told(part).minutes, 0) +
   tableTutorials.all().reduce((sum, tutorial) => sum + tableTutorials.minutesOf(tutorial), 0);
 
-export const tablesBook = {signposts, minutes, parts: signposts.length};
+export const tablesBook = {signposts, minutes, inTheBook: signposts.length};

@@ -33,7 +33,7 @@ export const TutorialPage: FC = () => {
           <Link className="signpost" to={`${demoTab.address(DemoTopics.tables)}${searchFromShown({})}`}>
             {demoTab.names[DemoTopics.tables]}
           </Link>
-          {` · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.parts}`}
+          {` · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`}
         </p>
         <h2 id={titled} className="title">{tableTutorials.nameOf(tutorial)}</h2>
       </hgroup>

@@ -27,7 +27,7 @@ export const PartPage: FC<{part: TablePart}> = ({part}) => {
   const linked = ({title, to, heading, search}: PartPlace) => ({title, address: carried(to, heading, search)});
   return <article aria-labelledby={titled} className="tutorial-page tutorials">
     <hgroup>
-      <p className="caption">{`${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.parts}`}</p>
+      <p className="caption">{`${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`}</p>
       <h2 id={titled} className="title">{name}</h2>
     </hgroup>
     <Aggregations/>
