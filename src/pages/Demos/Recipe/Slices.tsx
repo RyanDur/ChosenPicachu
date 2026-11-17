@@ -1,5 +1,4 @@
-import {TabLink} from '@pages/Demos/TabLink';
-import {DemoTopics} from '@pages/Demos/demo-topics';
+import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {FC, ReactNode} from 'react';
 import {Link} from 'react-router';
 import {maybe} from '@ryandur/sand';
@@ -47,9 +46,8 @@ export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, partPage})
       a <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
-        rel="noreferrer">user story</a>, a card, a conversation and a confirmation, as
-      the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks
-      through. The whole of it reads as one:
+        rel="noreferrer">user story</a>, a card, a conversation and a confirmation, as taught in the z-index
+      part <PartLink part="lets-build-this-feature"/>. The whole of it reads as one:
     </p>
     <hgroup className="story arriving card rounded-corners lifted">
       <Can className="can paragraph bold">{can}</Can>

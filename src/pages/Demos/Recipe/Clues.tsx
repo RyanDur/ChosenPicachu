@@ -1,4 +1,4 @@
-import {PartTermLink} from '@pages/Demos/ZIndexDemo';
+import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {FC, ReactNode} from 'react';
 import {maybe} from '@ryandur/sand';
 import {needHeading} from '@pages/Demos/headings';
@@ -18,8 +18,8 @@ export const Clues: FC<CluesProps> = ({quote, by, clues, verdict, headedBy}) => 
       () => <h3 id={needHeading.id} className="phase-title title">{needHeading.title}</h3>)}
     <p className="overview paragraph muted-ink">
       Before any code, and before any story, someone needs something. Listen for what they say and name each clue, a
-      line of it and what it commits the build to, as the <PartTermLink part="lets-build-this-feature">z-index tab</PartTermLink> shows;
-      the clues point at the element to build it with.
+      line of it and what it commits the build to, as taught in the z-index part <PartLink part="lets-build-this-feature"/>. The clues
+      point at the element to build it with.
     </p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">{quote}</blockquote>

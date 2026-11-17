@@ -163,12 +163,12 @@ describe('the Structure practice tab', () => {
     ]));
   });
 
-  test('should send the banners’ role to the z-index page that builds it', async () => {
+  test('should cite the z-index part that builds the banners’ role', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');
 
     expect(practicePage.linksUnder('The skeleton, and a name where a landmark repeats')).toEqual(expect.arrayContaining([
-      ['z-index tab', demosAt('z-index/lets-build-this-feature')]
+      ['Let’s build this feature', demosAt('z-index/lets-build-this-feature')]
     ]));
   });
 

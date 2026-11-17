@@ -1,4 +1,5 @@
 import {TabLink} from '@pages/Demos/TabLink';
+import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {DemoTopics} from '@pages/Demos';
 import {FC, ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, DrawnStory, Tell, Want, Words, lines, carve} from '../../Recipe';
@@ -50,7 +51,7 @@ const suppliedBy: Record<World, ReactNode> = {
       a carried row’s or column’s cells stay visible in their place, and <code className="monospaced">motion</code>,
       whether moves animate, are classes on the table.</Says>
     <Says>The behavior arrives through <code className="monospaced">useDragSortable</code>, a hook. A component is a
-      function that writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> says. A
+      function that writes a piece of the page, as taught in the z-index part <PartLink part="why-the-popover-wins"/>. A
       hook is a function a component calls while it renders. It calls one to keep something across renders, or to read
       something kept outside React. The page calls the hook with its columns, its rows and the two choices.</Says>
     <Says>The hook makes the hand, a store of the table’s own. A store is one plain object that holds state and answers
