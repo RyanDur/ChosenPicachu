@@ -174,7 +174,9 @@ export const ChartsTutorial: FC = () => {
       {chartKinds.all.map(kind => <li key={kind}>
         <Link className="signpost" to={chartKinds.address(kind)}>{chartKinds.names[kind]}</Link>
         <p className="paragraph">{told[kind].says}</p>
-        <p className="caption muted-ink">{`${told[kind].minutes} minutes`}</p>
+        <p className="caption muted-ink">
+          <time dateTime={`PT${told[kind].minutes}M`}>{`${told[kind].minutes} minutes to read`}</time>
+        </p>
       </li>)}
     </ol>
     <p className="overview paragraph">
