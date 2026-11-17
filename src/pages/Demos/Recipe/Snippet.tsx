@@ -15,7 +15,7 @@ type Source = {path: string; url: string; owner?: string; first: number; last: n
 
 const sourcesOf = (lines: readonly Line[]): Source[] =>
   lines.reduce<Source[]>((sources, {from}) => {
-    if (from) {
+    if (from?.kind === 'site') {
       const {file: {path, url, owner}, line} = from;
       const known = sources.find(source => source.path === path);
       return known
@@ -53,12 +53,11 @@ const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
   call: 'call-ink'
 };
 
-const unlinkedSaying = (lines: readonly Line[]): string => lines.some(({exhibit = false}) => exhibit)
-  ? 'Taken from the exhibit on this page. The rest of the site doesn’t use it.'
-  : 'Written for this page, not taken from the site’s code.';
+const takenFromTheExhibit = (lines: readonly Line[]): boolean => lines.some(({from}) => from?.kind === 'exhibit');
 
 export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
+  const fromTheExhibit = takenFromTheExhibit(lines);
   const indented = lines.map(({text}) => splitIndent(text));
   const inked = excerpts.tokensOf(label, lines.map((line, at) => ({...line, text: indented[at].code})));
   return <figure className="sample">
@@ -75,11 +74,11 @@ export const Snippet: FC<Props> = ({label, lines}) => {
       })}</code>
     </pre>
     <figcaption className="sources caption ink">
-      {has(sources)
-        ? sources.map(({path, url, owner, first, last}) =>
-          <a className="signpost reachable" href={`${url}#L${first}-L${last}`} target="_blank" rel="noreferrer"
-            key={path}>{nameOf(path, owner)} on GitHub</a>)
-        : unlinkedSaying(lines)}
+      {sources.map(({path, url, owner, first, last}) =>
+        <a className="signpost reachable" href={`${url}#L${first}-L${last}`} target="_blank" rel="noreferrer"
+          key={path}>{nameOf(path, owner)} on GitHub</a>)}
+      {fromTheExhibit && 'Taken from the exhibit on this page. The rest of the site doesn’t use it.'}
+      {not(has(sources)) && not(fromTheExhibit) && 'Written for this page, not taken from the site’s code.'}
     </figcaption>
   </figure>;
 };

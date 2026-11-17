@@ -11,9 +11,14 @@ export type CodeFile = {
   text?: string;
 };
 
+export type Origin = {
+  file: CodeFile;
+  line: number;
+  kind: 'site' | 'exhibit';
+};
+
 export type Line = {
   text: string;
   dim?: boolean;
-  from?: {file: CodeFile; line: number};
-  exhibit?: boolean;
+  from?: Origin;
 };

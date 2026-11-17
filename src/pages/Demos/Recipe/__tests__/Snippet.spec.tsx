@@ -17,7 +17,7 @@ describe('a code sample', () => {
 
   test('should name the library a sample was taken from before its file', () => {
     const library: CodeFile = {path: 'src/lib/util/index.ts', url: 'https://github.com/RyanDur/sand/blob/main/src/lib/util/index.ts', owner: 'sand'};
-    render(<Snippet label="TS" lines={[{text: 'export const has = notEmpty;', from: {file: library, line: 188}}]}/>);
+    render(<Snippet label="TS" lines={[{text: 'export const has = notEmpty;', from: {file: library, line: 188, kind: 'site'}}]}/>);
 
     expect(codeSample.fileLink('sand’s util/index.ts on GitHub')).toHaveAttribute('href', `${library.url}#L188-L188`);
   });
@@ -71,6 +71,16 @@ describe('a code sample', () => {
     render(<Snippet label="TS" lines={lines.fromTheExhibit(carve.between(store, 'export const store', 'export const more'))}/>);
 
     expect(codeSample.source()).toBe('Taken from the exhibit on this page. The rest of the site doesn’t use it.');
+  });
+
+  test('should link the site’s file and say the exhibit’s lines were taken from the exhibit, when a sample holds both', () => {
+    render(<Snippet label="TS" lines={[
+      ...lines.fromTheExhibit(carve.between(store, 'export const store', 'export const store')),
+      ...carve.between(shared, 'export type Store', 'export type Store')
+    ]}/>);
+
+    expect(codeSample.fileNames()).toEqual(['components/store.ts on GitHub']);
+    expect(codeSample.source()).toContain('Taken from the exhibit on this page. The rest of the site doesn’t use it.');
   });
 
   test('should name what a lowercase folder sits inside, since it is a module of that component', () => {
