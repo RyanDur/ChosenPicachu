@@ -262,7 +262,7 @@ describe('the banner dials’ readings', () => {
 });
 
 describe('the links to other tabs', () => {
-  test('should link each term it glosses, and each tab it names, to that tab', async () => {
+  test('should link the accordions tab it names, and the dials it glosses, to that tab', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
     const tab = await demoTabs.arrivedOn('Z-index');
