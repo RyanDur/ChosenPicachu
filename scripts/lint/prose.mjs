@@ -61,7 +61,7 @@ const breaksBetweenWords = {
      * @param {any} node
      * @returns {boolean}
      */
-    const writesWords = node => maybe(node)
+    const selfClosingComponent = node => maybe(node)
       .map(({type, openingElement}) => type === 'JSXElement' && openingElement.selfClosing === true
         && openingElement.name.type === 'JSXIdentifier' && /^[A-Z]/.test(openingElement.name.name))
       .orElse(false);
@@ -69,7 +69,7 @@ const breaksBetweenWords = {
       JSXText: text => {
         const siblings = text.parent.children;
         const at = siblings.indexOf(text);
-        const joinedAfter = (showsWords(siblings[at - 1]) || writesWords(siblings[at - 1]))
+        const joinedAfter = (showsWords(siblings[at - 1]) || selfClosingComponent(siblings[at - 1]))
           && breakThenWord.test(text.value);
         const joinedBefore = showsWords(siblings[at + 1]) && wordThenBreak.test(text.value);
         if (joinedAfter || joinedBefore) context.report({node: text, messageId: 'joined'});
