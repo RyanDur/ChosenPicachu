@@ -8,7 +8,7 @@ import {WorldGlider, WorldNote} from './World';
 import {useShownTutorial} from './useShownTutorial';
 import {DragSortTutorial} from './DragSort';
 import {MenuRecipe, ResizeRecipe} from './Recipe';
-import {stations} from '../Recipe';
+import {stations} from '@pages/Demos/stations';
 import './TutorialPage.css';
 
 const recipes: Record<Tutorial, FC> = {
