@@ -42,8 +42,8 @@ export const WhyThirdIsOnTop: FC = () => <>
     <li className="run">
       <p className="paragraph">Choose a card with the pills above the pile, and the page adds the class raised to
         it. A class is a name a style
-        sheet’s <TabLink to={DemoTopics.accordions} heading="fold-choices-heading">rules</TabLink> pick out, as the
-        accordions part <DemoLink to={remembersTheFoldAt}><cite>{remembersTheFoldTitle}</cite></DemoLink> says. A
+        sheet’s <TabLink to={DemoTopics.accordions} heading="fold-choices-heading">rules</TabLink> pick out, as taught
+        in the accordions part <DemoLink to={remembersTheFoldAt}><cite>{remembersTheFoldTitle}</cite></DemoLink>. A
         rule is a selector, which names the elements it applies to, and the properties it sets. The style sheet gives
         raised a z-index of 1. A positioned card with a z-index of 1 is painted after every card left at auto, so the
         raised card lands on top. The others keep their order under it: they are still at auto, and still painted in the
