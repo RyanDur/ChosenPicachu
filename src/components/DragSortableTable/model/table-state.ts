@@ -106,14 +106,14 @@ const endSizing = ({sizing, ...state}: TableState): TableState =>
       .map((share): TableState => shares.wholePercent(share) === shares.wholePercent(from) ? state : {...state, report: {about: 'share', name: column, share}}))
     .orElse(state);
 
-const sizingFor = (state: TableState, column: string): Maybe<Sizing> =>
+const ownSizing = (state: TableState, column: string): Maybe<Sizing> =>
   maybe(state.sizing).mBind(sizing => sizing.column === column ? some(sizing) : nothing());
 
 const sizingOf = (state: TableState, column: string): TableState =>
-  sizingFor(state, column).either(() => state, () => endSizing(state));
+  ownSizing(state, column).either(() => state, () => endSizing(state));
 
 const startedAt = (state: TableState, column: string): Maybe<number> =>
-  sizingFor(state, column).map(({from}) => from).or(() => maybe(state.widths).mBind(widths => maybe(widths[column])));
+  ownSizing(state, column).map(({from}) => from).or(() => maybe(state.widths).mBind(widths => maybe(widths[column])));
 
 const tradeBy = (state: TableState, column: string, neighbor: string, delta: number): TableState => {
   const ours = sizingOf(state, column);
@@ -133,7 +133,7 @@ const pointerSizing = (sizing?: Sizing): PointerSizing | undefined =>
   has(sizing) && sizing.stage === 'keyed' ? undefined : sizing;
 
 const gripOf = (state: TableState, column: string): PointerSizing | undefined =>
-  sizingFor(state, column).map(pointerSizing).orElse(undefined);
+  ownSizing(state, column).map(pointerSizing).orElse(undefined);
 
 const pointerHolds = (state: TableState, column: string): boolean =>
   maybe(gripOf(state, column)).map(() => true).orElse(false);
@@ -150,10 +150,10 @@ const ungripOf = (state: TableState, column: string): TableState =>
   maybe(gripOf(state, column)).map(() => endSizing(state)).orElse(state);
 
 const endKeyedSizingOf = (state: TableState, column: string): TableState =>
-  sizingFor(state, column).map(sizing => sizing.stage === 'keyed' ? endSizing(state) : state).orElse(state);
+  ownSizing(state, column).map(sizing => sizing.stage === 'keyed' ? endSizing(state) : state).orElse(state);
 
 const endSizingOf = (state: TableState, column: string): TableState =>
-  sizingFor(state, column).map(() => endSizing(state)).orElse(state);
+  ownSizing(state, column).map(() => endSizing(state)).orElse(state);
 
 const namedShare = (state: TableState, column: string): number | undefined =>
   startedAt(state, column).orElse(undefined);
