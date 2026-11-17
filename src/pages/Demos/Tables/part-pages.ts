@@ -20,22 +20,41 @@ const onward: Record<TablePart, Onward> = {
   'the-need-and-its-clues': {numbered: '2. Sketch a design from the need', heading: 'phase-design'}
 };
 
-const listings: Record<TablePart, Omit<Told, 'says'>> = {
+const book = [
+  'the-need-and-its-clues',
+  'the-sketch',
+  'the-slices',
+  'the-still-table',
+  'the-live-table-and-the-store'
+] as const;
+
+type BookPart = typeof book[number];
+
+type Listing = {
+  name: string;
+  minutes: number;
+};
+
+const listings: Record<TablePart, Listing> = {
   'the-need-and-its-clues': {
     name: 'Start with the need, and let it pick the element',
-    minutes: 2,
-    ordinal: 1
+    minutes: 2
   }
 };
+
+const ordinalOf = (part: BookPart): number => book.indexOf(part) + 1;
 
 const all: readonly TablePart[] = ['the-need-and-its-clues'];
 
 const addressOf = (part: TablePart): string => `${demoTab.address(DemoTopics.tables)}${part}/`;
 
 export const tableParts = {
-  told: (part: TablePart): Told => ({...listings[part], says: names.tableParts[part].description}),
+  told: (part: TablePart): Told => {
+    const {name, minutes} = listings[part];
+    return {name, minutes, ordinal: ordinalOf(part), says: names.tableParts[part].description};
+  },
   onwardOf: (part: TablePart): Onward => onward[part],
   addressOf,
   shownAt: (pathname: string): Maybe<TablePart> => maybe(all.find(part => pathname === addressOf(part))),
-  inTheBook: 5
+  inTheBook: book.length
 };
