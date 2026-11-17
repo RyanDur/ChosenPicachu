@@ -11,8 +11,9 @@ export const ZIndexIntroduction: FC = () =>
       property for changing which.</p>
     <p className="paragraph">This tab assumes what the <TabLink to={DemoTopics.accordions}>accordions
       tab</TabLink> gives: an element, an
-      attribute, <DemoLink to={accordionParts.addressOf('a-box-remembers-the-fold')}>a class</DemoLink>, a dial and a
-      custom property. The rest is new here.</p>
+      attribute, <DemoLink to={accordionParts.addressOf('a-box-remembers-the-fold')}>a class</DemoLink>, a dial
+      and <DemoLink to={accordionParts.addressOf('the-measured-height')}>a custom property</DemoLink>. The rest is new
+      here.</p>
     <p className="paragraph">z-index reads like one ranking for the whole page, where the biggest number wins. So when a
       menu opens under a card, or a banner is covered by something scrolling past, the usual fix is a bigger number.
       Then 9999 loses too.</p>
