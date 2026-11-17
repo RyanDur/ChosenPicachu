@@ -99,6 +99,22 @@ const detailsBuilds: Build[] = ['the inclusive details build', 'the details buil
 
 const closeBarsBeforeTheParts = (build: Build): number => build === 'the radio build' || build === 'the measured radio build' ? 1 : 0;
 
+const pressedOnceItStartsMoving = async (fold: Locator, first: Locator, second: Locator): Promise<void> =>
+  fold.evaluate((element, {firstPress, secondPress}) => new Promise<void>((resolve, reject) => {
+    if (!(element instanceof HTMLElement && firstPress instanceof HTMLElement && secondPress instanceof HTMLElement)) {
+      reject(new Error('the fold or a press is not an element that can be clicked'));
+      return;
+    }
+    const started = (event: TransitionEvent): void => {
+      if (event.propertyName !== 'height') return;
+      element.removeEventListener('transitionstart', started);
+      secondPress.click();
+      resolve();
+    };
+    element.addEventListener('transitionstart', started);
+    firstPress.click();
+  }), {firstPress: await first.elementHandle(), secondPress: await second.elementHandle()});
+
 export const accordionsTab = (page: Page) => {
   const built = (build: Build): Locator =>
     page.getByRole('article').filter({has: page.getByRole('heading', {name: headings[build], exact: true})}).first();
@@ -135,6 +151,11 @@ export const accordionsTab = (page: Page) => {
     holdsFocus: (build: Build): Promise<boolean> =>
       built(build).evaluate(article => article.contains(document.activeElement)),
     firstPartOf: (build: Build): Part => partOf(build, 0),
+    opensTheFirstPartThenChoosesOnceItStartsMoving: async (build: Build, motion: 'Static'): Promise<void> => {
+      await siteFrame(page).hydrated();
+      await pressedOnceItStartsMoving(partOf(build, 0).fold, pressesOfTheFirstPart(build).opens,
+        page.getByRole('group', {name: 'fold motion'}).getByRole('radio', {name: motion}));
+    },
     closesThenOpensTheFirstPartInOneFrame: async (build: Build): Promise<void> => {
       await siteFrame(page).hydrated();
       const {opens, shuts} = pressesOfTheFirstPart(build);
