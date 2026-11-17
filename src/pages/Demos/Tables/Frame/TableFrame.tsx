@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, useEffect, useReducer} from 'react';
-import {asyncResult, has, maybe, not} from '@ryandur/sand';
+import {asyncResult, has, is, maybe, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {useEnvironment} from '@environment';
 import {bannerChange, useBannerDispatch} from '@banners';
@@ -36,7 +36,7 @@ export const TableFrame: FC<PropsWithChildren> = ({children}) => {
     return () => watcher.disconnect();
   }).orElse(() => undefined), [frame]);
 
-  const stood = not(maybe(frame).isNothing);
+  const stood = is(frame);
 
   return <>
     {has(frameMarkup) && <iframe className={classNames('table-frame', not(stood) && 'concealed')}
