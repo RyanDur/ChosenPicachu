@@ -11,11 +11,13 @@ describe('the sort menu recipe', () => {
     expect(await demoPage.findTitle('The trader can sort the lookbacks by any measure, or take the order back')).toBeInTheDocument();
   });
 
-  test('should link the popover to the z-index tab that builds its menu on it', async () => {
+  test('should link the z-index tab where the popover comes back, and again where a component does', async () => {
     render(<TestApp at="/"><MenuRecipe/></TestApp>);
 
-    expect(await tablesTab().linkInSentence(/So the chooser uses the platform’s popover, the one the/, 'z-index tab'))
-      .toHaveAttribute('href', demosAt('z-index'));
+    expect(demoPage.linksToTabsIn(await tablesTab().recipe('sort menu'))).toEqual([
+      ['z-index tab', demosAt('z-index')],
+      ['z-index tab', demosAt('z-index')]
+    ]);
   });
 
   test('should link position-area to MDN', async () => {

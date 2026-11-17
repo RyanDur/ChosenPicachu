@@ -8,11 +8,14 @@ import {FlowTableRecipe} from '../FlowTableRecipe';
 import {TableControls} from '../../TableControls';
 
 describe('the drag sort recipe', () => {
-  test('should link the row grip to the drag sort tab’s grip where it explains it', async () => {
+  test('should link the drag sort tab where it explains the row grip, after the tabs its other parts come from', async () => {
     render(<TestApp at="/"><Recipe/></TestApp>);
 
-    expect(await tablesTab().linkInSentence(/The grip is a real button, like the/, 'drag sort tab'))
-      .toHaveAttribute('href', demosAt('drag-and-drop'));
+    expect(demoPage.linksToTabsIn(await tablesTab().recipe('drag sort'))).toEqual([
+      ['Drag sort list demo', demosAt('drag-and-drop')],
+      ['Charts tab', demosAt('charts')],
+      ['drag sort tab', demosAt('drag-and-drop')]
+    ]);
   });
 
   test('should open the recipe with its stories closed', async () => {
