@@ -20,15 +20,12 @@ const ranked = <Seat>(
   [...seats].sort((left, right) => {
     const first = sortKeyOf(left);
     const second = sortKeyOf(right);
-    const difference = worded(first) || worded(second)
-      ? wordOf(first).localeCompare(wordOf(second))
-      : numberOf(first) - numberOf(second);
+    const worded = [first, second].some(key => key.map(value => typeof value === 'string').orElse(false));
+    const difference = worded
+      ? first.map(String).orElse('').localeCompare(second.map(String).orElse(''))
+      : first.map(Number).orElse(Number.NEGATIVE_INFINITY) - second.map(Number).orElse(Number.NEGATIVE_INFINITY);
     return direction === 'ascending' ? difference : -difference;
   });
-
-const worded = (key: Maybe<SortKey>): boolean => key.map(value => typeof value === 'string').orElse(false);
-const wordOf = (key: Maybe<SortKey>): string => key.map(String).orElse('');
-const numberOf = (key: Maybe<SortKey>): number => key.map(Number).orElse(Number.NEGATIVE_INFINITY);
 
 export const sorting = {
   choices,

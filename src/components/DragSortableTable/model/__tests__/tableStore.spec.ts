@@ -138,7 +138,7 @@ describe('the table store', () => {
 
 describe('the arrangement', () => {
   const trades: Readonly<Record<string, number>> = {'this minute': 3, 'this hour': 9, session: 5};
-  const valueOf = (row: string, column: string): Maybe<number> => column === 'trades' ? maybe(trades[row]) : nothing();
+  const sortKeyOf = (row: string, column: string): Maybe<number> => column === 'trades' ? maybe(trades[row]) : nothing();
   const arranged = arrangements.of(['lookback', 'trades', 'buys'], ['this minute', 'this hour']);
 
   test('keys that arrive later sit after the ones still seated, and the sort ranks them all', () => {
@@ -147,7 +147,7 @@ describe('the arrangement', () => {
     const more = arrangements.reducer(byTrades, arrangements.arrived(['this minute', 'this hour', 'session']));
 
     expect(more.rows).toEqual(['this minute', 'this hour', 'session']);
-    expect(arrangements.standingOf(more, valueOf)).toEqual(['this hour', 'session', 'this minute']);
+    expect(arrangements.standingOf(more, sortKeyOf)).toEqual(['this hour', 'session', 'this minute']);
   });
 
   test('a foreign action leaves the arrangement as it was', () => {
