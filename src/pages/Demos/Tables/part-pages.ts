@@ -14,17 +14,15 @@ type Told = {
   ordinal: number;
 };
 
-const book = [
+const book: readonly TablePart[] = [
   'the-need-and-its-clues',
   'the-sketch',
   'the-slices',
   'the-still-table',
   'the-live-table-and-the-store'
-] as const;
+];
 
-type BookPart = typeof book[number];
-
-const titles: Record<BookPart, string> = {
+const titles: Record<TablePart, string> = {
   'the-need-and-its-clues': needHeading.title,
   'the-sketch': designHeading.title,
   'the-slices': storiesHeading.title,
@@ -53,18 +51,14 @@ const tabAddress = demoTab.address(DemoTopics.tables);
 
 const addressOf = (part: TablePart): string => `${tabAddress}${part}/`;
 
-const ordinalOf = (part: BookPart): number => book.indexOf(part) + 1;
-
-const isListed = (part: BookPart): part is TablePart => Object.keys(minutes).includes(part);
-
-const all: readonly TablePart[] = book.filter(isListed);
+const ordinalOf = (part: TablePart): number => book.indexOf(part) + 1;
 
 const whereIs = (station: number): Place =>
-  maybe(book[station - 1]).mBind(part => maybe(isListed(part) ? part : undefined)).either(
+  maybe(book[station - 1]).either(
     part => ({to: addressOf(part), ...maybe(opens[part]).map(ids => ({search: {[livingStories.param]: ids.join(',')}})).orElse({})}),
     () => ({to: tabAddress, heading: stations.idOf(station)}));
 
-const neighborOf = (part: BookPart): PartPlace =>
+const neighborOf = (part: TablePart): PartPlace =>
   ({title: `${ordinalOf(part)}. ${titles[part]}`, ...whereIs(ordinalOf(part))});
 
 const theFeatures: PartPlace = {title: featuresHeading.title, ...whereIs(book.length + 1)};
@@ -83,6 +77,6 @@ export const tableParts = {
   nextOf: (part: TablePart): Maybe<PartPlace> => maybe(besides(part, 1).orElse(theFeatures)),
   addressOf,
   whereIs,
-  shownAt: (pathname: string): Maybe<TablePart> => maybe(all.find(part => pathname === addressOf(part))),
+  shownAt: (pathname: string): Maybe<TablePart> => maybe(book.find(part => pathname === addressOf(part))),
   inTheBook: book.length
 };
