@@ -32,12 +32,12 @@ describe('why the popover wins, on its own page', () => {
     expect(theTrap.controlIn(trap, 'Sort by, in the top layer')).toBeInTheDocument();
   });
 
-  test('should lead back to part three’s page and on to part five on the tab, by number and title, with the raised card carried', async () => {
+  test('should lead back to part three’s page and on to part five’s page, by number and title, with the raised card carried', async () => {
     render(<TestApp at={demosAt(popoverWins, '?raised=second')}/>);
 
     expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
       ['Previous: 3. What else forms a stacking context', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second')],
-      ['Next: 5. Why a fixed banner still loses', `${demosAt('z-index', '?raised=second')}#fixed-banner-loses-heading`]
+      ['Next: 5. Why a fixed banner still loses', demosAt('z-index/why-a-fixed-banner-still-loses', '?raised=second')]
     ]);
   });
 

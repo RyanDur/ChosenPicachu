@@ -66,7 +66,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('raises and dismisses the banners from a finger that lands just off their buttons', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto('demos/z-index/why-a-fixed-banner-still-loses/');
       const banners = bannerTrap(page);
 
       await fingerTap(page, banners.raiseOld);
@@ -134,7 +134,7 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
     });
 
     test('closes a banner with a finger that lands just off its dismiss', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto('demos/z-index/why-a-fixed-banner-still-loses/');
       await bannerTrap(page).raiseSite.tap();
       const dismiss = page.getByRole('alert').getByRole('button', {name: /^dismiss/}).first();
       await expect(dismiss).toBeVisible();

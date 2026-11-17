@@ -1,7 +1,6 @@
 import {FC, ReactNode, useEffect} from 'react';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {useControls} from '../Controls';
-import {BannerExplained} from './BannerExplained';
 import {PartListing} from './PartListing';
 import {TopLayerTutorial} from './Tutorial';
 import {ZIndexIntroduction} from './Introduction';
@@ -14,6 +13,7 @@ import {WhyThirdIsOnTop} from './WhyThirdIsOnTop';
 import {Why9999StillLoses} from './Why9999StillLoses';
 import {WhatElseFormsAStackingContext} from './WhatElseFormsAStackingContext';
 import {WhyThePopoverWins} from './WhyThePopoverWins';
+import {WhyAFixedBannerStillLoses} from './WhyAFixedBannerStillLoses';
 
 const usePlacingTheBanners = (): void => {
   const {side, align, enter, stack} = useControls();
@@ -28,7 +28,8 @@ const pagesOfParts: Record<ZIndexPart, ReactNode> = {
   'why-third-is-on-top': <WhyThirdIsOnTop/>,
   'why-9999-still-loses': <Why9999StillLoses/>,
   'what-else-forms-a-stacking-context': <WhatElseFormsAStackingContext/>,
-  'why-the-popover-wins': <WhyThePopoverWins/>
+  'why-the-popover-wins': <WhyThePopoverWins/>,
+  'why-a-fixed-banner-still-loses': <WhyAFixedBannerStillLoses/>
 };
 
 export const Room: FC = () => {
@@ -41,7 +42,7 @@ export const Room: FC = () => {
     <PartListing part="why-9999-still-loses"/>
     <PartListing part="what-else-forms-a-stacking-context"/>
     <PartListing part="why-the-popover-wins"/>
-    <BannerExplained/>
+    <PartListing part="why-a-fixed-banner-still-loses"/>
     <WhichCardIsOnTop/>
     <TopLayerTutorial/>
   </>);

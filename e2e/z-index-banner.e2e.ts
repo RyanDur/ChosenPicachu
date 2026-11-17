@@ -1,13 +1,15 @@
 import {Page, expect} from '@playwright/test';
 import {test} from './__test_support/history-writes';
-import {bannerTrap, boxOf, desktop, dialRow, iPhone, pressTab, tabsTo} from './__test_support';
+import {bannerTrap, boxOf, desktop, dialRow, iPhone, pressTab, siteFrame, tabsTo} from './__test_support';
+
+const fixedBannerPage = 'demos/z-index/why-a-fixed-banner-still-loses/';
 
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
   test.describe(`at ${size} wide`, () => {
     test.use(device);
 
     test('the old banner stays on the window, and card two passes over it while its edge still shows', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto(fixedBannerPage);
       const banners = bannerTrap(page);
       await banners.raiseOld.click();
       await expect(banners.oldBanner).toBeVisible();
@@ -19,7 +21,7 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
     });
 
     test('the site’s banner stays over card two as it passes', async ({page}) => {
-      await page.goto('demos/z-index/');
+      await page.goto(fixedBannerPage);
       const banners = bannerTrap(page);
       await banners.raiseSite.click();
       await expect(banners.siteBanner).toBeVisible();
@@ -29,11 +31,12 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
       await expect.poll(() => banners.onTopOf(banners.siteBanner, 'middle')).toBe('the banner');
     });
 
-    test('the tutorial below brings the step that writes the panel at the page’s root into view, with its story heading in view', async ({page}) => {
-      await page.goto('demos/z-index/');
+    test('Let’s build this feature brings the step that writes the panel at the page’s root into view, with its story heading in view', async ({page}) => {
+      await page.goto(fixedBannerPage);
+      await siteFrame(page).hydrated();
       const part = page.getByRole('region', {name: 'Why a fixed banner still loses'});
 
-      await part.getByRole('link', {name: 'the tutorial below'}).click();
+      await part.getByRole('link', {name: 'Let’s build this feature', exact: true}).click();
 
       await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
       await expect(page.getByText('The user sees the news over the page')).toBeInViewport();
@@ -44,12 +47,13 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
 test.describe('a phone, where the page itself scrolls', () => {
   test.use(iPhone);
 
-  const tutorialBelow = (page: Page) =>
-    page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'});
+  const buildThisFeature = (page: Page) =>
+    page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'Let’s build this feature', exact: true});
 
-  test('Back from the tutorial below returns the reader to the link they followed, and Forward to the tutorial\'s story', async ({page}) => {
-    await page.goto('demos/z-index/');
-    const link = tutorialBelow(page);
+  test('Back from Let’s build this feature returns the reader to the link they followed, and Forward to the tutorial\'s story', async ({page}) => {
+    await page.goto(fixedBannerPage);
+    await siteFrame(page).hydrated();
+    const link = buildThisFeature(page);
     await link.click();
     await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
 
@@ -61,13 +65,13 @@ test.describe('a phone, where the page itself scrolls', () => {
   });
 });
 
-test('a keyboard reader who follows the tutorial below reaches the story\'s opener with one Tab, and Enter folds the story', async ({page}) => {
-  await page.goto('demos/z-index/');
-  const link = page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'});
+test('a keyboard reader who follows Let’s build this feature reaches the story\'s opener with one Tab, and Enter folds the story', async ({page}) => {
+  await page.goto(fixedBannerPage);
+  await siteFrame(page).hydrated();
+  const link = page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'Let’s build this feature', exact: true});
   await tabsTo(page, link);
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#news-top-story$/);
-  await expect(link).not.toBeFocused();
   await expect(page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'The user sees the news over the page'})}).last()).toBeFocused();
 
   await expect(page.getByText('Write the panel last, at the page’s root')).toBeVisible();
@@ -78,11 +82,12 @@ test('a keyboard reader who follows the tutorial below reaches the story\'s open
   await expect(page.getByText('Write the panel last, at the page’s root')).toBeHidden();
 });
 
-test('a reader who follows the tutorial below with motion allowed lands on the story\'s heading', async ({page}) => {
+test('a reader who follows Let’s build this feature with motion allowed lands on the story\'s heading', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
-  await page.goto('demos/z-index/');
+  await page.goto(fixedBannerPage);
+  await siteFrame(page).hydrated();
 
-  await page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'the tutorial below'}).click();
+  await page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'Let’s build this feature', exact: true}).click();
 
   await expect(page).toHaveURL(/#news-top-story$/);
   await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
@@ -104,7 +109,7 @@ test('the entrance reads the chosen side, and reads that a new banner appears in
 });
 
 test('a link that holds the panel to the window’s bottom edge raises the site’s banner there', async ({page}) => {
-  await page.goto('demos/z-index/?side=bottom');
+  await page.goto(`${fixedBannerPage}?side=bottom`);
   const banners = bannerTrap(page);
 
   await banners.raiseSite.click();
@@ -118,7 +123,7 @@ test('a link that holds the panel to the window’s bottom edge raises the site�
 });
 
 test('a reader who dismisses the site’s only banner is left with no site banner', async ({page}) => {
-  await page.goto('demos/z-index/');
+  await page.goto(fixedBannerPage);
   const banners = bannerTrap(page);
   await banners.raiseSite.click();
   await expect(banners.siteNotes).toHaveCount(1);
@@ -129,7 +134,7 @@ test('a reader who dismisses the site’s only banner is left with no site banne
 });
 
 test('a reader who dismisses one of two site banners is left with the other', async ({page}) => {
-  await page.goto('demos/z-index/');
+  await page.goto(fixedBannerPage);
   const banners = bannerTrap(page);
   await banners.raiseSite.click();
   await banners.raiseSite.click();
@@ -143,7 +148,7 @@ test('a reader who dismisses one of two site banners is left with the other', as
 });
 
 test('in a stack that grows sideways, a dismissed banner leaves', async ({page}) => {
-  await page.goto('demos/z-index/?stack=left');
+  await page.goto(`${fixedBannerPage}?stack=left`);
   const banners = bannerTrap(page);
   await banners.raiseSite.click();
   await expect(banners.siteNotes).toHaveCount(1);
@@ -154,7 +159,7 @@ test('in a stack that grows sideways, a dismissed banner leaves', async ({page})
 });
 
 test('a raised note is announced: the browser finds it in the page’s alert', async ({page}) => {
-  await page.goto('demos/z-index/');
+  await page.goto(fixedBannerPage);
   const banners = bannerTrap(page);
 
   await banners.raiseSite.click();
