@@ -55,6 +55,8 @@ export const explanation = {
   drawingNamed: (part: HTMLElement, name: string | RegExp): HTMLElement => within(part).getByRole('figure', {name}),
   saying: (part: HTMLElement, words: string | RegExp): HTMLElement => within(part).getByText(words),
   sourcesBeside: (part: HTMLElement, words: RegExp): string[] => sourcesIn(runTelling(part, words)),
+  sampleCaptionsBeside: (part: HTMLElement, words: RegExp): string[] =>
+    sampleFiguresIn(runTelling(part, words)).map(figure => computeAccessibleName(figure)),
   linksBeside: (part: HTMLElement, words: RegExp): (string | null)[][] => within(runTelling(part, words)).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')]),
   runTelling,

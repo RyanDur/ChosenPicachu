@@ -26,6 +26,7 @@ import {ExclusiveHtmlAloneAccordion} from './ExclusiveHtmlAlone';
 import placementCss from '../../../styles/placement.css?sample';
 import resetCss from '../../../styles/reset.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
+import drawingCss from '../../../styles/drawing.css?sample';
 import {
   FocusOnTheBar,
   OffScreenNotGone,
@@ -77,8 +78,8 @@ type Build = {
 };
 
 const knownHeightBuilds: Record<FoldType, Build> = {
-  inclusive: {Accordion: InclusiveAccordion, sample: carve.between(inclusiveAccordionSource, '<li key={heading} className="fold">', '</li>')},
-  exclusive: {Accordion: ExclusiveAccordion, sample: carve.between(exclusiveAccordionSource, '<li className="fold" key={heading}>', '</li>')}
+  inclusive: {Accordion: InclusiveAccordion, sample: lines.fromTheExhibit(carve.between(inclusiveAccordionSource, '<li key={heading} className="fold">', '</li>'))},
+  exclusive: {Accordion: ExclusiveAccordion, sample: lines.fromTheExhibit(carve.between(exclusiveAccordionSource, '<li className="fold" key={heading}>', '</li>'))}
 };
 
 const platformBuilds: Record<FoldType, Build> = {
@@ -191,7 +192,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 other element on the page shares. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute
                 names the radio’s id. That link makes a press anywhere on the label press the radio. Each id
                 includes the fold’s place in the list, so no two radios share one.</p>}
-            <Snippet label="HTML" lines={foldType === 'inclusive' ? carve.between(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
+            <Snippet label="HTML" lines={foldType === 'inclusive' ? lines.fromTheExhibit(carve.between(foldHtmlSource, '<li class="fold">', '</li>')) : radioFold}/>
           </li>
           <li className="run">
             <p className="paragraph">Now a rule has to match on whether the {input} is
@@ -202,7 +203,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
               elements with the same parent. That is why the order is fixed: the style sheet can only look forward from
               the {input}.
               While it is not checked, this rule collapses the text. No script is involved.</p>
-            <Snippet label="CSS" lines={carve.unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')}/>
+            <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'))}/>
             <TheRuleMatchesTheBox/>
           </li>
         </ol>
@@ -279,16 +280,15 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 <OffScreenNotGone/>
               </li>
               <li className="run">
-                <p className="paragraph">The bar’s colors are the page’s the other way round: light words on a
-                  dark ground, where the page sets dark words on a light one. The rest of the site uses that look too,
-                  so I keep it out of the bar’s own style sheet.
-                  It is a class in a shared style sheet, <code className="monospaced">inverse-filled</code>, and the bar
+                <p className="paragraph">The bar looks like the site’s diagrams: a paper ground with a charcoal hairline
+                  around it. The diagrams use that look too, so I keep it out of the bar’s own style sheet.
+                  It is a class in a shared style sheet, <code className="monospaced">drawn-piece</code>, and the bar
                   wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own style
                   sheet keeps the structure, the row, the padding and the height. The samples that follow show both, the
                   style sheet’s rule and then the shared class.</p>
                 <Snippet label="CSS" lines={[
-                  ...carve.unit(accordionsCss, '&:not(.close) .info-label {'), lines.blank,
-                  ...carve.unit(surfaceCss, '.inverse-filled {')
+                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '&:not(.close) .info-label {')), lines.blank,
+                  ...carve.unit(drawingCss, '.drawn-piece {')
                 ]}/>
               </li>
               <li className="run">
@@ -306,13 +306,13 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   ? ' With static the turn has no transition, so the corner turns at once.'
                   : ' With reveal and the drawer, a transition sits on every bar, not on one state, so opening and closing both turn the arrow over 500 milliseconds with ease.'}</p>
                 <Snippet label="CSS" lines={[
-                  ...carve.unit(accordionsCss, '&:not(.close) .info-label {'), lines.blank,
-                  ...carve.unit(accordionsCss, '.opening-arrow::after {'), lines.blank,
+                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '&:not(.close) .info-label {')), lines.blank,
+                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '.opening-arrow::after {')), lines.blank,
                   ...carve.unit(surfaceCss, '.corner-after::after {'), lines.blank,
-                  ...carve.unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {'),
+                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {')),
                   ...{
-                    reveal: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')],
-                    drawer: [lines.blank, ...carve.unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {')],
+                    reveal: [lines.blank, ...lines.fromTheExhibit(carve.unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {'))],
+                    drawer: [lines.blank, ...lines.fromTheExhibit(carve.unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {'))],
                     static: []
                   }[foldMotion]
                 ]}/>
@@ -345,12 +345,12 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   static: ' With static, nothing moves: the panel is at its full height or at 0, at once.'
                 }[foldMotion]}</p>
                 <Snippet label="CSS" lines={[
-                  ...carve.unit(accordionsCss, '.info,\n    .info-text {'), lines.blank,
-                  ...carve.unit(accordionsCss, '.info {\n      overflow: hidden;'), lines.blank,
-                  ...carve.unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {'),
+                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info,\n    .info-text {')), lines.blank,
+                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info {\n      overflow: hidden;')), lines.blank,
+                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info-toggle:not(:checked) ~ .info {')),
                   ...{
-                    reveal: [lines.blank, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
-                    drawer: [lines.blank, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
+                    reveal: [lines.blank, ...lines.fromTheExhibit(carve.unit(oldWayMotionCss, '& .info {\n      transition: height'))],
+                    drawer: [lines.blank, ...lines.fromTheExhibit(carve.unit(oldWayMotionCss, '& .info {\n      transition: height'))],
                     static: []
                   }[foldMotion]
                 ]}/>
@@ -367,14 +367,14 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   static: ''
                 }[foldMotion]}</p>
                 <Snippet label="CSS" lines={[
-                  ...carve.unit(accordionsCss, '.info-text {\n      overflow-y'), lines.blank,
-                  ...carve.unit(accordionsCss, '.info-paragraph {'), lines.blank,
+                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info-text {\n      overflow-y')), lines.blank,
+                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info-paragraph {')), lines.blank,
                   ...carve.unit(surfaceCss, '.foot-shadowed {'),
                   ...{
                     reveal: [],
                     drawer: [
-                      lines.blank, ...carve.unit(accordionsCss, '.drawer & .info {'), lines.blank,
-                      ...carve.unit(accordionsCss, '.drawer & .info-text {')
+                      lines.blank, ...lines.fromTheExhibit(carve.unit(accordionsCss, '.drawer & .info {')), lines.blank,
+                      ...lines.fromTheExhibit(carve.unit(accordionsCss, '.drawer & .info-text {'))
                     ],
                     static: []
                   }[foldMotion]
@@ -394,8 +394,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 <Snippet label="CSS" lines={[
                   ...carve.unit(surfaceCss, '.focus-ringed {'),
                   ...{
-                    reveal: [lines.blank, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
-                    drawer: [lines.blank, ...carve.unit(oldWayMotionCss, '& .info {\n      transition: height')],
+                    reveal: [lines.blank, ...lines.fromTheExhibit(carve.unit(oldWayMotionCss, '& .info {\n      transition: height'))],
+                    drawer: [lines.blank, ...lines.fromTheExhibit(carve.unit(oldWayMotionCss, '& .info {\n      transition: height'))],
                     static: []
                   }[foldMotion]
                 ]}/>
@@ -410,19 +410,17 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 <p className="paragraph">A checked radio stays checked when you press it again, so a fold cannot close
                   itself. So the list starts with a Close radio, checked at first, and choosing it unchecks
                   whichever fold was open.</p>
-                <Snippet label="HTML" lines={carve.between(exclusiveAccordionSource, '<li className="fold close field-inverse">', '</li>')}/>
+                <Snippet label="HTML" lines={lines.fromTheExhibit(carve.between(exclusiveAccordionSource, '<li className="fold close drawn-piece">', '</li>'))}/>
               </li>}
               {foldType === 'exclusive' && <li className="run">
                 <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
                   gets its own rule: a flex row that centers its one word. Its label fills the whole bar,
-                  so a press anywhere on the bar counts. Its ground
-                  is <code className="monospaced">field-inverse</code> and its
-                  text <code className="monospaced">field-ink</code>, two plain color classes with no hover or focus of
-                  their own.</p>
+                  so a press anywhere on the bar counts. It
+                  wears <code className="monospaced">drawn-piece</code>, the class the other bars wear, which has no hover
+                  or focus of its own.</p>
                 <Snippet label="CSS" lines={[
-                  ...carve.unit(accordionsCss, '&.close {'), lines.blank,
-                  ...carve.unit(surfaceCss, '.field-inverse {'), lines.blank,
-                  ...carve.unit(surfaceCss, '.field-ink {')
+                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '&.close {')), lines.blank,
+                  ...carve.unit(drawingCss, '.drawn-piece {')
                 ]}/>
               </li>}
               <li className="run">
@@ -458,7 +456,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
             <ol className="runs">
               <li className="run">
                 <p className="paragraph">The bar is the same flex row as the label in the {input} build, now on
-                  summary, wearing the same classes: <code className="monospaced">inverse-filled</code> for its
+                  summary. Its classes are the site’s own: <code className="monospaced">inverse-filled</code> for its
                   colors, <code className="monospaced">attentive</code> for
                   the approach color, the ring and a glow while it is pressed,
                   and <code className="monospaced">field-outlined</code> for the
