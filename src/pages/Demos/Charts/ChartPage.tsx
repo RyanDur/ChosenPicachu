@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {Link, Navigate, useParams} from 'react-router';
-import {maybe} from '@ryandur/sand';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PriceChart} from './PriceChart';
@@ -56,21 +55,17 @@ const features: Record<ChartKind, Feature> = {
 
 type Props = {kind: ChartKind};
 
-const numbered = (kind: ChartKind): string => `${chartKinds.all.indexOf(kind) + 1}. ${chartKinds.names[kind]}`;
-
-const Neighbors: FC<Props> = ({kind}) => {
-  const at = chartKinds.all.indexOf(kind);
-  return <nav className="chart-neighbors" aria-label="the chart pages">
-    {maybe(chartKinds.all[at - 1]).map(previousKind =>
+const Neighbors: FC<Props> = ({kind}) =>
+  <nav className="chart-neighbors" aria-label="the chart pages">
+    {chartKinds.previous(kind).map(previousKind =>
       <Link key={previousKind} className="reachable signpost" rel="prev" to={chartKinds.address(previousKind)}>
-        {`Previous: ${numbered(previousKind)}`}
+        {`Previous: ${chartKinds.numbered(previousKind)}`}
       </Link>).orNull()}
-    {maybe(chartKinds.all[at + 1]).map(nextKind =>
+    {chartKinds.next(kind).map(nextKind =>
       <Link key={nextKind} className="onward reachable signpost" rel="next" to={chartKinds.address(nextKind)}>
-        {`Next: ${numbered(nextKind)}`}
+        {`Next: ${chartKinds.numbered(nextKind)}`}
       </Link>).orNull()}
   </nav>;
-};
 
 const ChartKindTutorial: FC<Props> = ({kind}) => {
   const {name, reference, quote, chart: Chart} = features[kind];
