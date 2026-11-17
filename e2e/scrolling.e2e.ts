@@ -2,7 +2,7 @@ import {Locator, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {assertionPatience} from './__test_support/patience';
 import {not} from '@ryandur/sand';
-import {boxOf, clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, tablesDemo, twoFramesLater} from './__test_support';
+import {boxOf, clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, siteFrame, tablesDemo, twoFramesLater} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -77,9 +77,12 @@ for (const {reader, use} of desks) {
 
     test('the wheel moves the page, and an open Feedback dialog holds it still', async ({page}) => {
       await page.goto('demos/tables/the-live-table-and-the-store/?living=flow%2Cstore');
+      await siteFrame(page).hydrated();
       const held = page.getByRole('heading', {name: 'The trader can watch the market live, one lookback beside another'});
       await held.scrollIntoViewIfNeeded();
       const shut = await topOf(held);
+      const {x, y, width, height} = await boxOf(held);
+      await page.mouse.move(x + width / 2, y + height / 2);
       await page.mouse.wheel(0, 200);
       await risesAbove(held, shut);
       await clickWhereItIs(page, feedbackOn(page).open);
@@ -99,6 +102,7 @@ test.describe('a desktop, where only the search changes', () => {
 
   test('a story opened on a recipe leaves the page where it was', async ({page}) => {
     await page.goto('demos/tables/the-live-table-and-the-store/?living=flow');
+    await siteFrame(page).hydrated();
     const tables = tablesDemo(page);
     await tables.storyAt(1).scrollIntoViewIfNeeded();
     const where = await documentScrollY(page);
