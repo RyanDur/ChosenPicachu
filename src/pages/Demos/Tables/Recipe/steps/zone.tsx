@@ -1,3 +1,5 @@
+import {TabLink} from '@pages/Demos/TabLink';
+import {DemoTopics} from '@pages/Demos';
 import {FC} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Want, Words, carve, lines} from '../../../Recipe';
 import {DeadZoneFigure} from '../DeadZoneFigure';
@@ -17,7 +19,8 @@ export const DeadZone: FC = () =>
     </Words>
     <Reveal>
       <Says>This step is JavaScript alone. To find the column under the pointer, the code adds the columns’ widths from
-        the left until the total passes the pointer’s x.</Says>
+        the left until the total passes the pointer’s x. sizeOf reads a width from the survey, and a column the survey
+        hasn’t measured counts as no width.</Says>
       <Says>That column gives way only once the pointer is past a dead zone on the side it came in by. The dead zone is
         a quarter of that column’s width, or half the difference between it and the carried column when that is more,
         which is the case when a narrow column passes a much wider one.</Says>
@@ -25,9 +28,13 @@ export const DeadZone: FC = () =>
         the neighbor’s dead zone again.</Says>
       <Says>The decision is in struckPast, one function that doesn’t know which axis it is on. The step for rows uses it
         unchanged.</Says>
+      <Says>struckPast answers with a Maybe, as the <TabLink to={DemoTopics.charts}>Charts tab</TabLink> explains. It
+        holds the column that counts as under the pointer, or nothing while the pointer is still in a dead zone or past
+        the table’s edge.</Says>
       <DeadZoneFigure/>
       <Codes>
         <Snippet label="TS" lines={[
+          ...carve.unit(sources.survey, 'const sizeOf = '), lines.blank,
           ...carve.unit(sources.survey, 'const deadZone = '), lines.blank,
           ...carve.unit(sources.survey, 'const struckPast = '), lines.blank,
           ...carve.unit(sources.survey, 'const columnUnder')
