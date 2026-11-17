@@ -61,7 +61,9 @@ const whereIs = (station: number): Place =>
 const neighborOf = (part: TablePart): PartPlace =>
   ({title: `${ordinalOf(part)}. ${titles[part]}`, ...whereIs(ordinalOf(part))});
 
-const theFeatures: PartPlace = {title: featuresHeading.title, ...whereIs(book.length + 1)};
+const featuresStation = book.length + 1;
+
+const theFeatures: PartPlace = {title: featuresHeading.title, ...whereIs(featuresStation)};
 
 const besides = (part: TablePart, step: number): Maybe<PartPlace> =>
   maybe(book[ordinalOf(part) - 1 + step]).map(neighborOf);
@@ -78,5 +80,7 @@ export const tableParts = {
   addressOf,
   whereIs,
   shownAt: (pathname: string): Maybe<TablePart> => maybe(book.find(part => pathname === addressOf(part))),
+  parts: book,
+  featuresStation,
   inTheBook: book.length
 };

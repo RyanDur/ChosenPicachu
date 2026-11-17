@@ -33,22 +33,11 @@ export const Tutorials: FC = () => {
     </header>
     <WorldNote/>
     <ol className="spine" aria-label="the stations">
-      <Station at={1}>
-        <PartEntry part="the-need-and-its-clues"/>
-      </Station>
-      <Station at={2}>
-        <PartEntry part="the-sketch"/>
-      </Station>
-      <Station at={3}>
-        <PartEntry part="the-slices"/>
-      </Station>
-      <Station at={4}>
-        <PartEntry part="the-still-table"/>
-      </Station>
-      <Station at={5}>
-        <PartEntry part="the-live-table-and-the-store"/>
-      </Station>
-      <Station at={6}>
+      {tableParts.parts.map((part, index) =>
+        <Station key={part} at={index + 1}>
+          <PartEntry part={part}/>
+        </Station>)}
+      <Station at={tableParts.featuresStation}>
         <h3 className="phase-title title">{featuresHeading.title}</h3>
         <FeaturesAskedFor/>
         <p className="paragraph">
