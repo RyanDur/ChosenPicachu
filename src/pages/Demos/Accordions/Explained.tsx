@@ -173,14 +173,16 @@ export const AccordionsExplained: FC<Props> = ({folds}) => {
             <summary id="details-depth" className="fold-bar bold">How details works</summary>
             <ol className="runs">
               <li className="run">
-                <p className="paragraph">The bar is the same flex row as the label
-                  in <RemembersTheFoldLink>the {input} build</RemembersTheFoldLink>, now on
-                  summary. Its classes are the site’s own: <code className="monospaced">inverse-filled</code> for its
+                <p className="paragraph">The summary lays its name and arrow side by side in a flex row, as the label
+                  does in <RemembersTheFoldLink>the {input} build</RemembersTheFoldLink>. It wears the site’s
+                  own <RemembersTheFoldLink>classes</RemembersTheFoldLink>, names a rule picks an element out
+                  by: <code className="monospaced">inverse-filled</code> for its
                   colors, <code className="monospaced">attentive</code> for
                   the approach color, the ring and a glow while it is pressed,
                   and <code className="monospaced">field-outlined</code> for the
-                  hairline that draws the line between one bar and the next. Summary takes focus and hover itself,
-                  where the {input} build carried focus from the hidden {input} to the label.</p>
+                  hairline that draws the line between one bar and the next. Summary takes focus, which marks the
+                  element the keyboard acts on, and hover itself, where the {input} build carried focus from the
+                  hidden {input} to the label.</p>
                 <Snippet label="CSS" lines={[
                   ...carve.unit(accordionsCss, '.info-label {\n      display: flex;\n      padding'), lines.blank,
                   ...carve.unit(surfaceCss, '.inverse-filled {'), lines.blank,
