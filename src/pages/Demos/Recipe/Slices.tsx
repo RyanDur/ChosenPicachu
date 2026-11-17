@@ -3,33 +3,39 @@ import {DemoTopics} from '@pages/Demos/demo-topics';
 import {FC, ReactNode} from 'react';
 import {Link} from 'react-router';
 import {maybe} from '@ryandur/sand';
-import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
+import {Place, useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {stations, storiesHeading} from '@pages/Demos/headings';
+
+type Slice = [slice: string, station: number];
+
+type PlacedSlice = [slice: string, station: number, place: Place];
+
+type OnTheTab = {
+  partPage?: never;
+  sliced: Slice[];
+};
+
+type OnAPartPage = {
+  partPage: {headedBy: string};
+  sliced: PlacedSlice[];
+};
 
 type SlicesProps = {
   can: string;
   soThat: string;
   slices: ReactNode;
-  sliced: [string, number][];
-  partPage?: PartPage;
-};
+} & (OnTheTab | OnAPartPage);
 
-type PartPage = {
-  headedBy: string;
-  whereIs: (station: number) => {to: string; heading?: string; search?: Record<string, string>};
-};
-
-const StationLink: FC<{station: number; partPage?: PartPage}> = ({station, partPage}) => {
+const StationLink: FC<{station: number; place?: Place}> = ({station, place}) => {
   const carried = useCarriedAddress();
-  return maybe(partPage).either(
-    ({whereIs}) => {
-      const {to, heading, search} = whereIs(station);
-      return <Link className="slice-station signpost caption upright" to={carried(to, heading, search)}>station {station}</Link>;
-    },
+  return maybe(place).either(
+    ({to, heading, search}) =>
+      <Link className="slice-station signpost caption upright" to={carried(to, heading, search)}>station {station}</Link>,
     () => <a className="slice-station signpost caption upright" href={`#${stations.idOf(station)}`}>station {station}</a>);
 };
 
 export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, partPage}) => {
+  const placed: [string, number, Place?][] = sliced;
   const Can: 'h3' | 'h4' = maybe(partPage).either(() => 'h3', () => 'h4');
   return <section className="phase card rounded-corners lifted"
     aria-labelledby={maybe(partPage).map(({headedBy}) => headedBy).orElse(storiesHeading.id)}>
@@ -51,10 +57,10 @@ export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, partPage})
     </hgroup>
     <p className="overview paragraph muted-ink">{slices}</p>
     <ul className="sliced" aria-label="the slices">
-      {sliced.map(([slice, station]) =>
+      {placed.map(([slice, station, place]) =>
         <li className="italic muted-ink" key={slice}>
           <span>{slice}</span>
-          <StationLink station={station} partPage={partPage}/>
+          <StationLink station={station} place={place}/>
         </li>)}
     </ul>
   </section>;

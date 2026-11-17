@@ -2,6 +2,7 @@ import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {designHeading, needHeading, stations, storiesHeading} from '@pages/Demos/headings';
+import type {Place} from '@pages/Demos/useCarriedAddress';
 import {stillStory} from './still-story';
 
 export type TablePart = keyof typeof names.tableParts;
@@ -40,12 +41,6 @@ const minutes: Record<TablePart, number> = {
 
 const opens: Partial<Record<TablePart, typeof stillStory>> = {
   'the-still-table': stillStory
-};
-
-type Place = {
-  to: string;
-  heading?: string;
-  search?: Record<string, string>;
 };
 
 export type PartPlace = Place & {
