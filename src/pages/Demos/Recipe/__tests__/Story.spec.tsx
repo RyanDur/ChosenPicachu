@@ -1,6 +1,6 @@
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
-import {act, render, screen, waitFor} from '@testing-library/react';
+import {act, render, waitFor} from '@testing-library/react';
 import {Link} from 'react-router';
 import {Step, StepHeading, Steps, Stories, Story} from '@pages/Demos/Recipe';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
@@ -108,8 +108,7 @@ describe('a story card', () => {
     const fold = card('The reader can follow a link to a story');
 
     await act(async () => {
-      screen.getByRole('link', {name: 'the tale below'}).click();
-      await Promise.resolve();
+      await appAddress.follow('the tale below');
       fold.toggleAttribute('open', true);
       fold.dispatchEvent(new Event('toggle'));
     });
@@ -129,8 +128,7 @@ describe('a story card', () => {
     const bar = recipeFolds.stepTitled(document.body, 'The reader can close a story a link opened');
 
     await act(async () => {
-      screen.getByRole('link', {name: 'the tale below'}).click();
-      await Promise.resolve();
+      await appAddress.follow('the tale below');
       bar.click();
     });
 

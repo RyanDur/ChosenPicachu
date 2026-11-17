@@ -8,6 +8,7 @@ const shown = (): string => `${path().textContent}${search().textContent}`;
 
 export const appAddress = {
   back: async (): Promise<void> => userEvent.click(screen.getByRole('button', {name: 'browser back'})),
+  follow: async (link: string): Promise<void> => userEvent.click(screen.getByRole('link', {name: link})),
   shown,
   path,
   search,
