@@ -90,16 +90,21 @@ const exclusiveBuilds: Build[] = ['the measured radio build', 'the radio build',
 
 export const measuredHeightPage = 'demos/accordions/the-measured-height/';
 
-const knownHeightBuilds: Build[] = ['the checkbox build', 'the radio build'];
+const remembersPage = 'demos/accordions/a-box-remembers-the-fold/';
 
-const pageOf = (build: Build): string => {
-  if (measuredBuilds.includes(build)) return measuredHeightPage;
-  if (knownHeightBuilds.includes(build)) return 'demos/accordions/a-box-remembers-the-fold/';
-  return 'demos/accordions/';
+const tabPage = 'demos/accordions/';
+
+const pageOf: Record<Build, string> = {
+  'the measured checkbox build': measuredHeightPage,
+  'the measured radio build': measuredHeightPage,
+  'the checkbox build': remembersPage,
+  'the radio build': remembersPage,
+  'the inclusive details build': tabPage,
+  'the details build': tabPage
 };
 
 export const showing = (build: Build, style: 'reveal' | 'drawer' | 'static' = 'reveal'): string =>
-  `${pageOf(build)}?type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}&style=${style}`;
+  `${pageOf[build]}?type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}&style=${style}`;
 
 const detailsBuilds: Build[] = ['the inclusive details build', 'the details build'];
 
