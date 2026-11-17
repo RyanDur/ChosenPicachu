@@ -46,9 +46,8 @@ export const BehaviorPractice: FC = () =>
       the code cannot work out from something else. Events are what happened, so I name them in the past tense:
       lifted, dropped, chosen. Each event goes to a pure function that takes the current state and returns the next.
       I keep the state in one place, and replacing it is the only way anything on screen changes.</p>
-    <p className="paragraph">Without these rules, state kept in two places drifts apart, and a change on screen has no
-      event to explain it. The parts below show the split in the code that runs here, then two rules beside it: code
-      that reads as sentences, and a value trusted once it crosses the boundary.</p>
+    <p className="paragraph">Without that, state kept in two places drifts apart, and a change on screen has no event to
+      explain it. The parts below show the split in this site’s code, then the rules that sit beside it.</p>
     <h3 className="paragraph bold">One reducer, one direction</h3>
     <p className="paragraph">A reducer is the pure function each event goes to, and its type says so: it takes the state
       and an event and returns the state.</p>
