@@ -168,7 +168,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the tables tab says the sketch takes one minute to read', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    expect(await tablesTab().readingTime('1 minute to read')).toBeVisible();
+    expect(await tablesTab().readingTimeOf(theSketch)).toHaveTextContent(/^1 minute to read$/);
   });
 
   test('should title the sketch’s page with the tab and the part', async () => {
