@@ -27,6 +27,7 @@ export const accordionsTab = {
     const holding = await Promise.all(parts.map(async name => (await screen.findByRole('region', {name})).contains(element)));
     return parts.filter((_, at) => holding[at]);
   },
+  buildIn: (part: HTMLElement): HTMLElement => within(part).getByRole('article'),
   buildsIn: (part: HTMLElement): string[] =>
     within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
   openPart: async (name: string): Promise<void> => userEvent.click(await screen.findByRole('link', {name})),

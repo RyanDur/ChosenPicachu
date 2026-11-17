@@ -62,6 +62,13 @@ describe('each page is named where a search shows it', () => {
     expect(described()).toBe(names.demos.tables.description);
   });
 
+  test('should give a box remembers the fold’s page its own title and description', async () => {
+    render(<TestApp at={demosAt('accordions/a-box-remembers-the-fold')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.accordions['a-box-remembers-the-fold'].title));
+    expect(described()).toBe(names.accordions['a-box-remembers-the-fold'].description);
+  });
+
   test('should give the measured height’s page its own title and description', async () => {
     render(<TestApp at={demosAt('accordions/the-measured-height')}/>);
 

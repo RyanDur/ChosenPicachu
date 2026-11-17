@@ -90,7 +90,13 @@ const exclusiveBuilds: Build[] = ['the measured radio build', 'the radio build',
 
 export const measuredHeightPage = 'demos/accordions/the-measured-height/';
 
-const pageOf = (build: Build): string => measuredBuilds.includes(build) ? measuredHeightPage : 'demos/accordions/';
+const knownHeightBuilds: Build[] = ['the checkbox build', 'the radio build'];
+
+const pageOf = (build: Build): string => {
+  if (measuredBuilds.includes(build)) return measuredHeightPage;
+  if (knownHeightBuilds.includes(build)) return 'demos/accordions/a-box-remembers-the-fold/';
+  return 'demos/accordions/';
+};
 
 export const showing = (build: Build, style: 'reveal' | 'drawer' | 'static' = 'reveal'): string =>
   `${pageOf(build)}?type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}&style=${style}`;
