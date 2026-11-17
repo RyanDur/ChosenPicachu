@@ -128,6 +128,7 @@ tester.run('american-spelling', prose.rules['american-spelling'], {
     {name: 'should accept a British word between single curly quotes', code: "const said = 'she wrote ‘the colour’';"},
     {name: 'should accept an apostrophe inside single curly quotes', code: "const said = 'she wrote ‘don’t colour it’';"},
     {name: 'should accept a British title inside a cite', code: 'const said = <p>read <cite>The Colour of Magic</cite></p>;'},
+    {name: 'should accept the American plural analyses', code: "const said = 'two analyses of the data';"},
     {name: 'should accept a British name inside an Attribution', code: 'const said = <Attribution>the Colour Society</Attribution>;'}
   ],
   invalid: [
@@ -147,6 +148,11 @@ tester.run('american-spelling', prose.rules['american-spelling'], {
     {name: 'should refuse a British word in a double-quoted string', code: 'const said = "the colour";', errors: british('colour', 'color')},
     {name: 'should refuse a doubled l', code: 'const fuelling = 1;', errors: british('fuelling', 'fueling')},
     {name: 'should refuse an inflected root of its own', code: 'const greys = 1;', errors: british('greys', 'grays')},
+    {name: 'should refuse a name between two strings that hold quote marks', code: "const open = '“'; const colour = 1; const close = '”';", errors: british('colour', 'color')},
+    {name: 'should refuse a name inside a quotation', code: 'const said = <p>“the {colourful} thing”</p>;', errors: british('colourful', 'colorful')},
+    {name: 'should refuse a British form that drops its e', code: 'const analysed = 1;', errors: british('analysed', 'analyzed')},
+    {name: 'should refuse a class name between straight quotes in a string', code: "const said = '<th class=\"colour-cell\">';", errors: british('colour', 'color')},
+    {name: 'should refuse a plain plural', code: 'const cheques = 1;', errors: british('cheques', 'checks')},
     {name: 'should refuse a word after an apostrophe that opens nothing', code: "const said = 'don’t colour it';", errors: british('colour', 'color')}
   ]
 });
