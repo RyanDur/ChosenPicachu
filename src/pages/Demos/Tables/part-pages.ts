@@ -11,6 +11,15 @@ type Told = {
   ordinal: number;
 };
 
+type Onward = {
+  numbered: string;
+  heading: string;
+};
+
+const onward: Record<TablePart, Onward> = {
+  'the-need-and-its-clues': {numbered: '2. Sketch a design from the need', heading: 'phase-design'}
+};
+
 const listings: Record<TablePart, Omit<Told, 'says'>> = {
   'the-need-and-its-clues': {
     name: 'Start with the need, and let it pick the element',
@@ -25,6 +34,7 @@ const addressOf = (part: TablePart): string => `${demoTab.address(DemoTopics.tab
 
 export const tableParts = {
   told: (part: TablePart): Told => ({...listings[part], says: names.tableParts[part].description}),
+  onwardOf: (part: TablePart): Onward => onward[part],
   addressOf,
   shownAt: (pathname: string): Maybe<TablePart> => maybe(all.find(part => pathname === addressOf(part))),
   inTheBook: 5
