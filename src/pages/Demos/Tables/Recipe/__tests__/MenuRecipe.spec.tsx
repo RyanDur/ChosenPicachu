@@ -11,12 +11,12 @@ describe('the sort menu recipe', () => {
     expect(await demoPage.findTitle('The trader can sort the lookbacks by any measure, or take the order back')).toBeInTheDocument();
   });
 
-  test('should link the z-index tab’s part on the popover where the popover comes back, and again where a component does', async () => {
+  test('should cite the z-index part on the popover where the popover comes back, and again where a component does', async () => {
     render(<TestApp at="/"><MenuRecipe/></TestApp>);
 
     expect(demoPage.linksToPageIn(await tablesTab().recipe('sort menu'), demosAt('z-index/why-the-popover-wins'))).toEqual([
-      ['z-index tab', demosAt('z-index/why-the-popover-wins')],
-      ['z-index tab', demosAt('z-index/why-the-popover-wins')]
+      ['Why the popover wins', demosAt('z-index/why-the-popover-wins')],
+      ['Why the popover wins', demosAt('z-index/why-the-popover-wins')]
     ]);
   });
 

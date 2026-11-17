@@ -1,5 +1,5 @@
 import {TabLink} from '@pages/Demos/TabLink';
-import {PartTermLink} from '@pages/Demos/ZIndexDemo';
+import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {DemoTopics} from '@pages/Demos';
 import {FC} from 'react';
 import {useControls} from '../../Controls';
@@ -72,8 +72,8 @@ const RankStory: FC = () => {
     soThat="the table ranks itself, and the trader still outranks it">
     <TheImplementation react="Builds" vanilla="Frame/table/menus.ts"/>
     <Tell>I could build the popup from divs, but then I would have to build focus, dismissal and
-      stacking myself. So the chooser uses the platform’s popover, the one
-      the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> builds its menu on, and the first steps below collect
+      stacking myself. So the chooser uses the platform’s popover, the one the menu is built on in the z-index
+      part <PartLink part="why-the-popover-wins"/>, and the first steps below collect
       what that decision gives. Sorting state has its own trap: the glyph, the attribute and the
       ranked rows each want their own copy of which column is chosen, and copies
       drift.</Tell>
@@ -112,8 +112,8 @@ const RankStory: FC = () => {
             z-index you have ever lost to; light-dismiss on outside click or Escape; one auto
             popover open at a time.</Says>
           <Says>In the React world the sample is built from Menu, Entry and Item. Each is a component, a function that
-            writes a piece of the page, as the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says, and each
-            writes one element.</Says>
+            writes a piece of the page, and each writes one element, as taught in the z-index
+            part <PartLink part="why-the-popover-wins"/>.</Says>
           {world === 'react'
             ? <Says>Item gives its button the site’s shared classes, looks that live in the site’s shared style sheet
               and that an element wears by name, and the page passes Menu the menu’s own, as the sample shows.</Says>

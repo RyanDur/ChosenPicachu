@@ -321,7 +321,7 @@ describe('the links to other tabs', () => {
     const tab = await demoTabs.arrivedOn('Drag sort');
 
     expect(demoPage.linksToPageIn(tab, `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/why-the-popover-wins/`],
+      ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`],
       ['State', `${Paths.demos}z-index/why-the-popover-wins/`]
     ]);
   });

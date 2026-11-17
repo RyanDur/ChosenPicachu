@@ -1,5 +1,5 @@
 import {TabLink} from '@pages/Demos/TabLink';
-import {PartTermLink} from '@pages/Demos/ZIndexDemo';
+import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {DemoLink} from '@pages/Demos/DemoLink';
 import {accordionParts} from '@pages/Demos/Accordions';
 import {FC, ReactNode} from 'react';
@@ -37,6 +37,8 @@ import axesSource from './Axes/Axes.tsx?sample';
 import axesCss from './Axes/Axes.css?sample';
 import '../Recipe/Recipe.css';
 
+const remembersTheFoldTitle = accordionParts.titleOf('remembers-heading');
+
 const PriceStory: FC = () =>
   <Story param="graph" id="price"
     can="The trader can watch the price move, live"
@@ -48,8 +50,7 @@ const PriceStory: FC = () =>
       one candle: a record of where the price opened, how high and how low it reached, and where it closed.</Tell>
     <Tell>The past is fetched as candles and fills the left of the line. The live feed fills the right. The two are
       joined in time order.</Tell>
-    <Tell>The page stores the trades and the fetched candles. React is the library this site’s script is written in, as
-      the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says. Every time it redraws the chart, the candles made
+    <Tell>The page stores the trades and the fetched candles. React is the library this site’s script is written in, as taught in the z-index part <PartLink part="why-the-popover-wins"/>. Every time it redraws the chart, the candles made
       from live trades, the joined series and the points are worked out again. None of them is stored.</Tell>
     <Steps>
       <Step>
@@ -62,7 +63,7 @@ const PriceStory: FC = () =>
           <Says>Each message is checked three ways before it counts. It has to parse as JSON. It has to have the fields
             a match has, each of the right kind. And its price, its size and its time have to turn into real numbers.
             What passes is a Trade. What fails never reaches the page’s state, the values the page holds and draws from,
-            as the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says.</Says>
+            as taught in the z-index part <PartLink part="why-the-popover-wins"/>.</Says>
           <Says>The page keeps only the newest 1,500 trades, because the feed never ends and the page must not grow with
             it, so the live part of the price line and the candles reaches back as far as those trades do.</Says>
         </Words>
@@ -118,7 +119,7 @@ const PriceStory: FC = () =>
           <Want>A trader watching the last few minutes and one reading the whole week are asking different questions.
             The trader picks the period, and everything on the chart follows it.</Want>
           <Says>The period menu sits on the chart. It is a <Mdn path="Web/API/Popover_API">popover</Mdn>, the kind of
-            menu the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> explains.</Says>
+            menu taught in the z-index part <PartLink part="why-the-popover-wins"/>.</Says>
           <Says>Each period has a length of time, a bucket length for a candle, and its own spacing for the marks on
             the time axis. The most candles the chart holds follows from the first two: the period’s length divided by
             its bucket. The hour has candles of a minute, at most 60 of them, marked every ten minutes. The day has
@@ -129,7 +130,7 @@ const PriceStory: FC = () =>
             link opens the chart at the same period. <code className="monospaced">candles:day</code> is the candle chart
             at a day, and a chart at the hour, the default, is written as its kind alone.</Says>
           <Says>The period menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece
-            of the page, as the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says. They write a menu, an li,
+            of the page, as taught in the z-index part <PartLink part="why-the-popover-wins"/>. They write a menu, an li,
             which is one item of a list, and a button.</Says>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
             sheet’s rules pick out. Item gives its button the site’s shared classes that set its look. Menu leaves its
@@ -190,8 +191,8 @@ const PriceStory: FC = () =>
             marks take the second, and so does every part between the price labels and the time marks: <code
             className="monospaced">.y-labels ~ :has(~ .x-labels)</code> picks each part that comes after the price
             labels and has the time marks still after it. The <code className="monospaced">~</code> is the
-            combinator <DemoLink to={accordionParts.addressOf('a-box-remembers-the-fold')}>the accordions tab
-              explains</DemoLink>, which picks the siblings that come later.</Says>
+            combinator that picks the siblings that come later, as taught in the accordions
+            part <DemoLink to={accordionParts.addressOf('a-box-remembers-the-fold')}><cite>{remembersTheFoldTitle}</cite></DemoLink>.</Says>
           <Says>How far apart the time marks sit comes from the period: every ten minutes on the hour chart, every hour
             on the day chart, every day on the week chart.</Says>
         </Words>
@@ -227,7 +228,7 @@ const CandlesStory: FC = () =>
             uses.</Says>
           <Says>The price line takes one price from each candle, its close. This chart draws all of it.</Says>
           <Says>The period menu is on this chart too, the same <Mdn path="Web/API/Popover_API">popover</Mdn> as on the
-            price line: the kind of menu the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> explains.</Says>
+            price line: the kind of menu taught in the z-index part <PartLink part="why-the-popover-wins"/>.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
@@ -259,8 +260,7 @@ const CandlesStory: FC = () =>
             wears <code className="monospaced">sell-side</code>, shared classes that set a side’s colors. The body
             wears <code className="monospaced">side-face</code> and the wall <code className="monospaced">side-wall</code>, so the shared style sheet paints
             them, and the wick wears <code className="monospaced">drawn</code>, which gives it its charcoal stroke.</Says>
-          <Says><code className="monospaced">Bar</code> is a component, a function that writes a piece of the page, as
-            the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says. It draws the wall first, then what the
+          <Says><code className="monospaced">Bar</code> is a component, a function that writes a piece of the page, as taught in the z-index part <PartLink part="why-the-popover-wins"/>. It draws the wall first, then what the
             candle puts inside it, here the wick, then the body on top, so the wick shows over the wall.</Says>
           <Says>The body and the wall each start as a square one unit on a side, and the wick as a line one unit
             tall. <code className="monospaced">shapes.placed</code> gives every shape four custom properties: where the
@@ -427,8 +427,7 @@ const PressureStory: FC = () =>
             behind it, which gives it an edge. The middle line wears <code className="monospaced">drawn</code>, which gives it its charcoal
             stroke.</Says>
           <Says>Each bar is drawn by <code className="monospaced">Bar</code>, the component the candles use: a function
-            that writes a piece of the page, as the <PartTermLink part="why-the-popover-wins">z-index
-              tab</PartTermLink> says. <code className="monospaced">Bar</code> draws a bar and the wall behind it,
+            that writes a piece of the page, as taught in the z-index part <PartLink part="why-the-popover-wins"/>. <code className="monospaced">Bar</code> draws a bar and the wall behind it,
             and <Link className="signpost" to={chartKinds.address('candles')}>the candles chart’s steps</Link> show it in full. Each
             shape starts as a square one unit on a side, takes its four custom properties
             from <code className="monospaced">shapes.placed</code>, and moves by
