@@ -19,13 +19,15 @@ describe('the tables map', () => {
   test('should say on the tables tab how many parts there are, the tutorials among them, and how long they take together', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    expect(await tablesMap.says()).toHaveTextContent(/^Eight parts, about 60 minutes: five that build the live table, then three tutorials/);
+    expect(await tablesMap.says()).toHaveTextContent(/^Eight parts, about 53 minutes: five that build the live table, then three tutorials/);
   });
 
-  test('should list every part on the tables tab, each leading to its page with the build carried', async () => {
+  test('should give only the size on the tables tab, where the stations already list the parts', async () => {
     render(<TestApp at={demosAt('tables', vanilla)}/>);
 
-    expect(await tablesMap.entries()).toEqual(everyPart());
+    await tablesMap.says();
+
+    expect(tablesMap.listed()).not.toBeInTheDocument();
   });
 
   test('should mark the part the reader is on, and lead to every other part', async () => {
@@ -45,6 +47,6 @@ describe('the tables map', () => {
   test('should say on the tables tab how long each tutorial takes to read', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    expect(await tablesTab().tutorialReadingTimeOf('Sort menu')).toHaveTextContent(/^9 minutes to read$/);
+    expect(await tablesTab().tutorialReadingTimeOf('Sort menu')).toHaveTextContent(/^7 minutes to read$/);
   });
 });
