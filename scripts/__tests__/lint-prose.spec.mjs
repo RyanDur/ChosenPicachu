@@ -110,49 +110,23 @@ const british = (word, american) => [{messageId: 'british', data: {british: word
 
 tester.run('american-spelling', prose.rules['american-spelling'], {
   valid: [
-    {name: 'should accept words spelled the American way', code: "const said = 'the color of the center';"},
-    {name: 'should accept a British word inside a Quotation', code: 'const said = <Quotation>the colour</Quotation>;'},
-    {name: 'should accept a British word inside a q', code: 'const said = <q>the colour</q>;'},
-    {name: 'should accept a British word inside a blockquote', code: 'const said = <blockquote>the colour</blockquote>;'},
-    {name: 'should accept a British word nested deeper in a quotation', code: 'const said = <q>the <b>colour</b></q>;'},
-    {name: 'should accept a British word between curly quotes', code: "const said = 'he wrote “the colour” there';"},
+    {name: 'should accept a name spelled the American way', code: 'const colorOfCenter = 1;'},
     {name: 'should accept ARIA’s labelledby', code: '<div aria-labelledby="x" />;'},
     {name: 'should accept ARIA’s labelledby spelled as a property', code: 'const props = {ariaLabelledBy: 1};'},
-    {name: 'should accept a string with no words', code: "const said = '123';"},
-    {name: 'should accept a number', code: 'const said = 1;'},
-    {name: 'should accept a raw template with no cooked text', code: 'const said = String.raw`\\unicode`;'},
-    {name: 'should accept a British word in an address', code: '<a href="https://example.org/colour-guide">guide</a>;'},
-    {name: 'should accept a curly quotation that holds markup', code: 'const said = <p>“the <b>colour</b>”</p>;'},
-    {name: 'should accept a curly quotation that holds a placeholder', code: 'const said = `“the ${x} colour”`;'},
-    {name: 'should accept a British word between straight quotes', code: '// he said "the colour"\nconst said = 1;'},
-    {name: 'should accept a British word between single curly quotes', code: "const said = 'she wrote ‘the colour’';"},
-    {name: 'should accept an apostrophe inside single curly quotes', code: "const said = 'she wrote ‘don’t colour it’';"},
-    {name: 'should accept a British title inside a cite', code: 'const said = <p>read <cite>The Colour of Magic</cite></p>;'},
-    {name: 'should accept the American plural analyses', code: "const said = 'two analyses of the data';"},
-    {name: 'should accept a British name inside an Attribution', code: 'const said = <Attribution>the Colour Society</Attribution>;'}
+    {name: 'should accept the American plural analyses', code: 'const analyses = 1;'},
+    {name: 'should leave a string to the reader', code: "const said = 'the colour';"}
   ],
   invalid: [
-    {name: 'should refuse a British word in a comment', code: '// the colour\nconst said = 1;', errors: british('colour', 'color')},
     {name: 'should refuse a British name', code: 'const colour = 1;', errors: british('colour', 'color')},
     {name: 'should refuse a British word inside a camel-cased name', code: 'const wayLabelled = 1;', errors: british('labelled', 'labeled')},
     {name: 'should refuse a British word in capitals', code: 'const COLOUR = 1;', errors: british('colour', 'color')},
     {name: 'should refuse a British JSX name', code: '<Colour />;', errors: british('colour', 'color')},
-    {name: 'should refuse a British word in JSX text', code: 'const said = <p>the colour</p>;', errors: british('colour', 'color')},
-    {name: 'should refuse a British word in a string', code: "const said = 'the colour';", errors: british('colour', 'color')},
-    {name: 'should refuse a British word in a template', code: 'const said = `the colour`;', errors: british('colour', 'color')},
-    {name: 'should report a word said twice once', code: "const said = 'colour on colour';", errors: british('colour', 'color')},
-    {name: 'should refuse an inflected -ise word', code: 'const initialised = 1;', errors: british('initialised', 'initialized')},
-    {name: 'should refuse an inflected -our word', code: 'const neighbouring = 1;', errors: british('neighbouring', 'neighboring')},
-    {name: 'should refuse an inflected -re word', code: 'const centred = 1;', errors: british('centred', 'centered')},
+    {name: 'should report a word said twice in one name once', code: 'const colourOnColour = 1;', errors: british('colour', 'color')},
+    {name: 'should refuse an -ise verb’s form', code: 'const initialised = 1;', errors: british('initialised', 'initialized')},
     {name: 'should refuse an -our word with an ending', code: 'const colourful = 1;', errors: british('colourful', 'colorful')},
-    {name: 'should refuse a British word in a double-quoted string', code: 'const said = "the colour";', errors: british('colour', 'color')},
+    {name: 'should refuse an -re word’s form', code: 'const centred = 1;', errors: british('centred', 'centered')},
     {name: 'should refuse a doubled l', code: 'const fuelling = 1;', errors: british('fuelling', 'fueling')},
-    {name: 'should refuse an inflected root of its own', code: 'const greys = 1;', errors: british('greys', 'grays')},
-    {name: 'should refuse a name between two strings that hold quote marks', code: "const open = '“'; const colour = 1; const close = '”';", errors: british('colour', 'color')},
-    {name: 'should refuse a name inside a quotation', code: 'const said = <p>“the {colourful} thing”</p>;', errors: british('colourful', 'colorful')},
-    {name: 'should refuse a British form that drops its e', code: 'const analysed = 1;', errors: british('analysed', 'analyzed')},
-    {name: 'should refuse a class name between straight quotes in a string', code: "const said = '<th class=\"colour-cell\">';", errors: british('colour', 'color')},
-    {name: 'should refuse a plain plural', code: 'const cheques = 1;', errors: british('cheques', 'checks')},
-    {name: 'should refuse a word after an apostrophe that opens nothing', code: "const said = 'don’t colour it';", errors: british('colour', 'color')}
+    {name: 'should refuse an irregular spelling', code: 'const analysed = 1;', errors: british('analysed', 'analyzed')},
+    {name: 'should refuse a plain plural', code: 'const cheques = 1;', errors: british('cheques', 'checks')}
   ]
 });

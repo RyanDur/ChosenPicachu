@@ -143,7 +143,7 @@ module.exports = [
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,tsx}'],
-    ignores: ['**/*.d.ts', 'scripts/lint/prose.mjs', 'scripts/__tests__/lint-prose.spec.mjs'],
+    ignores: ['**/*.d.ts', 'scripts/lint/prose.mjs'],
     plugins: {prose},
     rules: {'prose/american-spelling': 'error'}
   },

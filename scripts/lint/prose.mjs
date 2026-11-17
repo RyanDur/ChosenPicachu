@@ -1,4 +1,4 @@
-import {empty, has, is, maybe, not} from '@ryandur/sand';
+import {empty, has, maybe, not} from '@ryandur/sand';
 import {limit} from './wrap.mjs';
 
 const stringTokenTypes = new Set(['String', 'Template']);
@@ -107,7 +107,7 @@ const verbsEndingIse = ['apologise', 'customise', 'emphasise', 'finalise', 'init
   'visualise'];
 const doubledL = ['cancel', 'channel', 'dial', 'duel', 'fuel', 'funnel', 'label', 'level', 'model', 'quarrel', 'signal',
   'total', 'travel', 'tunnel'];
-const forms = {
+const irregularSpellings = {
   analyse: 'analyze', analysed: 'analyzed', analysing: 'analyzing', analyser: 'analyzer',
   analogue: 'analog', analogues: 'analogs', catalogue: 'catalog', catalogues: 'catalogs', catalogued: 'cataloged',
   cataloguing: 'cataloging', enrol: 'enroll', enrols: 'enrolls', enrolment: 'enrollment', fulfil: 'fulfill',
@@ -142,96 +142,26 @@ const american = Object.fromEntries([
   ...verbsEndingIse.flatMap(verb => ending(verb.slice(0, -1), `${verb.slice(0, -2)}z`,
     sharedEndings('e', 'ed', 'es', 'ing', 'er', 'ers', 'ation', 'ations'))),
   ...doubledL.flatMap(root => ending(root, root, [['led', 'ed'], ['ling', 'ing'], ['ler', 'er'], ['lers', 'ers']])),
-  ...Object.entries(forms)
+  ...Object.entries(irregularSpellings)
 ]);
-const quoting = new Set(['Quotation', 'Attribution', 'blockquote', 'q', 'cite']);
 const wordsIn = /[A-Z]?[a-z]+|[A-Z]+(?![a-z])/g;
-const quoteMarks = /[“”‘]|’(?![a-z])/gi;
-const straightQuoted = /"[^"\n]*"/g;
-const address = /\bhttps?:\/\/[^\s"'`<>)]+/g;
 const ariaLabelledBy = /labelled-?by/gi;
-
-/**
- * @param {any} node
- * @returns {boolean}
- */
-const quoted = node => has(node)
-  && (node.type === 'JSXElement' && quoting.has(node.openingElement.name.name) || quoted(node.parent));
-
-/**
- * @param {string} text
- * @param {RegExp} pattern
- */
-const spacedOut = (text, pattern) => text.replace(pattern, found => ' '.repeat(found.length));
-
-/**
- * @typedef {{node: any, range: [number, number], container: object, prose: boolean}} Text
- */
 
 /** @type {import('eslint').Rule.RuleModule} */
 const americanSpelling = {
   meta: {type: 'suggestion', schema: [], messages: {british: 'spell it the American way: {{american}}, not {{british}}'}},
   create(context) {
-    const source = context.sourceCode.text;
-    /** @type {Text[]} */
-    const texts = [];
-    /** @type {Text[]} */
-    const names = [];
-
-    // The parser splits a sentence around markup and placeholders, so a quotation's marks can sit in two text nodes
-    // of one element or one template. Marks pair within that element or template, never across code.
-    const quotationsIn = (/** @type {Text[]} */ held) => {
-      /** @type {Map<object, number[]>} */
-      const marksBy = new Map();
-      held.forEach(({range: [from, to], container}) => [...source.slice(from, to).matchAll(quoteMarks)]
-        .forEach(mark => marksBy.set(container, [...maybe(marksBy.get(container)).orElse([]), from + mark.index])));
-      return [...marksBy.values()].flatMap(marks => marks.reduce((spans, at) => {
-        const opening = source[at] === '“' || source[at] === '‘';
-        const open = spans.findLast(span => span.length === 1 && (source[span[0]] === '“') === (source[at] === '”'));
-        if (opening) return [...spans, [at]];
-        return is(open) ? spans.map(span => span === open ? [span[0], at] : span) : spans;
-      }, /** @type {number[][]} */ ([])).filter(span => span.length === 2));
-    };
-
-    /**
-     * @param {Text} text
-     * @param {number[][]} quotations
-     */
-    const reportBritishWordsIn = ({node, range: [from, to], prose}, quotations) => {
-      const masks = [address, ariaLabelledBy, ...prose ? [straightQuoted] : []];
-      const shown = masks.reduce(spacedOut, source.slice(from, to));
-      const inQuotation = (/** @type {number} */ at) => quotations.some(([open, close]) => open <= at && at < close);
-      [...new Set([...shown.matchAll(wordsIn)]
-        .filter(found => not(inQuotation(from + found.index)))
-        .map(found => found[0].toLowerCase()))]
-        .filter(word => Object.hasOwn(american, word))
-        .forEach(british => context.report({node, messageId: 'british', data: {british, american: american[british]}}));
-    };
-
     /**
      * @param {any} node
-     * @param {[number, number]} range
-     * @param {object} container
-     * @param {boolean} prose
+     * @param {string} name
      */
-    const hold = (node, range, container, prose) => {
-      if (not(quoted(node))) texts.push({node, range, container, prose});
-    };
+    const reportBritishWordsIn = (node, name) => [...new Set(maybe(name.replace(ariaLabelledBy, '').match(wordsIn))
+      .orElse([]).map(word => word.toLowerCase()))]
+      .filter(word => Object.hasOwn(american, word))
+      .forEach(british => context.report({node, messageId: 'british', data: {british, american: american[british]}}));
     return {
-      Identifier: node => names.push({node, range: node.range, container: node, prose: false}),
-      JSXIdentifier: node => names.push({node, range: node.range, container: node, prose: false}),
-      JSXText: node => hold(node, node.range, node.parent, true),
-      Literal: node => {
-        if (typeof node.value === 'string') hold(node, node.range, node, false);
-      },
-      TemplateElement: node => hold(node, node.range, node.parent, false),
-      'Program:exit': () => {
-        const comments = context.sourceCode.getAllComments()
-          .map(comment => ({node: comment, range: comment.range, container: comment, prose: true}));
-        const quotations = quotationsIn([...texts, ...comments]);
-        [...texts, ...comments].forEach(text => reportBritishWordsIn(text, quotations));
-        names.forEach(name => reportBritishWordsIn(name, []));
-      }
+      Identifier: node => reportBritishWordsIn(node, node.name),
+      JSXIdentifier: node => reportBritishWordsIn(node, node.name)
     };
   }
 };

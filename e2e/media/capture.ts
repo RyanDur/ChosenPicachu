@@ -12,7 +12,10 @@ const run = promisify(execFile);
 // playwright ships its own ffmpeg; the reels are cropped to the table with it
 const ffmpegIn = async (cache: string): Promise<Maybe<string>> => {
   const entries = await readdir(cache, {withFileTypes: true}).catch(() => []);
-  const home = maybe(entries.find(entry => entry.isDirectory() && entry.name.startsWith('ffmpeg-')));
+  const build = (name: string) => Number(name.slice('ffmpeg-'.length));
+  const newest = entries.filter(entry => entry.isDirectory() && entry.name.startsWith('ffmpeg-'))
+    .sort((one, other) => build(other.name) - build(one.name));
+  const home = maybe(newest.at(0));
   const binaries = await home.map(({name}) => readdir(join(cache, name))).orElse(Promise.resolve([]));
   return home.mBind(({name}) => maybe(binaries.find(binary => binary.startsWith('ffmpeg')))
     .map(binary => join(cache, name, binary)));
