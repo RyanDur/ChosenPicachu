@@ -7,7 +7,7 @@ import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
 import {DemoLink} from '@pages/Demos/DemoLink';
-import {featuresHeading} from '@pages/Demos/headings';
+import {featuresHeading} from './features-heading';
 import '../Tutorials.css';
 import './Tutorials.css';
 

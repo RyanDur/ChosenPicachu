@@ -1,7 +1,8 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
-import {designHeading, featuresHeading, needHeading, stations, storiesHeading} from '@pages/Demos/headings';
+import {designHeading, needHeading, stations, storiesHeading} from '@pages/Demos/headings';
+import {featuresHeading} from './features-heading';
 import type {Place} from '@pages/Demos/useCarriedAddress';
 import {livingStories} from './living-stories';
 
