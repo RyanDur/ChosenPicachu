@@ -22,13 +22,14 @@ const stackFact: Record<Stack, string> = {
 type Axis = 'vertical' | 'sideways';
 
 const axisFact: Record<Axis, ReactNode> = {
-  vertical: <><code className="monospaced">:where(.stack-down, .stack-up)</code> is the part of the rule’s <WhyThirdIsOnTopLink>selector</WhyThirdIsOnTopLink> that
-    matches the panel with either class, and the rule applies to each banner in it. So I write
-    the <code className="monospaced">grid-template-rows</code> rule
+  vertical: <><code className="monospaced">:where(.stack-down, .stack-up)</code> is the part of
+    the rule’s <WhyThirdIsOnTopLink>selector</WhyThirdIsOnTopLink> that matches the panel with either class, and the
+    rule applies to each banner in it. So I write the <code className="monospaced">grid-template-rows</code> rule
     once for the downward and upward stacks, and the <code className="monospaced">grid-template-columns</code> rule once
     for the two sideways stacks.</>,
-  sideways: <><code className="monospaced">:where(.stack-left, .stack-right)</code> is the part of the rule’s <WhyThirdIsOnTopLink>selector</WhyThirdIsOnTopLink> that
-    matches the panel with either class, and the rule applies to each banner in it. So I write
+  sideways: <><code className="monospaced">:where(.stack-left, .stack-right)</code> is the part of
+    the rule’s <WhyThirdIsOnTopLink>selector</WhyThirdIsOnTopLink> that matches the panel with either class, and the
+    rule applies to each banner in it. So I write
     the <code className="monospaced">grid-template-columns</code> rule once for the leftward and rightward stacks, and
     the <code className="monospaced">grid-template-rows</code> rule once for the two vertical stacks.</>
 };
