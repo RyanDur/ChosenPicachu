@@ -4,7 +4,7 @@ import {demosAt} from '@pages/Demos/__test_support';
 import {tablesMap} from '@pages/Demos/Tables/__test_support';
 
 const vanilla = '?world=vanilla';
-const everyPart = (current?: string) => [
+const everyPart = [
   ['1. Start with the need, and let it pick the element', demosAt('tables/the-need-and-its-clues', vanilla)],
   ['2. Sketch a design from the need', demosAt('tables/the-sketch', vanilla)],
   ['3. Slice the design into stories', demosAt('tables/the-slices', vanilla)],
@@ -13,7 +13,7 @@ const everyPart = (current?: string) => [
   ['6. Drag sort', demosAt('tables/sort', vanilla)],
   ['7. Sort menu', demosAt('tables/menu', vanilla)],
   ['8. Drag resize', demosAt('tables/resize', vanilla)]
-].map(([name, address]) => [name, name === current ? null : address]);
+];
 
 describe('the tables map', () => {
   test('should say on the tables tab how long the parts take together', async () => {
@@ -30,17 +30,17 @@ describe('the tables map', () => {
     expect(tablesMap.listed()).not.toBeInTheDocument();
   });
 
-  test('should mark the part the reader is on, and lead to every other part', async () => {
+  test('should mark the part the reader is on, and lead to every part', async () => {
     render(<TestApp at={demosAt('tables/the-slices', vanilla)}/>);
 
-    expect(await tablesMap.signposts()).toEqual(everyPart('3. Slice the design into stories'));
+    expect(await tablesMap.signposts()).toEqual(everyPart);
     expect(await tablesMap.current()).toHaveTextContent('3. Slice the design into stories');
   });
 
   test('should mark a tutorial as the part the reader is on', async () => {
     render(<TestApp at={demosAt('tables/menu', vanilla)}/>);
 
-    expect(await tablesMap.signposts()).toEqual(everyPart('7. Sort menu'));
+    expect(await tablesMap.signposts()).toEqual(everyPart);
     expect(await tablesMap.current()).toHaveTextContent('7. Sort menu');
   });
 });
