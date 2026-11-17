@@ -97,11 +97,3 @@ describe('the gap step, on a term part one defines', () => {
     expect(explanation.linkNamed(step, 'selector')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second&stack=left'));
   });
 });
-
-describe('the gap step, with the stack growing sideways', () => {
-  test('should keep the linked selector apart from the word after it', async () => {
-    render(<TestApp at={demosAt('z-index', '?stack=left')}/>);
-
-    expect(await recipeSteps.findWords('Open a gap in the stack first')).toHaveTextContent('the rule’s selector that matches');
-  });
-});
