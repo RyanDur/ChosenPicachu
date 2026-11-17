@@ -16,10 +16,10 @@ export const arrangedView: ArrangedView = {
   })),
   rowsOf: (arrangement, aggregates) => {
     const shown = cells.seated(aggregates);
-    const valueOf = (row: string, column: string) => maybe(shown.find(({key}) => key === row))
+    const sortKeyOf = (row: string, column: string) => maybe(shown.find(({key}) => key === row))
       .mBind(seated => maybe(seated.values[column]));
     const byLookback: ReadonlyMap<string, Measures> = new Map(aggregates.map(row => [row.lookback.key, row]));
-    return arrangements.standingOf(arrangement, valueOf).flatMap(key => {
+    return arrangements.standingOf(arrangement, sortKeyOf).flatMap(key => {
       const row = byLookback.get(key);
       return row ? [row] : [];
     });

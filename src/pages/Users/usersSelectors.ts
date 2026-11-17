@@ -10,7 +10,7 @@ const holdingAdds: ReadonlySet<RosterRequest> = new Set(['waiting', 'unreachable
 const inOrder = (users: readonly User[], order: readonly string[]): readonly User[] =>
   order.flatMap(id => users.filter(user => user.id === id));
 
-const valueOf = (users: readonly User[]) => (row: string, column: string) =>
+const sortKeyOf = (users: readonly User[]) => (row: string, column: string) =>
   maybe(userColumns.seated(users).find(({key}) => key === row)).mBind(seated => maybe(seated.values[column]));
 
 type UsersSelectors = {
@@ -24,7 +24,7 @@ type UsersSelectors = {
 };
 
 export const usersSelectors: UsersSelectors = {
-  users: ({users, arrangement}) => inOrder(users, arrangements.standingOf(arrangement, valueOf(users))),
+  users: ({users, arrangement}) => inOrder(users, arrangements.standingOf(arrangement, sortKeyOf(users))),
   columns: ({arrangement}) => arrangement.columns.map(name => ({
     name,
     data: maybe(userColumns.all.find(column => column.name === name)).map(column => column.data).orElse({label: name}),
