@@ -3,7 +3,6 @@
 
   display: grid;
   gap: var(--base);
-  max-inline-size: var(--drawn-width);
   margin: 0;
   container-type: inline-size;
 
@@ -11,7 +10,8 @@
     --drawing-column: 100cqi;
 
     display: block;
-    inline-size: 100%;
+    inline-size: auto;
+    max-inline-size: 100%;
     block-size: auto;
   }
 
