@@ -17,7 +17,7 @@ describe('a code sample', () => {
 
   test('should name the library a sample was taken from before its file', () => {
     const library: CodeFile = {path: 'src/lib/util/index.ts', url: 'https://github.com/RyanDur/sand/blob/main/src/lib/util/index.ts', owner: 'sand'};
-    render(<Snippet label="TS" lines={[{text: 'export const has = notEmpty;', from: {file: library, line: 188, kind: 'site'}}]}/>);
+    render(<Snippet label="TS" lines={[{text: 'export const has = notEmpty;', from: {file: library, line: 188, kind: 'linked'}}]}/>);
 
     expect(codeSample.fileLink('sand’s util/index.ts on GitHub')).toHaveAttribute('href', `${library.url}#L188-L188`);
   });

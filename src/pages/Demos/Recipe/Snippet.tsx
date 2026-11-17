@@ -15,7 +15,7 @@ type Source = {path: string; url: string; owner?: string; first: number; last: n
 
 const sourcesOf = (lines: readonly Line[]): Source[] =>
   lines.reduce<Source[]>((sources, {from}) => {
-    if (from?.kind === 'site') {
+    if (from?.kind === 'linked') {
       const {file: {path, url, owner}, line} = from;
       const known = sources.find(source => source.path === path);
       return known

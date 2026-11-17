@@ -14,7 +14,7 @@ export type CodeFile = {
 export type Origin = {
   file: CodeFile;
   line: number;
-  kind: 'site' | 'exhibit';
+  kind: 'linked' | 'exhibit';
 };
 
 export type Line = {
