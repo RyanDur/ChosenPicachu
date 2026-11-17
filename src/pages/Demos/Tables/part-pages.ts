@@ -2,7 +2,6 @@ import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {designHeading, needHeading, stations, storiesHeading} from '@pages/Demos/headings';
-import {featuresHeading} from './features-heading';
 import type {Place} from '@pages/Demos/useCarriedAddress';
 import {livingStories} from './living-stories';
 
@@ -68,11 +67,6 @@ const placeOf = (part: TablePart): PartPlace =>
 
 const featuresStation = book.length + 1;
 
-const theFeatures: PartPlace = {title: featuresHeading.title, ...whereIs(featuresStation)};
-
-const besides = (part: TablePart, step: number): Maybe<PartPlace> =>
-  maybe(book[ordinalOf(part) - 1 + step]).map(placeOf);
-
 export const tableParts = {
   told: (part: TablePart): Told => ({
     name: titles[part],
@@ -80,8 +74,6 @@ export const tableParts = {
     ordinal: ordinalOf(part),
     says: names.tableParts[part].description
   }),
-  previousOf: (part: TablePart): Maybe<PartPlace> => besides(part, -1),
-  nextOf: (part: TablePart): Maybe<PartPlace> => maybe(besides(part, 1).orElse(theFeatures)),
   addressOf,
   placeOf,
   numbered,
