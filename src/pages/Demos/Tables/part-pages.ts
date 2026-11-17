@@ -14,15 +14,17 @@ type Told = {
   ordinal: number;
 };
 
-const book: readonly TablePart[] = [
+const book = [
   'the-need-and-its-clues',
   'the-sketch',
   'the-slices',
   'the-still-table',
   'the-live-table-and-the-store'
-];
+] as const satisfies readonly TablePart[];
 
-const titles: Record<TablePart, string> = {
+type BookPart = typeof book[number];
+
+const titles: Record<BookPart, string> = {
   'the-need-and-its-clues': needHeading.title,
   'the-sketch': designHeading.title,
   'the-slices': storiesHeading.title,
@@ -30,7 +32,7 @@ const titles: Record<TablePart, string> = {
   'the-live-table-and-the-store': 'Make the table live'
 };
 
-const minutes: Record<TablePart, number> = {
+const minutes: Record<BookPart, number> = {
   'the-need-and-its-clues': 1,
   'the-sketch': 1,
   'the-slices': 2,
