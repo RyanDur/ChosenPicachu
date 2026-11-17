@@ -7,6 +7,7 @@ import menuCss from '@components/Menu/Menu.css?sample';
 import itemSource from '@components/Menu/Item.tsx?sample';
 import '../Runs.css';
 import {zIndexParts} from './part-pages';
+import {WhyThirdIsOnTopLink} from './WhyThirdIsOnTopLink';
 
 export const PopoverExplained: FC = () =>
   <section aria-labelledby={partHeadings.popoverWins} className="stacking-part">
@@ -79,7 +80,8 @@ export const PopoverExplained: FC = () =>
           there is no room below, and where a browser has no position-area, it centers the menu on the screen.
           In the style sheet the placement sits under <code className="monospaced">&amp;[popover]</code>, which reads as
           a menu that is also a popover. The placement is measured from an anchor, and a popover’s anchor is the button
-          that opened it. A menu that is not a popover gets no anchor from the button that opens it, so the rule leaves
+          that opened it. A menu that is not a popover gets no anchor from the button that opens it, so
+          the <WhyThirdIsOnTopLink>rule</WhyThirdIsOnTopLink> leaves
           that menu out. Card one’s list in <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else
             forms a stacking context</cite></a> names
           its own anchor.</p>
