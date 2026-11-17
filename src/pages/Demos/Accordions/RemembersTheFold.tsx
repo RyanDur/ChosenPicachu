@@ -119,7 +119,8 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
                 in <TabLink to={DemoTopics.zIndex}>React</TabLink>, the library
                 this site’s script is written in, which writes class
                 as <code className="monospaced">className</code> and for
-                as <code className="monospaced">htmlFor</code>.</p>
+                as <code className="monospaced">htmlFor</code>. A class is a name an element wears so a rule can
+                pick it out.</p>
               <Snippet label="TS" lines={sample}/>
             </li>
             <li className="run">
