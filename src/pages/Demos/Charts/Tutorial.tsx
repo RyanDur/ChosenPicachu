@@ -11,33 +11,23 @@ import kindsSource from './chart-kinds.ts?sample';
 import crossingSource from '../DragAndDrop/crossing.ts?sample';
 import workspaceCss from './Workspace.css?sample';
 import '../Recipe/Recipe.css';
-import {Part, Parts} from '../Parts';
+import {Link} from 'react-router';
 import {ChartKind, chartKinds} from './chart-kinds';
 
-const told: Record<ChartKind, Pick<Part, 'says' | 'reading'>> = {
-  price: {
-    says: 'A line shows whether the market is climbing, stalling or rolling over, without a digit to read.',
-    reading: '8 minutes'
-  },
-  candles: {
-    says: 'Each bucket of time answers for itself: where it opened and closed, how far it reached, and how much conviction was underneath.',
-    reading: '7 minutes'
-  },
-  pressure: {
-    says: 'Bars show whether buyers drove the price there or the sellers stepped away.',
-    reading: '5 minutes'
-  },
-  pie: {
-    says: 'One circle at the session’s end shows who owned it.',
-    reading: '5 minutes'
-  }
+type Told = {
+  says: string;
+  minutes: number;
 };
 
-const chartPages: readonly Part[] = chartKinds.all.map(kind => ({
-  title: chartKinds.names[kind],
-  to: chartKinds.address(kind),
-  ...told[kind]
-}));
+const told: Record<ChartKind, Told> = {
+  price: {says: 'A line shows whether the market is climbing, stalling or rolling over, without a digit to read.', minutes: 8},
+  candles: {
+    says: 'Each bucket of time answers for itself: where it opened and closed, how far it reached, and how much conviction was underneath.',
+    minutes: 7
+  },
+  pressure: {says: 'Bars show whether buyers drove the price there or the sellers stepped away.', minutes: 5},
+  pie: {says: 'One circle at the session’s end shows who owned it.', minutes: 5}
+};
 
 const WorkspaceStory: FC = () =>
   <Story param="graph" id="workspace"
@@ -180,7 +170,13 @@ export const ChartsTutorial: FC = () => {
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
     <h2 id={titled} className="title">let’s build this feature</h2>
-    <Parts labelledBy={titled} parts={chartPages}/>
+    <ol aria-labelledby={titled}>
+      {chartKinds.all.map(kind => <li key={kind}>
+        <Link className="signpost" to={chartKinds.address(kind)}>{chartKinds.names[kind]}</Link>
+        <p className="paragraph">{told[kind].says}</p>
+        <p className="caption muted-ink">{`${told[kind].minutes} minutes`}</p>
+      </li>)}
+    </ol>
     <p className="overview paragraph">
       We are going to build this site’s live charts, feature by feature. Here is how to use this page: the card below is
       the workspace, told as a <a className="signpost"
