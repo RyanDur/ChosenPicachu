@@ -23,7 +23,7 @@ export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
       </hgroup>
       <fieldset>
         <legend className="off-screen">folds</legend>
-        <ul className="accordion trim">
+        <ul className="accordion">
           <li className="fold close drawn-piece" onChange={() => dispatch(foldChange.allClosed())}>
             <input id="measured-close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio"
               name="measured-group"/>
@@ -36,7 +36,7 @@ export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
               <label id={barOf(id)} className="info-label opening-arrow drawn-piece prior-approached corner-after"
                 htmlFor={`measured-fold-${id}-radio`}>{heading}</label>
               <MeasuredPanel namedBy={barOf(id)}>
-                <p className="info-paragraph">{story}</p>
+                <p className="info-paragraph drawn-piece">{story}</p>
               </MeasuredPanel>
             </li>)}
         </ul>

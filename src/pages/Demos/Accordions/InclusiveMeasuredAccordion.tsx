@@ -26,7 +26,7 @@ export const InclusiveMeasuredAccordion: FC<AccordionProps> = ({
       </hgroup>
       <fieldset>
         <legend className="off-screen">folds</legend>
-        <ul className="accordion trim">
+        <ul className="accordion">
           {folds.map(({heading, story}, id) =>
             <li key={heading} className="fold"
               onChange={event => dispatch(toggled(event, barOf(id)))}>
@@ -34,7 +34,7 @@ export const InclusiveMeasuredAccordion: FC<AccordionProps> = ({
               <label id={barOf(id)} className="info-label opening-arrow drawn-piece prior-approached corner-after"
                 htmlFor={`measured-fold-${id}-checkbox`}>{heading}</label>
               <MeasuredPanel namedBy={barOf(id)}>
-                <p className="info-paragraph">{story}</p>
+                <p className="info-paragraph drawn-piece">{story}</p>
               </MeasuredPanel>
             </li>)}
         </ul>

@@ -14,7 +14,7 @@ export const ExclusiveAccordion: FC<AccordionProps> = ({
   </hgroup>
   <fieldset>
     <legend className="off-screen">folds</legend>
-    <ul className="accordion trim">
+    <ul className="accordion">
       <li className="fold close drawn-piece">
         <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
         <label className="info-label prior-approached" htmlFor="close-radio">Close</label>
@@ -25,7 +25,7 @@ export const ExclusiveAccordion: FC<AccordionProps> = ({
           <label id={`fold-${id}-radio-label`}
             className="info-label opening-arrow drawn-piece prior-approached corner-after"
             htmlFor={`fold-${id}-radio`}>{heading}</label>
-          <div className="info">
+          <div className="info drawn-piece">
             <section className="info-text foot-shadowed focus-ringed" tabIndex={0}
               aria-labelledby={`fold-${id}-radio-label`}>
               <p className="info-paragraph">{story}</p>
