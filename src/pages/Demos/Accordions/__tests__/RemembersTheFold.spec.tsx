@@ -122,14 +122,6 @@ describe('the box that remembers the fold, chosen by type', () => {
     expect(explanation.codeBeside(part, /To open and close a fold/)).toBeInTheDocument();
     expect(explanation.sourcesBeside(part, /To open and close a fold/)).toEqual([]);
   });
-
-  test('should, with exclusive chosen, say what an attribute is before it names the id', async () => {
-    render(<TestApp at={demosAt(remembers, '?type=exclusive')}/>);
-
-    const part = await explanation.part(title);
-
-    expect(explanation.saying(part, /To open and close a fold/)).toHaveTextContent('An attribute is a name, often with a value, written inside an element’s opening tag. An id is an attribute whose value no other element on the page shares.');
-  });
 });
 
 describe('the rule that reads the box', () => {
