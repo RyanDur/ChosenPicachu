@@ -242,6 +242,14 @@ describe('the old way', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/the-max-height-guess', '?type=inclusive&style=drawer'));
   });
 
+  test('should give the max-height guess’s reading time in the singular, as one minute', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const oldWay = await explanation.part(parts[0]);
+
+    expect(explanation.saying(oldWay, '1 minute to read')).toBeInTheDocument();
+  });
+
   test('should say what the max-height guess does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 

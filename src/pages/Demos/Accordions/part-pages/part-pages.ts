@@ -42,7 +42,7 @@ type AccordionParts = {
 
 const listings: Record<AccordionPart, Listing> = {
   'a-box-remembers-the-fold': {heading: 'remembers-heading', minutes: 8},
-  'the-max-height-guess': {heading: 'max-height-guess-heading', minutes: 0},
+  'the-max-height-guess': {heading: 'max-height-guess-heading', minutes: 1},
   'the-measured-height': {heading: 'measured-heading', minutes: 5}
 };
 

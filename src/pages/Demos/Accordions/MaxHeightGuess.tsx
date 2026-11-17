@@ -8,7 +8,7 @@ import './PartDepth.css';
 
 export const MaxHeightGuess: FC = () => <>
   <p className="paragraph">This part builds on “<PartLink part="a-box-remembers-the-fold"/>”, for the known height
-    and the rule that shows the panel.</p>
+    and the rule that reads the box.</p>
   <p className="paragraph">When the height isn’t known ahead of time, most of us slid a fold open with a
     guess. A <RemembersTheFoldLink>transition</RemembersTheFoldLink> moves a property over a set time, but it
     can’t move a height to auto, the height the text needs, so we moved the

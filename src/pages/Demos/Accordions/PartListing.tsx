@@ -9,7 +9,7 @@ export const PartListing: FC<{part: AccordionPart}> = ({part}) => {
     <h3 id={heading} className="sub-title bold"><PartLink part={part}/></h3>
     <p className="paragraph">{says}</p>
     <p className="caption muted-ink">
-      <time dateTime={`PT${minutes}M`}>{`${minutes} minutes to read`}</time>
+      <time dateTime={`PT${minutes}M`}>{`${minutes} ${minutes === 1 ? 'minute' : 'minutes'} to read`}</time>
     </p>
   </section>;
 };
