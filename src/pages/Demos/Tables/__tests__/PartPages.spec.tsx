@@ -253,7 +253,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the tables tab holds every station the slices on their page point at', async () => {
     const {unmount} = render(<TestApp at={theSlicesPage}/>);
     await tablesTab().partPlace();
-    const stations = demoPage.sliceStations();
+    const stations = demoPage.sliceStationsOn(demosAt('tables'));
     unmount();
 
     render(<TestApp at={demosAt('tables')}/>);
