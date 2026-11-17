@@ -24,6 +24,12 @@ tester.run('breaks-between-words', prose.rules['breaks-between-words'], {
   ],
   invalid: [
     {
+      name: 'should refuse a word that starts the line after a self-closing component, which writes words of its own',
+      code: 'const said = <p>\n  what <PartLink part="x"/>\n  give: a z-index\n</p>;',
+      output: null,
+      errors: [{messageId: 'joined'}]
+    },
+    {
       name: 'should refuse a word that starts the line after an element, since the break drops the space before it',
       code: 'const said = <p>\n  the rule’s <a href="/">selector</a>\n  that matches\n</p>;',
       output: null,
