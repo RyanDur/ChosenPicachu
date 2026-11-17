@@ -20,6 +20,15 @@ describe('the measured height, on its own page', () => {
     expect(appAddress.fragment()).toBe('#max-height-guess-heading');
   });
 
+  test('following the part it builds on for the input and its label opens that part’s page, with the fold choices carried', async () => {
+    const from = demosAt(measuredHeight, '?type=inclusive&style=drawer');
+    render(<TestApp at={from}/>);
+
+    await accordionsTab.openPart('A box remembers the fold, and a rule reads it');
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/a-box-remembers-the-fold', '?type=inclusive&style=drawer'));
+  });
+
   test('the measured height’s page says its place in the accordions book', async () => {
     render(<TestApp at={demosAt(measuredHeight)}/>);
 

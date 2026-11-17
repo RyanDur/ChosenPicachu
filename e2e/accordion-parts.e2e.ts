@@ -2,6 +2,27 @@ import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {accordionsTab, siteFrame} from './__test_support';
 
+test('a reader follows a box remembers the fold from the accordions tab to its page, with the known-height fold at its top', async ({page}) => {
+  await page.goto('demos/accordions/');
+  await siteFrame(page).hydrated();
+
+  await accordionsTab(page).partLink('A box remembers the fold, and a rule reads it').click();
+
+  await expect(page).toHaveURL(/demos\/accordions\/a-box-remembers-the-fold\/$/);
+  await expect(accordionsTab(page).partTitle('A box remembers the fold, and a rule reads it')).toBeVisible();
+  await expect(page.getByRole('heading', {name: 'Accordion using a radio group and a known height', exact: true})).toBeVisible();
+});
+
+test('a box remembers the fold’s page builds its fold with the fold type chosen on the tab', async ({page}) => {
+  await page.goto('demos/accordions/?type=inclusive&style=drawer');
+  await siteFrame(page).hydrated();
+
+  await accordionsTab(page).partLink('A box remembers the fold, and a rule reads it').click();
+
+  await expect(page).toHaveURL(/demos\/accordions\/a-box-remembers-the-fold\/\?type=inclusive&style=drawer$/);
+  await expect(page.getByRole('heading', {name: 'Accordion using checkboxes and a known height', exact: true})).toBeVisible();
+});
+
 test('a reader follows the measured height from the accordions tab to its page, with the fold it measures at its top', async ({page}) => {
   await page.goto('demos/accordions/');
   await siteFrame(page).hydrated();

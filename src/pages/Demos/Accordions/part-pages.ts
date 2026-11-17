@@ -26,7 +26,7 @@ const titles: Record<TabHeading, string> = {
 
 type Listing = {heading: TabHeading; minutes: number};
 
-type Told = {name: string; minutes: number; ordinal: number; says: string};
+type Told = {heading: TabHeading; name: string; minutes: number; ordinal: number; says: string};
 
 type AccordionParts = {
   told: (part: AccordionPart) => Told;
@@ -40,6 +40,7 @@ type AccordionParts = {
 };
 
 const listings: Record<AccordionPart, Listing> = {
+  'a-box-remembers-the-fold': {heading: 'remembers-heading', minutes: 0},
   'the-measured-height': {heading: 'measured-heading', minutes: 9}
 };
 
@@ -63,6 +64,7 @@ export const accordionParts: AccordionParts = {
   told: part => {
     const {heading, minutes} = listings[part];
     return {
+      heading,
       name: titles[heading],
       minutes,
       ordinal: placeOf(heading) + 1,

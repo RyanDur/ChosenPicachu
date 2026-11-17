@@ -11,6 +11,7 @@ import {FoldMotionDial} from './FoldMotionDial';
 import {FoldTypeDial} from './FoldTypeDial';
 import {foldInput} from './fold-input';
 import {looks} from './looks';
+import {PartLink} from './PartLink';
 import {TabPartLink} from './TabPartLink';
 import {PlainFold} from './Plain';
 import exclusiveMeasuredAccordionSource from './ExclusiveMeasuredAccordion.tsx?sample';
@@ -46,8 +47,8 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
   const input = foldInput.of(foldType);
   const {Accordion: Measured, sample} = measuredBuilds[foldType];
   return <>
-    <p className="paragraph">This part builds on two before it on the accordions tab:
-      “<TabPartLink heading="remembers-heading"/>”, for the {input} and its label, and
+    <p className="paragraph">This part builds on two before it:
+      “<PartLink part="a-box-remembers-the-fold"/>”, for the {input} and its label, and
       “<TabPartLink heading="max-height-guess-heading"/>”, which this part answers.</p>
     <DialGroup>
       <FoldTypeDial/>

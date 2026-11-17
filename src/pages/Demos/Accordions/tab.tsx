@@ -2,6 +2,7 @@ import {FC, ReactNode} from 'react';
 import {seeded} from '@components/fibs';
 import {AccordionsExplained} from './Explained';
 import {MeasuredHeight} from './MeasuredHeight';
+import {RemembersTheFold} from './RemembersTheFold';
 import {PartPage} from './PartPage';
 import {AccordionPart} from './part-pages';
 import {useShownPart} from './useShownPart';
@@ -17,12 +18,13 @@ const paragraphs = (count: number, dealt: () => string, {randNumber, randParagra
 const draws = seeded('the accordion exhibits');
 const dealt = draws.wordDeck();
 const measuredFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
+const knownFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
 const foldLists = {
-  known: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)},
   platform: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)}
 };
 
 const pagesOfParts: Record<AccordionPart, ReactNode> = {
+  'a-box-remembers-the-fold': <RemembersTheFold folds={knownFolds}/>,
   'the-measured-height': <MeasuredHeight folds={measuredFolds}/>
 };
 

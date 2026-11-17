@@ -12,6 +12,7 @@ describe('the pages drawn into the build', () => {
   test.each([
     ...Object.values(Paths).filter(/** @param {string} path */ path => path.startsWith('/') && not(path.includes(':'))),
     ...Object.values(DemoTopics).map(demoTab.address),
+    `${Paths.demos}accordions/a-box-remembers-the-fold/`,
     `${Paths.demos}accordions/the-measured-height/`,
     `${Paths.demos}z-index/why-third-is-on-top/`,
     `${Paths.demos}tables/the-need-and-its-clues/`,
