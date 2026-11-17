@@ -5,7 +5,7 @@ import {BannerExplained} from './BannerExplained';
 import {FormsContextExplained} from './FormsContextExplained';
 import {MenuExplained} from './MenuExplained';
 import {PopoverExplained} from './PopoverExplained';
-import {StackingExplained} from './Explained';
+import {ThirdOnTopListing} from './ThirdOnTopListing';
 import {TopLayerTutorial} from './Tutorial';
 import {ZIndexIntroduction} from './Introduction';
 import {WhichCardIsOnTop} from './WhichCardIsOnTop';
@@ -34,7 +34,7 @@ export const Room: FC = () => {
   return useShownPart().either(part => <PartPage part={part}>{pagesOfParts[part]}</PartPage>, () => <>
     <ZIndexIntroduction/>
     <NaturalZIndex className="card rounded-corners lifted padded"/>
-    <StackingExplained/>
+    <ThirdOnTopListing/>
     <MenuExplained/>
     <FormsContextExplained/>
     <PopoverExplained/>
