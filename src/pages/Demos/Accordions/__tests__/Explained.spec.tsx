@@ -298,6 +298,14 @@ describe('the tab’s words on the build part 2 shows', () => {
     expect(explanation.linkNamed(platformWay, 'the checkbox build’s folds')).toHaveAttribute('href', remembers);
   });
 
+  test('should link classes in How details works to part 2’s page, where class is defined', async () => {
+    render(<TestApp at={demosAt('accordions', build)}/>);
+
+    const platformWay = await explanation.part(parts[1]);
+
+    expect(explanation.linkNamed(platformWay, 'classes')).toHaveAttribute('href', remembers);
+  });
+
   test('should link the known-height build’s bars to part 2’s page', async () => {
     render(<TestApp at={demosAt('accordions', build)}/>);
 
