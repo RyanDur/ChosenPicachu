@@ -10,6 +10,7 @@ import {DragSortTutorial} from './DragSort';
 import {MenuRecipe, ResizeRecipe} from './Recipe';
 import {DemoLink} from '@pages/Demos/DemoLink';
 import {tableParts} from './part-pages';
+import {tablesBook} from './tables-book';
 import {TablesMap} from './TablesMap';
 import './TutorialPage.css';
 
@@ -25,7 +26,6 @@ export const TutorialPage: FC = () => {
   const startingAt = tableParts.told(tableTutorials.startingPart);
   const {to, search} = tableParts.whereIs(startingAt.ordinal);
   return useShownTutorial().either(tutorial => {
-    const {ordinal, outOf} = tableTutorials.positionOf(tutorial);
     const TutorialRecipe = recipes[tutorial];
     return <section aria-labelledby={titled} className="tutorial-page">
       <hgroup>
@@ -33,7 +33,7 @@ export const TutorialPage: FC = () => {
           <Link className="signpost" to={`${demoTab.address(DemoTopics.tables)}${searchFromShown({})}`}>
             {demoTab.names[DemoTopics.tables]}
           </Link>
-          {` · tutorial ${ordinal} of ${outOf}`}
+          {` · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.parts}`}
         </p>
         <h2 id={titled} className="title">{tableTutorials.nameOf(tutorial)}</h2>
       </hgroup>

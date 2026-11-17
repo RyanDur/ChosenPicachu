@@ -5,14 +5,12 @@ import {PartPlace, TablePart, tableParts} from './part-pages';
 
 export type Tutorial = keyof typeof names.tables;
 
-type Position = {ordinal: number; outOf: number};
-
 type TableTutorials = {
   all: () => readonly Tutorial[];
   nameOf: (tutorial: Tutorial) => string;
   minutesOf: (tutorial: Tutorial) => number;
   addressOf: (tutorial: Tutorial) => string;
-  positionOf: (tutorial: Tutorial) => Position;
+  ordinalOf: (tutorial: Tutorial) => number;
   placeOf: (tutorial: Tutorial) => PartPlace;
   at: (pathname: string) => Maybe<Tutorial>;
   startingPart: TablePart;
@@ -34,16 +32,16 @@ const minutes: Record<Tutorial, number> = {sort: 18, menu: 7, resize: 7};
 
 const addressOf = (tutorial: Tutorial): string => `${demoTab.address(DemoTopics.tables)}${tutorial}/`;
 
-const positionOf = (tutorial: Tutorial): Position => ({ordinal: inOrder.indexOf(tutorial) + 1, outOf: inOrder.length});
+const ordinalOf = (tutorial: Tutorial): number => tableParts.inTheBook + inOrder.indexOf(tutorial) + 1;
 
 export const tableTutorials: TableTutorials = {
   all: () => inOrder,
   nameOf: tutorial => named[tutorial],
   minutesOf: tutorial => minutes[tutorial],
   addressOf,
-  positionOf,
+  ordinalOf,
   placeOf: tutorial => ({
-    title: tableParts.numbered(tableParts.inTheBook + positionOf(tutorial).ordinal, named[tutorial]),
+    title: tableParts.numbered(ordinalOf(tutorial), named[tutorial]),
     to: addressOf(tutorial)
   }),
   at: pathname => maybe(inOrder.find(tutorial => pathname === addressOf(tutorial))),
