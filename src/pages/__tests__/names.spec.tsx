@@ -83,6 +83,13 @@ describe('each page is named where a search shows it', () => {
     expect(described()).toBe(names.accordions['what-the-platform-gives-now'].description);
   });
 
+  test('should give how a sliding fold moves’ page its own title and description', async () => {
+    render(<TestApp at={demosAt('accordions/how-a-sliding-fold-moves')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names.accordions['how-a-sliding-fold-moves'].title));
+    expect(described()).toBe(names.accordions['how-a-sliding-fold-moves'].description);
+  });
+
   test('should give the measured height’s page its own title and description', async () => {
     render(<TestApp at={demosAt('accordions/the-measured-height')}/>);
 

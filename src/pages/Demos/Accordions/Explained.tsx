@@ -8,7 +8,6 @@ import inclusiveHtmlAloneSource from './InclusiveHtmlAlone.tsx?sample';
 import exclusiveHtmlAloneSource from './ExclusiveHtmlAlone.tsx?sample';
 import {InclusiveHtmlAloneAccordion} from './InclusiveHtmlAlone';
 import {ExclusiveHtmlAloneAccordion} from './ExclusiveHtmlAlone';
-import resetCss from '../../../styles/reset.css?sample';
 import {looks} from './looks';
 import {accordionParts} from './part-pages';
 import {tabHeadings} from './tab-headings';
@@ -101,34 +100,6 @@ export const AccordionsExplained: FC = () => {
       <PartListing part="the-measured-height" level={3}/>
     </section>
     <PartListing part="what-the-platform-gives-now" level={2}/>
-    <section aria-labelledby="motion-heading" className="accordion-part">
-      <h2 id="motion-heading" className="title bold">{accordionParts.titleOf('motion-heading')}</h2>
-      <ol className={looks.runs}>
-        <li className="run">
-          <p className="paragraph">Every fold that slides on this tab’s pages moves by transition, never by animation,
-            because a reader may press again before the fold lands. If they do,
-            a <Mdn path="Web/CSS/CSS_transitions">transition</Mdn> turns around from wherever it is.
-            An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays a set of keyframes on its own clock, whatever
-            the state does.</p>
-        </li>
-        <li className="run">
-          <p className="paragraph">When a reader asks
-            for <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn>, every fold opens with no slide. The
-            reset, the style sheet that sets every element’s defaults, has a reduced-motion block with three rules.
-            The first uses the universal selector, *, which picks every element and reaches their before and after
-            too. It sets each transition’s duration to zero, cuts each animation to 0.01 milliseconds, plays each
-            animation once,
-            and turns smooth scrolling into a jump. The second names ::details-content, the part a
-            details hides, which the universal selector cannot reach. The third sets view
-            transitions, the browser’s moves from one page state to the next, to no animation at all.</p>
-          <Snippet label="CSS" lines={carve.unit(resetCss, '@media (prefers-reduced-motion: reduce) {')}/>
-        </li>
-        <li className="run">
-          <p className="paragraph">A fold’s transition has no delay, so with no duration it has no middle: the
-            change lands whole in one frame, one picture the browser draws. One that ran even for an instant
-            would show the old state for a frame, and a fold’s text would arrive after the fold had opened.</p>
-        </li>
-      </ol>
-    </section>
+    <PartListing part="how-a-sliding-fold-moves" level={2}/>
   </>;
 };
