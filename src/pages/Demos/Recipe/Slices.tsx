@@ -11,22 +11,27 @@ type SlicesProps = {
   soThat: string;
   slices: ReactNode;
   sliced: [string, number][];
-  headedBy?: string;
-  stationsAt?: string;
+  partPage?: PartPage;
 };
 
-const StationLink: FC<{station: number; at?: string}> = ({station, at}) => {
+type PartPage = {
+  headedBy: string;
+  stationsAt: string;
+};
+
+const StationLink: FC<{station: number; partPage?: PartPage}> = ({station, partPage}) => {
   const carried = useCarriedAddress();
   const id = stations.idOf(station);
-  return maybe(at).either(
-    tab => <Link className="slice-station signpost caption upright" to={carried(tab, id)}>station {station}</Link>,
+  return maybe(partPage).either(
+    ({stationsAt}) => <Link className="slice-station signpost caption upright" to={carried(stationsAt, id)}>station {station}</Link>,
     () => <a className="slice-station signpost caption upright" href={`#${id}`}>station {station}</a>);
 };
 
-export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, headedBy, stationsAt}) => {
-  const Can: 'h3' | 'h4' = maybe(headedBy).either(() => 'h3', () => 'h4');
-  return <section className="phase card rounded-corners lifted" aria-labelledby={maybe(headedBy).orElse(storiesHeading.id)}>
-    {maybe(headedBy).either(
+export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, partPage}) => {
+  const Can: 'h3' | 'h4' = maybe(partPage).either(() => 'h3', () => 'h4');
+  return <section className="phase card rounded-corners lifted"
+    aria-labelledby={maybe(partPage).map(({headedBy}) => headedBy).orElse(storiesHeading.id)}>
+    {maybe(partPage).either(
       () => null,
       () => <h3 id={storiesHeading.id} className="phase-title title">{storiesHeading.title}</h3>)}
     <p className="overview paragraph muted-ink">
@@ -47,7 +52,7 @@ export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, headedBy, 
       {sliced.map(([slice, station]) =>
         <li className="italic muted-ink" key={slice}>
           <span>{slice}</span>
-          <StationLink station={station} at={stationsAt}/>
+          <StationLink station={station} partPage={partPage}/>
         </li>)}
     </ul>
   </section>;
