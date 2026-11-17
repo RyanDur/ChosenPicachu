@@ -7,15 +7,14 @@ import surfaceCss from '../../../styles/surface.css?sample';
 import tabsCss from '@navigation/Tabs/Tabs.css?sample';
 import '../Runs.css';
 import {zIndexParts} from './part-pages';
+import {PartLink} from './PartLink';
 
 const mdn = 'https://developer.mozilla.org/en-US/docs/Web/CSS/';
 
 export const WhatElseFormsAStackingContext: FC = () => <>
   <p className="paragraph">A card with no z-index at all can still trap the list inside it. This part shows which
-    properties form a stacking context and which only change how a box looks. It assumes what
-    “<DemoLink to={zIndexParts.addressOf('why-third-is-on-top')}>{zIndexParts.titleOf('third-on-top')}</DemoLink>”
-    and “<DemoLink to={zIndexParts.addressOf('why-9999-still-loses')}>{zIndexParts.titleOf('still-loses')}</DemoLink>”
-    give: positioned and auto, a stacking context, and a z-index compared only inside its own.</p>
+    properties form a stacking context and which only change how a box looks. It assumes what <PartLink
+    part="why-third-is-on-top"/> and <PartLink part="why-9999-still-loses"/> give: positioned and auto, a stacking context, and a z-index compared only inside its own.</p>
   <ContextChooser/>
   <ol className="runs card rounded-corners lifted padded">
     <li className="run">
