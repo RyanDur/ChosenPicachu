@@ -17,6 +17,7 @@ export {Reveal} from './Reveal';
 export {Defined} from './Defined';
 export {Clues} from './Clues';
 export {Design} from './Design';
+export {designHeading} from './design-heading';
 export {Slices} from './Slices';
 export {storyKeys} from './storyKeys';
 export {Codes} from './Codes';
