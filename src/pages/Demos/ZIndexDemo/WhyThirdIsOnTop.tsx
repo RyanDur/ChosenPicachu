@@ -12,10 +12,14 @@ import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 import './ZIndexDemo.css';
 
+const remembersTheFold = accordionParts.told('a-box-remembers-the-fold').name;
+const remembersTheFoldAt = accordionParts.addressOf('a-box-remembers-the-fold');
+
 export const WhyThirdIsOnTop: FC = () => <>
   <p className="paragraph">Even with no z-index anywhere, one of three overlapping cards ends up on top. This part
     shows why, and then what one z-index does to it. It assumes what
-    the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> gives: an element and a class.</p>
+    the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> gives: an element and <DemoLink
+    to={remembersTheFoldAt}>a class</DemoLink>.</p>
   <NaturalZIndex className="card rounded-corners lifted padded"/>
   <ol className="runs card rounded-corners lifted padded">
     <li className="run">
@@ -37,8 +41,8 @@ export const WhyThirdIsOnTop: FC = () => <>
     </li>
     <li className="run">
       <p className="paragraph">Choose a card with the pills above the pile, and the page adds the class raised to
-        it. A class is a name a style sheet’s rules pick out, as the <DemoLink
-        to={accordionParts.addressOf('a-box-remembers-the-fold')}>accordions tab</DemoLink> says. The <TabLink
+        it. A class is a name a style sheet’s rules pick out, as the accordions part <DemoLink
+        to={remembersTheFoldAt}><cite>{remembersTheFold}</cite></DemoLink> says. The <TabLink
         to={DemoTopics.accordions} heading="fold-choices-heading">accordions tab</TabLink> says what a rule is: a
         selector and the properties it sets. The style sheet gives raised a z-index of 1. A positioned card with a
         z-index of 1 is painted after every card left at auto, so the raised card lands on top. The others keep their
