@@ -1,21 +1,16 @@
 import {FC, PropsWithChildren, useEffect, useReducer} from 'react';
-import {asyncResult, has, is, maybe, not} from '@ryandur/sand';
+import {asyncResult, has, is, Maybe, maybe, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {useEnvironment} from '@environment';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {useControls} from '../../Controls';
+import {measured, useMeasuredOnResize} from '../../Stage';
 import {tableFrame} from './table-frame';
-import {TableFrameChange, tableFrameChange} from './table-frame-change';
+import {tableFrameChange} from './table-frame-change';
 import './TableFrame.css';
 
-const measured = (frame: HTMLIFrameElement, dispatch: (change: TableFrameChange) => void): void => {
-  maybe(frame.contentDocument).mBind(({body}) => maybe(body)).map(body => {
-    const height = Math.ceil(body.getBoundingClientRect().height);
-    if (height > 0) {
-      dispatch(tableFrameChange.grown(height));
-    }
-  });
-};
+const bodyOf = (frame: HTMLIFrameElement): Maybe<HTMLElement> =>
+  maybe(frame.contentDocument).mBind(({body}) => maybe(body));
 
 export const TableFrame: FC<PropsWithChildren> = ({children}) => {
   const {pace, origin, motion} = useControls();
@@ -30,11 +25,7 @@ export const TableFrame: FC<PropsWithChildren> = ({children}) => {
     .onFailure(() => dispatchBanner(bannerChange.raised('the table could not be assembled')))
     .cancel, [pace, origin, motion, tradeFeed, tradeHistory, tradeProduct, dispatchBanner]);
 
-  useEffect(() => maybe(frame).map(watched => {
-    const watcher = new ResizeObserver(() => measured(watched, dispatch));
-    watcher.observe(watched);
-    return () => watcher.disconnect();
-  }).orElse(() => undefined), [frame]);
+  useMeasuredOnResize(bodyOf, dispatch, tableFrameChange.grown, frame);
 
   const stood = is(frame);
 
@@ -44,7 +35,7 @@ export const TableFrame: FC<PropsWithChildren> = ({children}) => {
       style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
       onLoad={event => {
         dispatch(tableFrameChange.loaded(event.currentTarget));
-        measured(event.currentTarget, dispatch);
+        measured(bodyOf(event.currentTarget), dispatch, tableFrameChange.grown);
       }}
       srcDoc={frameMarkup}/>}
     {not(stood) && children}
