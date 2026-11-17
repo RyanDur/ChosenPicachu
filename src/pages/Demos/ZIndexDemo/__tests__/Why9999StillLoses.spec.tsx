@@ -22,12 +22,21 @@ describe('why 9999 still loses, on its own page', () => {
     expect(explanation.linkNamed(part, 'Why Third is on top')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 
-  test('should link the top layer its menu names to where the tab defines it, with the raised card carried', async () => {
+  test('should link Why the popover wins, where its opener glosses the top layer, to its heading on the tab with the raised card carried', async () => {
     render(<TestApp at={demosAt(stillLoses, '?raised=second')}/>);
+
+    const part = await explanation.part(title);
+    const opener = explanation.saying(part, /^A list with a z-index of 9999/);
+
+    expect(explanation.linkNamed(opener, 'Why the popover wins')).toHaveAttribute('href', `${demosAt('z-index', '?raised=second')}#popover-wins-heading`);
+  });
+
+  test('should name the top layer in its steps without a link, so pressing the words never leaves the exhibit', async () => {
+    render(<TestApp at={demosAt(stillLoses)}/>);
 
     const trap = await theTrap.find();
 
-    expect(explanation.linkNamed(trap, 'top layer')).toHaveAttribute('href', `${demosAt('z-index', '?raised=second')}#popover-wins-heading`);
+    expect(explanation.queryLinkNamed(trap, 'top layer')).not.toBeInTheDocument();
   });
 
   test('should lead back to part one’s page and on to part three on the tab, by number and title, with the raised card carried', async () => {
