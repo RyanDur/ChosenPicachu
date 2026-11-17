@@ -221,6 +221,14 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titles(theSlices)).toHaveLength(1);
   });
 
+  test('the slices’ page heads its story one level under its title', async () => {
+    render(<TestApp at={theSlicesPage}/>);
+
+    await tablesTab().partPlace();
+
+    expect(tablesTab().titles('The trader can watch the live market over lookbacks they arrange', 3)).toHaveLength(1);
+  });
+
   test('the slices on their page point at their stations on the tables tab, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-slices', '?world=vanilla')}/>);
 
