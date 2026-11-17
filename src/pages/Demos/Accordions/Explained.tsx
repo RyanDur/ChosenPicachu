@@ -27,10 +27,6 @@ import './Explained.css';
 import {Build} from './build';
 import './PartDepth.css';
 
-export type FoldLists = {
-  platform: Record<FoldType, Fold[]>;
-};
-
 const toldRun = 'run card rounded-corners lifted padded';
 
 type HtmlAloneBuild = {
@@ -49,10 +45,10 @@ const platformBuilds: Record<FoldType, Build> = {
 };
 
 type Props = {
-  foldLists: FoldLists;
+  folds: Record<FoldType, Fold[]>;
 };
 
-export const AccordionsExplained: FC<Props> = ({foldLists}) => {
+export const AccordionsExplained: FC<Props> = ({folds}) => {
   const {foldType, foldMotion} = useControls();
   const exhibitMoving = classNames(looks.exhibit, foldMotion);
   const input = foldInput.of(foldType);
@@ -154,7 +150,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
     </section>
     <section aria-labelledby="platform-way-heading" className="accordion-part">
       <h2 id="platform-way-heading" className="title bold">{accordionParts.titleOf('platform-way-heading')}</h2>
-      <Platform className={exhibitMoving} folds={foldLists.platform[foldType]}/>
+      <Platform className={exhibitMoving} folds={folds[foldType]}/>
       <ol className={looks.runs}>
         <li className="run">
           <p className="paragraph">This build uses details and summary, the two elements from the first accordion. Each

@@ -19,9 +19,7 @@ const draws = seeded('the accordion exhibits');
 const dealt = draws.wordDeck();
 const measuredFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
 const knownFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
-const foldLists = {
-  platform: {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)}
-};
+const platformFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
 
 const pagesOfParts: Record<AccordionPart, ReactNode> = {
   'a-box-remembers-the-fold': <RemembersTheFold folds={knownFolds}/>,
@@ -30,4 +28,4 @@ const pagesOfParts: Record<AccordionPart, ReactNode> = {
 
 export const Room: FC = () => useShownPart().either(
   part => <PartPage part={part}>{pagesOfParts[part]}</PartPage>,
-  () => <AccordionsExplained foldLists={foldLists}/>);
+  () => <AccordionsExplained folds={platformFolds}/>);
