@@ -65,6 +65,6 @@ describe('why 9999 still loses, on the tab', () => {
     render(<TestApp at={demosAt('z-index')}/>);
     await demoTabs.arrivedOn('Z-index');
 
-    expect(theTrap.missing()).toBe(true);
+    expect(theTrap.query()).not.toBeInTheDocument();
   });
 });
