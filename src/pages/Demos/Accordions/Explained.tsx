@@ -286,10 +286,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own style
                   sheet keeps the structure, the row, the padding and the height. The samples that follow show both, the
                   style sheet’s rule and then the shared class.</p>
-                <Snippet label="CSS" lines={[
-                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '&:not(.close) .info-label {')), lines.blank,
-                  ...carve.unit(drawingCss, '.drawn-piece {')
-                ]}/>
+                <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '&:not(.close) .info-label {'))}/>
+                <Snippet label="CSS" lines={carve.unit(drawingCss, '.drawn-piece {')}/>
               </li>
               <li className="run">
                 <p className="paragraph">Each bar shows an arrow that points right while its fold is closed and down
@@ -308,7 +306,6 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 <Snippet label="CSS" lines={[
                   ...lines.fromTheExhibit(carve.unit(accordionsCss, '&:not(.close) .info-label {')), lines.blank,
                   ...lines.fromTheExhibit(carve.unit(accordionsCss, '.opening-arrow::after {')), lines.blank,
-                  ...carve.unit(surfaceCss, '.corner-after::after {'), lines.blank,
                   ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info-toggle:checked ~ .info-label::after {')),
                   ...{
                     reveal: [lines.blank, ...lines.fromTheExhibit(carve.unit(accordionsCss, ':is(.reveal, .drawer) &:not(.close) .info-toggle ~ .info-label::after {'))],
@@ -316,6 +313,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     static: []
                   }[foldMotion]
                 ]}/>
+                <Snippet label="CSS" lines={carve.unit(surfaceCss, '.corner-after::after {')}/>
                 <TwoBordersTurned/>
               </li>
               <li className="run">
@@ -391,14 +389,9 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   drawer: ' With the drawer, visibility moves on the same 300 milliseconds and changes at the visible end, so a closing panel keeps its text until it is shut.',
                   static: ''
                 }[foldMotion]}</p>
-                <Snippet label="CSS" lines={[
-                  ...carve.unit(surfaceCss, '.focus-ringed {'),
-                  ...{
-                    reveal: [lines.blank, ...lines.fromTheExhibit(carve.unit(oldWayMotionCss, '& .info {\n      transition: height'))],
-                    drawer: [lines.blank, ...lines.fromTheExhibit(carve.unit(oldWayMotionCss, '& .info {\n      transition: height'))],
-                    static: []
-                  }[foldMotion]
-                ]}/>
+                <Snippet label="CSS" lines={carve.unit(surfaceCss, '.focus-ringed {')}/>
+                {foldMotion !== 'static' &&
+                  <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(oldWayMotionCss, '& .info {\n      transition: height'))}/>}
               </li>
               {foldType === 'exclusive' && <li className="run">
                 <p className="paragraph">Every radio in the build has the name group, so checking a fold unchecks the
@@ -418,10 +411,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   so a press anywhere on the bar counts. It
                   wears <code className="monospaced">drawn-piece</code>, the class the other bars wear, which has no hover
                   or focus of its own.</p>
-                <Snippet label="CSS" lines={[
-                  ...lines.fromTheExhibit(carve.unit(accordionsCss, '&.close {')), lines.blank,
-                  ...carve.unit(drawingCss, '.drawn-piece {')
-                ]}/>
+                <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '&.close {'))}/>
+                <Snippet label="CSS" lines={carve.unit(drawingCss, '.drawn-piece {')}/>
               </li>}
               <li className="run">
                 <p className="paragraph">A screen reader announces each fold as what its markup says it is:

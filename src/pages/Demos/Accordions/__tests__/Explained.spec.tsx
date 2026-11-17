@@ -357,12 +357,15 @@ describe('how the known height works', () => {
   const knownHeightWorks = 'How the known height works';
   const threeParts = /^The fold is the three parts from/;
 
-  test('should link the bar’s shared look, beside the run that names it, to the site’s drawing style sheet on GitHub', async () => {
+  test('should show the bar’s own rule as taken from the exhibit, and its shared look apart from it, linked to the site’s drawing style sheet on GitHub', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const folded = recipeFolds.story(await explanation.part(parts[0]), knownHeightWorks);
 
-    expect(explanation.sourcesBeside(folded, /The bar looks like the site’s diagrams/)).toEqual(['styles/drawing.css on GitHub']);
+    expect(explanation.sampleCaptionsBeside(folded, /The bar looks like the site’s diagrams/)).toEqual([
+      'Taken from the exhibit on this page. The rest of the site doesn’t use it.',
+      'styles/drawing.css on GitHub'
+    ]);
   });
 
   test('should show, with inclusive chosen, the build’s source beside the fold’s run as taken from the exhibit, with no link', async () => {
