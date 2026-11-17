@@ -4,7 +4,7 @@ import {FC, ReactNode} from 'react';
 import {Link} from 'react-router';
 import {maybe} from '@ryandur/sand';
 import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
-import {stations} from './stations';
+import {stations} from '@pages/Demos/stations';
 import {storiesHeading} from '@pages/Demos/headings';
 
 type SlicesProps = {

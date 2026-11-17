@@ -1,7 +1,6 @@
 export {Stories} from './Stories';
 export {DialNote} from './DialNote';
 export {Station} from './Station';
-export {stations} from './stations';
 export {Exercise} from './Exercise';
 export {Story} from './Story';
 export {StoryDepth} from './StoryDepth';
