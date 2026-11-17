@@ -1,7 +1,7 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {DemoTopics, demoTab} from '@pages/Demos';
-import {TablePart} from './part-pages';
+import {PartPlace, TablePart, tableParts} from './part-pages';
 
 export type Tutorial = keyof typeof names.tables;
 
@@ -13,6 +13,7 @@ type TableTutorials = {
   minutesOf: (tutorial: Tutorial) => number;
   addressOf: (tutorial: Tutorial) => string;
   positionOf: (tutorial: Tutorial) => Position;
+  placeOf: (tutorial: Tutorial) => PartPlace;
   at: (pathname: string) => Maybe<Tutorial>;
   startingPart: TablePart;
 };
@@ -33,12 +34,18 @@ const minutes: Record<Tutorial, number> = {sort: 18, menu: 7, resize: 7};
 
 const addressOf = (tutorial: Tutorial): string => `${demoTab.address(DemoTopics.tables)}${tutorial}/`;
 
+const positionOf = (tutorial: Tutorial): Position => ({ordinal: inOrder.indexOf(tutorial) + 1, outOf: inOrder.length});
+
 export const tableTutorials: TableTutorials = {
   all: () => inOrder,
   nameOf: tutorial => named[tutorial],
   minutesOf: tutorial => minutes[tutorial],
   addressOf,
-  positionOf: tutorial => ({ordinal: inOrder.indexOf(tutorial) + 1, outOf: inOrder.length}),
+  positionOf,
+  placeOf: tutorial => ({
+    title: tableParts.numbered(tableParts.inTheBook + positionOf(tutorial).ordinal, named[tutorial]),
+    to: addressOf(tutorial)
+  }),
   at: pathname => maybe(inOrder.find(tutorial => pathname === addressOf(tutorial))),
   startingPart: 'the-live-table-and-the-store'
 };

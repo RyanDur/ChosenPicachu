@@ -3,10 +3,7 @@ import {tableTutorials} from './tutorial-pages';
 
 const parts: PartPlace[] = tableParts.inOrder.map(tableParts.placeOf);
 
-const tutorials: PartPlace[] = tableTutorials.all().map(tutorial => ({
-  title: `${tableParts.inTheBook + tableTutorials.positionOf(tutorial).ordinal}. ${tableTutorials.nameOf(tutorial)}`,
-  to: tableTutorials.addressOf(tutorial)
-}));
+const tutorials: PartPlace[] = tableTutorials.all().map(tableTutorials.placeOf);
 
 const minutes = tableParts.inOrder.reduce((sum, part) => sum + tableParts.told(part).minutes, 0) +
   tableTutorials.all().reduce((sum, tutorial) => sum + tableTutorials.minutesOf(tutorial), 0);
