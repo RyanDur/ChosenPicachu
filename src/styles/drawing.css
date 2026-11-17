@@ -1,112 +1,78 @@
-.drawn {
-    stroke: var(--charcoal);
-}
+.drawn { stroke: var(--charcoal); }
 
-.paper-filled {
-    fill: var(--paper);
-}
+.paper-filled { fill: var(--paper); }
 
-.faded-leather-filled {
-    fill: var(--faded-leather);
-}
+.faded-leather-filled { fill: var(--faded-leather); }
 
-.faded-mint-filled {
-    fill: var(--faded-mint);
-}
+.faded-mint-filled { fill: var(--faded-mint); }
 
-.drawn-filled {
-    fill: var(--charcoal);
-}
+.drawn-filled { fill: var(--charcoal); }
 
-.approach-filled {
-    fill: var(--approach);
-}
+.approach-filled { fill: var(--approach); }
 
-.ring-drawn {
-    stroke: var(--ring);
-}
+.ring-drawn { stroke: var(--ring); }
 
-.ink-filled {
-    fill: var(--ink);
-}
+.ink-filled { fill: var(--ink); }
 
-.hollow {
-    fill: none;
-}
+.hollow { fill: none; }
 
 .drawn-piece {
-    background: var(--paper);
-    border: var(--hairline) solid var(--charcoal);
+  background: var(--paper);
+  border: var(--hairline) solid var(--charcoal);
 }
 
-.dashed-drawn {
-    stroke-dasharray: 4 3;
-}
+.dashed-drawn { stroke-dasharray: 4 3; }
 
 .buy-side {
-    --side-face: var(--mint-shade);
-    --side-wall: var(--mint-ink);
-    --side-ink: var(--mint-ink);
-    --side-line: var(--mint-dim);
+  --side-face: var(--mint-shade);
+  --side-wall: var(--mint-ink);
+  --side-ink: var(--mint-ink);
+  --side-line: var(--mint-dim);
 }
 
 .sell-side {
-    --side-face: var(--international-orange-engineering);
-    --side-wall: var(--international-orange-engineering-shade);
-    --side-ink: var(--international-orange-engineering);
-    --side-line: var(--international-orange-engineering);
+  --side-face: var(--international-orange-engineering);
+  --side-wall: var(--international-orange-engineering-shade);
+  --side-ink: var(--international-orange-engineering);
+  --side-line: var(--international-orange-engineering);
 }
 
-.side-face {
-    fill: var(--side-face);
-}
+.side-face { fill: var(--side-face); }
 
-.side-wall {
-    fill: var(--side-wall);
-}
+.side-wall { fill: var(--side-wall); }
 
-.side-ink {
-    color: var(--side-ink);
-}
+.side-ink { color: var(--side-ink); }
 
 .volume-side {
-    --side-face: var(--faded-leather);
-    --side-wall: var(--field-drab);
+  --side-face: var(--faded-leather);
+  --side-wall: var(--field-drab);
 }
 
-.side-line {
-    stroke: var(--side-line, var(--primary-blue));
-}
+.side-line { stroke: var(--side-line, var(--primary-blue)); }
 
-.side-dot {
-    fill: var(--side-line, var(--primary-blue));
-}
+.side-dot { fill: var(--side-line, var(--primary-blue)); }
 
-.line-shadowed {
-    filter: drop-shadow(0 var(--hairline-x-2) var(--hairline) var(--shadow));
-}
+.line-shadowed { filter: drop-shadow(0 var(--hairline-x-2) var(--hairline) var(--shadow)); }
 
 .spinning-dots {
-    --dots-trailing: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em,
+  --dots-trailing: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em,
     -0.775em -0.297em 0 -0.46em, -0.82em -0.09em 0 -0.477em;
 
-    font-size: var(--base-x-11);
-    width: 1em;
-    height: 1em;
-    box-shadow: var(--dots-trailing);
-    animation: turning 1.7s infinite linear;
+  font-size: var(--base-x-11);
+  width: 1em;
+  height: 1em;
+  box-shadow: var(--dots-trailing);
+  animation: turning 1.7s infinite linear;
 }
 
 @keyframes turning {
-    0% {
-        transform: rotate(0deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
 
-    100% {
-        transform: rotate(360deg);
-    }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.pulled-apart-hatched {
-    fill: url(#page-pulled-apart-hatch);
-}
+.pulled-apart-hatched { fill: url(#page-pulled-apart-hatch); }
