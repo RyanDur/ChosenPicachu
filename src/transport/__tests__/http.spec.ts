@@ -241,7 +241,7 @@ describe('http', () => {
     test('gives back nothing when the server answers with no content', async () => {
       respondWith('DELETE', 204, null);
 
-      expect(await sent().orNull()).toEqual(undefined);
+      expect(await sent().map(answered => answered.orElse('no body')).orNull()).toEqual('no body');
     });
 
     test('fails as forbidden when the server refuses', async () => {

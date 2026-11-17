@@ -36,15 +36,14 @@ export const http = {
         .or(() => maybe(response, isCreated).map(createdBody<T>))
         .orElse(fail(response))),
 
-  delete: (endpoint: string): Result.Async<undefined, HTTPError> =>
+  delete: (endpoint: string): Result.Async<Maybe<never>, HTTPError> =>
     request(endpoint, 'DELETE').mBind(response =>
-      maybe(response, isNoContent).map(emptySuccess)
+      maybe(response, isNoContent).map(noBody<never>)
         .orElse(fail(response)))
 };
 
 const bodyResult = (response: Response) =>
   asyncResult(response.json()).or(() => asyncFailure(HTTPError.JSON_BODY_ERROR));
-const emptySuccess = () => asyncSuccess<undefined, HTTPError>(undefined);
 const noBody = <T>() => asyncSuccess<Maybe<T>, HTTPError>(nothing());
 const createdBody = <T>(response: Response) => bodyResult(response).map((body: T) => maybe(body));
 
