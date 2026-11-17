@@ -192,7 +192,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                 other element on the page shares. The label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute
                 names the radio’s id. That link makes a press anywhere on the label press the radio. Each id
                 includes the fold’s place in the list, so no two radios share one.</p>}
-            <Snippet label="HTML" lines={foldType === 'inclusive' ? lines.fromTheExhibit(carve.between(foldHtmlSource, '<li class="fold">', '</li>')) : radioFold}/>
+            <Snippet label="HTML" lines={foldType === 'inclusive' ? carve.between(foldHtmlSource, '<li class="fold">', '</li>') : radioFold}/>
           </li>
           <li className="run">
             <p className="paragraph">Now a rule has to match on whether the {input} is

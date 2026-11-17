@@ -94,12 +94,12 @@ describe('the accordions tab', () => {
 });
 
 describe('the words and the code chosen by type', () => {
-  test('should, with inclusive chosen, show the plain fold’s HTML beside the run on the box as taken from the exhibit, with no link', async () => {
+  test('should, with inclusive chosen, link the run on the box to the plain fold’s HTML on GitHub', async () => {
     render(<TestApp at={demosAt('accordions', '?type=inclusive')}/>);
 
     const oldWay = await explanation.part(parts[0]);
 
-    expect(explanation.sampleCaptionsBeside(oldWay, /To open and close a fold/)).toEqual(['Taken from the exhibit on this page. The rest of the site doesn’t use it.']);
+    expect(explanation.sourcesBeside(oldWay, /To open and close a fold/)).toEqual(['Plain/fold.html on GitHub']);
   });
 
   test('should, with exclusive chosen, show a sample beside the run on the box that links no file on GitHub', async () => {
