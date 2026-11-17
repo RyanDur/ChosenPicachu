@@ -121,7 +121,8 @@ const irregularSpellings = {
  * @param {[string, string][]} endings
  * @returns {[string, string][]}
  */
-const ending = (british, american, endings) => endings.map(([ours, theirs]) => [british + ours, american + theirs]);
+const formsWithEndings = (british, american, endings) =>
+  endings.map(([ours, theirs]) => [british + ours, american + theirs]);
 const sharedEndings = (/** @type {string[]} */ ...endings) =>
   endings.map(end => /** @type {[string, string]} */ ([end, end]));
 
@@ -131,17 +132,17 @@ const sharedEndings = (/** @type {string[]} */ ...endings) =>
  */
 const family = ([british, american]) => {
   if (british.endsWith('our'))
-    return ending(british, american, sharedEndings('', 's', 'ed', 'ing', 'ful', 'less', 'able', 'ite', 'ites'));
+    return formsWithEndings(british, american, sharedEndings('', 's', 'ed', 'ing', 'ful', 'less', 'able', 'ite', 'ites'));
   if (british.endsWith('re') && american.endsWith('er'))
-    return ending(british.slice(0, -2), american.slice(0, -2),
+    return formsWithEndings(british.slice(0, -2), american.slice(0, -2),
       [['re', 'er'], ['res', 'ers'], ['red', 'ered'], ['ring', 'ering']]);
-  return ending(british, american, sharedEndings('', 's'));
+  return formsWithEndings(british, american, sharedEndings('', 's'));
 };
-const american = Object.fromEntries([
+const americanFor = Object.fromEntries([
   ...Object.entries(roots).flatMap(family),
-  ...verbsEndingIse.flatMap(verb => ending(verb.slice(0, -1), `${verb.slice(0, -2)}z`,
+  ...verbsEndingIse.flatMap(verb => formsWithEndings(verb.slice(0, -1), `${verb.slice(0, -2)}z`,
     sharedEndings('e', 'ed', 'es', 'ing', 'er', 'ers', 'ation', 'ations'))),
-  ...doubledL.flatMap(root => ending(root, root, [['led', 'ed'], ['ling', 'ing'], ['ler', 'er'], ['lers', 'ers']])),
+  ...doubledL.flatMap(root => formsWithEndings(root, root, [['led', 'ed'], ['ling', 'ing'], ['ler', 'er'], ['lers', 'ers']])),
   ...Object.entries(irregularSpellings)
 ]);
 const wordsIn = /[A-Z]?[a-z]+|[A-Z]+(?![a-z])/g;
@@ -157,8 +158,8 @@ const americanSpelling = {
      */
     const reportBritishWordsIn = (node, name) => [...new Set(maybe(name.replace(ariaLabelledBy, '').match(wordsIn))
       .orElse([]).map(word => word.toLowerCase()))]
-      .filter(word => Object.hasOwn(american, word))
-      .forEach(british => context.report({node, messageId: 'british', data: {british, american: american[british]}}));
+      .filter(word => Object.hasOwn(americanFor, word))
+      .forEach(british => context.report({node, messageId: 'british', data: {british, american: americanFor[british]}}));
     return {
       Identifier: node => reportBritishWordsIn(node, node.name),
       JSXIdentifier: node => reportBritishWordsIn(node, node.name)
