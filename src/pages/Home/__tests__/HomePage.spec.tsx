@@ -27,7 +27,7 @@ describe('the home page', () => {
   });
 
   test('should come to the drawing after the opener', () => {
-    expect(outOfReadingOrder([homePage.paragraphOpening(/^The Demos put that practice to work/), homePage.drawing()]))
+    expect(outOfReadingOrder([homePage.openerLink('The Demos'), homePage.drawing()]))
       .toEqual([]);
   });
 
