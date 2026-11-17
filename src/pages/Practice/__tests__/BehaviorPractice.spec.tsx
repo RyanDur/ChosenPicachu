@@ -37,6 +37,7 @@ describe('the Behavior practice tab', () => {
     await practicePage.arrivedOn('Behavior');
 
     expect(practicePage.partHeadings()).toEqual([
+      'What organizing behavior has to solve',
       'What is true and what happened',
       'Code that reads as sentences',
       'Where the world comes in',
