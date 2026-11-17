@@ -5,6 +5,7 @@ import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
 import {TopLayerMenu} from './TopLayerMenu';
 import {CardOne, useControls} from '../Controls';
+import './ZIndexDemo.css';
 
 type Opened = CardOne | 'top layer';
 
