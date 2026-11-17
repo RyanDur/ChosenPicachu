@@ -4,7 +4,7 @@ import {tableTutorials} from './tutorial-pages';
 const parts: PartPlace[] = tableParts.inOrder.map(tableParts.placeOf);
 
 const tutorials: PartPlace[] = tableTutorials.all().map(tutorial => ({
-  title: `${tableParts.inTheBook + tableTutorials.placeOf(tutorial).ordinal}. ${tableTutorials.nameOf(tutorial)}`,
+  title: `${tableParts.inTheBook + tableTutorials.positionOf(tutorial).ordinal}. ${tableTutorials.nameOf(tutorial)}`,
   to: tableTutorials.addressOf(tutorial)
 }));
 
