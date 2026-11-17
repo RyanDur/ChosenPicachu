@@ -8,7 +8,7 @@ import {WorldGlider, WorldNote} from './World';
 import {useShownTutorial} from './useShownTutorial';
 import {DragSortTutorial} from './DragSort';
 import {MenuRecipe, ResizeRecipe} from './Recipe';
-import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
+import {DemoLink} from '@pages/Demos/DemoLink';
 import {tableParts} from './part-pages';
 import './TutorialPage.css';
 
@@ -21,7 +21,6 @@ const recipes: Record<Tutorial, FC> = {
 export const TutorialPage: FC = () => {
   const {searchFromShown} = useSearchParamsObject({});
   const titled = `tutorial${useId()}`;
-  const carried = useCarriedAddress();
   const startingAt = tableParts.told(tableTutorials.startingPart);
   const {to, search} = tableParts.whereIs(startingAt.ordinal);
   return useShownTutorial().either(tutorial => {
@@ -42,7 +41,7 @@ export const TutorialPage: FC = () => {
       <WorldNote/>
       <p className="paragraph">
         This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
-        “<Link className="signpost" to={carried(to, undefined, search)}>{startingAt.name}</Link>”, ends,
+        “<DemoLink to={to} search={search}>{startingAt.name}</DemoLink>”, ends,
         with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
         those are new to you, read that part first.
       </p>
