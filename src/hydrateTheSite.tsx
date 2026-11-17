@@ -1,16 +1,18 @@
-import {FC, startTransition, useEffect} from 'react';
+import {FC, startTransition, useEffect, useState} from 'react';
 import {createRoot, hydrateRoot} from 'react-dom/client';
 import {DataRouter, RouterProvider} from 'react-router';
 import {Arrival, arrival, ArrivalDrawn} from '@navigation/arrival';
+import {CurrentLocation} from '@navigation/current-location';
 import {Site} from './Site';
 
 type RoutedSiteProps = {router: DataRouter; arrived: Arrival};
 
 const RoutedSite: FC<RoutedSiteProps> = ({router, arrived}) => {
+  const [currentLocation] = useState(() => () => router.state.location);
   useEffect(() => arrived.follow(router), [arrived, router]);
-  return <Site><ArrivalDrawn.Provider value={arrived.drawn}>
+  return <Site><ArrivalDrawn.Provider value={arrived.drawn}><CurrentLocation.Provider value={currentLocation}>
     <RouterProvider router={router} onError={error => console.error(error)}/>
-  </ArrivalDrawn.Provider></Site>;
+  </CurrentLocation.Provider></ArrivalDrawn.Provider></Site>;
 };
 
 export const hydrateTheSite = {

@@ -15,6 +15,7 @@ import {
 } from 'react';
 import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, useLocation, useNavigate} from 'react-router';
 import {arrival, ArrivalDrawn} from '@navigation/arrival';
+import {CurrentLocation} from '@navigation/current-location';
 import {SiteProviders} from '../SiteProviders';
 import {Opener, RoomModule, roomsOpenedBy, siteHolding} from '../routes';
 import {Environment, environment} from '@transport';
@@ -83,6 +84,7 @@ export const TestApp: FC<Props> = ({at = '/', cameFrom, feed, environment: overr
     children: [siteHolding(has(children) ? [...routesAt(at, children), {path: '*', element: null}] : siteRooms)]
   }], {initialEntries: maybe(cameFrom).map(from => [from, at]).orElse([at]), hydrationData: {}}));
   const [arrived] = useState(() => arrival(window));
+  const [currentLocation] = useState(() => () => memory.state.location);
   useEffect(() => arrived.follow(memory), [arrived, memory]);
   const [reported, setReported] = useState<readonly string[]>([]);
   const report = (error: unknown): void =>
@@ -94,7 +96,9 @@ export const TestApp: FC<Props> = ({at = '/', cameFrom, feed, environment: overr
         {...environment, ...(has(feed) ? {tradeFeed: feed.url} : {})},
         Object.getOwnPropertyDescriptors(overrides))}>
         <ArrivalDrawn.Provider value={arrived.drawn}>
-          <RouterProvider router={memory} onError={report}/>
+          <CurrentLocation.Provider value={currentLocation}>
+            <RouterProvider router={memory} onError={report}/>
+          </CurrentLocation.Provider>
         </ArrivalDrawn.Provider>
       </SiteProviders>
     </StrictMode>
