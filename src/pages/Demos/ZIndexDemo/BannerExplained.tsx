@@ -9,6 +9,7 @@ import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@banners/Banners.tsx?sample';
 import bannersCss from '@banners/Banners.css?sample';
 import '../Runs.css';
+import {PartLink} from './PartLink';
 import {zIndexParts} from './part-pages';
 
 export const BannerExplained: FC = () => {
@@ -22,8 +23,8 @@ export const BannerExplained: FC = () => {
         <p className="paragraph">The old banner’s position is fixed. It is placed against the window and kept there as
           the page scrolls, here along the window’s bottom edge. Its z-index is 9999, but it is written inside card one,
           and card one forms a stacking context. So as the page scrolls, plain text passes under the banner, but card
-          two, later in the code with its own z-index of 1, passes over it. It is the old menu again, at the window’s
-          edge.</p>
+          two, later in the code with its own z-index of 1, passes over it. It is the old menu
+          in <PartLink part="why-9999-still-loses"/> again, at the window’s edge.</p>
         <Snippet label="CSS" lines={lines.fromTheExhibit([
           ...carve.unit(zIndexCss, '.old-banner {'), lines.blank,
           ...carve.unit(zIndexCss, '.forms-context {')

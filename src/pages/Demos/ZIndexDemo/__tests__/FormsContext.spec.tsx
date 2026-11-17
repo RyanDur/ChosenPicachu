@@ -186,4 +186,12 @@ describe('the part on what else forms a stacking context', () => {
     expect(explanation.linkNamed(part, 'the whole list'))
       .toHaveAttribute('href', 'https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Stacking_context');
   });
+
+  test('should link the menu part’s card to its page, with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+
+    const part = await explanation.part(heading);
+
+    expect(explanation.linkNamed(part, 'The menu part’s card')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
+  });
 });
