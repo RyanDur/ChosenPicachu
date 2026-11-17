@@ -332,6 +332,12 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can watch the price move, live');
     };
 
+    test('should link where it names the combinator to the accordions part that explains it, with the query carried', async () => {
+      await priceStory();
+
+      expect(demoPage.signpost('the accordions tab explains')).toHaveAttribute('href', demosAt('accordions/a-box-remembers-the-fold', '?graph=price'));
+    });
+
     test('should head each step with what happens', async () => {
       expect(recipeFolds.stepTitles(await priceStory())).toEqual([
         'Open a socket, and keep only what decodes',

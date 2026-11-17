@@ -1,4 +1,6 @@
 import {TabLink} from '@pages/Demos/TabLink';
+import {DemoLink} from '@pages/Demos/DemoLink';
+import {accordionParts} from '@pages/Demos/Accordions';
 import {FC, ReactNode} from 'react';
 import {Link} from 'react-router';
 import {DemoTopics} from '@pages/Demos';
@@ -186,8 +188,9 @@ const PriceStory: FC = () =>
             children. Every part starts across both columns. The price labels then take the first column. The time
             marks take the second, and so does every part between the price labels and the time marks: <code
             className="monospaced">.y-labels ~ :has(~ .x-labels)</code> picks each part that comes after the price
-            labels and has the time marks still after it. The <code className="monospaced">~</code> is the combinator
-            the accordions tab explains, which picks the siblings that come later.</Says>
+            labels and has the time marks still after it. The <code className="monospaced">~</code> is the
+            combinator <DemoLink to={accordionParts.addressOf('a-box-remembers-the-fold')}>the accordions tab
+              explains</DemoLink>, which picks the siblings that come later.</Says>
           <Says>How far apart the time marks sit comes from the period: every ten minutes on the hour chart, every hour
             on the day chart, every day on the week chart.</Says>
         </Words>
