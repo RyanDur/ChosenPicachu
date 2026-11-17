@@ -1,5 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
+import names from '@navigation/names.json';
 import {appAddress} from '@__test_support/address';
 import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
@@ -237,7 +238,7 @@ describe('the old way', () => {
 
     const oldWay = await explanation.part(parts[0]);
 
-    expect(explanation.saying(oldWay, 'A hidden input holds whether the fold is open, and a :checked rule shows its panel.')).toBeInTheDocument();
+    expect(explanation.saying(oldWay, names.accordions['a-box-remembers-the-fold'].description)).toBeInTheDocument();
   });
 });
 
