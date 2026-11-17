@@ -107,10 +107,10 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
       </li>
       <li className="run">
         <p className="paragraph">A transition is CSS moving a property from its old value to its new one over a set
-          time. It can move a height to a number but not to auto, the height the text needs, so a fold that slides with
-          no script needs a height known ahead of time. Here every panel is the same height, so every fold travels the
-          same distance, and a short fold moves like a tall one. The cost is that a short fold leaves room under its
-          text, and a tall one makes you scroll.</p>
+          time. It can move a height to a number but not to auto, the height the text needs, so the height a fold slides
+          to has to be a number, and the simplest is one known ahead of time. Here every panel is the same height, so
+          every fold travels the same distance, and a short fold moves like a tall one. The cost is that a short fold
+          leaves room under its text, and a tall one makes you scroll.</p>
         <TheKnownHeight/>
       </li>
       <li className="part-depth">
