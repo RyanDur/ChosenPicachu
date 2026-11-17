@@ -37,7 +37,7 @@ const minutes: Record<TablePart, number> = {
   'the-sketch': 1,
   'the-slices': 2,
   'the-still-table': 5,
-  'the-live-table-and-the-store': 13
+  'the-live-table-and-the-store': 12
 };
 
 const opens: Partial<Record<TablePart, string[]>> = {
