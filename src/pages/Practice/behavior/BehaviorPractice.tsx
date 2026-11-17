@@ -49,7 +49,7 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">Without these rules, state kept in two places drifts apart, and a change on screen has no
       event to explain it. The parts below show the split in the code that runs here, then two rules beside it: code
       that reads as sentences, and a value trusted once it crosses the boundary.</p>
-    <h3 className="paragraph bold">What is true and what happened</h3>
+    <h3 className="paragraph bold">One reducer, one direction</h3>
     <p className="paragraph">A reducer is the pure function each event goes to, and its type says so: it takes the state
       and an event and returns the state.</p>
     <ReducerCarve/>
