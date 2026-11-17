@@ -439,10 +439,10 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titleShown(theFlowStory)).not.toBeInTheDocument();
   });
 
-  test('the tables tab says the live table takes thirteen minutes to read', async () => {
+  test('the tables tab says the live table takes twelve minutes to read', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    expect(await tablesTab().readingTimeOf(theLiveTable)).toHaveTextContent(/^13 minutes to read$/);
+    expect(await tablesTab().readingTimeOf(theLiveTable)).toHaveTextContent(/^12 minutes to read$/);
   });
 
   test('should title the live table’s page with the tab and the part', async () => {
