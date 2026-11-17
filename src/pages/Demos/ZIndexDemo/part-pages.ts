@@ -38,13 +38,15 @@ type ZIndexParts = {
   titleOf: (book: BookPart) => string;
   numbered: (book: BookPart) => string;
   tabHeadingOf: (book: BookPart) => string;
+  pageOf: (book: BookPart) => Maybe<ZIndexPart>;
   previousOf: (part: ZIndexPart) => Maybe<BookPart>;
   nextOf: (part: ZIndexPart) => Maybe<BookPart>;
   inTheBook: number;
 };
 
 const listings: Record<ZIndexPart, Listing> = {
-  'why-third-is-on-top': {book: 'third-on-top', minutes: 3}
+  'why-third-is-on-top': {book: 'third-on-top', minutes: 3},
+  'why-9999-still-loses': {book: 'still-loses', minutes: 3}
 };
 
 const tabAddress = demoTab.address(DemoTopics.zIndex);
@@ -57,6 +59,8 @@ const besidePart = (part: ZIndexPart, step: number): Maybe<BookPart> =>
   maybe(bookOrder[placeOf(listings[part].book) + step]);
 
 const isPart = (name: string): name is ZIndexPart => Object.keys(listings).includes(name);
+
+const parts = Object.keys(listings).filter(isPart);
 
 const partAt = (pathname: string): Maybe<ZIndexPart> => {
   const named = pathname.slice(tabAddress.length, -1);
@@ -79,6 +83,7 @@ export const zIndexParts: ZIndexParts = {
   titleOf: book => titles[book],
   numbered: book => `${placeOf(book) + 1}. ${titles[book]}`,
   tabHeadingOf: book => tabHeadings[book],
+  pageOf: book => maybe(parts.find(part => listings[part].book === book)),
   previousOf: part => besidePart(part, -1),
   nextOf: part => besidePart(part, 1),
   inTheBook: bookOrder.length

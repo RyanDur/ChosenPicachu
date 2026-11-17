@@ -6,7 +6,7 @@ import {theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 describe('the menu built the new way', () => {
   test('should sit in card one, beside Sort by', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
     const trap = await theTrap.find();
 
     const cardOne = theTrap.cardOne(trap);
@@ -16,12 +16,12 @@ describe('the menu built the new way', () => {
 });
 
 describe('why the popover wins', () => {
-  test('should link to Why 9999 still loses', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+  test('should link Why 9999 still loses to its page, where its menus are, with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
 
     const part = await explanation.part('Why the popover wins');
 
-    expect(explanation.linkNamed(part, 'Why 9999 still loses')).toHaveAttribute('href', zIndexTab.fragmentOf('Why 9999 still loses'));
+    expect(explanation.linkNamed(part, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
   });
 
   test('should link the run on the menu’s placement to card one’s list in What else forms a stacking context', async () => {
