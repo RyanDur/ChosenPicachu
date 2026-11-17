@@ -1,7 +1,5 @@
 @media (pointer: coarse) {
   .map-entry {
     display: block;
-    min-block-size: var(--finger-reach);
-    align-content: center;
   }
 }
