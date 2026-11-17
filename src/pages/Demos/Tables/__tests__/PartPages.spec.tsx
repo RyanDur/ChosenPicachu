@@ -137,6 +137,14 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titles(theSketch)).toHaveLength(1);
   });
 
+  test('the sketch’s page heads what a design cannot tell you one level under its title', async () => {
+    render(<TestApp at={theSketchsPage}/>);
+
+    await tablesTab().partPlace();
+
+    expect(tablesTab().titles('what a design cannot tell you', 3)).toHaveLength(1);
+  });
+
   test('the sketch’s page leads back to the need’s page and on to the slices on the tables tab, by number and title, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-sketch', '?world=vanilla')}/>);
 

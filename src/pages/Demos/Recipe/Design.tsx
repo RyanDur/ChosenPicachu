@@ -9,8 +9,9 @@ type DesignProps = {
   headedBy?: string;
 };
 
-export const Design: FC<DesignProps> = ({sketch, answers, unanswered, headedBy}) =>
-  <section className="phase card rounded-corners lifted" aria-labelledby={maybe(headedBy).orElse(designHeading.id)}>
+export const Design: FC<DesignProps> = ({sketch, answers, unanswered, headedBy}) => {
+  const Subtitle: 'h3' | 'h4' = maybe(headedBy).either(() => 'h3', () => 'h4');
+  return <section className="phase card rounded-corners lifted" aria-labelledby={maybe(headedBy).orElse(designHeading.id)}>
     {maybe(headedBy).either(
       () => null,
       () => <h3 id={designHeading.id} className="phase-title title">{designHeading.title}</h3>)}
@@ -24,7 +25,7 @@ export const Design: FC<DesignProps> = ({sketch, answers, unanswered, headedBy})
       <figcaption className="paragraph">{answers}</figcaption>
     </figure>
     <aside className="unanswered field rounded-corners" aria-label="what a design cannot tell you">
-      <h4 className="unanswered-title caption muted-ink uppercase">what a design cannot tell you</h4>
+      <Subtitle className="unanswered-title caption muted-ink uppercase">what a design cannot tell you</Subtitle>
       <ul className="unanswered-list">
         {unanswered.map(question => <li key={question}>{question}</li>)}
       </ul>
@@ -35,3 +36,4 @@ export const Design: FC<DesignProps> = ({sketch, answers, unanswered, headedBy})
       when the answers arrive.
     </p>
   </section>;
+};
