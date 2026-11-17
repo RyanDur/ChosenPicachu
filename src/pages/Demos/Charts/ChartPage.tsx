@@ -61,10 +61,14 @@ const numbered = (kind: ChartKind): string => `${chartKinds.all.indexOf(kind) + 
 const Neighbors: FC<Props> = ({kind}) => {
   const at = chartKinds.all.indexOf(kind);
   return <nav className="chart-neighbors" aria-label="the chart pages">
-    {maybe(chartKinds.all[at - 1]).map(before =>
-      <Link key={before} className="reachable signpost" rel="prev" to={chartKinds.address(before)}>{`Previous: ${numbered(before)}`}</Link>).orNull()}
-    {maybe(chartKinds.all[at + 1]).map(after =>
-      <Link key={after} className="onward reachable signpost" rel="next" to={chartKinds.address(after)}>{`Next: ${numbered(after)}`}</Link>).orNull()}
+    {maybe(chartKinds.all[at - 1]).map(previousKind =>
+      <Link key={previousKind} className="reachable signpost" rel="prev" to={chartKinds.address(previousKind)}>
+        {`Previous: ${numbered(previousKind)}`}
+      </Link>).orNull()}
+    {maybe(chartKinds.all[at + 1]).map(nextKind =>
+      <Link key={nextKind} className="onward reachable signpost" rel="next" to={chartKinds.address(nextKind)}>
+        {`Next: ${numbered(nextKind)}`}
+      </Link>).orNull()}
   </nav>;
 };
 
