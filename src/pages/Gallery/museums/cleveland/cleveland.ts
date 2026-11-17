@@ -18,7 +18,7 @@ import {artFields} from '@pages/Gallery/museums/artFields';
 const clevelandFields = ['id', 'title', 'creators', 'tombstone', 'images'].join();
 
 const sized = (image: Maybe<ClevelandImage>): string[] =>
-  image.mBind(({url, width}) => maybe(width).map(across => [`${url} ${across}w`])).orElse([]);
+  image.mBind(({url, width}) => maybe(width, has).map(across => [`${url} ${across}w`])).orElse([]);
 
 const srcSetOf = (record: ClevelandRecord): Maybe<string> => maybe(record.images)
   .map(({web, print}) => [...sized(maybe(web)), ...sized(maybe(print))].join(', '))
@@ -26,9 +26,11 @@ const srcSetOf = (record: ClevelandRecord): Maybe<string> => maybe(record.images
 
 const written = (words: string): boolean => words !== '';
 
+const described = (record: ClevelandRecord): string[] =>
+  maybe(record.creators).orElse([]).map(({description}) => description).filter(has).filter(written);
+
 const artistOf = (record: ClevelandRecord): Maybe<string> =>
-  maybe(maybe(record.creators).orElse([]).flatMap(({description}) => maybe(description).map(said => [said]).orElse([])).join(', '), written)
-    .or(() => maybe(record.tombstone));
+  maybe(described(record).join(', '), written).or(() => maybe(record.tombstone));
 
 const toPiece = (record: ClevelandRecord): Art => ({
   id: String(record.id),
