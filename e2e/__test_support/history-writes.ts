@@ -1,8 +1,6 @@
 import {writeFile} from 'node:fs/promises';
 import {test as journey} from './journey';
 
-// #446: CI saw the z-index page lose a followed link's fragment twice (43974457481, 43985257596), and no one has found
-// what wrote `?news=top` without it. A failing run's report names each writer; this goes with the fix.
 const recordEachWrite = (): void => {
   // Chromium keeps 10 frames, which can stop inside React's event handling before the code that asked for the write
   Error.stackTraceLimit = 50;
