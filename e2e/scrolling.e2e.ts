@@ -76,7 +76,7 @@ for (const {reader, use} of desks) {
     });
 
     test('the wheel moves the page, and an open Feedback dialog holds it still', async ({page}) => {
-      await page.goto('demos/tables/the-live-table-and-the-store/');
+      await page.goto('demos/tables/the-live-table-and-the-store/?living=flow%2Cstore');
       const held = page.getByRole('heading', {name: 'The trader can watch the market live, one lookback beside another'});
       await held.scrollIntoViewIfNeeded();
       const shut = await topOf(held);
