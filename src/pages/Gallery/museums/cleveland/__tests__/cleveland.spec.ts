@@ -78,7 +78,8 @@ describe('Cleveland as a source of art', () => {
 
     test('leaves the srcset out when Cleveland gives no image a width', async () => {
       const url = faker.internet.url();
-      anyRequestRespondsWith(JSON.stringify({data: {...clevelandPieceResponse.data, images: {web: {url, width: ''}, print: {url}}}}));
+      const images = {web: {url, width: ''}, print: {url}};
+      anyRequestRespondsWith(JSON.stringify({data: {...clevelandPieceResponse.data, images}}));
 
       const actual = await art.get({id: fromClevelandToPiece.id, source: Source.CLEVELAND}).orNull();
 
