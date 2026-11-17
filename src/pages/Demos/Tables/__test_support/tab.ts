@@ -22,7 +22,6 @@ export const tablesTab = () => ({
   tutorialLink,
   follow: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
   backToTheTab: async (): Promise<void> => userEvent.click(await tutorialLink('Tables')),
-  readTheStationFirst: async (): Promise<void> => userEvent.click(await tutorialLink(/^station \d+ of the tables tab$/)),
   tutorialsListed: async (): Promise<string[]> =>
     within(await screen.findByRole('list', {name: 'the tutorials'}, untilTheTablesTabRenders)).getAllByRole('link')
       .map(link => computeAccessibleName(link)),

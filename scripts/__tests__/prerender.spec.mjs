@@ -20,6 +20,7 @@ describe('the pages drawn into the build', () => {
     `${Paths.demos}tables/the-sketch/`,
     `${Paths.demos}tables/the-slices/`,
     `${Paths.demos}tables/the-still-table/`,
+    `${Paths.demos}tables/the-live-table-and-the-store/`,
     ...chartKinds.all.map(kind => `${Paths.demos}charts/${kind}/`),
     ...concerns.inOrder.map(practiceAddress.of)
   ])('include %s', address => {

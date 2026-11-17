@@ -55,7 +55,7 @@ for (const {reader, use} of desks) {
     });
 
     test('a tab switch keeps the tabs where they were on screen', async ({page}) => {
-      await page.goto('demos/tables/');
+      await page.goto('demos/tables/the-live-table-and-the-store/');
       await page.getByRole('group').filter({has: page.getByText(/^so that /)}).nth(1).scrollIntoViewIfNeeded();
       await expect.poll(() => documentScrollY(page)).toBeGreaterThan(0);
       const tabs = page.getByRole('navigation', {name: 'demos'});
@@ -69,15 +69,15 @@ for (const {reader, use} of desks) {
     });
 
     test('an address that names a step shows the step', async ({page}) => {
-      await page.goto('demos/tables/#station-5');
-      const step = page.getByRole('heading', {name: 'The trader can watch the market live, one lookback beside another'});
+      await page.goto('demos/tables/#station-6');
+      const step = page.getByRole('heading', {name: 'Add features, in the order they were asked for'});
 
       await expect(step).toBeInViewport();
     });
 
     test('the wheel moves the page, and an open Feedback dialog holds it still', async ({page}) => {
-      await page.goto('demos/tables/');
-      const held = page.getByRole('heading', {name: 'Slice the design into stories'});
+      await page.goto('demos/tables/the-live-table-and-the-store/');
+      const held = page.getByRole('heading', {name: 'The trader can watch the market live, one lookback beside another'});
       await held.scrollIntoViewIfNeeded();
       const shut = await topOf(held);
       await page.mouse.wheel(0, 200);
@@ -98,7 +98,7 @@ test.describe('a desktop, where only the search changes', () => {
   test.use({viewport: desktop.viewport});
 
   test('a story opened on a recipe leaves the page where it was', async ({page}) => {
-    await page.goto('demos/tables/');
+    await page.goto('demos/tables/the-live-table-and-the-store/');
     const tables = tablesDemo(page);
     await tables.storyAt(1).scrollIntoViewIfNeeded();
     const where = await documentScrollY(page);

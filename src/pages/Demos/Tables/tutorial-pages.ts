@@ -1,6 +1,7 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {DemoTopics, demoTab} from '@pages/Demos';
+import {TablePart} from './part-pages';
 
 export type Tutorial = keyof typeof names.tables;
 
@@ -12,7 +13,7 @@ type TableTutorials = {
   addressOf: (tutorial: Tutorial) => string;
   placeOf: (tutorial: Tutorial) => Place;
   at: (pathname: string) => Maybe<Tutorial>;
-  startingStation: number;
+  startingPart: TablePart;
 };
 
 const places: Record<Tutorial, number> = {sort: 1, menu: 2, resize: 3};
@@ -35,5 +36,5 @@ export const tableTutorials: TableTutorials = {
   addressOf,
   placeOf: tutorial => ({ordinal: inOrder.indexOf(tutorial) + 1, outOf: inOrder.length}),
   at: pathname => maybe(inOrder.find(tutorial => pathname === addressOf(tutorial))),
-  startingStation: 5
+  startingPart: 'the-live-table-and-the-store'
 };

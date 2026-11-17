@@ -61,6 +61,13 @@ export const pages: readonly SitePage[] = [
     budgeted: true
   },
   {
+    name: 'the live table and the store',
+    path: 'demos/tables/the-live-table-and-the-store/',
+    ready: 'navigation',
+    loaded: page => page.getByRole('region', {name: 'live aggregations'}).getByRole('columnheader', {name: 'trades'}),
+    budgeted: true
+  },
+  {
     name: 'tables in vanilla',
     path: 'demos/tables/?world=vanilla',
     ready: 'navigation',

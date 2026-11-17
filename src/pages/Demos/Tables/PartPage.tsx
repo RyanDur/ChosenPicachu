@@ -5,7 +5,7 @@ import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {Aggregations} from './Aggregations';
 import {PartPlace, TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
-import {DesignAsk, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
+import {DesignAsk, FlowTableRecipe, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
 import '../Tutorials.css';
 import './TutorialPage.css';
 
@@ -13,7 +13,8 @@ const parts: Record<TablePart, FC<{headedBy: string}>> = {
   'the-need-and-its-clues': StoryClues,
   'the-sketch': DesignAsk,
   'the-slices': StorySlices,
-  'the-still-table': StillTableRecipe
+  'the-still-table': StillTableRecipe,
+  'the-live-table-and-the-store': FlowTableRecipe
 };
 
 export const PartPage: FC<{part: TablePart}> = ({part}) => {
@@ -21,7 +22,7 @@ export const PartPage: FC<{part: TablePart}> = ({part}) => {
   const {name, ordinal} = tableParts.told(part);
   const carried = useCarriedAddress();
   const Part = parts[part];
-  const linked = ({numbered, to, heading, search}: PartPlace) => ({numbered, address: carried(to, heading, search)});
+  const linked = ({title, to, heading, search}: PartPlace) => ({title, address: carried(to, heading, search)});
   return <article aria-labelledby={titled} className="tutorial-page tutorials">
     <hgroup>
       <p className="caption">{`${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tableParts.inTheBook}`}</p>

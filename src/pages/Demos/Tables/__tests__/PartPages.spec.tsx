@@ -16,6 +16,11 @@ const theStillTable = 'Build the still table';
 const theStillStory = 'The trader can read the market in a table';
 const theStillTablesPage = demosAt('tables/the-still-table');
 const theStory = 'The trader can watch the live market over lookbacks they arrange';
+const theLiveTable = 'Make the table live';
+const theFlowStory = 'The trader can watch the market live, one lookback beside another';
+const theStoreStory = 'The page is a store, and so is the table';
+const theLiveTablesPage = demosAt('tables/the-live-table-and-the-store');
+const bothStoriesOpen = 'living=flow%2Cstore';
 
 describe('the tables tab’s parts, each on its own page', () => {
   test('following the need and its clues from the tables tab opens its page', async () => {
@@ -239,14 +244,16 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titles('The trader can watch the live market over lookbacks they arrange', 3)).toHaveLength(1);
   });
 
-  test('the slices on their page point at the still table’s page and the later stations on the tables tab, with the build carried', async () => {
+  test('the slices on their page point at the still table’s and the live table’s pages and the later stations on the tables tab, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-slices', '?world=vanilla')}/>);
 
     await tablesTab().partPlace();
 
     const station = (at: number) => `${demosAt('tables', '?world=vanilla')}#station-${at}`;
     expect(demoPage.sliceLinks()).toEqual([
-      demosAt('tables/the-still-table', '?world=vanilla&living=still'), station(5), station(6), station(6), station(6)
+      demosAt('tables/the-still-table', '?world=vanilla&living=still'),
+      demosAt('tables/the-live-table-and-the-store', `?world=vanilla&${bothStoriesOpen}`),
+      station(6), station(6), station(6)
     ]);
   });
 
@@ -317,7 +324,7 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(aggregations.card()).toBeVisible();
     expect(demoPage.part(theStillTable)).toBeVisible();
     expect(tablesTab().titleShown(theStory)).not.toBeInTheDocument();
-    expect(tablesTab().titleShown('The trader can watch the market live, one lookback beside another')).not.toBeInTheDocument();
+    expect(tablesTab().titleShown(theFlowStory)).not.toBeInTheDocument();
   });
 
   test('the still table’s page links each term it glosses, and each tab it names, to that tab', async () => {
@@ -346,12 +353,12 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titles(theStillTable)).toHaveLength(1);
   });
 
-  test('the still table’s page leads back to the slices’ page and on to the live table on the tables tab, by number and title, with the build carried', async () => {
+  test('the still table’s page leads back to the slices’ page and on to the live table’s page, by number and title, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-still-table', '?world=vanilla')}/>);
 
     expect(await pageFoot.leadsOn('the tables parts')).toEqual([
       ['Previous: 3. Slice the design into stories', demosAt('tables/the-slices', '?world=vanilla')],
-      ['Next: 5. Make the table live', `${demosAt('tables', '?world=vanilla')}#station-5`]
+      ['Next: 5. Make the table live', demosAt('tables/the-live-table-and-the-store', `?world=vanilla&${bothStoriesOpen}`)]
     ]);
   });
 
@@ -367,5 +374,80 @@ describe('the tables tab’s parts, each on its own page', () => {
     render(<TestApp at={theStillTablesPage}/>);
 
     expect(await demoTabs.title(`Demos Tables · ${theStillTable}`)).toBeInTheDocument();
+  });
+
+  test('following the live table from the tables tab opens its page with both its stories open', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    await tablesTab().follow(theLiveTable);
+
+    expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(demosAt('tables/the-live-table-and-the-store', `?${bothStoriesOpen}`));
+    await tablesTab().partPlace();
+    expect(recipeFolds.story(demoPage.part('the living table'), theFlowStory)).toHaveAttribute('open');
+    expect(recipeFolds.story(demoPage.part('the living table'), theStoreStory)).toHaveAttribute('open');
+  });
+
+  test('the live table’s page shows the live table, then only the live table and the store', async () => {
+    render(<TestApp at={theLiveTablesPage}/>);
+
+    await tablesTab().partPlace();
+
+    expect(aggregations.card()).toBeVisible();
+    expect(demoPage.part('the living table')).toBeVisible();
+    expect(tablesTab().titleShown(theStillStory)).not.toBeInTheDocument();
+  });
+
+  test('the live table’s page links each term it glosses, and each tab it names, to that tab', async () => {
+    render(<TestApp at={theLiveTablesPage}/>);
+
+    await tablesTab().partPlace();
+
+    expect(demoPage.linksToTabsIn(demoPage.part('the living table'))).toEqual([
+      ['charts tab', demosAt('charts')]
+    ]);
+  });
+
+  test('the live table’s page says its place among the parts', async () => {
+    render(<TestApp at={theLiveTablesPage}/>);
+
+    expect(await tablesTab().partPlace()).toHaveTextContent('Tables · part 5 of 5');
+  });
+
+  test('the live table’s page heads the live table once, as its title', async () => {
+    render(<TestApp at={theLiveTablesPage}/>);
+
+    await tablesTab().partPlace();
+
+    expect(tablesTab().titles(theLiveTable, 2)).toHaveLength(1);
+    expect(tablesTab().titles(theLiveTable)).toHaveLength(1);
+  });
+
+  test('the live table’s page leads back to the still table’s page and on to the features on the tables tab, with the build carried', async () => {
+    render(<TestApp at={demosAt('tables/the-live-table-and-the-store', '?world=vanilla')}/>);
+
+    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+      ['Previous: 4. Build the still table', demosAt('tables/the-still-table', '?world=vanilla&living=still')],
+      ['Next: Add features, in the order they were asked for', `${demosAt('tables', '?world=vanilla')}#station-6`]
+    ]);
+  });
+
+  test('the tables tab leads to the live table’s page instead of showing the live table', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    await tablesTab().tutorialLink(theLiveTable);
+
+    expect(tablesTab().titleShown(theFlowStory)).not.toBeInTheDocument();
+  });
+
+  test('the tables tab says the live table takes thirteen minutes to read', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    expect(await tablesTab().readingTimeOf(theLiveTable)).toHaveTextContent(/^13 minutes to read$/);
+  });
+
+  test('should title the live table’s page with the tab and the part', async () => {
+    render(<TestApp at={theLiveTablesPage}/>);
+
+    expect(await demoTabs.title(`Demos Tables · ${theLiveTable}`)).toBeInTheDocument();
   });
 });
