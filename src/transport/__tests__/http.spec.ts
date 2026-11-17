@@ -1,6 +1,6 @@
 import {http as handle, HttpResponse} from 'msw';
-import {HTTPError} from '..';
-import {http, HTTPMethod} from '../http';
+import {http, HTTPError} from '..';
+import type {HTTPMethod} from '../http';
 import {faker} from '@faker-js/faker';
 import {failure, Result} from '@ryandur/sand';
 import {server} from '@__test_support/server';
