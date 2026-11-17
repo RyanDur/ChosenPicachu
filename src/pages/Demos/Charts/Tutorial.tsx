@@ -77,12 +77,12 @@ const WorkspaceStory: FC = () =>
         <Words>
           <Want>A chart is large and the drag starts at its grip. So the swap is measured from the pointer, not from the
             chart’s far edge.</Want>
-          <Says>On dragstart, the <PartTermLink part="why-the-popover-wins">event</PartTermLink> the browser sends when a drag begins,
-            the code marks where the pointer is on the page and keeps it
+          <Says>On dragstart, the <PartTermLink part="why-the-popover-wins">event</PartTermLink> the browser sends when
+            a drag begins, the code marks where the pointer is on the page and keeps it
             in <code className="monospaced">pointerYAtLastSeat</code>. On every dragover, the event it sends as the
-            pointer moves over a chart, the code compares the pointer with that mark. A third of the held chart’s
-            height below the mark, the chart swaps with the one under it; a third above, with the one over it. Then the
-            mark is set again to where the pointer is.</Says>
+            pointer moves over a chart, the code compares the pointer with that mark. A third of the held chart’s height
+            below the mark, the chart swaps with the one under it; a third above, with the one over it. Then the mark is
+            set again to where the pointer is.</Says>
           <Says>That matters when the charts differ in height. A short chart that passes a tall one drops by the tall
             one’s height. A mark left on the chart would now be far from the pointer, and the two would swap straight
             back.</Says>

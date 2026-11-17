@@ -50,8 +50,9 @@ const PriceStory: FC = () =>
       one candle: a record of where the price opened, how high and how low it reached, and where it closed.</Tell>
     <Tell>The past is fetched as candles and fills the left of the line. The live feed fills the right. The two are
       joined in time order.</Tell>
-    <Tell>The page stores the trades and the fetched candles. React is the library this site’s script is written in, as taught in the z-index part <PartLink part="why-the-popover-wins"/>. Every time it redraws the chart, the candles made
-      from live trades, the joined series and the points are worked out again. None of them is stored.</Tell>
+    <Tell>The page stores the trades and the fetched candles. React is the library this site’s script is written in, as
+      taught in the z-index part <PartLink part="why-the-popover-wins"/>. Every time it redraws the chart, the candles
+      made from live trades, the joined series and the points are worked out again. None of them is stored.</Tell>
     <Steps>
       <Step>
         <StepHeading title="Open a socket, and keep only what decodes"/>
@@ -130,8 +131,8 @@ const PriceStory: FC = () =>
             link opens the chart at the same period. <code className="monospaced">candles:day</code> is the candle chart
             at a day, and a chart at the hour, the default, is written as its kind alone.</Says>
           <Says>The period menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece
-            of the page, as taught in the z-index part <PartLink part="why-the-popover-wins"/>. They write a menu, an li,
-            which is one item of a list, and a button.</Says>
+            of the page, as taught in the z-index part <PartLink part="why-the-popover-wins"/>. They write a menu, an
+            li, which is one item of a list, and a button.</Says>
           <Says>A class, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says, is a name a style
             sheet’s rules pick out. Item gives its button the site’s shared classes that set its look. Menu leaves its
             own look to whatever draws it, so <code className="monospaced">PeriodMenu</code>, which the price and candle
@@ -260,7 +261,8 @@ const CandlesStory: FC = () =>
             wears <code className="monospaced">sell-side</code>, shared classes that set a side’s colors. The body
             wears <code className="monospaced">side-face</code> and the wall <code className="monospaced">side-wall</code>, so the shared style sheet paints
             them, and the wick wears <code className="monospaced">drawn</code>, which gives it its charcoal stroke.</Says>
-          <Says><code className="monospaced">Bar</code> is a component, a function that writes a piece of the page, as taught in the z-index part <PartLink part="why-the-popover-wins"/>. It draws the wall first, then what the
+          <Says><code className="monospaced">Bar</code> is a component, a function that writes a piece of the page, as
+            taught in the z-index part <PartLink part="why-the-popover-wins"/>. It draws the wall first, then what the
             candle puts inside it, here the wick, then the body on top, so the wick shows over the wall.</Says>
           <Says>The body and the wall each start as a square one unit on a side, and the wick as a line one unit
             tall. <code className="monospaced">shapes.placed</code> gives every shape four custom properties: where the
@@ -427,10 +429,11 @@ const PressureStory: FC = () =>
             behind it, which gives it an edge. The middle line wears <code className="monospaced">drawn</code>, which gives it its charcoal
             stroke.</Says>
           <Says>Each bar is drawn by <code className="monospaced">Bar</code>, the component the candles use: a function
-            that writes a piece of the page, as taught in the z-index part <PartLink part="why-the-popover-wins"/>. <code className="monospaced">Bar</code> draws a bar and the wall behind it,
-            and <Link className="signpost" to={chartKinds.address('candles')}>the candles chart’s steps</Link> show it in full. Each
-            shape starts as a square one unit on a side, takes its four custom properties
-            from <code className="monospaced">shapes.placed</code>, and moves by
+            that writes a piece of the page, as taught in the z-index
+            part <PartLink part="why-the-popover-wins"/>. <code className="monospaced">Bar</code> draws a bar and the
+            wall behind it, and <Link className="signpost" to={chartKinds.address('candles')}>the candles chart’s
+              steps</Link> show it in full. Each shape starts as a square one unit on a side, takes its four custom
+            properties from <code className="monospaced">shapes.placed</code>, and moves by
             the <Mdn path="Web/CSS/transform">transform</Mdn> in <code className="monospaced">shape.css</code>. I move
             things only by transform and opacity, which spare the browser a new layout on every frame. When a minute’s
             sums change, its bars grow to their new size over 300 milliseconds.</Says>
