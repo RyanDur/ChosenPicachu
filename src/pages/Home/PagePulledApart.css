@@ -1,0 +1,27 @@
+.page-pulled-apart {
+  --drawn-width: 480px;
+
+  display: grid;
+  gap: var(--base);
+  max-inline-size: var(--drawn-width);
+  margin: 0;
+  container-type: inline-size;
+
+  .drawing {
+    --drawing-column: 100cqi;
+
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .drawn-line {
+    stroke-width: var(--hairline);
+    vector-effect: non-scaling-stroke;
+  }
+
+  .slab-line {
+    stroke-width: var(--hairline-x-2);
+    vector-effect: non-scaling-stroke;
+  }
+}

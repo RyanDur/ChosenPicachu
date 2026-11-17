@@ -1,9 +1,19 @@
-import {screen, within} from '@testing-library/react';
+import {isInaccessible, screen, within} from '@testing-library/react';
+import {not} from '@ryandur/sand';
 import userEvent from '@testing-library/user-event';
+
+const article = (): HTMLElement => screen.getByRole('article');
+const drawing = (): HTMLElement => within(article()).getByRole('figure', {name: /^A page, pulled apart\./});
 
 const openerLinkElements = (): HTMLElement[] => within(screen.getByRole('article')).getAllByRole('link');
 
 export const homePage = {
+  drawing,
+  paragraphOpening: (opening: RegExp): HTMLElement =>
+    within(article()).getByText((_, element) => element?.tagName === 'P' && opening.test(element.textContent)),
+  letteringHeard: (): string[] => Array.from(drawing().querySelectorAll('text'))
+    .filter(text => not(isInaccessible(text)))
+    .map(text => text.textContent ?? ''),
   arrived: (): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name: 'The three languages'}),
   openerLinks: (): (string | null)[][] => openerLinkElements()
     .map(link => [link.textContent, link.getAttribute('href')]),

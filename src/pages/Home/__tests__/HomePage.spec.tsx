@@ -2,6 +2,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {render} from '@testing-library/react';
 import {Paths} from '@navigation';
 import {homePage} from '@pages/Home/__test_support/home';
+import {outOfReadingOrder} from '@__test_support/reading-order';
 
 describe('the home page', () => {
   beforeEach(async () => {
@@ -19,5 +20,18 @@ describe('the home page', () => {
       ['Practice', Paths.practice],
       ['The Demos', Paths.demos]
     ]);
+  });
+
+  test('should show a page pulled apart into its three languages, named by its title and caption', () => {
+    expect(homePage.drawing()).toBeVisible();
+  });
+
+  test('should come to the drawing after the opener', () => {
+    expect(outOfReadingOrder([homePage.paragraphOpening(/^The Demos put that practice to work/), homePage.drawing()]))
+      .toEqual([]);
+  });
+
+  test('should keep the drawing’s lettering from a screen reader', () => {
+    expect(homePage.letteringHeard()).toEqual([]);
   });
 });
