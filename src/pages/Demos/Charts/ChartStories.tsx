@@ -1,9 +1,8 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC, ReactNode} from 'react';
-import {generatePath, Link} from 'react-router';
-import {Paths} from '@navigation';
+import {Link} from 'react-router';
 import {DemoTopics} from '@pages/Demos';
-import {ChartKind} from './chart-kinds';
+import {ChartKind, chartKinds} from './chart-kinds';
 import {Codes, Mdn, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../Recipe';
 import candleShapesSource from './Candles/candle-shapes.ts?sample';
 import candleSeriesSource from '@pages/Demos/Market/candles.ts?sample';
@@ -34,8 +33,6 @@ import liveTradesSource from '@pages/Demos/Market/live-trades.ts?sample';
 import axesSource from './Axes/Axes.tsx?sample';
 import axesCss from './Axes/Axes.css?sample';
 import '../Recipe/Recipe.css';
-
-const candlesSteps = generatePath(Paths.chartTutorial, {kind: 'candles'});
 
 const PriceStory: FC = () =>
   <Story param="graph" id="price"
@@ -428,7 +425,7 @@ const PressureStory: FC = () =>
           <Says>Each bar is drawn by <code className="monospaced">Bar</code>, the component the candles use: a function
             that writes a piece of the page, as the <TabLink to={DemoTopics.zIndex}>z-index
               tab</TabLink> says. <code className="monospaced">Bar</code> draws a bar and the wall behind it,
-            and <Link className="signpost" to={candlesSteps}>the candles chart’s steps</Link> show it in full. Each
+            and <Link className="signpost" to={chartKinds.address('candles')}>the candles chart’s steps</Link> show it in full. Each
             shape starts as a square one unit on a side, takes its four custom properties
             from <code className="monospaced">shapes.placed</code>, and moves by
             the <Mdn path="Web/CSS/transform">transform</Mdn> in <code className="monospaced">shape.css</code>. I move
