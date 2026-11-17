@@ -17,10 +17,14 @@ const recordEachWrite = (): void => {
 export const test = journey.extend<{historyWrites: void}>({
   historyWrites: [async ({page}, use, testInfo) => {
     const writes: unknown[] = [];
+    let threw = false;
+    page.on('pageerror', () => {
+      threw = true;
+    });
     await page.exposeFunction('recordHistoryWrite', (write: unknown) => writes.push(write));
     await page.addInitScript(recordEachWrite);
     await use();
-    if (testInfo.status !== testInfo.expectedStatus) {
+    if (threw || testInfo.status !== testInfo.expectedStatus) {
       const path = testInfo.outputPath('history-writes.json');
       await writeFile(path, JSON.stringify(writes, null, 2));
       await testInfo.attach('history writes', {path, contentType: 'application/json'});
