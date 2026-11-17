@@ -358,7 +358,8 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                   does not fit. Whether a tall fold’s last line is cut off depends on where its lines fall, so the
                   section wears <code className="monospaced">foot-shadowed</code>. That class paints a shadow at the
                   section’s foot, and over it a cover in the panel’s color that scrolls with the text. The cover hides
-                  the shadow when the text is at its end, or when the text fits.
+                  the shadow when the text is at its end, or when the text fits. The section also
+                  wears <code className="monospaced">charcoal-outlined</code>, the same charcoal hairline as the bars.
                 {{
                   reveal: ' With reveal, the section sits at the panel’s top, so the text is uncovered from its first line down.',
                   drawer: ' With the drawer, the panel lays the section out as a column set at its end, so the section’s bottom stays on the fold’s edge.',
@@ -377,6 +378,7 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
                     static: []
                   }[foldMotion]
                 ]}/>
+                <Snippet label="CSS" lines={carve.unit(surfaceCss, '.charcoal-outlined {')}/>
               </li>
               <li className="run">
                 <p className="paragraph">The section has a tabindex of 0, so a keyboard can reach it and scroll it,
