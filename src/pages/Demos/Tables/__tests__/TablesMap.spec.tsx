@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt} from '@pages/Demos/__test_support';
-import {tablesMap, tablesTab} from '@pages/Demos/Tables/__test_support';
+import {tablesMap} from '@pages/Demos/Tables/__test_support';
 
 const vanilla = '?world=vanilla';
 const everyPart = (current?: string) => [
@@ -42,11 +42,5 @@ describe('the tables map', () => {
 
     expect(await tablesMap.signposts()).toEqual(everyPart('7. Sort menu'));
     expect(await tablesMap.current()).toHaveTextContent('7. Sort menu');
-  });
-
-  test('should say on the tables tab how long each tutorial takes to read', async () => {
-    render(<TestApp at={demosAt('tables')}/>);
-
-    expect(await tablesTab().tutorialReadingTimeOf('Sort menu')).toHaveTextContent(/^7 minutes to read$/);
   });
 });

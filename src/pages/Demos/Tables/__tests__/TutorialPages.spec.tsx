@@ -31,6 +31,12 @@ describe('the table tutorials, each on its own page', () => {
     expect(tablesTab().recipeShown('drag resize')).not.toBeInTheDocument();
   });
 
+  test('should say on the tables tab how long each tutorial takes to read', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    expect(await tablesTab().tutorialReadingTimeOf('Sort menu')).toHaveTextContent(/^7 minutes to read$/);
+  });
+
   test('a tutorial’s page shows the live table, then only that tutorial', async () => {
     render(<TestApp at={demosAt('tables/resize')}/>);
 
