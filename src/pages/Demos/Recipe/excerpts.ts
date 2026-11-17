@@ -1,4 +1,4 @@
-import {is, maybe, not} from '@ryandur/sand';
+import {is, maybe, Maybe, not} from '@ryandur/sand';
 import {highlight, Label, Token} from './highlight';
 import {Line} from './sample';
 
@@ -20,10 +20,10 @@ const excerptsOf = (lines: readonly Line[]): number[][] => lines.reduce<number[]
 
 const grammarsCarryingState: Record<string, Label> = {ts: 'TS', tsx: 'TS', html: 'HTML'};
 
-const writtenIn = (path: string): Label | undefined => grammarsCarryingState[path.slice(path.lastIndexOf('.') + 1)];
+const writtenIn = (path: string): Maybe<Label> => maybe(grammarsCarryingState[path.slice(path.lastIndexOf('.') + 1)]);
 
 const linesBefore = (label: Label, line: Line): string[] => maybe(line.from)
-  .map(({file, line: number}) => writtenIn(file.path) === label
+  .map(({file, line: number}) => writtenIn(file.path).map(written => written === label).orElse(false)
     ? maybe(file.text).map(text => text.split('\n').slice(0, number - 1)).orElse([])
     : [])
   .orElse([]);
