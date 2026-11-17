@@ -9,8 +9,8 @@ import {TableFrameChange, tableFrameChange} from './table-frame-change';
 import './TableFrame.css';
 
 const measured = (frame: HTMLIFrameElement, dispatch: (change: TableFrameChange) => void): void => {
-  maybe(frame.contentDocument).map(inner => {
-    const height = Math.ceil(inner.body.getBoundingClientRect().height);
+  maybe(frame.contentDocument).mBind(({body}) => maybe(body)).map(body => {
+    const height = Math.ceil(body.getBoundingClientRect().height);
     if (height > 0) {
       dispatch(tableFrameChange.grown(height));
     }
