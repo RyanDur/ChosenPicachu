@@ -18,10 +18,10 @@ export const accordionsTab = {
   choose: async (dial: string, name: string): Promise<void> => userEvent.click(option(await choice(dial), name)),
   readingIn: (row: HTMLElement): HTMLElement => within(row).getByRole('status'),
   openFold: (fold: HTMLElement): Promise<void> => userEvent.click(within(fold).getByText(computeAccessibleName(fold))),
-  openFirstFold: async (part: HTMLElement): Promise<HTMLElement> => {
-    const control = within(part).getAllByRole('radio')[0];
-    await userEvent.click(control);
-    return control;
+  openFirstFoldIn: async (part: HTMLElement): Promise<HTMLElement> => {
+    const fold = within(part).getAllByRole('group')[0];
+    await userEvent.click(within(fold).getAllByText(/^\w+$/)[0]);
+    return fold;
   },
   partsHolding: async (element: HTMLElement, parts: string[]): Promise<string[]> => {
     const holding = await Promise.all(parts.map(async name => (await screen.findByRole('region', {name})).contains(element)));

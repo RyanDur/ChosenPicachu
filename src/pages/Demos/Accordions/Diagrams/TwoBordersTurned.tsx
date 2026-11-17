@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {Chevron, Diagram, Label} from '../../Recipe/Drawing';
-import './Diagrams.css';
 
 export const TwoBordersTurned: FC = () =>
   <Diagram lead="Two borders, turned" height={100}

@@ -61,46 +61,6 @@
       min-block-size: 0;
     }
   }
-
-  .grid-fold {
-    overflow: hidden;
-    display: grid;
-    grid-template-rows: min-content;
-
-    .fold-clip {
-      overflow: hidden;
-      display: grid;
-      grid-template-rows: 0fr;
-    }
-
-    .fold-clip-item {
-      display: block;
-      min-height: 0;
-    }
-
-    &:has(:checked) .fold-clip {
-      grid-template-rows: 1fr;
-    }
-
-    .fold-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--base);
-    }
-
-    .fold-control {
-      padding: var(--base);
-    }
-
-    &:has(:checked) .when-closed {
-      display: none;
-    }
-
-    &:not(:has(:checked)) .when-open {
-      display: none;
-    }
-  }
 }
 
 .accordion {
@@ -206,26 +166,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--base-x-1_25);
-}
-
-.toggle-accordion {
-  display: flex;
-  flex-direction: column;
-  gap: var(--base-x-1_25);
-
-  &:is(.reveal, .drawer) .grid-fold .fold-clip {
-    transition: grid-template-rows .3s ease-in-out;
-  }
-
-  &.drawer .grid-fold {
-    .fold-clip {
-      align-content: end;
-    }
-
-    .fold-clip-item {
-      align-self: end;
-    }
-  }
 }
 
 .opening-arrow::after {

@@ -1,6 +1,5 @@
 import {FC} from 'react';
 import {Arrow, Box, Diagram, Label, Part} from '../../Recipe/Drawing';
-import './Diagrams.css';
 
 export const ThreeBecomeTwo: FC = () =>
   <Diagram lead="Three pieces become two" height={130}

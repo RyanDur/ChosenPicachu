@@ -3,9 +3,9 @@ import {boxOf} from './box';
 import type {Locator, Page} from '@playwright/test';
 import {siteFrame} from './site';
 
-export type Build = 'the measured checkbox build' | 'the measured radio build' | 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build' | 'the grid checkbox build' | 'the grid radio build';
+export type Build = 'the measured checkbox build' | 'the measured radio build' | 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build';
 
-export const builds: Build[] = ['the checkbox build', 'the radio build', 'the inclusive details build', 'the details build', 'the grid checkbox build', 'the grid radio build'];
+export const builds: Build[] = ['the checkbox build', 'the radio build', 'the inclusive details build', 'the details build'];
 
 export const measuredBuilds: Build[] = ['the measured checkbox build', 'the measured radio build'];
 
@@ -15,9 +15,7 @@ const headings: Record<Build, string> = {
   'the checkbox build': 'Accordion using checkboxes and a known height',
   'the radio build': 'Accordion using a radio group and a known height',
   'the inclusive details build': 'Inclusive accordion using details elements',
-  'the details build': 'Exclusive accordion using details elements',
-  'the grid checkbox build': 'Inclusive accordion using checkboxes',
-  'the grid radio build': 'Exclusive accordion using radio group'
+  'the details build': 'Exclusive accordion using details elements'
 };
 
 export type Part = {
@@ -79,30 +77,16 @@ const radioPart = ({page, fold, article, index}: Where): Omit<Part, 'showsText'>
   isOpen: () => fold.getByRole('radio').isChecked()
 });
 
-export const controlWord = (fold: Locator, word: 'Open' | 'Close'): Locator => fold.getByText(word, {exact: true});
-
-const gridPart = (fold: Locator, control: 'checkbox' | 'radio', openByKeyboard: () => Promise<void>): Omit<Part, 'showsText'> => ({
-  fold,
-  open: () => controlWord(fold, 'Open').click(),
-  close: () => controlWord(fold, 'Close').click(),
-  openByKeyboard,
-  isOpen: () => fold.getByRole(control).isChecked()
-});
-
 const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
   'the measured checkbox build': ({page, fold}) => checkboxPart(page, fold),
   'the measured radio build': where => radioPart(where),
   'the checkbox build': ({page, fold}) => checkboxPart(page, fold),
   'the radio build': where => radioPart(where),
   'the inclusive details build': ({page, fold}) => detailsPart(page, fold),
-  'the details build': ({page, fold}) => detailsPart(page, fold),
-  'the grid checkbox build': ({page, fold}) => gridPart(fold, 'checkbox', () => focusAndPress(page, fold.getByRole('checkbox'), 'Space')),
-  'the grid radio build': ({page, fold, article, index}) => gridPart(fold, 'radio', () => index === 0
-    ? focusAndPress(page, fold.getByRole('radio'), 'Space')
-    : focusAndPress(page, article.getByRole('radio').first(), 'ArrowDown', index))
+  'the details build': ({page, fold}) => detailsPart(page, fold)
 };
 
-const exclusiveBuilds: Build[] = ['the measured radio build', 'the radio build', 'the details build', 'the grid radio build'];
+const exclusiveBuilds: Build[] = ['the measured radio build', 'the radio build', 'the details build'];
 
 export const showing = (build: Build, style: 'reveal' | 'drawer' | 'static' = 'reveal'): string =>
   `demos/accordions/?type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}&style=${style}`;

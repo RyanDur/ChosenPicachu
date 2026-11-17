@@ -8,10 +8,8 @@ import {FoldTypeDial} from './FoldTypeDial';
 import {AccordionProps, Fold} from './accordion-props';
 import {ExclusiveAccordion} from './ExclusiveAccordion';
 import {ExclusiveMeasuredAccordion} from './ExclusiveMeasuredAccordion';
-import {ExclusiveRadioToggleAccordion} from './ExclusiveRadioToggleAccordion';
 import {ExclusiveToggleAccordion} from './ExclusiveToggleAccordion';
 import {InclusiveAccordion} from './InclusiveAccordion';
-import {InclusiveCheckboxToggleAccordion} from './InclusiveCheckboxToggleAccordion';
 import {InclusiveMeasuredAccordion} from './InclusiveMeasuredAccordion';
 import {InclusiveToggleAccordion} from './InclusiveToggleAccordion';
 import {carve, Line, lines, Mdn, Sample, Snippet} from '../Recipe';
@@ -19,10 +17,8 @@ import exclusiveAccordionSource from './ExclusiveAccordion.tsx?sample';
 import exclusiveMeasuredAccordionSource from './ExclusiveMeasuredAccordion.tsx?sample';
 import inclusiveMeasuredAccordionSource from './InclusiveMeasuredAccordion.tsx?sample';
 import openFoldsSource from './open-folds.ts?sample';
-import exclusiveRadioToggleAccordionSource from './ExclusiveRadioToggleAccordion.tsx?sample';
 import exclusiveToggleAccordionSource from './ExclusiveToggleAccordion.tsx?sample';
 import inclusiveAccordionSource from './InclusiveAccordion.tsx?sample';
-import inclusiveCheckboxToggleAccordionSource from './InclusiveCheckboxToggleAccordion.tsx?sample';
 import inclusiveToggleAccordionSource from './InclusiveToggleAccordion.tsx?sample';
 import accordionsCss from './Accordions.css?sample';
 import oldWayMotionCss from './OldWayMotion.css?sample';
@@ -43,15 +39,11 @@ import {
   OneGuessTwoFolds,
   OneJobTwoWays,
   OneNameOneChoice,
-  PaddingInsideTheClip,
-  RidesTheEdge,
-  RowToItsContent,
   SizedToTheText,
   TheKnownHeight,
   TheRuleMatchesTheBox,
   ThreeBecomeTwo,
-  TwoBordersTurned,
-  WhatEachElementDoes
+  TwoBordersTurned
 } from './Diagrams';
 import {FoldInput} from './fold-input';
 import '../Runs.css';
@@ -61,7 +53,6 @@ export type FoldLists = {
   measured: Record<FoldType, Fold[]>;
   known: Record<FoldType, Fold[]>;
   platform: Record<FoldType, Fold[]>;
-  gridRow: Record<FoldType, Fold[]>;
 };
 
 const exhibit = 'card rounded-corners lifted padded';
@@ -111,11 +102,6 @@ const measuredBuilds: Record<FoldType, Build> = {
   inclusive: {Accordion: InclusiveMeasuredAccordion, sample: sharedOpenFolds(inclusiveMeasuredAccordionSource)},
   exclusive: {Accordion: ExclusiveMeasuredAccordion, sample: sharedOpenFolds(exclusiveMeasuredAccordionSource)}
 };
-
-const gridRowAccordions: Record<FoldType, FC<AccordionProps>> = {
-  inclusive: InclusiveCheckboxToggleAccordion,
-  exclusive: ExclusiveRadioToggleAccordion
-};
 type Props = {
   foldLists: FoldLists;
 };
@@ -131,7 +117,6 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
   const {Accordion: Platform} = platform;
   const measured = measuredBuilds[foldType];
   const {Accordion: Measured} = measured;
-  const GridRow = gridRowAccordions[foldType];
   return <>
     <header className="tab-introduction">
       <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
@@ -709,129 +694,6 @@ export const AccordionsExplained: FC<Props> = ({foldLists}) => {
               <li className="run">
                 <p className="paragraph">There is no script here either.</p>
               </li>
-            </ol>
-          </details>
-        </li>
-      </ol>
-    </section>
-    <section aria-labelledby="together-heading" className="accordion-part">
-      <h2 id="together-heading" className="title bold">A {input} and a grid row: the old control, the new slide</h2>
-      <GridRow className={exhibitMoving} folds={foldLists.gridRow[foldType]}/>
-      <ol className={runs}>
-        {foldType === 'inclusive' && <li className="run">
-          <p className="paragraph">The inclusive build keeps the checkbox from the old way, with no script, and takes
-            its slide from the grid row. Each bar holds the fold’s name and,
-            at its end, an Open or Close control, and the checkbox remembers whether the fold is open, as it did in the
-            known-height build. The name is only a name: pressing it does nothing. Only the control works the fold. What
-            is new is the way the text opens, below.</p>
-          <Snippet label="HTML" lines={carve.between(inclusiveCheckboxToggleAccordionSource, '<fieldset>\n    <legend className="off-screen">folds</legend>\n    <ul className="new-accordion">', '</header>')}/>
-        </li>}
-        {foldType === 'exclusive' && <li className="run">
-          <p className="paragraph">The exclusive build keeps the radio group from the old way and takes its slide from
-            the grid row. Each bar holds the fold’s name and, at its
-            end, an Open or Close control; the name is only a name, and only the control works the fold.</p>
-          <p className="paragraph">Radios that share a name keep one fold open on their own, which checkboxes cannot do
-            without script. What a radio cannot do is close itself: pressed again, it stays checked. So I add that with
-            a little script on the list. The radios stay plain.</p>
-          <p className="paragraph">A press on a radio is an event, the browser telling the page that something happened.
-            The event then bubbles up through the elements around the radio, and the list runs a function for it on the
-            way, which is called a handler.</p>
-          <p className="paragraph">The script keeps the open radio’s value, the string each radio carries to tell it
-            apart, in a <code className="monospaced">data-open</code> attribute on the list element. In the script it
-            is <code className="monospaced">dataset.open</code>: <Mdn path="Web/API/HTMLElement/dataset">dataset</Mdn> is the browser’s name
-            for an element’s data- attributes, with the prefix dropped. A
-            press on that radio unchecks it and clears the attribute, and a press on any other writes the new one. The
-            arrow keys move the choice and press as they go, so each move is written too.</p>
-          <Snippet label="TS" lines={[
-            ...carve.unit(exclusiveRadioToggleAccordionSource, 'const openAfter'), lines.blank,
-            ...carve.unit(exclusiveRadioToggleAccordionSource, 'const radioPressed'), lines.blank,
-            ...carve.unit(exclusiveRadioToggleAccordionSource, 'const radioClicked'), lines.blank,
-            ...carve.between(exclusiveRadioToggleAccordionSource, '<ul className="new-accordion" onClick', '<ul className="new-accordion" onClick')
-          ]}/>
-          <WhatEachElementDoes/>
-        </li>}
-        <li className="run">
-          <p className="paragraph">Under the bar, the fold’s paragraph is a grid, the CSS layout that sets a box out in
-            rows and columns, with one row. Its height is in fr, a grid unit for a share of the space: in a grid sized
-            to its content, a row of 1fr is as tall as the text needs and a row of 0fr has no height. The row is 0fr
-            while the fold is closed. <Mdn path="Web/CSS/:has"><code className="monospaced">:has()</code></Mdn> is a piece of a CSS rule
-            that picks an element by what it contains, so <code className="monospaced">:has(:checked)</code> makes that
-            row 1fr when the fold holds a checked input. The paragraph’s overflow hidden hides whatever its row does
-            not hold.</p>
-          <Snippet label="CSS" lines={[
-            ...carve.unit(accordionsCss, '.fold-clip {'), lines.blank,
-            ...carve.unit(accordionsCss, '&:has(:checked) .fold-clip {')
-          ]}/>
-          <RowToItsContent/>
-        </li>
-        <li className="part-depth">
-          <details aria-labelledby="together-depth">
-            <summary id="together-depth" className="fold-bar bold">How the {input} and the grid row work
-              together</summary>
-            <ol className="runs">
-              <li className="run">
-                <p className="paragraph">The bar carries the fold’s name. The control is a {input} under a label. The
-                  label holds the Open or Close the eye sees and, off screen, the fold’s name, so a listener hears the
-                  word, the fold and the state: “Open”, then the fold’s name, then “{input}, not checked”. Someone using
-                  voice control says what they see. Its checked state is the fold’s state. The word that does not apply
-                  has display: none, which takes it out of the page and out of the name the listener hears, so the
-                  control is always called by the one word it shows. The control is a box drawn
-                  by <code className="monospaced">hairline-outline</code>, a hairline in the text’s own color,
-                  and <code className="monospaced">field-pressed</code>,
-                  which gives it the page’s own ground and ink while it is pressed.</p>
-                <Snippet label="CSS" lines={[
-                  ...carve.unit(accordionsCss, '&:has(:checked) .when-closed {'), lines.blank,
-                  ...carve.unit(accordionsCss, '&:not(:has(:checked)) .when-open {'), lines.blank,
-                  ...carve.unit(surfaceCss, '.hairline-outline {'), lines.blank,
-                  ...carve.unit(surfaceCss, '.field-pressed:active {')
-                ]}/>
-              </li>
-              {foldType === 'exclusive' && <li className="run">
-                <p className="paragraph">The space bar is the keyboard’s press, but on a checked radio most browsers do
-                  nothing with it, so no press reaches the list. So a handler on the list for keydown, the event a key
-                  press sends, catches the space bar too, and closes the fold when the key lands on the open radio.</p>
-                <Snippet label="TS" lines={carve.unit(exclusiveRadioToggleAccordionSource, 'const spacePressed')}/>
-              </li>}
-              <li className="run">
-                {foldType === 'inclusive'
-                  ? <p className="paragraph">This build has no script to lose.</p>
-                  : <p className="paragraph">Without the list’s script, the build still works as a radio group: it keeps
-                    one fold open. Only the second press that closes a fold is lost.</p>}
-              </li>
-              <li className="run">
-                <p className="paragraph">Here the paragraph’s item is a span with no minimum height, and, as in the
-                  details build, the text’s padding sits on a span inside it, so the row can shrink to 0. A paragraph
-                  may hold spans, so the text needs no other element. If you let the fold’s own row move and the
-                  paragraph clip inside it, the clip falls behind the row while it moves, and a blank band shows under
-                  the text.</p>
-                <Snippet label="CSS" lines={[
-                  ...carve.unit(accordionsCss, '.fold-clip-item {'), lines.blank,
-                  ...carve.unit(accordionsCss, '.fold-text {')
-                ]}/>
-                <PaddingInsideTheClip/>
-              </li>
-              <li className="run">
-                <p className="paragraph">The fold motion above chooses how the folds here move, and each build wears
-                  the choice as a class.
-                {{
-                  reveal: ' Reveal moves the row on a transition, 300 milliseconds of ease-in-out. The text shows from its top down as the row grows.',
-                  drawer: ' Drawer moves the row on the same transition, 300 milliseconds of ease-in-out, and sets the text at the row’s bottom, as the next run explains.',
-                  static: ' Static matches neither class in the rule for the transition, so the build has none, and the row changes at once.'
-                }[foldMotion]}</p>
-                <Snippet label="CSS" lines={carve.unit(accordionsCss, '&:is(.reveal, .drawer) .grid-fold .fold-clip {')}/>
-              </li>
-              {foldMotion === 'drawer' && <li className="run">
-                <p className="paragraph">With the drawer, the text slides down from under its bar. Its paragraph grows
-                  from 0fr to 1fr, as above. Between the two, the row is shorter than the paragraph
-                  around it, so <code className="monospaced">align-content: end</code> sets the row at the paragraph’s
-                  bottom. Then <code className="monospaced">align-self: end</code> sets the item at the row’s bottom, as
-                  tall as its text. So the text’s bottom edge stays on the fold’s edge the whole way, and the
-                  paragraph’s overflow hides the text above the fold. One transition moves it all, so no part can fall
-                  behind another. The drawer works around no browser limit. I built it to show what grid alignment does
-                  on its own.</p>
-                <Snippet label="CSS" lines={carve.unit(accordionsCss, '&.drawer .grid-fold {')}/>
-                <RidesTheEdge/>
-              </li>}
             </ol>
           </details>
         </li>

@@ -6,7 +6,7 @@
   "demos": {
     "accordions": {
       "title": "Accordions · Chosen Picachu",
-      "description": "An accordion in HTML alone, the old ways it was built, what the platform gives now and the two together, and which of the three languages each job needed."
+      "description": "An accordion in HTML alone, the old ways it was built, what the platform gives now, and which of the three languages each job needed."
     },
     "z-index": {
       "title": "Z-index · Chosen Picachu",
