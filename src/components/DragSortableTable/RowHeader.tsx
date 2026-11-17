@@ -24,7 +24,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
   const rowDrift = useTableRead(tableReads.driftOfRow(row));
   const settling = useTableRead(tableReads.settlingOfRowIn(row, standing));
   const seat = columnSeat.or(() => rowSeat);
-  const drift = maybe(columnDrift).orElse(rowDrift);
+  const drift = columnDrift.or(() => rowDrift);
 
   const nudged = (to: number, heights: PixelSizes): void =>
     dispatch(tableActions.rowWalkedTo({row, label}, to, heights, standing));
@@ -53,7 +53,7 @@ export const RowHeader: FC<ComponentProps<'th'> & {column: string; row: string; 
     className={classNames(
       ...looks.rowHeaderCell, className, ...looks.cellNeeds,
       ...looks.motionStates(columnCarried || carried, settlingFrom, shoved))}
-    style={looks.placement({seat: seat.orElse(undefined), drift, settlingFrom, shove: shoved})}>
+    style={looks.placement({seat, drift, settlingFrom, shove: shoved})}>
     <RowGrip position={position}
       onPointerDown={lifting.row(() => order, () => standing, lift)}
       {...travel.whileHeld(maybe(drag), moved, release)}

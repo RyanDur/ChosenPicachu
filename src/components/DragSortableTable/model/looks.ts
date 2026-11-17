@@ -3,31 +3,31 @@ import {has, maybe, Maybe, not} from '@ryandur/sand';
 import {ColumnShove, RowShove, Settling} from './table-state';
 import {Drift} from './travel';
 
-const pixels = (length?: number): `${number}px` | undefined => has(length) ? `${length}px` : undefined;
+const pixels = (length: number): `${number}px` => `${length}px`;
 
-const pixelsAlong = (place: Maybe<Drift>, axis: keyof Drift): `${number}px` | undefined =>
-  place.map(at => pixels(at[axis])).orElse(undefined);
+const pixelsAlong = (place: Maybe<Drift>, axis: keyof Drift): Maybe<`${number}px`> =>
+  place.map(at => pixels(at[axis]));
 
-const shoveDistance = (shove?: ColumnShove | RowShove): `${number}px` | undefined =>
-  has(shove) ? `${shove.by}px` : undefined;
+const shoveDistance = (shove?: ColumnShove | RowShove): Maybe<`${number}px`> =>
+  maybe(shove).map(({by}) => pixels(by));
 
 const shoved = (shove?: ColumnShove | RowShove): string | false =>
   has(shove) && `shoved-${shove.toward}`;
 
-type Placement = {seat?: Drift; drift?: Drift; settlingFrom?: Settling; shove?: ColumnShove | RowShove};
+type Placement = {seat: Maybe<Drift>; drift: Maybe<Drift>; settlingFrom?: Settling; shove?: ColumnShove | RowShove};
 
 const placement = ({seat, drift, settlingFrom, shove}: Placement): CSSProperties => {
   const settling = maybe(settlingFrom);
   return {
-    '--seat-x': pixelsAlong(maybe(seat), 'x'),
-    '--seat-y': pixelsAlong(maybe(seat), 'y'),
-    '--drift-x': pixelsAlong(maybe(drift), 'x'),
-    '--drift-y': pixelsAlong(maybe(drift), 'y'),
-    '--settle-x': pixelsAlong(settling.map(settled => settled.seat), 'x'),
-    '--settle-y': pixelsAlong(settling.map(settled => settled.seat), 'y'),
-    '--settle-drift-x': pixelsAlong(settling.map(settled => settled.drift), 'x'),
-    '--settle-drift-y': pixelsAlong(settling.map(settled => settled.drift), 'y'),
-    '--shoved-by': shoveDistance(shove)
+    '--seat-x': pixelsAlong(seat, 'x').orElse(undefined),
+    '--seat-y': pixelsAlong(seat, 'y').orElse(undefined),
+    '--drift-x': pixelsAlong(drift, 'x').orElse(undefined),
+    '--drift-y': pixelsAlong(drift, 'y').orElse(undefined),
+    '--settle-x': pixelsAlong(settling.map(settled => settled.seat), 'x').orElse(undefined),
+    '--settle-y': pixelsAlong(settling.map(settled => settled.seat), 'y').orElse(undefined),
+    '--settle-drift-x': pixelsAlong(settling.map(settled => settled.drift), 'x').orElse(undefined),
+    '--settle-drift-y': pixelsAlong(settling.map(settled => settled.drift), 'y').orElse(undefined),
+    '--shoved-by': shoveDistance(shove).orElse(undefined)
   };
 };
 

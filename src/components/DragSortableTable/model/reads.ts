@@ -60,11 +60,11 @@ const seatOfColumn = (name: string) => (view: TableView): Maybe<Drift> =>
 const seatOfRow = (key: string) => (view: TableView): Maybe<Drift> =>
   rowHeld(key)(view) ? seatOffset(view) : nothing();
 
-const driftOfColumn = (name: string) => (view: TableView): Drift | undefined =>
-  maybe(columnDrag(name)(view)).map(drag => drag.drift).orElse(undefined);
+const driftOfColumn = (name: string) => (view: TableView): Maybe<Drift> =>
+  maybe(columnDrag(name)(view)).map(drag => drag.drift);
 
-const driftOfRow = (key: string) => (view: TableView): Drift | undefined =>
-  maybe(rowDrag(key)(view)).map(drag => drag.drift).orElse(undefined);
+const driftOfRow = (key: string) => (view: TableView): Maybe<Drift> =>
+  maybe(rowDrag(key)(view)).map(drag => drag.drift);
 
 const settlingOfColumnIn = (name: string, order: readonly string[]) => (view: TableView): Settling | undefined =>
   columnHeld(name)(view) ? tableState.settlingAt(view.state, order, standing(view)) : undefined;
