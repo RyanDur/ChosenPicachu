@@ -25,6 +25,6 @@ export const PartPage: FC<{part: TablePart}> = ({part}) => {
     <WorldNote/>
     <StoryClues headedByPage aria-labelledby={titled}/>
     <PageFoot label="the tables parts" previous={nothing()}
-      next={some({numbered, address: carried(demoTab.address(DemoTopics.tables), heading)})}/>
+      next={some({numbered, address: carried(demoTab.address(DemoTopics.tables), heading.id)})}/>
   </article>;
 };

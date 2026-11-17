@@ -52,7 +52,7 @@ const onward: Record<TablePart, OnwardPart> = {
 
 type Onward = {
   numbered: string;
-  heading: string;
+  heading: TabHeading;
 };
 
 const isListed = (part: BookPart): part is TablePart => Object.keys(listings).includes(part);
@@ -68,7 +68,7 @@ export const tableParts = {
   },
   onwardOf: (part: TablePart): Onward => {
     const {part: next, heading} = onward[part];
-    return {numbered: `${ordinalOf(next)}. ${heading.title}`, heading: heading.id};
+    return {numbered: `${ordinalOf(next)}. ${heading.title}`, heading};
   },
   addressOf,
   shownAt: (pathname: string): Maybe<TablePart> => maybe(all.find(part => pathname === addressOf(part))),
