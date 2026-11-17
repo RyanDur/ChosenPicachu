@@ -117,4 +117,24 @@ describe('a story card', () => {
     await waitFor(() => expect(appAddress.search()).toHaveTextContent('tale=told'));
     expect(appAddress.fragment()).toBe('#tale-told-story');
   });
+
+  test('a press on a story a followed link opened, before the page has caught up, closes it', async () => {
+    render(<TestApp at="/"><Stories>
+      <Link to={{search: '?tale=told', hash: '#tale-told-story'}}>the tale below</Link>
+      <Story param="tale" id="told" can="The reader can close a story a link opened" soThat="a press always answers">
+        <p>the told story</p>
+      </Story>
+    </Stories></TestApp>);
+    await appAddress.drawn();
+    const bar = recipeFolds.stepTitled(document.body, 'The reader can close a story a link opened');
+
+    await act(async () => {
+      screen.getByRole('link', {name: 'the tale below'}).click();
+      await Promise.resolve();
+      bar.click();
+    });
+
+    await waitFor(() => expect(appAddress.fragment()).toBe('#tale-told-story'));
+    expect(appAddress.search()).not.toHaveTextContent('tale=told');
+  });
 });
