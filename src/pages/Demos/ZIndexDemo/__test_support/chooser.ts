@@ -1,11 +1,15 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {computeAccessibleName} from 'dom-accessibility-api';
+import {is, not} from '@ryandur/sand';
+
+const named = {name: /^What card one wears decides/};
 
 const wear = (chooser: HTMLElement, worn: string): HTMLElement => within(chooser).getByRole('radio', {name: worn});
 
 export const wearsChooser = {
-  find: (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^What card one wears decides/}),
+  find: (): Promise<HTMLElement> => screen.findByRole('figure', named),
+  missing: (): boolean => not(is(screen.queryByRole('figure', named))),
   wearsOffered: (chooser: HTMLElement): string[] =>
     within(within(chooser).getByRole('group', {name: 'What card one wears'})).getAllByRole('radio').map(choice => computeAccessibleName(choice)),
   wear,

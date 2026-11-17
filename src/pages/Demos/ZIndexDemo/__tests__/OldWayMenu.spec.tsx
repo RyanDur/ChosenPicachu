@@ -182,13 +182,13 @@ describe('the card that traps the menu', () => {
 });
 
 describe('why 9999 still loses', () => {
-  test('should link What else forms a stacking context to its heading on the tab', async () => {
+  test('should link What else forms a stacking context to its page', async () => {
     render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
 
     const part = await explanation.part('Why 9999 still loses');
 
     expect(explanation.linkNamed(part, 'What else forms a stacking context'))
-      .toHaveAttribute('href', `${demosAt('z-index')}#what-else-forms-heading`);
+      .toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context'));
   });
 });
 

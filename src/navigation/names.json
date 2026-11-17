@@ -30,6 +30,7 @@
     "the-measured-height": {"title": "The measured height · Accordions · Chosen Picachu", "description": "A script measures the text, and the style sheet slides the panel to that height."}
   },
   "z-index": {
+    "what-else-forms-a-stacking-context": {"title": "What else forms a stacking context · Z-index · Chosen Picachu", "description": "Opacity, a transform, fixed, sticky and isolation each form a stacking context on their own; an outline, a border or a position alone does not."},
     "why-9999-still-loses": {"title": "Why 9999 still loses · Z-index · Chosen Picachu", "description": "A list with z-index: 9999 opens under a card with z-index: 1, because a z-index counts only inside its stacking context."},
     "why-third-is-on-top": {"title": "Why Third is on top · Z-index · Chosen Picachu", "description": "With no z-index, the browser paints positioned boxes in the order the code lists them, so the last one is on top."}
   },

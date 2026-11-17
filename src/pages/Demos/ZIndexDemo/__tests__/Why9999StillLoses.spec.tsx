@@ -39,12 +39,12 @@ describe('why 9999 still loses, on its own page', () => {
     expect(explanation.queryLinkNamed(trap, 'top layer')).not.toBeInTheDocument();
   });
 
-  test('should lead back to part one’s page and on to part three on the tab, by number and title, with the raised card carried', async () => {
+  test('should lead back to part one’s page and on to part three’s page, by number and title, with the raised card carried', async () => {
     render(<TestApp at={demosAt(stillLoses, '?raised=second')}/>);
 
     expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
       ['Previous: 1. Why Third is on top', demosAt('z-index/why-third-is-on-top', '?raised=second')],
-      ['Next: 3. What else forms a stacking context', `${demosAt('z-index', '?raised=second')}#what-else-forms-heading`]
+      ['Next: 3. What else forms a stacking context', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second')]
     ]);
   });
 

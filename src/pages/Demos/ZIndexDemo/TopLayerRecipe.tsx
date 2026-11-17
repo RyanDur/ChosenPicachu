@@ -40,8 +40,7 @@ export const TopLayerRecipe: FC = () => {
     <Tell>I could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the
       term taught in <PartLink part="why-9999-still-loses"/>.
       An element around the banner forms a stacking context by the
-      ways <a className="signpost" href={`#${partHeadings.whatElseForms}`}><cite>What else forms a stacking
-        context</cite></a> shows. <code className="monospaced">position: fixed</code>, which pins the banner to the
+      ways <PartLink part="what-else-forms-a-stacking-context"/> shows. <code className="monospaced">position: fixed</code>, which pins the banner to the
       window, does not lift it out of that context,
       as <a className="signpost" href={`#${partHeadings.fixedBannerLoses}`}><cite>Why a fixed banner still
         loses</cite></a> shows. Inside that context, the banner’s 9999 is compared with nothing outside it. So
