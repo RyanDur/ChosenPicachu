@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {Exercise, Slices} from '../../Recipe';
+import {TabLink} from '@pages/Demos/TabLink';
 
 export const StorySlices: FC<{headedBy: string}> = ({headedBy}) => <>
   <Slices headedBy={headedBy} stationsAt={demoTab.address(DemoTopics.tables)} can="The trader can watch the live market over lookbacks they arrange"
@@ -15,8 +16,9 @@ export const StorySlices: FC<{headedBy: string}> = ({headedBy}) => <>
       ['The trader can widen a column', 6]
     ]}/>
   <Exercise>
-    If you want the exercise, stop here and build the story yourself first. The table at the top of this page is my
-    interpretation of that; the parts that follow break the interpretation into features. Read them to see how I built
-    it, or to compare it with yours. The links go to MDN, Mozilla’s web reference, if you want more.
+    If you want the exercise, stop here and build the story yourself first. The table at the top of
+    the <TabLink to={DemoTopics.tables}>tables tab</TabLink> is my interpretation of it, and each slice above links
+    to the build of its feature. Read those to see how I built it, or to compare it with yours. They link to MDN,
+    Mozilla’s web reference, if you want more.
   </Exercise>
 </>;
