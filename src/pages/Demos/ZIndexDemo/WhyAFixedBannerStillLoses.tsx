@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
 import {useSearchParamsOnceHydrated} from '@navigation/search-params';
+import {demoTab, DemoTopics} from '@pages/Demos';
 import {carve, lines, Snippet, storyKeys} from '../Recipe';
 import {BannerTrap} from './BannerTrap';
-import {partHeadings} from './part-headings';
 import {topLayerStory} from './top-layer-story';
 import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@banners/Banners.tsx?sample';
@@ -12,11 +12,14 @@ import '../Runs.css';
 import {PartLink} from './PartLink';
 import {zIndexParts} from './part-pages';
 
-export const BannerExplained: FC = () => {
+export const WhyAFixedBannerStillLoses: FC = () => {
   const [searchParams] = useSearchParamsOnceHydrated();
 
-  return <section aria-labelledby={partHeadings.fixedBannerLoses} className="stacking-part">
-    <h2 id={partHeadings.fixedBannerLoses} className="title bold">{zIndexParts.titleOf('fixed-banner-loses')}</h2>
+  return <>
+    <p className="paragraph">A banner pinned to the window with a z-index of 9999 can still slide under a card as the
+      page scrolls. This part shows why, and where the site writes its own banner so that no card covers it. It assumes
+      what <PartLink part="why-9999-still-loses"/> and <PartLink part="what-else-forms-a-stacking-context"/> give: a
+      z-index compared only inside its own stacking context, and fixed and isolation each forming one.</p>
     <BannerTrap/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
@@ -33,18 +36,21 @@ export const BannerExplained: FC = () => {
       <li className="run">
         <p className="paragraph">The site’s own banner is fixed too. It is written last on the page, outside the tab’s
           content. The content wears <code className="monospaced">isolation: isolate</code>,
-          as <PartLink part="what-else-forms-a-stacking-context"/> shows, so no card’s z-index is ever compared with the
-          banner’s. The banner’s 3 is compared with the content and with the header, the footer, the site’s navigation
-          and the tabs, none of them higher than 2. It stays at the window’s edge, over every card on the page, card two
-          included.</p>
+          as <PartLink part="what-else-forms-a-stacking-context"/> shows, so no card’s z-index is ever compared with
+          the banner’s. The banner’s 3 is compared with the content and with the header, the footer, the site’s
+          navigation and the tabs, none of them higher than 2. It stays at the window’s edge, over every card on the
+          page, card two included.</p>
         <Snippet label="HTML" lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
         <Snippet label="CSS" lines={carve.between(bannersCss, '.banners {', 'z-index: 3;')}/>
       </li>
       <li className="run">
-        <p className="paragraph">To build this banner yourself, go to <Link className="signpost"
-          to={{search: `?${storyKeys.openedIn(searchParams, topLayerStory)}`, hash: storyKeys.anchorOf(topLayerStory)}}>the
-          tutorial below</Link>. It opens at the step where the panel is written at the page’s root.</p>
+        <p className="paragraph">To build this banner yourself, go to <Link className="signpost" to={{
+          pathname: demoTab.address(DemoTopics.zIndex),
+          search: `?${storyKeys.openedIn(searchParams, topLayerStory)}`,
+          hash: storyKeys.anchorOf(topLayerStory)
+        }}><cite>{zIndexParts.titleOf('build-this-feature')}</cite></Link>. It opens at the step where the panel is
+          written at the page’s root.</p>
       </li>
     </ol>
-  </section>;
+  </>;
 };

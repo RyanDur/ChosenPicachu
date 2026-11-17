@@ -24,8 +24,7 @@ describe('the top layer', () => {
   });
 
   test('the user raises a banner from the demo', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
+    render(<TestApp at={demosAt('z-index/why-a-fixed-banner-still-loses')}/>);
 
     await siteBanners.raise();
 
@@ -33,8 +32,7 @@ describe('the top layer', () => {
   });
 
   test('every press stacks another banner', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
+    render(<TestApp at={demosAt('z-index/why-a-fixed-banner-still-loses')}/>);
 
     await siteBanners.raise();
     await siteBanners.raise();
@@ -127,7 +125,7 @@ describe('the banner tutorial’s first story', () => {
     const news = recipeFolds.story(await zIndexTab.findFeatureStories(), story);
 
     expect(explanation.linkNamed(news, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses'));
-    expect(explanation.linkNamed(news, 'Why a fixed banner still loses')).toHaveAttribute('href', zIndexTab.fragmentOf('Why a fixed banner still loses'));
+    expect(explanation.linkNamed(news, 'Why a fixed banner still loses')).toHaveAttribute('href', demosAt('z-index/why-a-fixed-banner-still-loses'));
     expect(explanation.linkNamed(news, 'What else forms a stacking context')).toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context'));
   });
 

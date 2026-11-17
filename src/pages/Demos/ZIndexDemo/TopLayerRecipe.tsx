@@ -2,7 +2,6 @@ import {FC} from 'react';
 import {Align, Side} from '@banners';
 import {Codes, Mdn, Says, Sample, Snippet, Step, DialStep, StepHeading, Steps, Story, Want, Words, Tell, lines, carve} from '../Recipe';
 import {AlignDial, SideDial, useControls} from '../Controls';
-import {partHeadings} from './part-headings';
 import {PartLink} from './PartLink';
 import {PartTermLink} from './PartTermLink';
 import {topLayerStory} from './top-layer-story';
@@ -42,10 +41,9 @@ export const TopLayerRecipe: FC = () => {
       taught in <PartLink part="why-9999-still-loses"/>. An element around the banner forms a stacking context by the
       ways <PartLink part="what-else-forms-a-stacking-context"/> shows. <code className="monospaced">position:
         fixed</code>, which pins the banner to the window, does not lift it out of that context,
-      as <a className="signpost" href={`#${partHeadings.fixedBannerLoses}`}><cite>Why a fixed banner still
-        loses</cite></a> shows. Inside that context, the banner’s 9999 is compared with nothing outside it. So I write
-      the panel last on the page, outside the tab’s content, where its z-index is compared with that content as a whole
-      and with the frame around it, never with a card.</Tell>
+      as <PartLink part="why-a-fixed-banner-still-loses"/> shows. Inside that context, the banner’s 9999 is compared
+      with nothing outside it. So I write the panel last on the page, outside the tab’s content, where its z-index is
+      compared with that content as a whole and with the frame around it, never with a card.</Tell>
     <Steps>
       <Step>
         <StepHeading title="Write the panel last, at the page’s root"/>

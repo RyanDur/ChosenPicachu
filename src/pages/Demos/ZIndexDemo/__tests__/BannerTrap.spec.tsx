@@ -5,16 +5,18 @@ import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {explanation, recipeFolds, recipeSteps} from '@pages/Demos/Recipe/__test_support';
 import {bannerExhibit, exhibit, oldBanner, wayLabeled, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
+const fixedBanner = 'z-index/why-a-fixed-banner-still-loses';
+
 describe('the banner exhibit', () => {
   test('should give its steps before any control', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(fixedBanner)}/>);
     const banners = await bannerExhibit.find();
 
     expect(exhibit.controlsBeforeTheSteps(banners, bannerExhibit.controls(banners))).toEqual([]);
   });
 
   test('should show Raise a banner on both buttons, under the way each is built', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(fixedBanner)}/>);
     const banners = await bannerExhibit.find();
 
     const oldWay = bannerExhibit.button(banners, 'Raise a banner, the old way');
@@ -30,7 +32,7 @@ describe('the banner exhibit', () => {
 
 describe('the old banner', () => {
   test('should say nothing until it is raised', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(fixedBanner)}/>);
 
     await oldBanner.findRaiser();
 
@@ -38,7 +40,7 @@ describe('the old banner', () => {
   });
 
   test('should be announced when raised from card one', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(fixedBanner)}/>);
 
     await oldBanner.raise();
 
@@ -46,7 +48,7 @@ describe('the old banner', () => {
   });
 
   test('should leave when dismissed by keyboard, and give focus back to the button that raised it', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(fixedBanner)}/>);
     await oldBanner.raiseByKeyboard();
     await oldBanner.tabToDismiss();
     expect(oldBanner.dismissButton()).toHaveFocus();
@@ -60,36 +62,37 @@ describe('the old banner', () => {
 
 describe('why a fixed banner still loses', () => {
   test('should open the banner tutorial at the step that writes the panel at the page’s root, keeping the reader’s choices', async () => {
-    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+    render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
     const part = await explanation.part('Why a fixed banner still loses');
 
-    await zIndexTab.follow(part, 'the tutorial below');
+    await zIndexTab.follow(part, 'Let’s build this feature');
 
     expect(demoPage.says('Write the panel last, at the page’s root')).toBeVisible();
     expect(appAddress.search()).toHaveTextContent('raised=second');
   });
 
   test('should link What else forms a stacking context to its page, with the raised card carried', async () => {
-    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+    render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
     const part = await explanation.part('Why a fixed banner still loses');
+    const run = explanation.saying(part, /^The site’s own banner is fixed too/);
 
-    expect(explanation.linkNamed(part, 'What else forms a stacking context'))
+    expect(explanation.linkNamed(run, 'What else forms a stacking context'))
       .toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'));
   });
 
-  test('should take the keyboard to the story the tutorial below names', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+  test('should take the keyboard to the banner’s story in Let’s build this feature', async () => {
+    render(<TestApp at={demosAt(fixedBanner)}/>);
     const part = await explanation.part('Why a fixed banner still loses');
 
-    await zIndexTab.follow(part, 'the tutorial below');
+    await zIndexTab.follow(part, 'Let’s build this feature');
 
     const story = recipeFolds.story(document.body, 'The user sees the news over the page');
     await waitFor(() => expect(recipeFolds.itemOf(story)).toHaveFocus());
   });
 
   test('should link the old menu it compares itself with to that menu’s page, with the raised card carried', async () => {
-    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+    render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
     const part = await explanation.part('Why a fixed banner still loses');
     const run = explanation.saying(part, /It is the old menu in/);
