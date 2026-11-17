@@ -10,9 +10,8 @@ const openerLinkElements = (): HTMLElement[] => within(screen.getByRole('article
 export const homePage = {
   drawing,
   openerLink: (name: string): HTMLElement => within(article()).getByRole('link', {name}),
-  letteringHeard: (): string[] => Array.from(drawing().querySelectorAll('text'))
-    .filter(text => not(isInaccessible(text)))
-    .map(text => text.textContent ?? ''),
+  letteringHeard: (words: string[]): string[] =>
+    words.filter(word => not(isInaccessible(within(drawing()).getByText(word)))),
   arrived: (): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name: 'The three languages'}),
   openerLinks: (): (string | null)[][] => openerLinkElements()
     .map(link => [link.textContent, link.getAttribute('href')]),

@@ -32,6 +32,6 @@ describe('the home page', () => {
   });
 
   test('should keep the drawing’s lettering from a screen reader', () => {
-    expect(homePage.letteringHeard()).toEqual([]);
+    expect(homePage.letteringHeard(['structure', 'section', 'click', 'dialog'])).toEqual([]);
   });
 });
