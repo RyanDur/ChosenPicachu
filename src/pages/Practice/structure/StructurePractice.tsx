@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Link} from 'react-router';
 import {repository} from '@navigation';
 import {MomentLink, recordAddress} from '@pages/Record';
-import {PartLink, PartTermLink} from '@pages/Demos/ZIndexDemo';
+import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {Mdn} from '@pages/Demos/Recipe';
 import {LandmarkMap} from './LandmarkMap';
 import {AttachmentCarve, ColumnBesideCarve, HeaderCellCarve} from './TableCarves';
@@ -157,7 +157,8 @@ export const StructurePractice: FC = () =>
       href={repository.file('src/components/DragSortableTable/ResizeHandle.tsx')}>ResizeHandle</a> resizes, <a className="signpost"
       href={repository.file('src/components/DragSortableTable/SortMenu.tsx')}>SortMenu</a> sorts, <a className="signpost"
       href={repository.file('src/components/DragSortableTable/DraggableColumn.tsx')}>DraggableColumn</a> carries
-      a column. The menu is three components that write one element each, as the <PartTermLink part="why-the-popover-wins">z-index tab</PartTermLink> says. A behavior the table needs
+      a column. The menu is three components that write one element each, as taught in the z-index
+      part <PartLink part="why-the-popover-wins"/>. A behavior the table needs
       that no part has gets a new part with that one job, not a prop on an old one. The platform’s own elements work the
       same way, one element per meaning: a details opens, a dialog holds focus, an output announces.</p>
     <p className="paragraph">This is also why the site’s new elements are React components and not custom elements. The
@@ -192,10 +193,11 @@ export const StructurePractice: FC = () =>
       The standard that calls a div a last resort is the one the browser makers wrote themselves, from
       the <MomentLink to="browsersTakePen">2004 moment</MomentLink> on.</p>
     <p className="paragraph">Here is what ARIA last looks like on this site. Every role it writes can be read in a
-      minute. The banners are a section with role <code className="monospaced">alert</code>, and the old-style banner
-      the <PartTermLink part="why-a-fixed-banner-still-loses">z-index tab</PartTermLink> raises, a paragraph, carries the
-      same role, because there is no alert element. The z-index tab’s old-way menu, the one script opens to show what
-      the platform now does for free, is a menu element holding a list of buttons, with
+      minute. The banners are a section with role <code className="monospaced">alert</code>, and the old-style banner,
+      a paragraph, carries the same role, because there is no alert element. The reader raises that banner in the
+      z-index part <PartLink part="why-a-fixed-banner-still-loses"/>. In the z-index
+      part <PartLink part="why-the-popover-wins"/>, script opens an old-way menu to show what the platform now does for
+      free. That menu is a menu element holding a list of buttons, with
       role <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role <code className="monospaced">none</code> on each list item. A screen reader reads a menu element as a list, not as a menu, and
       the list item’s own
       role would get in the way. The popover menu beside it carries no role at all. A term’s definition, the small card
@@ -215,7 +217,7 @@ export const StructurePractice: FC = () =>
       its own. <code className="monospaced">aria-current</code> marks the one of several that is current: the rail’s page, a tab,
       a menu’s chosen item. <code className="monospaced">aria-expanded</code> says that a button has opened something the platform does not
       know is open: the old-way
-      menu’s, and the Expand button on the z-index tab’s pile of cards. <code
+      menu’s, and the Expand button on the pile of cards in the z-index part <PartLink part="why-third-is-on-top"/>. <code
       className="monospaced">aria-hidden</code> hides what a screen reader should not read as prose. An image’s <code className="monospaced">alt</code> is its text for a screen reader. I hide each drawing whole, since its
       caption says what it shows: a drawing in the page’s markup by <code className="monospaced">aria-hidden</code>,
       and a drawing served as an image, like the landmark map, by an empty <code className="monospaced">alt</code>. I
