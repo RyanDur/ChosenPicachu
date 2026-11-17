@@ -122,7 +122,7 @@ export const recording = async (browser: Browser, url: string, keys = false): Pr
       await video.saveAs(raw);
       const crop = `crop=${frame.width}:${frame.height}:${frame.x}:${frame.y}`;
       await run(await ffmpegPath(), ['-y', '-loglevel', 'error', '-i', raw,
-        '-vf', crop, '-c:v', 'libvpx', '-b:v', '1M', path]);
+        '-vf', crop, '-c:v', 'libvpx-vp9', '-b:v', '1M', path]);
       await rm(raw);
     }
   };
