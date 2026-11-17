@@ -48,7 +48,7 @@ const regionLettering: readonly Lettered[] = [
   {word: 'header', u: 8, v: 18},
   {word: 'section', u: -4, v: 58, anchor: 'end'},
   {word: 'nav', u: 22.5, v: 42},
-  {word: 'button', u: 30, v: 57.5, anchor: 'end'},
+  {word: 'button', u: 33.5, v: 60.5, anchor: 'end'},
   {word: 'main', u: 60.5, v: 50}
 ];
 
