@@ -4,7 +4,6 @@ import {demoTab, DemoTopics} from '@pages/Demos';
 import {designHeading, featuresHeading, needHeading, stations, storiesHeading} from '@pages/Demos/headings';
 import type {Place} from '@pages/Demos/useCarriedAddress';
 import {livingStories} from './living-stories';
-import {storyKeys} from '@pages/Demos/Recipe';
 
 export type TablePart = keyof typeof names.tableParts;
 
@@ -54,12 +53,9 @@ const addressOf = (part: TablePart): string => `${tabAddress}${part}/`;
 
 const ordinalOf = (part: TablePart): number => book.indexOf(part) + 1;
 
-const opened = (ids: string[]): Record<string, string> => Object.fromEntries(
-  ids.reduce((params, id) => storyKeys.openedIn(params, {param: livingStories.param, id}), new URLSearchParams()));
-
 const whereIs = (station: number): Place =>
   maybe(book[station - 1]).either(
-    part => ({to: addressOf(part), ...maybe(opens[part]).map(ids => ({search: opened(ids)})).orElse({})}),
+    part => ({to: addressOf(part), ...maybe(opens[part]).map(ids => ({search: {[livingStories.param]: ids.join(',')}})).orElse({})}),
     () => ({to: tabAddress, heading: stations.idOf(station)}));
 
 const neighborOf = (part: TablePart): PartPlace =>
