@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {DemoLink} from '@pages/Demos/DemoLink';
 import {ZIndexPart, zIndexParts} from './part-pages';
+import './ZIndexDemo.css';
 
 export const PartListing: FC<{part: ZIndexPart}> = ({part}) => {
   const {heading, name, says, minutes} = zIndexParts.told(part);
