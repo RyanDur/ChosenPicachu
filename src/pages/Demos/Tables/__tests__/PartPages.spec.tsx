@@ -60,12 +60,12 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titles(theNeed)).toHaveLength(1);
   });
 
-  test('the need’s page links the page where the z-index tab names its clues', async () => {
+  test('the need’s page cites the z-index part that names its clues', async () => {
     render(<TestApp at={theNeedsPage}/>);
 
     await tablesTab().place();
 
-    expect(demoPage.linksToPageIn(demoPage.part(theNeed), demosAt('z-index/lets-build-this-feature'))).toEqual([['z-index tab', demosAt('z-index/lets-build-this-feature')]]);
+    expect(demoPage.linksToPageIn(demoPage.part(theNeed), demosAt('z-index/lets-build-this-feature'))).toEqual([['Let’s build this feature', demosAt('z-index/lets-build-this-feature')]]);
   });
 
   test('the build chosen on the tables tab carries into the part it opens', async () => {
@@ -213,12 +213,13 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titleShown('Add features, in the order they were asked for')).not.toBeInTheDocument();
   });
 
-  test('the slices’ page links the tab its story names', async () => {
+  test('the slices’ page cites the z-index part that teaches a user story', async () => {
     render(<TestApp at={theSlicesPage}/>);
 
     await tablesTab().place();
 
-    expect(demoPage.linksToTabsIn(demoPage.part(theSlices))).toContainEqual(['z-index tab', demosAt('z-index')]);
+    expect(demoPage.linksToPageIn(demoPage.part(theSlices), demosAt('z-index/lets-build-this-feature')))
+      .toContainEqual(['Let’s build this feature', demosAt('z-index/lets-build-this-feature')]);
   });
 
   test('the slices’ page says its place among the parts', async () => {
@@ -333,9 +334,17 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().place();
 
     expect(demoPage.linksToTabsIn(demoPage.part(theStillTable))).toEqual([
-      ['accordions tab', demosAt('accordions')],
-      ['z-index tab', demosAt('z-index')]
+      ['accordions tab', demosAt('accordions')]
     ]);
+  });
+
+  test('the still table’s page cites the z-index part that defines a component', async () => {
+    render(<TestApp at={theStillTablesPage}/>);
+
+    await tablesTab().place();
+
+    expect(demoPage.linksToPageIn(demoPage.part(theStillTable), demosAt('z-index/why-the-popover-wins')))
+      .toEqual([['Why the popover wins', demosAt('z-index/why-the-popover-wins')]]);
   });
 
   test('the still table’s page says its place among the parts', async () => {

@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Link} from 'react-router';
 import {repository} from '@navigation';
 import {MomentLink, recordAddress} from '@pages/Record';
-import {PartTermLink} from '@pages/Demos/ZIndexDemo';
+import {PartLink, PartTermLink} from '@pages/Demos/ZIndexDemo';
 import {Mdn} from '@pages/Demos/Recipe';
 import {LandmarkMap} from './LandmarkMap';
 import {AttachmentCarve, ColumnBesideCarve, HeaderCellCarve} from './TableCarves';
@@ -72,10 +72,9 @@ export const StructurePractice: FC = () =>
     <p className="paragraph">One region on every page is a role and not an element, and that is the element rule from
       its other side: I write a role only where no element does the job. The banners are a section with
       the role alert, because there is no alert element to reach for. The role makes the section a live region, a
-      part of the page whose changes a screen reader reads out.
-      The <PartTermLink part="lets-build-this-feature">z-index tab</PartTermLink> builds it and says what the role
-      buys, a screen reader announcing a new note without being asked. It is one of the few roles this site writes; the
-      part on ARIA below lists them all.</p>
+      part of the page whose changes a screen reader reads out. What the role buys is a screen reader announcing a new
+      note without being asked, as taught in the z-index part <PartLink part="lets-build-this-feature"/>. It is one of the few
+      roles this site writes; the part on ARIA below lists them all.</p>
     <h3 className="paragraph bold" id={structureParts.elements} tabIndex={-1}>From the content to the element</h3>
     <p className="paragraph">I start from what the content is and pick the element for it. The platform
       has more elements than most pages use: a <a className="signpost"

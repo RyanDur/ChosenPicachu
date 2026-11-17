@@ -933,7 +933,6 @@ describe('the links to other tabs', () => {
     await feedIsSubscribed(feed);
 
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
@@ -946,7 +945,6 @@ describe('the links to other tabs', () => {
     await feedIsSubscribed(feed);
 
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
@@ -959,12 +957,20 @@ describe('the links to other tabs', () => {
     await feedIsSubscribed(feed);
 
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['Maybe', `${Paths.demos}charts/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
+  });
+
+  test('should cite the z-index part that teaches a user story, on a chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(demoPage.linksToPageIn(demoPage.wholePage(), `${Paths.demos}z-index/lets-build-this-feature/`))
+      .toContainEqual(['Let’s build this feature', `${Paths.demos}z-index/lets-build-this-feature/`]);
   });
 
   test('should link each tab it names to that tab, on the pie chart’s page', async () => {
@@ -973,7 +979,6 @@ describe('the links to other tabs', () => {
     await feedIsSubscribed(feed);
 
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]

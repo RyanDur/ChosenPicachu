@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {Navigate, useParams} from 'react-router';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
+import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {PageFoot} from '@pages/Demos/PageFoot';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
@@ -71,7 +72,8 @@ const ChartKindTutorial: FC<Props> = ({kind}) => {
         rel="noreferrer">{name}</a> above. The card below tells it as a <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
-        rel="noreferrer">user story</a>, a card, a conversation and a confirmation, which the <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> walks through: open it and you get the plan and the steps
+        rel="noreferrer">user story</a>, a card, a conversation and a confirmation, as taught in the z-index
+      part <PartLink part="lets-build-this-feature"/>. Open the card and you get the plan and the steps
       that build it, with the real code from this site, so what you read is what runs. The steps build on
       the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> and link to MDN, Mozilla’s web reference, if
       you want more.
