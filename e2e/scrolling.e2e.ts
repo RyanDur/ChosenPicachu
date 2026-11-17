@@ -56,6 +56,7 @@ for (const {reader, use} of desks) {
 
     test('a tab switch keeps the tabs where they were on screen', async ({page}) => {
       await page.goto('demos/tables/the-live-table-and-the-store/?living=flow%2Cstore');
+      await siteFrame(page).hydrated();
       await page.getByRole('group').filter({has: page.getByText(/^so that /)}).nth(1).scrollIntoViewIfNeeded();
       await expect.poll(() => documentScrollY(page)).toBeGreaterThan(0);
       const tabs = page.getByRole('navigation', {name: 'demos'});
