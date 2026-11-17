@@ -49,11 +49,10 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
       answers.</p>
     <figure className={looks.exhibit}>
       <PlainFold/>
-      <figcaption className="caption">This fold is a separate page, placed inside this one. The accordions tab’s fold
-        dials do not reach it. Whichever fold type and fold motion are chosen, it is one fold, and its text is
-        uncovered from the top down. Press the bar. With motion allowed, a script measures the text, and the
-        style sheet slides the panel to that height. A second press slides it shut. With less motion asked for, it
-        opens at once.</figcaption>
+      <figcaption className="caption">This fold is a separate page, placed inside this one, so the choices the address
+        carries do not reach it. It is one fold, and its text is uncovered from the top down. Press the bar. With
+        motion allowed, a script measures the text, and the style sheet slides the panel to that height. A second
+        press slides it shut. With less motion asked for, it opens at once.</figcaption>
     </figure>
     <ol className={looks.runs}>
       <li className="run">
