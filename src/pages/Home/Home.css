@@ -11,7 +11,9 @@
 
 @media (width > 1100px) {
   .home {
+    --opener-paragraphs: 6;
     grid-template-columns: 3fr minmax(320px, 1fr);
+    grid-template-rows: repeat(var(--opener-paragraphs), auto) 1fr;
     align-items: start;
 
     .thesis {
@@ -20,8 +22,7 @@
 
     .page-pulled-apart {
       grid-column: 2;
-      /* the span counts the opener's paragraphs */
-      grid-row: 1 / span 6;
+      grid-row: 1 / -1;
     }
   }
 }
