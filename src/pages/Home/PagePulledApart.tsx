@@ -88,8 +88,8 @@ const Lettering: FC<{labels: readonly Lettered[]; height: number}> = ({labels, h
 export const PagePulledApart: FC = () => {
   const clickPoint = projected(clickSpot, heights.behavior);
   return <figure className="page-pulled-apart">
-    <svg className="drawing center" viewBox={`${50 * unitsPerStep} 0 ${200 * unitsPerStep} ${258 * unitsPerStep}`}
-      width={200 * unitsPerStep}
+    <svg className="drawing center" viewBox={`${25 * unitsPerStep} 0 ${230 * unitsPerStep} ${258 * unitsPerStep}`}
+      width={230 * unitsPerStep}
       height={258 * unitsPerStep} aria-hidden="true">
       <defs>
         <pattern id="page-pulled-apart-hatch" patternUnits="userSpaceOnUse" width="7" height="7"
