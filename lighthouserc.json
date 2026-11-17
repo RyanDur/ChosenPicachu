@@ -19,7 +19,7 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 12288
+                "maxNumericValue": 7168
               }
             ],
             "resource-summary:stylesheet:size": [
@@ -49,6 +49,35 @@
               "error",
               {
                 "maxNumericValue": 11264
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 19456
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 185344
+              }
+            ]
+          }
+        },
+        {
+          "matchingUrlPattern": "/ChosenPicachu/demos/accordions/what\\-the\\-platform\\-gives\\-now/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 9216
               }
             ],
             "resource-summary:stylesheet:size": [
