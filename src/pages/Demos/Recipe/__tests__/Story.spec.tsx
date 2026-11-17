@@ -113,8 +113,8 @@ describe('a story card', () => {
       fold.dispatchEvent(new Event('toggle'));
     });
 
-    await waitFor(() => expect(appAddress.search()).toHaveTextContent('tale=told'));
     expect(appAddress.fragment()).toBe('#tale-told-story');
+    expect(appAddress.search()).toHaveTextContent('tale=told');
   });
 
   test('a press on a story a followed link opened, before the page has caught up, closes it', async () => {
@@ -131,7 +131,7 @@ describe('a story card', () => {
       await recipeFolds.press(document.body, 'The reader can close a story a link opened');
     });
 
-    await waitFor(() => expect(appAddress.fragment()).toBe('#tale-told-story'));
     expect(appAddress.search()).not.toHaveTextContent('tale=told');
+    expect(appAddress.fragment()).toBe('#tale-told-story');
   });
 });
