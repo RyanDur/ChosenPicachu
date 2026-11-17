@@ -9,16 +9,6 @@
   gap: var(--base);
 }
 
-.part-depth {
-  .fold-bar {
-    padding-block: var(--base);
-  }
-
-  .runs {
-    padding-block-start: var(--base-x-4);
-  }
-}
-
 .snapping ::details-content {
   transition: none;
 }

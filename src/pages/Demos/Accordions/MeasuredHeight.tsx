@@ -18,6 +18,8 @@ import panelSource from './MeasuredPanel.tsx?sample';
 import foldSource from './Plain/fold.main.ts?sample';
 import accordionsCss from './Accordions.css?sample';
 import oldWayMotionCss from './OldWayMotion.css?sample';
+import '../Runs.css';
+import './PartDepth.css';
 
 type Build = {
   readonly Accordion: FC<AccordionProps>;
