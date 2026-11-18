@@ -19,22 +19,20 @@ export const LetsBuildThisFeature: FC = () => {
   const dispatchBanner = useBannerDispatch();
 
   return <>
-    <p className="overview paragraph">This tutorial assumes the parts before it: where a z-index stops counting,
-      from <PartLink part="why-9999-still-loses"/> through <PartLink part="why-a-fixed-banner-still-loses"/>, and the
-      component, state and event that <PartLink part="why-the-popover-wins"/> explains.</p>
+    <p className="overview paragraph">
+      We are going to build this site’s banner: the panel that carries the news, whatever the news is. Elsewhere on
+      this site it reports real trouble. On this page, the Raise a banner button under the dials raises random nonsense
+      so you can watch the mechanics. It assumes what <PartLink part="why-9999-still-loses"/> through <PartLink
+        part="why-a-fixed-banner-still-loses"/> give: where a z-index stops counting. The banner sets one, and where
+      it sits decides what that number is compared with. It also assumes the component, state and event
+      that <PartLink part="why-the-popover-wins"/> explains.
+    </p>
     <BannerControls side={side} align={align} enter={enter} stack={stack}
       onSideChosen={next => change({side: next})}
       onAlignChosen={next => change({align: next})}
       onEnterChosen={next => change({enter: next})}
       onStackChosen={next => change({stack: next})}
       onRaise={() => dispatchBanner(bannerChange.raised(nextNews()))}/>
-    <p className="overview paragraph">
-      We are going to build this site’s banner: the panel that carries the news, whatever
-      the news is. Elsewhere on this site it reports real trouble. On this page, Raise a banner beside the dials raises
-      random nonsense so you can watch the mechanics.
-    </p>
-    <p className="overview paragraph">The earlier parts show what a z-index does and where it stops counting. The
-      banner uses both: it sets a z-index, and where it sits decides what that number is compared with.</p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">
         When something breaks, tell me. Do not make me guess why the chart went quiet,

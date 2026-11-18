@@ -93,7 +93,7 @@ test('a reader who follows Let’s build this feature with motion allowed lands 
   await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
 });
 
-test('on let’s build this feature’s page, a reader chooses an entrance and raises a banner beside the dials', async ({page}) => {
+test('on let’s build this feature’s page, a reader chooses an entrance and raises a banner under the dials', async ({page}) => {
   await page.goto('demos/z-index/lets-build-this-feature/');
   await pillSwitch(page, 'entrance').choose('Left');
 
