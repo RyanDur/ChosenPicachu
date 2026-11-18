@@ -29,8 +29,9 @@
 
 @media (width <= 1100px) and (height <= 600px) {
   .page-pulled-apart .drawing {
-    --drawing-column: min(100cqi, 100svh * tan(atan2(var(--drawn-width), var(--drawn-height))));
+    --between-the-bars: calc(100svh - var(--foot-reach));
+    --drawing-column: min(100cqi, var(--between-the-bars) * tan(atan2(var(--drawn-width), var(--drawn-height))));
 
-    max-block-size: 100svh;
+    max-block-size: var(--between-the-bars);
   }
 }
