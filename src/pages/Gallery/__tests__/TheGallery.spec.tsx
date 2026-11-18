@@ -10,6 +10,7 @@ import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@navigation';
 import {limits} from '@pages/Gallery/limits';
 import {galleryPage} from '../__test_support/gallery';
+import {site} from '@pages/__test_support';
 import {piecePage} from '@pages/Gallery/ArtPiece/__test_support';
 import {
   heldAICAllArtResponse,
@@ -73,7 +74,7 @@ describe('The gallery.', () => {
       await galleryPage.headerShows(firstPiece.title);
       const secondArrives = heldAICArtPieceResponse(anAICPieceResponse(secondPiece), secondPiece.id);
 
-      await galleryPage.backToTheWall();
+      await site.followRail('Gallery');
       await galleryWall.openPiece(secondPiece.title);
 
       expect(await piecePage.loadingAppears()).toBeInTheDocument();

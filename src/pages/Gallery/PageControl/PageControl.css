@@ -4,7 +4,7 @@
 
 .page-control {
   position: sticky;
-  bottom: 0;
+  bottom: var(--foot-reach);
   display: grid;
   gap: var(--base);
   inline-size: 100%;

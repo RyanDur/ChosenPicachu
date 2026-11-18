@@ -161,7 +161,7 @@
 .old-banner {
     position: fixed;
     inset-inline: var(--base-x-2);
-    inset-block-end: var(--base-x-2);
+    inset-block-end: calc(var(--foot-reach) + var(--base-x-2));
     z-index: 9999;
     display: flex;
     align-items: center;

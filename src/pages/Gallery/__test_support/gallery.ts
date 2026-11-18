@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 
 export const galleryPage = {
   headerShows: (title: string): Promise<HTMLElement> => within(screen.getByRole('banner')).findByText(title),
-  backToTheWall: async (): Promise<void> => userEvent.click(screen.getByRole('link', {name: 'Gallery'})),
   museumsAppear: (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'museums'}),
   museumsIfAny: (): HTMLElement | null => screen.queryByRole('navigation', {name: 'museums'}),
   museumAppears: (name: string): Promise<HTMLElement> => screen.findByRole('link', {name}),
