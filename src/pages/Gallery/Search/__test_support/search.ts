@@ -4,13 +4,12 @@ import {heldClock} from '@__test_support/heldClock';
 import userEvent, {type UserEvent} from '@testing-library/user-event';
 
 const searchBarOf = (user: Pick<UserEvent, 'type' | 'click' | 'tab'>) => {
-  const query = (): HTMLElement => gallerySettings().getByRole('combobox', {name: /Search For/});
+  const query = (): HTMLElement => gallerySettings().getByRole('combobox', {name: 'Search'});
   const submitButton = (): HTMLElement => gallerySettings().getByRole('button', {name: 'submit search'});
   const resetButton = (): HTMLElement => gallerySettings().getByRole('button', {name: 'reset search'});
   const suggestions = (): HTMLElement => gallerySettings().getByRole('listbox', {hidden: true});
   return {
     query,
-    queryNamedAppears: (name: string): Promise<HTMLElement> => gallerySettings().findByRole('combobox', {name}),
     submitButton,
     resetButton,
     type: (word: string): Promise<void> => user.type(query(), word),

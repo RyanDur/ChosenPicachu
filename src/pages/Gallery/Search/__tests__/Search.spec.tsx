@@ -16,10 +16,10 @@ describe('search', () => {
     anyRequestRespondsWith(JSON.stringify(aicSuggestionsOf([searchWord])));
   });
 
-  it('the label reads the word searched for, 100% and all', async () => {
+  it('the search field holds the word searched for, 100% and all', async () => {
     render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}&search=100%25`}/>);
 
-    expect(await searchPage.bar.queryNamedAppears('Search For: 100%')).toBeInTheDocument();
+    await waitFor(() => expect(searchPage.bar.query()).toHaveValue('100%'));
   });
 
   it('puts the searched word in the url', async () => {
@@ -32,13 +32,19 @@ describe('search', () => {
     expect(appAddress.path()).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`));
   });
 
-  it('a searched phrase holding an ampersand reads whole in the label', async () => {
-    render(<TestApp at={Paths.artGallery}/>);
+  it('a searched phrase holding an ampersand reads whole in the search field', async () => {
+    render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}&search=rock%20%26%20roll`}/>);
 
-    await searchPage.bar.type('rock & roll');
+    await waitFor(() => expect(searchPage.bar.query()).toHaveValue('rock & roll'));
+  });
+
+  it('a word added to the searched word searches for both', async () => {
+    render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}&search=cat`}/>);
+
+    await searchPage.bar.type('s');
     await searchPage.bar.submit();
 
-    expect(await searchPage.bar.queryNamedAppears('Search For: rock & roll')).toBeInTheDocument();
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent('search=cats'));
   });
 
   it('the keyboard walks from the query to reset, then submit', async () => {

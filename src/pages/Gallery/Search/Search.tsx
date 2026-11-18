@@ -32,6 +32,11 @@ const suggestionsFor = (typed: string, source: Source, dispatch: Dispatch<DraftC
 
 const blank: Draft = {typed: '', suggestions: []};
 
+const wordsIn = (form: HTMLFormElement): string => {
+  const words = new FormData(form).get('search');
+  return typeof words === 'string' ? words : '';
+};
+
 const nextDraft = (draft: Draft, change: DraftChange): Draft => {
   switch (change.type) {
     case 'typed':
@@ -71,7 +76,7 @@ export const Search: FC<PropsWithClassName> = ({className}) => {
     event.preventDefault();
     void navigate({
       pathname: gallery,
-      search: searchFromAddress({search: typed})
+      search: searchFromAddress({search: wordsIn(event.currentTarget)})
     }, {preventScrollReset: true});
   };
 
@@ -81,10 +86,10 @@ export const Search: FC<PropsWithClassName> = ({className}) => {
   };
 
   return <search className={classNames('search', 'backdrop', className)}>
-    <form className="search-form" onSubmit={submitted} onReset={reset}>
-      <label className="query-label field next-approached ellipsis" htmlFor={query}><span
-        className="bold">Search For:</span> {maybe(search).orElse('')}</label>
-      <input type="search" autoComplete="off" list={options} id={query} required
+    <form key={search} className="search-form" onSubmit={submitted} onReset={reset}>
+      <label className="query-label field next-approached ellipsis bold" htmlFor={query}>Search</label>
+      <input type="search" name="search" autoComplete="off" list={options} id={query} required
+        defaultValue={search}
         className="query bare card"
         onInput={event => dispatch(draftChange.typed(event.currentTarget.value))}/>
       <button className="reset-query button icon-button borderless field attentive reachable" type="reset"
