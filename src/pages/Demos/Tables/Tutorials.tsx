@@ -7,7 +7,7 @@ import {TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
 import {DemoLink} from '@pages/Demos/DemoLink';
 import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
-import {ReadingTime} from './ReadingTime';
+import {ReadingTime} from '@pages/Demos/ReadingTime';
 import {TablesSize} from './TablesSize';
 import {featuresHeading} from './features-heading';
 import '../Tutorials.css';
