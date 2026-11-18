@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import names from '@navigation/names.json';
 import {DialGroup, useControls} from '../Controls';
 import {FoldType} from '../ReaderSettings';
 import {FoldMotionDial} from './FoldMotionDial';
@@ -13,8 +12,6 @@ import resetCss from '../../../styles/reset.css?sample';
 import {looks} from './looks';
 import {accordionParts} from './part-pages';
 import {tabHeadings} from './tab-headings';
-import {PartLink} from './PartLink';
-import {ReadingTime} from '@pages/Demos/ReadingTime';
 import {PartListing} from './PartListing';
 import '../Runs.css';
 import './Explained.css';
@@ -99,15 +96,11 @@ export const AccordionsExplained: FC = () => {
     </section>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h2 id="old-way-heading" className="title bold">How we used to build a fold</h2>
-      <PartListing part="a-box-remembers-the-fold"/>
-      <PartListing part="the-max-height-guess"/>
-      <PartListing part="the-measured-height"/>
+      <PartListing part="a-box-remembers-the-fold" level={3}/>
+      <PartListing part="the-max-height-guess" level={3}/>
+      <PartListing part="the-measured-height" level={3}/>
     </section>
-    <section aria-labelledby="platform-way-heading" className="accordion-part">
-      <h2 id="platform-way-heading" className="title bold"><PartLink part="what-the-platform-gives-now"/></h2>
-      <p className="paragraph">{names.accordions['what-the-platform-gives-now'].description}</p>
-      <ReadingTime minutes={accordionParts.told('what-the-platform-gives-now').minutes}/>
-    </section>
+    <PartListing part="what-the-platform-gives-now" level={2}/>
     <section aria-labelledby="motion-heading" className="accordion-part">
       <h2 id="motion-heading" className="title bold">{accordionParts.titleOf('motion-heading')}</h2>
       <ol className={looks.runs}>
