@@ -87,6 +87,15 @@ describe('the feedback reducer', () => {
     expect(draft.sentNote).toEqual({state: 'none'});
   });
 
+  test('should drop the link to a sent note once the next note is sent', () => {
+    const sent = inTurn(openOn, feedbackChange.wordsEdited('It hides.'), feedbackChange.noteSubmitted(), feedbackChange.noteSent(noteAt));
+    const typedAgain = inTurn(sent, feedbackChange.wordsEdited('It also flickers.'));
+
+    const draft = inTurn(typedAgain, feedbackChange.noteSubmitted());
+
+    expect(draft.sentNote).toEqual({state: 'none'});
+  });
+
   test('should say why GitHub refused the note on screen', () => {
     const sending = feedbackDraft.reduce(openOn, feedbackChange.noteSubmitted());
 
