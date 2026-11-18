@@ -143,34 +143,45 @@ test('on a desk, the rail keeps the sent note’s link once Close shuts the dial
   await expect(feedback.sent.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
 });
 
+const sentAndClosed = async (page: Page): Promise<void> => {
+  await github(page);
+  const feedback = feedbackOn(page);
+  await page.goto('demos/tables/');
+  await siteFrame(page).hydrated();
+  await feedback.open.click();
+  await feedback.words.pressSequentially('The sort menu hides behind the header.');
+  await feedback.send.click();
+  await expect(feedback.status.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
+  await feedback.close.click();
+  await expect(feedback.dialog).toBeHidden();
+  await twoFramesLater(page);
+};
+
 test.describe('a phone on a page with tabs', () => {
   test.use(iPhone);
 
-  test('reads where the sent note is in the dialog, then reaches Feedback, a tab and the site menu once it closes', async ({page}) => {
-    await github(page);
-    const feedback = feedbackOn(page);
-    const site = siteFrame(page);
-    await page.goto('demos/tables/');
-    await site.hydrated();
-    await feedback.open.click();
-    await feedback.words.pressSequentially('The sort menu hides behind the header.');
-    await feedback.send.click();
-    await expect(feedback.status.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
-    await feedback.close.click();
-    await expect(feedback.dialog).toBeHidden();
-    await twoFramesLater(page);
+  test('reaches Feedback once the sent note’s dialog closes', async ({page}) => {
+    await sentAndClosed(page);
 
-    await clickWhereItIs(page, feedback.open);
-    await expect(feedback.dialog).toBeVisible();
-    await page.keyboard.press('Escape');
-    await expect(feedback.dialog).toBeHidden();
-    await twoFramesLater(page);
+    await clickWhereItIs(page, feedbackOn(page).open);
+
+    await expect(feedbackOn(page).dialog).toBeVisible();
+  });
+
+  test('reaches a tab once the sent note’s dialog closes', async ({page}) => {
+    await sentAndClosed(page);
+
     await clickWhereItIs(page, page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'}));
-    await expect(page).toHaveURL(/demos\/accordions\/$/);
-    await twoFramesLater(page);
-    await clickWhereItIs(page, site.menu);
 
-    await expect(site.nav).toBeVisible();
+    await expect(page).toHaveURL(/demos\/accordions\/$/);
+  });
+
+  test('reaches the site menu once the sent note’s dialog closes', async ({page}) => {
+    await sentAndClosed(page);
+
+    await clickWhereItIs(page, siteFrame(page).menu);
+
+    await expect(siteFrame(page).nav).toBeVisible();
   });
 });
 
