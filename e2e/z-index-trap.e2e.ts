@@ -112,6 +112,7 @@ test('given the page before its script runs, the old-way Sort by is disabled; on
   const menu = trappedMenu(page);
 
   await expect(menu.sortBy).toBeDisabled();
+  await hydration(page).release();
 
   await menu.openByKeyboard();
 

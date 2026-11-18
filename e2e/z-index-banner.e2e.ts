@@ -184,6 +184,7 @@ test('given the page before its script runs, the old way’s Raise a banner is d
   const banners = bannerTrap(page);
 
   await expect(banners.raiseOld).toBeDisabled();
+  await hydration(page).release();
 
   await banners.raiseOld.click();
 
@@ -196,6 +197,7 @@ test('given the page before its script runs, the site’s own Raise a banner is 
   const banners = bannerTrap(page);
 
   await expect(banners.raiseSite).toBeDisabled();
+  await hydration(page).release();
 
   await banners.raiseSite.click();
 
