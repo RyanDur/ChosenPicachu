@@ -45,7 +45,8 @@ const renderedPages = async () => {
   };
 };
 
-const pages = process.env.STAGE_RENDER === 'on' ? await renderedPages() : filedPages;
+const rendering = process.env.STAGE_RENDER === 'on';
+const pages = rendering ? await renderedPages() : filedPages;
 
 const rest = new Map(JSON.parse(readFileSync(join(fixtures, 'rest.json'), 'utf8'))
   .map(({key, ...entry}) => [key, entry]));
@@ -83,7 +84,7 @@ const answers = (request, response) => {
 
   const url = maybe(request.url).orElse('/');
 
-  if (url.split('?')[0].endsWith('/env.js')) {
+  if (not(rendering) && url.split('?')[0].endsWith('/env.js')) {
     return send(200, `window.__environment = ${JSON.stringify({
       tradeFeed: `ws://localhost:${server.address().port}/ws-feed`,
       tradeProduct: 'BTC-USD',
