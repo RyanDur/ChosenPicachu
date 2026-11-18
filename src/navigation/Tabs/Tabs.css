@@ -51,26 +51,22 @@
   }
 }
 
-@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
-  :root {
-    --tab-bar-reach: var(--base-x-5_5);
-  }
-}
-
 :root:has(.tabs) {
   scroll-padding-block-start: calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--base-x-2));
 }
 
 @media (width <= 600px), (width <= 1100px) and (height <= 600px) {
+  :root {
+    --tab-bar-reach: var(--base-x-5_5);
+  }
+
+  :root:has(.tabs) {
+    scroll-padding-block-start: var(--base-x-2);
+  }
+
   .tabs {
     position: fixed;
     inset: auto 0 var(--menu-bar-block);
     z-index: 2;
-  }
-}
-
-@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
-  :root:has(.tabs) {
-    scroll-padding-block-start: var(--base-x-2);
   }
 }
