@@ -185,14 +185,23 @@ test.describe('a phone on a page with tabs', () => {
   });
 });
 
+const githubHoldingItsAnswer = async (page: Page): Promise<() => Promise<void>> => {
+  let release = (): void => undefined;
+  await github(page, {answersOnce: new Promise<void>(answered => {
+    release = answered;
+  })});
+  return async () => {
+    const answered = page.waitForResponse(response => response.url().endsWith('/feedback-graphql') && response.request().method() === 'POST');
+    release();
+    await answered;
+  };
+};
+
 test.describe('a phone', () => {
   test.use(iPhone);
 
   test('reads where a note sent after Feedback closed is on GitHub once Feedback opens again', async ({page}) => {
-    let answer = (): void => undefined;
-    await github(page, {answersOnce: new Promise<void>(answered => {
-      answer = answered;
-    })});
+    const answer = await githubHoldingItsAnswer(page);
     const feedback = feedbackOn(page);
     await page.goto('demos/tables/');
     await siteFrame(page).hydrated();
@@ -202,9 +211,28 @@ test.describe('a phone', () => {
     await expect(feedback.status).toHaveText('Sending the note to GitHub.');
     await feedback.cancel.click();
     await expect(feedback.dialog).toBeHidden();
-    const answered = page.waitForResponse(response => response.url().endsWith('/feedback-graphql') && response.request().method() === 'POST');
-    answer();
-    await answered;
+    await answer();
+
+    await feedback.open.click();
+
+    await expect(feedback.status.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
+  });
+
+  test('reads where a note sent before Back is on GitHub once Feedback opens again', async ({page}) => {
+    const answer = await githubHoldingItsAnswer(page);
+    const feedback = feedbackOn(page);
+    await page.goto('demos/accordions/');
+    await siteFrame(page).hydrated();
+    await page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Tables'}).click();
+    await expect(page).toHaveURL(/\/demos\/tables\/$/);
+    await feedback.open.click();
+    await feedback.words.pressSequentially('The sort menu hides behind the header.');
+    await feedback.send.click();
+    await expect(feedback.status).toHaveText('Sending the note to GitHub.');
+    await page.goBack();
+    await expect(page).toHaveURL(/\/demos\/accordions\/$/);
+    await expect(feedback.dialog).toBeHidden();
+    await answer();
 
     await feedback.open.click();
 

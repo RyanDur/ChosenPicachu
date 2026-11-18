@@ -52,11 +52,11 @@ describe('the feedback reducer', () => {
   test('should clear the sent note and link to it', () => {
     const typed = feedbackDraft.reduce(feedbackDraft.reduce(openOn, feedbackChange.wordsEdited('It hides.')), feedbackChange.noteSubmitted());
 
-    const draft = feedbackDraft.reduce(typed, feedbackChange.noteSent(typed.openings, 'https://github.test/github.discussions/9', true));
+    const draft = feedbackDraft.reduce(typed, feedbackChange.noteSent(typed.openings, 'https://github.test/github.discussions/9'));
 
     expect(draft.words).toBe('');
     expect(draft.sending).toEqual({state: 'writing'});
-    expect(draft.sentTo).toBe('https://github.test/github.discussions/9');
+    expect(draft.sentNote).toEqual({state: 'unread', url: 'https://github.test/github.discussions/9'});
   });
 
   test('should say why GitHub refused the note on screen', () => {

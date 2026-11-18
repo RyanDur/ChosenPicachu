@@ -4,6 +4,8 @@ import {github} from './github';
 
 export type Sending = {state: 'writing'} | {state: 'sending'; words: string; reach: string} | {state: 'sent'} | {state: 'refused'; why: HTTPError};
 
+export type SentNote = {state: 'none'} | {state: 'unread'; url: string} | {state: 'read'; url: string};
+
 export type Draft = {
   key: string;
   openings: number;
@@ -11,18 +13,18 @@ export type Draft = {
   words: string;
   reach: string;
   sending: Sending;
-  sentTo?: string;
-  sentSeen: boolean;
+  sentNote: SentNote;
 };
 
 const draftAt = (key: string): Draft =>
-  ({key, openings: 0, thread: github.discussions, words: '', reach: '', sending: {state: 'writing'}, sentSeen: false});
+  ({key, openings: 0, thread: github.discussions, words: '', reach: '', sending: {state: 'writing'}, sentNote: {state: 'none'}});
 
 const aboutPage = (draft: Draft, key: string): boolean => draft.key === key;
 const onScreen = (draft: Draft, openings: number): boolean => draft.openings === openings;
 const unsentWords = ({sending, words, reach}: Draft): Pick<Draft, 'words' | 'reach'> =>
   sending.state === 'sending' && sending.words === words && sending.reach === reach ? {words: '', reach: ''} : {words, reach};
 const stillSending = ({sending}: Draft): Sending => sending.state === 'sending' ? sending : {state: 'writing'};
+const readOnOpening = ({sentNote}: Draft): SentNote => sentNote.state === 'unread' ? {state: 'read', url: sentNote.url} : {state: 'none'};
 
 const reduce = (draft: Draft, action: FeedbackChange): Draft => {
   switch (action.type) {
@@ -33,8 +35,7 @@ const reduce = (draft: Draft, action: FeedbackChange): Draft => {
         openings: draft.openings + 1,
         thread: github.discussions,
         sending: stillSending(draft),
-        sentTo: draft.sentSeen ? undefined : draft.sentTo,
-        sentSeen: true
+        sentNote: readOnOpening(draft)
       };
     case 'threadFound':
       return aboutPage(draft, action.key) ? {...draft, thread: action.url} : draft;
@@ -48,8 +49,8 @@ const reduce = (draft: Draft, action: FeedbackChange): Draft => {
       return {...draft, sending: {state: 'sending', words: draft.words, reach: draft.reach}};
     case 'noteSent':
       return onScreen(draft, action.openings)
-        ? {...draft, sentTo: action.url, sentSeen: action.seen, words: '', reach: '', sending: {state: 'writing'}}
-        : {...draft, ...unsentWords(draft), sentTo: action.url, sentSeen: action.seen, sending: {state: 'sent'}};
+        ? {...draft, sentNote: {state: 'unread', url: action.url}, words: '', reach: '', sending: {state: 'writing'}}
+        : {...draft, ...unsentWords(draft), sentNote: {state: 'unread', url: action.url}, sending: {state: 'sent'}};
     case 'noteRefused':
       return {...draft, sending: {state: 'refused', why: action.why}};
   }

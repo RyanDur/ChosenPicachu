@@ -8,6 +8,7 @@ import {Paths} from '@navigation';
 import {trouble} from '@transport';
 import {github} from './github';
 import {feedbackChange} from './feedbackChange';
+import type {SentNote} from './feedbackDraft';
 import {drafting} from './drafting';
 import {classNames} from '@components';
 import {Modal, ModalOpener} from '@components/Modal';
@@ -29,15 +30,18 @@ const fieldFirst = (event: SyntheticEvent<HTMLDialogElement>) => {
   }
 };
 
+const SentNoteLink: FC<{sentNote: SentNote}> = ({sentNote}) =>
+  sentNote.state !== 'none' && <>Sent. <a className="signpost" href={sentNote.url}>Read it on GitHub</a></>;
+
 const NoteStatus: FC = () => {
-  const [{sending, sentTo}] = useContext(drafting);
+  const [{sending, sentNote}] = useContext(drafting);
   switch (sending.state) {
     case 'sending':
       return 'Sending the note to GitHub.';
     case 'refused':
       return `${trouble.with('GitHub')(sending.why)}. Your words are still here.`;
   }
-  return has(sentTo) && <>Sent. <a className="signpost" href={sentTo}>Read it on GitHub</a></>;
+  return <SentNoteLink sentNote={sentNote}/>;
 };
 
 export const Feedback: FC = () => {
@@ -72,13 +76,12 @@ export const Feedback: FC = () => {
       return;
     }
     const {openings, words, reach} = draft;
-    const dialog = maybe(event.currentTarget.closest('dialog'));
     dispatch(feedbackChange.noteSubmitted());
     github.sent(
       {endpoint: feedbackEndpoint, token: feedbackToken},
       {page: {key: draft.key, name: pageName}, words, from: sentFrom, ...(empty(reach) ? {} : {reach})}
     )
-      .onSuccess(url => dispatch(feedbackChange.noteSent(openings, url, dialog.map(shown => shown.open).orElse(false))))
+      .onSuccess(url => dispatch(feedbackChange.noteSent(openings, url)))
       .onFailure(why => dispatch(feedbackChange.noteRefused(why)));
   };
 
@@ -86,7 +89,7 @@ export const Feedback: FC = () => {
     <p className={classNames('feedback-item', 'field', not(hydrated) && 'gap-filled')}>
       <ModalOpener className="feedback-open path rail-aside bold attentive field borderless reachable"
         inert={not(hydrated)} modal={hydrated ? feedbackDialogId : undefined} onClick={opening}>Feedback</ModalOpener>
-      <output className="feedback-sent caption">{has(draft.sentTo) && <>Sent. <a className="signpost" href={draft.sentTo}>Read it on GitHub</a></>}</output>
+      <output className="feedback-sent caption"><SentNoteLink sentNote={draft.sentNote}/></output>
     </p>
     {hydrated && <Modal key={pageThread} id={feedbackDialogId} aria-labelledby="feedback-title" className="feedback-dialog backdrop veiled ink" onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
@@ -110,7 +113,7 @@ export const Feedback: FC = () => {
         <fieldset className="feedback-actions field">
           <legend className="feedback-actions-name off-screen">Send or cancel</legend>
           <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}><NoteStatus/></output>
-          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor={feedbackDialogId} command="close">{has(draft.sentTo) ? 'Close' : 'Cancel'}</button>
+          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor={feedbackDialogId} command="close">{draft.sentNote.state === 'none' ? 'Cancel' : 'Close'}</button>
           <button type="submit" className="feedback-send path sub-title bold attentive inverse-filled borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </fieldset>
       </form>
