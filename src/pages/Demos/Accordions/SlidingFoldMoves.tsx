@@ -22,12 +22,11 @@ export const SlidingFoldMoves: FC = () => <>
       <p className="paragraph">When a reader asks
         for <Mdn path="Web/CSS/@media/prefers-reduced-motion">less motion</Mdn>, every fold opens with no slide. The
         reset, the style sheet that sets every element’s defaults, has a reduced-motion block with three rules.
-        The first uses the universal selector, *, which picks every element and reaches their before and after
-        too. It sets each transition’s duration to zero, cuts each animation to 0.01 milliseconds, plays each
-        animation once,
-        and turns smooth scrolling into a jump. The second names ::details-content, the part a
-        details hides, which the universal selector cannot reach. The third sets view
-        transitions, the browser’s moves from one page state to the next, to no animation at all.</p>
+        The first lists the universal selector, *, which picks every element, and *::before and *::after, which
+        reach their before and after. It sets each transition’s duration to zero, cuts each animation to 0.01
+        milliseconds, plays each animation once, and turns smooth scrolling into a jump. The second
+        names ::details-content, the part a details hides, which the universal selector cannot reach. The third sets
+        view transitions, the browser’s moves from one page state to the next, to no animation at all.</p>
       <Snippet label="CSS" lines={carve.unit(resetCss, '@media (prefers-reduced-motion: reduce) {')}/>
     </li>
     <li className="run">
