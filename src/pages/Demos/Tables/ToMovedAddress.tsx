@@ -1,7 +1,8 @@
 import {FC} from 'react';
-import {Navigate, useLocation, useSearchParams} from 'react-router';
-import {Maybe, maybe} from '@ryandur/sand';
+import {Location, Navigate, useLocation, useSearchParams} from 'react-router';
+import {empty, Maybe, maybe} from '@ryandur/sand';
 import {useHydrated} from '@components';
+import {storyKeys} from '../Recipe';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {livingStories} from './living-stories';
@@ -17,17 +18,28 @@ const tutorialNamed = (params: URLSearchParams): Maybe<string> =>
   maybe(tableTutorials.all().find(tutorial => tutorial === params.get(movedParams.tutorial)))
     .map(tableTutorials.addressOf);
 
-const partTellingFirst = (params: URLSearchParams): Maybe<string> =>
-  maybe(maybe(params.get(livingStories.param)).orElse('').split(',').find(story => tellers.has(story)))
+const storiesNamed = (params: URLSearchParams): string[] =>
+  maybe(params.get(livingStories.param)).orElse('').split(',').filter(story => tellers.has(story));
+
+const titleOf = (story: string): string => `#${storyKeys.anchorOf({param: livingStories.param, id: story})}`;
+
+const storyPointedAt = (named: string[], hash: string): Maybe<string> =>
+  maybe(empty(hash) ? named[0] : named.find(story => titleOf(story) === hash));
+
+const storyMoved = (params: URLSearchParams, {pathname, hash}: Location): Maybe<string> => {
+  const named = storiesNamed(params);
+  return storyPointedAt(named, hash)
     .mBind(story => maybe(tellers.get(story)))
-    .map(tableParts.addressOf);
+    .map(tableParts.addressOf)
+    .or(() => maybe(named[0]).map(() => pathname));
+};
 
 export const ToMovedAddress: FC = () => {
   const [params] = useSearchParams();
-  const {hash} = useLocation();
+  const location = useLocation();
   const hydrated = useHydrated();
   const dials = movedParams.droppedFrom(params);
-  return tutorialNamed(params).or(() => partTellingFirst(params)).either(
-    pathname => hydrated && <Navigate replace to={{pathname, search: dials.toString(), hash}}/>,
+  return tutorialNamed(params).or(() => storyMoved(params, location)).either(
+    pathname => hydrated && <Navigate replace to={{pathname, search: dials.toString(), hash: location.hash}}/>,
     () => null);
 };
