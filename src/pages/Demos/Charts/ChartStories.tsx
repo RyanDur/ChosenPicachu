@@ -131,9 +131,9 @@ const PriceStory: FC = () =>
             them, marked every day.</Says>
           <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
           <Says>The menu’s button starts disabled. The page comes from the server already drawn, before its script
-            runs, and a press in that moment would do nothing, so the button says it isn’t
-            ready. <code className="monospaced">useHydrated()</code> answers false until the script runs and true
-            after.</Says>
+            runs. The browser could open the menu then, since a popover needs no script, but choosing a period does, so
+            the button waits until the script has run. <code className="monospaced">useHydrated()</code> answers false
+            until the script runs and true after.</Says>
           <Says>The choice is written into the address, in its <code className="monospaced">charts</code> value, so a
             link opens the chart at the same period. <code className="monospaced">candles:day</code> is the candle chart
             at a day, and a chart at the hour, the default, is written as its kind alone.</Says>
