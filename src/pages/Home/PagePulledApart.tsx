@@ -11,7 +11,7 @@ const cosine30 = 0.866;
 const lift = 82;
 const slabDepth = 6;
 const projectionStart: Point = {x: 150, y: 170};
-const plate: Region = {u: 0, v: 0, across: 112, down: 72};
+const plate: Region = {u: 0, v: 0, across: 112, down: 78};
 
 const elevations = {structure: 0, presentation: lift, behavior: lift * 2};
 
