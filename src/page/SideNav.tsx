@@ -25,8 +25,12 @@ const SectionLink: FC<SectionLinkProps> = ({id, page, to, children}) => {
     aria-current={onThePage ? 'page' : undefined}>{children}</Link>;
 };
 
-const closedOnAPageChosen = ({target, currentTarget}: MouseEvent<HTMLElement>) => {
-  if (target instanceof Element && target.closest('a')) currentTarget.hidePopover();
+const opensElsewhere = ({ctrlKey, metaKey, shiftKey}: MouseEvent<HTMLElement>): boolean =>
+  ctrlKey || metaKey || shiftKey;
+
+const closedOnAPageChosen = (event: MouseEvent<HTMLElement>) => {
+  const {target, currentTarget} = event;
+  if (not(opensElsewhere(event)) && target instanceof Element && target.closest('a')) currentTarget.hidePopover();
 };
 
 export const SideNav: FC = () =>
