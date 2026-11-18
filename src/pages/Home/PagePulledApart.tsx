@@ -39,7 +39,7 @@ const slabRegions: Readonly<Record<string, Region>> = {
   button: {u: 80, v: 50, across: 22, down: 8}
 };
 
-const centerOf = ({u, v, across, down}: Region): Spot => ({u: u + across / 2, v: v + down / 2 + 1.8});
+const namePlaceIn = ({u, v, across, down}: Region): Spot => ({u: u + across / 2, v: v + down / 2 + 1.8});
 
 const scriptPoints: Readonly<Record<string, Spot>> = {
   toggle: {u: 18, v: 42},
@@ -96,7 +96,7 @@ export const PagePulledApart: FC = () =>
       {Object.values(scriptPoints).map(spot => <DroppedLine key={`${spot.u},${spot.v}`} spot={spot}/>)}
       <DroppedLine spot={frontCorner}/>
       {Object.entries(slabRegions).map(([name, region]) =>
-        <Lettering key={name} word={name} place={projected(centerOf(region), elevations.structure)} anchor="middle"/>)}
+        <Lettering key={name} word={name} place={projected(namePlaceIn(region), elevations.structure)} anchor="middle"/>)}
       {Object.entries(scriptPoints).map(([word, {u, v}]) =>
         <Lettering key={word} word={word} place={projected({u: u + 3, v: v + 1}, elevations.behavior)}/>)}
       {languages.map(({word, elevation}) => {
