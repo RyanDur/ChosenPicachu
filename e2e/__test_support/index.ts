@@ -1,6 +1,5 @@
 export {boxOf} from './box';
 export {chartsPage, feedStillConnecting, scriptedMarket} from './charts';
-export {homePage} from './home';
 export {practicePage} from './practice';
 export {recordPage} from './record';
 export {galleryPage} from './gallery';
@@ -16,6 +15,7 @@ export {whichCardIsOnTop} from './asking';
 export {feedbackOn, github} from './feedback';
 export {tablesDemo} from './tables';
 export {demoSettings} from './demo-settings';
+export {demosPage} from './demos';
 export {courseStations} from './stations';
 export {fingerTap, fingertipMiss, foldsAFingerLeavesShut} from './finger';
 export {dialRow, pillSwitch, pillsAFingerCannotChoose} from './pills';
