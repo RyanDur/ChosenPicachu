@@ -45,6 +45,10 @@
 
   .side-nav {
     grid-area: nav;
+    position: static;
+    inset: auto;
+    width: auto;
+    height: auto;
     overflow: visible;
     min-height: 0;
 
@@ -533,4 +537,81 @@
 .stick-to-bottom {
   position: sticky;
   bottom: 0;
+}
+
+.menu-button {
+  display: none;
+}
+
+@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
+  :root {
+    --foot-reach: calc(var(--menu-bar-block) + var(--home-indicator));
+  }
+
+  :root:has(.tabs) {
+    --foot-reach: calc(var(--menu-bar-block) + var(--tab-bar-reach) + var(--home-indicator));
+  }
+
+  #root {
+    padding-block-end: var(--foot-reach);
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      'header header'
+      'filter filter'
+      'main   main'
+      'footer footer';
+  }
+
+  #root:not(:has(.app-footer)) {
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      'header header'
+      'filter filter'
+      'main   main';
+  }
+
+  #root .rail {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-areas: 'feedback menu';
+    gap: var(--base);
+    padding-block-start: var(--base);
+    padding-block-end: var(--home-indicator);
+
+    .feedback-item {
+      grid-area: feedback;
+      padding-inline-end: 0;
+    }
+
+    .menu-button {
+      grid-area: menu;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--finger-reach);
+    }
+
+    .side-nav:not(:popover-open) {
+      display: none;
+    }
+
+    .side-nav:popover-open {
+      position: fixed;
+      inset: auto 0 0;
+      width: 100%;
+      max-height: 100dvh;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--base);
+      padding: var(--base) 0 var(--home-indicator);
+
+      .path {
+        height: var(--base-x-8);
+        padding-block: 0;
+      }
+    }
+  }
 }

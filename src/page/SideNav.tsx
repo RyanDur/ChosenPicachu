@@ -1,4 +1,4 @@
-import {FC, PropsWithChildren, useContext} from 'react';
+import {FC, MouseEvent, PropsWithChildren, useContext} from 'react';
 import {is, not} from '@ryandur/sand';
 import {Link, NavLink, useMatch} from 'react-router';
 import {Paths} from '@navigation';
@@ -25,8 +25,13 @@ const SectionLink: FC<SectionLinkProps> = ({id, page, to, children}) => {
     aria-current={onThePage ? 'page' : undefined}>{children}</Link>;
 };
 
+const closedOnAPageChosen = ({target, currentTarget}: MouseEvent<HTMLElement>) => {
+  if (target instanceof Element && target.closest('a')) currentTarget.hidePopover();
+};
+
 export const SideNav: FC = () =>
-  <nav id="side-nav" className="side-nav field backdrop-separated" aria-label="site">
+  <nav id="side-nav" popover="auto" className="side-nav field backdrop-separated veiled" aria-label="site"
+    onClick={closedOnAPageChosen}>
     <RailLink id="navigate-home" to={Paths.home} end>Home</RailLink>
     <RailLink id="navigate-record" to={Paths.record}>Record</RailLink>
     <SectionLink id="navigate-practice" page={Paths.practice} to={practiceAddress.of('Structure')}>Practice</SectionLink>

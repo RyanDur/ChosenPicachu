@@ -1,6 +1,6 @@
 import {Locator, Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, iPhone, nameOn, phoneSideways, recordPage, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
+import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, iPhone, nameOn, phoneSideways, recordPage, siteFrame, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
 const opensFromAFingerOnItsName = async (page: Page, name: string): Promise<void> => {
   await page.goto('demos/accordions/');
   const fold = accordionsTab(page).htmlAloneFold(name);
@@ -22,8 +22,10 @@ for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a
 
     test('opens a page from a finger that lands just off a link in the nav', async ({page}) => {
       await page.goto('');
+      await siteFrame(page).hydrated();
+      await siteFrame(page).menu.tap();
 
-      await fingerTap(page, page.getByRole('navigation', {name: 'site'}).getByRole('link', {name: 'Users'}));
+      await fingerTap(page, siteFrame(page).nav.getByRole('link', {name: 'Users'}));
 
       await expect(page).toHaveURL(/users/);
     });
