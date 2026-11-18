@@ -8,7 +8,6 @@ import {
   measuredHeightPage,
   plainFold,
   siteFrame,
-  textOf,
   type Part
 } from './__test_support';
 import {everyBuildJourneys, layoutRounding, test} from './__test_support/fold-journeys';
@@ -19,14 +18,14 @@ import {assertionPatience} from './__test_support/patience';
 test.use({workerOfItsOwn: 'the measured folds'});
 
 everyBuildJourneys(measuredBuilds);
-const gapUnderItsText = (part: Part): Promise<number> => gapUnder(part.fold, textOf(part));
+const gapUnderItsText = (part: Part): Promise<number> => gapUnder(part.fold, part.words);
 
 const settlesWithinRounding = async (measure: () => Promise<number>): Promise<void> =>
   expect(async () => expect(await measure()).toBeLessThanOrEqual(layoutRounding)).toPass({timeout: assertionPatience});
 
 const tallestOf = async (parts: Part[]): Promise<Part> => {
   const heights = await Promise.all(parts.map(part =>
-    textOf(part).evaluate(text => text.getBoundingClientRect().height)));
+    part.words.evaluate(text => text.getBoundingClientRect().height)));
   return parts[heights.indexOf(Math.max(...heights))];
 };
 

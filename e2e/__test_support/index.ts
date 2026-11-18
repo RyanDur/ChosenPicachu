@@ -21,7 +21,7 @@ export {fingerTap, fingertipMiss, foldsAFingerLeavesShut} from './finger';
 export {dialRow, pillSwitch, pillsAFingerCannotChoose} from './pills';
 export {sortableList} from './lists';
 export {heightOnceSettled} from './motion';
-export {accordionsTab, plainFold, gapUnder, rememberedFolds, rememberedFoldLabels, builds, measuredBuilds, measuredHeightPage, textOf, type Build, showing, type Part, nameOn} from './accordions';
+export {accordionsTab, plainFold, gapUnder, rememberedFolds, rememberedFoldLabels, builds, measuredBuilds, measuredHeightPage, type Build, showing, type Part, nameOn} from './accordions';
 export {stackingPile, type Card} from './stacking';
 export {zIndexTab} from './z-index';
 export {bannerTrap, contextChooser, topLayerMenu, trappedMenu, wearsReportedWrong, type SortChoice, type Worn} from './trap';

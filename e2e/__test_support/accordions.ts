@@ -41,8 +41,10 @@ type Controls = Omit<Part, 'showsText' | 'words'>;
 
 type Where = {page: Page; fold: Locator; article: Locator; index: number};
 
+const wordsIn = (fold: Locator): Locator => fold.getByRole('paragraph', {includeHidden: true});
+
 const textShownIn = (fold: Locator) => async (): Promise<boolean> => {
-  const text = fold.getByRole('paragraph', {includeHidden: true});
+  const text = wordsIn(fold);
   if (not(await text.isVisible())) {
     return false;
   }
@@ -57,7 +59,7 @@ const textShownIn = (fold: Locator) => async (): Promise<boolean> => {
 };
 
 const readable = (fold: Locator): Pick<Part, 'showsText' | 'words'> => ({
-  words: fold.getByRole('paragraph'),
+  words: wordsIn(fold),
   showsText: textShownIn(fold)
 });
 
@@ -189,8 +191,6 @@ export const accordionsTab = (page: Page) => {
     partsOf
   };
 };
-
-export const textOf = (part: Part): Locator => part.fold.getByRole('paragraph', {includeHidden: true});
 
 export const rememberedFolds = (page: Page): Locator =>
   page.getByRole('article').filter({has: page.getByRole('heading', {name: /and a known height$/})}).getByRole('radio');
