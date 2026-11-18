@@ -11,8 +11,8 @@ describe('the home page', () => {
     await homePage.arrived();
   });
 
-  test('should come to the claim before the drawing', () => {
-    expect(outOfReadingOrder([homePage.claim(), homePage.drawing()])).toEqual([]);
+  test('should come to its first paragraph before the drawing', () => {
+    expect(outOfReadingOrder([homePage.firstParagraph(), homePage.drawing()])).toEqual([]);
   });
 
   test('should link only the book the opener names and the three doors', () => {
