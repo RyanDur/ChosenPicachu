@@ -19,8 +19,10 @@ const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
   wears: schema.literalUnion(...inOrder.worn)
 };
 
+const readerSettings = [...Object.keys(decoders), 'charts'];
+
 export const dialParams = {
   decoders,
   keptFrom: (params: URLSearchParams): URLSearchParams =>
-    new URLSearchParams([...params].filter(([param]) => param in decoders))
+    new URLSearchParams([...params].filter(([param]) => readerSettings.includes(param)))
 };

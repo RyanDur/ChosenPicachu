@@ -31,6 +31,17 @@ describe('The Demos page', () => {
     expect(await demoTabs.names()).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
   });
 
+  test('the charts a reader set up come back when they return to the charts tab', async () => {
+    render(<TestApp at={demosAt('charts', '?charts=price,candles:day')}/>);
+    await demoTabs.open('Tables');
+    await demoTabs.arrivedOn('Tables');
+
+    await demoTabs.open('Charts');
+
+    await demoTabs.arrivedOn('Charts');
+    expect(new URLSearchParams(appAddress.search().textContent).get('charts')).toBe('price,candles:day');
+  });
+
   test('the demos page’s own address lands on the Accordions tab', async () => {
     const from = Paths.demos;
     render(<TestApp at={from}/>);
