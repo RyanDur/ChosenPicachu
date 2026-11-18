@@ -71,6 +71,6 @@
 
 @media (width <= 600px), (width <= 1100px) and (height <= 600px) {
   :root:has(.tabs) {
-    scroll-padding-block: var(--base-x-2) calc(var(--menu-bar-block) + var(--tab-bar-reach) + var(--base-x-2));
+    scroll-padding-block-start: var(--base-x-2);
   }
 }
