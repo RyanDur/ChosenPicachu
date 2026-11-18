@@ -41,7 +41,7 @@ export const FoldMotionDial: FC = () => {
     chosen={foldMotion}
     onChosen={next => change({foldMotion: next})}
     reading={<>
-      <span className="when-motion-allowed">{motions[foldMotion]}</span> <span
-        className="when-less-motion">{lessMotion}</span>
+      <span className="when-motion-allowed">{motions[foldMotion]}</span> <span className="when-less-motion">
+        {lessMotion}</span>
     </>}/>;
 };
