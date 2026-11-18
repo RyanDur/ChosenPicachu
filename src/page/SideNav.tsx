@@ -1,4 +1,4 @@
-import {FC, MouseEvent, PropsWithChildren, useCallback, useContext} from 'react';
+import {FC, MouseEvent, PropsWithChildren, ToggleEvent, useContext} from 'react';
 import {is, not} from '@ryandur/sand';
 import {Link, NavLink, useMatch} from 'react-router';
 import {Paths} from '@navigation';
@@ -8,6 +8,7 @@ import {queryString} from '@transport';
 import {opening} from '@pages/Gallery';
 import {PageUnknown} from './PageUnknown';
 import {PhoneLayoutEnding} from './PhoneLayoutEnding';
+import {PhoneLayoutEnds} from './phoneLayout';
 
 const railPath = () => 'path rail-path bold attentive field void-dot-before reachable';
 
@@ -30,14 +31,17 @@ const closedOnAPageChosen = ({target, currentTarget}: MouseEvent<HTMLElement>) =
   if (target instanceof Element && target.closest('a')) currentTarget.hidePopover();
 };
 
+const closedWhenThePhoneLayoutEnds = (phoneLayoutEnds: PhoneLayoutEnds) =>
+  ({currentTarget: nav, newState}: ToggleEvent<HTMLElement>) => {
+    if (newState !== 'open') return;
+    const stopListening = phoneLayoutEnds(() => nav.hidePopover());
+    nav.addEventListener('beforetoggle', stopListening, {once: true});
+  };
+
 export const SideNav: FC = () => {
   const phoneLayoutEnds = useContext(PhoneLayoutEnding);
-  const closedWhenThePhoneLayoutEnds = useCallback(
-    (nav: HTMLElement) => phoneLayoutEnds(() => nav.hidePopover()),
-    [phoneLayoutEnds]
-  );
   return <nav id="side-nav" popover="auto" className="side-nav field backdrop-separated veiled" aria-label="site"
-    ref={closedWhenThePhoneLayoutEnds} onClick={closedOnAPageChosen}>
+    onBeforeToggle={closedWhenThePhoneLayoutEnds(phoneLayoutEnds)} onClick={closedOnAPageChosen}>
     <RailLink id="navigate-home" to={Paths.home} end>Home</RailLink>
     <RailLink id="navigate-record" to={Paths.record}>Record</RailLink>
     <SectionLink id="navigate-practice" page={Paths.practice} to={practiceAddress.of('Structure')}>Practice</SectionLink>
