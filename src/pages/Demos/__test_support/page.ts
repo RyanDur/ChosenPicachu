@@ -22,9 +22,11 @@ const pageAndPlaceOf = (link: HTMLElement): string => {
   return `${pathname}${hash}`;
 };
 
-const linksToPageIn = (holder: HTMLElement, address: string): string[][] => within(holder).getAllByRole('link')
+const toPage = (links: HTMLElement[], address: string): string[][] => links
   .map(link => [link.textContent, pageAndPlaceOf(link)])
   .filter(([, href]) => href === address);
+
+const linksToPageIn = (holder: HTMLElement, address: string): string[][] => toPage(within(holder).getAllByRole('link'), address);
 
 const linksOffTheRail = (): HTMLElement[] => {
   const rail = screen.getByRole('region', {name: 'pages and feedback'});
@@ -60,6 +62,7 @@ export const demoPage = {
   wholePage: (): HTMLElement => screen.getByRole('main'),
   linksToTabsIn,
   linksToPageIn,
+  linksToPage: (address: string): string[][] => toPage(linksOffTheRail(), address),
   linksToTabs: (): string[][] => toTabs(linksOffTheRail()),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   sliceLinks: (): (string | null)[] => within(slices()).getAllByRole('link').map(link => link.getAttribute('href')),

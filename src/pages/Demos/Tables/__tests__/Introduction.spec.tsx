@@ -30,7 +30,7 @@ describe('the tables tab’s introduction', () => {
   test('should link each term the z-index part on the popover defines to that part’s page', () => {
     render(<TestApp at="/"><TablesIntroduction/></TestApp>);
 
-    expect(demoPage.linksToPageIn(document.body, `${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
+    expect(demoPage.linksToPage(`${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([
       ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`],
       ['events', `${Paths.demos}z-index/why-the-popover-wins/`],
       ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`]
