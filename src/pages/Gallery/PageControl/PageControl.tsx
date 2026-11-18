@@ -2,6 +2,7 @@ import {SubmitEvent, useId} from 'react';
 import {Maybe, maybe} from '@ryandur/sand';
 import {numberParam} from '@navigation/search-params';
 import {useGallery} from '@pages/Gallery/Context';
+import {keptForm} from '@pages/Gallery/keptForm';
 import './PageControl.css';
 
 const typed = (form: FormData, field: string): Maybe<number> =>
@@ -11,6 +12,7 @@ export const PageControl = () => {
   const {pagination, page, size, updateSearchParams} = useGallery();
   const goTo = useId();
   const perPage = useId();
+  const formKey = keptForm.useKey('pages', `${page} ${size}`);
 
   const firstPage = 1;
   const lastPage = pagination.map(({totalPages}) => totalPages).orElse(undefined);
@@ -20,10 +22,10 @@ export const PageControl = () => {
     const typedIn = new FormData(event.currentTarget);
     event.currentTarget.reset();
     updateSearchParams({page: typed(typedIn, 'page').orElse(page), size: typed(typedIn, 'size').orElse(size)},
-      {preventScrollReset: false});
+      {preventScrollReset: false, state: keptForm.across('pages', formKey)});
   };
 
-  return <form key={`${page} ${size}`} onSubmit={onSubmit} className="page-control backdrop">
+  return <form key={formKey} onSubmit={onSubmit} className="page-control backdrop">
     <label className="go-to-label control-label field next-approached bold" htmlFor={goTo}>Page</label>
     <input type="number"
       id={goTo}
