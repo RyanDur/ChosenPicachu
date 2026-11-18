@@ -69,6 +69,17 @@ export const views: readonly View[] = [
     }
   },
   {
+    name: 'its menu open as the window widens past a phone',
+    page: named('home'),
+    atWidths: [390],
+    into: async page => {
+      await page.getByRole('button', {name: 'Menu', exact: true}).click();
+      await page.getByRole('navigation', {name: 'site'}).getByRole('link').first().waitFor();
+      await page.setViewportSize({width: 820, height: 900});
+      await page.waitForTimeout(400);
+    }
+  },
+  {
     name: 'a rail link hovered',
     page: named('home'),
     atWidths: [1440, 1000],
