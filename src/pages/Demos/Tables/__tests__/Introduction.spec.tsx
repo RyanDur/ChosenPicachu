@@ -27,7 +27,7 @@ describe('the tables tab’s introduction', () => {
     ]);
   });
 
-  test('should link each term the z-index part on the popover defines to that part’s page', () => {
+  test('should link each term and each cite of Why the popover wins to its page', () => {
     render(<TestApp at="/"><TablesIntroduction/></TestApp>);
 
     expect(demoPage.linksToPage(`${Paths.demos}z-index/why-the-popover-wins/`)).toEqual([

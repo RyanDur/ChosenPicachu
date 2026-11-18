@@ -315,7 +315,7 @@ describe('the links to other tabs', () => {
     ]);
   });
 
-  test('should link each term the z-index part on the popover defines to that part’s page', async () => {
+  test('should link each term and each cite of Why the popover wins to its page', async () => {
     render(<TestApp at={demosAt('drag-and-drop')}/>);
 
     const tab = await demoTabs.arrivedOn('Drag sort');
