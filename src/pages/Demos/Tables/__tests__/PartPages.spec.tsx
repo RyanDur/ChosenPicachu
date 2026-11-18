@@ -515,6 +515,17 @@ describe('a link saved to a story when it was on the tables tab', () => {
     expect(recipeFolds.story(demoPage.part(theLiveTable), theStoreStory)).toHaveAttribute('open');
   });
 
+  test('should open the live table’s page with both its stories open when it names them both', async () => {
+    const old = demosAt('tables', '?living=flow%2Cstore');
+    render(<TestApp at={old}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(theLiveTablesPage);
+    await tablesTab().place();
+    const live = demoPage.part(theLiveTable);
+    expect(recipeFolds.story(live, theFlowStory)).toHaveAttribute('open');
+    expect(recipeFolds.story(live, theStoreStory)).toHaveAttribute('open');
+  });
+
   test('should stay on the tables tab when it names no story a page tells', async () => {
     const old = demosAt('tables', '?living=nowhere');
     render(<TestApp at={old}/>);
