@@ -115,6 +115,7 @@ test('given the charts tab before its script runs, Add a chart is disabled; once
   await charts.adder.click();
   await charts.chartToAdd('Candles').click();
 
+  await expect(charts.seat('candles')).toBeVisible();
   await expect(charts.report).toHaveText('Candles added');
 });
 
