@@ -39,15 +39,14 @@ export const AccordionsExplained: FC = () => {
       <p className="paragraph">Nothing here leans on another tab.</p>
       <p className="paragraph">You don’t always need all three languages. HTML does some jobs alone, and HTML with CSS
         does more, before you need script. If you know how each one works, you can choose the one the job needs. This
-        page shows that with one small thing, built several ways.</p>
+        tab builds one small thing in HTML alone, and each part’s page builds it another way.</p>
       <p className="paragraph">The thing is an accordion: a list of parts, each with a bar you press to show or hide the
         text under it. This page calls one of them a fold. HTML alone can show and hide a fold.</p>
       <p className="paragraph">Sliding it open is the hard part. For years, CSS could move a height to a number but not
         to the height the text needs, so the older ways each worked around it: guess a height, measure it with script,
         or set one in advance. Each has a cost.</p>
       <p className="paragraph">By the end you can build an accordion in HTML alone, make it slide with CSS, keep one
-        fold open at a time, and say which language each job needed and why. The first accordion below is HTML
-        alone.</p>
+        fold open at a time, and say which language each job needed and why. The accordion below is HTML alone.</p>
     </header>
     <section aria-labelledby="html-alone-heading" className="accordion-part snapping">
       <h2 id="html-alone-heading" className="title bold">{accordionParts.titleOf('html-alone-heading')}</h2>
@@ -76,8 +75,8 @@ export const AccordionsExplained: FC = () => {
         </li>}
         <li className="run">
           <p className="paragraph">The browser also remembers whether each fold is open, and says so to a screen reader,
-            which is software that reads the page aloud. The fold does not slide. The sections below are about making it
-            slide, starting with how we did it before the browser could.</p>
+            which is software that reads the page aloud. The fold does not slide. The parts listed below make it slide,
+            each on a page of its own, starting with how we did it before the browser could.</p>
         </li>
       </ol>
     </section>
@@ -92,7 +91,7 @@ export const AccordionsExplained: FC = () => {
         like a height or a color, given a value.</p>
       <p className="paragraph">The fold motion does not reach the accordion above. A browser opens a details at once
         on its own. The site’s reset, the style sheet that sets every element’s defaults, slides every details where the
-        browser can, and the first accordion turns that off, so you see what HTML alone does.</p>
+        browser can, and the accordion above turns that off, so you see what HTML alone does.</p>
       <DialGroup>
         <FoldTypeDial/>
         <FoldMotionDial/>
