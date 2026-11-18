@@ -8,6 +8,7 @@ import {Paths} from '@navigation';
 import {trouble} from '@transport';
 import {github} from './github';
 import {feedbackChange} from './feedbackChange';
+import type {Sending} from './feedbackDraft';
 import {drafting} from './drafting';
 import {classNames} from '@components';
 import {Modal, ModalOpener} from '@components/Modal';
@@ -29,6 +30,8 @@ const fieldFirst = (event: SyntheticEvent<HTMLDialogElement>) => {
   }
 };
 
+const refusal = ({state}: Sending): boolean => state === 'refused' || state === 'refusedBefore';
+
 const SentNoteLink: FC = () => {
   const [{sentNote}] = useContext(drafting);
   return sentNote.state !== 'none' && <>Sent. <a className="signpost" href={sentNote.url}>Read it on GitHub</a></>;
@@ -40,6 +43,7 @@ const NoteStatus: FC = () => {
     case 'sending':
       return 'Sending the note to GitHub.';
     case 'refused':
+    case 'refusedBefore':
       return `${trouble.with('GitHub')(sending.why)}. Your words are still here.`;
   }
   return <SentNoteLink/>;
@@ -113,7 +117,7 @@ export const Feedback: FC = () => {
         </label>
         <fieldset className="feedback-actions field">
           <legend className="feedback-actions-name off-screen">Send or cancel</legend>
-          <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}><NoteStatus/></output>
+          <output className={classNames('feedback-status', 'paragraph', refusal(draft.sending) && 'alarm-ink')}><NoteStatus/></output>
           <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor={feedbackDialogId} command="close">{draft.sentNote.state === 'none' ? 'Cancel' : 'Close'}</button>
           <button type="submit" className="feedback-send path sub-title bold attentive inverse-filled borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </fieldset>

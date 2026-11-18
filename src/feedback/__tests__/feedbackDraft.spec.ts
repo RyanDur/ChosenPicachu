@@ -94,4 +94,12 @@ describe('the feedback reducer', () => {
 
     expect(draft.sending).toEqual({state: 'refused', why: HTTPError.FORBIDDEN});
   });
+
+  test('should drop a refusal on the second opening after it arrived', () => {
+    const refused = inTurn(openOn, feedbackChange.noteSubmitted(), feedbackChange.noteRefused(HTTPError.FORBIDDEN));
+
+    const draft = inTurn(refused, feedbackChange.opened(tables), feedbackChange.opened(tables));
+
+    expect(draft.sending).toEqual({state: 'writing'});
+  });
 });
