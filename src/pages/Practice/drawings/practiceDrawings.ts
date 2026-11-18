@@ -166,14 +166,14 @@ const landmarkMap = ((): Drawing<'wide' | 'stacked' | 'phone'> => {
   ];
 
   const phone: Box[] = [
-    {label: 'header', look: landmark, x: 6, y: 6, width: 288, height: 42},
-    {label: 'main', look: landmark, x: 6, y: 57, width: 288, height: 165},
-    {label: 'nav · tabs', look: secondary, x: 15, y: 96, width: 270, height: 30, note: 'on a page with tabs; shown at the foot'},
-    {label: 'footer', look: landmark, x: 6, y: 231, width: 288, height: 39, note: 'only where a page has one'},
-    {label: 'section · pages and feedback', look: landmark, x: 6, y: 300, width: 288, height: 99},
-    {label: 'feedback', look: secondary, x: 15, y: 333, width: 81, height: 39},
-    {label: 'nav · site', look: landmark, x: 105, y: 333, width: 180, height: 39, note: 'opens from Menu'},
-    {label: 'section · role alert · live region · last on the page', look: lastOnThePage, x: 12, y: 39, width: 282, height: 24}
+    {label: 'section · pages and feedback', look: landmark, x: 6, y: 6, width: 288, height: 99, note: 'shown at the foot'},
+    {label: 'nav · site', look: landmark, x: 15, y: 39, width: 180, height: 39, note: 'opens from Menu'},
+    {label: 'feedback', look: secondary, x: 204, y: 39, width: 81, height: 39},
+    {label: 'header', look: landmark, x: 6, y: 135, width: 288, height: 42},
+    {label: 'main', look: landmark, x: 6, y: 186, width: 288, height: 165},
+    {label: 'nav · tabs', look: secondary, x: 15, y: 225, width: 270, height: 30, note: 'on a page with tabs; shown at the foot'},
+    {label: 'footer', look: landmark, x: 6, y: 360, width: 288, height: 39, note: 'only where a page has one'},
+    {label: 'section · role alert · live region · last on the page', look: lastOnThePage, x: 12, y: 168, width: 282, height: 24}
   ];
 
   const drawnBox = (box: Box): string =>
@@ -181,7 +181,7 @@ const landmarkMap = ((): Drawing<'wide' | 'stacked' | 'phone'> => {
     caption(box.label, {x: box.x + inset, y: box.y + inset}) +
     (has(box.note) ? caption(box.note, {x: box.x, y: box.y + box.height + inset}) : '');
 
-  const sizes = {wide: {width: 480, height: 356}, stacked: {width: 300, height: 388}, phone: {width: 300, height: 405}};
+  const sizes = {wide: {width: 480, height: 356}, stacked: {width: 300, height: 388}, phone: {width: 300, height: 427}};
 
   return {
     sheet: 'src/pages/Practice/structure/LandmarkMap.css',
