@@ -541,6 +541,10 @@
       'main   main';
   }
 
+  #root .app-footer {
+    bottom: var(--foot-reach);
+  }
+
   #root .rail {
     position: fixed;
     inset: auto 0 0;

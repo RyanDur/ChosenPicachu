@@ -1,6 +1,6 @@
 import {Locator, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {desktop, documentScrollY, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab} from './__test_support';
+import {clickWhereItIs, desktop, documentScrollY, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab, twoFramesLater} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> =>
   region.evaluate(element => element.contains(document.activeElement));
@@ -81,6 +81,18 @@ for (const {reader, device} of handhelds) {
       await expect(gallery.wall.first()).toBeVisible();
 
       await gallery.nextPage.tap();
+
+      await expect(gallery.settings).toContainText(/, page 2(?!\d)/);
+    });
+
+    test('pages on from the pager while partway down the wall', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+      await expect(gallery.wall.first()).toBeVisible();
+      await gallery.wall.nth(Math.floor(await gallery.wall.count() / 2)).scrollIntoViewIfNeeded();
+      await twoFramesLater(page);
+
+      await clickWhereItIs(page, gallery.nextPage);
 
       await expect(gallery.settings).toContainText(/, page 2(?!\d)/);
     });
