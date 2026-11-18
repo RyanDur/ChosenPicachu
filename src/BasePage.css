@@ -245,31 +245,6 @@
         grid-area: pager;
       }
     }
-
-    .side-nav {
-      width: 100%;
-      flex-direction: row;
-      justify-content: space-around;
-      align-items: center;
-      align-content: center;
-
-      .path {
-        padding-inline: 0;
-        margin-bottom: 0;
-        height: unset;
-        width: fit-content;
-      }
-
-      .path + .path {
-        height: unset;
-      }
-
-      .path[aria-current="page"]::before {
-        inset-inline-start: 50%;
-        top: calc(50% + 0.5lh + var(--base-x-0_5));
-        translate: -50% 0;
-      }
-    }
   }
 
   #root:not(:has(.app-footer)) {
@@ -306,6 +281,33 @@
   }
 }
 
+@media (601px <= width <= 1100px) and (height > 600px) {
+  #root .side-nav {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    align-content: center;
+
+    .path {
+      padding-inline: 0;
+      margin-bottom: 0;
+      height: unset;
+      width: fit-content;
+    }
+
+    .path + .path {
+      height: unset;
+    }
+
+    .path[aria-current="page"]::before {
+      inset-inline-start: 50%;
+      top: calc(50% + 0.5lh + var(--base-x-0_5));
+      translate: -50% 0;
+    }
+  }
+}
+
 .rail {
   display: contents;
 }
@@ -316,7 +318,7 @@
   }
 }
 
-@media (601px <= width <= 1100px) {
+@media (601px <= width <= 1100px) and (height > 600px) {
   #root .rail:has(.feedback-item) {
     --paths-and-feedback: 9;
 
@@ -364,15 +366,6 @@
       }
     }
 
-    .side-nav {
-      min-width: 0;
-      flex-wrap: wrap;
-      padding-inline-start: var(--base);
-    }
-
-    .feedback-item {
-      padding-inline-end: var(--base);
-    }
   }
 
   #root:not(:has(.app-footer)) {
@@ -385,11 +378,6 @@
 }
 
 @media (width <= 600px) {
-  #root .side-nav {
-    display: grid;
-    grid-template-columns: repeat(4, auto);
-  }
-
   #root .app-header {
     padding-block-start: var(--base);
     grid-template-columns: 1fr;
@@ -400,31 +388,12 @@
   }
 }
 
-@media (width <= 600px) {
-  #root .side-nav {
-    .path {
-      padding-inline-start: var(--base-x-2);
-      padding-block: var(--base-x-0_5);
-    }
-
-    .path[aria-current="page"]::before {
-      inset-inline-start: 0;
-      top: 50%;
-      translate: 0 -50%;
-    }
-  }
-}
-
 @media (width <= 1100px) and (height <= 600px) {
   #root {
     .app-header {
       grid-template-columns: auto 1fr;
       grid-auto-rows: auto;
       grid-template-areas: 'title search';
-    }
-
-    .side-nav .path {
-      padding-block: var(--base-x-0_5);
     }
   }
 }
@@ -606,7 +575,7 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: var(--base);
-      padding: var(--base) 0 var(--home-indicator);
+      padding: var(--base) var(--base) calc(var(--base) + var(--home-indicator));
 
       .path {
         height: var(--base-x-8);
