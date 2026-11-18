@@ -588,4 +588,9 @@
       }
     }
   }
+
+  #root .rail:not(:has(.feedback-item)) {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'menu';
+  }
 }
