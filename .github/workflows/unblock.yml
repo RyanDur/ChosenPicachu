@@ -1,0 +1,29 @@
+name: unblock
+
+# When a card's pull request merges, the cards it blocked can start: its code is on main.
+# A Done card's issue stays open, so GitHub never releases a blocked-by link by itself.
+# The card is the number in the branch name, verify/<issue>[-words]; other branches name no card.
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  release:
+    if: github.event.pull_request.merged && startsWith(github.event.pull_request.head.ref, 'verify/')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      BRANCH: ${{ github.event.pull_request.head.ref }}
+    steps:
+      - name: Release the cards this card blocked
+        run: |
+          card=$(printf '%s' "$BRANCH" | sed -nE 's#^verify/([0-9]+)([-/].*)?$#\1#p')
+          if [ -z "$card" ]; then echo "$BRANCH names no card"; exit 0; fi
+          id=$(gh api "repos/$REPO/issues/$card" -q .id)
+          for blocked in $(gh api "repos/$REPO/issues/$card/dependencies/blocking" -q '.[].number'); do
+            gh api -X DELETE "repos/$REPO/issues/$blocked/dependencies/blocked_by/$id" > /dev/null
+            echo "#$blocked no longer waits on #$card"
+          done
