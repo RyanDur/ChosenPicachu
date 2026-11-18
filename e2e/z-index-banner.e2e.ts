@@ -1,7 +1,7 @@
 import {Page, expect} from '@playwright/test';
 import {test} from './__test_support/history-writes';
 import {
-  bannerTrap, boxOf, desktop, dialRow, hydrationHeldBack, iPhone, pillSwitch, pressTab, siteFrame, tabsTo, zIndexTab
+  bannerTrap, boxOf, desktop, dialRow, hydration, iPhone, pillSwitch, pressTab, siteFrame, tabsTo, zIndexTab
 } from './__test_support';
 
 const fixedBannerPage = 'demos/z-index/why-a-fixed-banner-still-loses/';
@@ -179,7 +179,7 @@ test('a raised note is announced: the browser finds it in the page’s alert', a
 });
 
 test('given the page before its script runs, the old way’s Raise a banner is disabled; once the script runs, the first press raises the old banner', async ({page}) => {
-  await hydrationHeldBack(page, fixedBannerPage);
+  await hydration(page).holdBack(fixedBannerPage);
   await page.goto(fixedBannerPage);
   const banners = bannerTrap(page);
 
@@ -191,7 +191,7 @@ test('given the page before its script runs, the old way’s Raise a banner is d
 });
 
 test('given the page before its script runs, the site’s own Raise a banner is disabled; once the script runs, the first press raises the site’s banner', async ({page}) => {
-  await hydrationHeldBack(page, fixedBannerPage);
+  await hydration(page).holdBack(fixedBannerPage);
   await page.goto(fixedBannerPage);
   const banners = bannerTrap(page);
 
