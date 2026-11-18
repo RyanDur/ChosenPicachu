@@ -1,12 +1,10 @@
 import {screen} from '@testing-library/react';
 import {computeAccessibleName} from 'dom-accessibility-api';
-import {namedSite} from '@pages/__test_support/site';
+import {asOnADesk, namedSite} from '@pages/__test_support/site';
 
 export type Landmark = readonly [role: string, name: string];
 
 const roles = ['banner', 'navigation', 'region', 'complementary', 'search', 'form', 'main', 'contentinfo'] as const;
-
-const asOnADesk = {hidden: true};
 
 const ofTheFrame = (element: HTMLElement): boolean => !element.parentElement?.closest('main');
 
