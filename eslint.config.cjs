@@ -114,7 +114,8 @@ const oldWayExhibits = [
 
 module.exports = [
   {
-    ignores: ['dist/**', 'build/**', 'node_modules/**', 'coverage/**', 'playwright-report/**', 'test-results/**', '.lighthouseci/**']
+    ignores: ['dist/**', 'build/**', 'build-ssr/**', 'node_modules/**', 'coverage/**', 'playwright-report/**',
+      'test-results/**', '.lighthouseci/**']
   },
   {
     files: ['**/*.{js,mjs,cjs,ts}'],
