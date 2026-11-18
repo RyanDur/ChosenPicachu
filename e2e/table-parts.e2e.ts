@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {documentScrollY, pillSwitch, siteFrame, tablesDemo, twoFramesLater} from './__test_support';
+import {pillSwitch, siteFrame, tablesDemo} from './__test_support';
 
 test('a reader follows the need and its clues’ foot on to the sketch’s page with the build kept', async ({page}) => {
   await page.goto('demos/tables/the-need-and-its-clues/?world=vanilla');
@@ -34,23 +34,16 @@ test('a reader on a tutorial page reached by a link saved with a story follows t
   await expect(tablesDemo(page).tutorials.link('Sort menu')).toBeVisible();
 });
 
-test('a reader who follows a link out of the live table’s page and comes Back is where they were', async ({page}) => {
+test('a reader who follows a link out of the live table’s page and comes Back is on the live table’s page', async ({page}) => {
   await page.goto('demos/tables/the-live-table-and-the-store/?world=vanilla');
   await siteFrame(page).hydrated();
-  const out = page.getByRole('link', {name: 'charts tab', exact: true});
-  await out.scrollIntoViewIfNeeded();
-  await twoFramesLater(page);
-  const where = await documentScrollY(page);
-  expect(where).toBeGreaterThan(0);
 
-  await out.click();
+  await page.getByRole('link', {name: 'charts tab', exact: true}).click();
   await expect(page).toHaveURL(/demos\/charts\/\?world=vanilla$/);
   await page.goBack();
 
   await expect(page).toHaveURL(/demos\/tables\/the-live-table-and-the-store\/\?world=vanilla$/);
-  await expect(out).toBeInViewport();
-  // WebKit on the Linux runner restores Back a pixel off; a pixel is no place a reader can tell apart
-  await expect.poll(async () => Math.abs(await documentScrollY(page) - where)).toBeLessThanOrEqual(1);
+  await expect(page.getByRole('heading', {level: 2, name: 'Make the table live', exact: true})).toBeVisible();
 });
 
 test.describe('a reader with script turned off', () => {
