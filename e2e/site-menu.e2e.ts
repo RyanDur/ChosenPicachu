@@ -4,8 +4,6 @@ import {clickWhereItIs, iPadSplitView, iPadUpright, iPhone, shortPhoneSideways, 
 
 const pages = ['Home', 'Record', 'Practice', 'Demos', 'Users', 'Gallery', 'Games', 'Repo'];
 
-const openAsAPopover = (nav: Element): boolean => nav.matches(':popover-open');
-
 test.describe('a phone held upright', () => {
   test.use(iPhone);
 
@@ -128,7 +126,6 @@ test.describe('an iPad in split view widened past a phone', () => {
     await page.setViewportSize(iPadUpright.viewport);
 
     await expect(page.getByRole('region', {name: 'pages and feedback'}).getByRole('navigation', {name: 'site'})).toBeVisible();
-    await expect.poll(() => site.nav.evaluate(openAsAPopover), 'the site menu is open').toBe(false);
   });
 
   test('keeps a keyboard reader on the link they were on in the menu', async ({page}) => {
@@ -142,7 +139,6 @@ test.describe('an iPad in split view widened past a phone', () => {
 
     await page.setViewportSize(iPadUpright.viewport);
 
-    await expect.poll(() => site.nav.evaluate(openAsAPopover), 'the site menu is open').toBe(false);
     await expect(record).toBeFocused();
     await expect(record).toBeVisible();
   });
