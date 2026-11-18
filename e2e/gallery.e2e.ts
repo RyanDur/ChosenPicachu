@@ -403,6 +403,19 @@ test.describe('a visitor at a desk', () => {
     await expect(gallery.searchField).toHaveValue('lilies');
   });
 
+  test('keeps the focus on the page field after going to a page with Enter', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await siteFrame(page).hydrated();
+    await gallery.pageNumber.fill('2');
+
+    await gallery.pageNumber.press('Enter');
+
+    await expect(page).toHaveURL(/page=2/);
+    await expect(gallery.pageNumber).toBeFocused();
+  });
+
   test('lands at the top of the page it goes to from the page field', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.hangPageOneOnEveryPage();
