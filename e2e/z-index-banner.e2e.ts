@@ -73,7 +73,7 @@ test('a keyboard reader who follows Let’s build this feature reaches the story
   const link = page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'Let’s build this feature', exact: true});
   await tabsTo(page, link);
   await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/#news-top-story$/);
+  await expect(page).toHaveURL(/\/lets-build-this-feature\/#news-top-story$/);
   await expect(page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'The user sees the news over the page'})}).last()).toBeFocused();
 
   await expect(page.getByText('Write the panel last, at the page’s root')).toBeVisible();
@@ -84,15 +84,37 @@ test('a keyboard reader who follows Let’s build this feature reaches the story
   await expect(page.getByText('Write the panel last, at the page’s root')).toBeHidden();
 });
 
-test('a reader who follows Let’s build this feature with motion allowed lands on the story\'s heading', async ({page}) => {
+test('a reader who follows Let’s build this feature with motion allowed lands on the story\'s heading, with only its place in the address', async ({page}) => {
   await page.emulateMedia({reducedMotion: 'no-preference'});
   await page.goto(fixedBannerPage);
   await siteFrame(page).hydrated();
 
   await page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'Let’s build this feature', exact: true}).click();
 
-  await expect(page).toHaveURL(/#news-top-story$/);
+  await expect(page).toHaveURL(/\/lets-build-this-feature\/#news-top-story$/);
   await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
+});
+
+test('a reader with a saved link that still names the story\'s record lands on the story, open', async ({page}) => {
+  await page.goto('demos/z-index/lets-build-this-feature/?news=top#news-top-story');
+
+  await expect(page.getByRole('group', {name: 'The user sees the news over the page'})).toHaveAttribute('open');
+  await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
+});
+
+test('a story the reader opened by hand is closed again after a reload, and the address keeps no record of it', async ({page}) => {
+  await page.goto('demos/z-index/lets-build-this-feature/');
+  await siteFrame(page).hydrated();
+  const story = page.getByRole('group', {name: 'The user can have multiple banners'});
+
+  await story.getByText('The user can have multiple banners').click();
+  await expect(story).toHaveAttribute('open');
+  await expect(page).toHaveURL(/\/lets-build-this-feature\/$/);
+
+  await page.reload();
+  await siteFrame(page).hydrated();
+
+  await expect(story).not.toHaveAttribute('open');
 });
 
 test('on let’s build this feature’s page, a reader chooses an entrance and raises a banner under the dials', async ({page}) => {

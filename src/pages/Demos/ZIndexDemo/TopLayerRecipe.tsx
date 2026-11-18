@@ -34,7 +34,7 @@ const alignSheet: Record<Align, Sample> = {
 export const TopLayerRecipe: FC = () => {
   const {side, align} = useControls();
 
-  return <Story {...topLayerStory}
+  return <Story titleId={topLayerStory}
     can="The user sees the news over the page"
     soThat="no stacking context can bury the news">
     <Tell>I could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the term

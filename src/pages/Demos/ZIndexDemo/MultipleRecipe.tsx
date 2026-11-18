@@ -62,13 +62,12 @@ const ownedMargin: Record<Axis, string> = {
   sideways: '&:where(.stack-right) .trouble:where(:not(:last-child)) .news,'
 };
 
-const multipleStory = {param: 'news', id: 'many'} as const;
 const slideInStep = 'step-slide-in';
 
 export const MultipleRecipe: FC = () => {
   const {enter, stack} = useControls();
 
-  return <Story {...multipleStory}
+  return <Story titleId="news-many-story"
     can="The user can have multiple banners"
     soThat="no message waits for another to leave">
     <Tell>More than one message can be up at once, so the banners stack. A banner arrives in two moves: the stack

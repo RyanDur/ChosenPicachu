@@ -167,7 +167,7 @@ const gestureCodes: Record<World, ReactNode> = {
 
 const WidenStory: FC = () => {
   const {world} = useControls();
-  return <Story param="resize" id="widen"
+  return <Story titleId="resize-widen-story"
     can="The trader can widen a column"
     soThat="what they read most gets the room, and the table keeps its shape">
     <Tell>The ledger is the table’s record of each column’s share of the width.</Tell>

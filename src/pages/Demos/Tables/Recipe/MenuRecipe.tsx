@@ -67,7 +67,7 @@ const RankStory: FC = () => {
   const tableSource = paceSources.table[pace];
   const rowSource = paceSources.row[pace];
   const buildSource = buildSources[pace];
-  return <Story param="menu" id="rank"
+  return <Story titleId="menu-rank-story"
     can="The trader can sort the lookbacks by any measure, or take the order back"
     soThat="the table ranks itself, and the trader still outranks it">
     <TheImplementation react="Builds" vanilla="Frame/table/menus.ts"/>

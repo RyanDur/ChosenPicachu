@@ -1,1 +1,1 @@
-export const topLayerStory = {param: 'news', id: 'top'} as const;
+export const topLayerStory = 'news-top-story';
