@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Navigate, useSearchParams} from 'react-router';
+import {Navigate, useLocation, useSearchParams} from 'react-router';
 import {maybe} from '@ryandur/sand';
 import {useHydrated} from '@components';
 import {TablePart, tableParts} from './part-pages';
@@ -13,11 +13,13 @@ const tellers: Record<string, TablePart> = {
 
 export const ToPartTelling: FC = () => {
   const [params] = useSearchParams();
+  const {hash} = useLocation();
   const hydrated = useHydrated();
   const named = (params.get(livingStories.param) ?? '').split(',');
   const dials = new URLSearchParams(params);
   dials.delete(livingStories.param);
   return maybe(Object.entries(tellers).find(([story]) => named.includes(story))).either(
-    ([, part]) => hydrated && <Navigate replace to={{pathname: tableParts.addressOf(part), search: dials.toString()}}/>,
+    ([, part]) => hydrated &&
+      <Navigate replace to={{pathname: tableParts.addressOf(part), search: dials.toString(), hash}}/>,
     () => null);
 };
