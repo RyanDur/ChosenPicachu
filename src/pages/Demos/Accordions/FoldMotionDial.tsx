@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {DialRow, useControls} from '../Controls';
 import {FoldMotion} from '../ReaderSettings';
+import {useShownPart} from './useShownPart';
 
 const foldMotions = [
   {words: 'Reveal', value: 'reveal'},
@@ -31,9 +32,9 @@ const onThePartPages: Readings = {
   lessMotion: 'If your system asks for less motion, every fold on the part pages opens at once, whichever you choose.'
 };
 
-export const FoldMotionDial: FC<{forThePartPages?: boolean}> = ({forThePartPages = false}) => {
+export const FoldMotionDial: FC = () => {
   const {foldMotion, change} = useControls();
-  const {motions, lessMotion} = forThePartPages ? onThePartPages : onThisPage;
+  const {motions, lessMotion} = useShownPart().either(() => onThisPage, () => onThePartPages);
   return <DialRow label="fold motion"
     name="fold-motion"
     choices={foldMotions}
