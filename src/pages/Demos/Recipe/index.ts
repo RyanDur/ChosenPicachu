@@ -2,6 +2,7 @@ export {Stories} from './Stories';
 export {DialNote} from './DialNote';
 export {Station} from './Station';
 export {Exercise} from './Exercise';
+export {DrawnStory} from './DrawnStory';
 export {Story} from './Story';
 export {StoryDepth} from './StoryDepth';
 export {Tell} from './Tell';

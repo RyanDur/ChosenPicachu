@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {carve, Codes, lines, Reveal, Says, Snippet, Step, StepHeading, Steps, Story, Tell, Want, Words} from '../../Recipe';
+import {carve, Codes, lines, Reveal, Says, Snippet, Step, StepHeading, Steps, DrawnStory, Tell, Want, Words} from '../../Recipe';
 import {useControls} from '../../Controls';
 import {Term} from './Term';
 import stateSource from '@components/DragSortableTable/model/table-state.ts?sample';
@@ -286,7 +286,7 @@ const WhoSubscribes: FC = () => {
 };
 
 export const StoreStory: FC = () =>
-  <Story id={livingStories.ids.store} open
+  <DrawnStory param={livingStories.param} id={livingStories.ids.store} open
     can="The page is a store, and so is the table"
     soThat="the charts and the tables read one stream, the page owns the order it shows, and both worlds write them one way">
     <Tell>I could let each chart and each table keep its own copy of the trades. They would drift from each other
@@ -311,4 +311,4 @@ export const StoreStory: FC = () =>
       <ExchangeIsMiddleware/>
       <WhoSubscribes/>
     </Steps>
-  </Story>;
+  </DrawnStory>;

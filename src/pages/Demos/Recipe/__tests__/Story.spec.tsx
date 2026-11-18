@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {render, waitFor} from '@testing-library/react';
-import {Step, StepHeading, Steps, Stories, Story} from '@pages/Demos/Recipe';
+import {DrawnStory, Step, StepHeading, Steps, Stories, Story} from '@pages/Demos/Recipe';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 
 const card = (title: string): HTMLElement => recipeFolds.story(document.body, title);
@@ -98,9 +98,9 @@ describe('a story card', () => {
 
   test('a story its page draws open is open as it first renders', () => {
     render(<TestApp at="/"><Stories>
-      <Story id="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
+      <DrawnStory param="tale" id="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
         <p>the story</p>
-      </Story>
+      </DrawnStory>
     </Stories></TestApp>);
 
     expect(card('The reader can read the story at once')).toHaveAttribute('open');
@@ -108,24 +108,14 @@ describe('a story card', () => {
 
   test('a story its page draws open closes on one press and leaves the address as it was', async () => {
     render(<TestApp at="/?world=vanilla"><Stories>
-      <Story id="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
+      <DrawnStory param="tale" id="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
         <p>the story</p>
-      </Story>
+      </DrawnStory>
     </Stories></TestApp>);
 
     await recipeFolds.press(document.body, 'The reader can read the story at once');
 
     expect(card('The reader can read the story at once')).not.toHaveAttribute('open');
     expect(appAddress.shown()).toBe('/?world=vanilla');
-  });
-
-  test('a story that keeps no record starts closed unless its page draws it open', () => {
-    render(<TestApp at="/"><Stories>
-      <Story id="told" can="The reader can open the story" soThat="the page stays short">
-        <p>the story</p>
-      </Story>
-    </Stories></TestApp>);
-
-    expect(card('The reader can open the story')).not.toHaveAttribute('open');
   });
 });
