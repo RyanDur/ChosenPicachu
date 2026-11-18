@@ -514,11 +514,11 @@
 
 @media (width <= 600px), (width <= 1100px) and (height <= 600px) {
   :root {
-    --foot-reach: calc(var(--menu-bar-block) + var(--home-indicator));
+    --foot-reach: var(--menu-bar-block);
   }
 
   :root:has(.tabs) {
-    --foot-reach: calc(var(--menu-bar-block) + var(--tab-bar-reach) + var(--home-indicator));
+    --foot-reach: calc(var(--menu-bar-block) + var(--tab-bar-reach));
   }
 
   #root {
@@ -548,7 +548,6 @@
     grid-template-areas: 'feedback menu';
     gap: var(--base);
     padding-block-start: var(--base);
-    padding-block-end: var(--home-indicator);
 
     .feedback-item {
       grid-area: feedback;
@@ -569,7 +568,7 @@
 
     .side-nav:popover-open {
       position: fixed;
-      inset: auto 0 calc(var(--menu-bar-block) + var(--home-indicator));
+      inset: auto 0 var(--menu-bar-block);
       width: 100%;
       max-height: 100dvh;
       display: grid;
