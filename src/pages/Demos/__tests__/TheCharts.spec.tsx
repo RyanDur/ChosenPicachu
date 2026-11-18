@@ -969,7 +969,7 @@ describe('the links to other tabs', () => {
     ]);
   });
 
-  test('should link each term the z-index part on the popover defines to that part’s page, on the tab', async () => {
+  test('should link each term and each cite of Why the popover wins to its page, on the tab', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -982,7 +982,7 @@ describe('the links to other tabs', () => {
     ]);
   });
 
-  test('should link each term the z-index part on the popover defines to that part’s page, on the price chart’s page', async () => {
+  test('should link each cite of Why the popover wins to its page, on the price chart’s page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -995,7 +995,7 @@ describe('the links to other tabs', () => {
     ]);
   });
 
-  test('should link each term the z-index part on the popover defines to that part’s page, on the candles chart’s page', async () => {
+  test('should link each cite of Why the popover wins to its page, on the candles chart’s page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -1006,7 +1006,7 @@ describe('the links to other tabs', () => {
     ]);
   });
 
-  test('should link each term the z-index part on the popover defines to that part’s page, on the pressure chart’s page', async () => {
+  test('should link each cite of Why the popover wins to its page, on the pressure chart’s page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
