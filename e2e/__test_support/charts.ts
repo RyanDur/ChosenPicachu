@@ -13,7 +13,7 @@ const tradeFrame = (id: number, price: number, at: number): string => JSON.strin
 const aMinuteApartEndingNow = (prices: number[]): string[] =>
   prices.map((price, id) => tradeFrame(id, price, Date.now() - (prices.length - 1 - id) * 60_000));
 
-export const scriptedMarket = async (page: Page, prices: number[]): Promise<void> => {
+const scriptedMarket = async (page: Page, prices: number[]): Promise<void> => {
   await page.route(/\/products\/.*\/candles/, route =>
     route.fulfill({json: [], headers: {'access-control-allow-origin': '*'}}));
   await page.routeWebSocket(/ws-feed/, socket => {
@@ -21,7 +21,7 @@ export const scriptedMarket = async (page: Page, prices: number[]): Promise<void
   });
 };
 
-export const feedStillConnecting = async (page: Page, prices: number[]): Promise<{opens: () => void}> => {
+const feedStillConnecting = async (page: Page, prices: number[]): Promise<{opens: () => void}> => {
   const {promise: opened, resolve: opens} = Promise.withResolvers<void>();
   await page.route(/\/products\/.*\/candles/, route =>
     route.fulfill({json: [], headers: {'access-control-allow-origin': '*'}}));
@@ -72,6 +72,8 @@ export const chartsPage = (page: Page) => {
     }};
   };
   return {
+    scriptedMarket: (prices: number[]): Promise<void> => scriptedMarket(page, prices),
+    feedStillConnecting: (prices: number[]): Promise<{opens: () => void}> => feedStillConnecting(page, prices),
     seat,
     doorway: (chart: string): Locator => page.getByRole('link', {name: `${chart} tutorial`, exact: true}),
     carryByTheGrip,

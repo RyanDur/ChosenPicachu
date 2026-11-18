@@ -1,5 +1,5 @@
 export {boxOf} from './box';
-export {chartsPage, feedStillConnecting, scriptedMarket} from './charts';
+export {chartsPage} from './charts';
 export {practicePage} from './practice';
 export {recordPage} from './record';
 export {galleryPage} from './gallery';
