@@ -7,7 +7,7 @@ import {desk} from './desk';
 import {readerSettings} from '../ReaderSettings';
 
 export const useDesk = () => {
-  const {[readerSettings.desk]: charts = 'price', updateSearchParams} = useSearchParamsObject({[readerSettings.desk]: schema.string});
+  const {[readerSettings.deskParam]: charts = 'price', updateSearchParams} = useSearchParamsObject({[readerSettings.deskParam]: schema.string});
   const seats = desk.dealt(charts);
   return {
     seats,
@@ -15,10 +15,10 @@ export const useDesk = () => {
     periodOf: (kind: ChartKind): Period =>
       maybe(seats.find(seat => seat.kind === kind)).map(({period}) => period).orElse(Period.hour),
     choosePeriod: (kind: ChartKind, period: Period) =>
-      updateSearchParams({[readerSettings.desk]: desk.periodChosen(kind, period, seats)}),
-    add: (kind: ChartKind) => updateSearchParams({[readerSettings.desk]: desk.added(kind, seats)}),
-    remove: (at: number) => updateSearchParams({[readerSettings.desk]: desk.without(at, seats)}),
+      updateSearchParams({[readerSettings.deskParam]: desk.periodChosen(kind, period, seats)}),
+    add: (kind: ChartKind) => updateSearchParams({[readerSettings.deskParam]: desk.added(kind, seats)}),
+    remove: (at: number) => updateSearchParams({[readerSettings.deskParam]: desk.without(at, seats)}),
     reorder: (from: number, to: number, options?: {replace?: boolean}) =>
-      updateSearchParams({[readerSettings.desk]: desk.seated(from, to, seats)}, options)
+      updateSearchParams({[readerSettings.deskParam]: desk.seated(from, to, seats)}, options)
   };
 };
