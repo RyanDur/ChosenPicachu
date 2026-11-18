@@ -9,7 +9,6 @@ import {PartPage} from './PartPage';
 import {useShownPart} from './useShownPart';
 
 const TabContents: FC = () => <>
-  <ToMovedAddress/>
   <TablesIntroduction/>
   <Aggregations/>
   <Tutorials/>
@@ -19,5 +18,8 @@ export const Room: FC = () => {
   const part = useShownPart();
   return useShownTutorial().either(
     () => <TutorialPage/>,
-    () => part.either(shown => <PartPage part={shown}/>, () => <TabContents/>));
+    () => <>
+      <ToMovedAddress/>
+      {part.either(shown => <PartPage part={shown}/>, () => <TabContents/>)}
+    </>);
 };

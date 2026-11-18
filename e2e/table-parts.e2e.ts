@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {documentScrollY, pillSwitch, siteFrame, twoFramesLater} from './__test_support';
+import {documentScrollY, pillSwitch, siteFrame, tablesDemo, twoFramesLater} from './__test_support';
 
 test('a reader follows the need and its clues’ foot on to the sketch’s page with the build kept', async ({page}) => {
   await page.goto('demos/tables/the-need-and-its-clues/?world=vanilla');
@@ -22,6 +22,16 @@ test('a reader follows a slice from the slices’ page to the still table’s pa
   await expect(page).toHaveURL(/demos\/tables\/the-still-table\/\?world=vanilla$/);
   await expect(pillSwitch(page, 'world').pill('Vanilla')).toBeChecked();
   await expect(page.getByRole('group', {name: 'The trader can read the market in a table'})).toHaveAttribute('open');
+});
+
+test('a reader who arrives on the live table’s page by a link saved with its stories follows the Tables tab to the tables tab', async ({page}) => {
+  await page.goto('demos/tables/the-live-table-and-the-store/?living=flow%2Cstore&world=vanilla');
+  await siteFrame(page).hydrated();
+
+  await page.getByRole('link', {name: 'Tables', exact: true}).click();
+
+  await expect(page).toHaveURL(/demos\/tables\/\?world=vanilla$/);
+  await expect(tablesDemo(page).tutorials.link('Sort menu')).toBeVisible();
 });
 
 test('a reader who follows a link out of the live table’s page and comes Back is where they were', async ({page}) => {
