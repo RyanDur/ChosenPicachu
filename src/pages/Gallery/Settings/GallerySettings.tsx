@@ -1,10 +1,11 @@
-import {ChangeEvent, FC, useId} from 'react';
+import {ChangeEvent, FC, useContext, useId} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {Search} from '@pages/Gallery/Search';
 import {PageControl} from '@pages/Gallery/PageControl';
-import {useGallery} from '@pages/Gallery/Context';
+import {KnownDoors, useGallery} from '@pages/Gallery/Context';
 import './GallerySettings.css';
 import {museums, sourceParam} from '@pages/Gallery/museums';
+import {doors} from '@pages/Gallery/doors';
 
 const sheet = 'gallery-settings';
 
@@ -23,13 +24,15 @@ const Readout: FC = () => {
 
 const MuseumChoice: FC = () => {
   const {tab, updateSearchParams} = useGallery();
+  const open = doors.openIn(useContext(KnownDoors));
   const choice = useId();
   const chosen = (event: ChangeEvent<HTMLSelectElement>) =>
     maybe(sourceParam.decode(event.currentTarget.value)).map(museum => updateSearchParams({tab: museum}));
   return <>
     <label className="museum-label field bold" htmlFor={choice}>Museum</label>
-    <select id={choice} className="museum-choice field bold ellipsis" value={maybe(tab).orElse('')} onChange={chosen}>
-      {museums.all.map(({display, param}) => <option key={param} value={param}>{display}</option>)}
+    <select id={choice} className="museum-choice card borderless square-cornered ellipsis" value={maybe(tab).orElse('')}
+      onChange={chosen}>
+      {open.map(({display, param}) => <option key={param} value={param}>{display}</option>)}
     </select>
   </>;
 };

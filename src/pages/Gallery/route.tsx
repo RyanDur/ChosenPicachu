@@ -7,13 +7,16 @@ import {GalleryNav} from '@pages/Gallery/Nav';
 import {ArtGalleryPage} from './ArtGalleryPage';
 import {GalleryError} from './GalleryError';
 import {GalleryHeader} from './GalleryHeader';
+import {MuseumDoors} from './MuseumDoors';
 
 export const ErrorBoundary = GalleryError;
 
 export const Room: FC = () =>
   <GalleryProviders gallery={Paths.artGallery}>
-    <GalleryHeader/>
-    <GalleryAside/>
-    <Main><ArtGalleryPage/></Main>
-    <Footer><GalleryNav id="gallery-nav"/></Footer>
+    <MuseumDoors>
+      <GalleryHeader/>
+      <GalleryAside/>
+      <Main><ArtGalleryPage/></Main>
+      <Footer><GalleryNav id="gallery-nav"/></Footer>
+    </MuseumDoors>
   </GalleryProviders>;
