@@ -5,7 +5,8 @@
   .page-pulled-apart {
     float: inline-end;
     inline-size: max(30%, var(--base-x-40));
-    margin: 0 0 var(--base-x-3) var(--base-x-6);
+    margin-block-end: var(--base-x-3);
+    margin-inline-start: var(--base-x-6);
   }
 
   .claim {
