@@ -6,11 +6,18 @@ const article = (): HTMLElement => screen.getByRole('article');
 const drawing = (): HTMLElement => within(article()).getByRole('figure', {name: /^A page, pulled apart\./});
 
 const articleLinkElements = (): HTMLElement[] => within(article()).getAllByRole('link');
+const doors = (): HTMLElement => within(article()).getByRole('list');
+const wordsParagraphs = (): HTMLElement[] => within(article()).getAllByRole('paragraph')
+  .filter(paragraph => not(drawing().contains(paragraph)) && not(doors().contains(paragraph)));
 
 export const homePage = {
   drawing,
-  firstParagraph: (): HTMLElement => within(article()).getAllByRole('paragraph')
-    .filter(paragraph => not(drawing().contains(paragraph)))[0],
+  firstParagraph: (): HTMLElement => wordsParagraphs()[0],
+  lastWordsParagraph: (): HTMLElement => {
+    const paragraphs = wordsParagraphs();
+    return paragraphs[paragraphs.length - 1];
+  },
+  firstDoor: (): HTMLElement => within(doors()).getAllByRole('heading')[0],
   letteringHeard: (words: string[]): string[] =>
     words.filter(word => not(isInaccessible(within(drawing()).getByText(word)))),
   arrived: (): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name: 'The three languages'}),
