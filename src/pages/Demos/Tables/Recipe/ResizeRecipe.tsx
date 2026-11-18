@@ -238,7 +238,10 @@ const WidenStory: FC = () => {
             a <Mdn path="Web/CSS/:has"><code className="monospaced">:has()</code></Mdn> rule on the
             cell pads for what it holds: more room when a menu is present, less when only the
             handle is. It has a cost: the padding and the controls’ offsets are
-            two numbers that must agree, so both live in the one header style sheet and nowhere else.
+            numbers that must agree, and they sit in two style sheets, the table’s for the padding and the handle’s
+            width and the header’s for the sort button’s offset. Under a mouse they miss by 4px: the sort button’s box
+            reaches 4px into the line the name wraps in. The padding that would clear it broke short names mid-word in
+            a narrow column, which every reader sees, so the 4px stays.
             The column names itself with <code className="monospaced">aria-label</code>, since the title is bare text
             with no element to point at.</Says>
           {edgeMarkup[world]}
