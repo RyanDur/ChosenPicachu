@@ -55,7 +55,7 @@ const reduce = (draft: Draft, action: FeedbackChange): Draft => {
     case 'reachEdited':
       return {...draft, reach: action.reach};
     case 'noteSubmitted':
-      return {...draft, sending: {state: 'sending', words: draft.words, reach: draft.reach}};
+      return {...draft, sentNote: {state: 'none'}, sending: {state: 'sending', words: draft.words, reach: draft.reach}};
     case 'noteSent':
       return {...draft, ...unsentWords(draft), sentNote: {state: 'unread', url: action.url}, sending: {state: 'writing'}};
     case 'noteRefused':

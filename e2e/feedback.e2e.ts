@@ -271,6 +271,24 @@ test('a note GitHub refuses stays in the open dialog, and it says so', async ({p
   await expect(feedback.words).toHaveValue('A step does not build.');
 });
 
+test('a second note GitHub refuses leaves no link to the first, and Cancel still reads Cancel', async ({page}) => {
+  await github(page);
+  const feedback = feedbackOn(page);
+  await page.goto('demos/tables/');
+  await feedback.open.click();
+  await feedback.words.pressSequentially('The sort menu hides behind the header.');
+  await feedback.send.click();
+  await expect(feedback.status).toContainText('Sent.');
+  await github(page, {refuse: 'Bad credentials'});
+  await feedback.words.pressSequentially('It also flickers.');
+
+  await feedback.send.click();
+
+  await expect(feedback.status).toHaveText('GitHub turned the request away. Your words are still here.');
+  await expect(feedback.cancel).toBeVisible();
+  await expect(page.getByRole('link', {name: 'Read it on GitHub', includeHidden: true})).toHaveCount(0);
+});
+
 test('the first line links to the page’s own thread', async ({page}) => {
   const feedback = feedbackOn(page);
   await page.goto('demos/accordions/');
