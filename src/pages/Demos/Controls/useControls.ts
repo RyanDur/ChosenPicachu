@@ -1,19 +1,11 @@
 import {useSearchParamsObject} from '@navigation/search-params';
 import {Motion, Origin} from '@components/DragSortableTable';
 import {Placement, unplaced} from '@banners';
-import {inOrder} from './inOrder';
-import {dialParams} from './dial-params';
+import {
+  Address, CardOne, FoldMotion, FoldType, Pace, RaisedCard, readerSettings, Track, World, Worn
+} from '../ReaderSettings';
 
 export type {Motion, Origin};
-export type Pace = 'eager' | 'lazy';
-export type World = 'react' | 'vanilla';
-export type Track = 'pointer' | 'keyboard';
-export type FoldType = 'inclusive' | 'exclusive';
-export type FoldMotion = 'reveal' | 'drawer' | 'static';
-export type RaisedCard = typeof inOrder.raisedCards[number];
-export type CardOne = 'contained' | 'free';
-export type Worn = typeof inOrder.worn[number];
-
 export type Settings = Placement & {
   pace: Pace;
   origin: Origin;
@@ -28,12 +20,6 @@ export type Settings = Placement & {
 };
 
 export type Controls = Settings & {change: (next: Partial<Settings>) => void};
-
-export type Address = Omit<Settings, 'foldType' | 'foldMotion' | 'cardOne'> & {
-  type: FoldType;
-  style: FoldMotion;
-  'card-one': CardOne;
-};
 
 const defaults: Address = {
   pace: 'eager',
@@ -50,7 +36,7 @@ const defaults: Address = {
 };
 
 export const useControls = (): Controls => {
-  const {type, style, 'card-one': cardOne, ...found} = useSearchParamsObject(dialParams.decoders, defaults);
+  const {type, style, 'card-one': cardOne, ...found} = useSearchParamsObject(readerSettings.decoders, defaults);
   return {
     ...found,
     foldType: type,

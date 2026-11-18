@@ -1,5 +1,6 @@
 import {FC} from 'react';
-import {DialRow, FoldMotion, useControls} from '../Controls';
+import {DialRow, useControls} from '../Controls';
+import {FoldMotion} from '../ReaderSettings';
 
 const foldMotions = [
   {words: 'Reveal', value: 'reveal'},

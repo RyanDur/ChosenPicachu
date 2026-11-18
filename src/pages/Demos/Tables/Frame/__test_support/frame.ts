@@ -3,7 +3,8 @@ import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {environment} from '@transport';
 import {Feed} from '@pages/Demos/__test_support/feed';
-import type {Motion, Origin, Pace} from '../../../Controls';
+import type {Motion, Origin} from '../../../Controls';
+import type {Pace} from '../../../ReaderSettings';
 import {startingTable} from '../starting';
 import {boot} from '../boot';
 

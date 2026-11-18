@@ -3,7 +3,7 @@ import {DemoTopics} from '@pages/Demos';
 import {FC, ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, DrawnStory, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
-import type {World} from '../../Controls';
+import type {World} from '../../ReaderSettings';
 import {StoreStory} from './StoreRecipe';
 import {livingStories} from '../living-stories';
 import exchangeSource from '@pages/Demos/Market/exchange.ts?sample';

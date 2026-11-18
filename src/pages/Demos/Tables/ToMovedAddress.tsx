@@ -5,7 +5,7 @@ import {useHydrated} from '@components';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {livingStories} from './living-stories';
-import {dialParams} from '../Controls';
+import {readerSettings} from '../ReaderSettings';
 
 const tutorialParam = 'tut';
 
@@ -36,7 +36,7 @@ export const ToMovedAddress: FC = () => {
   const [params] = useSearchParams();
   const location = useLocation();
   const hydrated = useHydrated();
-  const dials = dialParams.keptFrom(params);
+  const dials = readerSettings.keptFrom(params);
   return pageForFragment(location.hash)
     .or(() => pageForNamedTutorial(params))
     .or(() => pageForNamedStory(params, location))

@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import type {World} from '../../Controls';
+import type {World} from '../../ReaderSettings';
 import {useControls} from '../../Controls';
 
 const worldCopy: Record<World, string> = {

@@ -1,5 +1,6 @@
 import {FC} from 'react';
-import {Motion, Origin, Pace, useControls} from '../../../Controls';
+import {Motion, Origin, useControls} from '../../../Controls';
+import {Pace} from '../../../ReaderSettings';
 import {Tell} from '../../../Recipe';
 
 const paces: Record<Pace, string> = {

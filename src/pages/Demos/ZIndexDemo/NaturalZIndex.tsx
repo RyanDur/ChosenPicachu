@@ -2,7 +2,8 @@ import {FC, useState} from 'react';
 import {not} from '@ryandur/sand';
 import {PillGlider} from '@components/PillGlider';
 import {classNames, PropsWithClassName} from '@components';
-import {inOrder, RaisedCard, useControls} from '../Controls';
+import {useControls} from '../Controls';
+import {inOrder, RaisedCard} from '../ReaderSettings';
 import './ZIndexDemo.css';
 
 const words: Record<RaisedCard, string> = {none: 'None', first: 'First', second: 'Second', third: 'Third'};

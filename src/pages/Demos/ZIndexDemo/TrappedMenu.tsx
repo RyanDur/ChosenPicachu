@@ -4,7 +4,8 @@ import {Maybe, nothing, some, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
 import {TopLayerMenu} from './TopLayerMenu';
-import {CardOne, useControls} from '../Controls';
+import {useControls} from '../Controls';
+import {CardOne} from '../ReaderSettings';
 import './ZIndexDemo.css';
 
 type Opened = CardOne | 'top layer';

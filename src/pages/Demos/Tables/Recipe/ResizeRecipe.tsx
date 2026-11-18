@@ -1,7 +1,7 @@
 import {FC, ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
-import type {World} from '../../Controls';
+import type {World} from '../../ReaderSettings';
 import {Term} from './Term';
 import sharesSource from '@components/DragSortableTable/model/shares.ts?sample';
 import resizeSource from '@components/DragSortableTable/ResizeHandle.tsx?sample';

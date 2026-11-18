@@ -1,7 +1,8 @@
 import {maybe} from '@ryandur/sand';
 import {unconfigured} from '@transport';
 import {arrangements} from '@components/DragSortableTable/model';
-import type {Dials, Pace} from '../../Controls';
+import type {Dials} from '../../Controls';
+import type {Pace} from '../../ReaderSettings';
 import {exchange, marketActions, marketReads, marketStore, Measures} from '@pages/Demos/Market';
 import {builds} from './builds';
 

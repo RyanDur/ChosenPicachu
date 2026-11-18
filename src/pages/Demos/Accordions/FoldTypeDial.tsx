@@ -1,5 +1,6 @@
 import {FC} from 'react';
-import {DialRow, FoldType, useControls} from '../Controls';
+import {DialRow, useControls} from '../Controls';
+import {FoldType} from '../ReaderSettings';
 
 const foldTypes = [{words: 'Inclusive', value: 'inclusive'}, {words: 'Exclusive', value: 'exclusive'}] as const;
 

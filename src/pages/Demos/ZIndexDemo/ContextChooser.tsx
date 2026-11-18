@@ -3,7 +3,8 @@ import {useHydrated} from '@components';
 import {Maybe, nothing, some, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
-import {inOrder, useControls, Worn} from '../Controls';
+import {useControls} from '../Controls';
+import {inOrder, Worn} from '../ReaderSettings';
 
 const property: Record<Worn, string> = {
   nothing: 'nothing',

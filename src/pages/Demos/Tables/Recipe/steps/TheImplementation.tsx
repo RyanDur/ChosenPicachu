@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {repository} from '@navigation';
 import {Tell} from '../../../Recipe';
 import {useControls} from '../../../Controls';
-import type {World} from '../../../Controls';
+import type {World} from '../../../ReaderSettings';
 
 const sourceOf = (world: World, path: string): string => world === 'react'
   ? repository.directory(`src/pages/Demos/Tables/${path}`)

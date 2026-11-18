@@ -1,10 +1,7 @@
 export type {Copy, Dials} from './Controls';
-export type {Motion, Origin, Pace, World} from './useControls';
+export type {Motion, Origin} from './useControls';
 export {Controls} from './Controls';
 export {useControls} from './useControls';
-export {dialParams} from './dial-params';
-export {inOrder} from './inOrder';
-export type {CardOne, FoldMotion, FoldType, RaisedCard, Worn} from './useControls';
 export {DialGroup} from './DialGroup';
 export {DialRow} from './DialRow';
 export {PaceDial} from './PaceDial';

@@ -1,4 +1,4 @@
-import type {Pace} from '../../Controls';
+import type {Pace} from '../../ReaderSettings';
 import eager from '../Frame/builds/Eager.ts?sample';
 import lazy from '../Frame/builds/Lazy.ts?sample';
 import {Sample} from '../../Recipe';
