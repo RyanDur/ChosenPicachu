@@ -3,7 +3,7 @@ const {motion} = require('./scripts/lint/motion.mjs');
 
 const structure = [
   'display', '/^grid/', '/^flex/', 'gap', 'row-gap', 'column-gap', 'order',
-  'position', 'float', '/^inset/', 'top', 'right', 'bottom', 'left', 'z-index', '/^position-/', 'anchor-name',
+  'position', 'float', 'clear', '/^inset/', 'top', 'right', 'bottom', 'left', 'z-index', '/^position-/', 'anchor-name',
   '/^padding/', '/^margin/', 'box-sizing',
   'width', 'height', '/^min-/', '/^max-/', 'inline-size', 'block-size', 'aspect-ratio',
   '/^align-/', '/^justify-/', '/^place-/',
