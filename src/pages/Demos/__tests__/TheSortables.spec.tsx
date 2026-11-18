@@ -98,6 +98,17 @@ describe('the sortable list demo', () => {
     expect(recipeFolds.story(recipe, 'The user can arrange the list from the keyboard')).not.toHaveAttribute('open');
   });
 
+  test('pressing the tab the reader is on leaves its open stories open', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('drag-and-drop', '?native=sort')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await dragSortTab.recipe();
+
+    await demoTabs.open('Drag sort');
+
+    expect(recipeFolds.story(await dragSortTab.recipe(), 'The user can arrange the list by hand')).toHaveAttribute('open');
+  });
+
   test('the list starts eager, hiding and animated, and says so', async () => {
     const feed = await listeningFeed();
 
