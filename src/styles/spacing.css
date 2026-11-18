@@ -59,7 +59,7 @@
 
   --pointer-reach: var(--base-x-3);
   --finger-reach: var(--base-x-5_5);
-  --menu-bar-block: calc(var(--finger-reach) + var(--base));
+  --menu-bar-block: calc(var(--base-x-5_5) + var(--base));
   --foot-reach: 0px;
   --tab-bar-reach: var(--base-x-10);
 
