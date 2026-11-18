@@ -18,6 +18,12 @@
 .paragraph {
   font-size: var(--text-body);
   line-height: 1.55;
+
+  @media (pointer: coarse) {
+    &:has([type='button']) {
+      line-height: var(--base-x-3);
+    }
+  }
 }
 
 .caption {
