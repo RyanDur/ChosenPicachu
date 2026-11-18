@@ -61,13 +61,13 @@ describe('the accordions tab', () => {
 });
 
 describe('the fold choices', () => {
-  test('should answer the drawer, through the fold motion dial, with what it does and what a reader who asks for less motion gets', async () => {
+  test('should answer the drawer, through the fold motion dial, with what it does on the part pages and what a reader who asks for less motion gets there', async () => {
     render(<TestApp at={demosAt('accordions', '?style=drawer')}/>);
 
     const reading = accordionsTab.readingIn(await accordionsTab.choiceRow('fold motion'));
 
-    expect(reading).toHaveTextContent('The text slides down from under its bar.');
-    expect(reading).toHaveTextContent('If your system asks for less motion, every fold here opens at once, whichever you choose.');
+    expect(reading).toHaveTextContent('On the part pages, the text slides down from under its bar.');
+    expect(reading).toHaveTextContent('If your system asks for less motion, every fold on the part pages opens at once, whichever you choose.');
   });
 
   test('should read the chosen fold type, and read the other once it is chosen', async () => {
@@ -82,31 +82,31 @@ describe('the fold choices', () => {
     expect(accordionsTab.readingIn(row)).toHaveTextContent('Any number of folds can be open at once.');
   });
 
-  test('should read Reveal as the fold motion once it is chosen over static', async () => {
+  test('should read Reveal as the fold motion on the part pages once it is chosen over static', async () => {
     render(<TestApp at={demosAt('accordions', '?style=static')}/>);
 
     const row = await accordionsTab.choiceRow('fold motion');
     await accordionsTab.choose('fold motion', 'Reveal');
 
-    expect(accordionsTab.readingIn(row)).toHaveTextContent('The text is uncovered from its first line down.');
+    expect(accordionsTab.readingIn(row)).toHaveTextContent('On the part pages, the text is uncovered from its first line down.');
   });
 
-  test('should read Drawer as the fold motion once it is chosen over static', async () => {
+  test('should read Drawer as the fold motion on the part pages once it is chosen over static', async () => {
     render(<TestApp at={demosAt('accordions', '?style=static')}/>);
 
     const row = await accordionsTab.choiceRow('fold motion');
     await accordionsTab.choose('fold motion', 'Drawer');
 
-    expect(accordionsTab.readingIn(row)).toHaveTextContent('The text slides down from under its bar.');
+    expect(accordionsTab.readingIn(row)).toHaveTextContent('On the part pages, the text slides down from under its bar.');
   });
 
-  test('should read Static as the fold motion once it is chosen over reveal', async () => {
+  test('should read Static as the fold motion on the part pages once it is chosen over reveal', async () => {
     render(<TestApp at={demosAt('accordions', '?style=reveal')}/>);
 
     const row = await accordionsTab.choiceRow('fold motion');
     await accordionsTab.choose('fold motion', 'Static');
 
-    expect(accordionsTab.readingIn(row)).toHaveTextContent('The fold opens at once, with nothing moving.');
+    expect(accordionsTab.readingIn(row)).toHaveTextContent('On the part pages, the fold opens at once, with nothing moving.');
   });
 });
 

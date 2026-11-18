@@ -91,7 +91,7 @@ export const AccordionsExplained: FC = () => {
         browser can, and the accordion above turns that off, so you see what HTML alone does.</p>
       <DialGroup>
         <FoldTypeDial/>
-        <FoldMotionDial/>
+        <FoldMotionDial forThePartPages/>
       </DialGroup>
     </section>
     <section aria-labelledby="old-way-heading" className="accordion-part">

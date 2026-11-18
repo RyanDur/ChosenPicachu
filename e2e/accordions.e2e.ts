@@ -168,20 +168,20 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
   });
 }
 
-const lessMotion = 'If your system asks for less motion, every fold here opens at once, whichever you choose.';
+const lessMotion = 'If your system asks for less motion, every fold on the part pages opens at once, whichever you choose.';
 
 for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone', device: iPhone}]) {
   test.describe(reader, () => {
     test.use(device);
 
-    test('the fold motion reads the chosen pill, and reads that no fold moves once the reader asks for less motion', async ({page}) => {
+    test('the fold motion on the tab reads the chosen pill for the part pages, and reads that no fold there moves once the reader asks for less motion', async ({page}) => {
       await page.emulateMedia({reducedMotion: 'no-preference'});
       await page.goto('demos/accordions/?style=drawer');
       const {reading} = dialRow(page, 'fold motion');
       await reading.scrollIntoViewIfNeeded();
 
-      await expect(reading).toHaveText('The text slides down from under its bar.', {useInnerText: true});
-      await expect(reading).toMatchAriaSnapshot('- status: The text slides down from under its bar.');
+      await expect(reading).toHaveText('On the part pages, the text slides down from under its bar.', {useInnerText: true});
+      await expect(reading).toMatchAriaSnapshot('- status: On the part pages, the text slides down from under its bar.');
 
       await page.emulateMedia({reducedMotion: 'reduce'});
 
