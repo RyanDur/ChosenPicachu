@@ -8,7 +8,7 @@ import {sources} from './sources';
 const shareMarkup: Record<World, ReactNode> = {
   react: <Snippet label="HTML" lines={[
     lines.plain('<table><thead><tr><th scope="col">lookback</th> ...'),
-    lines.plain('<button className="grip" tabIndex={0} aria-label="move row 2"><Handle/></button>'),
+    lines.plain('<button className="grip grabbable" tabIndex={0} disabled={not(hydrated)} aria-label="move row 2"><Handle/></button>'),
     lines.plain('<button className="resize-handle" tabIndex={0} aria-label="resize trades, 24%"/>')
   ]}/>,
   vanilla: <Snippet label="HTML" lines={[
@@ -44,8 +44,9 @@ export const CssShare: FC = () => {
         they
         do, <code className="monospaced">data-row-grip</code> and <code className="monospaced">data-resize-handle</code>, and <code className="monospaced">dragSortable</code> attaches the
         behavior to each when boot calls it.</Says>}
-      {world === 'react' && <Says>In the React build both buttons are disabled until the page’s script runs, so the grip
-        offers no grab hand and the handle no resize cursor.</Says>}
+      {world === 'react' && <Says>In the React build the grip
+        carries <code className="monospaced">disabled={'{'}not(hydrated){'}'}</code>: it is disabled until the page’s
+        script runs, and the style sheet sets the grab hand only on what isn’t disabled.</Says>}
       <Says>JavaScript is left holding only what CSS cannot: one measurement, some arithmetic,
         and the order.</Says>
       <Codes>
