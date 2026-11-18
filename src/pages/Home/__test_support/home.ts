@@ -9,8 +9,8 @@ const openerLinkElements = (): HTMLElement[] => within(screen.getByRole('article
 
 export const homePage = {
   drawing,
-  prose: (): HTMLElement[] => within(article()).getAllByRole('paragraph')
-    .filter(paragraph => not(drawing().contains(paragraph))),
+  claim: (): HTMLElement => within(article()).getAllByRole('paragraph')
+    .filter(paragraph => not(drawing().contains(paragraph)))[0],
   openerLink: (name: string): HTMLElement => within(article()).getByRole('link', {name}),
   letteringHeard: (words: string[]): string[] =>
     words.filter(word => not(isInaccessible(within(drawing()).getByText(word)))),
