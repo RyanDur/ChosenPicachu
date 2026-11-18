@@ -34,8 +34,10 @@ describe('why a fixed banner still loses, on its own page', () => {
 
   test('should show the two Raise a banner buttons it explains', async () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
+    const banners = await bannerExhibit.find();
 
-    expect(await bannerExhibit.find()).toBeInTheDocument();
+    expect(bannerExhibit.button(banners, 'Raise a banner, the old way')).toBeInTheDocument();
+    expect(bannerExhibit.button(banners, 'Raise a banner, the site’s own')).toBeInTheDocument();
   });
 
   test('should ask which card is on top', async () => {
