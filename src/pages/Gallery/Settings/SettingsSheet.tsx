@@ -9,6 +9,14 @@ const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: Keyboa
   if (event.key === 'Enter') apply(event.currentTarget);
 };
 
+const refusedSaysWhy = (field: HTMLInputElement): boolean => field.reportValidity();
+
+const refusedGoesBack = (field: HTMLInputElement): boolean => {
+  if (field.checkValidity()) return true;
+  field.value = field.defaultValue;
+  return false;
+};
+
 const MuseumRow: FC = () => {
   const {tab, updateSearchParams} = useGallery();
   const open = doors.openIn(useContext(KnownDoors));
@@ -50,37 +58,36 @@ const SearchRow: FC = () => {
 
 const movedTo = {preventScrollReset: false};
 
-const appliedNumber = (input: HTMLInputElement, shown: number, apply: (value: number) => void) => {
-  if (input.valueAsNumber === shown) return;
-  if (input.checkValidity()) apply(input.valueAsNumber);
-  else input.value = input.defaultValue;
-};
+const applyingNumber = (shown: number, apply: (value: number) => void) =>
+  (accepted: (field: HTMLInputElement) => boolean) => (input: HTMLInputElement): void => {
+    if (input.valueAsNumber !== shown && accepted(input)) apply(input.valueAsNumber);
+  };
 
 const SizeRow: FC = () => {
   const {size, updateSearchParams} = useGallery();
   const field = useId();
-  const apply = (input: HTMLInputElement) =>
-    appliedNumber(input, size, perPage => updateSearchParams({size: perPage}, movedTo));
+  const applying = applyingNumber(size, perPage => updateSearchParams({size: perPage}, movedTo));
 
   return <>
     <label className="sheet-label field bold" htmlFor={field}>Per page</label>
     <input type="number" id={field} min={1} max={100} required enterKeyHint="go"
       className="sheet-field bare card" defaultValue={size}
-      onKeyDown={whenEntered(apply)} onBlur={event => apply(event.currentTarget)}/>
+      onKeyDown={whenEntered(applying(refusedSaysWhy))}
+      onBlur={event => applying(refusedGoesBack)(event.currentTarget)}/>
   </>;
 };
 
 const PageRow: FC = () => {
   const {page, pagination, updateSearchParams} = useGallery();
   const field = useId();
-  const apply = (input: HTMLInputElement) =>
-    appliedNumber(input, page, to => updateSearchParams({page: to}, movedTo));
+  const applying = applyingNumber(page, to => updateSearchParams({page: to}, movedTo));
 
   return <>
     <label className="sheet-label field bold" htmlFor={field}>Page</label>
     <input type="number" id={field} min={1} max={pagination.map(({totalPages}) => totalPages).orElse(undefined)}
       required enterKeyHint="go" className="sheet-field bare card" defaultValue={page}
-      onKeyDown={whenEntered(apply)} onBlur={event => apply(event.currentTarget)}/>
+      onKeyDown={whenEntered(applying(refusedSaysWhy))}
+      onBlur={event => applying(refusedGoesBack)(event.currentTarget)}/>
   </>;
 };
 

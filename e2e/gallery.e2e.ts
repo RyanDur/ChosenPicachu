@@ -192,7 +192,7 @@ for (const {reader, device} of handhelds) {
       await expect(page).toHaveURL(/size=12/);
     });
 
-    test('puts back the page it is on when the page typed is past the last', async ({page}) => {
+    test('puts back the page it is on when the reader leaves a page past the last', async ({page}) => {
       const gallery = galleryPage(page);
       await gallery.answerEveryWallFromTheRecording();
       await page.goto('gallery/?tab=vam&page=3');
@@ -200,9 +200,24 @@ for (const {reader, device} of handhelds) {
       await gallery.openSettings();
       await gallery.pageNumber.fill('999999');
 
-      await gallery.pageNumber.press('Enter');
+      await gallery.pageNumber.press('Tab');
 
       await expect(gallery.pageNumber).toHaveValue('3');
+      await expect(page).toHaveURL(/page=3/);
+    });
+
+    test('keeps a refused page in the field on Enter, for the browser to say why, with the gallery where it was', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam&page=3');
+      await expect(gallery.count).toHaveText(/^Page 3 of /);
+      await gallery.openSettings();
+      await gallery.pageNumber.fill('0');
+
+      await gallery.pageNumber.press('Enter');
+
+      await expect(gallery.pageNumber).toHaveValue('0');
+      await expect(gallery.pageNumber).toBeFocused();
       await expect(page).toHaveURL(/page=3/);
     });
 
