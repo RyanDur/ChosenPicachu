@@ -1,7 +1,8 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support';
-import {zIndexMap} from '@pages/Demos/ZIndexDemo/__test_support';
+import {bookMap, demosAt} from '@pages/Demos/__test_support';
+
+const zIndexMap = bookMap('the z-index map');
 
 const raised = '?raised=second';
 const everyPart = [

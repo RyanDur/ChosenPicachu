@@ -1,7 +1,9 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support';
-import {tablesMap} from '@pages/Demos/Tables/__test_support';
+import {bookMap, demosAt} from '@pages/Demos/__test_support';
+import {untilTheTablesTabRenders} from '@pages/Demos/Tables/__test_support';
+
+const tablesMap = bookMap('the tables map', untilTheTablesTabRenders);
 
 const vanilla = '?world=vanilla';
 const everyPart = [

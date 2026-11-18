@@ -2,7 +2,6 @@ export {bannerExhibit} from './bannerExhibit';
 export {oldBanner} from './oldBanner';
 export {siteBanners} from './banners';
 export {wearsChooser} from './chooser';
-export {zIndexMap} from './map';
 export {stackingPile} from './pile';
 export {exhibit} from './steps';
 export {zIndexTab} from './tab';

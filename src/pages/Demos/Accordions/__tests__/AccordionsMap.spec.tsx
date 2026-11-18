@@ -1,7 +1,8 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support';
-import {accordionsMap} from '@pages/Demos/Accordions/__test_support/map';
+import {bookMap, demosAt} from '@pages/Demos/__test_support';
+
+const accordionsMap = bookMap('the accordions map');
 
 const chosen = '?type=inclusive&style=drawer';
 const everyPart = [
