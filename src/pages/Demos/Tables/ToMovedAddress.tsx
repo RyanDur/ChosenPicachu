@@ -2,7 +2,6 @@ import {FC} from 'react';
 import {Location, Navigate, useLocation, useSearchParams} from 'react-router';
 import {empty, Maybe, maybe} from '@ryandur/sand';
 import {useHydrated} from '@components';
-import {storyKeys} from '../Recipe';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {livingStories} from './living-stories';
@@ -22,7 +21,7 @@ const tutorialNamed = (params: URLSearchParams): Maybe<string> =>
 
 const pageTelling = (story: string): Maybe<string> => maybe(tellers.get(story)).map(tableParts.addressOf);
 
-const titleOf = (story: string): string => `#${storyKeys.anchorOf({param: livingStories.param, id: story})}`;
+const titleOf = (story: string): string => `#${livingStories.titleIdOf(story)}`;
 
 const storyTitled = (hash: string): Maybe<string> =>
   maybe([...tellers.keys()].find(story => titleOf(story) === hash)).mBind(pageTelling);

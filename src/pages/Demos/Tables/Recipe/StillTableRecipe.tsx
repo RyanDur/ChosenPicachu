@@ -123,7 +123,7 @@ const dealCodes: Record<World, ReactNode> = {
 
 const StillStory: FC = () => {
   const {world} = useControls();
-  return <DrawnStory param={livingStories.param} id={livingStories.ids.still} open
+  return <DrawnStory titleId={livingStories.titleIdOf(livingStories.ids.still)} open
     can="The trader can read the market in a table"
     soThat="the shape is right before anything moves">
     <TheImplementation react="Aggregations" vanilla="Frame/frame.main.ts"/>
