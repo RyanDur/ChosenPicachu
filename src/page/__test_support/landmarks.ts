@@ -1,13 +1,12 @@
 import {screen} from '@testing-library/react';
 import {computeAccessibleName} from 'dom-accessibility-api';
+import {namedSite} from '@pages/__test_support/site';
 
 export type Landmark = readonly [role: string, name: string];
 
 const roles = ['banner', 'navigation', 'region', 'complementary', 'search', 'form', 'main', 'contentinfo'] as const;
 
 const asOnADesk = {hidden: true};
-
-const siteNav = (): HTMLElement => screen.getByLabelText('site');
 
 const ofTheFrame = (element: HTMLElement): boolean => !element.parentElement?.closest('main');
 
@@ -18,7 +17,7 @@ export const landmarks = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('main'),
   footerArrived: (): Promise<HTMLElement> => screen.findByRole('contentinfo'),
   ofTheFrame: (): Landmark[] => {
-    const nav = siteNav();
+    const nav = screen.getByRole('navigation', namedSite);
     return [
       {role: 'navigation', element: nav},
       ...roles.flatMap(role => screen.queryAllByRole(role)
