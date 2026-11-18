@@ -21,7 +21,8 @@ export const LetsBuildThisFeature: FC = () => {
   return <>
     <p className="overview paragraph">
       We are going to build this site’s banner: the panel that carries the news, whatever the news is. Elsewhere on
-      this site it reports real trouble. On this page, the Raise a banner button under the dials raises random nonsense
+      this site it reports real trouble. On this page, the <TabLink to={DemoTopics.accordions}>dials</TabLink> are
+      controls that set how the banner behaves, and the Raise a banner button under them raises random nonsense
       so you can watch the mechanics. This part assumes what <PartLink part="why-third-is-on-top"/> through <PartLink
         part="why-a-fixed-banner-still-loses"/> give: what a z-index does and where it stops counting, and the component,
       state and event that <PartLink part="why-the-popover-wins"/> explains. The banner sets a z-index, and where it sits
@@ -77,7 +78,7 @@ export const LetsBuildThisFeature: FC = () => {
     <p className="overview paragraph">
       Every card below is one of those stories, shortened. Its headline says who gets what and its second line says why;
       the steps inside say what each conversation settled, with the real code from this site, so what you read is what
-      runs. Its confirmation is a journey this site runs. The <TabLink to={DemoTopics.accordions}>dials</TabLink> place
+      runs. Its confirmation is a journey this site runs. The dials place
       the stack, choose its entrance and pick how it grows. Where a step depends on a dial, that dial sits on the
       step. The links go to MDN, if you want more.
     </p>
