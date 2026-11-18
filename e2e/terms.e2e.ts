@@ -1,15 +1,27 @@
 import {Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {definedTerm, desktop, iPhone, pressTab, timesShut, whatHappened} from './__test_support';
+import {definedTerm, desktop, iPhone, pressTab, siteFrame, timesShut, whatHappened} from './__test_support';
 
-const aTapShowsTheDefinition = async (page: Page, tab: string, story: string, term: string): Promise<void> => {
-  await page.goto(`demos/${tab}/`);
+const aTapShows = async (page: Page, story: string, term: string): Promise<void> => {
   const {word, definition} = await definedTerm(page, story, term);
 
   await word.tap();
 
   await expect(definition).toBeVisible();
 };
+
+const aTapShowsTheDefinition = async (page: Page, tab: string, story: string, term: string): Promise<void> => {
+  await page.goto(`demos/${tab}/`);
+  await aTapShows(page, story, term);
+};
+
+const aTapInAStoryOpenedByATapShowsTheDefinition =
+  async (page: Page, tab: string, story: string, term: string): Promise<void> => {
+    await page.goto(`demos/${tab}/`);
+    await siteFrame(page).hydrated();
+    await page.getByRole('heading', {name: story, exact: true}).tap();
+    await aTapShows(page, story, term);
+  };
 
 test.describe('a phone', () => {
   test.use(iPhone);
@@ -20,11 +32,11 @@ test.describe('a phone', () => {
 
   test('a tap on middleware shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables/the-live-table-and-the-store', 'The page is a store, and so is the table', 'middleware'));
 
-  test('a tap on survey shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables/sort', 'The trader can sort by column', 'survey'));
+  test('a tap on survey, in a story opened by a tap, shows its definition', ({page}) => aTapInAStoryOpenedByATapShowsTheDefinition(page, 'tables/sort', 'The trader can sort by column', 'survey'));
 
   test('a tap on reducer shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables/the-live-table-and-the-store', 'The page is a store, and so is the table', 'reducer'));
 
-  test('a tap on crossing shows its definition', ({page}) => aTapShowsTheDefinition(page, 'drag-and-drop', 'The user can arrange the list by hand', 'crossing'));
+  test('a tap on crossing, in a story opened by a tap, shows its definition', ({page}) => aTapInAStoryOpenedByATapShowsTheDefinition(page, 'drag-and-drop', 'The user can arrange the list by hand', 'crossing'));
 });
 
 test.describe('a phone, with a definition open', () => {
