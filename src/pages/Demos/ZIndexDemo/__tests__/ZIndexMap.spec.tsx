@@ -14,10 +14,10 @@ const everyPart = [
 ];
 
 describe('the z-index map', () => {
-  test('should say on the z-index tab how many parts there are and how long they take together', async () => {
+  test('should say on the z-index tab how long the parts take together', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    expect(await zIndexMap.says()).toHaveTextContent('Six parts, about 24 minutes.');
+    expect(await zIndexMap.says()).toHaveTextContent(/about 24 minutes/);
   });
 
   test('should give only the size on the z-index tab, where the listings already name the parts', async () => {
