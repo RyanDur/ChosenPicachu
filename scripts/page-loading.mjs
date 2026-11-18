@@ -5,7 +5,7 @@ import {maybe} from '@ryandur/sand';
 /**
  * @param {string} client
  * @param {string} base
- * @return {(html: string, entry: string, rooms: string[]) => string}
+ * @return {{page: (html: string, rooms: string[]) => string, fallback: (html: string) => string}}
  */
 export const pageLoading = (client, base) => {
   /** @type {Record<string, {file: string, imports?: string[]}>} */
@@ -23,12 +23,23 @@ export const pageLoading = (client, base) => {
     return into;
   };
 
-  return (html, entry, rooms) => {
+  /**
+   * @param {string} html
+   * @param {string} entry
+   * @param {string[]} rooms
+   * @return {string}
+   */
+  const loaded = (html, entry, rooms) => {
     const chunks = [entry, ...rooms.map(room => `src/${room}`)].reduce((into, chunk) => withImports(chunk, into), new Set());
     const preloads = [...chunks].map(chunk => `<link rel="modulepreload" href="${base}${manifest[chunk].file}"/>`);
     const sheet = `<link rel="stylesheet" href="${base}${manifest['style.css'].file}"/>`;
     return html
       .replace('</head>', `${preloads.join('')}${sheet}</head>`)
       .replace('</body>', `<script type="module" src="${base}${manifest[entry].file}"></script></body>`);
+  };
+
+  return {
+    page: (html, rooms) => loaded(html, 'src/entry.client.tsx', rooms),
+    fallback: html => loaded(html, 'src/entry.fallback.tsx', [])
   };
 };

@@ -42,10 +42,10 @@ const renderedPages = async () => {
     isOne: path => prerender.pages.includes(`${path}/`),
     answer: async path => {
       if (not(prerender.pages.includes(path))) {
-        return {status: 404, html: loading(await prerender.fallback(), 'src/entry.fallback.tsx', [])};
+        return {status: 404, html: loading.fallback(await prerender.fallback())};
       }
       const {html, rooms} = await prerender.page(path);
-      return {status: 200, html: loading(html, 'src/entry.client.tsx', rooms)};
+      return {status: 200, html: loading.page(html, rooms)};
     },
     caching: drawnFresh
   };
