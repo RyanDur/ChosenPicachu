@@ -255,12 +255,12 @@ describe('the stub stage rendering on request', () => {
     expect(answer).toContain('the users page would not draw');
   });
 
-  test('should serve the build’s own environment, the values its pages were drawn with', async () => {
+  test('should serve the stage’s own environment, never the one the build was made with', async () => {
     const {stage, port} = await stageUp({STAGE_RENDER: 'on', STAGE_SITE: aBuildThatDrawsAUsersPage()});
 
     const answer = await answerTo(port, get('/ChosenPicachu/env.js'));
     stage.kill();
 
-    expect(answer).toContain('"tradeProduct": "the build’s own"');
+    expect(answer).toContain('"feedbackToken":"recorded"');
   });
 });
