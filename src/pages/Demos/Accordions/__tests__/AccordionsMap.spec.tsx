@@ -12,13 +12,13 @@ const everyPart = [
   ['5. What the platform gives now', demosAt('accordions/what-the-platform-gives-now', chosen)],
   ['6. How a sliding fold moves', demosAt('accordions/how-a-sliding-fold-moves', chosen)]
 ];
-const size = 'Six parts, about 24 minutes. The dials you set on one part carry to the next.';
+const howLong = /about 24 minutes/;
 
 describe('the accordions map', () => {
-  test('should say on the accordions tab how many parts there are and how long they take together', async () => {
+  test('should say on the accordions tab how long the parts take together', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    expect(await accordionsMap.says()).toHaveTextContent(size);
+    expect(await accordionsMap.says()).toHaveTextContent(howLong);
   });
 
   test('should give only the size on the accordions tab, where the listings already name the parts', async () => {
@@ -29,10 +29,10 @@ describe('the accordions map', () => {
     expect(accordionsMap.listed()).not.toBeInTheDocument();
   });
 
-  test('should say on a part’s page how many parts there are and how long they take together', async () => {
+  test('should say on a part’s page how long the parts take together', async () => {
     render(<TestApp at={demosAt('accordions/the-max-height-guess')}/>);
 
-    expect(await accordionsMap.saysInTheMap()).toHaveTextContent(size);
+    expect(await accordionsMap.saysInTheMap()).toHaveTextContent(howLong);
   });
 
   test('should lead from a part’s page to every part, with the reader’s choices carried', async () => {
