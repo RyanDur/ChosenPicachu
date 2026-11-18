@@ -8,7 +8,10 @@ const order: ('None' | Card)[] = ['None', 'First', 'Second', 'Third'];
 export const stackingPile = (page: Page) => {
   const pile = page.getByRole('figure', {name: /^The pile\./});
   const raisedGroup = pile.getByRole('group', {name: 'card raised'});
+  const expander = pile.getByRole('button', {name: 'Expand'});
   return {
+    expander,
+    collapser: pile.getByRole('button', {name: 'Collapse'}),
     cards: () => pile.getByRole('listitem'),
     cardsFromTheTop: (): Promise<string[]> => pile.getByRole('list').evaluate(list => {
       list.scrollIntoView({block: 'center'});
@@ -31,7 +34,7 @@ export const stackingPile = (page: Page) => {
     },
     expand: async (): Promise<void> => {
       await siteFrame(page).hydrated();
-      await pile.getByRole('button', {name: 'Expand'}).click();
+      await expander.click();
     },
     collapse: async (): Promise<void> => {
       await siteFrame(page).hydrated();

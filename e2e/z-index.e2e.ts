@@ -1,7 +1,7 @@
 import {Page, expect} from '@playwright/test';
 import {maybe} from '@ryandur/sand';
 import {test} from './__test_support/journey';
-import {type Card, siteFrame, stackingPile, whichCardIsOnTop} from './__test_support';
+import {type Card, hydration, siteFrame, stackingPile, whichCardIsOnTop} from './__test_support';
 
 test('the z-index cards start in a stack, the button spreads them, and pressing it again stacks them', async ({page}) => {
   await page.goto('demos/z-index/');
@@ -66,4 +66,18 @@ test('the reader asks for the answer to which card is on top from the keyboard, 
 
   await expect(asking.answer).toBeVisible();
   await expect.poll(asking.readInOrder).toEqual(['question', 'answer', 'drawing']);
+});
+
+test('given the z-index tab before its script runs, the pile’s Expand is disabled; once the script runs, the first press expands the pile', async ({page}) => {
+  const address = 'demos/z-index/';
+  await hydration(page).holdBack(address);
+  await page.goto(address);
+  const pile = stackingPile(page);
+
+  await expect(pile.expander).toBeDisabled();
+  await hydration(page).release();
+
+  await pile.expander.click();
+
+  await expect(pile.collapser).toBeVisible();
 });

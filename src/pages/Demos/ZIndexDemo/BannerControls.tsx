@@ -1,4 +1,6 @@
 import {FC} from 'react';
+import {not} from '@ryandur/sand';
+import {useHydrated} from '@components';
 import {Align, Entrance, Side, Stack} from '@banners';
 import {DialGroup, DialRow} from '../Controls';
 import './BannerControls.css';
@@ -49,8 +51,9 @@ export type BannerControlsProps = {
 
 export const BannerControls: FC<BannerControlsProps> = ({
   side, align, enter, stack, onSideChosen, onAlignChosen, onEnterChosen, onStackChosen, onRaise
-}) =>
-  <section aria-labelledby="banner-controls-heading" className="controls">
+}) => {
+  const hydrated = useHydrated();
+  return <section aria-labelledby="banner-controls-heading" className="controls">
     <h3 id="banner-controls-heading" className="off-screen">banner controls</h3>
     <DialGroup>
       <DialRow label="side"
@@ -102,7 +105,9 @@ export const BannerControls: FC<BannerControlsProps> = ({
     <p className="caption">
       <code className="monospaced">{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
     </p>
-    <button type="button" tabIndex={0} className="button primary reachable after-dials" onClick={onRaise}>
+    <button type="button" tabIndex={0} className="button primary reachable after-dials"
+      disabled={not(hydrated)} onClick={onRaise}>
       Raise a banner
     </button>
   </section>;
+};
