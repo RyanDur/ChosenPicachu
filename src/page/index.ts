@@ -7,4 +7,5 @@ export {Header, type Listing} from './Header';
 export {Main} from './Main';
 export {PageError} from './PageError';
 export {phoneLayout} from './phoneLayout';
+export {phoneQuery} from './phoneQuery';
 export {WaitingRoom} from './WaitingRoom';

@@ -2,6 +2,7 @@ import {FC} from 'react';
 import wideFrame from '../drawings/landmark-map-wide.svg?url&no-inline';
 import stackedFrame from '../drawings/landmark-map-stacked.svg?url&no-inline';
 import phoneFrame from '../drawings/landmark-map-phone.svg?url&no-inline';
+import {phoneQuery} from '@page';
 import {practiceDrawings} from '../drawings';
 import '../PracticeDrawing.css';
 
@@ -10,7 +11,7 @@ const {wide, stacked, phone} = practiceDrawings.byName['landmark-map'].sizes;
 export const LandmarkMap: FC = () =>
   <figure className="practice-drawing">
     <picture className="center">
-      <source media={practiceDrawings.railAtTheFoot} srcSet={phoneFrame} width={phone.width} height={phone.height}/>
+      <source media={phoneQuery} srcSet={phoneFrame} width={phone.width} height={phone.height}/>
       <source media={practiceDrawings.railAboveTheHeader} srcSet={stackedFrame}
         width={stacked.width} height={stacked.height}/>
       <img className="drawing" src={wideFrame} width={wide.width} height={wide.height} alt=""/>
