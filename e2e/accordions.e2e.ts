@@ -193,3 +193,16 @@ for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader:
     });
   });
 }
+
+test.describe('a reader with script turned off', () => {
+  test.use({javaScriptEnabled: false});
+
+  test('opens a fold of the details build on the accordions tab and reads its words', async ({page}) => {
+    await page.goto('demos/accordions/');
+    const fold = accordionsTab(page).partOf('the details build', 0);
+
+    await fold.open();
+
+    await expect(fold.fold.getByRole('paragraph')).toBeVisible();
+  });
+});
