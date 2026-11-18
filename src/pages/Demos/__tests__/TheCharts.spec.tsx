@@ -988,6 +988,15 @@ describe('the links to other tabs', () => {
       .toContainEqual(['A box remembers the fold, and a rule reads it', `${Paths.demos}accordions/a-box-remembers-the-fold/`]);
   });
 
+  test('should gloss class with the accordions part that teaches it, on the pie chart’s page', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(demoPage.linksToPageIn(demoPage.wholePage(), `${Paths.demos}accordions/a-box-remembers-the-fold/`))
+      .toContainEqual(['A box remembers the fold, and a rule reads it', `${Paths.demos}accordions/a-box-remembers-the-fold/`]);
+  });
+
   test('should gloss class with the accordions part that teaches it, on the tab', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
@@ -1014,7 +1023,6 @@ describe('the links to other tabs', () => {
     await feedIsSubscribed(feed);
 
     expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
-      ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
