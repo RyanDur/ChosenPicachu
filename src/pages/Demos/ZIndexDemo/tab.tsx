@@ -23,27 +23,30 @@ const usePlacingTheBanners = (): void => {
   useEffect(() => () => dispatchBanner(bannerChange.unplaced()), [dispatchBanner]);
 };
 
-const pagesOfParts: Record<ZIndexPart, ReactNode> = {
-  'why-third-is-on-top': <PartPage part="why-third-is-on-top"><WhyThirdIsOnTop/></PartPage>,
-  'why-9999-still-loses': <PartPage part="why-9999-still-loses"><Why9999StillLoses/></PartPage>,
-  'what-else-forms-a-stacking-context':
-    <PartPage part="what-else-forms-a-stacking-context"><WhatElseFormsAStackingContext/></PartPage>,
-  'why-the-popover-wins': <PartPage part="why-the-popover-wins"><WhyThePopoverWins/></PartPage>,
-  'why-a-fixed-banner-still-loses': <PartPage part="why-a-fixed-banner-still-loses"><WhyAFixedBannerStillLoses/></PartPage>,
-  'lets-build-this-feature': <PartPage part="lets-build-this-feature" className="tutorials"><LetsBuildThisFeature/></PartPage>
+const partContents: Record<ZIndexPart, ReactNode> = {
+  'why-third-is-on-top': <WhyThirdIsOnTop/>,
+  'why-9999-still-loses': <Why9999StillLoses/>,
+  'what-else-forms-a-stacking-context': <WhatElseFormsAStackingContext/>,
+  'why-the-popover-wins': <WhyThePopoverWins/>,
+  'why-a-fixed-banner-still-loses': <WhyAFixedBannerStillLoses/>,
+  'lets-build-this-feature': <LetsBuildThisFeature/>
 };
+
+const partWears: Partial<Record<ZIndexPart, string>> = {'lets-build-this-feature': 'tutorials'};
 
 export const Room: FC = () => {
   usePlacingTheBanners();
 
-  return useShownPart().either(part => pagesOfParts[part], () => <>
-    <ZIndexIntroduction/>
-    <NaturalZIndex className="card rounded-corners lifted padded"/>
-    <PartListing part="why-third-is-on-top"/>
-    <PartListing part="why-9999-still-loses"/>
-    <PartListing part="what-else-forms-a-stacking-context"/>
-    <PartListing part="why-the-popover-wins"/>
-    <PartListing part="why-a-fixed-banner-still-loses"/>
-    <PartListing part="lets-build-this-feature"/>
-  </>);
+  return useShownPart().either(
+    part => <PartPage part={part} className={partWears[part]}>{partContents[part]}</PartPage>,
+    () => <>
+      <ZIndexIntroduction/>
+      <NaturalZIndex className="card rounded-corners lifted padded"/>
+      <PartListing part="why-third-is-on-top"/>
+      <PartListing part="why-9999-still-loses"/>
+      <PartListing part="what-else-forms-a-stacking-context"/>
+      <PartListing part="why-the-popover-wins"/>
+      <PartListing part="why-a-fixed-banner-still-loses"/>
+      <PartListing part="lets-build-this-feature"/>
+    </>);
 };
