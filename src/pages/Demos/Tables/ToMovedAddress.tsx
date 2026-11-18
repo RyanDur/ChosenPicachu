@@ -15,21 +15,21 @@ const tellers = new Map<string, TablePart>([
   [livingStories.ids.store, 'the-live-table-and-the-store']
 ]);
 
-const tutorialNamed = (params: URLSearchParams): Maybe<string> =>
+const pageForNamedTutorial = (params: URLSearchParams): Maybe<string> =>
   maybe(tableTutorials.all().find(tutorial => tutorial === params.get(tutorialParam)))
     .map(tableTutorials.addressOf);
 
 const pageTelling = (story: string): Maybe<string> => maybe(tellers.get(story)).map(tableParts.addressOf);
 
-const titleOf = (story: string): string => `#${livingStories.titleIdOf(story)}`;
+const fragmentOf = (story: string): string => `#${livingStories.titleIdOf(story)}`;
 
-const storyTitled = (hash: string): Maybe<string> =>
-  maybe([...tellers.keys()].find(story => titleOf(story) === hash)).mBind(pageTelling);
+const pageForFragment = (hash: string): Maybe<string> =>
+  maybe([...tellers.keys()].find(story => fragmentOf(story) === hash)).mBind(pageTelling);
 
 const storiesNamed = (params: URLSearchParams): string[] =>
   maybe(params.get(livingStories.param)).orElse('').split(',').filter(story => tellers.has(story));
 
-const storyNamed = (params: URLSearchParams, {pathname, hash}: Location): Maybe<string> =>
+const pageForNamedStory = (params: URLSearchParams, {pathname, hash}: Location): Maybe<string> =>
   maybe(storiesNamed(params)[0]).mBind(first => empty(hash) ? pageTelling(first) : maybe(pathname));
 
 export const ToMovedAddress: FC = () => {
@@ -37,7 +37,10 @@ export const ToMovedAddress: FC = () => {
   const location = useLocation();
   const hydrated = useHydrated();
   const dials = dialParams.keptFrom(params);
-  return storyTitled(location.hash).or(() => tutorialNamed(params)).or(() => storyNamed(params, location)).either(
-    pathname => hydrated && <Navigate replace to={{pathname, search: dials.toString(), hash: location.hash}}/>,
-    () => null);
+  return pageForFragment(location.hash)
+    .or(() => pageForNamedTutorial(params))
+    .or(() => pageForNamedStory(params, location))
+    .either(
+      pathname => hydrated && <Navigate replace to={{pathname, search: dials.toString(), hash: location.hash}}/>,
+      () => null);
 };
