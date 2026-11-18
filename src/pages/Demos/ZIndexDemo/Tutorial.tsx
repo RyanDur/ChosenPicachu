@@ -1,6 +1,8 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
 import {FC} from 'react';
+import {decked, news} from '@components/fibs';
+import {bannerChange, useBannerDispatch} from '@banners';
 import {Stories} from '../Recipe';
 import {useControls} from '../Controls';
 import {BannerControls} from './BannerControls';
@@ -9,15 +11,18 @@ import {MultipleRecipe} from './MultipleRecipe';
 import {partHeadings} from './part-headings';
 import '../Recipe/Recipe.css';
 
+const nextNews = decked(news);
+
 export const TopLayerTutorial: FC = () => {
   const {side, align, enter, stack, change} = useControls();
+  const dispatchBanner = useBannerDispatch();
 
   return <section aria-labelledby={partHeadings.buildThisFeature} className="tutorials">
     <h2 id={partHeadings.buildThisFeature} className="title">let’s build this feature</h2>
     <p className="overview paragraph">
       We are going to build this site’s banner: the panel that carries the news, whatever
-      the news is. Elsewhere on this site it reports real trouble. On this page the button raises random nonsense so you
-      can watch the mechanics.
+      the news is. Elsewhere on this site it reports real trouble. On this page, Raise a banner beside the dials below
+      raises random nonsense so you can watch the mechanics.
     </p>
     <p className="overview paragraph">The earlier parts show what a z-index does and where it stops counting. The
       banner uses both: it sets a z-index, and where it sits decides what that number is compared with.</p>
@@ -73,7 +78,8 @@ export const TopLayerTutorial: FC = () => {
       onSideChosen={next => change({side: next})}
       onAlignChosen={next => change({align: next})}
       onEnterChosen={next => change({enter: next})}
-      onStackChosen={next => change({stack: next})}/>
+      onStackChosen={next => change({stack: next})}
+      onRaise={() => dispatchBanner(bannerChange.raised(nextNews()))}/>
     <section aria-label="build the banners yourself" className="build-steps">
       <Stories>
         <TopLayerRecipe/>
