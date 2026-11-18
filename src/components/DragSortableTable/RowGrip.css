@@ -4,10 +4,6 @@
   height: var(--base-x-2);
   display: inline-flex;
   align-items: center;
-
-  &:disabled {
-    cursor: revert;
-  }
 }
 
 @media (pointer: coarse) {
