@@ -1,4 +1,5 @@
 import {ClassGloss} from '@pages/Demos/Accordions';
+import {ReadingTime} from '@pages/Demos/ReadingTime';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PartLink, PartTermLink} from '@pages/Demos/ZIndexDemo';
 import {FC, useId} from 'react';
@@ -175,9 +176,7 @@ export const ChartsTutorial: FC = () => {
       {chartKinds.all.map(kind => <li key={kind} className="station void-badge-before shadow-rail-along">
         <Link className="signpost" to={chartKinds.address(kind)}>{chartKinds.names[kind]}</Link>
         <p className="paragraph">{told[kind].says}</p>
-        <p className="caption muted-ink">
-          <time dateTime={`PT${told[kind].minutes}M`}>{`${told[kind].minutes} minutes to read`}</time>
-        </p>
+        <ReadingTime minutes={told[kind].minutes}/>
       </li>)}
     </ol>
     <p className="overview paragraph">
