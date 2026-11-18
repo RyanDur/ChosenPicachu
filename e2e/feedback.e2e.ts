@@ -240,6 +240,23 @@ test.describe('a phone', () => {
   });
 });
 
+test('words added while a note is sending stay once GitHub has it', async ({page}) => {
+  const answer = await githubHoldingItsAnswer(page);
+  const feedback = feedbackOn(page);
+  await page.goto('demos/tables/');
+  await siteFrame(page).hydrated();
+  await feedback.open.click();
+  await feedback.words.pressSequentially('The sort menu hides.');
+  await feedback.send.click();
+  await expect(feedback.status).toHaveText('Sending the note to GitHub.');
+  await feedback.words.pressSequentially(' It also flickers.');
+
+  await answer();
+
+  await expect(feedback.status.getByRole('link', {name: 'Read it on GitHub'})).toBeVisible();
+  await expect(feedback.words).toHaveValue('The sort menu hides. It also flickers.');
+});
+
 test('a note GitHub refuses stays in the open dialog, and it says so', async ({page}) => {
   await github(page, {refuse: 'Bad credentials'});
   const feedback = feedbackOn(page);

@@ -80,13 +80,13 @@ export const Feedback: FC = () => {
     if (draft.sending.state === 'sending') {
       return;
     }
-    const {openings, words, reach} = draft;
+    const {words, reach} = draft;
     dispatch(feedbackChange.noteSubmitted());
     github.sent(
       {endpoint: feedbackEndpoint, token: feedbackToken},
       {page: {key: draft.key, name: pageName}, words, from: sentFrom, ...(empty(reach) ? {} : {reach})}
     )
-      .onSuccess(url => dispatch(feedbackChange.noteSent(openings, url)))
+      .onSuccess(url => dispatch(feedbackChange.noteSent(url)))
       .onFailure(why => dispatch(feedbackChange.noteRefused(why)));
   };
 
