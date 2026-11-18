@@ -33,7 +33,7 @@ describe('the accordions map', () => {
   test('should say on a part’s page how long the parts take together', async () => {
     render(<TestApp at={demosAt('accordions/the-max-height-guess')}/>);
 
-    expect(await accordionsMap.saysInTheMap()).toHaveTextContent(howLong);
+    expect(await accordionsMap.saysInside()).toHaveTextContent(howLong);
   });
 
   test('should lead from a part’s page to every part, with the reader’s choices carried', async () => {

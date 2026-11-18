@@ -32,7 +32,7 @@ describe('the z-index map', () => {
   test('should say on a part’s page how long the parts take together', async () => {
     render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
 
-    expect(await zIndexMap.saysInTheMap()).toHaveTextContent(/about 24 minutes/);
+    expect(await zIndexMap.saysInside()).toHaveTextContent(/about 24 minutes/);
   });
 
   test('should lead from a part’s page to every part, with the reader’s choices carried', async () => {
