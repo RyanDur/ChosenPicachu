@@ -48,12 +48,6 @@
 
 @media (width <= 600px) {
   .home {
-    display: grid;
-
-    .lede {
-      order: -1;
-    }
-
     .page-pulled-apart {
       float: none;
       inline-size: auto;

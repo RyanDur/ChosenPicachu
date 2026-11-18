@@ -2,7 +2,6 @@ import {FC} from 'react';
 
 export const Opener: FC = () =>
   <>
-    <p className="lede">A page is built from all three at once, and each has a job the others can’t do.</p>
     <p className="thesis paragraph">I made this site because I couldn’t find one about how HTML, CSS and JavaScript work
       together. There is plenty on each. MDN documents all three in depth, the standards define each in its own
       specification, and most courses teach them one at a time. The closest thing I found is Jeremy
