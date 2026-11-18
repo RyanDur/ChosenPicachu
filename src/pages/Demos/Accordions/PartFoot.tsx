@@ -1,11 +1,11 @@
 import {FC} from 'react';
 import {PageFoot} from '@pages/Demos/PageFoot';
 import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
-import {AccordionPart, accordionParts, TabHeading} from './part-pages';
+import {AccordionPart, accordionParts, BookPart} from './part-pages';
 
 export const PartFoot: FC<{part: AccordionPart}> = ({part}) => {
   const carried = useCarriedAddress();
-  const neighbor = (heading: TabHeading) => {
+  const neighbor = (heading: BookPart) => {
     const {to, heading: fragment} = accordionParts.whereIs(heading);
     return {title: accordionParts.numbered(heading), address: carried(to, fragment)};
   };
