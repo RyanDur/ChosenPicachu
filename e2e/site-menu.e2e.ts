@@ -144,6 +144,24 @@ test.describe('an iPad in split view widened past a phone', () => {
   });
 });
 
+test.describe('an iPad in split view, with a keyboard', () => {
+  test.use(iPadSplitView);
+
+  test('a Command-click on a page in the site menu opens it in a new tab and leaves the menu open', async ({page, context}) => {
+    const site = siteFrame(page);
+    await page.goto('');
+    await site.hydrated();
+    await site.menu.click();
+    await expect(site.nav).toBeVisible();
+    const newTab = context.waitForEvent('page');
+
+    await site.nav.getByRole('link', {name: 'Record'}).click({modifiers: ['ControlOrMeta']});
+
+    await expect(await newTab).toHaveURL(/\/record\/$/);
+    await expect(site.nav).toBeVisible();
+  });
+});
+
 test.describe('a short phone held on its side', () => {
   test.use(shortPhoneSideways);
 
