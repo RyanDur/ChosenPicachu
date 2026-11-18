@@ -93,6 +93,37 @@ for (const {reader, device} of handhelds) {
       await expect(gallery.count).toHaveText(/^Page 2 of /);
     });
 
+    test('opens the gallery settings on the museum the gallery shows', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+
+      await gallery.openSettings();
+
+      await expect(gallery.museum.getByRole('option', {selected: true})).toHaveText('The Victoria and Albert Museum');
+    });
+
+    test('shows another museum\'s pieces once it is chosen, with the settings still open on the choice', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam&page=1&size=8');
+      await gallery.openSettings();
+      await gallery.museum.focus();
+
+      await gallery.museum.selectOption({label: 'Harvard Art Museums'});
+
+      await expect(page).toHaveURL(/tab=harvard/);
+      await expect(gallery.wall.first()).toBeVisible();
+      await expect(gallery.sheet).toBeVisible();
+      await expect(gallery.museum).toBeFocused();
+    });
+
+    test('leaves the museum tabs to the gallery settings', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+      await expect(gallery.wall.first()).toBeVisible();
+
+      await expect(gallery.doors.first()).toBeHidden();
+    });
+
     test('Escape closes the gallery settings', async ({page}) => {
       const gallery = galleryPage(page);
       await page.goto('gallery/?tab=vam');
@@ -175,6 +206,13 @@ for (const {reader, device} of [
       await expect(page.getByRole('banner').getByRole('combobox', {name: 'Search', exact: true})).toBeVisible();
       await expect(gallery.settingsPanel.getByRole('spinbutton', {name: 'Page', exact: true})).toBeVisible();
       await expect(gallery.settings).toBeHidden();
+    });
+
+    test('shows the museum tabs', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+
+      await expect(gallery.doors.first()).toBeVisible();
     });
   });
 }

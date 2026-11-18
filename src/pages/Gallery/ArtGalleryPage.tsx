@@ -11,6 +11,7 @@ import missingWall from '../../assets/icons/missing-wall.svg?url';
 import {StandIn} from '@pages/Gallery/StandIn';
 import {useGallery} from '@pages/Gallery/Context';
 import {Doors, doors} from '@pages/Gallery/doors';
+import './ArtGalleryPage.css';
 
 const openIn = (doors: Doors) => museums.all.filter(({param}) => doors[param] === 'open');
 
@@ -52,7 +53,7 @@ export const ArtGalleryPage: FC = () => {
   }, [hydrated, movingTo, updateSearchParams]);
 
   return <>
-    {notEmpty(open) && <Tabs label="museums" current={tab}
+    {notEmpty(open) && <Tabs label="museums" className="museum-tabs" current={tab}
       values={open.map(museum => ({...museum, to: `${pathname}${searchFromShown({tab: museum.param})}`}))}/>}
     {{
       wall: <ArtGallery/>,

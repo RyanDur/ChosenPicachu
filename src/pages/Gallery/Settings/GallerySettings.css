@@ -47,10 +47,25 @@
     margin: 0;
     overflow: auto;
     display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-auto-rows: var(--finger-reach);
     gap: var(--base);
     padding-block: var(--base) 0;
 
+    .museum-label {
+      display: flex;
+      align-items: center;
+      padding-inline: var(--base-x-2);
+    }
+
+    .museum-choice {
+      min-width: 0;
+      padding-inline: var(--base-x-2);
+    }
+
     .search {
+      grid-column: 1 / -1;
+      grid-row: span 2;
       gap: var(--base);
       grid-template-columns: 1fr 2fr;
       grid-template-rows: repeat(2, var(--finger-reach));
@@ -70,6 +85,8 @@
     }
 
     .page-control {
+      grid-column: 1 / -1;
+      grid-row: span 3;
       position: static;
       grid-template-columns: 1fr 2fr;
       grid-template-rows: repeat(3, var(--finger-reach));

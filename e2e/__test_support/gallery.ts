@@ -23,6 +23,7 @@ export const galleryPage = (page: Page) => {
     searchField,
     pageNumber: page.getByRole('spinbutton', {name: 'Page', exact: true}),
     pageSize: page.getByRole('spinbutton', {name: 'Per page', exact: true}),
+    museum: page.getByRole('combobox', {name: 'Museum', exact: true}),
     settings: page.getByRole('button', {name: /^Gallery settings/}),
     sheet: page.getByRole('region', {name: 'gallery settings'}),
     openSettings: async (): Promise<void> => {
