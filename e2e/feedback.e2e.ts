@@ -172,7 +172,7 @@ test.describe('a phone on a page with tabs', () => {
     await sentAndClosed(page);
 
     const accordions = page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'});
-    await accordions.evaluate(tab => tab.scrollIntoView({inline: 'nearest', block: 'nearest'}));
+    await accordions.scrollIntoViewIfNeeded();
     await twoFramesLater(page);
 
     await clickWhereItIs(page, accordions);
