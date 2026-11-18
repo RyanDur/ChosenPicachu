@@ -161,7 +161,7 @@
 .old-banner {
     position: fixed;
     inset-inline: var(--base-x-2);
-    inset-block-end: calc(var(--foot-reach) + var(--base-x-2));
+    inset-block-end: var(--base-x-2);
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -170,5 +170,11 @@
 
     .dismiss {
         margin-inline-start: auto;
+    }
+}
+
+@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
+    .old-banner {
+        inset-block-end: calc(var(--foot-reach) + var(--base-x-2));
     }
 }
