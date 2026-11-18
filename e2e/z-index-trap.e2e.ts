@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {desktop, iPhone, trappedMenu} from './__test_support';
+import {desktop, hydrationHeldBack, iPhone, trappedMenu} from './__test_support';
 
 for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
   test.describe(`at ${size} wide`, () => {
@@ -103,4 +103,17 @@ test('a press outside the open menu closes it', async ({page}) => {
   await menu.caption.click();
 
   await expect(page.getByRole('menu')).toHaveCount(0);
+});
+
+test('given the page before its script runs, the old-way Sort by is disabled; once the script runs, the first Enter opens its menu', async ({page}) => {
+  const address = 'demos/z-index/why-9999-still-loses/';
+  await hydrationHeldBack(page, address);
+  await page.goto(address);
+  const menu = trappedMenu(page);
+
+  await expect(menu.sortBy).toBeDisabled();
+
+  await menu.openByKeyboard();
+
+  await expect(menu.choice('name')).toBeFocused();
 });

@@ -1,4 +1,5 @@
 import {Entry, Item, Menu} from '@components/Menu';
+import {useHydrated} from '@components';
 import {FC, FocusEvent, KeyboardEvent, useId, useReducer} from 'react';
 import {flushSync} from 'react-dom';
 import {Maybe, maybe, nothing, some, not} from '@ryandur/sand';
@@ -32,6 +33,7 @@ const buttonOf = (choice: HTMLElement): Maybe<HTMLElement> =>
 
 export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
   const [{open, chosen}, dispatch] = useReducer(sortMenu.reduce, sortMenu.initial);
+  const hydrated = useHydrated();
   const buttonId = useId();
   const menuId = useId();
 
@@ -71,7 +73,7 @@ export const SortMenu: FC<{onOpened: () => void}> = ({onOpened}) => {
 
   return <>
     <button id={buttonId} type="button" className="button drawn-piece attentive reachable" aria-haspopup="menu" aria-expanded={open}
-      aria-controls={open ? menuId : undefined}
+      aria-controls={open ? menuId : undefined} disabled={not(hydrated)}
       aria-label={`${words}, the old way`}
       onMouseDown={event => event.preventDefault()}
       onClick={({currentTarget}) => open ? closesOnto(currentTarget) : opens(currentTarget)}

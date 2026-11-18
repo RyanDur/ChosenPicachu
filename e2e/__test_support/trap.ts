@@ -8,6 +8,8 @@ export type SortChoice = 'name' | 'date' | 'size';
 
 export type Worn = 'nothing' | 'position: relative' | 'outline' | 'z-index: 1' | 'opacity: 0.9' | 'transform: rotate(-1deg)' | 'isolation: isolate';
 
+const untilPressable = (control: Locator): Promise<void> => control.click({trial: true});
+
 const oldWaySortBy = (figure: Locator) => {
   const sortBy = figure.getByRole('button', {name: /^Sort by(: \w+)?, the old way$/});
   const choice = (name: SortChoice) => figure.getByRole('menuitem', {name});
@@ -37,6 +39,7 @@ export const trappedMenu = (page: Page) => {
     caption: trap.getByText(/A list with z-index: 9999 opens under a card with z-index: 1/),
     said: trap.getByRole('status', {name: 'where the list opened'}),
     openByKeyboard: async (): Promise<void> => {
+      await untilPressable(menu.sortBy);
       await menu.sortBy.focus();
       await page.keyboard.press('Enter');
     }
