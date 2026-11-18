@@ -18,7 +18,7 @@ describe('why the popover wins, on its own page', () => {
     render(<TestApp at={demosAt(popoverWins, '?raised=second')}/>);
 
     const part = await explanation.part(title);
-    const opener = explanation.saying(part, /^A menu opened as a popover shows over every card/);
+    const opener = explanation.opener(part);
 
     expect(explanation.linkNamed(opener, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
   });
