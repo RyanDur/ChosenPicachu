@@ -26,7 +26,7 @@ describe('what else forms a stacking context, on its own page', () => {
     render(<TestApp at={demosAt(whatElseForms, '?wears=opacity')}/>);
 
     const part = await explanation.part(title);
-    const opener = explanation.saying(part, /^A card with no z-index at all/);
+    const opener = explanation.opener(part);
 
     expect(explanation.linkNamed(opener, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?wears=opacity'));
   });

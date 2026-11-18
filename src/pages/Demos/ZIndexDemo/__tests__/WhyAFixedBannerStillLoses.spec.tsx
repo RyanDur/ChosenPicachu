@@ -6,7 +6,6 @@ import {bannerExhibit, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const fixedBanner = 'z-index/why-a-fixed-banner-still-loses';
 const title = 'Why a fixed banner still loses';
-const opening = /^A banner pinned to the window with a z-index of 9999/;
 
 describe('why a fixed banner still loses, on its own page', () => {
   test('should say its place in the z-index book', async () => {
@@ -18,7 +17,7 @@ describe('why a fixed banner still loses, on its own page', () => {
   test('should link part two, which it builds on, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
-    const opener = explanation.saying(await explanation.part(title), opening);
+    const opener = explanation.opener(await explanation.part(title));
 
     expect(explanation.linkNamed(opener, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
   });
@@ -26,7 +25,7 @@ describe('why a fixed banner still loses, on its own page', () => {
   test('should link part three, which it builds on, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
-    const opener = explanation.saying(await explanation.part(title), opening);
+    const opener = explanation.opener(await explanation.part(title));
 
     expect(explanation.linkNamed(opener, 'What else forms a stacking context'))
       .toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'));

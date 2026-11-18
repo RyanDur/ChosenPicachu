@@ -26,7 +26,7 @@ describe('why 9999 still loses, on its own page', () => {
     render(<TestApp at={demosAt(stillLoses, '?raised=second')}/>);
 
     const part = await explanation.part(title);
-    const opener = explanation.saying(part, /^A list with a z-index of 9999/);
+    const opener = explanation.opener(part);
 
     expect(explanation.linkNamed(opener, 'Why the popover wins')).toHaveAttribute('href', demosAt('z-index/why-the-popover-wins', '?raised=second'));
   });
