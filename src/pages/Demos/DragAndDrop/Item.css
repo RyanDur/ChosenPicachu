@@ -20,9 +20,8 @@
 .sortable-list .grip {
     width: var(--base-x-2_5);
     padding: 0;
-    cursor: grab;
 }
 
-.sortable-list .grip:disabled {
-    cursor: revert;
+.sortable-list .grip:not(:disabled) {
+    cursor: grab;
 }

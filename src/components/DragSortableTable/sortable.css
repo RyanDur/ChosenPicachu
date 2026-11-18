@@ -13,11 +13,14 @@
 }
 
 .grabbable {
-  cursor: grab;
   touch-action: none;
   transition: opacity 50ms;
 
-  &:active {
+  &:not(:disabled) {
+    cursor: grab;
+  }
+
+  &:not(:disabled):active {
     cursor: grabbing;
   }
 }

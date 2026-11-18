@@ -68,7 +68,6 @@
   inset-block: 0;
   inset-inline-end: 0;
   padding: 0;
-  cursor: col-resize;
   touch-action: none;
   display: grid;
   justify-items: end;
@@ -78,8 +77,8 @@
     width: var(--base);
   }
 
-  &:disabled {
-    cursor: revert;
+  &:not(:disabled) {
+    cursor: col-resize;
   }
 }
 
