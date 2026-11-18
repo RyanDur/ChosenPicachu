@@ -1,10 +1,10 @@
-import {FC} from 'react';
+import {ChangeEvent, FC, useId} from 'react';
 import {has, maybe} from '@ryandur/sand';
 import {Search} from '@pages/Gallery/Search';
 import {PageControl} from '@pages/Gallery/PageControl';
 import {useGallery} from '@pages/Gallery/Context';
 import './GallerySettings.css';
-import {museums} from '@pages/Gallery/museums';
+import {museums, sourceParam} from '@pages/Gallery/museums';
 
 const sheet = 'gallery-settings';
 
@@ -21,10 +21,24 @@ const Readout: FC = () => {
   </button>;
 };
 
+const MuseumChoice: FC = () => {
+  const {tab, updateSearchParams} = useGallery();
+  const choice = useId();
+  const chosen = (event: ChangeEvent<HTMLSelectElement>) =>
+    maybe(sourceParam.decode(event.currentTarget.value)).map(museum => updateSearchParams({tab: museum}));
+  return <>
+    <label className="museum-label field bold" htmlFor={choice}>Museum</label>
+    <select id={choice} className="museum-choice field bold ellipsis" value={maybe(tab).orElse('')} onChange={chosen}>
+      {museums.all.map(({display, param}) => <option key={param} value={param}>{display}</option>)}
+    </select>
+  </>;
+};
+
 export const GallerySettings: FC = () => <>
   <Search className="header-settings settings-standing"/>
   <Readout/>
   <section id={sheet} popover="auto" aria-label="gallery settings" className="settings-sheet backdrop veiled">
+    <MuseumChoice/>
     <Search/>
     <PageControl/>
   </section>
