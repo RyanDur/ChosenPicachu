@@ -1,4 +1,4 @@
-import {screen, within} from '@testing-library/react';
+import {screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 const dialog = (): HTMLElement => screen.getByRole('dialog', {name: 'Feedback'});
@@ -33,6 +33,9 @@ export const feedback = {
   close: async (): Promise<void> => userEvent.click(within(dialog()).getByRole('button', {name: 'Close'})),
   closeControl: (): Promise<HTMLElement> => within(dialog()).findByRole('button', {name: 'Close'}),
   status,
+  answeredWhileClosed: (): Promise<void> => waitFor(() => {
+    if (screen.getByRole('button', {name: 'Send', hidden: true}).hasAttribute('disabled')) throw new Error('GitHub has not answered');
+  }),
   noteOnGitHubBesideFeedback: (): Promise<HTMLElement> => screen.findByRole('link', {name: 'Read it on GitHub'}),
   noteOnGitHubFromTheDialog: (): Promise<HTMLElement> =>
     within(status()).findByRole('link', {name: 'Read it on GitHub'})

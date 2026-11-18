@@ -259,6 +259,23 @@ describe('Feedback about the page', () => {
 });
 
 describe('Feedback when GitHub refuses', () => {
+  test('should say in its status line why GitHub refused a note after it closed, and keep the words', async () => {
+    const github = githubHoldingItsAnswer();
+    render(<TestApp at="/"/>);
+    await site.pageTitled();
+    await feedback.open();
+    await feedback.write('The sort menu hides.');
+    await feedback.send();
+    await feedback.cancel();
+    github.refuses();
+    await feedback.answeredWhileClosed();
+
+    await feedback.open();
+
+    expect(await feedback.says('GitHub turned the request away. Your words are still here.')).toBeInTheDocument();
+    expect(feedback.note()).toHaveValue('The sort menu hides.');
+  });
+
   test('should say GitHub has nothing at that address when the page’s thread is gone, and keep the words', async () => {
     githubLosingThePageThread();
     render(<TestApp at="/"/>);

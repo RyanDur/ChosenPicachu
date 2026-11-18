@@ -5,9 +5,9 @@ export const githubFindingNoThread = () =>
   server.use(http.post('https://api.github.com/graphql', () => HttpResponse.json({data: {search: {nodes: []}}})));
 
 export const githubHoldingItsAnswer = () => {
-  let answer: () => void = () => undefined;
-  const held = new Promise<void>(resolve => {
-    answer = () => resolve();
+  let reply: (accepted: boolean) => void = () => undefined;
+  const held = new Promise<boolean>(resolve => {
+    reply = resolve;
   });
   const notes: string[] = [];
   server.use(http.post('https://api.github.com/graphql', async ({request}) => {
@@ -16,10 +16,11 @@ export const githubHoldingItsAnswer = () => {
       return HttpResponse.json({data: {search: {nodes: []}}});
     }
     notes.push(asked);
-    await held;
-    return HttpResponse.json({data: {createDiscussion: {discussion: {id: 'D_9', url: 'https://github.test/discussions/9'}}}});
+    return await held
+      ? HttpResponse.json({data: {createDiscussion: {discussion: {id: 'D_9', url: 'https://github.test/discussions/9'}}}})
+      : HttpResponse.json({message: 'Bad credentials'}, {status: 401});
   }));
-  return {notes, answers: () => answer()};
+  return {notes, answers: () => reply(true), refuses: () => reply(false)};
 };
 
 export const githubLosingThePageThread = () =>
