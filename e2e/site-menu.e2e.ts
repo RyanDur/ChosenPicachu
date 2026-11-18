@@ -1,8 +1,10 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {clickWhereItIs, iPhone, shortPhoneSideways, siteFrame, tabsTo, twoFramesLater} from './__test_support';
+import {clickWhereItIs, iPadSplitView, iPadUpright, iPhone, shortPhoneSideways, siteFrame, tabsTo, twoFramesLater} from './__test_support';
 
 const pages = ['Home', 'Record', 'Practice', 'Demos', 'Users', 'Gallery', 'Games', 'Repo'];
+
+const openAsAPopover = (nav: Element): boolean => nav.matches(':popover-open');
 
 test.describe('a phone held upright', () => {
   test.use(iPhone);
@@ -110,6 +112,39 @@ test.describe('a keyboard reader on an upright phone', () => {
       .toHaveAttribute('aria-current', 'page');
     await expect(site.menu).toBeFocused();
     await expect(site.menu).toBeVisible();
+  });
+});
+
+test.describe('an iPad in split view widened past a phone', () => {
+  test.use(iPadSplitView);
+
+  test('closes the site menu, leaving the site nav in the rail', async ({page}) => {
+    const site = siteFrame(page);
+    await page.goto('');
+    await site.hydrated();
+    await site.menu.click();
+    await expect(site.nav).toBeVisible();
+
+    await page.setViewportSize(iPadUpright.viewport);
+
+    await expect(page.getByRole('region', {name: 'pages and feedback'}).getByRole('navigation', {name: 'site'})).toBeVisible();
+    await expect.poll(() => site.nav.evaluate(openAsAPopover), 'the site menu is open').toBe(false);
+  });
+
+  test('keeps a keyboard reader on the link they were on in the menu', async ({page}) => {
+    const site = siteFrame(page);
+    const record = site.nav.getByRole('link', {name: 'Record'});
+    await page.goto('');
+    await site.hydrated();
+    await site.menu.focus();
+    await page.keyboard.press('Enter');
+    await tabsTo(page, record);
+
+    await page.setViewportSize(iPadUpright.viewport);
+
+    await expect.poll(() => site.nav.evaluate(openAsAPopover), 'the site menu is open').toBe(false);
+    await expect(record).toBeFocused();
+    await expect(record).toBeVisible();
   });
 });
 
