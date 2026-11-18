@@ -5,7 +5,7 @@ import {useHydrated} from '@components';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {livingStories} from './living-stories';
-import {movedParams} from './moved-params';
+import {movedParams} from '@pages/Demos/moved-params';
 
 const tellers = new Map<string, TablePart>([
   [livingStories.ids.still, 'the-still-table'],
