@@ -1,6 +1,6 @@
 import {Locator, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {clickWhereItIs, desktop, documentScrollY, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab, twoFramesLater} from './__test_support';
+import {clickWhereItIs, desktop, documentScrollY, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame, twoFramesLater} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> =>
   region.evaluate(element => element.contains(document.activeElement));
@@ -370,6 +370,37 @@ test.describe('a visitor at a desk', () => {
 
     await expect(gallery.wall.first().getByRole('img')).toBeVisible();
     await expect(piece).toBeFocused();
+  });
+
+  test('keeps the focus on the search after searching with Enter', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await siteFrame(page).hydrated();
+    await gallery.searchField.fill('lilies');
+
+    await gallery.searchField.press('Enter');
+
+    await expect(page).toHaveURL(/search=lilies/);
+    await expect(gallery.searchField).toBeFocused();
+  });
+
+  test('shows the address\'s words in the search after Back and then Forward from a search made with Enter', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await siteFrame(page).hydrated();
+    await gallery.searchField.fill('lilies');
+    await gallery.searchField.press('Enter');
+    await expect(page).toHaveURL(/search=lilies/);
+
+    await page.goBack();
+    await expect(page).not.toHaveURL(/search=/);
+    await expect(gallery.searchField).toHaveValue('');
+    await page.goForward();
+
+    await expect(page).toHaveURL(/search=lilies/);
+    await expect(gallery.searchField).toHaveValue('lilies');
   });
 
   test('lands at the top of the page it goes to from the page field', async ({page}) => {
