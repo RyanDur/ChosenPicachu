@@ -137,8 +137,7 @@ const answers = (request, response) => {
     return response.end();
   }
   pages.answer(path)
-    .then(({status, html}) => answerWith(pages.caching)(status, html, 'text/html', true))
-    .catch(error => {
+    .then(({status, html}) => answerWith(pages.caching)(status, html, 'text/html', true), error => {
       console.error(`the stage could not draw ${path}`, error);
       answerWith(drawnFresh)(500, String(error), 'text/plain', false);
     });
