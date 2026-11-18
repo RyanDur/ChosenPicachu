@@ -10,7 +10,7 @@ export {usersPage, type Person} from './users';
 export {violationsOf} from './axe';
 export {phone, phoneSideways, shortPhoneSideways, iPhone, iPadSplitView, iPadUpright, iPadSideways, iPad13Upright, iPad11Upright, splitViewWide, justPastAPhone, desktop} from './devices';
 export {clickWhereItIs, documentScrollY, twoFramesLater} from './scrolling';
-export {siteFrame} from './site';
+export {hydrationHeldBack, siteFrame} from './site';
 export {whichCardIsOnTop} from './asking';
 export {feedbackOn, github} from './feedback';
 export {tablesDemo} from './tables';
