@@ -27,11 +27,11 @@
 
 @container (width >= 92ch) {
   .run:has(> :is(.sample, .recipe-figure)) {
-    > :not(.sample, .recipe-figure, .run-title) {
+    > :not(.sample, .recipe-figure) {
       grid-column: 1;
     }
 
-    > :not(.sample, .recipe-figure, .run-title):has(+ :is(.sample, .recipe-figure)) {
+    > :not(.sample, .recipe-figure):has(+ :is(.sample, .recipe-figure)) {
       grid-row-end: span 8;
     }
 
