@@ -1,12 +1,12 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
-import {useSearchParamsObject} from '@navigation/search-params';
 import {FeaturesAskedFor} from './Recipe';
 import {Station} from '../Recipe';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {WorldGlider, WorldNote} from './World';
 import {DemoLink} from '@pages/Demos/DemoLink';
+import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {ReadingTime} from './ReadingTime';
 import {TablesSize} from './TablesSize';
 import {featuresHeading} from './features-heading';
@@ -26,7 +26,7 @@ const PartEntry: FC<{part: TablePart}> = ({part}) => {
 };
 
 export const Tutorials: FC = () => {
-  const {searchFromShown} = useSearchParamsObject({});
+  const carried = useCarriedAddress();
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
     <header className="tutorials-header">
@@ -49,7 +49,7 @@ export const Tutorials: FC = () => {
         </p>
         <ol className="tutorial-links" aria-label="the tutorials">
           {tableTutorials.all().map(tutorial => <li key={tutorial}>
-            <Link className="tutorial-link signpost reachable" to={`${tableTutorials.addressOf(tutorial)}${searchFromShown({})}`}>{tableTutorials.nameOf(tutorial)}</Link>
+            <Link className="tutorial-link signpost reachable" to={carried(tableTutorials.addressOf(tutorial))}>{tableTutorials.nameOf(tutorial)}</Link>
             <ReadingTime minutes={tableTutorials.minutesOf(tutorial)}/>
           </li>)}
         </ol>

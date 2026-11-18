@@ -1,14 +1,14 @@
 import {FC, PropsWithChildren} from 'react';
-import {useSearchParamsObject} from '@navigation/search-params';
 import './DemosPage.css';
 import './Tutorials.css';
 import {Tabs} from '@navigation/Tabs';
 import {DemoTopics} from './demo-topics';
 import {demoTab} from './demo-tab';
 import {TabLink} from './TabLink';
+import {useCarriedAddress} from './useCarriedAddress';
 
 export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, children}) => {
-  const {searchFromShown} = useSearchParamsObject({});
+  const carried = useCarriedAddress();
 
   return <>
     <p className="demos-opening paragraph">
@@ -28,7 +28,8 @@ export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, ch
       came with.
     </p>
     <Tabs label="demos" current={topic}
-      values={Object.values(DemoTopics).map(param => ({display: demoTab.names[param], param, to: `${demoTab.address(param)}${searchFromShown({})}`}))}/>
+      values={Object.values(DemoTopics).map(param =>
+        ({display: demoTab.names[param], param, to: carried(demoTab.address(param))}))}/>
     <section id="about" aria-label={demoTab.names[topic]} className="about">
       {children}
     </section>

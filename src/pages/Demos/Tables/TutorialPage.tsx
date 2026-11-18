@@ -1,6 +1,5 @@
 import {FC, useId} from 'react';
 import {Link} from 'react-router';
-import {useSearchParamsObject} from '@navigation/search-params';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {Aggregations} from './Aggregations';
 import {Tutorial, tableTutorials} from './tutorial-pages';
@@ -9,6 +8,7 @@ import {useShownTutorial} from './useShownTutorial';
 import {DragSortTutorial} from './DragSort';
 import {MenuRecipe, ResizeRecipe} from './Recipe';
 import {DemoLink} from '@pages/Demos/DemoLink';
+import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {tableParts} from './part-pages';
 import {tablesBook} from './tables-book';
 import {PartFoot} from './PartFoot';
@@ -22,7 +22,7 @@ const recipes: Record<Tutorial, FC> = {
 };
 
 export const TutorialPage: FC = () => {
-  const {searchFromShown} = useSearchParamsObject({});
+  const carried = useCarriedAddress();
   const titled = `tutorial${useId()}`;
   const startingAt = tableParts.told(tableTutorials.startingPart);
   const {to} = tableParts.whereIs(startingAt.ordinal);
@@ -31,7 +31,7 @@ export const TutorialPage: FC = () => {
     return <section aria-labelledby={titled} className="tutorial-page">
       <hgroup>
         <p className="caption">
-          <Link className="signpost" to={`${demoTab.address(DemoTopics.tables)}${searchFromShown({})}`}>
+          <Link className="signpost" to={carried(demoTab.address(DemoTopics.tables))}>
             {demoTab.names[DemoTopics.tables]}
           </Link>
           {` · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`}

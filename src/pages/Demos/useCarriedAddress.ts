@@ -1,5 +1,7 @@
 import {maybe} from '@ryandur/sand';
-import {useSearchParamsObject} from '@navigation/search-params';
+import {useSearchParamsOnceHydrated} from '@navigation/search-params';
+import {queryString} from '@transport';
+import {movedParams} from './Tables';
 
 export type Place = {
   to: string;
@@ -7,7 +9,8 @@ export type Place = {
 };
 
 export const useCarriedAddress = (): ((to: string, heading?: string) => string) => {
-  const {searchFromShown} = useSearchParamsObject({});
+  const [shown] = useSearchParamsOnceHydrated();
+  const search = queryString.from(Object.fromEntries(movedParams.droppedFrom(shown).entries()));
   return (to, heading) =>
-    `${to}${searchFromShown({})}${maybe(heading).map(id => `#${id}`).orElse('')}`;
+    `${to}${search}${maybe(heading).map(id => `#${id}`).orElse('')}`;
 };
