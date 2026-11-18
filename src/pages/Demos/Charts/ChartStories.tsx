@@ -495,9 +495,8 @@ const PieStory: FC = () =>
           <Want>The shares have to become shapes that can move. A split that changes with every trade should turn
             smoothly, not jump.</Want>
           <Says>You could paint the split with a conic gradient, a background that sweeps color round a point. But a
-            painted background has no parts: nothing to label, nothing for a test to find, and nothing to give a class,
-            which is a name a style sheet’s rules pick out, as the <TabLink to={DemoTopics.accordions}>accordions
-              tab</TabLink> says.</Says>
+            painted background has no parts: nothing to label, nothing for a test to find, and nothing to give a
+            class. <ClassGloss/></Says>
           <Says>I tried arc paths next. An SVG arc carries a flag that flips when the arc passes half the circle, and a
             flag can’t be moved gradually, so a split that crosses half jumps.</Says>
           <Says>A dashed stroke on a circle can be moved gradually, but the browser has to draw the stroke again on
