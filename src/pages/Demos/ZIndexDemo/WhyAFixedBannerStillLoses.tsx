@@ -48,8 +48,8 @@ export const WhyAFixedBannerStillLoses: FC = () => {
           pathname: zIndexParts.addressOf('lets-build-this-feature'),
           search: `?${storyKeys.openedIn(searchParams, topLayerStory)}`,
           hash: storyKeys.anchorOf(topLayerStory)
-        }}><cite>{zIndexParts.titleOf('build-this-feature')}</cite></Link>. It opens at the step where the panel is
-          written at the page’s root.</p>
+        }}><cite>{zIndexParts.told('lets-build-this-feature').name}</cite></Link>. It opens at the step where the
+          panel is written at the page’s root.</p>
       </li>
     </ol>
     <WhichCardIsOnTop/>
