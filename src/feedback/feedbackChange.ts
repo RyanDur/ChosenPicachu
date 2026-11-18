@@ -6,7 +6,7 @@ export type ThreadUnknown = {readonly type: 'threadUnknown'; readonly key: strin
 export type WordsEdited = {readonly type: 'wordsEdited'; readonly words: string};
 export type ReachEdited = {readonly type: 'reachEdited'; readonly reach: string};
 export type NoteSubmitted = {readonly type: 'noteSubmitted'};
-export type NoteSent = {readonly type: 'noteSent'; readonly openings: number; readonly url: string};
+export type NoteSent = {readonly type: 'noteSent'; readonly url: string};
 export type NoteRefused = {readonly type: 'noteRefused'; readonly why: HTTPError};
 
 export type FeedbackChange =
@@ -26,6 +26,6 @@ export const feedbackChange = {
   wordsEdited: (words: string): WordsEdited => ({type: 'wordsEdited', words}),
   reachEdited: (reach: string): ReachEdited => ({type: 'reachEdited', reach}),
   noteSubmitted: (): NoteSubmitted => ({type: 'noteSubmitted'}),
-  noteSent: (openings: number, url: string): NoteSent => ({type: 'noteSent', openings, url}),
+  noteSent: (url: string): NoteSent => ({type: 'noteSent', url}),
   noteRefused: (why: HTTPError): NoteRefused => ({type: 'noteRefused', why})
 };

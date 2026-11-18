@@ -12,7 +12,6 @@ export type SentNote = {state: 'none'} | {state: 'unread'; url: string} | {state
 
 export type Draft = {
   key: string;
-  openings: number;
   thread: string;
   words: string;
   reach: string;
@@ -21,10 +20,9 @@ export type Draft = {
 };
 
 const draftAt = (key: string): Draft =>
-  ({key, openings: 0, thread: github.discussions, words: '', reach: '', sending: {state: 'writing'}, sentNote: {state: 'none'}});
+  ({key, thread: github.discussions, words: '', reach: '', sending: {state: 'writing'}, sentNote: {state: 'none'}});
 
 const aboutPage = (draft: Draft, key: string): boolean => draft.key === key;
-const onScreen = (draft: Draft, openings: number): boolean => draft.openings === openings;
 const unsentWords = ({sending, words, reach}: Draft): Pick<Draft, 'words' | 'reach'> =>
   sending.state === 'sending' && sending.words === words && sending.reach === reach ? {words: '', reach: ''} : {words, reach};
 const sendingOnOpening = ({sending}: Draft): Sending => {
@@ -44,7 +42,6 @@ const reduce = (draft: Draft, action: FeedbackChange): Draft => {
       return {
         ...draft,
         key: action.key,
-        openings: draft.openings + 1,
         thread: github.discussions,
         sending: sendingOnOpening(draft),
         sentNote: readOnOpening(draft)
@@ -60,9 +57,7 @@ const reduce = (draft: Draft, action: FeedbackChange): Draft => {
     case 'noteSubmitted':
       return {...draft, sending: {state: 'sending', words: draft.words, reach: draft.reach}};
     case 'noteSent':
-      return onScreen(draft, action.openings)
-        ? {...draft, sentNote: {state: 'unread', url: action.url}, words: '', reach: '', sending: {state: 'writing'}}
-        : {...draft, ...unsentWords(draft), sentNote: {state: 'unread', url: action.url}, sending: {state: 'writing'}};
+      return {...draft, ...unsentWords(draft), sentNote: {state: 'unread', url: action.url}, sending: {state: 'writing'}};
     case 'noteRefused':
       return {...draft, sending: {state: 'refused', why: action.why}};
   }

@@ -54,24 +54,33 @@ describe('the feedback reducer', () => {
   test('should clear the sent note and link to it', () => {
     const typed = feedbackDraft.reduce(feedbackDraft.reduce(openOn, feedbackChange.wordsEdited('It hides.')), feedbackChange.noteSubmitted());
 
-    const draft = feedbackDraft.reduce(typed, feedbackChange.noteSent(typed.openings, 'https://github.test/github.discussions/9'));
+    const draft = feedbackDraft.reduce(typed, feedbackChange.noteSent('https://github.test/github.discussions/9'));
 
     expect(draft.words).toBe('');
     expect(draft.sending).toEqual({state: 'writing'});
     expect(draft.sentNote).toEqual({state: 'unread', url: 'https://github.test/github.discussions/9'});
   });
 
+  test('should keep words typed while the note was sending, once GitHub answers', () => {
+    const sending = inTurn(openOn, feedbackChange.wordsEdited('The sort menu hides.'), feedbackChange.noteSubmitted());
+    const typedOn = inTurn(sending, feedbackChange.wordsEdited('The sort menu hides. It also flickers.'));
+
+    const draft = inTurn(typedOn, feedbackChange.noteSent(noteAt));
+
+    expect(draft.words).toBe('The sort menu hides. It also flickers.');
+  });
+
   test('should keep the link to a sent note through the next opening', () => {
     const sending = inTurn(openOn, feedbackChange.wordsEdited('It hides.'), feedbackChange.noteSubmitted());
 
-    const draft = inTurn(sending, feedbackChange.noteSent(sending.openings, noteAt), feedbackChange.opened(tables));
+    const draft = inTurn(sending, feedbackChange.noteSent(noteAt), feedbackChange.opened(tables));
 
     expect(draft.sentNote).toEqual({state: 'read', url: noteAt});
   });
 
   test('should drop the link to a sent note on the opening after that', () => {
     const sending = inTurn(openOn, feedbackChange.wordsEdited('It hides.'), feedbackChange.noteSubmitted());
-    const reopened = inTurn(sending, feedbackChange.noteSent(sending.openings, noteAt), feedbackChange.opened(tables));
+    const reopened = inTurn(sending, feedbackChange.noteSent(noteAt), feedbackChange.opened(tables));
 
     const draft = inTurn(reopened, feedbackChange.opened(tables));
 
