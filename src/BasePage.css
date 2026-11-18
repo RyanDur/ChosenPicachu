@@ -576,14 +576,17 @@
       position: fixed;
       inset: auto 0 var(--menu-bar-block);
       width: 100%;
-      max-height: 100dvh;
+      max-height: calc(100dvh - var(--menu-bar-block));
+      overflow: auto;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: minmax(var(--finger-reach), 1fr);
       gap: var(--base);
       padding: var(--base);
 
       .path {
         height: var(--base-x-8);
+        max-height: 100%;
         padding-block: 0;
       }
     }
