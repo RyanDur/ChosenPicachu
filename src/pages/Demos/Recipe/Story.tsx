@@ -21,10 +21,7 @@ type Told = PropsWithChildren<{
   soThat: string;
 }>;
 
-type Props = Told & {
-  param?: string;
-  open?: boolean;
-};
+type Props = Told & ({param: string; open?: never} | {param?: never; open?: boolean});
 
 const Head: FC<{anchor: string; can: string; soThat: string; steps: number}> = ({anchor, can, soThat, steps}) => {
   const {story: Can} = useRanks();
