@@ -1,6 +1,6 @@
 import {Page, expect} from '@playwright/test';
 import {test} from './__test_support/history-writes';
-import {bannerTrap, boxOf, desktop, dialRow, iPhone, pressTab, siteFrame, tabsTo} from './__test_support';
+import {bannerTrap, boxOf, desktop, dialRow, iPhone, pillSwitch, pressTab, siteFrame, tabsTo, zIndexTab} from './__test_support';
 
 const fixedBannerPage = 'demos/z-index/why-a-fixed-banner-still-loses/';
 
@@ -91,6 +91,15 @@ test('a reader who follows Let’s build this feature with motion allowed lands 
 
   await expect(page).toHaveURL(/#news-top-story$/);
   await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
+});
+
+test('on the z-index tab, a reader chooses an entrance and raises a banner beside the dials', async ({page}) => {
+  await page.goto('demos/z-index/');
+  await pillSwitch(page, 'entrance').choose('Left');
+
+  await zIndexTab(page).raisesABanner();
+
+  await expect(zIndexTab(page).newestBanner()).toBeVisible();
 });
 
 const lessMotionEntrance = 'If your system asks for less motion, a new banner appears in place, whichever entrance you choose.';
