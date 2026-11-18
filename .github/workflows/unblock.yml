@@ -22,7 +22,7 @@ jobs:
           card=$(printf '%s' "$BRANCH" | sed -nE 's#^verify/([0-9]+)([-/].*)?$#\1#p')
           if [ -z "$card" ]; then echo "$BRANCH names no card"; exit 0; fi
           id=$(gh api "repos/$REPO/issues/$card" -q .id)
-          blocked=$(gh api "repos/$REPO/issues/$card/dependencies/blocking" -q '.[].url')
+          blocked=$(gh api --paginate "repos/$REPO/issues/$card/dependencies/blocking" -q '.[].url')
           failed=0
           for url in $blocked; do
             if gh api -X DELETE "$url/dependencies/blocked_by/$id" > /dev/null; then
