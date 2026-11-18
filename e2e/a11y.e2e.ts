@@ -5,7 +5,7 @@ import {HtmlValidate} from 'html-validate';
 import {pages} from './pages';
 import {chartsPage, recordPage, scriptedMarket, violationsOf} from './__test_support';
 
-const standards = ['wcag2a', 'wcag2aa', 'wcag22aa'];
+const standards = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
 const validator = new HtmlValidate({
   extends: ['html-validate:recommended'],
