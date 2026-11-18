@@ -14,5 +14,5 @@ export const galleryPage = {
   noMuseumOpen: (): Promise<HTMLElement> => screen.findByAltText('no museum is open'),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   pagination: (): HTMLElement => screen.getByRole('navigation', {name: 'pagination'}),
-  nextPage: (): Promise<void> => userEvent.click(screen.getByRole('link', {name: 'NEXT'}))
+  nextPage: (): Promise<void> => userEvent.click(screen.getByRole('link', {name: 'next page'}))
 };

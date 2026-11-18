@@ -22,5 +22,5 @@ export const pageControl = {
   rubOutPage: (): Promise<void> => userEvent.clear(pageField()),
   typeSize: (size: string): Promise<void> => typedOver(sizeField(), size),
   go: (): Promise<void> => userEvent.click(gallerySettings().getByRole('button', {name: 'Go'})),
-  nextPage: (): Promise<void> => userEvent.click(screen.getByRole('link', {name: 'NEXT'}))
+  nextPage: (): Promise<void> => userEvent.click(screen.getByRole('link', {name: 'next page'}))
 };

@@ -1,5 +1,6 @@
 import {Link, useLocation} from 'react-router';
 import {FC} from 'react';
+import {nothing, some} from '@ryandur/sand';
 import {useGallery} from '@pages/Gallery/Context';
 import './GalleryNav.css';
 
@@ -20,32 +21,26 @@ export const GalleryNav: FC<Props> = ({id}) => {
   const hasPrevPage = currentPage > firstPage;
   const prevPage = hasPrevPage ? currentPage - 1 : currentPage;
 
-  const counted = pagination.map(({total, limit}) => ({
-    first: Math.min(1 + limit * (currentPage - 1), total),
-    last: Math.min(limit * currentPage, total),
-    total
-  }));
-
   return <nav className="pagination backdrop field-before field-after" aria-label="pagination" id={id}>
     {hasPrevPage && <>
       <Link to={`${path}${searchFromShown({page: firstPage})}`}
         className="page first field attentive bold">
-        FIRST
+        <span className="way-words">first page</span>
       </Link> <Link to={`${path}${searchFromShown({page: prevPage})}`}
         className="page prev field attentive bold">
-        PREV
+        <span className="way-words">previous page</span>
       </Link> </>}
-    {counted.map(({first, last, total}) =>
+    {pagination.mBind(({totalPages}) => totalPages > 0 ? some(totalPages) : nothing()).map(totalPages =>
       <output className="info field" key="count">
-        <span>{first} - {last}</span> <span>of</span> <span>{total}</span>
+        Page {currentPage} of {totalPages.toLocaleString()}
       </output>).orNull()}
     {hasNextPage && <>
       {' '}<Link to={`${path}${searchFromShown({page: nextPage})}`}
         className="page next field attentive bold">
-        NEXT
+        <span className="way-words">next page</span>
       </Link> <Link to={`${path}${searchFromShown({page: lastPage})}`}
         className="page last field attentive bold">
-        LAST
+        <span className="way-words">last page</span>
       </Link>
     </>}
   </nav>;

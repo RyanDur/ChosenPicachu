@@ -13,7 +13,7 @@ export type View = {
 
 const atRest = (page: SitePage): View => {
   if (page.name === 'users') return {name: 'at rest, with no worker', page: {...page, ready: 'alert'}, withoutWorkers: true};
-  if (page.name === 'gallery') return {name: 'at rest', page, into: next => next.getByRole('link', {name: 'NEXT'}).waitFor()};
+  if (page.name === 'gallery') return {name: 'at rest', page, into: next => next.getByRole('link', {name: 'next page'}).waitFor()};
   return {name: 'at rest', page};
 };
 
@@ -106,7 +106,7 @@ export const views: readonly View[] = [
     name: 'a piece hovered',
     page: named('gallery'),
     into: async page => {
-      await page.getByRole('link', {name: 'NEXT'}).waitFor();
+      await page.getByRole('link', {name: 'next page'}).waitFor();
       await hovered(page, () => page.getByRole('figure').first().getByRole('link'));
     }
   },
@@ -114,7 +114,7 @@ export const views: readonly View[] = [
     name: 'its page field focused',
     page: named('gallery'),
     into: async page => {
-      await page.getByRole('link', {name: 'NEXT'}).waitFor();
+      await page.getByRole('link', {name: 'next page'}).waitFor();
       await galleryPage(page).openSettings();
       await page.getByRole('spinbutton', {name: 'Page', exact: true}).focus();
       await page.mouse.move(0, 0);
@@ -124,7 +124,7 @@ export const views: readonly View[] = [
     name: 'its search hovered',
     page: named('gallery'),
     into: async page => {
-      await page.getByRole('link', {name: 'NEXT'}).waitFor();
+      await page.getByRole('link', {name: 'next page'}).waitFor();
       await hovered(page, () => page.getByRole('combobox', {name: 'Search', exact: true}));
     }
   },

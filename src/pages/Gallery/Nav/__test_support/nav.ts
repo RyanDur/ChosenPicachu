@@ -1,7 +1,7 @@
 import {screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-type Way = 'FIRST' | 'PREV' | 'NEXT' | 'LAST';
+type Way = 'first page' | 'previous page' | 'next page' | 'last page';
 
 const way = (name: Way): HTMLElement => screen.getByRole('link', {name});
 
