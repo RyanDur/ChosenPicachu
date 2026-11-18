@@ -85,7 +85,9 @@ const handleSays: Record<World, ReactNode> = {
     The <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action"><code className="monospaced">touch-action: none</code></Mdn> lets the pointer
     drag it on a touchscreen. Until the page’s script runs the handle is disabled. It takes no focus and no press,
-    offers no resize cursor, and draws no line under the pointer.</Says>,
+    offers no resize cursor, and draws no line under the pointer. The sample’s <code
+    className="monospaced">hydrated</code> is <code className="monospaced">useHydrated()</code>, true once the page’s
+    script has run; it has nothing to do with the trades the flow table hydrates.</Says>,
   vanilla: <>
     <Says>The handle is focusable from the start, announced by the name the markup gives it, and
       once the ledger exists <code className="monospaced">dressColumn</code> rewrites that label to state
@@ -95,9 +97,9 @@ const handleSays: Record<World, ReactNode> = {
       cell’s full height, with the line at its end. On a touchscreen it is a 44px square at the bottom of the cell,
       with the line in its middle. The <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the
       gesture, and <Mdn path="Web/CSS/touch-action"><code className="monospaced">touch-action: none</code></Mdn> lets
-      the pointer drag it on a touchscreen. The frame’s handles are enabled from the start, so the sample’s rules for a
-      disabled handle never apply here; they are for the React world, where the handle waits for the page’s
-      script.</Says>
+      the pointer drag it on a touchscreen. The frame’s handles are enabled from the start, so the
+      sample’s <code className="monospaced">:not(:disabled)</code> and <code className="monospaced">:enabled</code> always
+      match here; they matter in the React world, where the handle waits for the page’s script.</Says>
     <Says>In the vanilla build the handle is the button the page writes,
       marked <code className="monospaced">data-resize-handle</code>. When boot
       calls <code className="monospaced">dragSortable</code> it attaches the resize to that button, once; when its
