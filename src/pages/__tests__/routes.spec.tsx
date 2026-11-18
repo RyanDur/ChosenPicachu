@@ -224,7 +224,8 @@ describe('page error boundaries', () => {
 });
 
 describe('a room still loading', () => {
-  const loading = (at = '/') => render(<TestApp at={at}><Route path={at} lazy={() => new Promise(() => undefined)}/></TestApp>);
+  const loading = (at = '/') => render(<TestApp at={at}><Route path={at}
+    lazy={() => new Promise(() => undefined)}/></TestApp>);
 
   test('stands in the site under the site’s own name, and is not called closed', async () => {
     loading();
@@ -428,7 +429,7 @@ describe('the rail says which page the reader is on', () => {
     render(<TestApp at={Paths.home}/>);
     await homePage.arrived();
 
-    await homePage.followOpenerLink('Read the Record');
+    await homePage.followPageLink('Read the Record');
 
     await waitFor(() => expect(site.railLink('Record')).toHaveAttribute('aria-current', 'page'));
     expect(site.railLink('Record')).not.toHaveFocus();
