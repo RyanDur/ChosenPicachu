@@ -97,12 +97,16 @@
     font-size: var(--base-x-2_5);
   }
 
-  .rail-path {
-    font-size: var(--text-caption);
-  }
-
+  .rail-path,
   .rail-aside {
-    font-size: var(--text-caption);
+    font-size: var(--base-x-2);
+  }
+}
+
+@media (width <= 1100px) and (height <= 600px) {
+  .rail-path,
+  .rail-aside {
+    font-size: var(--text-title);
   }
 }
 

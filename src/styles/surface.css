@@ -159,6 +159,8 @@
   }
 }
 
+.backdrop-separated:popover-open { background: var(--backdrop); }
+
 .backdrop-separated > :where(:last-child) {
   box-shadow: 0 var(--base) 0 var(--backdrop);
 
