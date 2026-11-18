@@ -14,12 +14,12 @@ describe('let’s build this feature, on its own page', () => {
     expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 6 of 6');
   });
 
-  test('should link part two, where the z-index it assumes stops counting, to its page with the raised card carried', async () => {
+  test('should link part one, the first part it assumes, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(buildThisFeature, '?raised=second')}/>);
 
     const opener = explanation.opener(await explanation.part(title));
 
-    expect(explanation.linkNamed(opener, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
+    expect(explanation.linkNamed(opener, 'Why Third is on top')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 
   test('should link part five, the last part it assumes, to its page with the raised card carried', async () => {
