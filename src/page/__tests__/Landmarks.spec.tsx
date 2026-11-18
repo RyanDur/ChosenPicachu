@@ -13,6 +13,7 @@ describe('the frame’s landmarks a reader meets, in order', () => {
 
     expect(landmarks.ofTheFrame()).toEqual([
       ['region', 'pages and feedback'],
+      ['navigation', 'site'],
       ['banner', ''],
       ['main', '']
     ]);
@@ -25,6 +26,7 @@ describe('the frame’s landmarks a reader meets, in order', () => {
 
     expect(landmarks.ofTheFrame()).toEqual([
       ['region', 'pages and feedback'],
+      ['navigation', 'site'],
       ['banner', ''],
       ['complementary', 'gallery settings'],
       ['main', ''],
@@ -40,6 +42,7 @@ describe('the frame’s landmarks a reader meets, in order', () => {
 
     expect(landmarks.ofTheFrame()).toEqual([
       ['region', 'pages and feedback'],
+      ['navigation', 'site'],
       ['banner', ''],
       ['main', '']
     ]);
@@ -51,6 +54,7 @@ describe('the frame’s landmarks a reader meets, in order', () => {
 
     expect(landmarks.ofTheFrame()).toEqual([
       ['region', 'pages and feedback'],
+      ['navigation', 'site'],
       ['banner', ''],
       ['main', '']
     ]);
