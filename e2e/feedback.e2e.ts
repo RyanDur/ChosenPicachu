@@ -174,6 +174,33 @@ test.describe('a phone on a page with tabs', () => {
   });
 });
 
+test.describe('a phone', () => {
+  test.use(iPhone);
+
+  test('reads where a note sent after Feedback closed is on GitHub once Feedback opens again', async ({page}) => {
+    let answer = (): void => undefined;
+    await github(page, {answersOnce: new Promise<void>(answered => {
+      answer = answered;
+    })});
+    const feedback = feedbackOn(page);
+    await page.goto('demos/tables/');
+    await siteFrame(page).hydrated();
+    await feedback.open.click();
+    await feedback.words.pressSequentially('The sort menu hides behind the header.');
+    await feedback.send.click();
+    await expect(feedback.status).toHaveText('Sending the note to GitHub.');
+    await feedback.cancel.click();
+    await expect(feedback.dialog).toBeHidden();
+    const answered = page.waitForResponse(response => response.url().endsWith('/feedback-graphql') && response.request().method() === 'POST');
+    answer();
+    await answered;
+
+    await feedback.open.click();
+
+    await expect(feedback.status.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
+  });
+});
+
 test('a note GitHub refuses stays in the open dialog, and it says so', async ({page}) => {
   await github(page, {refuse: 'Bad credentials'});
   const feedback = feedbackOn(page);

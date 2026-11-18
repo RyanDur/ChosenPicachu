@@ -2,13 +2,13 @@ import type {Page, Route} from '@playwright/test';
 import {maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
 
-type GitHub = {refuse?: string};
+type GitHub = {refuse?: string; answersOnce?: Promise<unknown>};
 
 export type Posted = {query: string; variables: Record<string, string>};
 
 const postedShape = schema.object({required: {query: schema.unknown, variables: schema.record(schema.unknown)}});
 
-export const github = async (page: Page, {refuse}: GitHub = {}): Promise<Posted[]> => {
+export const github = async (page: Page, {refuse, answersOnce}: GitHub = {}): Promise<Posted[]> => {
   const posted: Posted[] = [];
   await page.route('**/feedback-graphql', async (route: Route) => {
     const question: Posted = maybe(postedShape.decode(route.request().postDataJSON()))
@@ -22,6 +22,7 @@ export const github = async (page: Page, {refuse}: GitHub = {}): Promise<Posted[
       return;
     }
     posted.push(question);
+    await answersOnce;
     await route.fulfill(maybe(refuse)
       .map(message => ({status: 401, json: {message}}))
       .orElse({json: {data: {createDiscussion: {discussion: {id: 'D_9', url: 'https://github.com/RyanDur/ChosenPicachu/discussions/9'}}, addDiscussionComment: {comment: {url: 'x'}}}}}));

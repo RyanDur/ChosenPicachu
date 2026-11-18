@@ -12,10 +12,11 @@ export type Draft = {
   reach: string;
   sending: Sending;
   sentTo?: string;
+  sentSeen: boolean;
 };
 
 const draftAt = (key: string): Draft =>
-  ({key, openings: 0, thread: github.discussions, words: '', reach: '', sending: {state: 'writing'}});
+  ({key, openings: 0, thread: github.discussions, words: '', reach: '', sending: {state: 'writing'}, sentSeen: false});
 
 const aboutPage = (draft: Draft, key: string): boolean => draft.key === key;
 const onScreen = (draft: Draft, openings: number): boolean => draft.openings === openings;
@@ -32,7 +33,8 @@ const reduce = (draft: Draft, action: FeedbackChange): Draft => {
         openings: draft.openings + 1,
         thread: github.discussions,
         sending: stillSending(draft),
-        sentTo: undefined
+        sentTo: draft.sentSeen ? undefined : draft.sentTo,
+        sentSeen: true
       };
     case 'threadFound':
       return aboutPage(draft, action.key) ? {...draft, thread: action.url} : draft;
@@ -46,8 +48,8 @@ const reduce = (draft: Draft, action: FeedbackChange): Draft => {
       return {...draft, sending: {state: 'sending', words: draft.words, reach: draft.reach}};
     case 'noteSent':
       return onScreen(draft, action.openings)
-        ? {...draft, sentTo: action.url, words: '', reach: '', sending: {state: 'writing'}}
-        : {...draft, ...unsentWords(draft), sentTo: action.url, sending: {state: 'sent'}};
+        ? {...draft, sentTo: action.url, sentSeen: action.seen, words: '', reach: '', sending: {state: 'writing'}}
+        : {...draft, ...unsentWords(draft), sentTo: action.url, sentSeen: action.seen, sending: {state: 'sent'}};
     case 'noteRefused':
       return {...draft, sending: {state: 'refused', why: action.why}};
   }
