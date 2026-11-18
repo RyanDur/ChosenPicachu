@@ -5,7 +5,7 @@ import type {Place} from '@pages/Demos/useCarriedAddress';
 
 export type AccordionPart = keyof typeof names.accordions;
 
-const headings = [
+const bookParts = [
   'html-alone-heading',
   'remembers-heading',
   'max-height-guess-heading',
@@ -14,9 +14,9 @@ const headings = [
   'motion-heading'
 ] as const;
 
-export type TabHeading = typeof headings[number];
+export type BookPart = typeof bookParts[number];
 
-const titles: Record<TabHeading, string> = {
+const titles: Record<BookPart, string> = {
   'html-alone-heading': 'An accordion in HTML alone',
   'remembers-heading': 'A box remembers the fold, and a rule reads it',
   'max-height-guess-heading': 'The max-height guess',
@@ -25,19 +25,19 @@ const titles: Record<TabHeading, string> = {
   'motion-heading': 'How a sliding fold moves'
 };
 
-type Listing = {heading: TabHeading; minutes: number};
+type Listing = {heading: BookPart; minutes: number};
 
-type Told = {heading: TabHeading; name: string; minutes: number; ordinal: number; says: string};
+type Told = {heading: BookPart; name: string; minutes: number; ordinal: number; says: string};
 
 type AccordionParts = {
   told: (part: AccordionPart) => Told;
   addressOf: (part: AccordionPart) => string;
   shownAt: (pathname: string) => Maybe<AccordionPart>;
-  whereIs: (heading: TabHeading) => Place;
-  titleOf: (heading: TabHeading) => string;
-  numbered: (heading: TabHeading) => string;
-  previousOf: (part: AccordionPart) => Maybe<TabHeading>;
-  nextOf: (part: AccordionPart) => Maybe<TabHeading>;
+  whereIs: (heading: BookPart) => Place;
+  titleOf: (heading: BookPart) => string;
+  numbered: (heading: BookPart) => string;
+  previousOf: (part: AccordionPart) => Maybe<BookPart>;
+  nextOf: (part: AccordionPart) => Maybe<BookPart>;
   inTheBook: number;
 };
 
@@ -51,16 +51,16 @@ const tabAddress = demoTab.address(DemoTopics.accordions);
 
 const addressOf = (part: AccordionPart): string => `${tabAddress}${part}/`;
 
-const placeOf = (heading: TabHeading): number => headings.indexOf(heading);
+const placeOf = (heading: BookPart): number => bookParts.indexOf(heading);
 
-const besidePart = (part: AccordionPart, step: number): Maybe<TabHeading> =>
-  maybe(headings[placeOf(listings[part].heading) + step]);
+const besidePart = (part: AccordionPart, step: number): Maybe<BookPart> =>
+  maybe(bookParts[placeOf(listings[part].heading) + step]);
 
 const isPart = (name: string): name is AccordionPart => Object.keys(listings).includes(name);
 
 const parts = Object.keys(listings).filter(isPart);
 
-const whereIs = (heading: TabHeading): Place =>
+const whereIs = (heading: BookPart): Place =>
   maybe(parts.find(part => listings[part].heading === heading)).either(
     part => ({to: addressOf(part)}),
     () => ({to: tabAddress, heading}));
@@ -88,5 +88,5 @@ export const accordionParts: AccordionParts = {
   numbered: heading => `${placeOf(heading) + 1}. ${titles[heading]}`,
   previousOf: part => besidePart(part, -1),
   nextOf: part => besidePart(part, 1),
-  inTheBook: headings.length
+  inTheBook: bookParts.length
 };
