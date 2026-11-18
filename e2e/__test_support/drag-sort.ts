@@ -115,6 +115,7 @@ export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
       await page.mouse.move(middle.x + by, middle.y, {steps: moves});
       await page.mouse.up();
     },
+    grip,
     resizeHandle,
     focusHandle: async (name: string): Promise<void> => {
       await siteFrame(page).hydrated();

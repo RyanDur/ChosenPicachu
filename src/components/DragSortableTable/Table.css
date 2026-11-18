@@ -78,6 +78,9 @@
     width: var(--base);
   }
 
+  &:disabled {
+    cursor: revert;
+  }
 }
 
 .fancy-table.apportioned .header-cell.shared {
