@@ -5,6 +5,8 @@ export type Landmark = readonly [role: string, name: string];
 
 const roles = ['banner', 'navigation', 'region', 'complementary', 'search', 'form', 'main', 'contentinfo'] as const;
 
+const asOnADesk = {hidden: true};
+
 const ofTheFrame = (element: HTMLElement): boolean => !element.parentElement?.closest('main');
 
 const inDocumentOrder = (first: HTMLElement, second: HTMLElement): number =>
@@ -14,7 +16,7 @@ export const landmarks = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('main'),
   footerArrived: (): Promise<HTMLElement> => screen.findByRole('contentinfo'),
   ofTheFrame: (): Landmark[] => roles
-    .flatMap(role => screen.queryAllByRole(role).filter(ofTheFrame).map(element => ({role, element})))
+    .flatMap(role => screen.queryAllByRole(role, asOnADesk).filter(ofTheFrame).map(element => ({role, element})))
     .sort((one, other) => inDocumentOrder(one.element, other.element))
-    .map(({role, element}) => [role, computeAccessibleName(element)])
+    .map(({role, element}) => [role, computeAccessibleName(element, asOnADesk)])
 };
