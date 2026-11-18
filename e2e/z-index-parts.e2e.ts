@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {contextChooser, siteFrame, stackingPile, trappedMenu, zIndexTab} from './__test_support';
+import {contextChooser, siteFrame, stackingPile, topLayerMenu, trappedMenu, zIndexTab} from './__test_support';
 
 const whyThirdIsOnTop = 'Why Third is on top';
 const whyNineNineNineStillLoses = 'Why 9999 still loses';
@@ -82,6 +82,7 @@ test('a reader follows why the popover wins from the z-index tab to its page and
   await expect(page).toHaveURL(/demos\/z-index\/why-the-popover-wins\/$/);
   await expect(page.getByText('Z-index · part 4 of 6', {exact: true})).toBeVisible();
   await expect(trappedMenu(page).sortBy).toBeVisible();
+  await expect(topLayerMenu(page).sortBy).toBeVisible();
 });
 
 test('a reader follows what else forms a stacking context’s foot on to the next part’s page, with the wear kept in the address', async ({page}) => {
