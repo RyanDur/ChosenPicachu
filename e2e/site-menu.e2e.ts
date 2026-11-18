@@ -116,7 +116,7 @@ test.describe('a keyboard reader on an upright phone', () => {
 test.describe('an iPad in split view widened past a phone', () => {
   test.use(iPadSplitView);
 
-  test('closes the site menu, leaving the site nav in the rail', async ({page}) => {
+  test('finds the site nav in the rail', async ({page}) => {
     const site = siteFrame(page);
     await page.goto('');
     await site.hydrated();
