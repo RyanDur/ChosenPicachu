@@ -23,7 +23,8 @@ const aboutPage = (draft: Draft, key: string): boolean => draft.key === key;
 const onScreen = (draft: Draft, openings: number): boolean => draft.openings === openings;
 const unsentWords = ({sending, words, reach}: Draft): Pick<Draft, 'words' | 'reach'> =>
   sending.state === 'sending' && sending.words === words && sending.reach === reach ? {words: '', reach: ''} : {words, reach};
-const stillSending = ({sending}: Draft): Sending => sending.state === 'sending' ? sending : {state: 'writing'};
+const keptThroughAnOpening = ({sending}: Draft): Sending =>
+  sending.state === 'sending' || sending.state === 'refused' ? sending : {state: 'writing'};
 const readOnOpening = ({sentNote}: Draft): SentNote => sentNote.state === 'unread' ? {state: 'read', url: sentNote.url} : {state: 'none'};
 
 const reduce = (draft: Draft, action: FeedbackChange): Draft => {
@@ -34,7 +35,7 @@ const reduce = (draft: Draft, action: FeedbackChange): Draft => {
         key: action.key,
         openings: draft.openings + 1,
         thread: github.discussions,
-        sending: stillSending(draft),
+        sending: keptThroughAnOpening(draft),
         sentNote: readOnOpening(draft)
       };
     case 'threadFound':
