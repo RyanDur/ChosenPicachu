@@ -1,5 +1,5 @@
 .page-pulled-apart {
-  --drawn-width: 552px;
+  --drawn-width: 516px;
   --drawn-height: 619.2px;
 
   display: grid;
@@ -22,7 +22,7 @@
   }
 
   .slab-line {
-    stroke-width: var(--hairline-x-2);
+    stroke-width: var(--hairline-x-3);
     vector-effect: non-scaling-stroke;
   }
 }

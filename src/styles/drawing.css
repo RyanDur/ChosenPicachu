@@ -2,6 +2,13 @@
 
 .paper-filled { fill: var(--paper); }
 
+.paper-haloed {
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 0.35em;
+  stroke-linejoin: round;
+}
+
 .faded-leather-filled { fill: var(--faded-leather); }
 
 .faded-mint-filled { fill: var(--faded-mint); }

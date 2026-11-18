@@ -3,7 +3,6 @@ import './PagePulledApart.css';
 
 type Spot = {readonly u: number; readonly v: number};
 type Region = Spot & {readonly across: number; readonly down: number};
-type Lettered = Spot & {readonly word: string; readonly anchor?: 'middle' | 'end'};
 type Point = {readonly x: number; readonly y: number};
 
 const unitsPerStep = 2.4;
@@ -12,7 +11,7 @@ const cosine30 = 0.866;
 const lift = 82;
 const slabDepth = 6;
 const projectionStart: Point = {x: 150, y: 170};
-const plate: Region = {u: 0, v: 0, across: 112, down: 70};
+const plate: Region = {u: 0, v: 0, across: 112, down: 72};
 
 const elevations = {structure: 0, presentation: lift, behavior: lift * 2};
 
@@ -33,35 +32,19 @@ const face = (from: Spot, to: Spot): string => pointsOf([
   projected(to, elevations.structure - slabDepth), projected(from, elevations.structure - slabDepth)]);
 
 const slabRegions: Readonly<Record<string, Region>> = {
-  header: {u: 6, v: 6, across: 102, down: 12},
-  section: {u: 6, v: 22, across: 32, down: 42},
-  nav: {u: 8, v: 24, across: 28, down: 25},
-  button: {u: 8, v: 52, across: 28, down: 10},
-  main: {u: 42, v: 22, across: 66, down: 42}
+  header: {u: 6, v: 6, across: 100, down: 12},
+  nav: {u: 6, v: 22, across: 24, down: 40},
+  main: {u: 34, v: 22, across: 72, down: 40},
+  footer: {u: 6, v: 66, across: 100, down: 6},
+  button: {u: 80, v: 50, across: 22, down: 8}
 };
 
-const dialog: Region = {u: 64, v: 6, across: 44, down: 46};
+const centerOf = ({u, v, across, down}: Region): Spot => ({u: u + across / 2, v: v + down / 2 + 1.8});
 
-const clickSpot: Spot = {u: 33, v: 57};
-
-const regionLettering: readonly Lettered[] = [
-  {word: 'header', u: 8, v: 18},
-  {word: 'section', u: -4, v: 58, anchor: 'end'},
-  {word: 'nav', u: 22.5, v: 42},
-  {word: 'button', u: 33.5, v: 60.5, anchor: 'end'},
-  {word: 'main', u: 60.5, v: 50}
-];
-
-const classLettering: readonly Lettered[] = [
-  {word: '.field', u: -4, v: 58, anchor: 'end'},
-  {word: '.paragraph', u: 124, v: 75},
-  {word: '.signpost', u: 138, v: 89}
-];
-
-const scriptLettering: readonly Lettered[] = [
-  {word: 'dialog', u: 88, v: 31, anchor: 'middle'},
-  {word: 'click', u: clickSpot.u + 7, v: clickSpot.v + 3}
-];
+const scriptPoints: Readonly<Record<string, Spot>> = {
+  toggle: {u: 18, v: 42},
+  click: {u: 91, v: 54}
+};
 
 const backCorner: Spot = {u: 0, v: 0};
 const frontCorner: Spot = {u: plate.across, v: plate.down};
@@ -79,18 +62,13 @@ const languages = [
   {word: 'structure', elevation: elevations.structure}
 ];
 
-const Lettering: FC<{lettering: readonly Lettered[]; elevation: number}> = ({lettering, elevation}) => <>
-  {lettering.map(lettered => <text key={lettered.word} className="drawn-caption monospaced ink-filled"
-    {...projected(lettered, elevation)} textAnchor={lettered.anchor}>
-    {lettered.word}
-  </text>)}
-</>;
+const Label: FC<{word: string; at: Point; anchor?: 'middle'}> = ({word, at, anchor}) =>
+  <text className="drawn-caption monospaced ink-filled paper-haloed" {...at} textAnchor={anchor}>{word}</text>;
 
-export const PagePulledApart: FC = () => {
-  const clickPoint = projected(clickSpot, elevations.behavior);
-  return <figure className="page-pulled-apart">
-    <svg className="drawing center" viewBox={`${25 * unitsPerStep} 0 ${230 * unitsPerStep} ${258 * unitsPerStep}`}
-      width={230 * unitsPerStep}
+export const PagePulledApart: FC = () =>
+  <figure className="page-pulled-apart">
+    <svg className="drawing center" viewBox={`${35 * unitsPerStep} 0 ${215 * unitsPerStep} ${258 * unitsPerStep}`}
+      width={215 * unitsPerStep}
       height={258 * unitsPerStep} aria-hidden="true">
       <defs>
         <pattern id="page-pulled-apart-hatch" patternUnits="userSpaceOnUse" width="7" height="7"
@@ -98,7 +76,6 @@ export const PagePulledApart: FC = () => {
           <line className="drawn-line drawn" x1="3.5" y1="0" x2="3.5" y2="7"/>
         </pattern>
       </defs>
-      <DroppedLine spot={backCorner}/>
       <polygon className="slab-line drawn paper-filled"
         points={face({u: 0, v: plate.down}, {u: plate.across, v: plate.down})}/>
       <polygon className="slab-line drawn paper-filled"
@@ -108,27 +85,29 @@ export const PagePulledApart: FC = () => {
         <polygon key={name} className="drawn-line drawn hollow" points={regionPoints(region, elevations.structure)}/>)}
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.presentation)}/>
       {Object.entries(slabRegions).map(([name, region]) =>
-        <polygon key={name} className="drawn-line drawn pulled-apart-hatched"
+        <polygon key={name} className={name === 'main' ? 'drawn-line drawn hollow' : 'drawn-line drawn pulled-apart-hatched'}
           points={regionPoints(region, elevations.presentation)}/>)}
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.behavior)}/>
-      <polygon className="drawn-line drawn hollow" points={regionPoints(dialog, elevations.behavior)}/>
+      {Object.entries(scriptPoints).map(([word, spot]) => {
+        const {x, y} = projected(spot, elevations.behavior);
+        return <circle key={word} className="drawn-filled" cx={x} cy={y} r={1.6 * unitsPerStep}/>;
+      })}
+      {Object.values(scriptPoints).map(spot => <DroppedLine key={`${spot.u},${spot.v}`} spot={spot}/>)}
+      <DroppedLine spot={backCorner}/>
       <DroppedLine spot={frontCorner}/>
-      <DroppedLine spot={clickSpot}/>
-      <circle className="drawn-filled" cx={clickPoint.x} cy={clickPoint.y} r={1.6 * unitsPerStep}/>
-      <Lettering lettering={regionLettering} elevation={elevations.structure}/>
-      <Lettering lettering={classLettering} elevation={elevations.presentation}/>
-      <Lettering lettering={scriptLettering} elevation={elevations.behavior}/>
+      {Object.entries(slabRegions).map(([name, region]) =>
+        <Label key={name} word={name} at={projected(centerOf(region), elevations.structure)} anchor="middle"/>)}
+      {Object.entries(scriptPoints).map(([word, {u, v}]) =>
+        <Label key={word} word={word} at={projected({u: u + 3, v: v + 1}, elevations.behavior)}/>)}
       {languages.map(({word, elevation}) => {
         const {x, y} = projected({u: 0, v: plate.down / 2}, elevation);
-        return <text key={word} className="drawn-caption uppercase ink-filled" x={x - 6 * unitsPerStep}
-          y={y - 6 * unitsPerStep}
-          textAnchor="end">{word}</text>;
+        return <text key={word} className="drawn-caption uppercase ink-filled paper-haloed" x={x - 6 * unitsPerStep}
+          y={y + 2 * unitsPerStep} textAnchor="end">{word}</text>;
       })}
     </svg>
     <figcaption className="caption"><strong className="bold">A page, pulled apart.</strong> The markup is the slab, the
-      one plate that is a page on its own. The style sheet dresses every region of it. The script answers the button
-      and adds the dialog. Lift the style sheet or the script off and the page still stands: that is separate. Set them
-      back and every mark lands on its element: that is together.
+      one plate that is a page on its own. The style sheet dresses every region of it. The script touches two points.
+      Lift the style sheet or the script off and the page still stands: that is separate. Set them back and every mark
+      lands on its element: that is together.
     </figcaption>
   </figure>;
-};
