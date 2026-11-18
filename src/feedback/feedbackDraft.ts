@@ -2,7 +2,7 @@ import {HTTPError} from '@transport';
 import {FeedbackChange} from './feedbackChange';
 import {github} from './github';
 
-export type Sending = {state: 'writing'} | {state: 'sending'; words: string; reach: string} | {state: 'sent'} | {state: 'refused'; why: HTTPError};
+export type Sending = {state: 'writing'} | {state: 'sending'; words: string; reach: string} | {state: 'refused'; why: HTTPError};
 
 export type SentNote = {state: 'none'} | {state: 'unread'; url: string} | {state: 'read'; url: string};
 
@@ -51,7 +51,7 @@ const reduce = (draft: Draft, action: FeedbackChange): Draft => {
     case 'noteSent':
       return onScreen(draft, action.openings)
         ? {...draft, sentNote: {state: 'unread', url: action.url}, words: '', reach: '', sending: {state: 'writing'}}
-        : {...draft, ...unsentWords(draft), sentNote: {state: 'unread', url: action.url}, sending: {state: 'sent'}};
+        : {...draft, ...unsentWords(draft), sentNote: {state: 'unread', url: action.url}, sending: {state: 'writing'}};
     case 'noteRefused':
       return {...draft, sending: {state: 'refused', why: action.why}};
   }
