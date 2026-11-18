@@ -4,6 +4,7 @@ import {Codes, Mdn, Says, Sample, Snippet, Step, DialStep, StepHeading, Steps, S
 import {AlignDial, SideDial, useControls} from '../Controls';
 import {partHeadings} from './part-headings';
 import {PartLink} from './PartLink';
+import {PartTermLink} from './PartTermLink';
 import {topLayerStory} from './top-layer-story';
 import bannersSource from '@banners/Banners.tsx?sample';
 import providerSource from '@banners/BannerProvider.tsx?sample';
@@ -65,8 +66,9 @@ export const TopLayerRecipe: FC = () => {
         <StepHeading title="Show it when there is news"/>
         <Words>
           <Want>The panel should be there when news arrives, and gone when the last of it is dismissed.</Want>
-          <Says>The site keeps its banners in a React context, a value React hands to every component inside it. It has
-            nothing to do with the stacking contexts above; the two only share the word.</Says>
+          <Says>The site keeps its banners in a <PartTermLink part="why-the-popover-wins">React</PartTermLink> context,
+            a value React hands to every component inside it. It has nothing to do with the stacking contexts above; the
+            two only share the word.</Says>
           <Says>To dispatch is to hand the context an action, a record of what happened. A component raises a banner by
             dispatching one that says a message arrived. The dismiss button dispatches one that marks the banner
             leaving, and the panel lowers it once it has slid away and the gap it left has closed. The panel reads the
