@@ -21,11 +21,10 @@ export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, ch
       only for what that drag lacks and a key for every
       move. <TabLink to={DemoTopics.charts}>The charts tab</TabLink> draws trades that keep arriving, each one checked
       where it enters. <TabLink to={DemoTopics.tables}>The tables tab</TabLink> builds one feature from those parts, in
-      the order it was asked for. A tab shows the feature first, with dials wherever the build has a choice. Then comes
-      the explanation, with what the platform gives now beside the tricks we used before it. Then come the steps that
-      build it, each beside the code that runs on this page. Start with the accordions if HTML, CSS and JavaScript are
-      new to you. Otherwise start at the first tab that adds something you don’t know, or go to the tab whose bug you
-      came with.
+      the order it was asked for. A tab opens on the feature. A long tab lists its parts, and each part is a page of its
+      own, with the thing it explains at its top and the code that runs on this page beside its steps. Start with the
+      accordions if HTML, CSS and JavaScript are new to you. Otherwise start at the first tab that adds something you
+      don’t know, or go to the tab whose bug you came with.
     </p>
     <Tabs label="demos" current={topic}
       values={Object.values(DemoTopics).map(param =>
