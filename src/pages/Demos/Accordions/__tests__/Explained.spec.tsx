@@ -245,9 +245,9 @@ describe('the old way', () => {
   test('should give the max-height guess’s reading time in the singular, as one minute', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const oldWay = await explanation.part(parts[0]);
+    const guess = explanation.partIn(await explanation.part(parts[0]), 'The max-height guess');
 
-    expect(explanation.saying(oldWay, '1 minute to read')).toBeInTheDocument();
+    expect(explanation.saying(guess, '1 minute to read')).toBeInTheDocument();
   });
 
   test('should say what the max-height guess does, under its title', async () => {
