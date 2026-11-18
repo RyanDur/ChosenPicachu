@@ -56,6 +56,7 @@ const choosesInTheTopLayerMenu = async (page: Page): Promise<void> => {
 const raisesAndDismissesTheBanners = async (page: Page): Promise<void> => {
   await page.goto('demos/z-index/why-a-fixed-banner-still-loses/');
   const banners = bannerTrap(page);
+  await banners.untilRaisable();
 
   await fingerTap(page, banners.raiseOld);
   await expect(banners.oldBanner).toBeVisible();
