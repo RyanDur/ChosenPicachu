@@ -12,6 +12,12 @@
 .outlined { outline: var(--hairline-x-2) solid currentcolor; }
 .bare { appearance: none; }
 .borderless { border: none; }
+
+.scrollbarless {
+  @media (width <= 600px), (width <= 1100px) and (height <= 600px) {
+    scrollbar-width: none;
+  }
+}
 .unfilled {
   background: none;
 
