@@ -138,6 +138,23 @@ for (const {reader, device} of handhelds) {
       await expect(gallery.searchField).toBeFocused();
     });
 
+    test('closes the gallery settings on Back from a search made there, and opens them again on the address\'s words', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam');
+      await gallery.openSettings();
+      await gallery.searchField.fill('lilies');
+      await gallery.searchField.press('Enter');
+      await expect(page).toHaveURL(/search=lilies/);
+
+      await page.goBack();
+
+      await expect(page).not.toHaveURL(/search=/);
+      await expect(gallery.sheet).toBeHidden();
+      await gallery.openSettings();
+      await expect(gallery.searchField).toHaveValue('');
+    });
+
     test('waits for Enter before searching the words typed in the gallery settings', async ({page}) => {
       const gallery = galleryPage(page);
       await gallery.answerEveryWallFromTheRecording();

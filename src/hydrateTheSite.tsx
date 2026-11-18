@@ -20,9 +20,19 @@ const sheetsClosedWhenThePhoneLayoutEnds = () =>
   phoneLayout(window).ends(() => Object.values(phoneSheets)
     .forEach(sheet => maybe(document.getElementById(sheet)).map(open => open.hidePopover())));
 
+// Android's back gesture closes an open popover before it goes back, so Back and Forward close the gallery's sheet;
+// closing moves focus out of a field, and a field applies as focus leaves it, so each field shows its default first
+const gallerySettingsClosedOnBackAndForward = () =>
+  window.addEventListener('popstate', () =>
+    maybe(document.getElementById(phoneSheets.gallerySettings)).map(sheet => {
+      sheet.querySelectorAll('input').forEach(field => field.value = field.defaultValue);
+      sheet.hidePopover();
+    }));
+
 export const hydrateTheSite = {
   overTheBuiltPage: (router: DataRouter): void => {
     sheetsClosedWhenThePhoneLayoutEnds();
+    gallerySettingsClosedOnBackAndForward();
     startTransition(() => {
       hydrateRoot(document,
         <RoutedSite router={router} arrived={arrival(window)}/>);
@@ -30,6 +40,7 @@ export const hydrateTheSite = {
   },
   afresh: (router: DataRouter): void => {
     sheetsClosedWhenThePhoneLayoutEnds();
+    gallerySettingsClosedOnBackAndForward();
     createRoot(document)
       .render(<RoutedSite router={router} arrived={arrival(window)}/>);
   }
