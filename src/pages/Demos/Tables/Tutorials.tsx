@@ -15,10 +15,10 @@ import './Tutorials.css';
 
 const PartEntry: FC<{part: TablePart}> = ({part}) => {
   const {name, says, minutes, ordinal} = tableParts.told(part);
-  const {to, search} = tableParts.whereIs(ordinal);
+  const {to} = tableParts.whereIs(ordinal);
   return <>
     <h3 className="phase-title title">
-      <DemoLink to={to} search={search}>{name}</DemoLink>
+      <DemoLink to={to}>{name}</DemoLink>
     </h3>
     <p className="paragraph">{says}</p>
     <ReadingTime minutes={minutes}/>

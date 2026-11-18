@@ -6,7 +6,7 @@ import {BookPart, tablesBook} from './tables-book';
 
 export const PartFoot: FC<{part: BookPart}> = ({part}) => {
   const carried = useCarriedAddress();
-  const neighbor = ({title, to, heading, search}: PartPlace) => ({title, address: carried(to, heading, search)});
+  const neighbor = ({title, to, heading}: PartPlace) => ({title, address: carried(to, heading)});
   return <PageFoot label="the tables parts"
     previous={tablesBook.previousOf(part).map(neighbor)}
     next={tablesBook.nextOf(part).map(neighbor)}/>;
