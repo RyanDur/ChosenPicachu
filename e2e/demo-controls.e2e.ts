@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {chartsPage, fingerTap, galleryPage, iPadUpright, iPhone, phoneSideways, sortableList, usersPage} from './__test_support';
+import {chartsPage, fingerTap, galleryPage, iPadUpright, iPhone, phoneSideways, siteFrame, sortableList, usersPage} from './__test_support';
 
 for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpright}, {reader: 'a phone', device: iPhone}]) {
   test.describe(reader, () => {
@@ -43,17 +43,24 @@ for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpr
 test.describe('a phone held sideways', () => {
   test.use(phoneSideways);
 
-  test('runs and clears a search from fingers that land just off submit and reset', async ({page}) => {
+  test('runs a search on a piece\'s page from a finger that lands just off submit', async ({page}) => {
     const gallery = galleryPage(page);
-    await page.goto('gallery/?tab=vam');
-    await gallery.openSettings();
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/O9138?tab=vam');
+    await siteFrame(page).hydrated();
     await gallery.searchField.fill('flowers');
 
     await fingerTap(page, gallery.submitSearch);
-    await expect(page).toHaveURL(/search=flowers/);
 
-    await gallery.openSettings();
+    await expect(page).toHaveURL(/search=flowers/);
+  });
+
+  test('clears the search on a piece\'s page from a finger that lands just off reset', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/O9138?tab=vam&search=lilies');
+
     await fingerTap(page, gallery.resetSearch);
+
     await expect(page).not.toHaveURL(/search=/);
   });
 });

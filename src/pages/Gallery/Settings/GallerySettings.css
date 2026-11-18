@@ -52,62 +52,15 @@
     gap: var(--base);
     padding-block: var(--base) 0;
 
-    .museum-label {
+    .sheet-label {
       display: flex;
       align-items: center;
       padding-inline: var(--base-x-2);
     }
 
-    .museum-choice {
+    .sheet-field {
       min-width: 0;
       padding-inline: var(--base-x-2);
-    }
-
-    .search {
-      grid-column: 1 / -1;
-      grid-row: span 2;
-      gap: var(--base);
-      grid-template-columns: 1fr 2fr;
-      grid-template-rows: repeat(2, var(--finger-reach));
-      grid-template-areas:
-        'query-label query'
-        'reset submit';
-
-      .query-label {
-        display: flex;
-        align-items: center;
-        padding-block-start: 0;
-      }
-
-      .submit-query {
-        margin-left: 0;
-      }
-    }
-
-    .page-control {
-      grid-column: 1 / -1;
-      grid-row: span 3;
-      position: static;
-      grid-template-columns: 1fr 2fr;
-      grid-template-rows: repeat(3, var(--finger-reach));
-      grid-template-areas:
-        'per-page-label per-page'
-        'go-to-label go-to'
-        'submit submit';
-
-      .go-to-label {
-        grid-area: go-to-label;
-      }
-
-      .per-page-label {
-        grid-area: per-page-label;
-      }
-
-      .control-label,
-      .control {
-        height: 100%;
-        margin: 0;
-      }
     }
   }
 }

@@ -60,6 +60,11 @@ export const galleryPage = (page: Page) => {
         return pageOne ? route.fulfill({contentType: pageOne.contentType, body: pageOne.body}) : route.fallback();
       });
     },
+    answerEveryWallFromTheRecording: async (): Promise<void> => {
+      const recorded = recordedOnTheStage('/vam/objects/search?page=1&page_size=8&images_exist=true');
+      await page.route(/\/vam\/objects\/search\?/, route =>
+        recorded ? route.fulfill({contentType: recorded.contentType, body: recorded.body}) : route.fallback());
+    },
     refuseEveryPicture: async (): Promise<void> => {
       await page.route('**/vam-image/*/full/**', route => route.abort());
     },
