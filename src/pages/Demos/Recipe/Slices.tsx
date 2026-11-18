@@ -29,8 +29,8 @@ type SlicesProps = {
 const StationLink: FC<{station: number; place?: Place}> = ({station, place}) => {
   const carried = useCarriedAddress();
   return maybe(place).either(
-    ({to, heading, search}) =>
-      <Link className="slice-station signpost caption upright" to={carried(to, heading, search)}>station {station}</Link>,
+    ({to, heading}) =>
+      <Link className="slice-station signpost caption upright" to={carried(to, heading)}>station {station}</Link>,
     () => <a className="slice-station signpost caption upright" href={`#${stations.idOf(station)}`}>station {station}</a>);
 };
 

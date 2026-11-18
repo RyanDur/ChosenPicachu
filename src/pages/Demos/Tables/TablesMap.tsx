@@ -13,8 +13,8 @@ export const TablesMap: FC = () => {
   return <nav aria-label="the tables map">
     <TablesSize/>
     <ol className="paragraph">
-      {tablesBook.signposts.map(({title, to, heading, search}) => <li key={title}>
-        <NavLink className={mapEntry} to={carried(to, heading, search)} end>{title}</NavLink>
+      {tablesBook.signposts.map(({title, to, heading}) => <li key={title}>
+        <NavLink className={mapEntry} to={carried(to, heading)} end>{title}</NavLink>
       </li>)}
     </ol>
   </nav>;

@@ -25,7 +25,7 @@ export const TutorialPage: FC = () => {
   const {searchFromShown} = useSearchParamsObject({});
   const titled = `tutorial${useId()}`;
   const startingAt = tableParts.told(tableTutorials.startingPart);
-  const {to, search} = tableParts.whereIs(startingAt.ordinal);
+  const {to} = tableParts.whereIs(startingAt.ordinal);
   return useShownTutorial().either(tutorial => {
     const TutorialRecipe = recipes[tutorial];
     return <section aria-labelledby={titled} className="tutorial-page">
@@ -43,7 +43,7 @@ export const TutorialPage: FC = () => {
       <WorldNote/>
       <p className="paragraph">
         This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
-        “<DemoLink to={to} search={search}>{startingAt.name}</DemoLink>”, ends,
+        “<DemoLink to={to}>{startingAt.name}</DemoLink>”, ends,
         with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
         those are new to you, read that part first.
       </p>
