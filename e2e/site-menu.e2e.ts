@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {iPhone, phoneSideways, siteFrame} from './__test_support';
+import {clickWhereItIs, iPhone, phoneSideways, shortPhoneSideways, siteFrame, twoFramesLater} from './__test_support';
 
 const pages = ['Home', 'Record', 'Practice', 'Demos', 'Users', 'Gallery', 'Games', 'Repo'];
 
@@ -92,3 +92,19 @@ for (const {held, device} of [{held: 'upright', device: iPhone}, {held: 'on its 
     });
   });
 }
+
+test.describe('a short phone held on its side', () => {
+  test.use(shortPhoneSideways);
+
+  test('the site menu keeps Home in reach', async ({page}) => {
+    await page.goto('record/');
+    await siteFrame(page).hydrated();
+    await siteFrame(page).menu.tap();
+
+    await twoFramesLater(page);
+
+    await clickWhereItIs(page, siteFrame(page).nav.getByRole('link', {name: 'Home'}));
+
+    await expect(page).toHaveURL(/\/ChosenPicachu\/$/);
+  });
+});
