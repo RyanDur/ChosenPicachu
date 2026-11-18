@@ -38,7 +38,9 @@ test('a reader who follows a link out of the live table’s page and comes Back 
   await page.goBack();
 
   await expect(page).toHaveURL(/demos\/tables\/the-live-table-and-the-store\/\?world=vanilla$/);
-  await expect.poll(() => documentScrollY(page)).toBe(where);
+  await expect(out).toBeInViewport();
+  // WebKit on the Linux runner restores Back a pixel off; a pixel is no place a reader can tell apart
+  await expect.poll(async () => Math.abs(await documentScrollY(page) - where)).toBeLessThanOrEqual(1);
 });
 
 test.describe('a reader with script turned off', () => {
