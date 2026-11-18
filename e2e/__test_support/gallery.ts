@@ -23,13 +23,13 @@ export const galleryPage = (page: Page) => {
     searchField,
     pageNumber: page.getByRole('spinbutton', {name: 'Page', exact: true}),
     pageSize: page.getByRole('spinbutton', {name: 'Per page', exact: true}),
-    settings: page.getByRole('group', {name: 'gallery settings'}),
+    settings: page.getByRole('button', {name: /^Gallery settings/}),
+    sheet: page.getByRole('region', {name: 'gallery settings'}),
     openSettings: async (): Promise<void> => {
-      if (await searchField.isHidden()) await page.getByRole('group', {name: 'gallery settings'}).getByText(/page \d+/).click();
+      if (await searchField.isHidden()) await page.getByRole('button', {name: /^Gallery settings/}).click();
       await searchField.waitFor();
-      await page.getByRole('group', {name: 'gallery settings'})
-        .evaluate(fold => Promise.all(fold.getAnimations({subtree: true}).map(motion => motion.finished)));
     },
+    count: page.getByRole('navigation', {name: 'pagination'}).getByRole('status'),
     submitSearch: page.getByRole('button', {name: 'submit search'}),
     resetSearch: page.getByRole('button', {name: 'reset search'}),
     go: page.getByRole('button', {name: 'Go', exact: true}),

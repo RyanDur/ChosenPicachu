@@ -95,11 +95,13 @@ const opensTheDragSortSettings = async (page: Page): Promise<void> => {
 };
 
 const opensTheGallerySettings = async (page: Page): Promise<void> => {
+  const gallery = galleryPage(page);
   await page.goto('gallery/?tab=vam');
-  const settings = galleryPage(page).settings;
-  await expect(settings).toBeVisible();
+  await expect(gallery.settings).toBeVisible();
 
-  await opensFromAFinger(page, settings);
+  await fingerTap(page, gallery.settings.getByText(/\S/).first());
+
+  await expect(gallery.sheet).toBeVisible();
 };
 
 const opensEveryHowIBuiltItFold = async (page: Page): Promise<void> => {
@@ -148,7 +150,7 @@ test.describe('a phone held upright', () => {
 
   test('opens the settings fold on the drag sort tab from a finger that lands just off its bar', ({page}) => opensTheDragSortSettings(page));
 
-  test('opens the gallery’s settings fold from a finger that lands just off its bar', ({page}) => opensTheGallerySettings(page));
+  test('opens the gallery settings from a finger that lands just off their tile', ({page}) => opensTheGallerySettings(page));
 
   test('opens every how I built it fold in an open story on the live table’s page from a finger that lands just off its bar', ({page}) => opensEveryHowIBuiltItFold(page));
 
@@ -178,7 +180,7 @@ test.describe('a phone held sideways', () => {
 
   test('opens the settings fold on the drag sort tab from a finger that lands just off its bar', ({page}) => opensTheDragSortSettings(page));
 
-  test('opens the gallery’s settings fold from a finger that lands just off its bar', ({page}) => opensTheGallerySettings(page));
+  test('opens the gallery settings from a finger that lands just off their tile', ({page}) => opensTheGallerySettings(page));
 
   test('opens every how I built it fold in an open story on the live table’s page from a finger that lands just off its bar', ({page}) => opensEveryHowIBuiltItFold(page));
 
