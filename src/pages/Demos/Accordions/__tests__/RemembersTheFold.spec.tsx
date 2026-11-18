@@ -11,9 +11,6 @@ const title = 'A box remembers the fold, and a rule reads it';
 const knownHeightWorks = 'How the known height works';
 const fromTheExhibit = 'Taken from the exhibit on this page. The rest of the site doesn’t use it.';
 
-const drawingsTitled = (part: HTMLElement, titles: string[]): HTMLElement[] =>
-  titles.map(drawing => explanation.drawingNamed(part, new RegExp(`^${drawing}\\.`)));
-
 describe('a box remembers the fold, on its own page', () => {
   test('should say its place in the accordions book', async () => {
     render(<TestApp at={demosAt(remembers)}/>);
@@ -172,7 +169,7 @@ describe('the drawings of a box remembering the fold', () => {
 
     const part = await explanation.part(title);
 
-    expect(drawingsTitled(part, ['The rule matches the box', 'The known height', 'Off screen, not gone', 'Two borders, turned', 'Focus on the box, drawn on the bar']))
+    expect(explanation.drawingsTitled(part, ['The rule matches the box', 'The known height', 'Off screen, not gone', 'Two borders, turned', 'Focus on the box, drawn on the bar']))
       .toEqual(explanation.drawingsIn(part));
   });
 
@@ -181,7 +178,7 @@ describe('the drawings of a box remembering the fold', () => {
 
     const part = await explanation.part(title);
 
-    expect(drawingsTitled(part, ['The rule matches the box', 'The known height', 'Off screen, not gone', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'One name, one choice']))
+    expect(explanation.drawingsTitled(part, ['The rule matches the box', 'The known height', 'Off screen, not gone', 'Two borders, turned', 'Focus on the box, drawn on the bar', 'One name, one choice']))
       .toEqual(explanation.drawingsIn(part));
   });
 });

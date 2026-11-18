@@ -10,9 +10,6 @@ const title = 'What the platform gives now';
 const build = '?type=inclusive&style=drawer';
 const remembers = demosAt('accordions/a-box-remembers-the-fold', build);
 
-const drawingsTitled = (part: HTMLElement, titles: string[]): HTMLElement[] =>
-  titles.map(drawing => explanation.drawingNamed(part, new RegExp(`^${drawing}\\.`)));
-
 describe('what the platform gives now, on its own page', () => {
   test('should say its place in the accordions book', async () => {
     render(<TestApp at={demosAt(platformWay)}/>);
@@ -119,7 +116,7 @@ describe('what the platform gives now, on its own page', () => {
 
     const platform = await explanation.part(title);
 
-    expect(drawingsTitled(platform, ['One job, two ways', 'Three pieces become two', 'Sized to the text'])).toEqual(explanation.drawingsIn(platform));
+    expect(explanation.drawingsTitled(platform, ['One job, two ways', 'Three pieces become two', 'Sized to the text'])).toEqual(explanation.drawingsIn(platform));
   });
 
   test('should draw, with exclusive chosen, under the platform, each mechanism in order, found by its name', async () => {
@@ -127,7 +124,7 @@ describe('what the platform gives now, on its own page', () => {
 
     const platform = await explanation.part(title);
 
-    expect(drawingsTitled(platform, ['One job, two ways', 'Three pieces become two', 'Sized to the text'])).toEqual(explanation.drawingsIn(platform));
+    expect(explanation.drawingsTitled(platform, ['One job, two ways', 'Three pieces become two', 'Sized to the text'])).toEqual(explanation.drawingsIn(platform));
   });
 
   test('should link the checkbox build, at its first use in what the platform gives and in How details works, to part 2’s page', async () => {
