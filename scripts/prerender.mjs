@@ -19,6 +19,6 @@ const written = (file, html) => {
 
 for (const path of prerender.pages) {
   const {html, rooms} = await prerender.page(path);
-  written(join(path, 'index.html'), loading(html, 'src/entry.client.tsx', rooms));
+  written(join(path, 'index.html'), loading.page(html, rooms));
 }
-written('404.html', loading(await prerender.fallback(), 'src/entry.fallback.tsx', []));
+written('404.html', loading.fallback(await prerender.fallback()));
