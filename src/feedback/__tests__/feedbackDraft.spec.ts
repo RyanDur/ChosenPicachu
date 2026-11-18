@@ -1,12 +1,14 @@
 import {HTTPError} from '@transport';
-import {feedbackChange} from '../feedbackChange';
+import {feedbackChange, type FeedbackChange} from '../feedbackChange';
 import {github} from '../github';
-import {feedbackDraft} from '../feedbackDraft';
+import {feedbackDraft, type Draft} from '../feedbackDraft';
 
 const tables = '/demos/tables/';
 const gallery = '/gallery';
 
 const openOn = feedbackDraft.reduce(feedbackDraft.initial(tables), feedbackChange.opened(tables));
+const noteAt = 'https://github.test/github.discussions/9';
+const inTurn = (draft: Draft, ...changes: FeedbackChange[]): Draft => changes.reduce(feedbackDraft.reduce, draft);
 
 describe('the feedback reducer', () => {
   test('should start a new opening on the page it was opened on, linking to Discussions', () => {
@@ -57,6 +59,23 @@ describe('the feedback reducer', () => {
     expect(draft.words).toBe('');
     expect(draft.sending).toEqual({state: 'writing'});
     expect(draft.sentNote).toEqual({state: 'unread', url: 'https://github.test/github.discussions/9'});
+  });
+
+  test('should keep the link to a sent note through the next opening', () => {
+    const sending = inTurn(openOn, feedbackChange.wordsEdited('It hides.'), feedbackChange.noteSubmitted());
+
+    const draft = inTurn(sending, feedbackChange.noteSent(sending.openings, noteAt), feedbackChange.opened(tables));
+
+    expect(draft.sentNote).toEqual({state: 'read', url: noteAt});
+  });
+
+  test('should drop the link to a sent note on the opening after that', () => {
+    const sending = inTurn(openOn, feedbackChange.wordsEdited('It hides.'), feedbackChange.noteSubmitted());
+    const reopened = inTurn(sending, feedbackChange.noteSent(sending.openings, noteAt), feedbackChange.opened(tables));
+
+    const draft = inTurn(reopened, feedbackChange.opened(tables));
+
+    expect(draft.sentNote).toEqual({state: 'none'});
   });
 
   test('should say why GitHub refused the note on screen', () => {
