@@ -48,15 +48,16 @@ export const PlatformGivesNow: FC<Props> = ({folds}) => {
     <Platform className={exhibitMoving} folds={folds[foldType]}/>
     <ol className={looks.runs}>
       <li className="run">
-        <p className="paragraph">This build uses details and summary, the two elements from the first accordion. Each
-          piece of <RemembersTheFoldLink>the {input} build</RemembersTheFoldLink> has a native
+        <p className="paragraph">This build uses details and summary, the two elements from the HTML-alone accordion.
+          Each piece of <RemembersTheFoldLink>the {input} build</RemembersTheFoldLink> has a native
           piece in its place. Summary is the bar and the control at once, so nothing has to tie a label to a
           hidden {input}. Details remembers whether it is open, so there is no {input} to hide and no rule that reads
           it. The keyboard comes with it, and a screen reader announces the bar as a disclosure, collapsed or
           expanded.
         {foldType === 'inclusive' && <> With nothing more, each fold opens and closes on its own,
           as <RemembersTheFoldLink>the checkbox build’s folds</RemembersTheFoldLink> do.</>}
-        {foldType === 'exclusive' && ' Every details here shares a name, as the first accordion’s details do. Pressing the open one closes it, so the list needs no Close bar.'} This build replaces the
+        {foldType === 'exclusive' && <> Every details here shares a name, as the HTML-alone accordion’s details do.
+          Pressing the open one closes it, so the list needs no Close bar.</>} This build replaces the
           three old ways: the max-height guess, the height measured by script, and the known height.</p>
         <Snippet label="TS" lines={platform.sample}/>
         <OneJobTwoWays input={input}/>
