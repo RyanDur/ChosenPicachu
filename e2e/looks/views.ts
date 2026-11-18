@@ -1,6 +1,6 @@
 import type {Page} from '@playwright/test';
 import {pages, type SitePage} from '../pages';
-import {boxOf, galleryPage} from '../__test_support';
+import {boxOf, galleryPage, siteFrame} from '../__test_support';
 
 export type View = {
   readonly name: string;
@@ -73,8 +73,10 @@ export const views: readonly View[] = [
     page: named('home'),
     atWidths: [390],
     into: async page => {
-      await page.getByRole('button', {name: 'Menu', exact: true}).click();
-      await page.getByRole('navigation', {name: 'site'}).getByRole('link').first().waitFor();
+      const site = siteFrame(page);
+      await site.hydrated();
+      await site.menu.click();
+      await site.nav.getByRole('link').first().waitFor();
       await page.setViewportSize({width: 820, height: 900});
       await page.waitForTimeout(400);
     }
