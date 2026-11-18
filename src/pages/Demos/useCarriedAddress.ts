@@ -11,6 +11,5 @@ export const useCarriedAddress = (): ((to: string, heading?: string) => string) 
   const [shown] = useSearchParamsOnceHydrated();
   const dials = dialParams.keptFrom(shown).toString();
   const search = empty(dials) ? '' : `?${dials}`;
-  return (to, heading) =>
-    `${to}${search}${maybe(heading).map(id => `#${id}`).orElse('')}`;
+  return (to, heading) => `${to}${search}${maybe(heading).map(id => `#${id}`).orElse('')}`;
 };
