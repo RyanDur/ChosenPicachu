@@ -32,15 +32,19 @@ const oldWaySortBy = (figure: Locator) => {
 export const trappedMenu = (page: Page) => {
   const trap = page.getByRole('figure', {name: /^The trap\./});
   const menu = oldWaySortBy(trap);
+  const focusSortBy = async (): Promise<void> => {
+    await untilPressable(menu.sortBy);
+    await menu.sortBy.focus();
+  };
   return {
     ...menu,
     contextChoice: trap.getByRole('checkbox', {name: 'Card one has z-index: 1'}),
     contextWords: trap.getByText('Card one has z-index: 1', {exact: true}),
     caption: trap.getByText(/A list with z-index: 9999 opens under a card with z-index: 1/),
     said: trap.getByRole('status', {name: 'where the list opened'}),
+    focusSortBy,
     openByKeyboard: async (): Promise<void> => {
-      await untilPressable(menu.sortBy);
-      await menu.sortBy.focus();
+      await focusSortBy();
       await page.keyboard.press('Enter');
     }
   };

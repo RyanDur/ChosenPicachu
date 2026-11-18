@@ -64,7 +64,7 @@ test('Escape from a choice closes the menu in the top layer and gives focus back
 test('Tab from Sort by reaches Sort by, in the top layer', async ({page}) => {
   await page.goto('demos/z-index/why-9999-still-loses/');
   const menu = topLayerMenu(page);
-  await trappedMenu(page).sortBy.focus();
+  await trappedMenu(page).focusSortBy();
 
   await page.keyboard.press('Tab');
 
