@@ -26,7 +26,8 @@ const toPage = (links: HTMLElement[], address: string): string[][] => links
   .map(link => [link.textContent, pageAndPlaceOf(link)])
   .filter(([, href]) => href === address);
 
-const linksToPageIn = (holder: HTMLElement, address: string): string[][] => toPage(within(holder).getAllByRole('link'), address);
+const linksToPageIn = (holder: HTMLElement, address: string): string[][] =>
+  toPage(within(holder).getAllByRole('link'), address);
 
 const linksOffTheRail = (): HTMLElement[] => {
   const rail = screen.getByRole('region', {name: 'pages and feedback'});
