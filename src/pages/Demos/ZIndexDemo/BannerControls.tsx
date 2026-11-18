@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {Align, Entrance, Side, Stack} from '@banners';
 import {DialGroup, DialRow} from '../Controls';
+import './BannerControls.css';
 
 type Copy = {
   side: Record<Side, string>;
@@ -101,7 +102,7 @@ export const BannerControls: FC<BannerControlsProps> = ({
     <p className="caption">
       <code className="monospaced">{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
     </p>
-    <button type="button" tabIndex={0} className="button primary reachable" onClick={onRaise}>
+    <button type="button" tabIndex={0} className="button primary reachable after-dials" onClick={onRaise}>
       Raise a banner
     </button>
   </section>;
