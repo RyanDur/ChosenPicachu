@@ -14,9 +14,6 @@ type Drawing<Frame extends string> = {
 // --nav-in-a-row are named here for the pictures
 const phoneHeldUpright = '(width <= 600px)';
 const railAboveTheHeader = '(width <= 1100px)';
-// the rail is the foot in BasePage.css's phone query, which phoneLayout.ts names for the script; this module imports
-// nothing of the site's own, so the pictures name it too
-const railAtTheFoot = '(width <= 600px), (width <= 1100px) and (height <= 600px)';
 
 type Box = {
   readonly label: string;
@@ -196,4 +193,4 @@ const landmarkMap = ((): Drawing<'wide' | 'stacked' | 'phone'> => {
 
 const byName = {'where-a-rule-lives': whereARuleLives, 'landmark-map': landmarkMap} as const;
 
-export const practiceDrawings = {byName, minifiedCss, phoneHeldUpright, railAboveTheHeader, railAtTheFoot};
+export const practiceDrawings = {byName, minifiedCss, phoneHeldUpright, railAboveTheHeader};
