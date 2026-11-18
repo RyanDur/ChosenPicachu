@@ -41,7 +41,7 @@ const SearchRow: FC = () => {
 
   const apply = ({value}: HTMLInputElement) => {
     if (value === searched) return;
-    if (value === '') removeSearchParams('search');
+    if (value === '') removeSearchParams(['search']);
     else updateSearchParams({search: value});
   };
 
