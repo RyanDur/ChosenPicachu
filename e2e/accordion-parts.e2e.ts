@@ -67,15 +67,12 @@ test('a reader follows what the platform gives now’s foot on to how a sliding 
   await expect(accordionsTab(page).partTitle('How a sliding fold moves')).toBeVisible();
 });
 
-test('a reader opens how a sliding fold moves from the tab and goes back to what the platform gives now, with the dials kept', async ({page}) => {
+test('a reader opens how a sliding fold moves from the tab, and its details fold is built with the dials chosen there', async ({page}) => {
   await page.goto('demos/accordions/?type=inclusive&style=drawer');
   await siteFrame(page).hydrated();
 
   await accordionsTab(page).partLink('How a sliding fold moves').click();
-  await expect(accordionsTab(page).partTitle('How a sliding fold moves')).toBeVisible();
-  await page.getByRole('navigation', {name: 'the accordions parts'})
-    .getByRole('link', {name: 'Previous: 5. What the platform gives now'}).click();
 
-  await expect(page).toHaveURL(/demos\/accordions\/what-the-platform-gives-now\/\?type=inclusive&style=drawer$/);
+  await expect(page).toHaveURL(/demos\/accordions\/how-a-sliding-fold-moves\/\?type=inclusive&style=drawer$/);
   await expect(page.getByRole('heading', {name: 'Inclusive accordion using details elements', exact: true})).toBeVisible();
 });
