@@ -1,8 +1,8 @@
-import * as schema from 'schemawax';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {Motion, Origin} from '@components/DragSortableTable';
 import {Placement, unplaced} from '@banners';
 import {inOrder} from './inOrder';
+import {dialParams} from './dial-params';
 
 export type {Motion, Origin};
 export type Pace = 'eager' | 'lazy';
@@ -29,27 +29,10 @@ export type Settings = Placement & {
 
 export type Controls = Settings & {change: (next: Partial<Settings>) => void};
 
-type Address = Omit<Settings, 'foldType' | 'foldMotion' | 'cardOne'> & {
+export type Address = Omit<Settings, 'foldType' | 'foldMotion' | 'cardOne'> & {
   type: FoldType;
   style: FoldMotion;
   'card-one': CardOne;
-};
-
-const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
-  pace: schema.literalUnion('eager', 'lazy'),
-  origin: schema.literalUnion('keep', 'hide'),
-  motion: schema.literalUnion('animated', 'static'),
-  world: schema.literalUnion('react', 'vanilla'),
-  track: schema.literalUnion('pointer', 'keyboard'),
-  type: schema.literalUnion('inclusive', 'exclusive'),
-  style: schema.literalUnion('reveal', 'drawer', 'static'),
-  side: schema.literalUnion('top', 'middle', 'bottom'),
-  align: schema.literalUnion('left', 'center', 'right'),
-  enter: schema.literalUnion('above', 'below', 'left', 'right'),
-  stack: schema.literalUnion('down', 'up', 'left', 'right'),
-  raised: schema.literalUnion(...inOrder.raisedCards),
-  'card-one': schema.literalUnion('contained', 'free'),
-  wears: schema.literalUnion(...inOrder.worn)
 };
 
 const defaults: Address = {
@@ -67,7 +50,7 @@ const defaults: Address = {
 };
 
 export const useControls = (): Controls => {
-  const {type, style, 'card-one': cardOne, ...found} = useSearchParamsObject(decoders, defaults);
+  const {type, style, 'card-one': cardOne, ...found} = useSearchParamsObject(dialParams.decoders, defaults);
   return {
     ...found,
     foldType: type,

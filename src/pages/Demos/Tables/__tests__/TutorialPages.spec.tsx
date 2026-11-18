@@ -170,18 +170,11 @@ describe('a link saved to an old tables tutorial address', () => {
     expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize', '?world=vanilla'));
   });
 
-  test('should keep an encoded & inside the value the address carries', async () => {
-    const old = demosAt('tables', '?tut=resize&note=a%26b');
+  test('should carry the dials alone, leaving what else the address holds', async () => {
+    const old = demosAt('tables', '?tut=resize&world=vanilla&note=a%26b&col=a&col=b');
     render(<TestApp at={old}/>);
 
-    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize', '?note=a%26b'));
-  });
-
-  test('should keep every value of a key the address repeats', async () => {
-    const old = demosAt('tables', '?tut=resize&col=a&col=b');
-    render(<TestApp at={old}/>);
-
-    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize', '?col=a&col=b'));
+    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize', '?world=vanilla'));
   });
 
   test('should keep the place in the page the address points to', async () => {

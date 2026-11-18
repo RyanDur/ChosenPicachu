@@ -1,7 +1,6 @@
-import {maybe} from '@ryandur/sand';
+import {empty, maybe} from '@ryandur/sand';
 import {useSearchParamsOnceHydrated} from '@navigation/search-params';
-import {queryString} from '@transport';
-import {movedParams} from './moved-params';
+import {dialParams} from './Controls';
 
 export type Place = {
   to: string;
@@ -10,7 +9,8 @@ export type Place = {
 
 export const useCarriedAddress = (): ((to: string, heading?: string) => string) => {
   const [shown] = useSearchParamsOnceHydrated();
-  const search = queryString.from(Object.fromEntries(movedParams.droppedFrom(shown).entries()));
+  const dials = dialParams.keptFrom(shown).toString();
+  const search = empty(dials) ? '' : `?${dials}`;
   return (to, heading) =>
     `${to}${search}${maybe(heading).map(id => `#${id}`).orElse('')}`;
 };

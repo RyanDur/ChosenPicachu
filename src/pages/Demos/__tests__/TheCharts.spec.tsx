@@ -332,10 +332,10 @@ describe('a list of charts', () => {
       return recipeFolds.story(document.body, 'The trader can watch the price move, live');
     };
 
-    test('should link where it names the combinator to the accordions part that explains it, with the query carried', async () => {
+    test('should link where it names the combinator to the accordions part that explains it, leaving the chart’s story behind', async () => {
       await priceStory();
 
-      expect(demoPage.signpost('A box remembers the fold, and a rule reads it')).toHaveAttribute('href', demosAt('accordions/a-box-remembers-the-fold', '?graph=price'));
+      expect(demoPage.signpost('A box remembers the fold, and a rule reads it')).toHaveAttribute('href', demosAt('accordions/a-box-remembers-the-fold'));
     });
 
     test('should head each step with what happens', async () => {
