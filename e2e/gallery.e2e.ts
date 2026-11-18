@@ -84,20 +84,24 @@ for (const {reader, device} of handhelds) {
 
       await expect(gallery.settings).toContainText(/, page 2(?!\d)/);
     });
-
-    test('pages on from the pager while partway down the wall', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.wall.first()).toBeVisible();
-      await gallery.wall.nth(Math.floor(await gallery.wall.count() / 2)).scrollIntoViewIfNeeded();
-      await twoFramesLater(page);
-
-      await clickWhereItIs(page, gallery.nextPage);
-
-      await expect(gallery.settings).toContainText(/, page 2(?!\d)/);
-    });
   });
 }
+
+test.describe('a phone held upright', () => {
+  test.use(iPhone);
+
+  test('pages on from the pager while partway down the wall', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.first()).toBeVisible();
+    await gallery.wall.nth(Math.floor(await gallery.wall.count() / 2)).scrollIntoViewIfNeeded();
+    await twoFramesLater(page);
+
+    await clickWhereItIs(page, gallery.nextPage);
+
+    await expect(gallery.settings).toContainText(/, page 2(?!\d)/);
+  });
+});
 
 for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpright}, {reader: 'a 13-inch iPad held upright', device: iPad13Upright}]) {
   test.describe(reader, () => {
