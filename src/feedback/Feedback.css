@@ -29,6 +29,10 @@
   .feedback-item > .feedback-open {
     padding-inline: var(--base);
   }
+
+  .feedback-sent {
+    display: none;
+  }
 }
 
 .feedback-open[inert] {

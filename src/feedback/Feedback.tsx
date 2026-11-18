@@ -34,12 +34,10 @@ const NoteStatus: FC = () => {
   switch (sending.state) {
     case 'sending':
       return 'Sending the note to GitHub.';
-    case 'sent':
-      return <>Sent. <a className="signpost" href={sentTo}>Read it on GitHub</a></>;
     case 'refused':
       return `${trouble.with('GitHub')(sending.why)}. Your words are still here.`;
   }
-  return null;
+  return has(sentTo) && <>Sent. <a className="signpost" href={sentTo}>Read it on GitHub</a></>;
 };
 
 export const Feedback: FC = () => {
@@ -74,18 +72,12 @@ export const Feedback: FC = () => {
       return;
     }
     const {openings, words, reach} = draft;
-    const shown = maybe(event.currentTarget.closest('dialog'));
-    const closedSince = new AbortController();
-    shown.map(dialog => dialog.addEventListener('close', () => closedSince.abort(), {once: true}));
     dispatch(feedbackChange.noteSubmitted());
     github.sent(
       {endpoint: feedbackEndpoint, token: feedbackToken},
       {page: {key: draft.key, name: pageName}, words, from: sentFrom, ...(empty(reach) ? {} : {reach})}
     )
       .onSuccess(url => dispatch(feedbackChange.noteSent(openings, url)))
-      .onSuccess(() => {
-        if (not(closedSince.signal.aborted)) shown.map(dialog => dialog.close());
-      })
       .onFailure(why => dispatch(feedbackChange.noteRefused(why)));
   };
 
@@ -117,7 +109,7 @@ export const Feedback: FC = () => {
         <fieldset className="feedback-actions field">
           <legend className="feedback-actions-name off-screen">Send or cancel</legend>
           <output className={classNames('feedback-status', 'paragraph', draft.sending.state === 'refused' && 'alarm-ink')}><NoteStatus/></output>
-          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor={feedbackDialogId} command="close">Cancel</button>
+          <button type="button" className="feedback-cancel path sub-title bold attentive field hairline-outline ink reachable" commandfor={feedbackDialogId} command="close">{has(draft.sentTo) ? 'Close' : 'Cancel'}</button>
           <button type="submit" className="feedback-send path sub-title bold attentive inverse-filled borderless reachable" disabled={draft.sending.state === 'sending'}>Send</button>
         </fieldset>
       </form>
