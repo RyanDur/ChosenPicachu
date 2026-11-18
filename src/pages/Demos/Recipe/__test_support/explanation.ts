@@ -17,6 +17,16 @@ const runWith = (part: HTMLElement, holds: (run: HTMLElement) => boolean, what: 
 const runTelling = (part: HTMLElement, words: RegExp): HTMLElement =>
   runWith(part, run => is(within(run).queryByText(words)), `tells ${words}`);
 
+const openerOf = (part: HTMLElement): HTMLElement => {
+  const title = within(part).getByRole('heading', {level: 2});
+  const afterTitle = within(part).getAllByRole('paragraph')
+    .filter(paragraph => is(title.compareDocumentPosition(paragraph) & Node.DOCUMENT_POSITION_FOLLOWING));
+  if (not(afterTitle.length)) {
+    throw new Error('no paragraph after the part\'s title');
+  }
+  return afterTitle[0];
+};
+
 const drawingsIn = (part: HTMLElement): HTMLElement[] =>
   within(part).getAllByRole('figure')
     .filter(figure => not(within(figure).queryByRole('code')) && not(within(figure).queryAllByTitle(/./).length));
@@ -58,6 +68,7 @@ export const explanation = {
   queryLinkNamed: (part: HTMLElement, name: string | RegExp): HTMLElement | null => within(part).queryByRole('link', {name}),
   drawingNamed: (part: HTMLElement, name: string | RegExp): HTMLElement => within(part).getByRole('figure', {name}),
   saying: (part: HTMLElement, words: string | RegExp): HTMLElement => within(part).getByText(words),
+  opener: openerOf,
   sourcesBeside: (part: HTMLElement, words: RegExp): string[] => sourcesIn(runTelling(part, words)),
   sampleCaptionsBeside: (part: HTMLElement, words: RegExp): string[] =>
     sampleFiguresIn(runTelling(part, words)).map(figure => computeAccessibleName(figure)),

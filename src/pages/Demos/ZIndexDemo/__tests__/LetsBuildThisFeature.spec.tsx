@@ -6,7 +6,6 @@ import {zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const buildThisFeature = 'z-index/lets-build-this-feature';
 const title = 'Let’s build this feature';
-const opening = /^This tutorial assumes the parts before it/;
 
 describe('let’s build this feature, on its own page', () => {
   test('should say its place in the z-index book', async () => {
@@ -18,7 +17,7 @@ describe('let’s build this feature, on its own page', () => {
   test('should link part two, where the z-index it assumes stops counting, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(buildThisFeature, '?raised=second')}/>);
 
-    const opener = explanation.saying(await explanation.part(title), opening);
+    const opener = explanation.opener(await explanation.part(title));
 
     expect(explanation.linkNamed(opener, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
   });
@@ -26,7 +25,7 @@ describe('let’s build this feature, on its own page', () => {
   test('should link part five, the last part it assumes, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(buildThisFeature, '?raised=second')}/>);
 
-    const opener = explanation.saying(await explanation.part(title), opening);
+    const opener = explanation.opener(await explanation.part(title));
 
     expect(explanation.linkNamed(opener, 'Why a fixed banner still loses'))
       .toHaveAttribute('href', demosAt('z-index/why-a-fixed-banner-still-loses', '?raised=second'));
@@ -35,7 +34,7 @@ describe('let’s build this feature, on its own page', () => {
   test('should link part four, which explains the component, state and event it assumes, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(buildThisFeature, '?raised=second')}/>);
 
-    const opener = explanation.saying(await explanation.part(title), opening);
+    const opener = explanation.opener(await explanation.part(title));
 
     expect(explanation.linkNamed(opener, 'Why the popover wins')).toHaveAttribute('href', demosAt('z-index/why-the-popover-wins', '?raised=second'));
   });
