@@ -20,6 +20,7 @@ const headings: Record<Build, string> = {
 
 export type Part = {
   fold: Locator;
+  words: Locator;
   showsText: () => Promise<boolean>;
   open: () => Promise<void>;
   close: () => Promise<void>;
@@ -35,6 +36,8 @@ const focusAndPress = async (page: Page, control: Locator, key: string, times = 
     await page.keyboard.press(key);
   }
 };
+
+type Controls = Omit<Part, 'showsText' | 'words'>;
 
 type Where = {page: Page; fold: Locator; article: Locator; index: number};
 
@@ -53,7 +56,12 @@ const textShownIn = (fold: Locator) => async (): Promise<boolean> => {
   }));
 };
 
-const detailsPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
+const readable = (fold: Locator): Pick<Part, 'showsText' | 'words'> => ({
+  words: fold.getByRole('paragraph'),
+  showsText: textShownIn(fold)
+});
+
+const detailsPart = (page: Page, fold: Locator): Controls => ({
   fold,
   open: () => nameOn(fold).click(),
   close: () => nameOn(fold).click(),
@@ -61,7 +69,7 @@ const detailsPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
   isOpen: () => fold.evaluate(details => details.hasAttribute('open'))
 });
 
-const checkboxPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
+const checkboxPart = (page: Page, fold: Locator): Controls => ({
   fold,
   open: () => nameOn(fold).click(),
   close: () => nameOn(fold).click(),
@@ -69,7 +77,7 @@ const checkboxPart = (page: Page, fold: Locator): Omit<Part, 'showsText'> => ({
   isOpen: () => fold.getByRole('checkbox').isChecked()
 });
 
-const radioPart = ({page, fold, article, index}: Where): Omit<Part, 'showsText'> => ({
+const radioPart = ({page, fold, article, index}: Where): Controls => ({
   fold,
   open: () => nameOn(fold).click(),
   close: () => article.getByText('Close', {exact: true}).first().click(),
@@ -77,7 +85,7 @@ const radioPart = ({page, fold, article, index}: Where): Omit<Part, 'showsText'>
   isOpen: () => fold.getByRole('radio').isChecked()
 });
 
-const partIn: Record<Build, (where: Where) => Omit<Part, 'showsText'>> = {
+const partIn: Record<Build, (where: Where) => Controls> = {
   'the measured checkbox build': ({page, fold}) => checkboxPart(page, fold),
   'the measured radio build': where => radioPart(where),
   'the checkbox build': ({page, fold}) => checkboxPart(page, fold),
@@ -138,11 +146,11 @@ export const accordionsTab = (page: Page) => {
   };
   const partOf = (build: Build, index: number): Part => {
     const fold = folds(build).nth(index + closeBarsBeforeTheParts(build));
-    return {...partIn[build]({page, fold, article: built(build), index}), showsText: textShownIn(fold)};
+    return {...partIn[build]({page, fold, article: built(build), index}), ...readable(fold)};
   };
   const htmlAloneFold = (name: string): Part & {closeByKeyboard: () => Promise<void>} => {
     const fold = page.getByRole('region', {name: 'An accordion in HTML alone'}).getByRole('group').filter({hasText: name});
-    return {...detailsPart(page, fold), showsText: textShownIn(fold), closeByKeyboard: () => focusAndPress(page, nameOn(fold), 'Enter')};
+    return {...detailsPart(page, fold), ...readable(fold), closeByKeyboard: () => focusAndPress(page, nameOn(fold), 'Enter')};
   };
   const partsOf = async (build: Build): Promise<Part[]> =>
     (await folds(build).all()).slice(closeBarsBeforeTheParts(build)).map((_fold, index) => partOf(build, index));
