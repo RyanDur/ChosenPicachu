@@ -63,42 +63,50 @@ const SearchRow: FC = () => {
   </>;
 };
 
-type NumberRowProps = {
-  readonly label: string;
-  readonly shown: number;
-  readonly min: number;
-  readonly max?: number;
-  readonly applied: (value: number) => void;
+const movedTo = {preventScrollReset: false};
+
+const appliedNumber = (input: HTMLInputElement, shown: number, apply: (value: number) => void, putBack: () => void) => {
+  if (input.valueAsNumber === shown) return;
+  if (input.checkValidity()) apply(input.valueAsNumber);
+  else putBack();
 };
 
-const NumberRow: FC<NumberRowProps> = ({label, shown, min, max, applied}) => {
-  const {typed, type} = useDraft(String(shown));
+const SizeRow: FC = () => {
+  const {size, updateSearchParams} = useGallery();
+  const {typed, type} = useDraft(String(size));
   const field = useId();
-
-  const apply = (input: HTMLInputElement) => {
-    if (input.valueAsNumber === shown) return;
-    if (input.checkValidity()) applied(input.valueAsNumber);
-    else type(String(shown));
-  };
+  const apply = (input: HTMLInputElement) =>
+    appliedNumber(input, size, perPage => updateSearchParams({size: perPage}, movedTo), () => type(String(size)));
 
   return <>
-    <label className="sheet-label field bold" htmlFor={field}>{label}</label>
-    <input type="number" id={field} min={min} max={max} required enterKeyHint="go"
+    <label className="sheet-label field bold" htmlFor={field}>Per page</label>
+    <input type="number" id={field} min={1} max={100} required enterKeyHint="go"
       className="sheet-field bare card" value={typed}
       onChange={event => type(event.currentTarget.value)}
       onKeyDown={whenEntered(apply)} onBlur={event => apply(event.currentTarget)}/>
   </>;
 };
 
-export const SettingsSheet: FC<{readonly id: string}> = ({id}) => {
-  const {page, size, pagination, updateSearchParams} = useGallery();
-  const movedTo = {preventScrollReset: false};
-  return <section id={id} popover="auto" aria-label="gallery settings" className="settings-sheet backdrop veiled">
+const PageRow: FC = () => {
+  const {page, pagination, updateSearchParams} = useGallery();
+  const {typed, type} = useDraft(String(page));
+  const field = useId();
+  const apply = (input: HTMLInputElement) =>
+    appliedNumber(input, page, to => updateSearchParams({page: to}, movedTo), () => type(String(page)));
+
+  return <>
+    <label className="sheet-label field bold" htmlFor={field}>Page</label>
+    <input type="number" id={field} min={1} max={pagination.map(({totalPages}) => totalPages).orElse(undefined)}
+      required enterKeyHint="go" className="sheet-field bare card" value={typed}
+      onChange={event => type(event.currentTarget.value)}
+      onKeyDown={whenEntered(apply)} onBlur={event => apply(event.currentTarget)}/>
+  </>;
+};
+
+export const SettingsSheet: FC<{readonly id: string}> = ({id}) =>
+  <section id={id} popover="auto" aria-label="gallery settings" className="settings-sheet backdrop veiled">
     <MuseumRow/>
     <SearchRow/>
-    <NumberRow label="Per page" shown={size} min={1} max={100}
-      applied={perPage => updateSearchParams({size: perPage}, movedTo)}/>
-    <NumberRow label="Page" shown={page} min={1} max={pagination.map(({totalPages}) => totalPages).orElse(undefined)}
-      applied={to => updateSearchParams({page: to}, movedTo)}/>
+    <SizeRow/>
+    <PageRow/>
   </section>;
-};
