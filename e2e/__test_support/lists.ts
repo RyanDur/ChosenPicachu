@@ -44,6 +44,7 @@ export const sortableList = (page: Page) => {
     items,
     seats: (): Promise<string[]> => items.allInnerTexts(),
     item: seatOf,
+    grip: gripNamed,
     moveReport: page.getByRole('status', {name: 'move report'}),
     atRest: (): Promise<boolean> => list.evaluate(holder => {
       const places = (): string =>
