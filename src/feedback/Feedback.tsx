@@ -72,12 +72,13 @@ export const Feedback: FC = () => {
       return;
     }
     const {openings, words, reach} = draft;
+    const dialog = maybe(event.currentTarget.closest('dialog'));
     dispatch(feedbackChange.noteSubmitted());
     github.sent(
       {endpoint: feedbackEndpoint, token: feedbackToken},
       {page: {key: draft.key, name: pageName}, words, from: sentFrom, ...(empty(reach) ? {} : {reach})}
     )
-      .onSuccess(url => dispatch(feedbackChange.noteSent(openings, url)))
+      .onSuccess(url => dispatch(feedbackChange.noteSent(openings, url, dialog.map(shown => shown.open).orElse(false))))
       .onFailure(why => dispatch(feedbackChange.noteRefused(why)));
   };
 

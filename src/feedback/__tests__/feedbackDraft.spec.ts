@@ -52,7 +52,7 @@ describe('the feedback reducer', () => {
   test('should clear the sent note and link to it', () => {
     const typed = feedbackDraft.reduce(feedbackDraft.reduce(openOn, feedbackChange.wordsEdited('It hides.')), feedbackChange.noteSubmitted());
 
-    const draft = feedbackDraft.reduce(typed, feedbackChange.noteSent(typed.openings, 'https://github.test/github.discussions/9'));
+    const draft = feedbackDraft.reduce(typed, feedbackChange.noteSent(typed.openings, 'https://github.test/github.discussions/9', true));
 
     expect(draft.words).toBe('');
     expect(draft.sending).toEqual({state: 'writing'});

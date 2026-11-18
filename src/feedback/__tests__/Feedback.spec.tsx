@@ -288,6 +288,22 @@ describe('Feedback once GitHub has its note', () => {
     expect(feedback.dialog()).toBeVisible();
   });
 
+  test('should say in its status line where a note sent after it closed is on GitHub', async () => {
+    const github = githubHoldingItsAnswer();
+    render(<TestApp at="/"/>);
+    await site.pageTitled();
+    await feedback.open();
+    await feedback.write('The sort menu hides.');
+    await feedback.send();
+    await feedback.cancel();
+    github.answers();
+    await feedback.noteOnGitHubBesideFeedback();
+
+    await feedback.open();
+
+    expect(await feedback.noteOnGitHubFromTheDialog()).toHaveAttribute('href', 'https://github.test/discussions/9');
+  });
+
   test('should offer Close where it offered Cancel', async () => {
     const github = githubHoldingItsAnswer();
     render(<TestApp at="/"/>);
