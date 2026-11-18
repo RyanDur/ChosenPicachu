@@ -201,8 +201,10 @@ test.describe('a reader with script turned off', () => {
     await page.goto('demos/accordions/');
     const fold = accordionsTab(page).partOf('the details build', 0);
 
+    await expect(fold.words).toBeHidden();
+
     await fold.open();
 
-    await expect(fold.fold.getByRole('paragraph')).toBeVisible();
+    await expect(fold.words).toBeVisible();
   });
 });
