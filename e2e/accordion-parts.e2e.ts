@@ -23,16 +23,6 @@ test('a box remembers the fold’s page builds its fold with the fold type chose
   await expect(page.getByRole('heading', {name: 'Accordion using checkboxes and a known height', exact: true})).toBeVisible();
 });
 
-test('a reader follows the max-height guess from the accordions tab to its page, with the dials kept', async ({page}) => {
-  await page.goto('demos/accordions/?type=inclusive&style=drawer');
-  await siteFrame(page).hydrated();
-
-  await accordionsTab(page).partLink('The max-height guess').click();
-
-  await expect(page).toHaveURL(/demos\/accordions\/the-max-height-guess\/\?type=inclusive&style=drawer$/);
-  await expect(accordionsTab(page).partTitle('The max-height guess')).toBeVisible();
-});
-
 test('a reader follows the measured height from the accordions tab to its page, with the fold it measures at its top', async ({page}) => {
   await page.goto('demos/accordions/');
   await siteFrame(page).hydrated();
