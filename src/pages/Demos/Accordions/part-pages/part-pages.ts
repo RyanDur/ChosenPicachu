@@ -39,6 +39,8 @@ type AccordionParts = {
   previousOf: (part: AccordionPart) => Maybe<BookPart>;
   nextOf: (part: AccordionPart) => Maybe<BookPart>;
   inTheBook: number;
+  inOrder: readonly BookPart[];
+  minutes: number;
 };
 
 const listings: Record<AccordionPart, Listing> = {
@@ -48,6 +50,8 @@ const listings: Record<AccordionPart, Listing> = {
   'what-the-platform-gives-now': {heading: 'platform-way-heading', minutes: 7},
   'how-a-sliding-fold-moves': {heading: 'motion-heading', minutes: 2}
 };
+
+const htmlAloneMinutes = 1;
 
 const tabAddress = demoTab.address(DemoTopics.accordions);
 
@@ -90,5 +94,7 @@ export const accordionParts: AccordionParts = {
   numbered: heading => `${placeOf(heading) + 1}. ${titles[heading]}`,
   previousOf: part => besidePart(part, -1),
   nextOf: part => besidePart(part, 1),
-  inTheBook: bookParts.length
+  inTheBook: bookParts.length,
+  inOrder: bookParts,
+  minutes: Object.values(listings).reduce((sum, {minutes}) => sum + minutes, htmlAloneMinutes)
 };
