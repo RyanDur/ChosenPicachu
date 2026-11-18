@@ -34,6 +34,8 @@ type ZIndexParts = {
   previousOf: (part: ZIndexPart) => Maybe<ZIndexPart>;
   nextOf: (part: ZIndexPart) => Maybe<ZIndexPart>;
   inTheBook: number;
+  inOrder: ZIndexPart[];
+  minutes: number;
 };
 
 const isPart = (name: string): name is ZIndexPart => Object.keys(book).includes(name);
@@ -63,5 +65,7 @@ export const zIndexParts: ZIndexParts = {
   numbered: part => `${placeOf(part) + 1}. ${book[part].title}`,
   previousOf: part => besidePart(part, -1),
   nextOf: part => besidePart(part, 1),
-  inTheBook: bookOrder.length
+  inTheBook: bookOrder.length,
+  inOrder: bookOrder,
+  minutes: bookOrder.reduce((sum, part) => sum + book[part].minutes, 0)
 };

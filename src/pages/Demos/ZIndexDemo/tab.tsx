@@ -8,6 +8,7 @@ import {PartPage} from './PartPage';
 import {ZIndexPart} from './part-pages';
 import {useShownPart} from './useShownPart';
 import {WhyThirdIsOnTop} from './WhyThirdIsOnTop';
+import {ZIndexSize} from './ZIndexSize';
 import {Why9999StillLoses} from './Why9999StillLoses';
 import {WhatElseFormsAStackingContext} from './WhatElseFormsAStackingContext';
 import {WhyThePopoverWins} from './WhyThePopoverWins';
@@ -42,6 +43,7 @@ export const Room: FC = () => {
     () => <>
       <ZIndexIntroduction/>
       <NaturalZIndex className="card rounded-corners lifted padded"/>
+      <ZIndexSize/>
       <PartListing part="why-third-is-on-top"/>
       <PartListing part="why-9999-still-loses"/>
       <PartListing part="what-else-forms-a-stacking-context"/>
