@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {not} from '@ryandur/sand';
 import {PillGlider} from '@components/PillGlider';
-import {classNames, PropsWithClassName} from '@components';
+import {classNames, PropsWithClassName, useHydrated} from '@components';
 import {useControls} from '../Controls';
 import {inOrder, RaisedCard} from '../ReaderSettings';
 import './ZIndexDemo.css';
@@ -12,12 +12,13 @@ const cardsToRaise = inOrder.raisedCards.map(value => ({words: words[value], val
 export const NaturalZIndex: FC<PropsWithClassName> = ({className}) => {
   const {raised, change} = useControls();
   const [isCollapsed, updateCollapsed] = useState(true);
+  const hydrated = useHydrated();
   const togglePile = () => updateCollapsed(not(isCollapsed));
   const pileCardClasses = (card: RaisedCard) => classNames('pile-card card rounded-corners floating', isCollapsed && 'closed', raised === card && 'raised');
 
   return <figure className={classNames('natural-z-index', className)}>
     <button type="button" className="button primary" aria-expanded={not(isCollapsed)} aria-controls="z-index-pile"
-      onClick={togglePile}>{isCollapsed ? 'Expand' : 'Collapse'}</button>
+      disabled={not(hydrated)} onClick={togglePile}>{isCollapsed ? 'Expand' : 'Collapse'}</button>
     <PillGlider label="card raised" name="card-raised" choices={cardsToRaise} chosen={raised} onChosen={next => change({raised: next})}/>
     <ol id="z-index-pile" className="demo-container">
       <li className={pileCardClasses('first')}>First</li>

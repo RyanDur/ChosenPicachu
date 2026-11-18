@@ -203,3 +203,17 @@ test('given the page before its script runs, the site’s own Raise a banner is 
 
   await expect(banners.siteBanner).toBeVisible();
 });
+
+test('given let’s build this feature’s page before its script runs, Raise a banner is disabled; once the script runs, the first press raises a banner', async ({page}) => {
+  const address = 'demos/z-index/lets-build-this-feature/';
+  await hydration(page).holdBack(address);
+  await page.goto(address);
+  const controls = zIndexTab(page);
+
+  await expect(controls.raiser).toBeDisabled();
+  await hydration(page).release();
+
+  await controls.raisesABanner();
+
+  await expect(controls.newestBanner()).toBeVisible();
+});
