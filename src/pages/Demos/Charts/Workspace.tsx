@@ -1,10 +1,10 @@
 import {Entry, Item, Menu} from '@components/Menu';
 import {FC, useState} from 'react';
 import {Link} from 'react-router';
-import {maybe, Maybe, has} from '@ryandur/sand';
+import {maybe, Maybe, has, not} from '@ryandur/sand';
 import {chartKinds} from './chart-kinds';
 import {feedStatus} from './feed-status';
-import {classNames} from '@components';
+import {classNames, useHydrated} from '@components';
 import {marketReads} from '../Market';
 import {useMarketRead} from '../Market/Trading';
 import {useDesk} from './useDesk';
@@ -32,6 +32,7 @@ export const Workspace: FC<Props> = ({product}) => {
   const status = useMarketRead(marketReads.feedStatus);
   const {seats, absentKinds, add, remove, reorder} = useDesk();
   const [report, setReport] = useState('');
+  const hydrated = useHydrated();
   const nameAt = (at: number): string => chartKinds.names[seats[at].kind];
   const removed = (at: number, pressed: Element): void => {
     desk.atAfterRemoval(at, seats.length).mBind(next => doorwayAt(next, pressed)).map(link => link.focus());
@@ -57,7 +58,7 @@ export const Workspace: FC<Props> = ({product}) => {
       {has(absentKinds) &&
           <>
             <button type="button" className="add-chart rounded-corners button secondary circular round-glyph"
-              popoverTarget="add-chart"
+              popoverTarget="add-chart" disabled={not(hydrated)}
               aria-label="Add a chart">+
             </button>
             <Menu id="add-chart" tabIndex={-1} popover="auto" className="card rounded-corners lifted"
