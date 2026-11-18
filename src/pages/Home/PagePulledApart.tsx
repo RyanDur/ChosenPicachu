@@ -7,6 +7,7 @@ type Lettered = Spot & {readonly word: string; readonly anchor?: 'middle' | 'end
 type Point = {readonly x: number; readonly y: number};
 
 const unitsPerStep = 2.4;
+const drawn = {width: 230 * unitsPerStep, height: 258 * unitsPerStep};
 const tilt = 0.42;
 const cosine30 = 0.866;
 const lift = 82;
@@ -88,10 +89,11 @@ const Lettering: FC<{lettering: readonly Lettered[]; elevation: number}> = ({let
 
 export const PagePulledApart: FC = () => {
   const clickPoint = projected(clickSpot, elevations.behavior);
-  return <figure className="page-pulled-apart">
-    <svg className="drawing center" viewBox={`${25 * unitsPerStep} 0 ${230 * unitsPerStep} ${258 * unitsPerStep}`}
-      width={230 * unitsPerStep}
-      height={258 * unitsPerStep} aria-hidden="true">
+  return <figure className="page-pulled-apart"
+    style={{'--drawn-width': `${drawn.width}px`, '--drawn-height': `${drawn.height}px`}}>
+    <svg className="drawing center" viewBox={`${25 * unitsPerStep} 0 ${drawn.width} ${drawn.height}`}
+      width={drawn.width}
+      height={drawn.height} aria-hidden="true">
       <defs>
         <pattern id="page-pulled-apart-hatch" patternUnits="userSpaceOnUse" width="7" height="7"
           patternTransform="rotate(135)">

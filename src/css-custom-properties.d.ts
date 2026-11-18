@@ -27,5 +27,7 @@ declare module 'csstype' {
     '--shape-foot'?: `${number}px`;
     '--shape-width'?: number;
     '--shape-height'?: number;
+    '--drawn-width'?: `${number}px`;
+    '--drawn-height'?: `${number}px`;
   }
 }
