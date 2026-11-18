@@ -12,6 +12,7 @@ import {looks} from './looks';
 import {accordionParts} from './part-pages';
 import {tabHeadings} from './tab-headings';
 import {PartListing} from './PartListing';
+import {AccordionsSize} from './AccordionsSize';
 import '../Runs.css';
 import './Explained.css';
 
@@ -93,6 +94,7 @@ export const AccordionsExplained: FC = () => {
         <FoldMotionDial/>
       </DialGroup>
     </section>
+    <AccordionsSize/>
     <section aria-labelledby="old-way-heading" className="accordion-part">
       <h2 id="old-way-heading" className="title bold">How we used to build a fold</h2>
       <PartListing part="a-box-remembers-the-fold" level={3}/>

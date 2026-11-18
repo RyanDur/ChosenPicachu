@@ -2,6 +2,7 @@ import {FC, PropsWithChildren, useId} from 'react';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {AccordionPart, accordionParts} from './part-pages';
 import {PartFoot} from './PartFoot';
+import {AccordionsMap} from './AccordionsMap';
 import './PartPage.css';
 
 type Props = {
@@ -17,6 +18,7 @@ export const PartPage: FC<PropsWithChildren<Props>> = ({part, children}) => {
       <h2 id={titled} className="title">{name}</h2>
     </hgroup>
     {children}
+    <AccordionsMap/>
     <PartFoot part={part}/>
   </section>;
 };
