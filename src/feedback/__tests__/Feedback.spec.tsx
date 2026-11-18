@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {render, waitFor} from '@testing-library/react';
 import {site} from '@pages/__test_support';
-import {demosAt} from '@pages/Demos/__test_support';
+import {demosAt, demoTabs} from '@pages/Demos/__test_support';
 import {
   githubFindingNoThread,
   githubHoldingAThread,
@@ -302,6 +302,27 @@ describe('Feedback once GitHub has its note', () => {
     await feedback.open();
 
     expect(await feedback.noteOnGitHubFromTheDialog()).toHaveAttribute('href', 'https://github.test/discussions/9');
+  });
+
+  test('should drop the link to a note read on another tab once Feedback has opened twice since', async () => {
+    const github = githubHoldingItsAnswer();
+    render(<TestApp at={demosAt('tables')}/>);
+    await site.pageTitled();
+    await feedback.open();
+    await feedback.write('The sort menu hides.');
+    await feedback.send();
+    await feedback.cancel();
+    await demoTabs.open('Accordions');
+    await feedback.open();
+    github.answers();
+    await feedback.noteOnGitHubFromTheDialog();
+    await feedback.close();
+    await feedback.open();
+    await feedback.close();
+
+    await feedback.open();
+
+    expect(feedback.status()).toBeEmptyDOMElement();
   });
 
   test('should offer Close where it offered Cancel', async () => {
