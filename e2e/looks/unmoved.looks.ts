@@ -1,6 +1,6 @@
 import {expect, test, type Browser, type Page} from '@playwright/test';
 import {differences, heldStill, lookOf, type Look} from './look';
-import {not} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
 import {views, type View} from './views';
 
 const stages = {before: 'http://localhost:4530/ChosenPicachu/', after: 'http://localhost:4531/ChosenPicachu/'};
@@ -38,8 +38,11 @@ const looked = async (
   return look;
 };
 
+const drawnAt = (width: number) => ({atWidths}: View): boolean =>
+  maybe(atWidths).map(widths => widths.includes(width)).orElse(true);
+
 for (const viewport of sizes) {
-  for (const view of views.filter(view => view.atWidths?.includes(viewport.width) ?? true)) {
+  for (const view of views.filter(drawnAt(viewport.width))) {
     test(`${view.page.name}, ${view.name}, at ${viewport.width}, looks as it did`, async ({browser}) => {
       const [before, after] = await Promise.all([
         looked(browser, stages.before, view, viewport),
