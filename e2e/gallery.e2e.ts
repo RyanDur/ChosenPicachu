@@ -124,6 +124,80 @@ for (const {reader, device} of handhelds) {
       await expect(gallery.doors.first()).toBeHidden();
     });
 
+    test('searches from the gallery settings on Enter, with them still open on the search', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam');
+      await gallery.openSettings();
+      await gallery.searchField.fill('lilies');
+
+      await gallery.searchField.press('Enter');
+
+      await expect(page).toHaveURL(/search=lilies/);
+      await expect(gallery.sheet).toBeVisible();
+      await expect(gallery.searchField).toBeFocused();
+    });
+
+    test('waits for Enter before searching the words typed in the gallery settings', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam');
+      await gallery.openSettings();
+
+      await gallery.searchField.pressSequentially('lilies');
+
+      await expect(gallery.searchField).toHaveValue('lilies');
+      await expect(page).not.toHaveURL(/search=/);
+    });
+
+    test('goes to the page typed in the gallery settings once the reader leaves the field', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam');
+      await gallery.openSettings();
+      await gallery.pageNumber.fill('2');
+
+      await gallery.pageNumber.press('Tab');
+
+      await expect(page).toHaveURL(/page=2/);
+      await expect(gallery.sheet).toBeVisible();
+    });
+
+    test('shows the number per page typed in the gallery settings on Enter', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam');
+      await gallery.openSettings();
+      await gallery.pageSize.fill('12');
+
+      await gallery.pageSize.press('Enter');
+
+      await expect(page).toHaveURL(/size=12/);
+    });
+
+    test('puts back the page it is on when the page typed is past the last', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam&page=3');
+      await expect(gallery.count).toHaveText(/^Page 3 of /);
+      await gallery.openSettings();
+      await gallery.pageNumber.fill('999999');
+
+      await gallery.pageNumber.press('Enter');
+
+      await expect(gallery.pageNumber).toHaveValue('3');
+      await expect(page).toHaveURL(/page=3/);
+    });
+
+    test('asks for no button to apply the gallery settings', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+
+      await gallery.openSettings();
+
+      await expect(gallery.sheet.getByRole('button')).toHaveCount(0);
+    });
+
     test('Escape closes the gallery settings', async ({page}) => {
       const gallery = galleryPage(page);
       await page.goto('gallery/?tab=vam');
