@@ -20,7 +20,7 @@ for (const {reader, device} of handhelds) {
       await gallery.openSettings();
       await expect(gallery.searchField).toBeVisible();
 
-      await expect(gallery.searchField).toHaveAccessibleName(/Search For/);
+      await expect(gallery.searchField).toHaveAccessibleName('Search');
     });
 
     test('lands in the search field from a tap on its label', async ({page}) => {
@@ -112,7 +112,7 @@ for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpr
       await page.goto('gallery/?tab=vam');
       await expect(gallery.searchField).toBeVisible();
 
-      await expect(gallery.searchField).toHaveAccessibleName(/Search For/);
+      await expect(gallery.searchField).toHaveAccessibleName('Search');
     });
 
     test('lands in the search field from a tap on its label', async ({page}) => {
@@ -139,8 +139,8 @@ for (const {reader, device} of [
       await page.goto('gallery/?tab=vam');
       await expect(gallery.wall.first()).toBeVisible();
 
-      await expect(page.getByRole('banner').getByRole('combobox', {name: /Search For/})).toBeVisible();
-      await expect(gallery.settingsPanel.getByRole('spinbutton', {name: /^Page #/})).toBeVisible();
+      await expect(page.getByRole('banner').getByRole('combobox', {name: 'Search', exact: true})).toBeVisible();
+      await expect(gallery.settingsPanel.getByRole('spinbutton', {name: 'Page', exact: true})).toBeVisible();
       await expect(gallery.settings).toHaveCount(0);
     });
   });

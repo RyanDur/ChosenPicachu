@@ -8,7 +8,16 @@ import {pageControl} from '@pages/Gallery/PageControl/__test_support';
 
 describe('The page controls', () => {
   describe('going to a specific page', () => {
-    test('going to a page clears the field', async () => {
+    test('the page field holds the page the address is on', async () => {
+      setupAICEveryPage(aicArtResponse);
+      render(<TestApp at={`${Paths.artGallery}?page=4`}/>);
+
+      await galleryWall.framesAppear();
+
+      expect(pageControl.pageField()).toHaveValue(4);
+    });
+
+    test('after going to a page, the page field holds that page', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);
       await galleryWall.framesAppear();
@@ -17,18 +26,7 @@ describe('The page controls', () => {
       await pageControl.go();
 
       await waitFor(() => expect(appAddress.search()).toHaveTextContent('page=3'));
-      expect(pageControl.pageField()).toHaveValue(null);
-    });
-
-    test('after going to a page, the field says which page it is', async () => {
-      setupAICEveryPage(aicArtResponse);
-      render(<TestApp at={Paths.artGallery}/>);
-      await galleryWall.framesAppear();
-
-      await pageControl.typePage('3');
-      await pageControl.go();
-
-      expect(await pageControl.pageFieldSaysAppears(3)).toBeInTheDocument();
+      expect(pageControl.pageField()).toHaveValue(3);
     });
 
     test('changing only the page size keeps the page the nav walked to', async () => {
@@ -36,9 +34,9 @@ describe('The page controls', () => {
       render(<TestApp at={Paths.artGallery}/>);
       await galleryWall.framesAppear();
       await pageControl.nextPage();
-      await pageControl.pageFieldSaysAppears(2);
+      await pageControl.pageFieldHolds(2);
       await pageControl.nextPage();
-      await pageControl.pageFieldSaysAppears(3);
+      await pageControl.pageFieldHolds(3);
 
       await pageControl.typeSize('45');
       await pageControl.go();
@@ -93,6 +91,15 @@ describe('The page controls', () => {
   });
 
   describe('changing the number of elements', () => {
+    test('the per page field holds the page size the address asks for', async () => {
+      setupAICEveryPage(aicArtResponse);
+      render(<TestApp at={`${Paths.artGallery}?size=30`}/>);
+
+      await galleryWall.framesAppear();
+
+      expect(pageControl.sizeField()).toHaveValue(30);
+    });
+
     it('should allow the user to change the elements per page', async () => {
       setupAICEveryPage(aicArtResponse);
       render(<TestApp at={Paths.artGallery}/>);

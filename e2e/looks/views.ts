@@ -116,7 +116,7 @@ export const views: readonly View[] = [
     into: async page => {
       await page.getByRole('link', {name: 'NEXT'}).waitFor();
       await galleryPage(page).openSettings();
-      await page.getByRole('spinbutton', {name: /^Page #/}).focus();
+      await page.getByRole('spinbutton', {name: 'Page', exact: true}).focus();
       await page.mouse.move(0, 0);
     }
   },
@@ -125,7 +125,7 @@ export const views: readonly View[] = [
     page: named('gallery'),
     into: async page => {
       await page.getByRole('link', {name: 'NEXT'}).waitFor();
-      await hovered(page, () => page.getByRole('combobox', {name: /Search For/}));
+      await hovered(page, () => page.getByRole('combobox', {name: 'Search', exact: true}));
     }
   },
   {
