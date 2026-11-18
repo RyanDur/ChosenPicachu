@@ -15,6 +15,15 @@ describe('the home page', () => {
     expect(outOfReadingOrder([homePage.firstParagraph(), homePage.drawing()])).toEqual([]);
   });
 
+  test('should come to the doors after its words, and its words after the drawing', () => {
+    expect(outOfReadingOrder([
+      homePage.firstParagraph(),
+      homePage.drawing(),
+      homePage.lastWordsParagraph(),
+      homePage.firstDoor()
+    ])).toEqual([]);
+  });
+
   test('should link only the book the opener names and the three doors', () => {
     expect(homePage.pageLinks()).toEqual([
       ['Resilient Web Design', 'https://resilientwebdesign.com/'],
