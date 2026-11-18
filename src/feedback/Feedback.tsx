@@ -8,7 +8,6 @@ import {Paths} from '@navigation';
 import {trouble} from '@transport';
 import {github} from './github';
 import {feedbackChange} from './feedbackChange';
-import type {SentNote} from './feedbackDraft';
 import {drafting} from './drafting';
 import {classNames} from '@components';
 import {Modal, ModalOpener} from '@components/Modal';
@@ -30,18 +29,20 @@ const fieldFirst = (event: SyntheticEvent<HTMLDialogElement>) => {
   }
 };
 
-const SentNoteLink: FC<{sentNote: SentNote}> = ({sentNote}) =>
-  sentNote.state !== 'none' && <>Sent. <a className="signpost" href={sentNote.url}>Read it on GitHub</a></>;
+const SentNoteLink: FC = () => {
+  const [{sentNote}] = useContext(drafting);
+  return sentNote.state !== 'none' && <>Sent. <a className="signpost" href={sentNote.url}>Read it on GitHub</a></>;
+};
 
 const NoteStatus: FC = () => {
-  const [{sending, sentNote}] = useContext(drafting);
+  const [{sending}] = useContext(drafting);
   switch (sending.state) {
     case 'sending':
       return 'Sending the note to GitHub.';
     case 'refused':
       return `${trouble.with('GitHub')(sending.why)}. Your words are still here.`;
   }
-  return <SentNoteLink sentNote={sentNote}/>;
+  return <SentNoteLink/>;
 };
 
 export const Feedback: FC = () => {
@@ -89,7 +90,7 @@ export const Feedback: FC = () => {
     <p className={classNames('feedback-item', 'field', not(hydrated) && 'gap-filled')}>
       <ModalOpener className="feedback-open path rail-aside bold attentive field borderless reachable"
         inert={not(hydrated)} modal={hydrated ? feedbackDialogId : undefined} onClick={opening}>Feedback</ModalOpener>
-      <output className="feedback-sent caption"><SentNoteLink sentNote={draft.sentNote}/></output>
+      <output className="feedback-sent caption"><SentNoteLink/></output>
     </p>
     {hydrated && <Modal key={pageThread} id={feedbackDialogId} aria-labelledby="feedback-title" className="feedback-dialog backdrop veiled ink" onToggle={fieldFirst}>
       <form className="feedback-form" onSubmit={send}>
