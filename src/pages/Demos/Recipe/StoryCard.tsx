@@ -1,12 +1,5 @@
-import {FC, PropsWithChildren} from 'react';
+import {FC} from 'react';
 import {useRanks} from './useRanks';
-
-export type Told = PropsWithChildren<{
-  param: string;
-  id: string;
-  can: string;
-  soThat: string;
-}>;
 
 export const StoryCard: FC<{titleId: string; can: string; soThat: string; steps: number}> = ({
   titleId,

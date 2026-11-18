@@ -1,10 +1,16 @@
-import {FC, MouseEvent, SyntheticEvent} from 'react';
+import {FC, MouseEvent, PropsWithChildren, SyntheticEvent} from 'react';
 import {useOpenStories} from './useOpenStories';
-import {Told} from './StoryCard';
 import {StoryShell} from './StoryShell';
 import {storyKeys} from './storyKeys';
 
-export const Story: FC<Told> = ({param, id, can, soThat, children}) => {
+type Props = PropsWithChildren<{
+  param: string;
+  id: string;
+  can: string;
+  soThat: string;
+}>;
+
+export const Story: FC<Props> = ({param, id, can, soThat, children}) => {
   const stories = useOpenStories(param);
   const toggled = (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
