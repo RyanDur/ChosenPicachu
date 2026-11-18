@@ -1,6 +1,7 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
+import type {Place} from '@pages/Demos/useCarriedAddress';
 
 export type AccordionPart = keyof typeof names.accordions;
 
@@ -32,7 +33,7 @@ type AccordionParts = {
   told: (part: AccordionPart) => Told;
   addressOf: (part: AccordionPart) => string;
   shownAt: (pathname: string) => Maybe<AccordionPart>;
-  pageOf: (heading: TabHeading) => Maybe<AccordionPart>;
+  whereIs: (heading: TabHeading) => Place;
   titleOf: (heading: TabHeading) => string;
   numbered: (heading: TabHeading) => string;
   previousOf: (part: AccordionPart) => Maybe<TabHeading>;
@@ -59,6 +60,11 @@ const isPart = (name: string): name is AccordionPart => Object.keys(listings).in
 
 const parts = Object.keys(listings).filter(isPart);
 
+const whereIs = (heading: TabHeading): Place =>
+  maybe(parts.find(part => listings[part].heading === heading)).either(
+    part => ({to: addressOf(part)}),
+    () => ({to: tabAddress, heading}));
+
 const partAt = (pathname: string): Maybe<AccordionPart> => {
   const named = pathname.slice(tabAddress.length, -1);
   return maybe(isPart(named) && pathname === addressOf(named) ? named : undefined);
@@ -77,7 +83,7 @@ export const accordionParts: AccordionParts = {
   },
   addressOf,
   shownAt: partAt,
-  pageOf: heading => maybe(parts.find(part => listings[part].heading === heading)),
+  whereIs,
   titleOf: heading => titles[heading],
   numbered: heading => `${placeOf(heading) + 1}. ${titles[heading]}`,
   previousOf: part => besidePart(part, -1),
