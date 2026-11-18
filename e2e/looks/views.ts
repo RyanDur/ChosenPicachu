@@ -8,6 +8,7 @@ export type View = {
   readonly into?: (page: Page) => Promise<void>;
   readonly withoutWorkers?: true;
   readonly held?: RegExp;
+  readonly atWidths?: readonly number[];
 };
 
 const atRest = (page: SitePage): View => {
@@ -70,6 +71,7 @@ export const views: readonly View[] = [
   {
     name: 'a rail link hovered',
     page: named('home'),
+    atWidths: [1440, 1000],
     into: page => hovered(page, () => page.getByRole('navigation', {name: 'site'}).getByRole('link').nth(1))
   },
   {
