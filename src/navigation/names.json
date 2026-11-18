@@ -27,7 +27,7 @@
   },
   "accordions": {
     "a-box-remembers-the-fold": {"title": "A box remembers the fold · Accordions · Chosen Picachu", "description": "A hidden input holds whether the fold is open, and a rule collapses its panel while the input is unchecked."},
-    "the-max-height-guess": {"title": "The max-height guess · Accordions · Chosen Picachu", "description": "Before a known height, most of us slid a fold open by moving max-height to a number taller than any fold would need."},
+    "the-max-height-guess": {"title": "The max-height guess · Accordions · Chosen Picachu", "description": "When the height isn’t known ahead of time, most of us slid a fold open by moving max-height to a number taller than any fold would need."},
     "the-measured-height": {"title": "The measured height · Accordions · Chosen Picachu", "description": "A script measures the text, and the style sheet slides the panel to that height."}
   },
   "z-index": {
