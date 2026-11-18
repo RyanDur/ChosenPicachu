@@ -1,0 +1,20 @@
+import {maybe} from '@ryandur/sand';
+import type {Page} from '@playwright/test';
+
+// goto waits for the load event, and every chunk is preloaded before it, so only a wait inside the entry script
+// leaves the page drawn but not yet hydrated for long enough to act in
+export const hydration = (page: Page) => ({
+  holdBack: async (address: string): Promise<void> => {
+    const html = await (await page.request.get(address)).text();
+    const entry = maybe(/<script type="module" src="([^"]+)"/.exec(html)).mBind(found => maybe(found[1])).either(
+      source => source,
+      () => {
+        throw new Error(`no entry script to hold back in ${address}`);
+      });
+    await page.route(url => url.pathname === entry, async route => {
+      const response = await route.fetch();
+      const body = `await new Promise(resolve => setTimeout(resolve, 1500));\n${await response.text()}`;
+      await route.fulfill({response, body});
+    });
+  }
+});

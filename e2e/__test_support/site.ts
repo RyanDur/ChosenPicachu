@@ -1,4 +1,3 @@
-import {maybe} from '@ryandur/sand';
 import type {Page} from '@playwright/test';
 
 export const siteFrame = (page: Page) => {
@@ -11,20 +10,4 @@ export const siteFrame = (page: Page) => {
     feedback: page.getByRole('button', {name: 'Feedback', exact: true, includeHidden: true}),
     hydrated: (): Promise<void> => page.getByRole('dialog', {name: 'Feedback', includeHidden: true}).waitFor({state: 'attached'})
   };
-};
-
-// goto waits for the load event, and every chunk is preloaded before it, so only a wait inside the entry script
-// leaves the page drawn but not yet hydrated for long enough to act in
-export const hydrationHeldBack = async (page: Page, address: string): Promise<void> => {
-  const html = await (await page.request.get(address)).text();
-  const entry = maybe(/<script type="module" src="([^"]+)"/.exec(html)).mBind(found => maybe(found[1])).either(
-    source => source,
-    () => {
-      throw new Error(`no entry script to hold back in ${address}`);
-    });
-  await page.route(url => url.pathname === entry, async route => {
-    const response = await route.fetch();
-    const body = `await new Promise(resolve => setTimeout(resolve, 1500));\n${await response.text()}`;
-    await route.fulfill({response, body});
-  });
 };
