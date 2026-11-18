@@ -12,19 +12,29 @@ test.describe('a 13-inch iPad held upright', () => {
   });
 });
 
-for (const {size, device} of [{size: 'a tablet', device: iPadUpright}, {size: 'a desktop', device: desktop}]) {
-  test.describe(`on ${size}`, () => {
-    test.use(device);
+test.describe('on a tablet', () => {
+  test.use(iPadUpright);
 
-    test('the site nav and Feedback show inside the pages and feedback rail under the real style sheet', async ({page}) => {
-      await page.goto('');
-      const rail = page.getByRole('region', {name: 'pages and feedback'});
+  test('the site nav and Feedback show inside the pages and feedback rail under the real style sheet', async ({page}) => {
+    await page.goto('');
+    const rail = page.getByRole('region', {name: 'pages and feedback'});
 
-      await expect(rail.getByRole('navigation', {name: 'site'})).toBeVisible();
-      await expect(rail.getByRole('button', {name: 'Feedback'})).toBeVisible();
-    });
+    await expect(rail.getByRole('navigation', {name: 'site'})).toBeVisible();
+    await expect(rail.getByRole('button', {name: 'Feedback'})).toBeVisible();
   });
-}
+});
+
+test.describe('on a desktop', () => {
+  test.use(desktop);
+
+  test('the site nav and Feedback show inside the pages and feedback rail under the real style sheet', async ({page}) => {
+    await page.goto('');
+    const rail = page.getByRole('region', {name: 'pages and feedback'});
+
+    await expect(rail.getByRole('navigation', {name: 'site'})).toBeVisible();
+    await expect(rail.getByRole('button', {name: 'Feedback'})).toBeVisible();
+  });
+});
 
 test.describe('on a phone', () => {
   test.use(iPhone);
