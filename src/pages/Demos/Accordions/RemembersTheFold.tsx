@@ -14,7 +14,7 @@ import {FoldTypeDial} from './FoldTypeDial';
 import {FocusOnTheBar, OffScreenNotGone, OneNameOneChoice, TheKnownHeight, TheRuleMatchesTheBox, TwoBordersTurned} from './Diagrams';
 import {foldInput} from './fold-input';
 import {looks} from './looks';
-import {TabPartLink} from './TabPartLink';
+import {HeadingLink} from './HeadingLink';
 import {tabHeadings} from './tab-headings';
 import exclusiveAccordionSource from './ExclusiveAccordion.tsx?sample';
 import inclusiveAccordionSource from './InclusiveAccordion.tsx?sample';
@@ -60,7 +60,7 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
   return <>
     <p className="paragraph">A fold has to keep whether it is open somewhere. This part keeps it in a hidden input and
       lets a rule in the style sheet read it, with no script. It builds on two places on the accordions tab:
-      “<TabPartLink heading="html-alone-heading"/>”, for elements, tags and screen readers,
+      “<HeadingLink heading="html-alone-heading"/>”, for elements, tags and screen readers,
       and <TabLink to={DemoTopics.accordions} heading={tabHeadings.foldChoices}>the fold choices</TabLink> after it, for
       style sheets, rules, selectors, properties and the dials.</p>
     <DialGroup>
