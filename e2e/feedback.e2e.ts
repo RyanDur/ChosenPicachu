@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame} from './__test_support';
+import {clickWhereItIs, desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame, twoFramesLater} from './__test_support';
 
 const findsFeedbackWithoutScrolling = async (page: Page, path: string): Promise<void> => {
   await github(page);
@@ -118,16 +118,61 @@ const enterSendsOntoSent = async (page: Page, field: 'words' | 'reach'): Promise
 
   await feedback[field].press('Enter');
 
-  await expect(feedback.dialog).toBeHidden();
-  await expect(feedback.sent).toContainText('Sent.');
-  await expect(feedback.sent.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
+  await expect(feedback.status).toContainText('Sent.');
+  await expect(feedback.status.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
   expect(posted[0].variables.title).toBe('Feedback: Demos Tables (/demos/tables/)');
   expect(posted[0].variables.body).toContain('The sort menu hides behind the header.');
 };
 
-test('Enter in the note field sends, and the dialog closes onto Sent', ({page}) => enterSendsOntoSent(page, 'words'));
+test('Enter in the note field sends, and the dialog says where the note is on GitHub', ({page}) => enterSendsOntoSent(page, 'words'));
 
-test('Enter in the reach field sends, and the dialog closes onto Sent', ({page}) => enterSendsOntoSent(page, 'reach'));
+test('Enter in the reach field sends, and the dialog says where the note is on GitHub', ({page}) => enterSendsOntoSent(page, 'reach'));
+
+test('on a desk, the rail keeps the sent note’s link once Close shuts the dialog', async ({page}) => {
+  await github(page);
+  const feedback = feedbackOn(page);
+  await page.goto('demos/tables/');
+  await feedback.open.click();
+  await feedback.words.pressSequentially('The sort menu hides behind the header.');
+  await feedback.send.click();
+  await expect(feedback.status).toContainText('Sent.');
+
+  await feedback.close.click();
+
+  await expect(feedback.dialog).toBeHidden();
+  await expect(feedback.sent.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
+});
+
+test.describe('a phone on a page with tabs', () => {
+  test.use(iPhone);
+
+  test('reads where the sent note is in the dialog, then reaches Feedback, a tab and the site menu once it closes', async ({page}) => {
+    await github(page);
+    const feedback = feedbackOn(page);
+    const site = siteFrame(page);
+    await page.goto('demos/tables/');
+    await site.hydrated();
+    await feedback.open.click();
+    await feedback.words.pressSequentially('The sort menu hides behind the header.');
+    await feedback.send.click();
+    await expect(feedback.status.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
+    await feedback.close.click();
+    await expect(feedback.dialog).toBeHidden();
+    await twoFramesLater(page);
+
+    await clickWhereItIs(page, feedback.open);
+    await expect(feedback.dialog).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(feedback.dialog).toBeHidden();
+    await twoFramesLater(page);
+    await clickWhereItIs(page, page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'}));
+    await expect(page).toHaveURL(/demos\/accordions\/$/);
+    await twoFramesLater(page);
+    await clickWhereItIs(page, site.menu);
+
+    await expect(site.nav).toBeVisible();
+  });
+});
 
 test('a note GitHub refuses stays in the open dialog, and it says so', async ({page}) => {
   await github(page, {refuse: 'Bad credentials'});

@@ -30,8 +30,8 @@ export const feedback = {
   send: async (): Promise<void> => userEvent.type(note(), '{Enter}'),
   sendControl: (): HTMLElement => within(dialog()).getByRole('button', {name: 'Send'}),
   cancel: async (): Promise<void> => userEvent.click(within(dialog()).getByRole('button', {name: 'Cancel'})),
+  closeControl: (): Promise<HTMLElement> => within(dialog()).findByRole('button', {name: 'Close'}),
   status,
-  noteOnGitHub: (): Promise<HTMLElement> => screen.findByRole('link', {name: 'Read it on GitHub'}),
   noteOnGitHubFromTheDialog: (): Promise<HTMLElement> =>
     within(status()).findByRole('link', {name: 'Read it on GitHub'})
 };

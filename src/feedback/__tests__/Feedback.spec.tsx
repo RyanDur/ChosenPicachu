@@ -74,7 +74,7 @@ describe('Feedback while a note is on its way', () => {
     expect(feedback.status()).toHaveTextContent('Sending the note to GitHub.');
     expect(feedback.sendControl()).toBeDisabled();
     github.answers();
-    expect(await feedback.noteOnGitHub()).toBeInTheDocument();
+    expect(await feedback.noteOnGitHubFromTheDialog()).toBeInTheDocument();
   });
 
   test('should say in the note the live page it was sent from', async () => {
@@ -101,7 +101,7 @@ describe('Feedback while a note is on its way', () => {
     await feedback.send();
     github.answers();
 
-    expect(await feedback.noteOnGitHub()).toBeInTheDocument();
+    expect(await feedback.noteOnGitHubFromTheDialog()).toBeInTheDocument();
     expect(github.notes).toHaveLength(1);
   });
 
@@ -270,5 +270,34 @@ describe('Feedback when GitHub refuses', () => {
 
     expect(await feedback.says('GitHub has nothing at that address. Your words are still here.')).toBeInTheDocument();
     expect(feedback.note()).toHaveValue('The sort menu hides.');
+  });
+});
+
+describe('Feedback once GitHub has its note', () => {
+  test('should stay open and say in its status line where the note is on GitHub', async () => {
+    const github = githubHoldingItsAnswer();
+    render(<TestApp at="/"/>);
+    await site.pageTitled();
+    await feedback.open();
+    await feedback.write('The sort menu hides.');
+    await feedback.send();
+
+    github.answers();
+
+    expect(await feedback.noteOnGitHubFromTheDialog()).toHaveAttribute('href', 'https://github.test/discussions/9');
+    expect(feedback.dialog()).toBeVisible();
+  });
+
+  test('should offer Close where it offered Cancel', async () => {
+    const github = githubHoldingItsAnswer();
+    render(<TestApp at="/"/>);
+    await site.pageTitled();
+    await feedback.open();
+    await feedback.write('The sort menu hides.');
+    await feedback.send();
+
+    github.answers();
+
+    expect(await feedback.closeControl()).toBeInTheDocument();
   });
 });

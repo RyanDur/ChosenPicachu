@@ -548,6 +548,7 @@
   #root .rail {
     position: fixed;
     inset: auto 0 0;
+    block-size: var(--menu-bar-block);
     z-index: 2;
     display: grid;
     grid-template-columns: 1fr 3fr;
