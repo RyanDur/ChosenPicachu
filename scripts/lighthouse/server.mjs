@@ -1,15 +1,51 @@
 import {createServer} from 'node:http';
 import {existsSync, readFileSync, statSync} from 'node:fs';
 import {dirname, extname, join, resolve} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath, pathToFileURL} from 'node:url';
 import {gzipSync} from 'node:zlib';
 import {is, maybe, not} from '@ryandur/sand';
 import {WebSocketServer} from 'ws';
+import {pageLoading} from '../page-loading.mjs';
 
 const port = Number(maybe(process.env.STAGE_PORT).orElse(4517));
 const here = dirname(fileURLToPath(import.meta.url));
 const site = resolve(maybe(process.env.STAGE_SITE).orElse(join(here, '../../build/client')));
 const fixtures = join(here, 'fixtures');
+
+/**
+ * @typedef {object} Pages
+ * @property {(path: string) => boolean} isOne
+ * @property {(path: string) => Promise<{status: number, html: string | Buffer}>} answer
+ */
+
+/** @type {Pages} */
+const filedPages = {
+  isOne: path => existsSync(join(site, path)) && statSync(join(site, path)).isDirectory(),
+  answer: async path => {
+    const entry = join(site, path, 'index.html');
+    return existsSync(entry)
+      ? {status: 200, html: readFileSync(entry)}
+      : {status: 404, html: readFileSync(join(site, '404.html'))};
+  }
+};
+
+/** @return {Promise<Pages>} */
+const renderedPages = async () => {
+  const {prerender} = await import(pathToFileURL(join(site, '../server/entry.server.js')).href);
+  const loading = pageLoading(site, '/ChosenPicachu/');
+  return {
+    isOne: path => prerender.pages.includes(`${path}/`),
+    answer: async path => {
+      if (not(prerender.pages.includes(path))) {
+        return {status: 404, html: loading(await prerender.fallback(), 'src/entry.fallback.tsx', [])};
+      }
+      const {html, rooms} = await prerender.page(path);
+      return {status: 200, html: loading(html, 'src/entry.client.tsx', rooms)};
+    }
+  };
+};
+
+const pages = process.env.STAGE_RENDER === 'on' ? await renderedPages() : filedPages;
 
 const rest = new Map(JSON.parse(readFileSync(join(fixtures, 'rest.json'), 'utf8'))
   .map(({key, ...entry}) => [key, entry]));
@@ -100,16 +136,17 @@ const answers = (request, response) => {
   if (extname(path)) {
     return send(404, 'not found', 'text/plain', false);
   }
-  if (not(path.endsWith('/')) && existsSync(file) && statSync(file).isDirectory()) {
+  if (not(path.endsWith('/')) && pages.isOne(path)) {
     const queryAt = url.indexOf('?');
     response.writeHead(301, {location: queryAt < 0 ? `${url}/` : `${url.slice(0, queryAt)}/${url.slice(queryAt)}`});
     return response.end();
   }
-  const entry = join(file, 'index.html');
-  if (existsSync(entry)) {
-    return send(200, readFileSync(entry), 'text/html', true);
-  }
-  send(404, readFileSync(join(site, '404.html')), 'text/html', true);
+  pages.answer(path)
+    .then(({status, html}) => send(status, html, 'text/html', true))
+    .catch(error => {
+      console.error(`the stage could not draw ${path}`, error);
+      send(500, String(error), 'text/plain', false);
+    });
 };
 const server = createServer(answers);
 

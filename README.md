@@ -40,6 +40,26 @@ npm run dev
 npm test
 ```
 
+## Running a demo rendered on the server
+
+The site is built ahead of time and served as files. `npm run ssr` serves it another way: it builds the site into `build-ssr/` without writing any pages, then renders each page on port 4517 when a browser asks for it.
+
+```shell
+npm run ssr
+```
+
+Open http://localhost:4517/ChosenPicachu/demos/accordions/ and view the page source. The text of every accordion is in the HTML the server sent, before any script runs.
+
+To run the Accordions journeys against it, start it on another port, then point Playwright at that port from a second terminal:
+
+```shell
+STAGE_PORT=4520 npm run ssr
+```
+
+```shell
+STAGE_PORT=4520 npx playwright test e2e/accordions.e2e.ts e2e/accordions-measured.e2e.ts e2e/accordion-parts.e2e.ts
+```
+
 ## Git hooks
 
 Activate the repo's quality gates once per clone:
