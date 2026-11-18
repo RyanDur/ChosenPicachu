@@ -67,6 +67,8 @@ export const explanation = {
     .filter(link => link.getAttribute('href')?.startsWith(site) ?? false),
   queryLinkNamed: (part: HTMLElement, name: string | RegExp): HTMLElement | null => within(part).queryByRole('link', {name}),
   drawingNamed: (part: HTMLElement, name: string | RegExp): HTMLElement => within(part).getByRole('figure', {name}),
+  drawingsTitled: (part: HTMLElement, titles: string[]): HTMLElement[] =>
+    titles.map(title => within(part).getByRole('figure', {name: new RegExp(`^${title}\\.`)})),
   saying: (part: HTMLElement, words: string | RegExp): HTMLElement => within(part).getByText(words),
   opener: openerOf,
   sourcesBeside: (part: HTMLElement, words: RegExp): string[] => sourcesIn(runTelling(part, words)),
