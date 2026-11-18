@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import {computeAccessibleName} from 'dom-accessibility-api';
 
 const choice = (dial: string): Promise<HTMLElement> => screen.findByRole('group', {name: dial});
+const buildIn = (part: HTMLElement): HTMLElement => within(part).getByRole('article');
 const option = (holder: HTMLElement, name: string): HTMLElement => within(holder).getByRole('radio', {name});
 
 export const accordionsTab = {
@@ -19,7 +20,7 @@ export const accordionsTab = {
   readingIn: (row: HTMLElement): HTMLElement => within(row).getByRole('status'),
   openFold: (fold: HTMLElement): Promise<void> => userEvent.click(within(fold).getByText(computeAccessibleName(fold))),
   openFirstFoldIn: async (part: HTMLElement): Promise<HTMLElement> => {
-    const fold = within(part).getAllByRole('group').filter(group => within(group).queryAllByRole('radio').length === 0)[0];
+    const fold = within(buildIn(part)).getAllByRole('group')[0];
     await userEvent.click(within(fold).getAllByText(/^\w+$/)[0]);
     return within(fold).getByRole('paragraph');
   },
@@ -27,7 +28,7 @@ export const accordionsTab = {
     const holding = await Promise.all(parts.map(async name => (await screen.findByRole('region', {name})).contains(element)));
     return parts.filter((_, at) => holding[at]);
   },
-  buildIn: (part: HTMLElement): HTMLElement => within(part).getByRole('article'),
+  buildIn,
   buildsIn: (part: HTMLElement): string[] =>
     within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
   openPart: async (name: string): Promise<void> => userEvent.click(await screen.findByRole('link', {name})),
