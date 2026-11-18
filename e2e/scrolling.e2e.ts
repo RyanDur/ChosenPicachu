@@ -2,7 +2,7 @@ import {Locator, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {assertionPatience} from './__test_support/patience';
 import {not} from '@ryandur/sand';
-import {boxOf, clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, siteFrame, twoFramesLater} from './__test_support';
+import {boxOf, clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, siteFrame, tablesDemo, twoFramesLater} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -97,3 +97,23 @@ for (const {reader, use} of desks) {
     });
   });
 }
+
+test.describe('a desktop, where only the search changes', () => {
+  test.use({viewport: desktop.viewport});
+
+  test('a story opened on the sort tutorial leaves the page where it was', async ({page}) => {
+    await page.goto('demos/tables/sort/');
+    await siteFrame(page).hydrated();
+    const tables = tablesDemo(page);
+    await tables.storyAt(1).scrollIntoViewIfNeeded();
+    const where = await documentScrollY(page);
+    expect(where).toBeGreaterThan(0);
+    const address = page.url();
+
+    await tables.openStoryAt(1);
+
+    await expect(page).not.toHaveURL(address);
+    await twoFramesLater(page);
+    expect(await documentScrollY(page)).toBe(where);
+  });
+});
