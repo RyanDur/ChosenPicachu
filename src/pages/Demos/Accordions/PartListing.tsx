@@ -9,11 +9,16 @@ type Props = {
   level: 2 | 3;
 };
 
+const headings = {
+  2: {Heading: 'h2', look: 'title bold'},
+  3: {Heading: 'h3', look: 'sub-title bold'}
+} as const;
+
 export const PartListing: FC<Props> = ({part, level}) => {
   const {heading, says, minutes} = accordionParts.told(part);
-  const Title = level === 2 ? 'h2' : 'h3';
+  const {Heading, look} = headings[level];
   return <section className="part-listing" aria-labelledby={heading}>
-    <Title id={heading} className={level === 2 ? 'title bold' : 'sub-title bold'}><PartLink part={part}/></Title>
+    <Heading id={heading} className={look}><PartLink part={part}/></Heading>
     <p className="paragraph">{says}</p>
     <ReadingTime minutes={minutes}/>
   </section>;
