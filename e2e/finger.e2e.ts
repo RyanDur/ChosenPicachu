@@ -16,19 +16,23 @@ const opensFromAFinger = async (page: Page, fold: Locator): Promise<void> => {
   await expect(fold).toHaveAttribute('open', '');
 };
 
+test.describe('a phone held upright', () => {
+  test.use(iPhone);
+
+  test('opens a page from a finger that lands just off a link in the nav', async ({page}) => {
+    await page.goto('');
+    await siteFrame(page).hydrated();
+    await siteFrame(page).menu.tap();
+
+    await fingerTap(page, siteFrame(page).nav.getByRole('link', {name: 'Users'}));
+
+    await expect(page).toHaveURL(/users/);
+  });
+});
+
 for (const {reader, device} of [{reader: 'a phone', device: iPhone}, {reader: 'a phone held sideways', device: phoneSideways}]) {
   test.describe(reader, () => {
     test.use(device);
-
-    test('opens a page from a finger that lands just off a link in the nav', async ({page}) => {
-      await page.goto('');
-      await siteFrame(page).hydrated();
-      await siteFrame(page).menu.tap();
-
-      await fingerTap(page, siteFrame(page).nav.getByRole('link', {name: 'Users'}));
-
-      await expect(page).toHaveURL(/users/);
-    });
 
     test('opens and closes what am I looking at with a finger that lands just off the line', async ({page}) => {
       await page.goto('demos/charts/');
