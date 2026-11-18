@@ -104,14 +104,25 @@ describe('the measured height, on its own page', () => {
     expect(depth).toBeVisible();
   });
 
-  test('should link each term it glosses, and each tab it names, to that tab', async () => {
+  test('should name no tab, now that the z-index parts it leans on have pages of their own', async () => {
     render(<TestApp at={demosAt(measuredHeight)}/>);
 
     const page = await demoTabs.arrivedOn('Accordions');
 
-    expect(demoPage.linksToTabsIn(page)).toEqual([
-      ['z-index tab', `${Paths.demos}z-index/`]
-    ]);
+    expect(demoPage.linksToTabsIn(page)).toEqual([]);
+  });
+
+  test('should cite the z-index parts that teach state, context and dispatch, each at its page', async () => {
+    render(<TestApp at={demosAt(measuredHeight)}/>);
+
+    const part = await explanation.part('The measured height');
+
+    expect(explanation.linksTo(part, `${Paths.demos}z-index/`).map(link => [link.textContent, link.getAttribute('href')]))
+      .toEqual([
+        ['Why the popover wins', `${Paths.demos}z-index/why-the-popover-wins/`],
+        ['Let’s build this feature', `${Paths.demos}z-index/lets-build-this-feature/`],
+        ['Let’s build this feature', `${Paths.demos}z-index/lets-build-this-feature/`]
+      ]);
   });
 
   test('should title the measured height’s page with the tab and the part', async () => {
