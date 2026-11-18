@@ -13,8 +13,8 @@
 .bare { appearance: none; }
 .borderless { border: none; }
 
-.scrollbarless {
-  @media (width <= 600px), (width <= 1100px) and (height <= 600px) {
+.swipe-scrolled {
+  @media (pointer: coarse) {
     scrollbar-width: none;
   }
 }
