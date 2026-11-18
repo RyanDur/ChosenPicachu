@@ -12,7 +12,7 @@
     "build": "tsc -b && vite build && vite build --ssr src/entry.server.tsx --outDir build/server && node scripts/prerender.mjs",
     "lint": "oxlint --type-aware --deny-warnings",
     "preview": "vite preview",
-    "ssr": "export VITE_APP_FEEDBACK_TOKEN=recorded VITE_APP_TRADE_PRODUCT=BTC-USD && vite build --outDir build-ssr/client && vite build --ssr src/entry.server.tsx --outDir build-ssr/server && STAGE_RENDER=on STAGE_SITE=build-ssr/client STAGE_PORT=${STAGE_PORT:-4520} node scripts/lighthouse/server.mjs",
+    "ssr": "node scripts/ssr.mjs",
     "tsc": "tsc -b",
     "lint:css": "stylelint --max-warnings 0 'src/**/*.css'",
     "lint:style": "eslint .",

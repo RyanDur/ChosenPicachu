@@ -6,6 +6,7 @@ import {gzipSync} from 'node:zlib';
 import {is, maybe, not} from '@ryandur/sand';
 import {WebSocketServer} from 'ws';
 import {pageLoading} from '../page-loading.mjs';
+import {stageEnvironment} from './stage-environment.mjs';
 
 const port = Number(maybe(process.env.STAGE_PORT).orElse(4517));
 const here = dirname(fileURLToPath(import.meta.url));
@@ -91,21 +92,8 @@ const answers = (request, response) => {
   const url = maybe(request.url).orElse('/');
 
   if (url.split('?')[0].endsWith('/env.js')) {
-    return send(200, `window.__environment = ${JSON.stringify({
-      tradeFeed: `ws://localhost:${server.address().port}/ws-feed`,
-      tradeProduct: 'BTC-USD',
-      tradeHistory: '/trade-history',
-      aicDomain: '/aic',
-      aicPictures: '/aic-image',
-      harvardDomain: '/harvard',
-      harvardAPIKey: 'recorded',
-      vamDomain: '/vam',
-      vamPictures: '/vam-image',
-      clevelandDomain: '/cleveland',
-      usersDomain: '/api/users',
-      feedbackToken: 'recorded',
-      feedbackEndpoint: '/feedback-graphql'
-    })};`, 'text/javascript', true);
+    return send(200, `window.__environment = ${JSON.stringify(stageEnvironment(server.address().port))};`,
+      'text/javascript', true);
   }
 
   if (request.method === 'POST' && url === '/feedback-graphql') {
