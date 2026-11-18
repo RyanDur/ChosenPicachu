@@ -1,5 +1,7 @@
 .home {
   display: flow-root;
+  inline-size: 100%;
+  container: home / inline-size;
   padding: var(--base-x-3) var(--page-inset);
 
   .page-pulled-apart {
@@ -47,6 +49,20 @@
 
     .doors {
       gap: var(--base-x-3);
+    }
+  }
+}
+
+@container home (width < 68.8rem) {
+  .home {
+    .page-pulled-apart {
+      float: none;
+      inline-size: auto;
+      margin: 0 0 var(--base-x-3);
+    }
+
+    .doors {
+      grid-template-columns: 1fr;
     }
   }
 }
