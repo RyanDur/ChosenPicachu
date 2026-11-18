@@ -898,7 +898,7 @@ describe('the workspace story', () => {
 });
 
 describe('the links to other tabs', () => {
-  test('should link each term it glosses, and each tab it names, to that tab', async () => {
+  test('should link each tab it names, and each term a tab teaches, to that tab', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -916,7 +916,7 @@ describe('the links to other tabs', () => {
     ]);
   });
 
-  test('should link each term it glosses, and each tab it names, to that tab, on the price chart’s page', async () => {
+  test('should link each tab it names to that tab, on the price chart’s page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -929,7 +929,7 @@ describe('the links to other tabs', () => {
     ]);
   });
 
-  test('should link each term it glosses, and each tab it names, to that tab, on the candles chart’s page', async () => {
+  test('should link each tab it names to that tab, on the candles chart’s page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -942,7 +942,7 @@ describe('the links to other tabs', () => {
     ]);
   });
 
-  test('should link each term it glosses, and each tab it names, to that tab, on the pressure chart’s page', async () => {
+  test('should link each tab it names, and each term a tab teaches, to that tab, on the pressure chart’s page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -956,7 +956,7 @@ describe('the links to other tabs', () => {
     ]);
   });
 
-  test('should link each term it glosses, and each tab it names, to that tab, on the pie chart’s page', async () => {
+  test('should link each tab it names to that tab, on the pie chart’s page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
