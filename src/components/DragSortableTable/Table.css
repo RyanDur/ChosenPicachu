@@ -82,6 +82,12 @@
   width: var(--share);
 }
 
+@media (pointer: fine) {
+  .resize-handle {
+    padding-inline-start: calc(var(--pointer-reach) - var(--base));
+  }
+}
+
 @media (pointer: coarse) {
   .resize-handle {
     inset-block-start: auto;

@@ -5,6 +5,8 @@ import {HtmlValidate} from 'html-validate';
 import {pages} from './pages';
 import {chartsPage, recordPage, scriptedMarket, violationsOf} from './__test_support';
 
+const standards = ['wcag2a', 'wcag2aa', 'wcag22aa'];
+
 const validator = new HtmlValidate({
   extends: ['html-validate:recommended'],
   rules: {
@@ -25,7 +27,7 @@ for (const {name, path, ready, loaded} of pages) {
     await expect(page.getByRole(ready).first()).toBeVisible({timeout: 30_000});
     if (loaded) await expect(loaded(page)).toBeVisible({timeout: 30_000});
 
-    const results = await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze();
+    const results = await new AxeBuilder({page}).withTags(standards).analyze();
 
     expect(violationsOf(results)).toEqual([]);
   });
@@ -37,10 +39,12 @@ test('the record has no accessibility violations with its folds open', async ({p
   await expect(record.timelineStories.last()).toBeVisible();
   await record.researchFold.getByRole('heading', {name: 'The research'}).click();
 
-  const found = violationsOf(await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa']).analyze());
+  const found = violationsOf(await new AxeBuilder({page}).withTags(standards).analyze());
   for (const story of await record.timelineStories.all()) {
     await record.fullerStoryOf(story).click();
-    found.push(...violationsOf(await new AxeBuilder({page}).include(record.timelineScope).withTags(['wcag2a', 'wcag2aa']).analyze()));
+    found.push(...violationsOf(
+      await new AxeBuilder({page}).include(record.timelineScope).withTags(standards).analyze()
+    ));
   }
 
   expect(found).toEqual([]);
@@ -68,7 +72,7 @@ const thePriceCardHasNoViolations = async (page: Page, prices: number[], sign: R
   await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
   await expect(charts.priceDelta).toHaveText(sign);
 
-  const results = await new AxeBuilder({page}).include(await charts.priceCardScope()).withTags(['wcag2a', 'wcag2aa']).analyze();
+  const results = await new AxeBuilder({page}).include(await charts.priceCardScope()).withTags(standards).analyze();
 
   expect(violationsOf(results)).toEqual([]);
 };
