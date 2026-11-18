@@ -34,6 +34,22 @@ test('a reader who arrives on the live table’s page by a link saved with its s
   await expect(tablesDemo(page).tutorials.link('Sort menu')).toBeVisible();
 });
 
+test('a link saved to the slices’ page with a story still in its address opens the slices’ page without it', async ({page}) => {
+  await page.goto('demos/tables/the-slices/?world=vanilla&living=still#live-aggregations');
+  await siteFrame(page).hydrated();
+
+  await expect(page).toHaveURL(/demos\/tables\/the-slices\/\?world=vanilla#live-aggregations$/);
+  await expect(page.getByRole('heading', {level: 2, name: 'Slice the design into stories', exact: true})).toBeVisible();
+});
+
+test('a link saved to the still table’s page naming a live table story opens the still table’s page without it', async ({page}) => {
+  await page.goto('demos/tables/the-still-table/?living=flow');
+  await siteFrame(page).hydrated();
+
+  await expect(page).toHaveURL(/demos\/tables\/the-still-table\/$/);
+  await expect(page.getByRole('heading', {level: 2, name: 'Build the still table', exact: true})).toBeVisible();
+});
+
 test('a reader who follows a link out of the live table’s page and comes Back is where they were', async ({page}) => {
   await page.goto('demos/tables/the-live-table-and-the-store/?world=vanilla');
   await siteFrame(page).hydrated();

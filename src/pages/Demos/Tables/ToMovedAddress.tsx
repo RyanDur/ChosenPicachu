@@ -5,8 +5,7 @@ import {useHydrated} from '@components';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {livingStories} from './living-stories';
-
-const tutorialParam = 'tut';
+import {movedParams} from './moved-params';
 
 const tellers = new Map<string, TablePart>([
   [livingStories.ids.still, 'the-still-table'],
@@ -15,7 +14,8 @@ const tellers = new Map<string, TablePart>([
 ]);
 
 const tutorialNamed = (params: URLSearchParams): Maybe<string> =>
-  maybe(tableTutorials.all().find(tutorial => tutorial === params.get(tutorialParam))).map(tableTutorials.addressOf);
+  maybe(tableTutorials.all().find(tutorial => tutorial === params.get(movedParams.tutorial)))
+    .map(tableTutorials.addressOf);
 
 const partTellingFirst = (params: URLSearchParams): Maybe<string> =>
   maybe(maybe(params.get(livingStories.param)).orElse('').split(',').find(story => tellers.has(story)))
@@ -26,9 +26,7 @@ export const ToMovedAddress: FC = () => {
   const [params] = useSearchParams();
   const {hash} = useLocation();
   const hydrated = useHydrated();
-  const dials = new URLSearchParams(params);
-  dials.delete(tutorialParam);
-  dials.delete(livingStories.param);
+  const dials = movedParams.droppedFrom(params);
   return tutorialNamed(params).or(() => partTellingFirst(params)).either(
     pathname => hydrated && <Navigate replace to={{pathname, search: dials.toString(), hash}}/>,
     () => null);
