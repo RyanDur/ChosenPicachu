@@ -1,6 +1,9 @@
 import {maybe} from '@ryandur/sand';
 import type {Page} from '@playwright/test';
 
+const released = 'hydration-released';
+const untilReleased = `await new Promise(resolve => addEventListener('${released}', resolve, {once: true}));\n`;
+
 // goto waits for the load event, and every chunk is preloaded before it, so only a wait inside the entry script
 // leaves the page drawn but not yet hydrated for long enough to act in
 export const hydration = (page: Page) => ({
@@ -13,8 +16,8 @@ export const hydration = (page: Page) => ({
       });
     await page.route(url => url.pathname === entry, async route => {
       const response = await route.fetch();
-      const body = `await new Promise(resolve => setTimeout(resolve, 1500));\n${await response.text()}`;
-      await route.fulfill({response, body});
+      await route.fulfill({response, body: `${untilReleased}${await response.text()}`});
     });
-  }
+  },
+  release: (): Promise<boolean> => page.evaluate(event => dispatchEvent(new Event(event)), released)
 });
