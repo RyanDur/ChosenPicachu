@@ -3,7 +3,7 @@ import {test} from './__test_support/journey';
 import AxeBuilder from '@axe-core/playwright';
 import {HtmlValidate} from 'html-validate';
 import {pages} from './pages';
-import {chartsPage, recordPage, scriptedMarket, violationsOf} from './__test_support';
+import {chartsPage, recordPage, violationsOf} from './__test_support';
 
 const standards = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
@@ -66,7 +66,7 @@ for (const {name, path, ready, loaded} of pages) {
 
 const thePriceCardHasNoViolations = async (page: Page, prices: number[], sign: RegExp): Promise<void> => {
   const charts = chartsPage(page);
-  await scriptedMarket(page, prices);
+  await chartsPage(page).scriptedMarket(prices);
   await page.goto('demos/charts/');
 
   await expect(charts.priceDelta).toBeVisible({timeout: 30_000});

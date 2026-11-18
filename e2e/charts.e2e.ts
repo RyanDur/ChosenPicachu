@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {boxOf, chartsPage, desktop, feedStillConnecting, hydration, iPhone, siteFrame} from './__test_support';
+import {boxOf, chartsPage, desktop, hydration, iPhone, siteFrame} from './__test_support';
 
 test('the price period menu stays hidden until the reader asks for it', async ({page}) => {
   const charts = chartsPage(page);
@@ -14,7 +14,7 @@ test('the price period menu stays hidden until the reader asks for it', async ({
 });
 
 test('the feed says it is connecting, then that it is live', async ({page}) => {
-  const feed = await feedStillConnecting(page, [50000, 50100]);
+  const feed = await chartsPage(page).feedStillConnecting([50000, 50100]);
   const status = page.getByRole('status', {name: 'feed'});
   await page.goto('demos/charts/');
   await expect(status).toHaveText('connecting to the live feed…');
