@@ -61,28 +61,60 @@ for (const {reader, device} of handhelds) {
       await expect(gallery.pageSize).toBeVisible();
     });
 
-    test('reads the museum and the page on the settings fold', async ({page}) => {
+    test('reads the museum on the Gallery settings button', async ({page}) => {
       const gallery = galleryPage(page);
       await page.goto('gallery/?tab=vam');
 
-      await expect(gallery.settings).toContainText(/The Victoria and Albert Museum, page 1 of \d+/);
+      await expect(gallery.settings).toContainText('The Victoria and Albert Museum');
     });
 
-    test('reads the search word on the settings fold once there is one', async ({page}) => {
+    test('reads the search word in quotes on the Gallery settings button once there is one', async ({page}) => {
       const gallery = galleryPage(page);
       await page.goto('gallery/?tab=vam&search=100%25');
 
-      await expect(gallery.settings).toContainText('100%, page 1');
+      await expect(gallery.settings).toContainText('“100%”');
     });
 
-    test('reads the next page on the settings fold after the arrow moves on', async ({page}) => {
+    test('names the Gallery settings button with the words it shows', async ({page}) => {
       const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam&search=100%25');
+
+      await expect(gallery.settings).toHaveAccessibleName('Gallery settings: The Victoria and Albert Museum, 100%');
+    });
+
+    test('reads the next page on the pager after the arrow moves on', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.hangPageOneOnEveryPage();
       await page.goto('gallery/?tab=vam');
       await expect(gallery.wall.first()).toBeVisible();
 
       await gallery.nextPage.tap();
 
-      await expect(gallery.settings).toContainText(/, page 2(?!\d)/);
+      await expect(gallery.count).toHaveText(/^Page 2 of /);
+    });
+
+    test('Escape closes the gallery settings', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+      await gallery.openSettings();
+
+      await page.keyboard.press('Escape');
+
+      await expect(gallery.sheet).toBeHidden();
+    });
+
+    test('a tap outside the gallery settings closes them, with the gallery where it was', async ({page}) => {
+      const gallery = galleryPage(page);
+      await page.goto('gallery/?tab=vam');
+      await expect(gallery.wall.first()).toBeVisible();
+      await gallery.openSettings();
+      await page.evaluate(() => window.scrollTo(0, 200));
+      const scrolledTo = await documentScrollY(page);
+
+      await page.touchscreen.tap(10, 10);
+
+      await expect(gallery.sheet).toBeHidden();
+      expect(await documentScrollY(page)).toBe(scrolledTo);
     });
   });
 }
@@ -92,6 +124,7 @@ test.describe('a phone held upright', () => {
 
   test('pages on from the pager while partway down the wall', async ({page}) => {
     const gallery = galleryPage(page);
+    await gallery.hangPageOneOnEveryPage();
     await page.goto('gallery/?tab=vam');
     await expect(gallery.wall.first()).toBeVisible();
     await gallery.wall.nth(Math.floor(await gallery.wall.count() / 2)).scrollIntoViewIfNeeded();
@@ -99,7 +132,7 @@ test.describe('a phone held upright', () => {
 
     await clickWhereItIs(page, gallery.nextPage);
 
-    await expect(gallery.settings).toContainText(/, page 2(?!\d)/);
+    await expect(gallery.count).toHaveText(/^Page 2 of /);
   });
 });
 
@@ -134,14 +167,14 @@ for (const {reader, device} of [
   test.describe(reader, () => {
     test.use(device);
 
-    test('shows the search and the page controls with no fold', async ({page}) => {
+    test('shows the search and the page controls with no Gallery settings button', async ({page}) => {
       const gallery = galleryPage(page);
       await page.goto('gallery/?tab=vam');
       await expect(gallery.wall.first()).toBeVisible();
 
       await expect(page.getByRole('banner').getByRole('combobox', {name: 'Search', exact: true})).toBeVisible();
       await expect(gallery.settingsPanel.getByRole('spinbutton', {name: 'Page', exact: true})).toBeVisible();
-      await expect(gallery.settings).toHaveCount(0);
+      await expect(gallery.settings).toBeHidden();
     });
   });
 }
@@ -149,14 +182,25 @@ for (const {reader, device} of [
 test.describe('a desktop window made narrow', () => {
   test.use(desktop);
 
-  test('folds the settings once it is a phone\'s width', async ({page}) => {
+  test('offers the Gallery settings once it is a phone\'s width', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
-    await expect(gallery.settings).toHaveCount(0);
+    await expect(gallery.settings).toBeHidden();
 
     await page.setViewportSize(iPhone.viewport);
 
     await expect(gallery.settings).toBeVisible();
+  });
+
+  test('closes the gallery settings once it is no longer a phone\'s width', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.setViewportSize(iPhone.viewport);
+    await page.goto('gallery/?tab=vam');
+    await gallery.openSettings();
+
+    await page.setViewportSize(desktop.viewport);
+
+    await expect(gallery.sheet).toBeHidden();
   });
 });
 

@@ -1,13 +1,17 @@
-import {gallerySettings} from '@pages/Gallery/__test_support';
+import {galleryBanner} from '@pages/Gallery/__test_support';
 import {within} from '@testing-library/react';
 import {heldClock} from '@__test_support/heldClock';
 import userEvent, {type UserEvent} from '@testing-library/user-event';
 
 const searchBarOf = (user: Pick<UserEvent, 'type' | 'click' | 'tab'>) => {
-  const query = (): HTMLElement => gallerySettings().getByRole('combobox', {name: 'Search'});
-  const submitButton = (): HTMLElement => gallerySettings().getByRole('button', {name: 'submit search'});
-  const resetButton = (): HTMLElement => gallerySettings().getByRole('button', {name: 'reset search'});
-  const suggestions = (): HTMLElement => gallerySettings().getByRole('listbox', {hidden: true});
+  const query = (): HTMLElement => galleryBanner().getByRole('combobox', {name: 'Search'});
+  const submitButton = (): HTMLElement => galleryBanner().getByRole('button', {name: 'submit search'});
+  const resetButton = (): HTMLElement => galleryBanner().getByRole('button', {name: 'reset search'});
+  const suggestions = (): HTMLElement => {
+    const field = query();
+    if (field instanceof HTMLInputElement && field.list) return field.list;
+    throw new Error('the search field offers no suggestions');
+  };
   return {
     query,
     submitButton,

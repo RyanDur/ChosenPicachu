@@ -15,20 +15,21 @@ const RoutedSite: FC<RoutedSiteProps> = ({router, arrived}) => {
   </ArrivalDrawn.Provider></Site>;
 };
 
-// CSS can't close a popover when its query stops matching, so the site menu is closed once the phone layout ends
-const menuClosedWhenThePhoneLayoutEnds = () =>
-  phoneLayout(window).ends(() => maybe(document.getElementById('side-nav')).map(menu => menu.hidePopover()));
+// CSS can't close a popover when its query stops matching, so the phone's sheets are closed once the phone layout ends
+const sheetsClosedWhenThePhoneLayoutEnds = () =>
+  phoneLayout(window).ends(() => ['side-nav', 'gallery-settings']
+    .forEach(sheet => maybe(document.getElementById(sheet)).map(open => open.hidePopover())));
 
 export const hydrateTheSite = {
   overTheBuiltPage: (router: DataRouter): void => {
-    menuClosedWhenThePhoneLayoutEnds();
+    sheetsClosedWhenThePhoneLayoutEnds();
     startTransition(() => {
       hydrateRoot(document,
         <RoutedSite router={router} arrived={arrival(window)}/>);
     });
   },
   afresh: (router: DataRouter): void => {
-    menuClosedWhenThePhoneLayoutEnds();
+    sheetsClosedWhenThePhoneLayoutEnds();
     createRoot(document)
       .render(<RoutedSite router={router} arrived={arrival(window)}/>);
   }

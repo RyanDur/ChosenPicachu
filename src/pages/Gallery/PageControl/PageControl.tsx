@@ -24,7 +24,7 @@ export const PageControl = () => {
   };
 
   return <form key={`${page} ${size}`} onSubmit={onSubmit} className="page-control backdrop">
-    <label className="go-to-label control-label field next-approached" htmlFor={goTo}>Page</label>
+    <label className="go-to-label control-label field next-approached bold" htmlFor={goTo}>Page</label>
     <input type="number"
       id={goTo}
       defaultValue={page}
@@ -32,7 +32,7 @@ export const PageControl = () => {
       max={lastPage}
       name="page"
       className="go-to control borderless focus-ringed"/>
-    <label className="per-page-label control-label field next-approached" htmlFor={perPage}>Per page</label>
+    <label className="per-page-label control-label field next-approached bold" htmlFor={perPage}>Per page</label>
     <input type="number"
       defaultValue={size}
       className="per-page control borderless focus-ringed"

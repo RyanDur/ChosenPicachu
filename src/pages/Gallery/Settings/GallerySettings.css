@@ -1,34 +1,102 @@
-.settings-fold {
+.gallery-readout {
   display: none;
-  min-width: 0;
-
-  > .fold-bar {
-    min-width: 0;
-  }
-
-  .readout {
-    display: flex;
-    min-width: 0;
-  }
-
-  .page {
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-
-  > .search,
-  > .page-control {
-    margin-block-start: var(--base);
-  }
 }
 
-@media (width <= 600px) or ((width <= 1100px) and (height <= 600px)) {
+@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
   #root .filter.settings-standing,
   .search.settings-standing {
     display: none;
   }
 
-  .settings-fold {
+  #root .app-header .gallery-readout {
     display: block;
+    justify-self: stretch;
+    width: auto;
+    min-width: 0;
+    margin-inline: calc(var(--page-inset) * -1);
+    padding: var(--base) 0;
+  }
+
+  .gallery-readout-tile {
+    display: flex;
+    align-items: center;
+    gap: var(--base-x-2);
+    block-size: var(--finger-reach);
+    padding-inline: var(--base-x-2);
+
+    > .ellipsis {
+      min-width: 0;
+    }
+
+    > .searched {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    &::after {
+      content: '⚙' / '';
+      margin-inline-start: auto;
+    }
+  }
+
+  .settings-sheet:popover-open {
+    position: fixed;
+    inset: auto 0 var(--menu-bar-block);
+    width: 100%;
+    max-height: calc(100dvh - var(--menu-bar-block));
+    margin: 0;
+    overflow: auto;
+    display: grid;
+    gap: var(--base);
+    padding-block: var(--base) 0;
+
+    .search {
+      gap: var(--base);
+      grid-template-columns: 1fr 2fr;
+      grid-template-rows: repeat(2, var(--finger-reach));
+      grid-template-areas:
+        'query-label query'
+        'reset submit';
+
+      .query-label {
+        display: flex;
+        align-items: center;
+        padding-block-start: 0;
+      }
+
+      .submit-query {
+        margin-left: 0;
+      }
+    }
+
+    .page-control {
+      position: static;
+      grid-template-columns: 1fr 2fr;
+      grid-template-rows: repeat(3, var(--finger-reach));
+      grid-template-areas:
+        'per-page-label per-page'
+        'go-to-label go-to'
+        'submit submit';
+
+      .go-to-label {
+        grid-area: go-to-label;
+      }
+
+      .per-page-label {
+        grid-area: per-page-label;
+      }
+
+      .control-label,
+      .control {
+        height: 100%;
+        margin: 0;
+      }
+    }
+  }
+}
+
+@media (width <= 1100px) and (height <= 600px) {
+  #root .app-header .gallery-readout {
+    margin-inline-start: 0;
   }
 }
