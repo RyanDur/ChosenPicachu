@@ -1,6 +1,17 @@
-import {FC, MouseEvent, SyntheticEvent} from 'react';
+import {Children, FC, isValidElement, MouseEvent, PropsWithChildren, ReactNode, SyntheticEvent} from 'react';
 import {storyKeys} from './storyKeys';
 import {StoryCard, Told} from './StoryCard';
+import {Steps} from './Steps';
+
+const stepsIn = (children: ReactNode): number =>
+  Children.toArray(children).reduce<number>((count, child) => {
+    if (isValidElement<PropsWithChildren>(child)) {
+      return child.type === Steps
+        ? count + Children.toArray(child.props.children).filter(isValidElement).length
+        : count + stepsIn(child.props.children);
+    }
+    return count;
+  }, 0);
 
 type Folding = {
   open: boolean;
@@ -13,7 +24,7 @@ export const StoryShell: FC<Told & Folding> = ({param, id, can, soThat, children
   return <li tabIndex={-1}>
     <details className="arc" open={open} aria-labelledby={titleId} onToggle={onToggle}>
       <summary className="fold-bar sub-title-glyph-before" onClick={onClick}>
-        <StoryCard titleId={titleId} can={can} soThat={soThat} body={children}/>
+        <StoryCard titleId={titleId} can={can} soThat={soThat} steps={stepsIn(children)}/>
       </summary>
       {children}
     </details>
