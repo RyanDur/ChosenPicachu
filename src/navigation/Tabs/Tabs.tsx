@@ -16,7 +16,7 @@ type Props = {
 };
 
 export const Tabs: FC<Props> = ({values, id, label, current}) =>
-  <nav aria-label={label} id={id} className="tabs backdrop backdrop-above contained">
+  <nav aria-label={label} id={id} className="tabs backdrop backdrop-above contained scrollbarless">
     <ul className="tab-list">{values.map(({param, display, to}) =>
       <li className="tab tab-path bold field attentive backdrop-underlined" key={param}>
         <Link to={to} preventScrollReset
