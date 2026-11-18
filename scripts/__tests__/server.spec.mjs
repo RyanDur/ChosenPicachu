@@ -232,7 +232,7 @@ describe('the stub stage rendering on request', () => {
     stage.kill();
 
     expect(answer).toMatch(/^HTTP\/1\.1 404/);
-    expect(answer).toContain('drawn fallback');
+    expect(answer).toMatch(/drawn fallback<script type="module" src="\/ChosenPicachu\/assets\/fallback\.js">/);
   });
 
   test('should send a page asked for without its slash to the address with it', async () => {
