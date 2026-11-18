@@ -20,7 +20,7 @@
   line-height: 1.55;
 
   @media (pointer: coarse) {
-    &:has([type='button']) {
+    &:has(.term) {
       line-height: var(--base-x-3);
     }
   }
