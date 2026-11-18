@@ -245,6 +245,24 @@ describe('the stub stage rendering on request', () => {
     expect(answer).toMatch(/\r\nlocation: \/ChosenPicachu\/users\/\r\n/i);
   });
 
+  test('should tell the browser to keep no copy of a page it draws', async () => {
+    const {stage, port} = await stageUp({STAGE_RENDER: 'on', STAGE_SITE: aBuildThatDrawsAUsersPage()});
+
+    const answer = await answerTo(port, get('/ChosenPicachu/users/'));
+    stage.kill();
+
+    expect(answer).toMatch(/\r\ncache-control: no-store\r\n/i);
+  });
+
+  test('should tell the browser to keep no copy of a page that failed to draw', async () => {
+    const {stage, port} = await stageUp({STAGE_RENDER: 'on', STAGE_SITE: aBuildThatDrawsAUsersPage()});
+
+    const answer = await answerTo(port, get('/ChosenPicachu/broken/'));
+    stage.kill();
+
+    expect(answer).toMatch(/\r\ncache-control: no-store\r\n/i);
+  });
+
   test('should answer a page that fails to draw with a server error', async () => {
     const {stage, port} = await stageUp({STAGE_RENDER: 'on', STAGE_SITE: aBuildThatDrawsAUsersPage()});
 

@@ -12,10 +12,14 @@ const here = dirname(fileURLToPath(import.meta.url));
 const site = resolve(maybe(process.env.STAGE_SITE).orElse(join(here, '../../build/client')));
 const fixtures = join(here, 'fixtures');
 
+const published = 'public, max-age=600';
+const drawnFresh = 'no-store';
+
 /**
  * @typedef {object} Pages
  * @property {(path: string) => boolean} isOne
  * @property {(path: string) => Promise<{status: number, html: string | Buffer}>} answer
+ * @property {string} caching
  */
 
 /** @type {Pages} */
@@ -26,7 +30,8 @@ const filedPages = {
     return existsSync(entry)
       ? {status: 200, html: readFileSync(entry)}
       : {status: 404, html: readFileSync(join(site, '404.html'))};
-  }
+  },
+  caching: published
 };
 
 /** @return {Promise<Pages>} */
@@ -41,7 +46,8 @@ const renderedPages = async () => {
       }
       const {html, rooms} = await prerender.page(path);
       return {status: 200, html: loading(html, 'src/entry.client.tsx', rooms)};
-    }
+    },
+    caching: drawnFresh
   };
 };
 
@@ -71,8 +77,8 @@ const feedbackAnswerTo = ({variables}) =>
  * @param {import('node:http').ServerResponse} response
  */
 const answers = (request, response) => {
-  const send = (status, body, contentType, compress) => {
-    const headers = {'content-type': contentType, 'cache-control': 'public, max-age=600'};
+  const answerWith = caching => (status, body, contentType, compress) => {
+    const headers = {'content-type': contentType, 'cache-control': caching};
     if (is(compress) && maybe(request.headers['accept-encoding']).orElse('').includes('gzip')) {
       body = gzipSync(body);
       headers['content-encoding'] = 'gzip';
@@ -80,6 +86,7 @@ const answers = (request, response) => {
     response.writeHead(status, headers);
     response.end(body);
   };
+  const send = answerWith(published);
 
   const url = maybe(request.url).orElse('/');
 
@@ -142,10 +149,10 @@ const answers = (request, response) => {
     return response.end();
   }
   pages.answer(path)
-    .then(({status, html}) => send(status, html, 'text/html', true))
+    .then(({status, html}) => answerWith(pages.caching)(status, html, 'text/html', true))
     .catch(error => {
       console.error(`the stage could not draw ${path}`, error);
-      send(500, String(error), 'text/plain', false);
+      answerWith(drawnFresh)(500, String(error), 'text/plain', false);
     });
 };
 const server = createServer(answers);
