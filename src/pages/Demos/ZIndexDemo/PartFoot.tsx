@@ -1,15 +1,13 @@
 import {FC} from 'react';
-import {demoTab, DemoTopics} from '@pages/Demos';
 import {PageFoot} from '@pages/Demos/PageFoot';
 import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
-import {BookPart, ZIndexPart, zIndexParts} from './part-pages';
+import {ZIndexPart, zIndexParts} from './part-pages';
 
 export const PartFoot: FC<{part: ZIndexPart}> = ({part}) => {
   const carried = useCarriedAddress();
-  const neighbor = (book: BookPart) => ({
-    title: zIndexParts.numbered(book),
-    address: zIndexParts.pageOf(book).map(part => carried(zIndexParts.addressOf(part)))
-      .orElse(carried(demoTab.address(DemoTopics.zIndex), zIndexParts.tabHeadingOf(book)))
+  const neighbor = (beside: ZIndexPart) => ({
+    title: zIndexParts.numbered(beside),
+    address: carried(zIndexParts.addressOf(beside))
   });
   return <PageFoot label="the z-index parts"
     previous={zIndexParts.previousOf(part).map(neighbor)}

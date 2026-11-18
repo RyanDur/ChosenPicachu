@@ -5,9 +5,12 @@ import {partHeadings} from '../part-headings';
 
 export type ZIndexPart = keyof typeof names['z-index'];
 
-const bookOrder = ['third-on-top', 'still-loses', 'what-else-forms', 'popover-wins', 'fixed-banner-loses', 'build-this-feature'] as const;
+type BookPart = 'third-on-top' | 'still-loses' | 'what-else-forms' | 'popover-wins' | 'fixed-banner-loses'
+  | 'build-this-feature';
 
-export type BookPart = typeof bookOrder[number];
+const bookOrder: readonly ZIndexPart[] = ['why-third-is-on-top', 'why-9999-still-loses',
+  'what-else-forms-a-stacking-context', 'why-the-popover-wins', 'why-a-fixed-banner-still-loses',
+  'lets-build-this-feature'];
 
 const titles: Record<BookPart, string> = {
   'third-on-top': 'Why Third is on top',
@@ -35,11 +38,9 @@ type ZIndexParts = {
   told: (part: ZIndexPart) => Told;
   addressOf: (part: ZIndexPart) => string;
   shownAt: (pathname: string) => Maybe<ZIndexPart>;
-  numbered: (book: BookPart) => string;
-  tabHeadingOf: (book: BookPart) => string;
-  pageOf: (book: BookPart) => Maybe<ZIndexPart>;
-  previousOf: (part: ZIndexPart) => Maybe<BookPart>;
-  nextOf: (part: ZIndexPart) => Maybe<BookPart>;
+  numbered: (part: ZIndexPart) => string;
+  previousOf: (part: ZIndexPart) => Maybe<ZIndexPart>;
+  nextOf: (part: ZIndexPart) => Maybe<ZIndexPart>;
   inTheBook: number;
 };
 
@@ -56,14 +57,13 @@ const tabAddress = demoTab.address(DemoTopics.zIndex);
 
 const addressOf = (part: ZIndexPart): string => `${tabAddress}${part}/`;
 
-const placeOf = (book: BookPart): number => bookOrder.indexOf(book);
+const placeOf = (part: ZIndexPart): number => bookOrder.indexOf(part);
 
-const besidePart = (part: ZIndexPart, step: number): Maybe<BookPart> =>
-  maybe(bookOrder[placeOf(listings[part].book) + step]);
+const titleOf = (part: ZIndexPart): string => titles[listings[part].book];
+
+const besidePart = (part: ZIndexPart, step: number): Maybe<ZIndexPart> => maybe(bookOrder[placeOf(part) + step]);
 
 const isPart = (name: string): name is ZIndexPart => Object.keys(listings).includes(name);
-
-const parts = Object.keys(listings).filter(isPart);
 
 const partAt = (pathname: string): Maybe<ZIndexPart> => {
   const named = pathname.slice(tabAddress.length, -1);
@@ -75,17 +75,15 @@ export const zIndexParts: ZIndexParts = {
     const {book, minutes} = listings[part];
     return {
       heading: tabHeadings[book],
-      name: titles[book],
+      name: titleOf(part),
       minutes,
-      ordinal: placeOf(book) + 1,
+      ordinal: placeOf(part) + 1,
       says: names['z-index'][part].description
     };
   },
   addressOf,
   shownAt: partAt,
-  numbered: book => `${placeOf(book) + 1}. ${titles[book]}`,
-  tabHeadingOf: book => tabHeadings[book],
-  pageOf: book => maybe(parts.find(part => listings[part].book === book)),
+  numbered: part => `${placeOf(part) + 1}. ${titleOf(part)}`,
   previousOf: part => besidePart(part, -1),
   nextOf: part => besidePart(part, 1),
   inTheBook: bookOrder.length
