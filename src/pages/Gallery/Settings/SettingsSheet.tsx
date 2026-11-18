@@ -26,7 +26,7 @@ const MuseumRow: FC = () => {
     maybe(sourceParam.decode(event.currentTarget.value)).map(museum => updateSearchParams({tab: museum}));
   return <>
     <label className="sheet-label field bold" htmlFor={choice}>Museum</label>
-    <select id={choice} className="sheet-field card borderless square-cornered ellipsis" value={maybe(tab).orElse('')}
+    <select id={choice} className="sheet-field card ellipsis" value={maybe(tab).orElse('')}
       onChange={chosen}>
       {open.map(({display, param}) => <option key={param} value={param}>{display}</option>)}
     </select>
@@ -55,7 +55,7 @@ const SearchRow: FC = () => {
   return <>
     <label className="sheet-label field bold" htmlFor={field}>Search</label>
     <input type="search" id={field} list={options} autoComplete="off" enterKeyHint="search"
-      className="sheet-field card borderless square-cornered" value={typed} onChange={typing}
+      className="sheet-field bare card" value={typed} onChange={typing}
       onKeyDown={whenEntered(apply)} onBlur={event => apply(event.currentTarget)}/>
     <datalist id={options}>
       {suggestions.map(suggestion => <option value={suggestion} key={suggestion}>{suggestion}</option>)}
@@ -84,7 +84,7 @@ const NumberRow: FC<NumberRowProps> = ({label, shown, min, max, applied}) => {
   return <>
     <label className="sheet-label field bold" htmlFor={field}>{label}</label>
     <input type="number" id={field} min={min} max={max} required enterKeyHint="go"
-      className="sheet-field card borderless square-cornered" value={typed}
+      className="sheet-field bare card" value={typed}
       onChange={event => type(event.currentTarget.value)}
       onKeyDown={whenEntered(apply)} onBlur={event => apply(event.currentTarget)}/>
   </>;
