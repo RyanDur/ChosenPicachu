@@ -16,7 +16,7 @@ describe('the home page', () => {
   });
 
   test('should link only the book the opener names and the three doors', () => {
-    expect(homePage.openerLinks()).toEqual([
+    expect(homePage.pageLinks()).toEqual([
       ['Resilient Web Design', 'https://resilientwebdesign.com/'],
       ['Read the Record', Paths.record],
       ['Read the Practice', Paths.practice],
@@ -25,19 +25,19 @@ describe('the home page', () => {
   });
 
   test('should open the Record from its door', async () => {
-    await homePage.followOpenerLink('Read the Record');
+    await homePage.followPageLink('Read the Record');
 
     expect(appAddress.shown()).toBe(Paths.record);
   });
 
   test('should open Practice from its door', async () => {
-    await homePage.followOpenerLink('Read the Practice');
+    await homePage.followPageLink('Read the Practice');
 
     expect(appAddress.shown()).toContain(Paths.practice);
   });
 
   test('should open the Demos from its door', async () => {
-    await homePage.followOpenerLink('Open the Demos');
+    await homePage.followPageLink('Open the Demos');
 
     expect(appAddress.shown()).toContain(Paths.demos);
   });
