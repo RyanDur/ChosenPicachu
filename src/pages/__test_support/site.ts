@@ -1,12 +1,14 @@
 import {not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
+import {computeAccessibleName} from 'dom-accessibility-api';
 import userEvent from '@testing-library/user-event';
 
 const room = (): HTMLElement => screen.getByRole('main');
 
 // jsdom hides a closed popover and names it nothing; the site's sheet shows the nav on a desk, which the journeys pin.
 const asOnADesk = {hidden: true};
-const siteNav = (): Promise<HTMLElement> => screen.findByLabelText('site');
+export const namedSite = {...asOnADesk, name: (_: string, element: Element) => computeAccessibleName(element, asOnADesk) === 'site'};
+const siteNav = (): Promise<HTMLElement> => screen.findByRole('navigation', namedSite);
 
 export const site = {
   room,
