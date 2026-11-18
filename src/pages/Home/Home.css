@@ -52,7 +52,7 @@
     .page-pulled-apart {
       float: none;
       inline-size: auto;
-      margin: var(--base-x-2) 0 var(--base-x-3);
+      margin: 0 0 var(--base-x-3);
     }
 
     .doors {
