@@ -130,6 +130,10 @@ const PriceStory: FC = () =>
             candles of an hour, at most 24 of them, marked every hour. The week has candles of six hours, at most 28 of
             them, marked every day.</Says>
           <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
+          <Says>The menu’s button starts disabled. The page comes from the server already drawn, before its script
+            runs, and a press in that moment would do nothing, so the button says it isn’t
+            ready. <code className="monospaced">useHydrated()</code> answers false until the script runs and true
+            after.</Says>
           <Says>The choice is written into the address, in its <code className="monospaced">charts</code> value, so a
             link opens the chart at the same period. <code className="monospaced">candles:day</code> is the candle chart
             at a day, and a chart at the hour, the default, is written as its kind alone.</Says>
@@ -149,7 +153,7 @@ const PriceStory: FC = () =>
             ...carve.unit(periodSource, 'const bucketMilliseconds'), lines.blank,
             ...carve.unit(periodSource, 'const candleCap'), lines.blank,
             ...carve.unit(periodMenuSource, 'const spoken'), lines.blank,
-            ...carve.between(periodMenuSource, '  const {periodOf, choosePeriod}', '  const period = periodOf(kind);')
+            ...carve.between(periodMenuSource, '  const {periodOf, choosePeriod}', '  const hydrated = useHydrated();')
           ]}/>
           <Snippet label="HTML" lines={[
             ...carve.between(periodMenuSource, '<button', '</Menu>')
