@@ -6,6 +6,7 @@ import {DemoTopics, demoTab} from '@pages/Demos';
 import {practiceAddress} from '@pages/Practice';
 import {queryString} from '@transport';
 import {opening} from '@pages/Gallery';
+import {phoneSheets} from './phoneSheets';
 import {PageUnknown} from './PageUnknown';
 
 const railPath = () => 'path rail-path bold attentive field void-dot-before reachable';
@@ -34,7 +35,7 @@ const closedOnAPageChosen = (event: MouseEvent<HTMLElement>) => {
 };
 
 export const SideNav: FC = () =>
-  <nav id="side-nav" popover="auto" className="side-nav field backdrop-separated veiled" aria-label="site"
+  <nav id={phoneSheets.siteMenu} popover="auto" className="side-nav field backdrop-separated veiled" aria-label="site"
     onClick={closedOnAPageChosen}>
     <RailLink id="navigate-home" to={Paths.home} end>Home</RailLink>
     <RailLink id="navigate-record" to={Paths.record}>Record</RailLink>
