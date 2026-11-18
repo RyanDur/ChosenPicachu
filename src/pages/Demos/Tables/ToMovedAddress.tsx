@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Location, Navigate, useLocation, useSearchParams} from 'react-router';
+import {Location, Navigate, Path, useLocation, useSearchParams} from 'react-router';
 import {empty, Maybe, maybe} from '@ryandur/sand';
 import {useHydrated} from '@components';
 import {tableTutorials} from './tutorial-pages';
@@ -15,9 +15,14 @@ const tellers = new Map<string, TablePart>([
   [livingStories.ids.store, 'the-live-table-and-the-store']
 ]);
 
-const pageForNamedTutorial = (params: URLSearchParams): Maybe<string> =>
+type Moved = Omit<Path, 'hash'>;
+
+const carrying = (params: URLSearchParams, ...alsoRead: string[]) => (pathname: string): Moved =>
+  ({pathname, search: readerSettings.keptFrom(params, ...alsoRead).toString()});
+
+const pageForNamedTutorial = (params: URLSearchParams): Maybe<Moved> =>
   maybe(tableTutorials.all().find(tutorial => tutorial === params.get(tutorialParam)))
-    .map(tableTutorials.addressOf);
+    .map(tutorial => carrying(params, tutorial)(tableTutorials.addressOf(tutorial)));
 
 const pageTelling = (story: string): Maybe<string> => maybe(tellers.get(story)).map(tableParts.addressOf);
 
@@ -36,11 +41,10 @@ export const ToMovedAddress: FC = () => {
   const [params] = useSearchParams();
   const location = useLocation();
   const hydrated = useHydrated();
-  const dials = readerSettings.keptFrom(params);
-  return pageForFragment(location.hash)
+  return pageForFragment(location.hash).map(carrying(params))
     .or(() => pageForNamedTutorial(params))
-    .or(() => pageForNamedStory(params, location))
+    .or(() => pageForNamedStory(params, location).map(carrying(params)))
     .either(
-      pathname => hydrated && <Navigate replace to={{pathname, search: dials.toString(), hash: location.hash}}/>,
+      moved => hydrated && <Navigate replace to={{...moved, hash: location.hash}}/>,
       () => null);
 };
