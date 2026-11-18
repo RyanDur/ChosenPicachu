@@ -203,7 +203,6 @@ describe('Feedback while a note is on its way', () => {
 
     expect(await feedback.noteOnGitHubFromTheDialog()).toBeInTheDocument();
     expect(feedback.wayToReach()).toHaveValue('another@example.test');
-    expect(feedback.note()).toHaveValue('The sort menu hides.');
   });
 
   test('should clear the way to reach the reader with the sent note when GitHub answers after Feedback is reopened', async () => {

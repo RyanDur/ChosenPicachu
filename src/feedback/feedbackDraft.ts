@@ -23,8 +23,9 @@ const draftAt = (key: string): Draft =>
   ({key, thread: github.discussions, words: '', reach: '', sending: {state: 'writing'}, sentNote: {state: 'none'}});
 
 const aboutPage = (draft: Draft, key: string): boolean => draft.key === key;
+const unsent = (now: string, sent: string): string => now === sent ? '' : now;
 const unsentWords = ({sending, words, reach}: Draft): Pick<Draft, 'words' | 'reach'> =>
-  sending.state === 'sending' && sending.words === words && sending.reach === reach ? {words: '', reach: ''} : {words, reach};
+  sending.state === 'sending' ? {words: unsent(words, sending.words), reach: unsent(reach, sending.reach)} : {words, reach};
 const sendingOnOpening = ({sending}: Draft): Sending => {
   switch (sending.state) {
     case 'sending':

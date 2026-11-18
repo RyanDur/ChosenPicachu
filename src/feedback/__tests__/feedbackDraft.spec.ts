@@ -70,6 +70,15 @@ describe('the feedback reducer', () => {
     expect(draft.words).toBe('The sort menu hides. It also flickers.');
   });
 
+  test('should clear the sent words once GitHub answers, though the way to reach was changed while sending', () => {
+    const sending = inTurn(openOn, feedbackChange.wordsEdited('The sort menu hides.'), feedbackChange.noteSubmitted());
+    const reachAdded = inTurn(sending, feedbackChange.reachEdited('reader@example.test'));
+
+    const draft = inTurn(reachAdded, feedbackChange.noteSent(noteAt));
+
+    expect(draft.words).toBe('');
+  });
+
   test('should keep the link to a sent note through the next opening', () => {
     const sending = inTurn(openOn, feedbackChange.wordsEdited('It hides.'), feedbackChange.noteSubmitted());
 
