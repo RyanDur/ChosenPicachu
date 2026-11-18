@@ -187,6 +187,16 @@ describe('the old way', () => {
     expect(explanation.saying(guess, '1 minute to read')).toBeInTheDocument();
   });
 
+  test('should say what the max-height guess does, under its title', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const oldWay = await explanation.part(parts[0]);
+
+    expect(explanation.saying(oldWay, names.accordions['the-max-height-guess'].description)).toBeInTheDocument();
+  });
+});
+
+describe('what the platform gives now, on the tab', () => {
   test('following what the platform gives now opens its page, with the fold choices carried', async () => {
     const from = demosAt('accordions', '?type=inclusive&style=drawer');
     render(<TestApp at={from}/>);
@@ -202,14 +212,6 @@ describe('the old way', () => {
     const platformWay = await explanation.part(parts[1]);
 
     expect(explanation.saying(platformWay, names.accordions['what-the-platform-gives-now'].description)).toBeInTheDocument();
-  });
-
-  test('should say what the max-height guess does, under its title', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    const oldWay = await explanation.part(parts[0]);
-
-    expect(explanation.saying(oldWay, names.accordions['the-max-height-guess'].description)).toBeInTheDocument();
   });
 });
 
