@@ -15,8 +15,8 @@ export const SlidingFoldMoves: FC = () => <>
       <p className="paragraph">Every fold that slides on this tab’s pages moves by transition, never by animation,
         because a reader may press again before the fold lands. If they do,
         a <RemembersTheFoldLink>transition</RemembersTheFoldLink> turns around from wherever it is.
-        An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays a set of keyframes on its own clock, whatever
-        the state does.</p>
+        An <Mdn path="Web/CSS/CSS_animations">animation</Mdn> plays a set of keyframes, the values a property passes
+        through, on its own clock, whatever the state does.</p>
     </li>
     <li className="run">
       <p className="paragraph">When a reader asks
