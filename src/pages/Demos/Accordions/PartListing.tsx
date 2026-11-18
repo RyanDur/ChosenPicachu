@@ -4,10 +4,16 @@ import {AccordionPart, accordionParts} from './part-pages';
 import {PartLink} from './PartLink';
 import './PartListing.css';
 
-export const PartListing: FC<{part: AccordionPart}> = ({part}) => {
+type Props = {
+  part: AccordionPart;
+  level: 2 | 3;
+};
+
+export const PartListing: FC<Props> = ({part, level}) => {
   const {heading, says, minutes} = accordionParts.told(part);
+  const Title = level === 2 ? 'h2' : 'h3';
   return <section className="part-listing" aria-labelledby={heading}>
-    <h3 id={heading} className="sub-title bold"><PartLink part={part}/></h3>
+    <Title id={heading} className={level === 2 ? 'title bold' : 'sub-title bold'}><PartLink part={part}/></Title>
     <p className="paragraph">{says}</p>
     <ReadingTime minutes={minutes}/>
   </section>;
