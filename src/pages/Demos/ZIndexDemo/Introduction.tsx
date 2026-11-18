@@ -24,11 +24,9 @@ export const ZIndexIntroduction: FC = () =>
       lose, and how a popover, an element the browser itself shows and hides, is drawn over everything on the
       page. The last part builds this site’s banner. It stays over the page for two reasons: where it is written, and
       the z-index it sets there.</p>
-    <p className="paragraph">This tab also explains the parts the later tabs build on. A component is a function that
-      writes a piece of the page, its state is what it holds, and an event is the browser telling it something
-      happened. The menu in <PartLink part="why-9999-still-loses"/> is this site’s Menu component on a popover. The
-      charts and tables tabs use all of these,
-      the drag sort tab all but the menu, and each points back here for them.</p>
+    <p className="paragraph">Part 4, <PartLink part="why-the-popover-wins"/>, explains what the later tabs build
+      on: React, a component, its state, an event, and this site’s Menu component on a popover. The charts and tables
+      tabs use all of these, the drag sort tab all but the menu, and each links to that part for them.</p>
     <p className="paragraph">The first exhibit below is a pile of three cards with no z-index at all. Raise First with
       the pills and watch it come to the top.</p>
   </header>;
