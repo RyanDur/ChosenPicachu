@@ -1,6 +1,5 @@
 import {DataRouter, Location, NavigationType, RouterState} from 'react-router';
 import {empty, Maybe, maybe, notEmpty} from '@ryandur/sand';
-import {scrollPlace} from '@navigation';
 import {landing, Measured, Watch} from './landing';
 
 export type Page =
@@ -82,7 +81,6 @@ const following = (page: Page, followers: Set<Follower>) => (router: DataRouter)
     if (navigation.state !== 'idle' || location.key !== current.key || location.key === followedKey) return;
     const opening = empty(followedKey);
     followedKey = location.key;
-    if (historyAction === NavigationType.Replace && scrollPlace.keeps(location)) return;
     stopLanding();
     stopLanding = opening || historyAction !== NavigationType.Pop ? landWhereAsked(page, location.hash) : nothingToStop;
   };

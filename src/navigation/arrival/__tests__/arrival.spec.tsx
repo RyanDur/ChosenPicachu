@@ -1,7 +1,6 @@
 import {FC, useSyncExternalStore} from 'react';
 import {render} from '@testing-library/react';
 import {createMemoryRouter, DataRouter, Link, Outlet, RouterProvider, useLocation, useNavigate} from 'react-router';
-import {scrollPlace} from '@navigation';
 import {arrival} from '../arrival';
 import {ArrivalDrawn} from '../ArrivalDrawn';
 import {useArrivalDrawn} from '../useArrivalDrawn';
@@ -82,7 +81,7 @@ const site = (late: LateTargets, later: LaterPage, opened: string): DataRouter =
 type FollowedSite = {
   readonly draws: (id: string) => void;
   readonly loadsTheLaterPage: () => void;
-  readonly rewritesTheAddress: () => void;
+  readonly replacesTheAddress: () => void;
   readonly goesBackByTheBrowser: () => void;
   readonly stopFollowing: () => void;
 };
@@ -98,10 +97,8 @@ const siteFollowed = (opened = '/'): FollowedSite => {
   return {
     draws: late.draw,
     loadsTheLaterPage: later.loads,
-    rewritesTheAddress: () => queueMicrotask(() => {
-      const {location} = router.state;
-      void router.navigate({search: '?rewritten', hash: location.hash},
-        {replace: true, state: scrollPlace.keptFrom(location)});
+    replacesTheAddress: () => queueMicrotask(() => {
+      void router.navigate({search: '?replaced', hash: router.state.location.hash}, {replace: true});
     }),
     goesBackByTheBrowser: () => queueMicrotask(() => {
       void router.navigate(-1);
@@ -190,20 +187,6 @@ describe('arrival', () => {
     expect(reader.heading('late')).not.toHaveFocus();
   });
 
-  test('a reader whose address the page rewrites under them is not moved', async () => {
-    const site = siteFollowed();
-    const reader = arrivingReader();
-    await reader.follows('/story#here');
-    await reader.waits(500);
-    await reader.presses('{Tab}');
-
-    site.rewritesTheAddress();
-    await reader.seesTheAddress('/story?rewritten');
-    await reader.waits(500);
-
-    expect(reader.headingsFocused()).toEqual(['here']);
-  });
-
   test('a reader who follows the link to the address they are on lands on it again', async () => {
     siteFollowed();
     const reader = arrivingReader();
@@ -217,14 +200,14 @@ describe('arrival', () => {
     expect(reader.headingsFocused()).toEqual(['here', 'here']);
   });
 
-  test('a reader whose address the page rewrites while it is still landing lands on it', async () => {
+  test('a reader whose address the page replaces while it is still landing lands on it', async () => {
     const site = siteFollowed();
     const reader = arrivingReader();
     await reader.follows('/story#late');
     await reader.waits(100);
 
-    site.rewritesTheAddress();
-    await reader.seesTheAddress('/story?rewritten');
+    site.replacesTheAddress();
+    await reader.seesTheAddress('/story?replaced');
     site.draws('late');
     await reader.sees('late');
     await reader.waits(500);
@@ -232,16 +215,16 @@ describe('arrival', () => {
     expect(reader.heading('late')).toHaveFocus();
   });
 
-  test('a reader the browser takes back to an address the page rewrote is not moved by the landing they left', async () => {
+  test('a reader the browser takes back to an address the page replaced is not moved by the landing they left', async () => {
     const site = siteFollowed('/story');
     const reader = arrivingReader();
-    site.rewritesTheAddress();
-    await reader.seesTheAddress('/story?rewritten');
+    site.replacesTheAddress();
+    await reader.seesTheAddress('/story?replaced');
     await reader.follows('/story#late');
     await reader.waits(100);
 
     site.goesBackByTheBrowser();
-    await reader.seesTheAddress('/story?rewritten');
+    await reader.seesTheAddress('/story?replaced');
     site.draws('late');
     await reader.sees('late');
     await reader.waits(500);
