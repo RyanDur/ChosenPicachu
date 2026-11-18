@@ -1,7 +1,6 @@
 import {FC} from 'react';
 import {classNames} from '@components';
-import {DemoTopics} from '@pages/Demos';
-import {TabLink} from '@pages/Demos/TabLink';
+import {PartLink as ZIndexPartLink} from '@pages/Demos/ZIndexDemo';
 import {DialGroup, useControls} from '../Controls';
 import {FoldType} from '../ReaderSettings';
 import {carve, Line, lines, Sample, Snippet} from '../Recipe';
@@ -115,8 +114,8 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
               <p className="paragraph">React, the library this site’s script is written in, keeps which folds are
                 open as the accordion’s state: a value React keeps between draws and draws the page from. The
                 accordion hands that state to every panel inside through a context, and each panel reads from it
-                whether its own fold is open. The <TabLink to={DemoTopics.zIndex}>z-index tab</TabLink> explains
-                state and context in full.</p>
+                whether its own fold is open. State is taught in the z-index part <ZIndexPartLink
+                part="why-the-popover-wins"/>, and context in <ZIndexPartLink part="lets-build-this-feature"/>.</p>
               <Snippet label="TS" lines={lines.fromTheExhibit([
                 ...sample, lines.blank,
                 ...carve.unit(openFoldsSource, 'export const openFolds')
@@ -126,7 +125,7 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
               <p className="paragraph">A panel keeps state of its own too: whether it is shown and, while it moves,
                 the height the motion starts from, the height it ends at, and whether it has started. It changes
                 that state through a reducer, sending each change with <code className="monospaced">dispatch</code>,
-                as the z-index tab shows.</p>
+                as taught in the z-index part <ZIndexPartLink part="lets-build-this-feature"/>.</p>
               <Snippet label="TS" lines={lines.fromTheExhibit([
                 ...carve.unit(panelSource, 'type Motion ='), lines.blank,
                 ...carve.unit(panelSource, 'type Panel ='), lines.blank,
