@@ -253,6 +253,30 @@ for (const {reader, device} of handhelds) {
       await expect(gallery.sheet).toBeHidden();
       expect(await documentScrollY(page)).toBe(scrolledTo);
     });
+
+    test('goes to a page typed in the gallery settings once Escape closes them', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam');
+      await gallery.openSettings();
+      await gallery.pageNumber.fill('2');
+
+      await page.keyboard.press('Escape');
+
+      await expect(page).toHaveURL(/page=2/);
+    });
+
+    test('goes to a page typed in the gallery settings once a tap outside closes them', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam');
+      await gallery.openSettings();
+      await gallery.pageNumber.fill('2');
+
+      await page.touchscreen.tap(10, 10);
+
+      await expect(page).toHaveURL(/page=2/);
+    });
   });
 }
 
