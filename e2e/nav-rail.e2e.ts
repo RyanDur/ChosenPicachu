@@ -44,7 +44,7 @@ test.describe('on a phone', () => {
     const rail = page.getByRole('region', {name: 'pages and feedback'});
 
     await expect(rail.getByRole('button', {name: 'Feedback'})).toBeVisible();
-    await expect(rail.getByRole('button', {name: 'Site menu'})).toBeVisible();
+    await expect(rail.getByRole('button', {name: 'Menu', exact: true})).toBeVisible();
   });
 });
 
