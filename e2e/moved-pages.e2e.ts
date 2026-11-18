@@ -49,6 +49,13 @@ test('Back from the story\'s page after a saved story link returns to the page t
   await expect(page.getByRole('heading', {level: 1, name: 'The three languages'})).toBeVisible();
 });
 
+test('a link saved to one story while the address named another lands on the story it points to', async ({page}) => {
+  await page.goto('demos/tables/?living=flow#living-still-story');
+
+  await expect(page).toHaveURL(/\/demos\/tables\/the-still-table\/#living-still-story$/);
+  await expect(page.getByRole('group', {name: 'The trader can read the market in a table', exact: true})).toBeVisible();
+});
+
 test.describe('a reader with script turned off', () => {
   test.use({javaScriptEnabled: false});
 
