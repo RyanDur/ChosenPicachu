@@ -76,6 +76,7 @@ export const PagePulledApart: FC = () =>
           <line className="drawn-line drawn" x1="3.5" y1="0" x2="3.5" y2="7"/>
         </pattern>
       </defs>
+      <DroppedLine spot={backCorner}/>
       <polygon className="slab-line drawn paper-filled"
         points={face({u: 0, v: plate.down}, {u: plate.across, v: plate.down})}/>
       <polygon className="slab-line drawn paper-filled"
@@ -93,7 +94,6 @@ export const PagePulledApart: FC = () =>
         return <circle key={word} className="drawn-filled" cx={x} cy={y} r={1.6 * unitsPerStep}/>;
       })}
       {Object.values(scriptPoints).map(spot => <DroppedLine key={`${spot.u},${spot.v}`} spot={spot}/>)}
-      <DroppedLine spot={backCorner}/>
       <DroppedLine spot={frontCorner}/>
       {Object.entries(slabRegions).map(([name, region]) =>
         <Label key={name} word={name} at={projected(centerOf(region), elevations.structure)} anchor="middle"/>)}
