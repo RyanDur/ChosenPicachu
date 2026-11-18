@@ -4,6 +4,7 @@ import {GalleryLinks} from '@pages/Gallery/Links';
 import {classNames, PropsWithClassName} from '@components';
 import {useGallery} from '@pages/Gallery/Context';
 import {useSuggestions} from './useSuggestions';
+import {keptForm} from '@pages/Gallery/keptForm';
 import './Search.css';
 import searchIcon from '../../../assets/icons/search.svg?url';
 import resetIcon from '../../../assets/icons/reset.svg?url';
@@ -20,13 +21,14 @@ export const Search: FC<PropsWithClassName> = ({className}) => {
   const {suggestions, typed, cleared} = useSuggestions(tab);
   const query = useId();
   const options = useId();
+  const formKey = keptForm.useKey('search', search ?? '');
 
   const submitted = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    void navigate({
-      pathname: gallery,
-      search: searchFromAddress({search: wordsIn(event.currentTarget)})
-    }, {preventScrollReset: true});
+    const words = wordsIn(event.currentTarget);
+    event.currentTarget.reset();
+    void navigate({pathname: gallery, search: searchFromAddress({search: words})},
+      {preventScrollReset: true, state: keptForm.across('search', formKey)});
   };
 
   const reset = () => {
@@ -35,14 +37,14 @@ export const Search: FC<PropsWithClassName> = ({className}) => {
   };
 
   return <search className={classNames('search', 'backdrop', className)}>
-    <form key={search} className="search-form" onSubmit={submitted} onReset={reset}>
+    <form key={formKey} className="search-form" onSubmit={submitted}>
       <label className="query-label field next-approached ellipsis bold" htmlFor={query}>Search</label>
       <input type="search" name="search" autoComplete="off" list={options} id={query} required
         defaultValue={search}
         className="query bare card"
         onInput={event => typed(event.currentTarget.value)}/>
       <button className="reset-query button icon-button borderless field attentive reachable" type="reset"
-        aria-label="reset search"><img className="icon" src={resetIcon} width="24" height="24" alt=""/></button>
+        aria-label="reset search" onClick={reset}><img className="icon" src={resetIcon} width="24" height="24" alt=""/></button>
       <button className="submit-query button icon-button borderless field attentive reachable" type="submit"
         aria-label="submit search"><img className="icon" src={searchIcon} width="24" height="24" alt=""/></button>
       <datalist id={options} className="field">
