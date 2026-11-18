@@ -3,8 +3,7 @@ import {appAddress} from '@__test_support/address';
 import {render} from '@testing-library/react';
 import {Paths} from '@navigation';
 import {homePage} from '@pages/Home/__test_support/home';
-
-const claim = 'A page is built from all three at once, and each has a job the others can’t do.';
+import {outOfReadingOrder} from '@__test_support/reading-order';
 
 describe('the home page', () => {
   beforeEach(async () => {
@@ -12,13 +11,8 @@ describe('the home page', () => {
     await homePage.arrived();
   });
 
-  test('should open its prose on the claim', () => {
-    expect(homePage.prose()[0]).toHaveTextContent(claim);
-  });
-
-  test('should say the claim once, in a paragraph of its own', () => {
-    expect(homePage.prose().filter(paragraph => paragraph.textContent.includes(claim)).map(said => said.textContent))
-      .toEqual([claim]);
+  test('should come to the claim before the drawing', () => {
+    expect(outOfReadingOrder([homePage.claim(), homePage.drawing()])).toEqual([]);
   });
 
   test('should link only the book the opener names and the three doors', () => {
