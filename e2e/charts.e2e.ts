@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {boxOf, chartsPage, desktop, feedStillConnecting, iPhone, siteFrame} from './__test_support';
+import {boxOf, chartsPage, desktop, feedStillConnecting, hydration, iPhone, siteFrame} from './__test_support';
 
 test('the price period menu stays hidden until the reader asks for it', async ({page}) => {
   const charts = chartsPage(page);
@@ -96,4 +96,34 @@ test.describe('a finger on a phone', () => {
     await finger.canceled();
     await expect(charts.seat('live trades')).not.toHaveAttribute('draggable', 'true');
   });
+});
+
+test('given the charts tab before its script runs, Add a chart is disabled; once the script runs, a chart chosen from it is added', async ({page}) => {
+  const address = 'demos/charts/';
+  await hydration(page).holdBack(address);
+  await page.goto(address);
+  const charts = chartsPage(page);
+
+  await expect(charts.adder).toBeDisabled();
+  await hydration(page).release();
+
+  await charts.adder.click();
+  await charts.chartToAdd('Candles').click();
+
+  await expect(charts.report).toHaveText('Candles added');
+});
+
+test('given the charts tab before its script runs, the period toggle is disabled; once the script runs, a period chosen from it is taken', async ({page}) => {
+  const address = 'demos/charts/';
+  await hydration(page).holdBack(address);
+  await page.goto(address);
+  const charts = chartsPage(page);
+
+  await expect(charts.periodToggle).toBeDisabled();
+  await hydration(page).release();
+
+  await charts.periodToggle.click();
+  await charts.period('week').click();
+
+  await expect(charts.periodToggle).toContainText('week');
 });

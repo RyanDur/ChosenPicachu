@@ -82,6 +82,9 @@ export const chartsPage = (page: Page) => {
     priceCardScope: async (): Promise<string> => `section[aria-labelledby="${await priceCard.getAttribute('aria-labelledby')}"]`,
     priceDelta: priceCard.getByText(/^[+-]\$/),
     periodToggle: page.getByRole('button', {name: 'price period'}),
-    period: (name: string): Locator => periodMenu.getByRole('button', {name})
+    period: (name: string): Locator => periodMenu.getByRole('button', {name}),
+    adder: page.getByRole('button', {name: 'Add a chart', exact: true}),
+    chartToAdd: (name: string): Locator => page.getByLabel('charts to add').getByRole('button', {name, exact: true}),
+    report: page.getByRole('status', {name: 'desk report'})
   };
 };
