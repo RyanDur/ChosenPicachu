@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
@@ -61,5 +61,14 @@ describe('why the popover wins, on the tab', () => {
     const listing = await explanation.part(title);
 
     expect(explanation.linkNamed(listing, title)).toHaveAttribute('href', demosAt(popoverWins, '?raised=second'));
+  });
+
+  test('should link the tab’s introduction to its page, with the raised card carried', async () => {
+    render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
+    await demoTabs.arrivedOn('Z-index');
+
+    const introduction = demoPage.says(/^Part 4, .*explains what the later tabs build on/);
+
+    expect(explanation.linkNamed(introduction, title)).toHaveAttribute('href', demosAt(popoverWins, '?raised=second'));
   });
 });
