@@ -152,9 +152,8 @@ const drawings = () => {
   const draw = () => {
     mkdirSync(folder, {recursive: true});
     drawn.forEach(({name, sheet, frames}) => {
-      const {wide, stacked} = frames(practiceDrawings.minifiedCss([...siteSheets, sheet].map(read => readFileSync(read, 'utf8')).join('')));
-      writeFileSync(`${folder}${name}-wide.svg`, wide);
-      writeFileSync(`${folder}${name}-stacked.svg`, stacked);
+      const drawnFrames = frames(practiceDrawings.minifiedCss([...siteSheets, sheet].map(read => readFileSync(read, 'utf8')).join('')));
+      Object.entries(drawnFrames).forEach(([frame, svg]) => writeFileSync(`${folder}${name}-${frame}.svg`, svg));
     });
   };
   return {

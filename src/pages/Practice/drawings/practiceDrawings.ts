@@ -4,16 +4,19 @@ import {has} from '@ryandur/sand';
 
 export type Size = {readonly width: number; readonly height: number};
 
-type Drawing = {
+type Drawing<Frame extends string> = {
   readonly sheet: string;
-  readonly sizes: {readonly wide: Size; readonly stacked: Size};
-  readonly frames: (siteStyle: string) => {wide: string; stacked: string};
+  readonly sizes: Readonly<Record<Frame, Size>>;
+  readonly frames: (siteStyle: string) => Record<Frame, string>;
 };
 
 // a media attribute cannot read a custom property, so the widths spacing.css names --phone-held-upright and
 // --nav-in-a-row are named here for the pictures
 const phoneHeldUpright = '(width <= 600px)';
 const railAboveTheHeader = '(width <= 1100px)';
+// the rail is the foot in BasePage.css's phone query, which phoneLayout.ts names for the script; this module imports
+// nothing of the site's own, so the pictures name it too
+const railAtTheFoot = '(width <= 600px), (width <= 1100px) and (height <= 600px)';
 
 type Box = {
   readonly label: string;
@@ -53,7 +56,7 @@ const sizeAround = (boxes: Box[]): Size => ({
   height: Math.max(...boxes.map(({y, height}) => y + height)) + margin
 });
 
-const whereARuleLives = ((): Drawing => {
+const whereARuleLives = ((): Drawing<'wide' | 'stacked'> => {
   const inset = 6;
   const folder = 'folder-box hollow drawn';
   const group = 'group-box hollow drawn';
@@ -134,7 +137,7 @@ const whereARuleLives = ((): Drawing => {
   };
 })();
 
-const landmarkMap = ((): Drawing => {
+const landmarkMap = ((): Drawing<'wide' | 'stacked' | 'phone'> => {
   const inset = 9;
   const landmark = 'landmark-box hollow drawn';
   const secondary = 'secondary-box hollow drawn';
@@ -162,23 +165,35 @@ const landmarkMap = ((): Drawing => {
     {label: 'section · role alert · live region · last on the page', look: lastOnThePage, x: 12, y: 129, width: 282, height: 24}
   ];
 
+  const phone: Box[] = [
+    {label: 'header', look: landmark, x: 6, y: 6, width: 288, height: 42},
+    {label: 'main', look: landmark, x: 6, y: 57, width: 288, height: 165},
+    {label: 'nav · tabs', look: secondary, x: 15, y: 96, width: 270, height: 30, note: 'on a page with tabs; shown at the foot'},
+    {label: 'footer', look: landmark, x: 6, y: 231, width: 288, height: 39, note: 'only where a page has one'},
+    {label: 'section · pages and feedback', look: landmark, x: 6, y: 300, width: 288, height: 99},
+    {label: 'feedback', look: secondary, x: 15, y: 333, width: 81, height: 39},
+    {label: 'nav · site', look: landmark, x: 105, y: 333, width: 180, height: 39, note: 'opens from Menu'},
+    {label: 'section · role alert · live region · last on the page', look: lastOnThePage, x: 12, y: 39, width: 282, height: 24}
+  ];
+
   const drawnBox = (box: Box): string =>
     rect(box) +
     caption(box.label, {x: box.x + inset, y: box.y + inset}) +
     (has(box.note) ? caption(box.note, {x: box.x, y: box.y + box.height + inset}) : '');
 
-  const sizes = {wide: {width: 480, height: 356}, stacked: {width: 300, height: 388}};
+  const sizes = {wide: {width: 480, height: 356}, stacked: {width: 300, height: 388}, phone: {width: 300, height: 405}};
 
   return {
     sheet: 'src/pages/Practice/structure/LandmarkMap.css',
     sizes,
     frames: siteStyle => ({
       wide: framed('landmark-map', sizes.wide, siteStyle, wide.map(drawnBox).join('')),
-      stacked: framed('landmark-map', sizes.stacked, siteStyle, stacked.map(drawnBox).join(''))
+      stacked: framed('landmark-map', sizes.stacked, siteStyle, stacked.map(drawnBox).join('')),
+      phone: framed('landmark-map', sizes.phone, siteStyle, phone.map(drawnBox).join(''))
     })
   };
 })();
 
 const byName = {'where-a-rule-lives': whereARuleLives, 'landmark-map': landmarkMap} as const;
 
-export const practiceDrawings = {byName, minifiedCss, phoneHeldUpright, railAboveTheHeader};
+export const practiceDrawings = {byName, minifiedCss, phoneHeldUpright, railAboveTheHeader, railAtTheFoot};
