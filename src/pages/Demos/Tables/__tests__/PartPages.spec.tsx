@@ -544,6 +544,21 @@ describe('a link saved to a story when it was on the tables tab', () => {
     expect(appAddress.fragment()).toBe('#living-flow-story');
   });
 
+  test('should stay on the tables tab at a station it points to, without the story', async () => {
+    const old = demosAt('tables', '?world=vanilla&living=still');
+    render(<TestApp at={`${old}#station-6`}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables', '?world=vanilla'));
+    expect(appAddress.fragment()).toBe('#station-6');
+  });
+
+  test('should open the page of the story its place points to, when it names stories on two pages', async () => {
+    const old = demosAt('tables', '?living=flow%2Cstill');
+    render(<TestApp at={`${old}#living-still-story`}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(theStillTablesPage);
+  });
+
   test('should stay on the tables tab when it names no story a page tells', async () => {
     const old = demosAt('tables', '?living=nowhere');
     render(<TestApp at={old}/>);
