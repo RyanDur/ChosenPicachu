@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {clickWhereItIs, iPhone, shortPhoneSideways, siteFrame, twoFramesLater} from './__test_support';
+import {clickWhereItIs, iPhone, shortPhoneSideways, siteFrame, tabsTo, twoFramesLater} from './__test_support';
 
 const pages = ['Home', 'Record', 'Practice', 'Demos', 'Users', 'Gallery', 'Games', 'Repo'];
 
@@ -88,6 +88,28 @@ test.describe('a phone held upright', () => {
 
     await expect(page).toHaveURL(/\/record\/$/);
     await expect(siteFrame(page).nav).toBeHidden();
+  });
+});
+
+test.describe('a keyboard reader on an upright phone', () => {
+  test.use(iPhone);
+
+  test('opens the site menu, chooses Record, and lands back on Menu', async ({page}) => {
+    const site = siteFrame(page);
+    await page.goto('');
+    await site.hydrated();
+    await site.menu.focus();
+    await page.keyboard.press('Enter');
+    await expect(site.nav).toBeVisible();
+    await tabsTo(page, site.nav.getByRole('link', {name: 'Record'}));
+
+    await page.keyboard.press('Enter');
+
+    await expect(page).toHaveURL(/\/record\/$/);
+    await expect(page.getByRole('navigation', {name: 'site', includeHidden: true}).getByRole('link', {name: 'Record', includeHidden: true}))
+      .toHaveAttribute('aria-current', 'page');
+    await expect(site.menu).toBeFocused();
+    await expect(site.menu).toBeVisible();
   });
 });
 
