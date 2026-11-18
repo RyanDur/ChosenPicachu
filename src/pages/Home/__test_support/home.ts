@@ -11,7 +11,6 @@ export const homePage = {
   drawing,
   claim: (): HTMLElement => within(article()).getAllByRole('paragraph')
     .filter(paragraph => not(drawing().contains(paragraph)))[0],
-  openerLink: (name: string): HTMLElement => within(article()).getByRole('link', {name}),
   letteringHeard: (words: string[]): string[] =>
     words.filter(word => not(isInaccessible(within(drawing()).getByText(word)))),
   arrived: (): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name: 'The three languages'}),
