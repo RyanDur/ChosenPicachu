@@ -39,7 +39,7 @@ const looked = async (
 };
 
 for (const viewport of sizes) {
-  for (const view of views) {
+  for (const view of views.filter(view => view.atWidths?.includes(viewport.width) ?? true)) {
     test(`${view.page.name}, ${view.name}, at ${viewport.width}, looks as it did`, async ({browser}) => {
       const [before, after] = await Promise.all([
         looked(browser, stages.before, view, viewport),
