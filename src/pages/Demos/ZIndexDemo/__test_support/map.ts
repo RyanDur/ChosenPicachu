@@ -4,6 +4,7 @@ const theMap = (): Promise<HTMLElement> => screen.findByRole('navigation', {name
 
 export const zIndexMap = {
   says: (): Promise<HTMLElement> => screen.findByText(/about \d+ minutes/),
+  saysInTheMap: async (): Promise<HTMLElement> => within(await theMap()).getByText(/about \d+ minutes/),
   listed: (): HTMLElement | null => screen.queryByRole('navigation', {name: 'the z-index map'}),
   signposts: async (): Promise<(string | null)[][]> =>
     within(await theMap()).getAllByRole('listitem').map(entry =>
