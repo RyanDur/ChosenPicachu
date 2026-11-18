@@ -171,7 +171,11 @@ test.describe('a phone on a page with tabs', () => {
   test('reaches a tab once the sent note’s dialog closes', async ({page}) => {
     await sentAndClosed(page);
 
-    await clickWhereItIs(page, page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'}));
+    const accordions = page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'});
+    await accordions.evaluate(tab => tab.scrollIntoView({inline: 'nearest', block: 'nearest'}));
+    await twoFramesLater(page);
+
+    await clickWhereItIs(page, accordions);
 
     await expect(page).toHaveURL(/demos\/accordions\/$/);
   });
