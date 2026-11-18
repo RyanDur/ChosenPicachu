@@ -16,7 +16,7 @@ describe('the tables tab’s introduction', () => {
     ]);
   });
 
-  test('should link each term it glosses, and each tab it names, to that tab', () => {
+  test('should link each tab it names to that tab', () => {
     render(<TestApp at="/"><TablesIntroduction/></TestApp>);
 
     expect(demoPage.linksToTabs()).toEqual([

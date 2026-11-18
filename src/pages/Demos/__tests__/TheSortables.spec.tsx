@@ -295,7 +295,7 @@ describe('the links to other tabs', () => {
     expect(explanation.linkNamed(slideStep, 'custom property')).toHaveAttribute('href', `${Paths.demos}accordions/?native=sort`);
   });
 
-  test('should link each term it glosses, and each tab it names, to that tab', async () => {
+  test('should link each tab it names, and each term a tab teaches, to that tab', async () => {
     render(<TestApp at={demosAt('drag-and-drop')}/>);
 
     const tab = await demoTabs.arrivedOn('Drag sort');
