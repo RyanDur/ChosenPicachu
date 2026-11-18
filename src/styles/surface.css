@@ -352,6 +352,8 @@
 }
 
 
+.muted-rule-above { border-block-start: var(--hairline) solid var(--ink-muted); }
+
 .muted-rule-below { border-block-end: var(--hairline) solid var(--ink-muted); }
 
 .muted-rule-after { border-inline-end: var(--hairline) solid var(--ink-muted); }

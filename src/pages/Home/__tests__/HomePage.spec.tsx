@@ -1,8 +1,10 @@
 import {TestApp} from '@__test_support/TestApp';
+import {appAddress} from '@__test_support/address';
 import {render} from '@testing-library/react';
 import {Paths} from '@navigation';
 import {homePage} from '@pages/Home/__test_support/home';
-import {outOfReadingOrder} from '@__test_support/reading-order';
+
+const claim = 'A page is built from all three at once, and each has a job the others can’t do.';
 
 describe('the home page', () => {
   beforeEach(async () => {
@@ -10,25 +12,44 @@ describe('the home page', () => {
     await homePage.arrived();
   });
 
-  test('should link the opener to the book it names, the Record and each language\'s story on it, Practice and the Demos, and nothing else', () => {
+  test('should open its prose on the claim', () => {
+    expect(homePage.prose()[0]).toHaveTextContent(claim);
+  });
+
+  test('should say the claim once, in a paragraph of its own', () => {
+    expect(homePage.prose().filter(paragraph => paragraph.textContent.includes(claim)).map(said => said.textContent))
+      .toEqual([claim]);
+  });
+
+  test('should link only the book the opener names and the three doors', () => {
     expect(homePage.openerLinks()).toEqual([
       ['Resilient Web Design', 'https://resilientwebdesign.com/'],
-      ['The Record', Paths.record],
-      ['the Structure story', `${Paths.record}#structure`],
-      ['the Presentation story', `${Paths.record}#presentation`],
-      ['the Behavior story', `${Paths.record}#behavior`],
-      ['Practice', Paths.practice],
-      ['The Demos', Paths.demos]
+      ['Read the Record', Paths.record],
+      ['Read the Practice', Paths.practice],
+      ['Open the Demos', Paths.demos]
     ]);
+  });
+
+  test('should open the Record from its door', async () => {
+    await homePage.followOpenerLink('Read the Record');
+
+    expect(appAddress.shown()).toBe(Paths.record);
+  });
+
+  test('should open Practice from its door', async () => {
+    await homePage.followOpenerLink('Read the Practice');
+
+    expect(appAddress.shown()).toContain(Paths.practice);
+  });
+
+  test('should open the Demos from its door', async () => {
+    await homePage.followOpenerLink('Open the Demos');
+
+    expect(appAddress.shown()).toContain(Paths.demos);
   });
 
   test('should show a figure named by its caption', () => {
     expect(homePage.drawing()).toBeVisible();
-  });
-
-  test('should come to the drawing after the opener', () => {
-    expect(outOfReadingOrder([homePage.openerLink('The Demos'), homePage.drawing()]))
-      .toEqual([]);
   });
 
   test('should keep the drawing’s lettering from a screen reader', () => {
