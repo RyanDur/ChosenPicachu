@@ -4,6 +4,7 @@ import {KnownDoors, useGallery} from '@pages/Gallery/Context';
 import {sourceParam} from '@pages/Gallery/museums';
 import {doors} from '@pages/Gallery/doors';
 import {useSuggestions} from '@pages/Gallery/Search';
+import {sheetShowsTheAddress} from './sheetShowsTheAddress';
 
 const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
   if (event.key === 'Enter') apply(event.currentTarget);
@@ -92,7 +93,7 @@ const PageRow: FC = () => {
 };
 
 const showingTheAddress = ({newState, currentTarget}: ToggleEvent<HTMLElement>) => {
-  if (newState === 'open') currentTarget.querySelectorAll('input').forEach(field => field.value = field.defaultValue);
+  if (newState === 'open') sheetShowsTheAddress(currentTarget);
 };
 
 export const SettingsSheet: FC<{readonly id: string}> = ({id}) =>
