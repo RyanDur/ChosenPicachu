@@ -62,8 +62,8 @@ const languages = [
   {word: 'structure', elevation: elevations.structure}
 ];
 
-const Label: FC<{word: string; at: Point; anchor?: 'middle'}> = ({word, at, anchor}) =>
-  <text className="drawn-caption monospaced ink-filled paper-haloed" {...at} textAnchor={anchor}>{word}</text>;
+const Lettering: FC<{word: string; place: Point; anchor?: 'middle'}> = ({word, place, anchor}) =>
+  <text className="drawn-caption monospaced ink-filled paper-haloed" {...place} textAnchor={anchor}>{word}</text>;
 
 export const PagePulledApart: FC = () =>
   <figure className="page-pulled-apart">
@@ -96,9 +96,9 @@ export const PagePulledApart: FC = () =>
       {Object.values(scriptPoints).map(spot => <DroppedLine key={`${spot.u},${spot.v}`} spot={spot}/>)}
       <DroppedLine spot={frontCorner}/>
       {Object.entries(slabRegions).map(([name, region]) =>
-        <Label key={name} word={name} at={projected(centerOf(region), elevations.structure)} anchor="middle"/>)}
+        <Lettering key={name} word={name} place={projected(centerOf(region), elevations.structure)} anchor="middle"/>)}
       {Object.entries(scriptPoints).map(([word, {u, v}]) =>
-        <Label key={word} word={word} at={projected({u: u + 3, v: v + 1}, elevations.behavior)}/>)}
+        <Lettering key={word} word={word} place={projected({u: u + 3, v: v + 1}, elevations.behavior)}/>)}
       {languages.map(({word, elevation}) => {
         const {x, y} = projected({u: 0, v: plate.down / 2}, elevation);
         return <text key={word} className="drawn-caption uppercase ink-filled paper-haloed" x={x - 6 * unitsPerStep}
