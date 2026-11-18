@@ -192,6 +192,13 @@ describe('a link saved to an old tables tutorial address', () => {
     expect(appAddress.fragment()).toBe('#station-3');
   });
 
+  test('should open the tutorial it names when it also names a story, and carry neither on', async () => {
+    const old = demosAt('tables', '?tut=menu&living=still');
+    render(<TestApp at={old}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/menu'));
+  });
+
   test('should stay on the tables tab and its list when it names no tutorial', async () => {
     const old = demosAt('tables', '?tut=scroll');
     render(<TestApp at={old}/>);
