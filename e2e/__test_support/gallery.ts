@@ -33,7 +33,7 @@ export const galleryPage = (page: Page) => {
     submitSearch: page.getByRole('button', {name: 'submit search'}),
     resetSearch: page.getByRole('button', {name: 'reset search'}),
     go: page.getByRole('button', {name: 'Go', exact: true}),
-    nextPage: page.getByRole('navigation', {name: 'pagination'}).getByRole('link', {name: 'NEXT'}),
+    nextPage: page.getByRole('navigation', {name: 'pagination'}).getByRole('link', {name: 'next page'}),
     settingsPanel: page.getByRole('complementary', {name: 'gallery settings'}),
     tapSearchLabel: (): Promise<void> => page.getByText('Search', {exact: true}).filter({visible: true}).click(),
     emptyWall: page.getByAltText('the museum answered with nothing'),

@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {render, waitFor} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 import {Paths} from '@navigation';
 import {heldAICAllArtResponse, setupAICAllArtResponse, setupAICEveryPage, galleryWall} from '@pages/Gallery/__test_support';
@@ -8,7 +8,7 @@ import {anyRequestFailsToConnect} from '@__test_support/server';
 import {appAddress} from '@__test_support/address';
 import {galleryNav} from '../__test_support';
 
-const {total_pages: lastPage, limit, total} = aicArtResponse.pagination;
+const {total_pages: lastPage, limit} = aicArtResponse.pagination;
 
 describe('Gallery Navigation', () => {
   test('no page is asked for until someone asks', async () => {
@@ -24,7 +24,7 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.framesAppear();
 
-    await galleryNav.go('NEXT');
+    await galleryNav.go('next page');
 
     expect(appAddress.shown()).toContain('page=2');
   });
@@ -34,8 +34,8 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.framesAppear();
 
-    expect(galleryNav.wayIfAny('PREV')).not.toBeInTheDocument();
-    expect(galleryNav.wayIfAny('FIRST')).not.toBeInTheDocument();
+    expect(galleryNav.wayIfAny('previous page')).not.toBeInTheDocument();
+    expect(galleryNav.wayIfAny('first page')).not.toBeInTheDocument();
   });
 
   test('the last page offers only the way back', async () => {
@@ -43,13 +43,13 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.framesAppear();
 
-    await galleryNav.go('LAST');
+    await galleryNav.go('last page');
 
     expect(appAddress.shown()).toContain(`page=${lastPage}`);
-    expect(galleryNav.wayIfAny('LAST')).not.toBeInTheDocument();
-    expect(galleryNav.wayIfAny('NEXT')).not.toBeInTheDocument();
-    expect(galleryNav.way('FIRST')).toBeInTheDocument();
-    expect(galleryNav.way('PREV')).toBeInTheDocument();
+    expect(galleryNav.wayIfAny('last page')).not.toBeInTheDocument();
+    expect(galleryNav.wayIfAny('next page')).not.toBeInTheDocument();
+    expect(galleryNav.way('first page')).toBeInTheDocument();
+    expect(galleryNav.way('previous page')).toBeInTheDocument();
   });
 
   test('the previous page is a page back', async () => {
@@ -57,7 +57,7 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={`${Paths.artGallery}?page=${lastPage}`}/>);
     await galleryWall.framesAppear();
 
-    await galleryNav.go('PREV');
+    await galleryNav.go('previous page');
 
     expect(appAddress.shown()).toContain(`page=${lastPage - 1}`);
   });
@@ -67,7 +67,7 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={`${Paths.artGallery}?page=${lastPage}`}/>);
     await galleryWall.framesAppear();
 
-    await galleryNav.go('FIRST');
+    await galleryNav.go('first page');
 
     expect(appAddress.shown()).toContain('page=1');
   });
@@ -77,18 +77,26 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={`${Paths.artGallery}?search=q`}/>);
     await galleryWall.framesAppear();
 
-    await galleryNav.go('NEXT');
+    await galleryNav.go('next page');
 
     expect(appAddress.shown()).toContain('search=q');
     expect(appAddress.shown()).toContain('page=2');
   });
 
-  test('the pagination counts the works showing, of the total', async () => {
+  test('the pagination says which page it is, of how many', async () => {
     setupAICEveryPage(aicArtResponse);
-    render(<TestApp at={`${Paths.artGallery}?page=1&size=${limit}`}/>);
+    render(<TestApp at={`${Paths.artGallery}?page=2&size=${limit}`}/>);
     await galleryWall.framesAppear();
 
-    expect(galleryNav.pagination()).toHaveTextContent(`${1} - ${limit} of ${total}`);
+    expect(galleryNav.pagination()).toHaveTextContent(`Page 2 of ${lastPage}`);
+  });
+
+  test('the pagination writes a long count the way the reader writes numbers', async () => {
+    setupAICEveryPage({...aicArtResponse, pagination: {...aicArtResponse.pagination, total_pages: 12412}});
+    render(<TestApp at={Paths.artGallery}/>);
+    await galleryWall.framesAppear();
+
+    expect(galleryNav.pagination()).toHaveTextContent(`Page 1 of ${(12412).toLocaleString()}`);
   });
 
   test('the ways and the count read as separate words, even with the styles off', async () => {
@@ -97,7 +105,7 @@ describe('Gallery Navigation', () => {
     await galleryWall.framesAppear();
 
     expect(galleryNav.pagination()).toHaveTextContent(
-      new RegExp(`^FIRST PREV ${limit + 1} - ${limit * 2} of ${total} NEXT LAST$`));
+      new RegExp(`^first page previous page Page 2 of ${lastPage} next page last page$`));
   });
 
   test('before any page has arrived, no count is said', () => {
@@ -107,7 +115,7 @@ describe('Gallery Navigation', () => {
     expect(galleryNav.pagination()).not.toHaveTextContent('of');
   });
 
-  test('a museum with nothing to show counts 0 - 0 of 0', async () => {
+  test('a museum with nothing to show says no count', async () => {
     setupAICEveryPage({
       ...aicArtResponse,
       data: [],
@@ -115,7 +123,9 @@ describe('Gallery Navigation', () => {
     });
     render(<TestApp at={Paths.artGallery}/>);
 
-    await waitFor(() => expect(galleryNav.pagination()).toHaveTextContent(/^0 - 0 of 0$/));
+    await galleryWall.standIn('the museum answered with nothing');
+
+    expect(galleryNav.pagination()).toHaveTextContent(/^$/);
   });
 
   test('a museum that refuses leaves no count from the museum before it', async () => {
@@ -124,23 +134,23 @@ describe('Gallery Navigation', () => {
     await galleryWall.framesAppear();
     anyRequestFailsToConnect();
 
-    await galleryNav.go('NEXT');
+    await galleryNav.go('next page');
 
     await galleryWall.standIn('the museum refused to answer');
-    expect(galleryNav.pagination()).not.toHaveTextContent(`${total}`);
+    expect(galleryNav.pagination()).not.toHaveTextContent(`of ${lastPage}`);
   });
 
   test('until the museum says where the end is, there is no way forward', async () => {
     const artArrives = heldAICAllArtResponse(aicArtResponse);
     render(<TestApp at={Paths.artGallery}/>);
 
-    expect(galleryNav.wayIfAny('NEXT')).not.toBeInTheDocument();
-    expect(galleryNav.wayIfAny('LAST')).not.toBeInTheDocument();
+    expect(galleryNav.wayIfAny('next page')).not.toBeInTheDocument();
+    expect(galleryNav.wayIfAny('last page')).not.toBeInTheDocument();
 
     artArrives();
 
-    expect(await galleryNav.wayAppears('NEXT')).toBeInTheDocument();
-    expect(galleryNav.way('LAST')).toBeInTheDocument();
+    expect(await galleryNav.wayAppears('next page')).toBeInTheDocument();
+    expect(galleryNav.way('last page')).toBeInTheDocument();
   });
 
   test('while the next page is on its way, the way forward and the count stay', async () => {
@@ -149,11 +159,11 @@ describe('Gallery Navigation', () => {
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.framesAppear();
 
-    await galleryNav.go('NEXT');
+    await galleryNav.go('next page');
 
-    expect(galleryNav.way('NEXT')).toBeInTheDocument();
-    expect(galleryNav.way('LAST')).toBeInTheDocument();
-    expect(galleryNav.pagination()).toHaveTextContent(`${limit + 1} - ${limit * 2} of ${total}`);
+    expect(galleryNav.way('next page')).toBeInTheDocument();
+    expect(galleryNav.way('last page')).toBeInTheDocument();
+    expect(galleryNav.pagination()).toHaveTextContent(`Page 2 of ${lastPage}`);
   });
 
   test('the way forward stays once the next page lands', async () => {
@@ -161,11 +171,11 @@ describe('Gallery Navigation', () => {
     const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: limits.record, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
     await galleryWall.framesAppear();
-    await galleryNav.go('NEXT');
+    await galleryNav.go('next page');
 
     nextPageArrives();
 
     await galleryWall.framesAppear();
-    expect(galleryNav.way('NEXT')).toBeInTheDocument();
+    expect(galleryNav.way('next page')).toBeInTheDocument();
   });
 });

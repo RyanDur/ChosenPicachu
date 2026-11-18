@@ -285,7 +285,7 @@ describe('The gallery.', () => {
     expect(galleryWall.loadingSign()).not.toBeInTheDocument();
   });
 
-  test('the count of works stays while the next page loads', async () => {
+  test('the count stays while the next page loads', async () => {
     setupAICAllArtResponse(aicArtResponse);
     const nextPageArrives = heldAICAllArtResponse(aicArtResponse, {limit: limits.record, page: 2});
     render(<TestApp at={Paths.artGallery}/>);
@@ -294,7 +294,7 @@ describe('The gallery.', () => {
     await galleryPage.nextPage();
 
     await galleryWall.loadingSignAppears();
-    expect(galleryPage.pagination()).toHaveTextContent(`of ${aicArtResponse.pagination.total}`);
+    expect(galleryPage.pagination()).toHaveTextContent(`Page 2 of ${aicArtResponse.pagination.total_pages}`);
 
     nextPageArrives();
 
@@ -315,14 +315,5 @@ describe('The gallery.', () => {
     nextPageArrives();
 
     await waitFor(() => expect(galleryWall.loadingSign()).not.toBeInTheDocument());
-  });
-
-  test('on the last page the count ends at the total', async () => {
-    const {total_pages: last, limit, total} = aicArtResponse.pagination;
-    setupAICAllArtResponse(aicArtResponse, {limit, page: last});
-    render(<TestApp at={`${Paths.artGallery}?page=${last}`}/>);
-    await galleryWall.framesAppear();
-
-    expect(galleryPage.pagination()).toHaveTextContent(`${1 + limit * (last - 1)} - ${total} of ${total}`);
   });
 });
