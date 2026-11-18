@@ -98,7 +98,7 @@ describe('a story card', () => {
 
   test('a story its page draws open is open as it first renders', () => {
     render(<TestApp at="/"><Stories>
-      <DrawnStory param="tale" id="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
+      <DrawnStory titleId="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
         <p>the story</p>
       </DrawnStory>
     </Stories></TestApp>);
@@ -108,7 +108,7 @@ describe('a story card', () => {
 
   test('a story its page draws open closes on one press and leaves the address as it was', async () => {
     render(<TestApp at="/?world=vanilla"><Stories>
-      <DrawnStory param="tale" id="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
+      <DrawnStory titleId="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
         <p>the story</p>
       </DrawnStory>
     </Stories></TestApp>);

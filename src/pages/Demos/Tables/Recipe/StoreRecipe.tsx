@@ -286,7 +286,7 @@ const WhoSubscribes: FC = () => {
 };
 
 export const StoreStory: FC = () =>
-  <DrawnStory param={livingStories.param} id={livingStories.ids.store} open
+  <DrawnStory titleId={livingStories.titleIdOf(livingStories.ids.store)} open
     can="The page is a store, and so is the table"
     soThat="the charts and the tables read one stream, the page owns the order it shows, and both worlds write them one way">
     <Tell>I could let each chart and each table keep its own copy of the trades. They would drift from each other

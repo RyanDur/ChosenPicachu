@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import {Told} from './StoryCard';
-import {StoryShell} from './StoryShell';
+import {StoryShell, Titled} from './StoryShell';
 
-export const DrawnStory: FC<Told & {open: boolean}> = drawn => <StoryShell {...drawn}/>;
+export const DrawnStory: FC<Titled & {open: boolean}> = drawn => <StoryShell {...drawn}/>;
