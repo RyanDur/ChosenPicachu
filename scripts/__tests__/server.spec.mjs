@@ -190,3 +190,68 @@ describe('the stub stage answers Feedback’s questions in place of GitHub', () 
     expect(bodyOf(answer).data.search.nodes).toEqual([]);
   });
 });
+
+const aBuildThatDrawsAUsersPage = () => {
+  const build = mkdtempSync(join(tmpdir(), 'stage-build-'));
+  const client = join(build, 'client');
+  mkdirSync(join(client, '.vite'), {recursive: true});
+  mkdirSync(join(build, 'server'));
+  writeFileSync(join(client, '.vite', 'manifest.json'), JSON.stringify({
+    'src/entry.client.tsx': {file: 'assets/client.js'},
+    'src/entry.fallback.tsx': {file: 'assets/fallback.js'},
+    'style.css': {file: 'assets/style.css'}
+  }));
+  writeFileSync(join(client, 'env.js'), 'window.__environment = {"tradeProduct": "the build’s own"};');
+  writeFileSync(join(build, 'server', 'entry.server.js'), `export const prerender = {
+  pages: ['/users/', '/broken/'],
+  page: async path => {
+    if (path === '/broken/') throw new Error('the users page would not draw');
+    return {html: '<html><head></head><body>drawn users</body></html>', rooms: []};
+  },
+  fallback: async () => '<html><head></head><body>drawn fallback</body></html>'
+};
+`);
+  return client;
+};
+
+describe('the stub stage rendering on request', () => {
+  test('should draw a page when it is asked for', async () => {
+    const {stage, port} = await stageUp({STAGE_RENDER: 'on', STAGE_SITE: aBuildThatDrawsAUsersPage()});
+
+    const answer = await answerTo(port, get('/ChosenPicachu/users/'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+    expect(answer).toMatch(/drawn users<script type="module" src="\/ChosenPicachu\/assets\/client\.js">/);
+  });
+
+  test('should answer an address the build does not know with the drawn fallback', async () => {
+    const {stage, port} = await stageUp({STAGE_RENDER: 'on', STAGE_SITE: aBuildThatDrawsAUsersPage()});
+
+    const answer = await answerTo(port, get('/ChosenPicachu/nowhere/'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 404/);
+    expect(answer).toContain('drawn fallback');
+  });
+
+  test('should send a page asked for without its slash to the address with it', async () => {
+    const {stage, port} = await stageUp({STAGE_RENDER: 'on', STAGE_SITE: aBuildThatDrawsAUsersPage()});
+
+    const answer = await answerTo(port, get('/ChosenPicachu/users'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 301/);
+    expect(answer).toMatch(/\r\nlocation: \/ChosenPicachu\/users\/\r\n/i);
+  });
+
+  test('should answer a page that fails to draw with a server error', async () => {
+    const {stage, port} = await stageUp({STAGE_RENDER: 'on', STAGE_SITE: aBuildThatDrawsAUsersPage()});
+
+    const answer = await answerTo(port, get('/ChosenPicachu/broken/'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 500/);
+    expect(answer).toContain('the users page would not draw');
+  });
+});
