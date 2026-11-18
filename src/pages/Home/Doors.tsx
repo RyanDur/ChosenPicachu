@@ -29,6 +29,6 @@ export const Doors: FC = () =>
     {doors.map(({heading, leadsTo, invitation, to}) => <li key={heading} className="door">
       <h2 className="sub-title bold">{heading}</h2>
       <p className="paragraph muted-ink">{leadsTo}</p>
-      <Link className="signpost bold reachable" to={to}>{invitation}</Link>
+      <Link className="way-on signpost bold reachable" to={to}>{invitation}</Link>
     </li>)}
   </ul>;
