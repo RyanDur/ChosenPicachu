@@ -33,7 +33,7 @@ const told: Record<ChartKind, Told> = {
 };
 
 const WorkspaceStory: FC = () =>
-  <Story param="graph" id="workspace"
+  <Story titleId="graph-workspace-story"
     can="The trader can lay out the workspace"
     soThat="the charts they watch sit where they put them">
     <Tell>The page writes every change to the layout into its address: adding a chart, sorting, removing one, and

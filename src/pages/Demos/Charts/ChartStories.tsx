@@ -43,7 +43,7 @@ const remembersTheFoldTitle = accordionParts.told(remembersTheFold).name;
 const remembersTheFoldAt = accordionParts.addressOf(remembersTheFold);
 
 const PriceStory: FC = () =>
-  <Story param="graph" id="price"
+  <Story titleId="graph-price-story"
     can="The trader can watch the price move, live"
     soThat="the session reads at a glance">
     <Tell>I could have reached for a chart library, but this chart is one line and two axes. So I draw the line with
@@ -216,7 +216,7 @@ const PriceStory: FC = () =>
   </Story>;
 
 const CandlesStory: FC = () =>
-  <Story param="graph" id="candles"
+  <Story titleId="graph-candles-story"
     can="The trader can read the same trades as candles"
     soThat="each bucket of time shows its open, its close, its high and low, and its volume">
     <Tell>A line shows where the price went. A candle shows what each bucket of time did: where the price opened and
@@ -353,7 +353,7 @@ const CandlesStory: FC = () =>
   </Story>;
 
 const PressureStory: FC = () =>
-  <Story param="graph" id="pressure"
+  <Story titleId="graph-pressure-story"
     can="The trader can see who is driving the move"
     soThat="a push and a retreat stop looking alike">
     <Tell>We could guess who is pushing from the direction of the price. But a rise on heavy buying and a rise because
@@ -465,7 +465,7 @@ const PressureStory: FC = () =>
   </Story>;
 
 const PieStory: FC = () =>
-  <Story param="graph" id="pie"
+  <Story titleId="graph-pie-story"
     can="The trader can see who owns the session"
     soThat="the whole pot reads in one circle">
     <Tell>The pie sums up to the last 1,500 trades as a whole: one wedge for the size buyers took and one for the size

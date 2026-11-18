@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
-import {useSearchParamsOnceHydrated} from '@navigation/search-params';
-import {carve, lines, Snippet, storyKeys} from '../Recipe';
+import {carve, lines, Snippet} from '../Recipe';
+import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {BannerTrap} from './BannerTrap';
 import {topLayerStory} from './top-layer-story';
 import zIndexCss from './ZIndexDemo.css?sample';
@@ -13,7 +13,7 @@ import {WhichCardIsOnTop} from './WhichCardIsOnTop';
 import {zIndexParts} from './part-pages';
 
 export const WhyAFixedBannerStillLoses: FC = () => {
-  const [searchParams] = useSearchParamsOnceHydrated();
+  const carried = useCarriedAddress();
 
   return <>
     <p className="paragraph">A banner pinned to the window with a z-index of 9999 can still slide under a card as the
@@ -44,11 +44,7 @@ export const WhyAFixedBannerStillLoses: FC = () => {
         <Snippet label="CSS" lines={carve.between(bannersCss, '.banners {', 'z-index: 3;')}/>
       </li>
       <li className="run">
-        <p className="paragraph">To build this banner yourself, go to <Link className="signpost" to={{
-          pathname: zIndexParts.addressOf('lets-build-this-feature'),
-          search: `?${storyKeys.openedIn(searchParams, topLayerStory)}`,
-          hash: storyKeys.anchorOf(topLayerStory)
-        }}><cite>{zIndexParts.told('lets-build-this-feature').name}</cite></Link>. It opens at the step where the
+        <p className="paragraph">To build this banner yourself, go to <Link className="signpost" to={carried(zIndexParts.addressOf('lets-build-this-feature'), topLayerStory)}><cite>{zIndexParts.told('lets-build-this-feature').name}</cite></Link>. It opens at the step where the
           panel is written at the page’s root.</p>
       </li>
     </ol>

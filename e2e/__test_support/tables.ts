@@ -11,11 +11,6 @@ export const tablesDemo = (page: Page) => ({
     firstStory: page.getByRole('region', {name: /yourself$/}).getByRole('group').first()
   },
   controls: page.getByRole('region', {name: 'table controls'}),
-  storyAt: (position: number): Locator => storyAt(page, position),
-  openStoryAt: async (position: number): Promise<void> => {
-    await siteFrame(page).hydrated();
-    await storyAt(page, position).getByText(/^so that /).click();
-  },
   howIBuiltItInTheFirstStory: async (): Promise<Locator> => {
     await siteFrame(page).hydrated();
     return storyAt(page, 0).getByRole('group', {name: 'how I built it'});

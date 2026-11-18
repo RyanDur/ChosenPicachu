@@ -87,22 +87,11 @@ describe('the sortable list demo', () => {
     expect(first).toHaveAttribute('draggable', 'false');
   });
 
-  test('the open cards travel in the url', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={demosAt('drag-and-drop', '?native=sort')} feed={feed}/>);
-
-    await feedIsSubscribed(feed);
-    const recipe = await dragSortTab.recipe();
-    expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
-    expect(recipeFolds.story(recipe, 'The user can arrange the list from the keyboard')).not.toHaveAttribute('open');
-  });
-
   test('pressing the tab the reader is on leaves its open stories open', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('drag-and-drop', '?native=sort')} feed={feed}/>);
+    render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await dragSortTab.recipe();
+    await dragSortTab.press(await dragSortTab.recipe(), /The user can arrange the list by hand/);
 
     await demoTabs.open('Drag sort');
 
@@ -230,6 +219,12 @@ describe('the sortable list demo', () => {
     expect(recipeFolds.stepTitled(recipe, 'Leave the lifted card where it was')).toBeInTheDocument();
     expect(recipeFolds.stepTitled(recipe, 'Slide every moved item home on release')).toBeInTheDocument();
     expect(recipeFolds.queryStepTitled(recipe, 'Commit inside the crossing')).not.toBeInTheDocument();
+  });
+
+  test('a dial turned in the recipe keeps the by-hand story open', async () => {
+    const recipe = await byHandStoryDialedLazyKeep();
+
+    expect(recipeFolds.story(recipe, 'The user can arrange the list by hand')).toHaveAttribute('open');
   });
 
   test("turning a dial in the recipe turns the list's own controls", async () => {

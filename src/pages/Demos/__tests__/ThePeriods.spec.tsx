@@ -56,7 +56,7 @@ describe('the chart periods', () => {
 
   test('choosing the day on the candles page draws the candles chart by the hour of each day', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, ({request}) => HttpResponse.json(rowsSpaced(granularityAsked(request)))));
-    render(<TestApp at={chartPageAt('candles', '?graph=candles')}/>);
+    render(<TestApp at={chartPageAt('candles')}/>);
     await chartsDesk.findOnChart('candles', '5 candles · 1m each');
 
     await chartsDesk.choosePeriod('candle', 'day');

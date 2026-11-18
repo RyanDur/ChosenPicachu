@@ -10,7 +10,6 @@ import {
   CutKey,
   DeadZone,
   DragSurface,
-  LazyPace,
   FocusLands,
   GripArrows,
   HideOrigin,
@@ -30,23 +29,20 @@ import {
   TwoRoads,
   WalkSlides
 } from './steps';
-import buildSource from '../Frame/builds/Lazy.ts?sample';
-import tableSource from '../Builds/LazyTable/LazyTable.tsx?sample';
-import headerSource from '../Builds/LazyTable/DraggableColumn.tsx?sample';
-import rowSource from '../Builds/LazyTable/RowHeader.tsx?sample';
-import paceSource from '../Builds/LazyTable/lazyDrop.ts?sample';
+import {SortBuild} from './sort-build';
 import cssSource from '@components/DragSortableTable/motion.css?sample';
 
-export const LazyRecipe: FC = () => {
+export const SortStories: FC<{build: SortBuild}> = ({build}) => {
+  const {react, vanilla, tableSource, buildSource, headerSource, rowSource, pace} = build;
   const {track, origin, motion} = useControls();
   return track === 'pointer'
     ? <>
-      <Story param="sort" id="column"
+      <Story titleId="sort-column-story"
         can="The trader can sort by column"
         soThat="the measures they compare sit beside each other">
         <NamesInTheCode/>
         <TwoRoads/>
-        <TheImplementation react="Builds/LazyTable" vanilla="Frame/builds/Lazy.ts"/>
+        <TheImplementation react={react} vanilla={vanilla}/>
         <TheWholeBuild tableSource={tableSource} buildSource={buildSource}/>
         <AgainstTheStream/>
         <OwnedPixels/>
@@ -58,7 +54,7 @@ export const LazyRecipe: FC = () => {
           <LiftOnce headerSource={headerSource} buildSource={buildSource}/>
           <DragSurface headerSource={headerSource}/>
           <DeadZone/>
-          <LazyPace headerSource={headerSource} paceSource={paceSource} buildSource={buildSource}/>
+          {pace}
           {origin === 'hide'
             ? <HideOrigin headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
             : <KeepOrigin cssSource={cssSource}/>}
@@ -67,7 +63,7 @@ export const LazyRecipe: FC = () => {
             : <StaticMotion cssSource={cssSource}/>}
         </Steps>
       </Story>
-      <Story param="sort" id="row"
+      <Story titleId="sort-row-story"
         can="The trader can sort by row"
         soThat="the lookbacks they watch closest sit on top">
         <TurnedVertical/>
@@ -77,12 +73,12 @@ export const LazyRecipe: FC = () => {
       </Story>
     </>
     : <>
-      <Story param="sort" id="column"
+      <Story titleId="sort-column-story"
         can="The trader can sort by column"
         soThat="the measures they compare sit beside each other">
         <NamesInTheCode/>
         <AccessTrack/>
-        <TheImplementation react="Builds/LazyTable" vanilla="Frame/builds/Lazy.ts"/>
+        <TheImplementation react={react} vanilla={vanilla}/>
         <QuietDials/>
         <Steps>
           <FocusLands headerSource={headerSource}/>
@@ -92,7 +88,7 @@ export const LazyRecipe: FC = () => {
             : <CutKey headerSource={headerSource} buildSource={buildSource}/>}
         </Steps>
       </Story>
-      <Story param="sort" id="row"
+      <Story titleId="sort-row-story"
         can="The trader can sort by row"
         soThat="the lookbacks they watch closest sit on top">
         <Steps>

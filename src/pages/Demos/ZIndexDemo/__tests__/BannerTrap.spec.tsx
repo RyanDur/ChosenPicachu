@@ -61,13 +61,13 @@ describe('the old banner', () => {
 });
 
 describe('why a fixed banner still loses', () => {
-  test('should link Let’s build this feature to its page with the banner’s story opened, keeping the reader’s choices', async () => {
+  test('should link Let’s build this feature to the banner’s story on its page, keeping the reader’s choices', async () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
     const part = await explanation.part('Why a fixed banner still loses');
 
     expect(explanation.linkNamed(part, 'Let’s build this feature'))
-      .toHaveAttribute('href', `${demosAt('z-index/lets-build-this-feature', '?raised=second&news=top')}#news-top-story`);
+      .toHaveAttribute('href', `${demosAt('z-index/lets-build-this-feature', '?raised=second')}#news-top-story`);
   });
 
   test('should open the banner tutorial at the step that writes the panel at the page’s root, keeping the reader’s choices', async () => {
@@ -76,7 +76,7 @@ describe('why a fixed banner still loses', () => {
 
     await zIndexTab.follow(part, 'Let’s build this feature');
 
-    expect(demoPage.says('Write the panel last, at the page’s root')).toBeVisible();
+    await waitFor(() => expect(demoPage.says('Write the panel last, at the page’s root')).toBeVisible());
     expect(appAddress.search()).toHaveTextContent('raised=second');
   });
 

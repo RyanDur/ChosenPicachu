@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {Codes, Says, Snippet, Step, StepHeading, Steps, Story, Tell, Want, Words, carve, Sample, lines} from '../../../Recipe';
 
 export const StraightToOrder: FC<{gripSource: Sample}> = ({gripSource}) =>
-  <Story param="native" id="keyboard"
+  <Story titleId="native-keyboard-story"
     can="The user can arrange the list from the keyboard"
     soThat="the keys go straight to the order">
     <Tell>Drag and drop has no keyboard events, and it does not matter: dragging was never the goal, the order

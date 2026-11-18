@@ -18,7 +18,6 @@ export {Defined} from './Defined';
 export {Clues} from './Clues';
 export {Design} from './Design';
 export {Slices} from './Slices';
-export {storyKeys} from './storyKeys';
 export {Codes} from './Codes';
 export {Snippet} from './Snippet';
 export {lines} from './lines';

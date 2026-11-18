@@ -319,28 +319,28 @@ describe('each page is named where a search shows it', () => {
   });
 
   test('should describe the price chart’s page with the story its tutorial tells', async () => {
-    render(<TestApp at={chartPageAt('price', '?graph=price')}/>);
+    render(<TestApp at={chartPageAt('price')}/>);
 
     expect(await chartPage.storyHeading(names.charts.price.description)).toBeInTheDocument();
     await waitFor(() => expect(described()).toBe(names.charts.price.description));
   });
 
   test('should describe the candles chart’s page with the story its tutorial tells', async () => {
-    render(<TestApp at={chartPageAt('candles', '?graph=candles')}/>);
+    render(<TestApp at={chartPageAt('candles')}/>);
 
     expect(await chartPage.storyHeading(names.charts.candles.description)).toBeInTheDocument();
     await waitFor(() => expect(described()).toBe(names.charts.candles.description));
   });
 
   test('should describe the pressure chart’s page with the story its tutorial tells', async () => {
-    render(<TestApp at={chartPageAt('pressure', '?graph=pressure')}/>);
+    render(<TestApp at={chartPageAt('pressure')}/>);
 
     expect(await chartPage.storyHeading(names.charts.pressure.description)).toBeInTheDocument();
     await waitFor(() => expect(described()).toBe(names.charts.pressure.description));
   });
 
   test('should describe the pie chart’s page with the story its tutorial tells', async () => {
-    render(<TestApp at={chartPageAt('pie', '?graph=pie')}/>);
+    render(<TestApp at={chartPageAt('pie')}/>);
 
     expect(await chartPage.storyHeading(names.charts.pie.description)).toBeInTheDocument();
     await waitFor(() => expect(described()).toBe(names.charts.pie.description));

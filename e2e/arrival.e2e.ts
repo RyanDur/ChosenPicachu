@@ -93,12 +93,20 @@ test('a reload returns the reader to where they were on the page', async ({page}
   await expect.poll(() => documentScrollY(page)).toBe(where);
 });
 
-test('a shared link to a step inside an open story opens with the story open and the step focused', async ({page}) => {
-  await page.goto('demos/z-index/lets-build-this-feature/?news=many#step-slide-in');
+const opensAtTheSlideInStep = async (page: Page): Promise<void> => {
+  await page.goto('demos/z-index/lets-build-this-feature/#step-slide-in');
   const story = page.getByRole('group', {name: 'The user can have multiple banners'});
   const step = story.getByRole('listitem').filter({has: page.getByRole('heading', {name: 'Slide in from off screen'})});
 
   await expect(step.first()).toBeFocused();
   await expect(story).toHaveAttribute('open');
-  await expect(page).toHaveURL(/\?news=many#step-slide-in$/);
+  await expect(page).toHaveURL(/\/lets-build-this-feature\/#step-slide-in$/);
+};
+
+test('a shared link to a step inside a closed story opens with the story open and the step focused', ({page}) => opensAtTheSlideInStep(page));
+
+test('a shared link to a step inside a closed story opens with the story open and the step focused, with motion allowed', async ({page}) => {
+  await page.emulateMedia({reducedMotion: 'no-preference'});
+
+  await opensAtTheSlideInStep(page);
 });

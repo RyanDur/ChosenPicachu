@@ -125,35 +125,16 @@ describe('the drag sort recipe', () => {
     expect(recipeFolds.queryStepTitled(recipe, 'Hold the pointer from the lift')).not.toBeInTheDocument();
   });
 
-  test('the open cards travel in the url', async () => {
-    render(<TestApp at="/?sort=column"><Recipe/></TestApp>);
-    const recipe = await tablesTab().recipe('drag sort');
-    expect(recipeFolds.story(recipe, 'The trader can sort by column')).toHaveAttribute('open');
-    expect(recipeFolds.story(recipe, 'The trader can sort by row')).not.toHaveAttribute('open');
-  });
-
   test('a story folds shut without folding the story beside it', async () => {
-    render(<TestApp at="/?sort=column,row"><Recipe/></TestApp>);
+    render(<TestApp at="/"><Recipe/></TestApp>);
     const recipe = await tablesTab().recipe('drag sort');
-    expect(recipeFolds.story(recipe, 'The trader can sort by row')).toHaveAttribute('open');
+    await recipeFolds.press(recipe, 'The trader can sort by column');
+    await recipeFolds.press(recipe, 'The trader can sort by row');
 
     const column = await recipeFolds.press(recipe, 'The trader can sort by column');
 
     expect(column).not.toHaveAttribute('open');
     expect(recipeFolds.story(recipe, 'The trader can sort by row')).toHaveAttribute('open');
-    expect(demoPage.urlSearch()).toHaveTextContent('sort=row');
-  });
-
-  test('the address holds every story the trader opens', async () => {
-    render(<TestApp at="/"><Recipe/></TestApp>);
-    const recipe = await tablesTab().recipe('drag sort');
-
-    const column = await recipeFolds.press(recipe, 'The trader can sort by column');
-    const row = await recipeFolds.press(recipe, 'The trader can sort by row');
-
-    expect(column).toHaveAttribute('open');
-    expect(row).toHaveAttribute('open');
-    expect(demoPage.urlSearch()).toHaveTextContent('sort=column%2Crow');
   });
 
   test('at the lazy pace, carrying the real thing with motion shows the lazy build’s column', async () => {
