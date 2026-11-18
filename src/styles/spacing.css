@@ -57,6 +57,7 @@
 
   --measure-floor: 45ch;
 
+  --pointer-reach: var(--base-x-3);
   --finger-reach: var(--base-x-5_5);
 
   --page-inset: var(--base-x-3);

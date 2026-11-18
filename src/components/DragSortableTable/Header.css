@@ -26,6 +26,12 @@
   content: '\25BC';
 }
 
+@media (pointer: fine) {
+  .sortable .header-cell:has(.resize-handle) .menu-toggle {
+    inset-inline-end: var(--pointer-reach);
+  }
+}
+
 @media (pointer: coarse) {
   .sortable .header-cell .menu-toggle {
     min-width: var(--finger-reach);

@@ -1,5 +1,5 @@
-@media (pointer: coarse) {
-  .map-entry {
-    display: block;
-  }
+.map-entry {
+  display: block;
+  min-block-size: var(--pointer-reach);
+  align-content: center;
 }
