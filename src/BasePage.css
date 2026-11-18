@@ -566,7 +566,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: var(--finger-reach);
     }
 
     .side-nav:not(:popover-open) {
@@ -581,9 +580,13 @@
       overflow: auto;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      grid-auto-rows: minmax(var(--finger-reach), 1fr);
+      grid-auto-rows: minmax(var(--pointer-reach), 1fr);
       gap: var(--base);
       padding: var(--base);
+
+      @media (pointer: coarse) {
+        grid-auto-rows: minmax(var(--finger-reach), 1fr);
+      }
 
       .path {
         height: var(--base-x-8);
