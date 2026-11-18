@@ -122,6 +122,9 @@ const answers = (request, response) => {
   }
 
   const path = url.replace(/^\/ChosenPicachu/, '').split('?')[0];
+  if (path.split('/').includes('..')) {
+    return send(404, 'not found', 'text/plain', false);
+  }
   const file = join(site, path);
   if (existsSync(file) && statSync(file).isFile()) {
     const kind = extname(file);

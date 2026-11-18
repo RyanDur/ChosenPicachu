@@ -105,6 +105,21 @@ describe('the stub stage answers a page address as GitHub Pages does', () => {
     expect(answer).toMatch(/^HTTP\/1\.1 404/);
     expect(answer).toContain('<title>no page here</title>');
   });
+
+  test('should keep a path that climbs out of the site from reaching any file beside it', async () => {
+    const beside = mkdtempSync(join(tmpdir(), 'stage-beside-'));
+    const site = join(beside, 'site');
+    mkdirSync(site);
+    writeFileSync(join(site, '404.html'), '<title>no page here</title>');
+    writeFileSync(join(beside, 'secret.txt'), 'a token beside the site');
+    const {stage, port} = await stageUp({STAGE_SITE: site});
+
+    const answer = await answerTo(port, get('/ChosenPicachu/../secret.txt'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 404/);
+    expect(answer).not.toContain('a token beside the site');
+  });
 });
 
 describe('the stub stage', () => {
