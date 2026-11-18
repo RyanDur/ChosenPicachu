@@ -15,7 +15,7 @@ export const ToPartTelling: FC = () => {
   const [params] = useSearchParams();
   const {hash} = useLocation();
   const hydrated = useHydrated();
-  const named = (params.get(livingStories.param) ?? '').split(',');
+  const named = maybe(params.get(livingStories.param)).orElse('').split(',');
   const dials = new URLSearchParams(params);
   dials.delete(livingStories.param);
   return maybe(Object.entries(tellers).find(([story]) => named.includes(story))).either(
