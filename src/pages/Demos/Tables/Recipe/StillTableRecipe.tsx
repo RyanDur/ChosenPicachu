@@ -3,7 +3,7 @@ import {DemoTopics} from '@pages/Demos';
 import {FC, ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, DrawnStory, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
-import type {World} from '../../Controls';
+import type {World} from '../../ReaderSettings';
 import {TheImplementation} from './steps';
 import dealSource from '../Builds/EagerTable/EagerTable.tsx?sample';
 import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';

@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {classNames} from '@components';
-import {DialGroup, FoldType, useControls} from '../Controls';
+import {DialGroup, useControls} from '../Controls';
+import {FoldType} from '../ReaderSettings';
 import {FoldMotionDial} from './FoldMotionDial';
 import {FoldTypeDial} from './FoldTypeDial';
 import {Fold} from './accordion-props';

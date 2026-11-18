@@ -1,7 +1,7 @@
 import {FC, ReactNode} from 'react';
 import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Want, Words, lines, carve} from '../../../Recipe';
 import {useControls} from '../../../Controls';
-import type {World} from '../../../Controls';
+import type {World} from '../../../ReaderSettings';
 import {Term} from '../Term';
 import {sources} from './sources';
 

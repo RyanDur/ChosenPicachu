@@ -1,4 +1,4 @@
-import {Pace} from '../../Controls';
+import {Pace} from '../../ReaderSettings';
 import {Sample} from '@pages/Demos/Recipe';
 
 import eagerTable from '../Builds/EagerTable/EagerTable.tsx?sample';

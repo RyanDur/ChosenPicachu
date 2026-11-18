@@ -1,4 +1,4 @@
-import {FoldType} from '../Controls';
+import {FoldType} from '../ReaderSettings';
 
 export type FoldInput = 'checkbox' | 'radio';
 
