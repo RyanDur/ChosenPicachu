@@ -5,11 +5,11 @@ import userEvent from '@testing-library/user-event';
 const article = (): HTMLElement => screen.getByRole('article');
 const drawing = (): HTMLElement => within(article()).getByRole('figure', {name: /^A page, pulled apart\./});
 
-const articleLinkElements = (): HTMLElement[] => within(screen.getByRole('article')).getAllByRole('link');
+const articleLinkElements = (): HTMLElement[] => within(article()).getAllByRole('link');
 
 export const homePage = {
   drawing,
-  claim: (): HTMLElement => within(article()).getAllByRole('paragraph')
+  firstParagraph: (): HTMLElement => within(article()).getAllByRole('paragraph')
     .filter(paragraph => not(drawing().contains(paragraph)))[0],
   letteringHeard: (words: string[]): string[] =>
     words.filter(word => not(isInaccessible(within(drawing()).getByText(word)))),
