@@ -42,19 +42,19 @@ const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
   wears: schema.literalUnion(...inOrder.worn)
 };
 
-const desk = 'charts';
+const deskParam = 'charts';
 
-const settingParams = [...Object.keys(decoders), desk];
+const settingParams = [...Object.keys(decoders), deskParam];
 
 type ReaderSettings = {
   decoders: typeof decoders;
-  desk: typeof desk;
+  deskParam: typeof deskParam;
   keptFrom: (params: URLSearchParams, ...alsoRead: string[]) => URLSearchParams;
 };
 
 export const readerSettings: ReaderSettings = {
   decoders,
-  desk,
+  deskParam,
   keptFrom: (params, ...alsoRead) =>
     new URLSearchParams([...params].filter(([param]) => [...settingParams, ...alsoRead].includes(param)))
 };
