@@ -95,4 +95,37 @@ describe('a story card', () => {
     await waitFor(() => expect(appAddress.search()).toHaveTextContent('next'));
     expect(appAddress.fragment()).toBe('#told-first');
   });
+
+  test('a story its page draws open is open as it first renders', () => {
+    render(<TestApp at="/"><Stories>
+      <Story id="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
+        <p>the story</p>
+      </Story>
+    </Stories></TestApp>);
+
+    expect(card('The reader can read the story at once')).toHaveAttribute('open');
+  });
+
+  test('a story its page draws open closes on one press and leaves the address as it was', async () => {
+    render(<TestApp at="/?world=vanilla"><Stories>
+      <Story id="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
+        <p>the story</p>
+      </Story>
+    </Stories></TestApp>);
+
+    await recipeFolds.press(document.body, 'The reader can read the story at once');
+
+    expect(card('The reader can read the story at once')).not.toHaveAttribute('open');
+    expect(appAddress.shown()).toBe('/?world=vanilla');
+  });
+
+  test('a story that keeps no record starts closed unless its page draws it open', () => {
+    render(<TestApp at="/"><Stories>
+      <Story id="told" can="The reader can open the story" soThat="the page stays short">
+        <p>the story</p>
+      </Story>
+    </Stories></TestApp>);
+
+    expect(card('The reader can open the story')).not.toHaveAttribute('open');
+  });
 });

@@ -79,7 +79,7 @@ describe('the table tutorials, each on its own page', () => {
     render(<TestApp at={demosAt('tables/sort', '?world=vanilla')}/>);
 
     expect(await pageFoot.leadsOn('the tables parts')).toEqual([
-      ['Previous: 5. Make the table live', demosAt('tables/the-live-table-and-the-store', '?world=vanilla&living=flow%2Cstore')],
+      ['Previous: 5. Make the table live', demosAt('tables/the-live-table-and-the-store', '?world=vanilla')],
       ['Next: 7. Sort menu', demosAt('tables/menu', '?world=vanilla')]
     ]);
   });
@@ -116,7 +116,7 @@ describe('the table tutorials, each on its own page', () => {
 
     await tablesTab().follow('Make the table live');
 
-    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables/the-live-table-and-the-store', '?world=vanilla&living=flow%2Cstore'));
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables/the-live-table-and-the-store', '?world=vanilla'));
   });
 
   test('the build chosen on the tables tab carries into the tutorial it opens', async () => {

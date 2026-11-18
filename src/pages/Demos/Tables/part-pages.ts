@@ -3,7 +3,6 @@ import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {designHeading, needHeading, stations, storiesHeading} from '@pages/Demos/headings';
 import type {Place} from '@pages/Demos/useCarriedAddress';
-import {livingStories} from './living-stories';
 
 export type TablePart = keyof typeof names.tableParts;
 
@@ -40,11 +39,6 @@ const minutes: Record<BuildPart, number> = {
   'the-live-table-and-the-store': 12
 };
 
-const opens: Partial<Record<TablePart, string[]>> = {
-  'the-still-table': [livingStories.ids.still],
-  'the-live-table-and-the-store': [livingStories.ids.flow, livingStories.ids.store]
-};
-
 export type PartPlace = Place & {
   title: string;
 };
@@ -57,7 +51,7 @@ const ordinalOf = (part: TablePart): number => buildParts.indexOf(part) + 1;
 
 const whereIs = (station: number): Place =>
   maybe(buildParts[station - 1]).either(
-    part => ({to: addressOf(part), ...maybe(opens[part]).map(ids => ({search: {[livingStories.param]: ids.join(',')}})).orElse({})}),
+    part => ({to: addressOf(part)}),
     () => ({to: tabAddress, heading: stations.idOf(station)}));
 
 const numbered = (ordinal: number, title: string): string => `${ordinal}. ${title}`;

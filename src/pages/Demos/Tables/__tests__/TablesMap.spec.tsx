@@ -8,8 +8,8 @@ const everyPart = [
   ['1. Start with the need, and let it pick the element', demosAt('tables/the-need-and-its-clues', vanilla)],
   ['2. Sketch a design from the need', demosAt('tables/the-sketch', vanilla)],
   ['3. Slice the design into stories', demosAt('tables/the-slices', vanilla)],
-  ['4. Build the still table', demosAt('tables/the-still-table', `${vanilla}&living=still`)],
-  ['5. Make the table live', demosAt('tables/the-live-table-and-the-store', `${vanilla}&living=flow%2Cstore`)],
+  ['4. Build the still table', demosAt('tables/the-still-table', vanilla)],
+  ['5. Make the table live', demosAt('tables/the-live-table-and-the-store', vanilla)],
   ['6. Drag sort', demosAt('tables/sort', vanilla)],
   ['7. Sort menu', demosAt('tables/menu', vanilla)],
   ['8. Drag resize', demosAt('tables/resize', vanilla)]

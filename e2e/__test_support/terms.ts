@@ -1,12 +1,16 @@
 import type {Locator, Page} from '@playwright/test';
+import {siteFrame} from './site';
 
 export const definedTerm = async (
   page: Page,
   story: string,
   term: string
 ): Promise<{word: Locator; definition: Locator}> => {
+  await siteFrame(page).hydrated();
   const fold = page.getByRole('group', {name: story, exact: true}).first();
-  await fold.getByRole('heading', {name: story, exact: true}).click();
+  if (await fold.evaluate(shut => shut instanceof HTMLDetailsElement && !shut.open)) {
+    await fold.getByRole('heading', {name: story, exact: true}).click();
+  }
   const word = fold.getByRole('button', {name: term, exact: true}).first();
   await word.scrollIntoViewIfNeeded();
   return {word, definition: fold.getByLabel(term, {exact: true}).first()};
