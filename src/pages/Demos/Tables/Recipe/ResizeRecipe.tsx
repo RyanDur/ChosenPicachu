@@ -78,21 +78,21 @@ const labelHoldsItsShare = ' While a drag or a held arrow key is under way the l
 const handleSays: Record<World, ReactNode> = {
   react: <Says>The handle is focusable from the start and announced by name, and once the ledger
     exists its label states the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the
-    header’s end edge, stretched to the cell’s height. The button is a grid container whose only item is the 8px
-    line its <code className="monospaced">::after</code> paints, and padding makes it wider than the line: 24px with
-    the line at its end under a mouse, and 44px with the line in its middle on a touchscreen, so the pointer has room
-    to land.
+    header’s end edge. The button is a grid container whose only item is the 8px line
+    its <code className="monospaced">::after</code> paints, and padding makes it wider than the line, so the pointer
+    has room to land. Under a mouse it is 24px wide and the cell’s full height, with the line at its end. On a
+    touchscreen it is a 44px square at the bottom of the cell, with the line in its middle.
     The <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action"><code className="monospaced">touch-action: none</code></Mdn> lets the pointer
     drag it on a touchscreen.</Says>,
   vanilla: <>
     <Says>The handle is focusable from the start, announced by the name the markup gives it, and
       once the ledger exists <code className="monospaced">dressColumn</code> rewrites that label to state
-      the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge, stretched
-      to the cell’s height. The button is a grid container whose only item is the 8px line
-      its <code className="monospaced">::after</code> paints, and padding makes it wider than the line: 24px with the
-      line at its end under a mouse, and 44px with the line in its middle on a touchscreen, so the pointer has room to
-      land. The <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the
+      the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge. The button is
+      a grid container whose only item is the 8px line its <code className="monospaced">::after</code> paints, and
+      padding makes it wider than the line, so the pointer has room to land. Under a mouse it is 24px wide and the
+      cell’s full height, with the line at its end. On a touchscreen it is a 44px square at the bottom of the cell,
+      with the line in its middle. The <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the
       gesture, and <Mdn path="Web/CSS/touch-action"><code className="monospaced">touch-action: none</code></Mdn> lets
       the pointer drag it on a touchscreen.</Says>
     <Says>In the vanilla build the handle is the button the page writes,
