@@ -1,3 +1,6 @@
-// CSS can't read a script's string, so the same query is written in BasePage.css, Tabs.css, Banners.css, Feedback.css,
-// ZIndexDemo.css, Home.css, typography.css, GallerySettings.css and PageControl.css; keep them in step
+// CSS can't read a script's string, so the sheets repeat this query; keep them in step. The whole query: BasePage.css,
+// Banners.css, Feedback.css, Tabs.css, ZIndexDemo.css, GallerySettings.css, PageControl.css, Home.css, surface.css and
+// typography.css. Its sideways half alone: BasePage.css, Gallery.css, PagePulledApart.css and typography.css. Its
+// upright half alone: BasePage.css, Feedback.css, sortable-list.css, Recipe.css, Aggregations.css, Tutorials.css,
+// Record.css, UsersPage.css and surface.css
 export const phoneQuery = '(width <= 600px), (width <= 1100px) and (height <= 600px)';
