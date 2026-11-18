@@ -64,7 +64,7 @@
 @media (width <= 600px), (width <= 1100px) and (height <= 600px) {
   .tabs {
     position: fixed;
-    inset: auto 0 calc(var(--menu-bar-block) + var(--home-indicator));
+    inset: auto 0 var(--menu-bar-block);
     z-index: 2;
   }
 }
