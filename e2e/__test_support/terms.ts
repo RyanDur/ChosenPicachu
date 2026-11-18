@@ -8,9 +8,6 @@ export const definedTerm = async (
 ): Promise<{word: Locator; definition: Locator}> => {
   await siteFrame(page).hydrated();
   const fold = page.getByRole('group', {name: story, exact: true}).first();
-  if (await fold.evaluate(shut => shut instanceof HTMLDetailsElement && !shut.open)) {
-    await fold.getByRole('heading', {name: story, exact: true}).click();
-  }
   const word = fold.getByRole('button', {name: term, exact: true}).first();
   await word.scrollIntoViewIfNeeded();
   return {word, definition: fold.getByLabel(term, {exact: true}).first()};
