@@ -35,7 +35,6 @@ type ZIndexParts = {
   told: (part: ZIndexPart) => Told;
   addressOf: (part: ZIndexPart) => string;
   shownAt: (pathname: string) => Maybe<ZIndexPart>;
-  titleOf: (book: BookPart) => string;
   numbered: (book: BookPart) => string;
   tabHeadingOf: (book: BookPart) => string;
   pageOf: (book: BookPart) => Maybe<ZIndexPart>;
@@ -84,7 +83,6 @@ export const zIndexParts: ZIndexParts = {
   },
   addressOf,
   shownAt: partAt,
-  titleOf: book => titles[book],
   numbered: book => `${placeOf(book) + 1}. ${titles[book]}`,
   tabHeadingOf: book => tabHeadings[book],
   pageOf: book => maybe(parts.find(part => listings[part].book === book)),
