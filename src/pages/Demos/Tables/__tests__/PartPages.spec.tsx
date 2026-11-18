@@ -1,4 +1,4 @@
-import {render} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
@@ -533,12 +533,15 @@ describe('a link saved to a story when it was on the tables tab', () => {
     expect(await appAddress.movedOnFrom(old)).toBe(theLiveTablesPage);
   });
 
-  test('should carry the place a saved link names on to the story’s page', async () => {
+  test('should land on the story a saved link points at, on the story’s page', async () => {
     const old = demosAt('tables', '?living=flow');
-    render(<TestApp at={`${old}#flow-story`}/>);
+    render(<TestApp at={`${old}#living-flow-story`}/>);
 
     expect(await appAddress.movedOnFrom(old)).toBe(theLiveTablesPage);
-    expect(appAddress.fragment()).toBe('#flow-story');
+    await tablesTab().place();
+    const flow = recipeFolds.story(demoPage.part(theLiveTable), theFlowStory);
+    await waitFor(() => expect(recipeFolds.itemOf(flow)).toHaveFocus());
+    expect(appAddress.fragment()).toBe('#living-flow-story');
   });
 
   test('should stay on the tables tab when it names no story a page tells', async () => {

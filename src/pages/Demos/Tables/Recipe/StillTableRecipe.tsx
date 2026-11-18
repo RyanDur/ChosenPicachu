@@ -1,7 +1,7 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
 import {FC, ReactNode} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, DrawnStory, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
 import type {World} from '../../Controls';
 import {TheImplementation} from './steps';
@@ -123,7 +123,7 @@ const dealCodes: Record<World, ReactNode> = {
 
 const StillStory: FC = () => {
   const {world} = useControls();
-  return <Story id={livingStories.ids.still} open
+  return <DrawnStory param={livingStories.param} id={livingStories.ids.still} open
     can="The trader can read the market in a table"
     soThat="the shape is right before anything moves">
     <TheImplementation react="Aggregations" vanilla="Frame/frame.main.ts"/>
@@ -160,7 +160,7 @@ const StillStory: FC = () => {
         </Reveal>
       </Step>
     </Steps>
-  </Story>;
+  </DrawnStory>;
 };
 
 export const StillTableRecipe: FC<{headedBy: string}> = ({headedBy}) =>
