@@ -1,0 +1,3 @@
+.controls > .after-dials {
+  margin-block-start: calc(var(--base-x-1_5) * 2);
+}
