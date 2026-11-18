@@ -4,6 +4,7 @@ import {appAddress} from '@__test_support/address';
 import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {aggregations, tableControls, tablesTab} from '@pages/Demos/Tables/__test_support';
 import {site} from '@pages/__test_support';
+import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 
 describe('the table tutorials, each on its own page', () => {
   test('following a tutorial from the tables tab opens that tutorial’s page', async () => {
@@ -183,6 +184,15 @@ describe('a link saved to an old tables tutorial address', () => {
 
     expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize'));
     expect(appAddress.fragment()).toBe('#station-3');
+  });
+
+  test('a link saved to an old tutorial address with a story open opens that story on the tutorial’s page', async () => {
+    const old = demosAt('tables', '?tut=sort&sort=column');
+    render(<TestApp at={old}/>);
+
+    await appAddress.movedOnFrom(old);
+
+    expect(recipeFolds.story(await tablesTab().recipe('drag sort'), 'The trader can sort by column')).toHaveAttribute('open');
   });
 
   test('should open the tutorial it names when it also names a story, and carry neither on', async () => {
