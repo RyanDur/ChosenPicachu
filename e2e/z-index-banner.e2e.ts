@@ -1,6 +1,8 @@
 import {Page, expect} from '@playwright/test';
 import {test} from './__test_support/history-writes';
-import {bannerTrap, boxOf, desktop, dialRow, iPhone, pillSwitch, pressTab, siteFrame, tabsTo, zIndexTab} from './__test_support';
+import {
+  bannerTrap, boxOf, desktop, dialRow, hydrationHeldBack, iPhone, pillSwitch, pressTab, siteFrame, tabsTo, zIndexTab
+} from './__test_support';
 
 const fixedBannerPage = 'demos/z-index/why-a-fixed-banner-still-loses/';
 
@@ -174,4 +176,28 @@ test('a raised note is announced: the browser finds it in the page’s alert', a
   await banners.raiseSite.click();
 
   await expect(banners.siteNotes).toHaveCount(1);
+});
+
+test('given the page before its script runs, the old way’s Raise a banner is disabled; once the script runs, the first press raises the old banner', async ({page}) => {
+  await hydrationHeldBack(page, fixedBannerPage);
+  await page.goto(fixedBannerPage);
+  const banners = bannerTrap(page);
+
+  await expect(banners.raiseOld).toBeDisabled();
+
+  await banners.raiseOld.click();
+
+  await expect(banners.oldBanner).toBeVisible();
+});
+
+test('given the page before its script runs, the site’s own Raise a banner is disabled; once the script runs, the first press raises the site’s banner', async ({page}) => {
+  await hydrationHeldBack(page, fixedBannerPage);
+  await page.goto(fixedBannerPage);
+  const banners = bannerTrap(page);
+
+  await expect(banners.raiseSite).toBeDisabled();
+
+  await banners.raiseSite.click();
+
+  await expect(banners.siteBanner).toBeVisible();
 });

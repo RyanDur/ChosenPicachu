@@ -1,5 +1,6 @@
 import {FC, MouseEvent, useState} from 'react';
-import {maybe} from '@ryandur/sand';
+import {maybe, not} from '@ryandur/sand';
+import {useHydrated} from '@components';
 import {decked, news} from '@components/fibs';
 import {bannerChange, useBannerDispatch} from '@banners';
 import './ZIndexDemo.css';
@@ -9,6 +10,7 @@ const nextNews = decked(news);
 export const BannerTrap: FC = () => {
   const [raised, updateRaised] = useState(false);
   const dispatchBanner = useBannerDispatch();
+  const hydrated = useHydrated();
   const dismissed = ({currentTarget: pressed}: MouseEvent<HTMLButtonElement>): void => {
     maybe(pressed.closest('li'))
       .mBind(card => maybe(card.querySelector<HTMLElement>('[data-raiser]')))
@@ -30,12 +32,14 @@ export const BannerTrap: FC = () => {
           <li className="trap-way">
             <p className="caption">The old way</p>
             <button data-raiser type="button" tabIndex={0} className="button drawn-piece attentive reachable" aria-label="Raise a banner, the old way"
-              onClick={() => updateRaised(true)}>Raise a banner</button>
+              disabled={not(hydrated)} onClick={() => updateRaised(true)}>Raise a banner</button>
           </li>
           <li className="trap-way">
             <p className="caption">The site’s banner</p>
             <button type="button" tabIndex={0} className="button primary reachable" aria-label="Raise a banner, the site’s own"
-              onClick={() => dispatchBanner(bannerChange.raised(nextNews()))}>Raise a banner</button>
+              disabled={not(hydrated)} onClick={() => dispatchBanner(bannerChange.raised(nextNews()))}>
+              Raise a banner
+            </button>
           </li>
         </ul>
         {raised && <p role="alert" className="old-banner drawn-piece">

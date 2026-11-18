@@ -127,12 +127,14 @@ export const topLayerMenu = (page: Page) => {
 
 export const bannerTrap = (page: Page) => {
   const trap = page.getByRole('figure', {name: /^The banners\./});
+  const raiseOld = trap.getByRole('button', {name: 'Raise a banner, the old way'});
   const cardTwo = trap.getByRole('listitem').filter({hasText: /^Card two has z-index/});
   const oldBanner = page.getByRole('alert').filter({hasText: /^An old banner\./});
   const siteNotes = page.getByRole('alert').filter({hasNot: page.getByText(/^An old banner\./)}).getByRole('listitem');
   const siteBanner = siteNotes.last();
   return {
-    raiseOld: trap.getByRole('button', {name: 'Raise a banner, the old way'}),
+    raiseOld,
+    untilRaisable: (): Promise<void> => untilPressable(raiseOld),
     raiseSite: trap.getByRole('button', {name: 'Raise a banner, the site’s own'}),
     oldBanner,
     siteNotes,
