@@ -59,3 +59,9 @@
     }
   }
 }
+
+@media (width <= 1100px) and (height <= 600px) {
+  .home .page-pulled-apart .drawing {
+    max-block-size: 100svh;
+  }
+}
