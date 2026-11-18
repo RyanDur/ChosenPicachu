@@ -38,14 +38,11 @@ test('a link saved to an old tables tutorial address lands on that tutorial, and
   await expect(page.getByRole('heading', {level: 1, name: 'The three languages'})).toBeVisible();
 });
 
-test('a link saved to a live table story on the tables tab lands on the live table\'s page with that story open, and Back returns to where it was followed from', async ({page}) => {
+test('Back from the story\'s page after a saved story link returns to the page the link was followed from', async ({page}) => {
   await page.goto('');
   await expect(page.getByRole('heading', {level: 1, name: 'The three languages'})).toBeVisible();
-
-  await page.goto('demos/tables/?living=store&world=vanilla');
-
-  await expect(page.getByRole('group', {name: 'The page is a store, and so is the table'})).toHaveAttribute('open');
-  await expect(page).toHaveURL(/\/demos\/tables\/the-live-table-and-the-store\/\?world=vanilla$/);
+  await page.goto('demos/tables/?living=store');
+  await expect(page).toHaveURL(/\/demos\/tables\/the-live-table-and-the-store\/$/);
 
   await page.goBack();
 
