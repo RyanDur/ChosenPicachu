@@ -28,12 +28,12 @@ export const site = {
       .then(links => links.map(link => link.textContent)),
   arrivedAt: async (name: string): Promise<HTMLElement> =>
     within(await siteNav()).findByRole('link', {name, current: 'page', ...asOnADesk}),
-  railHoldsTheNav: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pages and feedback'})).getByLabelText('site'),
+  railHoldsTheNav: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pages and feedback'})).getByRole('navigation', namedSite),
   railHoldsFeedback: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pages and feedback'})).getByRole('button', {name: 'Feedback'}),
   unmarkedRail: async (): Promise<boolean> =>
     not(within(await siteNav()).queryAllByRole('link', {current: 'page', ...asOnADesk}).length),
   railLink: (name: string): HTMLElement =>
-    within(screen.getByLabelText('site')).getByRole('link', {name, ...asOnADesk}),
+    within(screen.getByRole('navigation', namedSite)).getByRole('link', {name, ...asOnADesk}),
   followRail: async (name: string): Promise<void> => userEvent.click(within(await siteNav()).getByRole('link', {name, ...asOnADesk})),
   rail: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'pages and feedback'}),
   closedRoomIfAny: (): HTMLElement | null => screen.queryByText('This room is closed.'),
