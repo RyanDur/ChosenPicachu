@@ -1,4 +1,7 @@
 .page-pulled-apart {
+  --drawn-width: 552px;
+  --drawn-height: 619.2px;
+
   display: grid;
   gap: var(--base);
   margin: 0;
@@ -26,7 +29,7 @@
 
 @media (width <= 1100px) and (height <= 600px) {
   .page-pulled-apart .drawing {
-    --drawing-column: min(100cqi, 100svh * tan(atan2(var(--drawn-width, 1px), var(--drawn-height, 1px))));
+    --drawing-column: min(100cqi, 100svh * tan(atan2(var(--drawn-width), var(--drawn-height))));
 
     max-block-size: 100svh;
   }
