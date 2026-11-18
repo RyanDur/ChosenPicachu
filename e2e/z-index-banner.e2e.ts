@@ -1,4 +1,4 @@
-import {Page, expect} from '@playwright/test';
+import {expect} from '@playwright/test';
 import {test} from './__test_support/history-writes';
 import {
   bannerTrap, boxOf, desktop, dialRow, hydration, iPhone, pillSwitch, pressTab, siteFrame, tabsTo, zIndexTab
@@ -43,29 +43,22 @@ for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: 
       await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
       await expect(page.getByText('The user sees the news over the page')).toBeInViewport();
     });
+
+    test('Back from Let’s build this feature returns the reader to the link they followed, and Forward to the tutorial\'s story', async ({page}) => {
+      await page.goto(fixedBannerPage);
+      await siteFrame(page).hydrated();
+      const link = page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'Let’s build this feature', exact: true});
+      await link.click();
+      await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
+
+      await page.goBack();
+      await expect(link).toBeInViewport();
+
+      await page.goForward();
+      await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
+    });
   });
 }
-
-test.describe('a phone, where the page itself scrolls', () => {
-  test.use(iPhone);
-
-  const buildThisFeature = (page: Page) =>
-    page.getByRole('region', {name: 'Why a fixed banner still loses'}).getByRole('link', {name: 'Let’s build this feature', exact: true});
-
-  test('Back from Let’s build this feature returns the reader to the link they followed, and Forward to the tutorial\'s story', async ({page}) => {
-    await page.goto(fixedBannerPage);
-    await siteFrame(page).hydrated();
-    const link = buildThisFeature(page);
-    await link.click();
-    await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
-
-    await page.goBack();
-    await expect(link).toBeInViewport();
-
-    await page.goForward();
-    await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
-  });
-});
 
 test('a keyboard reader who follows Let’s build this feature reaches the story\'s opener with one Tab, and Enter folds the story', async ({page}) => {
   await page.goto(fixedBannerPage);
