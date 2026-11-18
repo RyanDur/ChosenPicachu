@@ -552,3 +552,39 @@ describe('a link saved to a story when it was on the tables tab', () => {
     expect(appAddress.shown()).toBe(old);
   });
 });
+
+describe('a part page reached by a link saved with a story or a tutorial in its address', () => {
+  test('should stay on its own page when the address names a story', async () => {
+    const saved = demosAt('tables/the-need-and-its-clues', '?world=vanilla&living=still');
+    render(<TestApp at={saved}/>);
+
+    await pageFoot.leadsOn('the tables parts');
+
+    expect(appAddress.shown()).toBe(saved);
+  });
+
+  test('should stay on its own page when the address names a tutorial', async () => {
+    const saved = demosAt('tables/the-need-and-its-clues', '?world=vanilla&tut=menu');
+    render(<TestApp at={saved}/>);
+
+    await pageFoot.leadsOn('the tables parts');
+
+    expect(appAddress.shown()).toBe(saved);
+  });
+
+  test('should lead on without the story the address names', async () => {
+    render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla&living=still')}/>);
+
+    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+      ['Next: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')]
+    ]);
+  });
+
+  test('should lead on without the tutorial the address names', async () => {
+    render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla&tut=menu')}/>);
+
+    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+      ['Next: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')]
+    ]);
+  });
+});
