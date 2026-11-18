@@ -1,0 +1,10 @@
+.map-entry {
+  display: block;
+}
+
+@media (pointer: fine) {
+  .map-entry {
+    min-block-size: var(--pointer-reach);
+    align-content: center;
+  }
+}
