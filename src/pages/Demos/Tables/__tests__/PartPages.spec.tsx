@@ -595,6 +595,14 @@ describe('a part page reached by a link saved with a story or a tutorial in its 
     ]);
   });
 
+  test('should lead on with the dials alone, leaving another tab’s story behind', async () => {
+    render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla&graph=price')}/>);
+
+    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+      ['Next: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')]
+    ]);
+  });
+
   test('should lead on without the tutorial the address names', async () => {
     render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla&tut=menu')}/>);
 

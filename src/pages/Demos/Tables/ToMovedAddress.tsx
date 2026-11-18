@@ -6,7 +6,9 @@ import {storyKeys} from '../Recipe';
 import {tableTutorials} from './tutorial-pages';
 import {TablePart, tableParts} from './part-pages';
 import {livingStories} from './living-stories';
-import {movedParams} from '@pages/Demos/moved-params';
+import {dialParams} from '../Controls';
+
+const tutorialParam = 'tut';
 
 const tellers = new Map<string, TablePart>([
   [livingStories.ids.still, 'the-still-table'],
@@ -15,7 +17,7 @@ const tellers = new Map<string, TablePart>([
 ]);
 
 const tutorialNamed = (params: URLSearchParams): Maybe<string> =>
-  maybe(tableTutorials.all().find(tutorial => tutorial === params.get(movedParams.tutorial)))
+  maybe(tableTutorials.all().find(tutorial => tutorial === params.get(tutorialParam)))
     .map(tableTutorials.addressOf);
 
 const storiesNamed = (params: URLSearchParams): string[] =>
@@ -38,7 +40,7 @@ export const ToMovedAddress: FC = () => {
   const [params] = useSearchParams();
   const location = useLocation();
   const hydrated = useHydrated();
-  const dials = movedParams.droppedFrom(params);
+  const dials = dialParams.keptFrom(params);
   return tutorialNamed(params).or(() => storyMoved(params, location)).either(
     pathname => hydrated && <Navigate replace to={{pathname, search: dials.toString(), hash: location.hash}}/>,
     () => null);
