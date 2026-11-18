@@ -98,14 +98,19 @@ test.describe('a finger on a phone', () => {
   });
 });
 
-test('given the charts tab before its script runs, Add a chart is disabled; once the script runs, a chart chosen from it is added', async ({page}) => {
+const chartsTabWithItsScriptHeldBack = async (page: Page) => {
   const address = 'demos/charts/';
-  await hydration(page).holdBack(address);
+  const script = hydration(page);
+  await script.holdBack(address);
   await page.goto(address);
-  const charts = chartsPage(page);
+  return {charts: chartsPage(page), release: script.release};
+};
+
+test('given the charts tab before its script runs, Add a chart is disabled; once the script runs, a chart chosen from it is added', async ({page}) => {
+  const {charts, release} = await chartsTabWithItsScriptHeldBack(page);
 
   await expect(charts.adder).toBeDisabled();
-  await hydration(page).release();
+  await release();
 
   await charts.adder.click();
   await charts.chartToAdd('Candles').click();
@@ -114,13 +119,10 @@ test('given the charts tab before its script runs, Add a chart is disabled; once
 });
 
 test('given the charts tab before its script runs, the period toggle is disabled; once the script runs, a period chosen from it is taken', async ({page}) => {
-  const address = 'demos/charts/';
-  await hydration(page).holdBack(address);
-  await page.goto(address);
-  const charts = chartsPage(page);
+  const {charts, release} = await chartsTabWithItsScriptHeldBack(page);
 
   await expect(charts.periodToggle).toBeDisabled();
-  await hydration(page).release();
+  await release();
 
   await charts.periodToggle.click();
   await charts.period('week').click();

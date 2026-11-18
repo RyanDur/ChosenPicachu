@@ -66,7 +66,7 @@ for (const {name, path, ready, loaded} of pages) {
 
 const thePriceCardHasNoViolations = async (page: Page, prices: number[], sign: RegExp): Promise<void> => {
   const charts = chartsPage(page);
-  await chartsPage(page).scriptedMarket(prices);
+  await charts.scriptedMarket(prices);
   await page.goto('demos/charts/');
 
   await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
