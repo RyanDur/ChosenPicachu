@@ -426,7 +426,7 @@
   }
 }
 
-.handle-raised:has(.handle:hover) { box-shadow: var(--raised); }
+.handle-raised:has(.handle:enabled:hover) { box-shadow: var(--raised); }
 
 .focal-ringed:has(.focal:focus-visible) { outline: var(--hairline-x-2) solid var(--ring); }
 
