@@ -130,10 +130,10 @@ const PriceStory: FC = () =>
             candles of an hour, at most 24 of them, marked every hour. The week has candles of six hours, at most 28 of
             them, marked every day.</Says>
           <Says>Choosing a period fetches the past again at that period’s candle size.</Says>
-          <Says>The menu’s button starts disabled. The page comes from the server already drawn, before its script
-            runs. The browser could open the menu then, since a popover needs no script, but choosing a period does, so
-            the button waits until the script has run. <code className="monospaced">useHydrated()</code> answers false
-            until the script runs and true after.</Says>
+          <Says>When a reader first arrives, the page is already drawn, made when the site was built, and its script
+            hasn’t run yet. The browser could open the menu then, since a popover needs no script, but choosing a period
+            needs the script, so until then the button is disabled. <code className="monospaced">useHydrated()</code> answers
+            false until the page’s script first runs, and true from then on.</Says>
           <Says>The choice is written into the address, in its <code className="monospaced">charts</code> value, so a
             link opens the chart at the same period. <code className="monospaced">candles:day</code> is the candle chart
             at a day, and a chart at the hour, the default, is written as its kind alone.</Says>
