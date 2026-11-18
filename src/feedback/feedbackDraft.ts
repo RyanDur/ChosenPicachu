@@ -2,7 +2,11 @@ import {HTTPError} from '@transport';
 import {FeedbackChange} from './feedbackChange';
 import {github} from './github';
 
-export type Sending = {state: 'writing'} | {state: 'sending'; words: string; reach: string} | {state: 'refused'; why: HTTPError};
+export type Sending =
+  | {state: 'writing'}
+  | {state: 'sending'; words: string; reach: string}
+  | {state: 'refused'; why: HTTPError}
+  | {state: 'refusedBefore'; why: HTTPError};
 
 export type SentNote = {state: 'none'} | {state: 'unread'; url: string} | {state: 'read'; url: string};
 
@@ -23,8 +27,15 @@ const aboutPage = (draft: Draft, key: string): boolean => draft.key === key;
 const onScreen = (draft: Draft, openings: number): boolean => draft.openings === openings;
 const unsentWords = ({sending, words, reach}: Draft): Pick<Draft, 'words' | 'reach'> =>
   sending.state === 'sending' && sending.words === words && sending.reach === reach ? {words: '', reach: ''} : {words, reach};
-const keptThroughAnOpening = ({sending}: Draft): Sending =>
-  sending.state === 'sending' || sending.state === 'refused' ? sending : {state: 'writing'};
+const sendingOnOpening = ({sending}: Draft): Sending => {
+  switch (sending.state) {
+    case 'sending':
+      return sending;
+    case 'refused':
+      return {state: 'refusedBefore', why: sending.why};
+  }
+  return {state: 'writing'};
+};
 const readOnOpening = ({sentNote}: Draft): SentNote => sentNote.state === 'unread' ? {state: 'read', url: sentNote.url} : {state: 'none'};
 
 const reduce = (draft: Draft, action: FeedbackChange): Draft => {
@@ -35,7 +46,7 @@ const reduce = (draft: Draft, action: FeedbackChange): Draft => {
         key: action.key,
         openings: draft.openings + 1,
         thread: github.discussions,
-        sending: keptThroughAnOpening(draft),
+        sending: sendingOnOpening(draft),
         sentNote: readOnOpening(draft)
       };
     case 'threadFound':
