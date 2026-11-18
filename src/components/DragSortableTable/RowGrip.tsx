@@ -10,7 +10,7 @@ export const RowGrip: FC<ComponentProps<'button'> & {position: number}> = ({posi
     type="button"
     tabIndex={0}
     disabled={not(useHydrated())}
-    className="grip grabbable borderless unfilled focus-ringed"
+    className="grip grabbable borderless unfilled smoked-while-disabled focus-ringed"
     aria-label={grip.label(position)}>
     <Handle aria-hidden/>
   </button>;

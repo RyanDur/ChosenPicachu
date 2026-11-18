@@ -389,9 +389,9 @@
 .hover-inverse-ink:hover { color: var(--ink-inverse); }
 
 .held-bar-after {
-  &:hover::after { background: var(--faded-leather); }
+  &:enabled:hover::after { background: var(--faded-leather); }
 
-  &:focus::after { background: var(--faded-mint); }
+  &:enabled:focus::after { background: var(--faded-mint); }
 }
 
 .paper-in-motion { background: var(--paper); }
