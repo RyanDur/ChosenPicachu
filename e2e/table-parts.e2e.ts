@@ -34,20 +34,40 @@ test('a reader who arrives on the live table’s page by a link saved with its s
   await expect(tablesDemo(page).tutorials.link('Sort menu')).toBeVisible();
 });
 
-test('a link saved to the slices’ page with a story still in its address opens the slices’ page without it', async ({page}) => {
+test('a link saved to the slices’ page with a story still in its address stays on the slices’ page', async ({page}) => {
   await page.goto('demos/tables/the-slices/?world=vanilla&living=still#live-aggregations');
   await siteFrame(page).hydrated();
 
-  await expect(page).toHaveURL(/demos\/tables\/the-slices\/\?world=vanilla#live-aggregations$/);
+  await expect(page).toHaveURL(/demos\/tables\/the-slices\/\?world=vanilla&living=still#live-aggregations$/);
   await expect(page.getByRole('heading', {level: 2, name: 'Slice the design into stories', exact: true})).toBeVisible();
 });
 
-test('a link saved to the still table’s page naming a live table story opens the still table’s page without it', async ({page}) => {
+test('a link saved to the still table’s page naming a live table story stays on the still table’s page', async ({page}) => {
   await page.goto('demos/tables/the-still-table/?living=flow');
   await siteFrame(page).hydrated();
 
-  await expect(page).toHaveURL(/demos\/tables\/the-still-table\/$/);
+  await expect(page).toHaveURL(/demos\/tables\/the-still-table\/\?living=flow$/);
   await expect(page.getByRole('heading', {level: 2, name: 'Build the still table', exact: true})).toBeVisible();
+});
+
+test('a reader on a tutorial page reached by a link saved with a story follows the Tables link to the tables tab', async ({page}) => {
+  await page.goto('demos/tables/sort/?world=vanilla&living=flow%2Cstore');
+  await siteFrame(page).hydrated();
+
+  await page.getByRole('region', {name: 'Drag sort'}).getByRole('link', {name: 'Tables', exact: true}).first().click();
+
+  await expect(page).toHaveURL(/demos\/tables\/\?world=vanilla$/);
+  await expect(tablesDemo(page).tutorials.link('Sort menu')).toBeVisible();
+});
+
+test('a reader on another tab reached by a link carrying a story follows the tab bar to the tables tab', async ({page}) => {
+  await page.goto('demos/charts/?world=vanilla&living=flow');
+  await siteFrame(page).hydrated();
+
+  await page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Tables'}).click();
+
+  await expect(page).toHaveURL(/demos\/tables\/\?world=vanilla$/);
+  await expect(tablesDemo(page).tutorials.link('Sort menu')).toBeVisible();
 });
 
 test('a reader who follows a link out of the live table’s page and comes Back is where they were', async ({page}) => {
