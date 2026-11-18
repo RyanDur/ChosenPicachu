@@ -19,7 +19,6 @@ export const LiftOnce: FC<{headerSource: Sample; buildSource: Sample}> = ({heade
       {world === 'react'
         ? <Says>The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press,
           and <code className="monospaced">touch-action: none</code> is why the pointer can drag on touch at all.
-          The hand is set only on what isn’t disabled, so a control that can’t be pressed yet doesn’t offer it.
           On <code className="monospaced">pointerdown</code> the
           header takes the survey, takes the pointer, and lifts. That is one dispatch, and after it the store
           holds the drag beside the columns and the seats: the one mark of what
@@ -32,7 +31,6 @@ export const LiftOnce: FC<{headerSource: Sample; buildSource: Sample}> = ({heade
           empty.</Says>
         : <Says>The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press,
           and <code className="monospaced">touch-action: none</code> is why the pointer can drag on touch at all.
-          The hand is set only on what isn’t disabled, so a control that can’t be pressed yet doesn’t offer it.
           On <code className="monospaced">pointerdown</code>, the header’s listener takes the survey and the pointer
           and calls the context’s <code className="monospaced">lifted</code>, which is the build’s lift, and one
           dispatch puts the drag in the store beside the columns and the seats, the one mark of what is carried. One

@@ -44,6 +44,8 @@ export const CssShare: FC = () => {
         they
         do, <code className="monospaced">data-row-grip</code> and <code className="monospaced">data-resize-handle</code>, and <code className="monospaced">dragSortable</code> attaches the
         behavior to each when boot calls it.</Says>}
+      {world === 'react' && <Says>In the React build both buttons are disabled until the page’s script runs, so the grip
+        offers no grab hand and the handle no resize cursor.</Says>}
       <Says>JavaScript is left holding only what CSS cannot: one measurement, some arithmetic,
         and the order.</Says>
       <Codes>
