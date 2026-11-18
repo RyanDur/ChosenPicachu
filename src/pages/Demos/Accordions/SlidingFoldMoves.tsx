@@ -1,4 +1,7 @@
 import {FC} from 'react';
+import {FoldType} from '../ReaderSettings';
+import {Fold} from './accordion-props';
+import {PlatformExhibit} from './PlatformExhibit';
 import {carve, Mdn, Snippet} from '../Recipe';
 import {looks} from './looks';
 import {PartLink} from './PartLink';
@@ -6,10 +9,11 @@ import {RemembersTheFoldLink} from './RemembersTheFoldLink';
 import resetCss from '../../../styles/reset.css?sample';
 import '../Runs.css';
 
-export const SlidingFoldMoves: FC = () => <>
+export const SlidingFoldMoves: FC<{folds: Record<FoldType, Fold[]>}> = ({folds}) => <>
   <p className="paragraph">This part builds on two before it: “<PartLink part="a-box-remembers-the-fold"/>”, where a
     transition first moves a fold, and “<PartLink part="what-the-platform-gives-now"/>”, for the details fold it
     slides.</p>
+  <PlatformExhibit folds={folds}/>
   <ol className={looks.runs}>
     <li className="run">
       <p className="paragraph">Every fold that slides on this tab’s pages moves by transition, never by animation,

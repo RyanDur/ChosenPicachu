@@ -1,31 +1,20 @@
 import {FC} from 'react';
-import {classNames} from '@components';
-import {DialGroup, useControls} from '../Controls';
+import {useControls} from '../Controls';
 import {FoldType} from '../ReaderSettings';
 import {carve, lines, Mdn, Snippet} from '../Recipe';
 import {Fold} from './accordion-props';
-import {Build} from './build';
 import {OneJobTwoWays, SizedToTheText, ThreeBecomeTwo} from './Diagrams';
-import {ExclusiveToggleAccordion} from './ExclusiveToggleAccordion';
-import {InclusiveToggleAccordion} from './InclusiveToggleAccordion';
-import {FoldMotionDial} from './FoldMotionDial';
-import {FoldTypeDial} from './FoldTypeDial';
 import {foldInput} from './fold-input';
 import {looks} from './looks';
+import {PlatformExhibit} from './PlatformExhibit';
+import {platformBuilds} from './platform-builds';
 import {PartLink} from './PartLink';
 import {RemembersTheFoldLink} from './RemembersTheFoldLink';
 import {HeadingLink} from './HeadingLink';
-import exclusiveToggleAccordionSource from './ExclusiveToggleAccordion.tsx?sample';
-import inclusiveToggleAccordionSource from './InclusiveToggleAccordion.tsx?sample';
 import accordionsCss from './Accordions.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
 import '../Runs.css';
 import './PartDepth.css';
-
-const platformBuilds: Record<FoldType, Build> = {
-  inclusive: {Accordion: InclusiveToggleAccordion, sample: carve.between(inclusiveToggleAccordionSource, '<details className="fold">', '</details>')},
-  exclusive: {Accordion: ExclusiveToggleAccordion, sample: carve.between(exclusiveToggleAccordionSource, '<details className="fold" name=', '</details>')}
-};
 
 type Props = {
   folds: Record<FoldType, Fold[]>;
@@ -33,19 +22,13 @@ type Props = {
 
 export const PlatformGivesNow: FC<Props> = ({folds}) => {
   const {foldType, foldMotion} = useControls();
-  const exhibitMoving = classNames(looks.exhibit, foldMotion);
   const input = foldInput.of(foldType);
   const platform = platformBuilds[foldType];
-  const {Accordion: Platform} = platform;
   return <>
     <p className="paragraph">This part builds on two before it: “<HeadingLink heading="html-alone-heading"/>”, on the
       tab, for details and summary, and “<PartLink part="a-box-remembers-the-fold"/>”, for the {input} build it
       replaces.</p>
-    <DialGroup>
-      <FoldTypeDial/>
-      <FoldMotionDial/>
-    </DialGroup>
-    <Platform className={exhibitMoving} folds={folds[foldType]}/>
+    <PlatformExhibit folds={folds}/>
     <ol className={looks.runs}>
       <li className="run">
         <p className="paragraph">This build uses details and summary, the two elements from the HTML-alone accordion.

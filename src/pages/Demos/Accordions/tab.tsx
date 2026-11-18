@@ -23,13 +23,14 @@ const dealt = draws.wordDeck();
 const measuredFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
 const knownFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
 const platformFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
+const slidingFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
 
 const pagesOfParts: Record<AccordionPart, ReactNode> = {
   'a-box-remembers-the-fold': <RemembersTheFold folds={knownFolds}/>,
   'the-max-height-guess': <MaxHeightGuess/>,
   'the-measured-height': <MeasuredHeight folds={measuredFolds}/>,
   'what-the-platform-gives-now': <PlatformGivesNow folds={platformFolds}/>,
-  'how-a-sliding-fold-moves': <SlidingFoldMoves/>
+  'how-a-sliding-fold-moves': <SlidingFoldMoves folds={slidingFolds}/>
 };
 
 export const Room: FC = () => useShownPart().either(

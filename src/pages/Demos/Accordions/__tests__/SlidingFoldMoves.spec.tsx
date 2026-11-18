@@ -16,6 +16,31 @@ describe('how a sliding fold moves, on its own page', () => {
     expect(await accordionsTab.place()).toHaveTextContent('Accordions · part 6 of 6');
   });
 
+  test('should build part five’s details fold at its top, inclusive for a reader who arrives with inclusive', async () => {
+    render(<TestApp at={demosAt(slidingFold, '?type=inclusive')}/>);
+
+    const part = await explanation.part(title);
+
+    expect(accordionsTab.buildsIn(part)).toEqual(['Inclusive accordion using details elements']);
+  });
+
+  test('should build part five’s details fold at its top, exclusive for a reader who arrives with exclusive', async () => {
+    render(<TestApp at={demosAt(slidingFold, '?type=exclusive')}/>);
+
+    const part = await explanation.part(title);
+
+    expect(accordionsTab.buildsIn(part)).toEqual(['Exclusive accordion using details elements']);
+  });
+
+  test('a reader who arrives with inclusive can choose exclusive on the page, and gets the exclusive details build', async () => {
+    render(<TestApp at={demosAt(slidingFold, '?type=inclusive')}/>);
+    const part = await explanation.part(title);
+
+    await accordionsTab.choose('fold type', 'Exclusive');
+
+    expect(accordionsTab.buildsIn(part)).toEqual(['Exclusive accordion using details elements']);
+  });
+
   test('should link the part where a transition first moves a fold to its page, with the fold choices carried', async () => {
     const from = demosAt(slidingFold, build);
     render(<TestApp at={from}/>);
