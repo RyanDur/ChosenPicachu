@@ -7,8 +7,8 @@ import {practiceAddress} from '@pages/Practice';
 import {queryString} from '@transport';
 import {opening} from '@pages/Gallery';
 import {PageUnknown} from './PageUnknown';
-import {PhoneLayoutEnding} from './PhoneLayoutEnding';
-import {PhoneLayoutEnds} from './phoneLayout';
+import {PhoneLayout} from './phoneLayout';
+import {ThePhoneLayout} from './ThePhoneLayout';
 
 const railPath = () => 'path rail-path bold attentive field void-dot-before reachable';
 
@@ -31,17 +31,17 @@ const closedOnAPageChosen = ({target, currentTarget}: MouseEvent<HTMLElement>) =
   if (target instanceof Element && target.closest('a')) currentTarget.hidePopover();
 };
 
-const closedWhenThePhoneLayoutEnds = (phoneLayoutEnds: PhoneLayoutEnds) =>
+const closedWhenThePhoneLayoutEnds = (layout: PhoneLayout) =>
   ({currentTarget: nav, newState}: ToggleEvent<HTMLElement>) => {
     if (newState !== 'open') return;
-    const stopListening = phoneLayoutEnds(() => nav.hidePopover());
+    const stopListening = layout.ends(() => nav.hidePopover());
     nav.addEventListener('beforetoggle', stopListening, {once: true});
   };
 
 export const SideNav: FC = () => {
-  const phoneLayoutEnds = useContext(PhoneLayoutEnding);
+  const layout = useContext(ThePhoneLayout);
   return <nav id="side-nav" popover="auto" className="side-nav field backdrop-separated veiled" aria-label="site"
-    onBeforeToggle={closedWhenThePhoneLayoutEnds(phoneLayoutEnds)} onClick={closedOnAPageChosen}>
+    onBeforeToggle={closedWhenThePhoneLayoutEnds(layout)} onClick={closedOnAPageChosen}>
     <RailLink id="navigate-home" to={Paths.home} end>Home</RailLink>
     <RailLink id="navigate-record" to={Paths.record}>Record</RailLink>
     <SectionLink id="navigate-practice" page={Paths.practice} to={practiceAddress.of('Structure')}>Practice</SectionLink>
