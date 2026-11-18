@@ -1,4 +1,4 @@
-import {FC, MouseEvent, PropsWithChildren, ToggleEvent, useContext} from 'react';
+import {FC, MouseEvent, PropsWithChildren, useContext} from 'react';
 import {is, not} from '@ryandur/sand';
 import {Link, NavLink, useMatch} from 'react-router';
 import {Paths} from '@navigation';
@@ -7,8 +7,6 @@ import {practiceAddress} from '@pages/Practice';
 import {queryString} from '@transport';
 import {opening} from '@pages/Gallery';
 import {PageUnknown} from './PageUnknown';
-import {PhoneLayout} from './phoneLayout';
-import {ThePhoneLayout} from './ThePhoneLayout';
 
 const railPath = () => 'path rail-path bold attentive field void-dot-before reachable';
 
@@ -31,17 +29,9 @@ const closedOnAPageChosen = ({target, currentTarget}: MouseEvent<HTMLElement>) =
   if (target instanceof Element && target.closest('a')) currentTarget.hidePopover();
 };
 
-const closedWhenThePhoneLayoutEnds = (layout: PhoneLayout) =>
-  ({currentTarget: nav, newState}: ToggleEvent<HTMLElement>) => {
-    if (newState !== 'open') return;
-    const stopListening = layout.ends(() => nav.hidePopover());
-    nav.addEventListener('beforetoggle', stopListening, {once: true});
-  };
-
-export const SideNav: FC = () => {
-  const layout = useContext(ThePhoneLayout);
-  return <nav id="side-nav" popover="auto" className="side-nav field backdrop-separated veiled" aria-label="site"
-    onBeforeToggle={closedWhenThePhoneLayoutEnds(layout)} onClick={closedOnAPageChosen}>
+export const SideNav: FC = () =>
+  <nav id="side-nav" popover="auto" className="side-nav field backdrop-separated veiled" aria-label="site"
+    onClick={closedOnAPageChosen}>
     <RailLink id="navigate-home" to={Paths.home} end>Home</RailLink>
     <RailLink id="navigate-record" to={Paths.record}>Record</RailLink>
     <SectionLink id="navigate-practice" page={Paths.practice} to={practiceAddress.of('Structure')}>Practice</SectionLink>
@@ -57,4 +47,3 @@ export const SideNav: FC = () => {
     <a id="navigate-repo" className="path rail-path bold attentive field reachable" href={Paths.repo}
       rel="noopener noreferrer" target="_blank">Repo</a>
   </nav>;
-};
