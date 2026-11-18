@@ -78,9 +78,10 @@ const labelHoldsItsShare = ' While a drag or a held arrow key is under way the l
 const handleSays: Record<World, ReactNode> = {
   react: <Says>The handle is focusable from the start and announced by name, and once the ledger
     exists its label states the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the
-    header’s end edge, stretched to the cell’s height, and the button carries no width of its
-    own: it is a grid container whose only item is the 8px line its <code className="monospaced">::after</code> paints,
-    so the painted line is the hit area.
+    header’s end edge, stretched to the cell’s height. The button is a grid container whose only item is the 8px
+    line its <code className="monospaced">::after</code> paints, and padding makes it wider than the line: 24px with
+    the line at its end under a mouse, and 44px with the line in its middle on a touchscreen, so the pointer has room
+    to land.
     The <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the gesture,
     and <Mdn path="Web/CSS/touch-action"><code className="monospaced">touch-action: none</code></Mdn> lets the pointer
     drag it on a touchscreen.</Says>,
@@ -88,9 +89,10 @@ const handleSays: Record<World, ReactNode> = {
     <Says>The handle is focusable from the start, announced by the name the markup gives it, and
       once the ledger exists <code className="monospaced">dressColumn</code> rewrites that label to state
       the <Term word="share">share</Term> too.{labelHoldsItsShare} It pins itself to the header’s end edge, stretched
-      to the cell’s height, and the button carries no width of its own: it is a grid container
-      whose only item is the 8px line its <code className="monospaced">::after</code> paints, so the painted line is the
-      hit area. The <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the
+      to the cell’s height. The button is a grid container whose only item is the 8px line
+      its <code className="monospaced">::after</code> paints, and padding makes it wider than the line: 24px with the
+      line at its end under a mouse, and 44px with the line in its middle on a touchscreen, so the pointer has room to
+      land. The <code className="monospaced">col-resize</code> <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the
       gesture, and <Mdn path="Web/CSS/touch-action"><code className="monospaced">touch-action: none</code></Mdn> lets
       the pointer drag it on a touchscreen.</Says>
     <Says>In the vanilla build the handle is the button the page writes,
@@ -265,6 +267,7 @@ const WidenStory: FC = () => {
             <SpokenLabel/>
             <Snippet label="CSS" lines={[
               ...carve.unit(baseCss, '.resize-handle {'), lines.blank,
+              ...carve.unit(baseCss, '@media (pointer: fine) {\n  .resize-handle {'), lines.blank,
               ...carve.unit(surfaceCss, '.borderless {'), lines.blank,
               ...carve.unit(surfaceCss, '.unfilled {'), lines.blank,
               ...carve.unit(surfaceCss, '.held-bar-after {'), lines.blank,
