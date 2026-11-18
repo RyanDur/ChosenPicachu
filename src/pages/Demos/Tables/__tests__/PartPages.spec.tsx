@@ -21,7 +21,6 @@ const theFlowStory = 'The trader can watch the market live, one lookback beside 
 const theStoreStory = 'The page is a store, and so is the table';
 const theLiveTablesPage = demosAt('tables/the-live-table-and-the-store');
 const theFeatures = 'Add features, in the order they were asked for';
-const bothStoriesOpen = 'living=flow%2Cstore';
 
 describe('the tables tab’s parts, each on its own page', () => {
   test('following the need and its clues from the tables tab opens its page', async () => {
@@ -252,8 +251,8 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     const station = (at: number) => `${demosAt('tables', '?world=vanilla')}#station-${at}`;
     expect(demoPage.sliceLinks()).toEqual([
-      demosAt('tables/the-still-table', '?world=vanilla&living=still'),
-      demosAt('tables/the-live-table-and-the-store', `?world=vanilla&${bothStoriesOpen}`),
+      demosAt('tables/the-still-table', '?world=vanilla'),
+      demosAt('tables/the-live-table-and-the-store', '?world=vanilla'),
       station(6), station(6), station(6)
     ]);
   });
@@ -275,7 +274,7 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     expect(await pageFoot.leadsOn('the tables parts')).toEqual([
       ['Previous: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')],
-      ['Next: 4. Build the still table', demosAt('tables/the-still-table', '?world=vanilla&living=still')]
+      ['Next: 4. Build the still table', demosAt('tables/the-still-table', '?world=vanilla')]
     ]);
   });
 
@@ -304,7 +303,7 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     await tablesTab().follow(theStillTable);
 
-    expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(demosAt('tables/the-still-table', '?living=still'));
+    expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(theStillTablesPage);
     await tablesTab().place();
     expect(recipeFolds.story(demoPage.part(theStillTable), theStillStory)).toHaveAttribute('open');
   });
@@ -359,7 +358,7 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     expect(await pageFoot.leadsOn('the tables parts')).toEqual([
       ['Previous: 3. Slice the design into stories', demosAt('tables/the-slices', '?world=vanilla')],
-      ['Next: 5. Make the table live', demosAt('tables/the-live-table-and-the-store', `?world=vanilla&${bothStoriesOpen}`)]
+      ['Next: 5. Make the table live', demosAt('tables/the-live-table-and-the-store', '?world=vanilla')]
     ]);
   });
 
@@ -382,20 +381,28 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     await tablesTab().follow(theLiveTable);
 
-    expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(demosAt('tables/the-live-table-and-the-store', `?${bothStoriesOpen}`));
+    expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(theLiveTablesPage);
     await tablesTab().place();
     expect(recipeFolds.story(demoPage.part(theLiveTable), theFlowStory)).toHaveAttribute('open');
     expect(recipeFolds.story(demoPage.part(theLiveTable), theStoreStory)).toHaveAttribute('open');
   });
 
-  test('the live table’s page opens only the story its address names', async () => {
-    render(<TestApp at={demosAt('tables/the-live-table-and-the-store', '?living=flow')}/>);
+  test('the still table’s page draws its story open at its own address', async () => {
+    render(<TestApp at={theStillTablesPage}/>);
+
+    await tablesTab().place();
+
+    expect(recipeFolds.story(demoPage.part(theStillTable), theStillStory)).toHaveAttribute('open');
+  });
+
+  test('the live table’s page draws both its stories open at its own address', async () => {
+    render(<TestApp at={theLiveTablesPage}/>);
 
     await tablesTab().place();
 
     const live = demoPage.part(theLiveTable);
     expect(recipeFolds.story(live, theFlowStory)).toHaveAttribute('open');
-    expect(recipeFolds.story(live, theStoreStory)).not.toHaveAttribute('open');
+    expect(recipeFolds.story(live, theStoreStory)).toHaveAttribute('open');
   });
 
   test('the live table’s page names its section by its title', async () => {
@@ -454,7 +461,7 @@ describe('the tables tab’s parts, each on its own page', () => {
     render(<TestApp at={demosAt('tables/the-live-table-and-the-store', '?world=vanilla')}/>);
 
     expect(await pageFoot.leadsOn('the tables parts')).toEqual([
-      ['Previous: 4. Build the still table', demosAt('tables/the-still-table', '?world=vanilla&living=still')],
+      ['Previous: 4. Build the still table', demosAt('tables/the-still-table', '?world=vanilla')],
       ['Next: 6. Drag sort', demosAt('tables/sort', '?world=vanilla')]
     ]);
   });
@@ -477,5 +484,42 @@ describe('the tables tab’s parts, each on its own page', () => {
     render(<TestApp at={theLiveTablesPage}/>);
 
     expect(await demoTabs.title(`Demos Tables · ${theLiveTable}`)).toBeInTheDocument();
+  });
+});
+
+describe('a link saved to a story when it was on the tables tab', () => {
+  test('should open the still table’s page with its story open', async () => {
+    const old = demosAt('tables', '?living=still');
+    render(<TestApp at={old}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(theStillTablesPage);
+    await tablesTab().place();
+    expect(recipeFolds.story(demoPage.part(theStillTable), theStillStory)).toHaveAttribute('open');
+  });
+
+  test('should open the live table’s page with the flow story open, in the build the address carries', async () => {
+    const old = demosAt('tables', '?world=vanilla&living=flow');
+    render(<TestApp at={old}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/the-live-table-and-the-store', '?world=vanilla'));
+    await tablesTab().place();
+    expect(recipeFolds.story(demoPage.part(theLiveTable), theFlowStory)).toHaveAttribute('open');
+  });
+
+  test('should open the live table’s page with the store story open', async () => {
+    const old = demosAt('tables', '?living=store');
+    render(<TestApp at={old}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(theLiveTablesPage);
+    await tablesTab().place();
+    expect(recipeFolds.story(demoPage.part(theLiveTable), theStoreStory)).toHaveAttribute('open');
+  });
+
+  test('should stay on the tables tab when it names no story a page tells', async () => {
+    const old = demosAt('tables', '?living=nowhere');
+    render(<TestApp at={old}/>);
+
+    await tablesTab().tutorialLink(theLiveTable);
+    expect(appAddress.shown()).toBe(old);
   });
 });

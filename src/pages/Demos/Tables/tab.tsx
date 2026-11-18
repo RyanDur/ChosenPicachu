@@ -5,11 +5,13 @@ import {Tutorials} from './Tutorials';
 import {TutorialPage} from './TutorialPage';
 import {useShownTutorial} from './useShownTutorial';
 import {ToTutorialNamed} from './ToTutorialNamed';
+import {ToPartTelling} from './ToPartTelling';
 import {PartPage} from './PartPage';
 import {useShownPart} from './useShownPart';
 
 const TabContents: FC = () => <>
   <ToTutorialNamed/>
+  <ToPartTelling/>
   <TablesIntroduction/>
   <Aggregations/>
   <Tutorials/>

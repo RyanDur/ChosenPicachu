@@ -2,7 +2,7 @@ import {Locator, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {assertionPatience} from './__test_support/patience';
 import {not} from '@ryandur/sand';
-import {boxOf, clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, siteFrame, tablesDemo, twoFramesLater} from './__test_support';
+import {boxOf, clickWhereItIs, desktop, documentScrollY, feedbackOn, iPadSideways, iPadUpright, phone, phoneSideways, recordPage, siteFrame, twoFramesLater} from './__test_support';
 
 const readers = [
   {reader: 'a phone', use: phone},
@@ -55,7 +55,7 @@ for (const {reader, use} of desks) {
     });
 
     test('a tab switch keeps the tabs where they were on screen', async ({page}) => {
-      await page.goto('demos/tables/the-live-table-and-the-store/?living=flow%2Cstore');
+      await page.goto('demos/tables/the-live-table-and-the-store/');
       await siteFrame(page).hydrated();
       await page.getByRole('group').filter({has: page.getByText(/^so that /)}).nth(1).scrollIntoViewIfNeeded();
       await expect.poll(() => documentScrollY(page)).toBeGreaterThan(0);
@@ -77,7 +77,7 @@ for (const {reader, use} of desks) {
     });
 
     test('the wheel moves the page, and an open Feedback dialog holds it still', async ({page}) => {
-      await page.goto('demos/tables/the-live-table-and-the-store/?living=flow%2Cstore');
+      await page.goto('demos/tables/the-live-table-and-the-store/');
       await siteFrame(page).hydrated();
       const held = page.getByRole('heading', {name: 'The trader can watch the market live, one lookback beside another'});
       await held.scrollIntoViewIfNeeded();
@@ -97,23 +97,3 @@ for (const {reader, use} of desks) {
     });
   });
 }
-
-test.describe('a desktop, where only the search changes', () => {
-  test.use({viewport: desktop.viewport});
-
-  test('a story opened on a recipe leaves the page where it was', async ({page}) => {
-    await page.goto('demos/tables/the-live-table-and-the-store/?living=flow');
-    await siteFrame(page).hydrated();
-    const tables = tablesDemo(page);
-    await tables.storyAt(1).scrollIntoViewIfNeeded();
-    const where = await documentScrollY(page);
-    expect(where).toBeGreaterThan(0);
-    const address = page.url();
-
-    await tables.openStoryAt(1);
-
-    await expect(page).not.toHaveURL(address);
-    await twoFramesLater(page);
-    expect(await documentScrollY(page)).toBe(where);
-  });
-});

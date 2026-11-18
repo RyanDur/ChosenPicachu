@@ -55,7 +55,7 @@ const refolds: Record<World, string> = {
 
 const FlowStory: FC = () => {
   const {world} = useControls();
-  return <Story param={livingStories.param} id={livingStories.ids.flow}
+  return <Story id={livingStories.ids.flow} open
     can="The trader can watch the market live, one lookback beside another"
     soThat="the numbers stay current without a single refresh">
     <Tell>The still becomes a stream. The trader arrives mid-session, so the page starts with
