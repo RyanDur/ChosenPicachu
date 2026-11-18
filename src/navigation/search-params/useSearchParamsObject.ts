@@ -25,7 +25,7 @@ type Given<T, D> = Partial<T> & Required<Pick<T, keyof D & keyof T>>;
 
 type SearchParamsObject<T extends {[key: string]: unknown}, D> = Given<T, D> & {
   updateSearchParams: (params: Partial<T>, options?: NavigateOptions) => void;
-  removeSearchParams: (...params: string[]) => void;
+  removeSearchParams: (params: string[], options?: NavigateOptions) => void;
   searchFromShown: (params: Partial<T>) => string;
   searchFromAddress: (params: Partial<T>) => string;
 };
@@ -52,9 +52,9 @@ export function useSearchParamsObject<T extends Params>(
   const searchFromAddress = (params = {}): string =>
     queryString.from({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)});
 
-  const removeSearchParams = (...params: string[]) =>
+  const removeSearchParams = (params: string[], options?: NavigateOptions) =>
     setSearchParams(Array.from(searchParams.entries())
-      .filter(([key]) => not(params.includes(key))), keepingThePlace);
+      .filter(([key]) => not(params.includes(key))), {...keepingThePlace, ...options});
 
   const updateSearchParams = (params = {}, options?: NavigateOptions) =>
     setSearchParams({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)},

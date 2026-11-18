@@ -385,6 +385,20 @@ test.describe('a visitor at a desk', () => {
     await expect(gallery.searchField).toBeFocused();
   });
 
+  test('keeps the focus on the reset button after a keyboard reader clears a search with it', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&search=lilies');
+    await siteFrame(page).hydrated();
+    await gallery.resetSearch.focus();
+
+    await gallery.resetSearch.press('Enter');
+
+    await expect(page).not.toHaveURL(/search=/);
+    await expect(gallery.searchField).toHaveValue('');
+    await expect(gallery.resetSearch).toBeFocused();
+  });
+
   test('shows the address\'s words in the search after Back and then Forward from a search made with Enter', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
