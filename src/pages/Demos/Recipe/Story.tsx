@@ -1,4 +1,4 @@
-import {Children, FC, MouseEvent, PropsWithChildren, ReactNode, SyntheticEvent, isValidElement} from 'react';
+import {Children, FC, isValidElement, MouseEvent, PropsWithChildren, ReactNode, SyntheticEvent} from 'react';
 import {maybe} from '@ryandur/sand';
 import {storyKeys} from './storyKeys';
 import {useOpenStories} from './useOpenStories';
@@ -23,10 +23,15 @@ type Told = PropsWithChildren<{
 
 type Props = Told & ({param: string; open?: never} | {param?: never; open?: boolean});
 
-const Head: FC<{anchor: string; can: string; soThat: string; steps: number}> = ({anchor, can, soThat, steps}) => {
+const StoryCard: FC<{titleId: string; can: string; soThat: string; steps: number}> = ({
+  titleId,
+  can,
+  soThat,
+  steps
+}) => {
   const {story: Can} = useRanks();
   return <hgroup className="story card rounded-corners lifted">
-    <Can className="can paragraph bold" id={anchor}>{can}</Can>
+    <Can className="can paragraph bold" id={titleId}>{can}</Can>
     <p className="so-that paragraph italic muted-ink">so that {soThat}</p>
     {steps > 0 && <p className="step-tally caption muted-ink">{steps === 1 ? '1 step' : `${steps} steps`}</p>}
   </hgroup>;
@@ -34,7 +39,7 @@ const Head: FC<{anchor: string; can: string; soThat: string; steps: number}> = (
 
 const RecordedStory: FC<Told & {param: string}> = ({param, id, can, soThat, children}) => {
   const stories = useOpenStories(param);
-  const anchor = storyKeys.anchorOf({param, id});
+  const titleId = storyKeys.anchorOf({param, id});
   const toggled = (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
     stories.toggle(id);
@@ -43,9 +48,9 @@ const RecordedStory: FC<Told & {param: string}> = ({param, id, can, soThat, chil
     stories.setOpen(id, currentTarget.open);
   };
   return <li tabIndex={-1}>
-    <details className="arc" open={stories.isOpen(id)} aria-labelledby={anchor} onToggle={matchAddressToFold}>
+    <details className="arc" open={stories.isOpen(id)} aria-labelledby={titleId} onToggle={matchAddressToFold}>
       <summary className="fold-bar sub-title-glyph-before" onClick={toggled}>
-        <Head anchor={anchor} can={can} soThat={soThat} steps={stepsIn(children)}/>
+        <StoryCard titleId={titleId} can={can} soThat={soThat} steps={stepsIn(children)}/>
       </summary>
       {children}
     </details>
@@ -53,11 +58,11 @@ const RecordedStory: FC<Told & {param: string}> = ({param, id, can, soThat, chil
 };
 
 const OwnStory: FC<Told & {open?: boolean}> = ({id, open, can, soThat, children}) => {
-  const anchor = `${id}-story`;
+  const titleId = `${id}-story`;
   return <li tabIndex={-1}>
-    <details className="arc" open={open} aria-labelledby={anchor}>
+    <details className="arc" open={open} aria-labelledby={titleId}>
       <summary className="fold-bar sub-title-glyph-before">
-        <Head anchor={anchor} can={can} soThat={soThat} steps={stepsIn(children)}/>
+        <StoryCard titleId={titleId} can={can} soThat={soThat} steps={stepsIn(children)}/>
       </summary>
       {children}
     </details>
