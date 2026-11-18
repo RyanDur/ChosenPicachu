@@ -28,6 +28,12 @@
   border: var(--hairline) solid var(--charcoal);
 }
 
+.drawn-piece:disabled {
+  color: var(--field);
+  background: var(--smoke);
+  border-color: var(--smoke);
+}
+
 .dashed-drawn { stroke-dasharray: 4 3; }
 
 .buy-side {
