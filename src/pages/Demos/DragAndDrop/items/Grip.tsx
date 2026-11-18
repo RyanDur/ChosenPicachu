@@ -12,7 +12,7 @@ export const Grip: FC<{item: string}> = ({item}) => {
 
   return <button type="button"
     disabled={not(useHydrated())}
-    className="grip handle borderless unfilled focus-ringed reachable"
+    className="grip handle borderless unfilled smoked-while-disabled focus-ringed reachable"
     aria-label={`grip for ${item}`}
     onPointerDown={() => dispatch(dragSortChange.gripped(item))}
     onPointerUp={() => dispatch(dragSortChange.letGo())}

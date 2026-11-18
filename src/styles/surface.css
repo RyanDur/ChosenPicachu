@@ -91,6 +91,11 @@
 
 .approached:has(~ :hover, ~ :focus) { background-color: var(--approach); }
 
+.smoked-while-disabled:disabled {
+  color: var(--field);
+  background: var(--smoke);
+}
+
 .inverse-filled {
   color: var(--field);
   background: var(--field-inverse);

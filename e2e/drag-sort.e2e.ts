@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {iPhone, sortableList} from './__test_support';
+import {hydration, iPhone, sortableList} from './__test_support';
 
 test.afterEach(async ({page}, testInfo) => {
   if (testInfo.status !== testInfo.expectedStatus) {
@@ -88,4 +88,18 @@ test.describe('a finger on a phone', () => {
 
     await expect(list.item('A')).toHaveAttribute('draggable', 'false');
   });
+});
+
+test('given the drag sort tab before its script runs, a grip is disabled; once the script runs, a drag from it moves the item', async ({page}) => {
+  const address = 'demos/drag-and-drop/';
+  await hydration(page).holdBack(address);
+  await page.goto(address);
+  const list = sortableList(page);
+
+  await expect(list.grip('A')).toBeDisabled();
+  await hydration(page).release();
+
+  const carried = await list.carry('A', 'C');
+  await expect.poll(list.seats).toEqual(['B', 'C', 'A']);
+  await carried.drop();
 });

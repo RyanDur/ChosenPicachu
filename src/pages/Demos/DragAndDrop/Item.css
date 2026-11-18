@@ -22,3 +22,7 @@
     padding: 0;
     cursor: grab;
 }
+
+.sortable-list .grip:disabled {
+    cursor: revert;
+}
