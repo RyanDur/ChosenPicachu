@@ -32,6 +32,10 @@
     gap: var(--base-x-1_5);
     align-content: start;
   }
+
+  .way-on {
+    justify-self: start;
+  }
 }
 
 @media (width <= 1100px) {
