@@ -6,6 +6,6 @@ export {Frame} from './Frame';
 export {Header, type Listing} from './Header';
 export {Main} from './Main';
 export {PageError} from './PageError';
-export {phoneLayoutEndsOn, type PhoneLayoutEnds} from './phoneLayout';
-export {PhoneLayoutEnding} from './PhoneLayoutEnding';
+export {phoneLayout, type PhoneLayout} from './phoneLayout';
+export {ThePhoneLayout} from './ThePhoneLayout';
 export {WaitingRoom} from './WaitingRoom';
