@@ -1,5 +1,5 @@
 import {Source} from '@pages/Gallery/source';
-import {Door} from '@pages/Gallery/museums';
+import {Door, museums} from '@pages/Gallery/museums';
 
 export type Doors = Record<Source, Door | 'unknown'>;
 
@@ -15,5 +15,6 @@ const noneAnswered: Doors = {
 export const doors = {
   initial: noneAnswered,
   answered: (museum: Source, door: Door): DoorAnswered => ({type: 'answered', museum, door}),
-  reduce: (known: Doors, {museum, door}: DoorAnswered): Doors => ({...known, [museum]: door})
+  reduce: (known: Doors, {museum, door}: DoorAnswered): Doors => ({...known, [museum]: door}),
+  openIn: (known: Doors) => museums.all.filter(({param}) => known[param] === 'open')
 };

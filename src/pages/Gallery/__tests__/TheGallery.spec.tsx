@@ -133,6 +133,18 @@ describe('The gallery.', () => {
     expect(galleryPage.museumIfAny('The Art Institute of Chicago')).not.toBeInTheDocument();
   });
 
+  test('a museum whose pictures are refused is not offered in the gallery settings', async () => {
+    setupAICAllArtResponse(aicArtResponse);
+    refuseAICPictures();
+    setupHarvardAllArtResponse(harvardArtResponse);
+
+    render(<TestApp at={Paths.artGallery}/>);
+
+    await waitFor(() => expect(galleryWall.frames()).toHaveLength(limits.record));
+    expect(galleryPage.museumsOffered()).toContain('Harvard Art Museums');
+    expect(galleryPage.museumsOffered()).not.toContain('The Art Institute of Chicago');
+  });
+
   test('a museum whose search finds no works has no door: Harvard', async () => {
     setupAICAllArtResponse(aicArtResponse);
     setupHarvardAllArtResponse({...harvardArtResponse, records: []});

@@ -1,4 +1,4 @@
-import {FC, useEffect, useReducer} from 'react';
+import {FC, useContext, useEffect} from 'react';
 import {useLocation} from 'react-router';
 import {useHydrated} from '@components';
 import {has, maybe, not, notEmpty} from '@ryandur/sand';
@@ -6,14 +6,12 @@ import {Tabs} from '@navigation/Tabs';
 import {Loading} from '@components/Loading';
 import {ArtGallery} from '@pages/Gallery/Art';
 import {Source} from '@pages/Gallery/source';
-import {art, museums} from '@pages/Gallery/museums';
+import {museums} from '@pages/Gallery/museums';
 import missingWall from '../../assets/icons/missing-wall.svg?url';
 import {StandIn} from '@pages/Gallery/StandIn';
-import {useGallery} from '@pages/Gallery/Context';
+import {KnownDoors, useGallery} from '@pages/Gallery/Context';
 import {Doors, doors} from '@pages/Gallery/doors';
 import './ArtGalleryPage.css';
-
-const openIn = (doors: Doors) => museums.all.filter(({param}) => doors[param] === 'open');
 
 const settledIn = (doors: Doors): boolean => museums.all.every(({param}) => doors[param] !== 'unknown');
 
@@ -23,28 +21,22 @@ type Shown =
   | {readonly shown: 'movingToAnOpenMuseum'; readonly museum: Source}
   | {readonly shown: 'loading'};
 
-const shownFor = (doors: Doors, tab?: Source): Shown => {
-  const open = openIn(doors);
+const shownFor = (known: Doors, tab?: Source): Shown => {
+  const open = doors.openIn(known);
   if (open.some(({param}) => param === tab)) return {shown: 'wall'};
-  if (not(settledIn(doors))) return {shown: 'loading'};
+  if (not(settledIn(known))) return {shown: 'loading'};
   return maybe(open[0])
     .map(({param}): Shown => ({shown: 'movingToAnOpenMuseum', museum: param}))
     .orElse<Shown>({shown: 'noMuseumOpen'});
 };
 
 export const ArtGalleryPage: FC = () => {
-  const [known, dispatch] = useReducer(doors.reduce, doors.initial);
+  const known = useContext(KnownDoors);
   const {tab, updateSearchParams, searchFromShown} = useGallery();
   const {pathname} = useLocation();
   const hydrated = useHydrated();
 
-  useEffect(() => {
-    const asked = museums.all.map(({param}) => art.open(param)
-      .onComplete(answer => dispatch(doors.answered(param, answer.orElse('closed')))));
-    return () => asked.forEach(asked => asked.cancel());
-  }, []);
-
-  const open = openIn(known);
+  const open = doors.openIn(known);
   const shown = shownFor(known, tab);
   const movingTo = shown.shown === 'movingToAnOpenMuseum' ? shown.museum : undefined;
 
