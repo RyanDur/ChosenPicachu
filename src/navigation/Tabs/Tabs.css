@@ -24,6 +24,10 @@
       margin: 0;
     }
 
+    &:has(> [aria-current="page"]) {
+      scroll-initial-target: nearest;
+    }
+
     .path {
       padding: 0 var(--base-x-5);
       display: flex;
