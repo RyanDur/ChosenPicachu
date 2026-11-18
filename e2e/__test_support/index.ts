@@ -27,6 +27,6 @@ export {zIndexTab} from './z-index';
 export {bannerTrap, contextChooser, topLayerMenu, trappedMenu, wearsReportedWrong, type SortChoice, type Worn} from './trap';
 export {pressTab, tabsTo} from './keyboard';
 export {seedRandom} from './random';
-export {definedTerm, timesShut, whatHappened} from './terms';
+export {terms} from './terms';
 export {tutorialTable, type TutorialTableName} from './tutorial-tables';
 export {arrivalPatience} from './patience';
