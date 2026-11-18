@@ -1,7 +1,7 @@
 import {maybe} from '@ryandur/sand';
 import {useSearchParamsOnceHydrated} from '@navigation/search-params';
 import {queryString} from '@transport';
-import {movedParams} from './Tables';
+import {movedParams} from './moved-params';
 
 export type Place = {
   to: string;
