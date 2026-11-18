@@ -95,6 +95,15 @@ describe('what the platform gives now, on its own page', () => {
     expect(explanation.sourcesBeside(explained, /This build uses details and summary/)).toEqual(['Accordions/ExclusiveToggleAccordion.tsx on GitHub']);
   });
 
+  test('should answer the drawer, through the fold motion dial, with what it does and what a reader who asks for less motion gets', async () => {
+    render(<TestApp at={demosAt(platformWay, '?style=drawer')}/>);
+
+    const reading = accordionsTab.readingIn(await accordionsTab.choiceRow('fold motion'));
+
+    expect(reading).toHaveTextContent('The text slides down from under its bar.');
+    expect(reading).toHaveTextContent('If your system asks for less motion, every fold here opens at once, whichever you choose.');
+  });
+
   test('should still show the first platform fold’s text after the reader chooses another motion', async () => {
     render(<TestApp at={demosAt(platformWay)}/>);
     const platform = await explanation.part(title);
