@@ -1,14 +1,12 @@
 import {phoneLayout} from './phoneLayout';
+import {typedValues} from './typedValues';
 
 type Page = Pick<Window, 'document' | 'addEventListener' | 'matchMedia'>;
-
-const typedValuesDropped = (popover: HTMLElement): void =>
-  popover.querySelectorAll('input').forEach(field => field.value = field.defaultValue);
 
 export const popovers = (page: Page) => {
   const closed = (which: string): void =>
     page.document.querySelectorAll<HTMLElement>(which).forEach(popover => {
-      typedValuesDropped(popover);
+      typedValues.droppedIn(popover);
       popover.hidePopover();
     });
   return {

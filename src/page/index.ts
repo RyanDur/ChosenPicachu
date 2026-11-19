@@ -9,5 +9,6 @@ export {PageError} from './PageError';
 export {PageFocus} from './PageFocus';
 export {popovers} from './popovers';
 export {phoneQuery} from './phoneQuery';
+export {typedValues} from './typedValues';
 export {usePageFocus} from './usePageFocus';
 export {WaitingRoom} from './WaitingRoom';
