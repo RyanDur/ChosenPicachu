@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {NavigationType, useLocation, useNavigationType} from 'react-router';
 import {maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
@@ -20,10 +20,9 @@ const useBackAndForthMoves = (): number => {
   const {key} = useLocation();
   const moved = useNavigationType() === NavigationType.Pop;
   const [seen, setSeen] = useState<BackAndForth>({at: key, moves: 0});
-  useEffect(() => {
-    if (key !== seen.at) setSeen({at: key, moves: moved ? seen.moves + 1 : seen.moves});
-  }, [key, moved, seen]);
-  return seen.moves;
+  const now = key === seen.at ? seen : {at: key, moves: moved ? seen.moves + 1 : seen.moves};
+  if (now !== seen) setSeen(now);
+  return now.moves;
 };
 
 export const keptForm = {
