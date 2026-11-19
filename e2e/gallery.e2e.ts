@@ -495,8 +495,9 @@ test.describe('a visitor at a desk', () => {
     await page.goto('gallery/?tab=vam&search=lilies');
     await siteFrame(page).hydrated();
     await gallery.searchField.fill('roses');
+    const rosesAnswered = page.waitForResponse(response => new URL(response.url()).searchParams.get('q') === 'roses');
     await gallery.searchField.press('Enter');
-    await expect(gallery.searchField).toHaveAttribute('value', 'roses');
+    await rosesAnswered;
     await gallery.searchField.fill('tulips');
 
     await page.goBack();
