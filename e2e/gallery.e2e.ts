@@ -23,6 +23,27 @@ for (const {reader, device} of handhelds) {
       await expect(gallery.searchField).toHaveAccessibleName('Search');
     });
 
+    test('puts the page field in the settings back to the last page when the museum answers while it is in use', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      const {promise: answered, resolve: answer} = Promise.withResolvers<void>();
+      await page.route(/\/vam\/objects\/search\?.*page=99999/, async route => {
+        await answered;
+        await route.fallback();
+      });
+      await page.goto('gallery/?tab=vam&page=99999&size=8');
+      await siteFrame(page).hydrated();
+      await gallery.openSettings();
+      await gallery.pageNumber.click();
+      answer();
+      await expect(gallery.count).toHaveText(/ of [\d,]+$/);
+      const lastPage = (await gallery.count.textContent())?.replace(/^.* of /, '').replaceAll(',', '');
+
+      await gallery.pageNumber.press('Tab');
+
+      await expect(gallery.pageNumber).toHaveValue(lastPage ?? '');
+    });
+
     test('lands in the search field from a tap on its label', async ({page}) => {
       const gallery = galleryPage(page);
       await page.goto('gallery/?tab=vam');
