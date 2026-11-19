@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC, PropsWithChildren} from 'react';
 import {useControls} from '../../Controls';
 import {Steps, Story} from '../../Recipe';
 import {
@@ -32,7 +32,7 @@ import {
 import {SortBuild} from './sort-build';
 import cssSource from '@components/DragSortableTable/motion.css?sample';
 
-export const SortStories: FC<{build: SortBuild; paceStep: ReactNode}> = ({build, paceStep}) => {
+export const SortStories: FC<PropsWithChildren<{build: SortBuild}>> = ({build, children}) => {
   const {react, vanilla, tableSource, buildSource, headerSource, rowSource} = build;
   const {track, origin, motion} = useControls();
   return track === 'pointer'
@@ -54,7 +54,7 @@ export const SortStories: FC<{build: SortBuild; paceStep: ReactNode}> = ({build,
           <LiftOnce headerSource={headerSource} buildSource={buildSource}/>
           <DragSurface headerSource={headerSource}/>
           <DeadZone/>
-          {paceStep}
+          {children}
           {origin === 'hide'
             ? <HideOrigin headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
             : <KeepOrigin cssSource={cssSource}/>}
