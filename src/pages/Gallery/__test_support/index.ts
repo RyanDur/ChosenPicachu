@@ -18,4 +18,4 @@ export {
   setupVAMAllArtResponse
 } from './museums';
 export {galleryWall} from './wall';
-export {galleryBanner, gallerySettings} from './settings';
+export {galleryRegions} from './galleryRegions';
