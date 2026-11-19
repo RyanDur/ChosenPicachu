@@ -1,4 +1,5 @@
 import {Locator, expect} from '@playwright/test';
+import {maybe} from '@ryandur/sand';
 import {test} from './__test_support/journey';
 import {clickWhereItIs, desktop, documentScrollY, galleryPage, hydration, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame, twoFramesLater} from './__test_support';
 
@@ -51,11 +52,12 @@ for (const {reader, device} of handhelds) {
       await gallery.pageNumber.click();
       answer();
       await expect(gallery.count).toHaveText(/ of [\d,]+$/);
-      const lastPage = (await gallery.count.textContent())?.replace(/^.* of /, '').replaceAll(',', '');
+      const lastPage = maybe(await gallery.count.textContent())
+        .map(count => count.replace(/^.* of /, '').replaceAll(',', '')).orElse('');
 
       await gallery.pageNumber.press('Tab');
 
-      await expect(gallery.pageNumber).toHaveValue(lastPage ?? '');
+      await expect(gallery.pageNumber).toHaveValue(lastPage);
     });
 
     test('lands in the search field from a tap on its label', async ({page}) => {
@@ -936,7 +938,7 @@ test.describe('a visitor at a desk', () => {
     const work = gallery.wall.first();
 
     await expect(gallery.standInOf(work)).toBeVisible();
-    const said = await gallery.standInOf(work).getAttribute('alt') ?? '';
+    const said = maybe(await gallery.standInOf(work).getAttribute('alt')).orElse('');
     await expect(work).toHaveAccessibleName(said.replace(/ would not load$/, ''));
   });
 });
