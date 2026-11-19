@@ -493,6 +493,30 @@ test.describe('a visitor at a desk', () => {
     await expect(page).toHaveURL(/[?&]page=1247(&|$)/);
   });
 
+  test('sends a page from an address whose size the per page field would refuse', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&size=200');
+    await siteFrame(page).hydrated();
+    await gallery.pageNumber.fill('3');
+
+    await gallery.go.click();
+
+    await expect(page).toHaveURL(/[?&]page=3(&|$)/);
+  });
+
+  test('sends a number per page from an address whose page the page field would refuse', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=0');
+    await siteFrame(page).hydrated();
+    await gallery.pageSize.fill('45');
+
+    await gallery.go.click();
+
+    await expect(page).toHaveURL(/[?&]size=45(&|$)/);
+  });
+
   test('goes to a page that exists at the number per page sent with it', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
