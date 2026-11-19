@@ -5,7 +5,7 @@ import {ZIndexPart, zIndexParts} from './part-pages';
 
 const Entry: FC<{part: ZIndexPart}> = ({part}) => {
   const {name, minutes, says} = zIndexParts.told(part);
-  return <PartsNavigationEntry to={zIndexParts.addressOf(part)} title={name} minutes={minutes} says={says}/>;
+  return <PartsNavigationEntry to={zIndexParts.addressOf(part)} name={name} minutes={minutes} says={says}/>;
 };
 
 export const PartsIndex: FC = () =>

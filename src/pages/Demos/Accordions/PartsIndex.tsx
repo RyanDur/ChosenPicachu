@@ -8,7 +8,7 @@ const ordinalOf = (heading: BookPart): number => accordionParts.inOrder.indexOf(
 
 const Entry: FC<{heading: BookPart}> = ({heading}) => {
   const {to, heading: fragment, title, minutes, says} = accordionParts.listed(heading);
-  return <PartsNavigationEntry to={to} heading={fragment} title={title} minutes={minutes} says={says}/>;
+  return <PartsNavigationEntry to={to} heading={fragment} name={title} minutes={minutes} says={says}/>;
 };
 
 const Era: FC<{label: string; headings: readonly BookPart[]}> = ({label, headings}) => <>
