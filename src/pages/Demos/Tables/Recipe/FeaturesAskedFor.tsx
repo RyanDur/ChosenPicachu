@@ -17,9 +17,8 @@ const CellHeading: FC<Required<PropsWithChildren>> = ({children}) =>
 export const FeaturesAskedFor: FC = () =>
   <>
     <p className="overview paragraph">
-      Now the table gains features, each one traceable to something the trader said. The
-      machine has a mouse and a keyboard, so every arrangement a pointer can make, a key can make
-      too.
+      Parts 1 to 5 build the live table. Parts 6 to 8 add features, each one traceable to something the trader
+      said. The machine has a mouse and a keyboard, so every arrangement a pointer can make, a key can make too.
     </p>
     <table className="tutorial-table contained">
       <caption className="off-screen">the features</caption>

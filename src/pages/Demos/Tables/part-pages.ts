@@ -1,7 +1,7 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
-import {designHeading, needHeading, stations, storiesHeading} from '@pages/Demos/headings';
+import {designHeading, needHeading, storiesHeading} from '@pages/Demos/headings';
 import type {Place} from '@pages/Demos/useCarriedAddress';
 
 export type TablePart = keyof typeof names.tableParts;
@@ -49,17 +49,10 @@ const addressOf = (part: TablePart): string => `${tabAddress}${part}/`;
 
 const ordinalOf = (part: TablePart): number => buildParts.indexOf(part) + 1;
 
-const whereIs = (station: number): Place =>
-  maybe(buildParts[station - 1]).either(
-    part => ({to: addressOf(part)}),
-    () => ({to: tabAddress, heading: stations.idOf(station)}));
-
 const numbered = (ordinal: number, title: string): string => `${ordinal}. ${title}`;
 
 const placeOf = (part: TablePart): PartPlace =>
-  ({title: numbered(ordinalOf(part), titles[part]), ...whereIs(ordinalOf(part))});
-
-const featuresStation = buildParts.length + 1;
+  ({title: numbered(ordinalOf(part), titles[part]), to: addressOf(part)});
 
 export const tableParts = {
   told: (part: TablePart): Told => ({
@@ -71,9 +64,7 @@ export const tableParts = {
   addressOf,
   placeOf,
   numbered,
-  whereIs,
   shownAt: (pathname: string): Maybe<TablePart> => maybe(buildParts.find(part => pathname === addressOf(part))),
   inOrder: buildParts,
-  featuresStation,
   count: buildParts.length
 };

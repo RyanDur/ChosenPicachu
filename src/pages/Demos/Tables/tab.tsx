@@ -1,5 +1,9 @@
 import {FC} from 'react';
+import {TabSidecar} from '../TabSidecar';
 import {TablesIntroduction} from './Introduction';
+import {TablesSize} from './TablesSize';
+import {PartsIndex} from './PartsIndex';
+import {WorldGlider, WorldNote} from './World';
 import {Aggregations} from './Aggregations';
 import {Tutorials} from './Tutorials';
 import {TutorialPage} from './TutorialPage';
@@ -11,6 +15,12 @@ import {useShownPart} from './useShownPart';
 const TabContents: FC = () => <>
   <ToMovedAddress/>
   <TablesIntroduction/>
+  <TabSidecar label="parts and dials" className="beside-the-opening">
+    <TablesSize/>
+    <PartsIndex/>
+    <WorldGlider/>
+    <WorldNote/>
+  </TabSidecar>
   <Aggregations/>
   <Tutorials/>
 </>;

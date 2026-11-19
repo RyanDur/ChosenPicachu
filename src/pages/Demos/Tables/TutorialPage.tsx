@@ -25,7 +25,7 @@ export const TutorialPage: FC = () => {
   const carried = useCarriedAddress();
   const titled = `tutorial${useId()}`;
   const startingAt = tableParts.told(tableTutorials.startingPart);
-  const {to} = tableParts.whereIs(startingAt.ordinal);
+  const to = tableParts.addressOf(tableTutorials.startingPart);
   return useShownTutorial().either(tutorial => {
     const TutorialRecipe = recipes[tutorial];
     return <section aria-labelledby={titled} className="tutorial-page">

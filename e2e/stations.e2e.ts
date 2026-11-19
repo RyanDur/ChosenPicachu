@@ -14,7 +14,7 @@ test('a keyboard reader who follows a story\'s station link carries on inside th
 });
 
 test('an address that names a station takes the keyboard to that station', async ({page}) => {
-  await page.goto('demos/tables/#station-6');
+  await page.goto('demos/drag-and-drop/#station-4');
 
   await expect(courseStations(page).station('Add features, in the order they were asked for')).toBeFocused();
 });

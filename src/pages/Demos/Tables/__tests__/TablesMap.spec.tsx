@@ -24,7 +24,7 @@ describe('the tables map', () => {
     expect(await tablesMap.says()).toHaveTextContent(/about 53 minutes/);
   });
 
-  test('should give only the size on the tables tab, where the stations already list the parts', async () => {
+  test('should give only the size on the tables tab, where the parts beside the opening already list them', async () => {
     render(<TestApp at={demosAt('tables', vanilla)}/>);
 
     await tablesMap.says();

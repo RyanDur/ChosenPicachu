@@ -8,6 +8,10 @@
   padding-inline-start: var(--base-x-4);
 }
 
+.parts-navigation-group {
+  margin-block-start: var(--base);
+}
+
 @property --title-reach {
   syntax: '<length>';
   inherits: true;

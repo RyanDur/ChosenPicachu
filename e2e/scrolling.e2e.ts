@@ -49,11 +49,11 @@ test.describe('a keyboard and a mouse', {tag: ['@desktop', '@iPadSidewaysWindow'
     expect(await topOf(tabs)).toBe(where);
   });
 
-  test('an address that names a step shows the step', async ({page}) => {
-    await page.goto('demos/tables/#station-6');
-    const step = page.getByRole('heading', {name: 'Add features, in the order they were asked for'});
+  test('an address that names the features asked for shows them', async ({page}) => {
+    await page.goto('demos/tables/#features-asked-for');
+    const features = page.getByRole('table', {name: 'the features'});
 
-    await expect(step).toBeInViewport();
+    await expect(features).toBeInViewport();
   });
 
   test('the wheel moves the page, and an open Feedback dialog holds it still', async ({page}) => {
