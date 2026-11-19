@@ -669,6 +669,43 @@ test.describe('a visitor at a desk', () => {
     await expect(gallery.pageNumber).toHaveValue('3');
   });
 
+  test('shows the address\'s words in the search after Back between two searches made with Enter', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await siteFrame(page).hydrated();
+    await gallery.searchField.fill('roses');
+    await gallery.searchField.press('Enter');
+    await expect(page).toHaveURL(/search=roses/);
+    await gallery.searchField.fill('tulips');
+    await gallery.searchField.press('Enter');
+    await expect(page).toHaveURL(/search=tulips/);
+    await gallery.searchField.fill('daisies');
+
+    await page.goBack();
+
+    await expect(page).toHaveURL(/search=roses/);
+    await expect(gallery.searchField).toHaveValue('roses');
+  });
+
+  test('shows the address\'s page in the page field after Back between two pages sent with Enter', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=2');
+    await siteFrame(page).hydrated();
+    await gallery.pageNumber.fill('3');
+    await gallery.pageNumber.press('Enter');
+    await expect(gallery.count).toHaveText(/^Page 3 of /);
+    await gallery.pageNumber.fill('4');
+    await gallery.pageNumber.press('Enter');
+    await expect(gallery.count).toHaveText(/^Page 4 of /);
+
+    await page.goBack();
+
+    await expect(page).toHaveURL(/[?&]page=3(&|$)/);
+    await expect(gallery.pageNumber).toHaveValue('3');
+  });
+
   test('shows the address\'s page in the page field after Back, not a page typed and never sent', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
