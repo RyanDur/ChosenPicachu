@@ -32,7 +32,8 @@
     container-type: size;
     inline-size: 100%;
     block-size: 100%;
-    max-inline-size: none;
+    max-inline-size: var(--drawn-width);
+    max-block-size: var(--drawn-height);
 
     .drawn-caption {
       --drawing-column: min(100cqi, 100cqb * tan(atan2(var(--drawn-width), var(--drawn-height))));
