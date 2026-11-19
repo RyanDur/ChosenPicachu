@@ -12,7 +12,7 @@ export const PageControl = () => {
   const {pagination, page, size, updateSearchParams} = useGallery();
   const goTo = useId();
   const perPage = useId();
-  const formKey = keptForm.useKey('pages', `${page} ${size}`);
+  const formKey = keptForm.useKey('pages');
 
   const firstPage = 1;
   const lastPage = pagination.map(({totalPages}) => totalPages).orElse(undefined);

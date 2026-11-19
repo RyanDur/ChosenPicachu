@@ -1,6 +1,6 @@
 import {Locator, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {clickWhereItIs, desktop, documentScrollY, galleryPage, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame, twoFramesLater} from './__test_support';
+import {clickWhereItIs, desktop, documentScrollY, galleryPage, hydration, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame, twoFramesLater} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> =>
   region.evaluate(element => element.contains(document.activeElement));
@@ -421,6 +421,54 @@ test.describe('a visitor at a desk', () => {
     await expect(page).not.toHaveURL(/search=/);
     await expect(gallery.searchField).toHaveValue('');
     await expect(gallery.resetSearch).toBeFocused();
+  });
+
+  test('shows the page the address is on in the page field', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+
+    await page.goto('gallery/?tab=vam&page=4');
+    await siteFrame(page).hydrated();
+
+    await expect(gallery.pageNumber).toHaveValue('4');
+  });
+
+  test('shows the page size the address asks for in the per page field', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+
+    await page.goto('gallery/?tab=vam&size=30');
+    await siteFrame(page).hydrated();
+
+    await expect(gallery.pageSize).toHaveValue('30');
+  });
+
+  test('keeps the focus and the letters of a reader who types in the search before the page\'s script runs', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await hydration(page).holdBack('gallery/?tab=vam&search=lilies');
+    await page.goto('gallery/?tab=vam&search=lilies');
+    await gallery.searchField.fill('roses');
+
+    await hydration(page).release();
+    await siteFrame(page).hydrated();
+
+    await expect(gallery.searchField).toHaveValue('roses');
+    await expect(gallery.searchField).toBeFocused();
+  });
+
+  test('keeps the focus and the number of a reader who types a page before the page\'s script runs', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await hydration(page).holdBack('gallery/?tab=vam&page=4&size=30');
+    await page.goto('gallery/?tab=vam&page=4&size=30');
+    await gallery.pageNumber.fill('7');
+
+    await hydration(page).release();
+    await siteFrame(page).hydrated();
+
+    await expect(gallery.pageNumber).toHaveValue('7');
+    await expect(gallery.pageNumber).toBeFocused();
   });
 
   test('shows the address\'s words in the search after Back and then Forward from a search made with Enter', async ({page}) => {
