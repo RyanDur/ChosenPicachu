@@ -3,6 +3,7 @@ import {Maybe, maybe} from '@ryandur/sand';
 import {numberParam} from '@navigation/search-params';
 import {useGallery} from '@pages/Gallery/Context';
 import {keptForm} from '@pages/Gallery/keptForm';
+import {pageWithinTheEnd} from '@pages/Gallery/pageWithinTheEnd';
 import './PageControl.css';
 
 const typed = (form: FormData, field: string): Maybe<number> =>
@@ -22,8 +23,12 @@ export const PageControl = () => {
     event.preventDefault();
     const typedIn = new FormData(event.currentTarget);
     event.currentTarget.reset();
-    updateSearchParams({page: typed(typedIn, 'page').orElse(page), size: typed(typedIn, 'size').orElse(size)},
-      {preventScrollReset: false, state: keptForm.across('pages', formKey)});
+    const sizeChosen = typed(typedIn, 'size').orElse(size);
+    const pageChosen = typed(typedIn, 'page').orElse(page);
+    updateSearchParams({
+      page: pageWithinTheEnd(pageChosen, sizeChosen, pagination),
+      size: sizeChosen
+    }, {preventScrollReset: false, state: keptForm.across('pages', formKey)});
   };
 
   return <form key={formKey} onSubmit={onSubmit} className="page-control backdrop">

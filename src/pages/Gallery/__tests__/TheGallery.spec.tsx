@@ -24,6 +24,7 @@ import {
   refuseVAMPictures,
   setupAICAllArtResponse,
   setupAICArtPieceResponse,
+  setupAICEveryPage,
   setupClevelandAllArtResponse,
   setupHarvardAllArtResponse,
   setupVAMAllArtResponse,
@@ -188,6 +189,17 @@ describe('The gallery.', () => {
 
     await waitFor(() => expect(appAddress.search()).toHaveTextContent('tab=harvard'));
     expect(appAddress.search()).toHaveTextContent('page=1');
+  });
+
+  test('a page size chosen in the gallery settings that puts the page past the end lands on the last page', async () => {
+    setupAICEveryPage(aicArtResponse);
+    render(<TestApp at={`${Paths.artGallery}?tab=aic&page=50`}/>);
+    await galleryWall.framesAppear();
+
+    await galleryPage.sizeInSettings(100);
+
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent('size=100'));
+    expect(appAddress.search()).toHaveTextContent('page=10');
   });
 
   test('the gallery settings show the address\'s museum as chosen while it is still asked', async () => {
