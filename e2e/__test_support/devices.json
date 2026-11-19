@@ -9,6 +9,7 @@
   "iPadUprightWindow": {"viewport": {"width": 820, "height": 1180}},
   "iPadSidewaysWindow": {"viewport": {"width": 1180, "height": 820}},
   "desktop": {"viewport": {"width": 1440, "height": 900}},
+  "shortDesktopWindow": {"viewport": {"width": 1300, "height": 580}},
   "iPad13Upright": {"viewport": {"width": 1024, "height": 1366}, "hasTouch": true},
   "iPad11Upright": {"viewport": {"width": 834, "height": 1194}, "hasTouch": true},
   "splitViewWide": {"viewport": {"width": 700, "height": 1000}, "hasTouch": true},
