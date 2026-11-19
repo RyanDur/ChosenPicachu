@@ -1,39 +1,35 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {desktop, hydration, iPhone, trappedMenu} from './__test_support';
+import {hydration, trappedMenu} from './__test_support';
 
-for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
-  test.describe(`at ${size} wide`, () => {
-    test.use(device);
+test.describe('the trapped menu', {tag: ['@iPhone', '@desktop']}, () => {
+  test('the menu opens under card two, with its first choice in the gap above it and its last below it', async ({page}) => {
+    await page.goto('demos/z-index/why-9999-still-loses/');
+    const menu = trappedMenu(page);
 
-    test('the menu opens under card two, with its first choice in the gap above it and its last below it', async ({page}) => {
-      await page.goto('demos/z-index/why-9999-still-loses/');
-      const menu = trappedMenu(page);
+    await menu.open();
 
-      await menu.open();
-
-      await expect.poll(() => menu.onTopAt('name')).toBe('the choice');
-      await expect.poll(() => menu.onTopAt('date')).toBe('card two');
-      await expect.poll(() => menu.onTopAt('size')).toBe('the choice');
-    });
-
-    test('freeing card one opens the menu over card two, and trapping it again drops the menu back under', async ({page}) => {
-      await page.goto('demos/z-index/why-9999-still-loses/');
-      const menu = trappedMenu(page);
-
-      await menu.contextChoice.click();
-      await expect(menu.contextChoice).not.toBeChecked();
-      await menu.open();
-      await expect.poll(() => menu.onTopAt('date')).toBe('the choice');
-      await page.keyboard.press('Escape');
-
-      await menu.contextChoice.click();
-      await expect(menu.contextChoice).toBeChecked();
-      await menu.open();
-      await expect.poll(() => menu.onTopAt('date')).toBe('card two');
-    });
+    await expect.poll(() => menu.onTopAt('name')).toBe('the choice');
+    await expect.poll(() => menu.onTopAt('date')).toBe('card two');
+    await expect.poll(() => menu.onTopAt('size')).toBe('the choice');
   });
-}
+
+  test('freeing card one opens the menu over card two, and trapping it again drops the menu back under', async ({page}) => {
+    await page.goto('demos/z-index/why-9999-still-loses/');
+    const menu = trappedMenu(page);
+
+    await menu.contextChoice.click();
+    await expect(menu.contextChoice).not.toBeChecked();
+    await menu.open();
+    await expect.poll(() => menu.onTopAt('date')).toBe('the choice');
+    await page.keyboard.press('Escape');
+
+    await menu.contextChoice.click();
+    await expect(menu.contextChoice).toBeChecked();
+    await menu.open();
+    await expect.poll(() => menu.onTopAt('date')).toBe('card two');
+  });
+});
 
 test('going back past the box takes back the sentence, which no longer matches the cards', async ({page}) => {
   await page.goto('demos/z-index/why-9999-still-loses/');
