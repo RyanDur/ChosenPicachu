@@ -6,5 +6,5 @@ const namesAndAddressesIn = (holder: HTMLElement): (string | null)[][] =>
 export const chartPage = {
   storyHeading: (description: string): Promise<HTMLElement> =>
     screen.findByRole('heading', {name: description.replace(/\.$/, '')}),
-  parts: (name: string): (string | null)[][] => namesAndAddressesIn(screen.getByRole('list', {name}))
+  partsIn: (index: HTMLElement): (string | null)[][] => namesAndAddressesIn(index)
 };

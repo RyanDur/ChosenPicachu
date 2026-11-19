@@ -76,6 +76,8 @@ export const chartsPage = (page: Page) => {
     feedStillConnecting: (prices: number[]): Promise<{opens: () => void}> => feedStillConnecting(page, prices),
     seat,
     doorway: (chart: string): Locator => page.getByRole('link', {name: `${chart} tutorial`, exact: true}),
+    partLink: (name: string): Locator =>
+      page.getByRole('navigation', {name: 'Parts', exact: true}).getByRole('link', {name, exact: true}),
     carryByTheGrip,
     fingerOnTheGrip,
     stillSliding: (): Promise<number> => page.getByRole('listitem').evaluateAll(charts => charts.flatMap(chart => chart.getAnimations()).length),

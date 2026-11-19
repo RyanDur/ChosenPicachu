@@ -1,5 +1,4 @@
 import {ClassGloss} from '@pages/Demos/Accordions';
-import {ReadingTime} from '@pages/Demos/ReadingTime';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PartLink, PartTermLink} from '@pages/Demos/ZIndexDemo';
 import {FC, useId} from 'react';
@@ -14,23 +13,6 @@ import kindsSource from './chart-kinds.ts?sample';
 import crossingSource from '../DragAndDrop/crossing.ts?sample';
 import workspaceCss from './Workspace.css?sample';
 import '../Recipe/Recipe.css';
-import {Link} from 'react-router';
-import {ChartKind, chartKinds} from './chart-kinds';
-
-type Told = {
-  says: string;
-  minutes: number;
-};
-
-const told: Record<ChartKind, Told> = {
-  price: {says: 'A line shows whether the market is climbing, stalling or rolling over, without a digit to read.', minutes: 8},
-  candles: {
-    says: 'Each bucket of time answers for itself: where it opened and closed, how far it reached, and how much conviction was underneath.',
-    minutes: 7
-  },
-  pressure: {says: 'Bars show whether buyers drove the price there or the sellers stepped away.', minutes: 5},
-  pie: {says: 'One circle at the session’s end shows who owned it.', minutes: 5}
-};
 
 const WorkspaceStory: FC = () =>
   <Story titleId="graph-workspace-story"
@@ -172,21 +154,14 @@ export const ChartsTutorial: FC = () => {
   const titled = `tutorials${useId()}`;
   return <section aria-labelledby={titled} className="tutorials">
     <h2 id={titled} className="title">let’s build this feature</h2>
-    <ol className="spine" aria-labelledby={titled}>
-      {chartKinds.all.map(kind => <li key={kind} className="station void-badge-before shadow-rail-along">
-        <Link className="signpost" to={chartKinds.address(kind)}>{chartKinds.names[kind]}</Link>
-        <p className="paragraph">{told[kind].says}</p>
-        <ReadingTime minutes={told[kind].minutes}/>
-      </li>)}
-    </ol>
     <p className="overview paragraph">
       We are going to build this site’s live charts, feature by feature. Here is how to use this page: the card below is
       the workspace, told as a <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
-        rel="noreferrer">user story</a>. Each chart above opens its own story: click it, or press Enter on it. Open one
-      and you get the plan for that feature and the steps that build it, with the real code from this site, so what
-      you read is what runs. A chart’s steps link to earlier tabs and to MDN, Mozilla’s web reference, if you want more.
+        rel="noreferrer">user story</a>. Each of the four parts listed above is a page of its own, with the plan for that
+      chart and the steps that build it, using the real code from this site, so what you read is what runs. A chart’s
+      steps link to earlier tabs and to MDN, Mozilla’s web reference, if you want more.
     </p>
     <figure className="feedback">
       <blockquote className="quote paragraph italic trim-bar-beside">

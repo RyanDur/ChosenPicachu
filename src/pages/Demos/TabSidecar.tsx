@@ -1,5 +1,8 @@
 import {FC, PropsWithChildren} from 'react';
+import {classNames} from '@components';
 import './TabSidecar.css';
 
-export const TabSidecar: FC<PropsWithChildren<{label: string}>> = ({label, children}) =>
-  <aside aria-label={label} className="tab-sidecar">{children}</aside>;
+type Props = PropsWithChildren<{label: string; className?: string}>;
+
+export const TabSidecar: FC<Props> = ({label, className, children}) =>
+  <aside aria-label={label} className={classNames('tab-sidecar', className)}>{children}</aside>;

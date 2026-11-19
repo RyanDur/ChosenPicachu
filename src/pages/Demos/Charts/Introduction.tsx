@@ -22,5 +22,5 @@ export const ChartsIntroduction: FC = () =>
       The second is candles, which show where the price opened and closed and how far it reached in each bucket of time.
       The last two show who is buying and who is selling. You can
       also let a reader add, sort and remove charts. The exhibit below starts with one chart, the price line. Press + to
-      add another. The last part of this page builds the workspace the charts sit in.</p>
+      add another. The end of this page builds the workspace the charts sit in.</p>
   </header>;
