@@ -121,7 +121,7 @@ describe('the fold choices', () => {
 });
 
 describe('the fold motion', () => {
-  test('should sit after the parts index, right after the fold type, before before you start, and in neither', async () => {
+  test('should sit after the parts index, right after the fold type, ahead of the Before you start section, and in neither', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
@@ -180,7 +180,7 @@ describe('the parts index', () => {
     expect(accordionsTab.titlesUnder(partsIndex, 'What the platform gives now')).toEqual(titles.slice(4));
   });
 
-  test('should come after the accordion in HTML alone, and before before you start', async () => {
+  test('should come after the accordion in HTML alone, and ahead of the Before you start section', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const partsIndex = await accordionsTab.partsIndex();
@@ -206,7 +206,7 @@ describe('the parts index', () => {
     expect(explanation.saying(entry, '5 min')).toBeInTheDocument();
   });
 
-  test('should say what the accordion in HTML alone does, under its title', async () => {
+  test('should say what the part “An accordion in HTML alone” does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), htmlAlone);
@@ -223,7 +223,7 @@ describe('the parts index', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/a-box-remembers-the-fold', '?type=inclusive&style=drawer'));
   });
 
-  test('should say what a box remembers the fold, and a rule reads it does, under its title', async () => {
+  test('should say what the part “A box remembers the fold, and a rule reads it” does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'A box remembers the fold, and a rule reads it');
@@ -240,7 +240,7 @@ describe('the parts index', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/the-max-height-guess', '?type=inclusive&style=drawer'));
   });
 
-  test('should say what the max-height guess does, under its title', async () => {
+  test('should say what the part “The max-height guess” does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'The max-height guess');
@@ -257,7 +257,7 @@ describe('the parts index', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/the-measured-height', '?type=inclusive&style=drawer'));
   });
 
-  test('should say what the measured height does, under its title', async () => {
+  test('should say what the part “The measured height” does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'The measured height');
@@ -274,7 +274,7 @@ describe('the parts index', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/what-the-platform-gives-now', '?type=inclusive&style=drawer'));
   });
 
-  test('should say what what the platform gives now does, under its title', async () => {
+  test('should say what the part “What the platform gives now” does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'What the platform gives now');
@@ -291,7 +291,7 @@ describe('the parts index', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/how-a-sliding-fold-moves', '?type=inclusive&style=drawer'));
   });
 
-  test('should say what how a sliding fold moves does, under its title', async () => {
+  test('should say what the part “How a sliding fold moves” does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'How a sliding fold moves');
@@ -309,7 +309,7 @@ describe('the accordion in HTML alone', () => {
     expect(explanation.foldLabelsIn(exhibit)).toEqual(['basalt', 'cinder', 'meadow']);
   });
 
-  test('should open its part before you start on its HTML', async () => {
+  test('should open its part with its HTML', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const firstRun = explanation.runsIn(await explanation.part(htmlAlone))[0];
