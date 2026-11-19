@@ -28,6 +28,16 @@ describe('viewing a piece', () => {
     expect(piecePage.title()).toHaveTextContent(pieceResponse.data.title);
   });
 
+  test('the header’s search, sent as the address holds it, goes to the gallery’s results for it', async () => {
+    setupAICArtPieceResponse(pieceResponse, pieceResponse.data.id);
+    render(<TestApp at={`${Paths.artGallery}${pieceResponse.data.id}?tab=${Source.AIC}&search=cats`}/>);
+    await waitFor(() => expect(piecePage.title()).toHaveTextContent(pieceResponse.data.title));
+
+    await searchPage.bar.submit();
+
+    await waitFor(() => expect(appAddress.path()).toHaveTextContent(new RegExp(`^${Paths.artGallery}$`)));
+  });
+
   test('a reset of the header’s search over words never sent keeps the page the reader came from', async () => {
     setupAICArtPieceResponse(pieceResponse, pieceResponse.data.id);
     render(<TestApp at={`${Paths.artGallery}${pieceResponse.data.id}?tab=${Source.AIC}&page=40`}/>);
