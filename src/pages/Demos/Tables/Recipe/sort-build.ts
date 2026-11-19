@@ -1,4 +1,3 @@
-import {ReactNode} from 'react';
 import {Sample} from '../../Recipe';
 
 export type SortBuild = {
@@ -8,5 +7,4 @@ export type SortBuild = {
   buildSource: Sample;
   headerSource: Sample;
   rowSource: Sample;
-  paceStep: ReactNode;
 };

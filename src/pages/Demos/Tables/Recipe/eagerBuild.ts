@@ -1,4 +1,3 @@
-import {EagerPace} from './steps';
 import {SortBuild} from './sort-build';
 import buildSource from '../Frame/builds/Eager.ts?sample';
 import tableSource from '../Builds/EagerTable/EagerTable.tsx?sample';
@@ -11,6 +10,5 @@ export const eagerBuild: SortBuild = {
   tableSource,
   buildSource,
   headerSource,
-  rowSource,
-  paceStep: <EagerPace headerSource={headerSource} buildSource={buildSource}/>
+  rowSource
 };

@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, ReactNode} from 'react';
 import {useControls} from '../../Controls';
 import {Steps, Story} from '../../Recipe';
 import {
@@ -32,8 +32,8 @@ import {
 import {SortBuild} from './sort-build';
 import cssSource from '@components/DragSortableTable/motion.css?sample';
 
-export const SortStories: FC<{build: SortBuild}> = ({build}) => {
-  const {react, vanilla, tableSource, buildSource, headerSource, rowSource, paceStep} = build;
+export const SortStories: FC<{build: SortBuild; paceStep: ReactNode}> = ({build, paceStep}) => {
+  const {react, vanilla, tableSource, buildSource, headerSource, rowSource} = build;
   const {track, origin, motion} = useControls();
   return track === 'pointer'
     ? <>
