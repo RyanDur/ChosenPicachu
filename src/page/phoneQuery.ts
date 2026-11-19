@@ -1,6 +1,6 @@
-// CSS can't read a script's string, so the sheets repeat this query; keep them in step. The whole query:
-// BasePage.css, Banners.css, Feedback.css, Tabs.css, ZIndexDemo.css, ArtGalleryPage.css, GallerySettings.css,
-// GalleryNav.css, PageControl.css, Home.css, surface.css and typography.css. Its sideways half alone: BasePage.css,
+// CSS can't read a script's string, so the sheets repeat this query; keep them in step. The whole query: BasePage.css,
+// Banners.css, Feedback.css, Tabs.css, ZIndexDemo.css, ArtGalleryPage.css, GallerySettings.css, GalleryNav.css,
+// PageControl.css, Home.css, placement.css, surface.css and typography.css. Its sideways half alone: BasePage.css,
 // Gallery.css, GallerySettings.css, PagePulledApart.css and typography.css. Its upright half alone: BasePage.css,
 // Feedback.css, sortable-list.css, Recipe.css, Aggregations.css, Tutorials.css, Record.css, UsersPage.css and
 // surface.css
