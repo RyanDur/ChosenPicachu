@@ -1,3 +1,4 @@
+import {maybe, not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -21,6 +22,14 @@ export const galleryPage = {
       .filter(({selected}) => selected)
       .map(({textContent}) => textContent ?? '')
       .join(),
+  searchInSettings: (words: string): Promise<void> =>
+    maybe(screen.getAllByRole('group', {hidden: true})
+      .find(group => not(maybe(within(group).queryByRole('combobox', {name: 'Museum', hidden: true})).isNothing)))
+      .either(
+        sheet => userEvent.type(within(sheet).getByRole('combobox', {name: 'Search', hidden: true}), `${words}{Enter}`),
+        () => {
+          throw new Error('no gallery settings sheet on the page');
+        }),
   chooseMuseum: (name: string): Promise<void> =>
     userEvent.selectOptions(screen.getByRole('combobox', {name: 'Museum', hidden: true}), name),
   museumsOffered: (): string[] =>

@@ -156,6 +156,28 @@ describe('The gallery.', () => {
     expect(galleryPage.museumChosen()).toBe('Choose a museum');
   });
 
+  test('a museum chosen from the museum tabs opens on its first page', async () => {
+    setupHarvardAllArtResponse(harvardArtResponse);
+    heldVAMPictures();
+    render(<TestApp at={`${Paths.artGallery}?tab=vam&page=40`}/>);
+
+    await galleryPage.enter('Harvard Art Museums');
+
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent('tab=harvard'));
+    expect(appAddress.search()).toHaveTextContent('page=1');
+  });
+
+  test('a search made in the gallery settings opens on its first page', async () => {
+    setupHarvardAllArtResponse(harvardArtResponse);
+    heldVAMPictures();
+    render(<TestApp at={`${Paths.artGallery}?tab=vam&page=40`}/>);
+
+    await galleryPage.searchInSettings('lilies');
+
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent('search=lilies'));
+    expect(appAddress.search()).toHaveTextContent('page=1');
+  });
+
   test('a museum chosen in the gallery settings opens on its first page', async () => {
     setupHarvardAllArtResponse(harvardArtResponse);
     heldVAMPictures();
