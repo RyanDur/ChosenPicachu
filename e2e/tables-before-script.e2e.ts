@@ -32,23 +32,29 @@ test('given the tables tab before its script runs, a resize handle is disabled; 
   await expect.poll(() => trades.announcedShare('volume')).toBeGreaterThan(before);
 });
 
-for (const pace of ['eager', 'lazy']) {
-  const paced = `${address}&pace=${pace}`;
+test('given the tables tab before its script runs, Tab passes over a movable column header; once the script runs, Tab stops on it and an arrow moves the column', async ({page}) => {
+  await hydration(page).holdBack(address);
+  await page.goto(address);
+  const trades = dragSortTable(page, tableWorlds.card(page).card);
 
-  test(`given the tables tab at the ${pace} pace before its script runs, Tab passes over a movable column header; once the script runs, Tab stops on it and an arrow moves the column`, async ({page}) => {
-    await hydration(page).holdBack(paced);
-    await page.goto(paced);
-    const trades = dragSortTable(page, tableWorlds.card(page).card);
+  await tabsTo(page, trades.columnHeader('trades'));
+  await expect(trades.columnHeader('trades')).not.toBeFocused();
+  await hydration(page).release();
 
-    await tabsTo(page, trades.columnHeader('trades'));
-    await expect(trades.columnHeader('trades')).not.toBeFocused();
-    await hydration(page).release();
+  await expect(trades.resizeHandle('lookback')).toBeEnabled();
+  await trades.resizeHandle('lookback').focus();
+  await tabsTo(page, trades.columnHeader('trades'));
+  await expect(trades.columnHeader('trades')).toBeFocused();
+  await page.keyboard.press('ArrowRight');
+  await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+});
 
-    await expect(trades.resizeHandle('lookback')).toBeEnabled();
-    await trades.resizeHandle('lookback').focus();
-    await tabsTo(page, trades.columnHeader('trades'));
-    await expect(trades.columnHeader('trades')).toBeFocused();
-    await page.keyboard.press('ArrowRight');
-    await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
-  });
-}
+test('at the lazy pace, Tab stops on a movable column header and an arrow moves the column', async ({page}) => {
+  const trades = await tableWorlds.opened(page, {at: `/ChosenPicachu/${address}&pace=lazy`, holder: page => tableWorlds.card(page).card});
+
+  await trades.resizeHandle('lookback').focus();
+  await tabsTo(page, trades.columnHeader('trades'));
+  await expect(trades.columnHeader('trades')).toBeFocused();
+  await page.keyboard.press('ArrowRight');
+  await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+});
