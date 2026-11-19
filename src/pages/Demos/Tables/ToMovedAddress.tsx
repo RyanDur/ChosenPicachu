@@ -7,7 +7,7 @@ import {TablePart, tableParts} from './part-pages';
 import {livingStories} from './living-stories';
 import {readerSettings} from '../ReaderSettings';
 import {stations} from '../headings';
-import {featuresId} from './features-id';
+import {featuresPlace} from './features-place';
 
 const tutorialParam = 'tut';
 
@@ -35,7 +35,7 @@ type StationPlace = Omit<Path, 'search'>;
 const stationed = new Map<string, StationPlace>([
   ...tableParts.inOrder.map((part, index): [string, StationPlace] =>
     [`#${stations.idOf(index + 1)}`, {pathname: tableParts.addressOf(part), hash: ''}]),
-  [`#${stations.idOf(tableParts.count + 1)}`, {pathname: tableParts.tabAddress, hash: `#${featuresId}`}]
+  [`#${stations.idOf(tableParts.count + 1)}`, {pathname: tableParts.tabAddress, hash: `#${featuresPlace.id}`}]
 ]);
 
 const placeForStation = (params: URLSearchParams, hash: string): Maybe<Path> =>
