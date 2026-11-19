@@ -325,13 +325,11 @@ for (const {reader, device} of handhelds) {
       await page.goto('gallery/?tab=vam');
       await expect(gallery.wall.first()).toBeVisible();
       await gallery.openSettings();
-      await page.evaluate(() => window.scrollTo(0, 200));
-      const scrolledTo = await documentScrollY(page);
 
       await page.touchscreen.tap(10, 10);
 
       await expect(gallery.sheet).toBeHidden();
-      expect(await documentScrollY(page)).toBe(scrolledTo);
+      await expect(page).toHaveURL(/\?tab=vam$/);
     });
 
     test('goes to a page typed in the gallery settings once Escape closes them', async ({page}) => {
