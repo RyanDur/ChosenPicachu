@@ -3,7 +3,7 @@ import {Maybe, maybe} from '@ryandur/sand';
 import {numberParam} from '@navigation/search-params';
 import {useGallery} from '@pages/Gallery/Context';
 import {keptForm} from '@pages/Gallery/keptForm';
-import {pageWithinTheEnd} from '@pages/Gallery/pageWithinTheEnd';
+import {pages} from '@pages/Gallery/pages';
 import './PageControl.css';
 
 const typed = (form: FormData, field: string): Maybe<number> =>
@@ -26,7 +26,7 @@ export const PageControl = () => {
     const sizeChosen = typed(typedIn, 'size').orElse(size);
     const pageChosen = typed(typedIn, 'page').orElse(page);
     updateSearchParams({
-      page: pageWithinTheEnd(pageChosen, sizeChosen, pagination),
+      page: pages.withinTheEnd(pageChosen, sizeChosen, pagination),
       size: sizeChosen
     }, {preventScrollReset: false, state: keptForm.across('pages', formKey)});
   };
