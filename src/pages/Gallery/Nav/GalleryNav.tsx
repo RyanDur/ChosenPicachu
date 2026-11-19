@@ -1,7 +1,7 @@
 import {Link, useLocation} from 'react-router';
 import {FC} from 'react';
-import {nothing, some} from '@ryandur/sand';
 import {useGallery} from '@pages/Gallery/Context';
+import {pages} from '@pages/Gallery/pages';
 import './GalleryNav.css';
 
 type Props = {
@@ -30,7 +30,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
         className="page prev field attentive bold">
         <span className="way-words">previous page</span>
       </Link> </>}
-    {pagination.mBind(({totalPages}) => totalPages > 0 ? some(totalPages) : nothing()).map(totalPages =>
+    {pages.last(pagination).map(totalPages =>
       <output className="info field" key="count">
         Page {currentPage.toLocaleString()} of {totalPages.toLocaleString()}
       </output>).orNull()}
