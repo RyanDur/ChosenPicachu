@@ -8,8 +8,8 @@ export const Opener: FC = () =>
       Keith’s <a className="signpost" href="https://resilientwebdesign.com/"><cite>Resilient Web Design</cite></a>, which
       treats the three as layers and tells their history, without code, by design. This site follows the same
       languages through working code.</p>
-    <p className="thesis paragraph">Each language has its own job. HTML says what things are, CSS says how they look,
-      and JavaScript says how they respond: structure, presentation and behavior.</p>
+    <p className="thesis paragraph">HTML says what things are, CSS says how they look, and JavaScript says how they
+      respond: structure, presentation and behavior.</p>
     <p className="thesis paragraph">I wrote this for developers who learned the three the way most of us did, one at a
       time and on the job, asking one language to do most of the work. Jobs then end up wherever they can be done: a div
       standing in for a button, a look written on the element itself, a script taking over scrolling, focus or the back
