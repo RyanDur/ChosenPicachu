@@ -17,14 +17,11 @@ const tellers = new Map<string, TablePart>([
   [livingStories.ids.store, 'the-live-table-and-the-store']
 ]);
 
-type Moved = Omit<Path, 'hash'> & {hash?: string};
+const carrying = (params: URLSearchParams, hash: string) => (pathname: string): Path =>
+  ({pathname, search: readerSettings.keptFrom(params).toString(), hash});
 
-const carrying = (params: URLSearchParams) => (pathname: string): Moved =>
-  ({pathname, search: readerSettings.keptFrom(params).toString()});
-
-const pageForNamedTutorial = (params: URLSearchParams): Maybe<Moved> =>
-  maybe(tableTutorials.all().find(tutorial => tutorial === params.get(tutorialParam)))
-    .map(tutorial => carrying(params)(tableTutorials.addressOf(tutorial)));
+const pageForNamedTutorial = (params: URLSearchParams): Maybe<string> =>
+  maybe(tableTutorials.all().find(tutorial => tutorial === params.get(tutorialParam))).map(tableTutorials.addressOf);
 
 const pageTelling = (story: string): Maybe<string> => maybe(tellers.get(story)).map(tableParts.addressOf);
 
@@ -33,7 +30,7 @@ const fragmentOf = (story: string): string => `#${livingStories.titleIdOf(story)
 const pageForFragment = (hash: string): Maybe<string> =>
   maybe([...tellers.keys()].find(story => fragmentOf(story) === hash)).mBind(pageTelling);
 
-type StationPlace = {pathname: string; hash: string};
+type StationPlace = Omit<Path, 'search'>;
 
 const stationed = new Map<string, StationPlace>([
   ...tableParts.inOrder.map((part, index): [string, StationPlace] =>
@@ -41,8 +38,8 @@ const stationed = new Map<string, StationPlace>([
   [`#${stations.idOf(tableParts.count + 1)}`, {pathname: tableParts.tabAddress, hash: `#${featuresId}`}]
 ]);
 
-const placeForStation = (params: URLSearchParams, hash: string): Maybe<Moved> =>
-  maybe(stationed.get(hash)).map(({pathname, hash: place}) => ({...carrying(params)(pathname), hash: place}));
+const placeForStation = (params: URLSearchParams, hash: string): Maybe<Path> =>
+  maybe(stationed.get(hash)).map(({pathname, hash: place}) => carrying(params, place)(pathname));
 
 const storiesNamed = (params: URLSearchParams): string[] =>
   maybe(params.get(livingStories.param)).orElse('').split(',').filter(story => tellers.has(story));
@@ -54,11 +51,12 @@ export const ToMovedAddress: FC = () => {
   const [params] = useSearchParams();
   const location = useLocation();
   const hydrated = useHydrated();
-  return pageForFragment(location.hash).map(carrying(params))
-    .or(() => pageForNamedTutorial(params))
+  const keepingTheFragment = carrying(params, location.hash);
+  return pageForFragment(location.hash).map(keepingTheFragment)
+    .or(() => pageForNamedTutorial(params).map(keepingTheFragment))
     .or(() => placeForStation(params, location.hash))
-    .or(() => pageForNamedStory(params, location).map(carrying(params)))
+    .or(() => pageForNamedStory(params, location).map(keepingTheFragment))
     .either(
-      moved => hydrated && <Navigate replace to={{hash: location.hash, ...moved}}/>,
+      moved => hydrated && <Navigate replace to={moved}/>,
       () => null);
 };
