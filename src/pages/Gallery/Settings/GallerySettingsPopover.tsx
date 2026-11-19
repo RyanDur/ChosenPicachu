@@ -1,6 +1,6 @@
 import {ChangeEvent, FC, FocusEvent, KeyboardEvent, ToggleEvent, useId} from 'react';
 import {has, maybe, not} from '@ryandur/sand';
-import {usePageFocus} from '@page';
+import {typedValues, usePageFocus} from '@page';
 import {useGallery, useKnownDoors} from '@pages/Gallery/Context';
 import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
@@ -132,7 +132,7 @@ const PageRow: FC = () => {
 };
 
 const showingTheAddress = ({newState, currentTarget}: ToggleEvent<HTMLElement>) => {
-  if (newState === 'open') currentTarget.querySelectorAll('input').forEach(field => field.value = field.defaultValue);
+  if (newState === 'open') typedValues.droppedIn(currentTarget);
 };
 
 export const GallerySettingsPopover: FC<{readonly id: string}> = ({id}) =>
