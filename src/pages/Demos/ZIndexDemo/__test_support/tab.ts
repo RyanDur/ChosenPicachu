@@ -5,6 +5,9 @@ import {readingOf} from '@pages/Demos/Controls/__test_support/reading';
 const findExpand = (): Promise<HTMLElement> => screen.findByRole('button', {name: 'Expand', expanded: false});
 
 export const zIndexTab = {
+  opening: (): Promise<HTMLElement> => screen.findByText(/^Where two boxes on a page overlap/),
+  pile: (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^The pile\./}),
+  size: (): Promise<HTMLElement> => screen.findByText(/^Six parts, about \d+ minutes\.$/),
   findFeatureStories: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'Let’s build this feature'}),
   fragmentOf: (heading: string): string => `#${screen.getByRole('heading', {name: heading}).id}`,
   follow: async (holder: HTMLElement, name: string): Promise<void> => userEvent.click(within(holder).getByRole('link', {name})),

@@ -15,7 +15,7 @@ const ownLines: Record<string, string[]> = {
   '/src/pages/Practice/PracticeDrawing.css': ['855px'],
   '/src/pages/Home/Home.css': ['688px'],
   '/src/pages/Demos/Runs.css': ['92ch'],
-  '/src/pages/Demos/Accordions/Explained.css': ['900px']
+  '/src/pages/Demos/TabSidecar.css': ['900px']
 };
 
 const asLine = (length: string): string => length.endsWith('rem') ? `${Math.round(parseFloat(length) * 10)}px` : length;

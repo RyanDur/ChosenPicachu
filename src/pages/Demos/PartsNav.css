@@ -1,0 +1,47 @@
+.parts-index {
+  display: grid;
+  gap: var(--base);
+}
+
+.parts-index-list {
+  display: grid;
+  padding-inline-start: var(--base-x-4);
+}
+
+@property --title-reach {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+.parts-index-entry {
+  --entry-room: var(--base);
+
+  position: relative;
+  padding-block: var(--entry-room);
+
+  .minutes {
+    position: absolute;
+    inset-block-start: calc(var(--entry-room) + var(--title-reach));
+    inset-inline-end: 0;
+  }
+
+  .says {
+    margin-block-start: var(--base-x-0_5);
+  }
+}
+
+.parts-index-link {
+  display: inline-flex;
+  margin-inline-end: var(--base-x-7);
+}
+
+@media (pointer: coarse) {
+  .parts-index-entry {
+    --title-reach: calc((var(--finger-reach) - 1lh) / 2);
+  }
+
+  .parts-index-link {
+    padding-block: var(--title-reach);
+  }
+}

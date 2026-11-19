@@ -1,7 +1,8 @@
 import {FC, ReactNode, useEffect} from 'react';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {useControls} from '../Controls';
-import {PartListing} from './PartListing';
+import {TabSidecar} from '../TabSidecar';
+import {PartsIndex} from './PartsIndex';
 import {ZIndexIntroduction} from './Introduction';
 import {NaturalZIndex} from './NaturalZIndex';
 import {PartPage} from './PartPage';
@@ -43,12 +44,9 @@ export const Room: FC = () => {
     () => <>
       <ZIndexIntroduction/>
       <NaturalZIndex className="card rounded-corners lifted padded"/>
-      <ZIndexSize/>
-      <PartListing part="why-third-is-on-top"/>
-      <PartListing part="why-9999-still-loses"/>
-      <PartListing part="what-else-forms-a-stacking-context"/>
-      <PartListing part="why-the-popover-wins"/>
-      <PartListing part="why-a-fixed-banner-still-loses"/>
-      <PartListing part="lets-build-this-feature"/>
+      <TabSidecar label="parts and minutes">
+        <ZIndexSize/>
+        <PartsIndex/>
+      </TabSidecar>
     </>);
 };
