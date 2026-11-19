@@ -8,7 +8,7 @@ const steps = {
   },
   'the features': {
     step: (page: Page): Locator => page.getByRole('region', {name: 'let’s build this feature', exact: true}),
-    before: (step: Locator): Locator => step.getByText(/every arrangement a pointer can make, a key can make too\./)
+    before: (step: Locator): Locator => step.getByRole('paragraph').first()
   }
 };
 
