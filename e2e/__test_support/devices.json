@@ -6,6 +6,8 @@
   "iPadSplitView": {"viewport": {"width": 507, "height": 1180}, "hasTouch": true},
   "iPadUpright": {"viewport": {"width": 820, "height": 1180}, "hasTouch": true},
   "iPadSideways": {"viewport": {"width": 1180, "height": 820}, "hasTouch": true},
+  "iPadUprightWindow": {"viewport": {"width": 820, "height": 1180}},
+  "iPadSidewaysWindow": {"viewport": {"width": 1180, "height": 820}},
   "desktop": {"viewport": {"width": 1440, "height": 900}},
   "iPad13Upright": {"viewport": {"width": 1024, "height": 1366}, "hasTouch": true},
   "iPad11Upright": {"viewport": {"width": 834, "height": 1194}, "hasTouch": true},
