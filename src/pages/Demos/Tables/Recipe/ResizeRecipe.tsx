@@ -26,7 +26,7 @@ const ledgerCodes: Record<World, ReactNode> = {
       ...carve.unit(looksSource, 'const headerNeeds')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...carve.between(headerSource, 'className={classNames(', '...looks.headerNeeds(lifts, width)'), lines.blank,
+      ...carve.between(headerSource, 'className={classNames(', '...looks.headerNeeds(movable, width)'), lines.blank,
       ...carve.between(headerSource, "'--share': width.map(shares.width)", "'--share': width.map(shares.width)")
     ]}/>
     <Snippet label="CSS" lines={[

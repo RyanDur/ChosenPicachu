@@ -19,7 +19,7 @@ export const FocusLands: FC<{headerSource: Sample}> = ({headerSource}) => {
     <Reveal>
       {world === 'react'
         ? <Says>The row grip is already a button, and a header asks with a tabIndex
-          once <code className="monospaced">lifts</code> is true, when its column can travel and the page’s script has
+          once <code className="monospaced">movable</code> is true, when its column can travel and the page’s script has
           run. So Tab reaches every movable piece of the table in order. The focus-visible ring draws for the
           keyboard only. A shared class is a look that lives in the site’s shared style sheet and that an element wears
           by name. <code className="monospaced">focus-ringed</code> is one: the site’s ring, which every movable column
@@ -39,7 +39,7 @@ export const FocusLands: FC<{headerSource: Sample}> = ({headerSource}) => {
       <Codes>
         {world === 'react'
           ? <Snippet label="HTML" lines={[
-            ...carve.between(headerSource, 'tabIndex={lifts', 'tabIndex={lifts'), lines.blank,
+            ...carve.between(headerSource, 'tabIndex={movable', 'tabIndex={movable'), lines.blank,
             ...carve.between(sources.grip, '<button', '</button>'),
             lines.aside('{/* the button was focusable all along; Safari’s Tab still wants it written */}')
           ]}/>

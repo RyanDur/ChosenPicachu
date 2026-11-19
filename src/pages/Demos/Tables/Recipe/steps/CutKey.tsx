@@ -21,7 +21,7 @@ export const CutKey: FC<{headerSource: Sample; buildSource: Sample}> = ({headerS
         {world === 'react'
           ? <Snippet label="TS" lines={[
             ...carve.unit(sources.arrows, 'const column: Arrows'), lines.blank,
-            ...carve.between(headerSource, 'onKeyDown={lifts ? arrows.column', 'walkedTo(to, widths)) : undefined}'), lines.blank,
+            ...carve.between(headerSource, 'onKeyDown={movable ? arrows.column', 'walkedTo(to, widths)) : undefined}'), lines.blank,
             ...carve.unit(headerSource, 'const walkedTo = '),
             lines.aside('// the whole walk; the marks land and clear at once, nothing to wait for')
           ]}/>
