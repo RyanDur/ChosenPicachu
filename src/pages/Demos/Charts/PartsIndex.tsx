@@ -5,10 +5,8 @@ import {ChartKind, chartKinds} from './chart-kinds';
 
 const Entry: FC<{kind: ChartKind}> = ({kind}) => {
   const {minutes, says} = chartKinds.told[kind];
-  return <PartsNavigationEntry to={chartKinds.address(kind)} name={chartKinds.names[kind]}>
-    <time className="minutes caption muted-ink" dateTime={`PT${minutes}M`}>{`${minutes} min`}</time>
-    <p className="says paragraph">{says}</p>
-  </PartsNavigationEntry>;
+  return <PartsNavigationEntry to={chartKinds.address(kind)} name={chartKinds.names[kind]}
+    minutes={minutes} says={says}/>;
 };
 
 export const PartsIndex: FC = () =>
