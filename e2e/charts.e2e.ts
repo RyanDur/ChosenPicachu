@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {boxOf, chartsPage, desktop, hydration, iPhone, siteFrame} from './__test_support';
+import {boxOf, chartsPage, hydration, siteFrame} from './__test_support';
 
 test('the price period menu stays hidden until the reader asks for it', async ({page}) => {
   const charts = chartsPage(page);
@@ -35,38 +35,29 @@ test('removing a chart leaves focus on the next chart\'s link', async ({page}) =
   await expect(charts.doorway('Candles')).toBeFocused();
 });
 
-const aPressOpensTheTutorial = async (page: Page, press: 'click' | 'tap', kind: string, region: string): Promise<void> => {
+const aPressOpensTheTutorial = async (page: Page, byTouch: boolean, kind: string, region: string): Promise<void> => {
   await page.goto(`demos/charts/?charts=${kind}`);
   const drawing = page.getByRole('region', {name: region, exact: true}).getByRole('figure');
   await drawing.scrollIntoViewIfNeeded();
   const box = await boxOf(drawing, `the ${kind} drawing is not shown`);
 
   const [x, y] = [box.x + box.width / 2, box.y + box.height / 2];
-  await (press === 'tap' ? page.touchscreen.tap(x, y) : page.mouse.click(x, y));
+  await (byTouch ? page.touchscreen.tap(x, y) : page.mouse.click(x, y));
 
   await expect(page).toHaveURL(new RegExp(`/demos/charts/${kind}/?$`));
 };
 
-for (const {reader, device, press} of [
-  {reader: 'a mouse at a desk', device: desktop, press: 'click' as const},
-  {reader: 'a finger on a phone', device: iPhone, press: 'tap' as const}
-]) {
-  test.describe(reader, () => {
-    test.use(device);
+test.describe('a press in the middle of a drawing', {tag: ['@iPhone', '@desktop']}, () => {
+  test('a press in the middle of the price drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'price', 'live trades'));
 
-    test('a press in the middle of the price drawing opens its tutorial', ({page}) => aPressOpensTheTutorial(page, press, 'price', 'live trades'));
+  test('a press in the middle of the candles drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'candles', 'candles'));
 
-    test('a press in the middle of the candles drawing opens its tutorial', ({page}) => aPressOpensTheTutorial(page, press, 'candles', 'candles'));
+  test('a press in the middle of the pressure drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'pressure', 'pressure'));
 
-    test('a press in the middle of the pressure drawing opens its tutorial', ({page}) => aPressOpensTheTutorial(page, press, 'pressure', 'pressure'));
+  test('a press in the middle of the pie drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'pie', 'pie'));
+});
 
-    test('a press in the middle of the pie drawing opens its tutorial', ({page}) => aPressOpensTheTutorial(page, press, 'pie', 'pie'));
-  });
-}
-
-test.describe('a mouse carrying a chart past its neighbor', () => {
-  test.use(desktop);
-
+test.describe('a mouse carrying a chart past its neighbor', {tag: '@desktop'}, () => {
   test('the chart swaps back only once the pointer has come a third of its height back', async ({page}) => {
     await page.goto('demos/charts/?charts=price,pie');
     const charts = chartsPage(page);
@@ -82,20 +73,16 @@ test.describe('a mouse carrying a chart past its neighbor', () => {
   });
 });
 
-test.describe('a finger on a phone', () => {
-  test.use(iPhone);
+test('a finger pressed on a chart\'s grip and taken over by the browser leaves the chart at rest', {tag: '@iPhone'}, async ({page, browserName}) => {
+  test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol cancels a finger');
+  await page.goto('demos/charts/?charts=price,candles');
+  const charts = chartsPage(page);
 
-  test('a finger pressed on a chart\'s grip and taken over by the browser leaves the chart at rest', async ({page, browserName}) => {
-    test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol cancels a finger');
-    await page.goto('demos/charts/?charts=price,candles');
-    const charts = chartsPage(page);
+  const finger = await charts.fingerOnTheGrip('live trades');
+  await expect(charts.seat('live trades')).toHaveAttribute('draggable', 'true');
 
-    const finger = await charts.fingerOnTheGrip('live trades');
-    await expect(charts.seat('live trades')).toHaveAttribute('draggable', 'true');
-
-    await finger.canceled();
-    await expect(charts.seat('live trades')).not.toHaveAttribute('draggable', 'true');
-  });
+  await finger.canceled();
+  await expect(charts.seat('live trades')).not.toHaveAttribute('draggable', 'true');
 });
 
 const chartsTabWithItsScriptHeldBack = async (page: Page) => {
