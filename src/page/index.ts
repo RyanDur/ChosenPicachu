@@ -8,7 +8,7 @@ export {Main} from './Main';
 export {PageError} from './PageError';
 export {PageFocus} from './PageFocus';
 export {popoversClosedWhenThePhoneLayoutEnds} from './popoversClosedWhenThePhoneLayoutEnds';
-export {typingDroppedOnBackAndForward} from './typingDroppedOnBackAndForward';
+export {popoversClosedOnBackAndForward} from './popoversClosedOnBackAndForward';
 export {phoneQuery} from './phoneQuery';
 export {usePageFocus} from './usePageFocus';
 export {WaitingRoom} from './WaitingRoom';
