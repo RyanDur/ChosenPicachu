@@ -102,7 +102,7 @@
   }
 }
 
-@media (width > 600px) and ((width > 1100px) or (height > 600px)) {
+@media not ((width <= 600px) or ((width <= 1100px) and (height <= 600px))) {
   @container home (width >= 68.8rem) {
     .home .page-pulled-apart {
       display: flex;
