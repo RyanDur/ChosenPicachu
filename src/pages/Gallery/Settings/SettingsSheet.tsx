@@ -5,6 +5,7 @@ import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
 import {opening} from '@pages/Gallery/opening';
 import {pages} from '@pages/Gallery/pages';
+import {numberField} from '@pages/Gallery/numberField';
 import {useGalleryAddress} from './useGalleryAddress';
 
 const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
@@ -72,7 +73,9 @@ const movedTo = {preventScrollReset: false};
 
 const applyingNumber = (current: number, apply: (value: number) => void) =>
   (accepted: (field: HTMLInputElement) => boolean) => (input: HTMLInputElement): void => {
-    if (input.valueAsNumber !== current && accepted(input)) apply(input.valueAsNumber);
+    if (input.valueAsNumber === current || !accepted(input)) return;
+    apply(input.valueAsNumber);
+    numberField.showsWhatItSent(input, input.valueAsNumber);
   };
 
 const SizeRow: FC = () => {

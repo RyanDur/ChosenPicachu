@@ -205,6 +205,22 @@ for (const {reader, device} of handhelds) {
       await expect(page).toHaveURL(/size=12/);
     });
 
+    test('opens the gallery settings again on the number per page sent from them with Enter', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam&size=30');
+      await gallery.openSettings();
+      await gallery.pageSize.fill('10');
+      await gallery.pageSize.press('Enter');
+      await expect(page).toHaveURL(/[?&]size=10(&|$)/);
+      await page.keyboard.press('Escape');
+      await expect(gallery.sheet).toBeHidden();
+
+      await gallery.openSettings();
+
+      await expect(gallery.pageSize).toHaveValue('10');
+    });
+
     test('goes to the last page offered in the gallery settings on Enter, when the address\'s page is past it', async ({page}) => {
       const gallery = galleryPage(page);
       await gallery.answerEveryWallFromTheRecording();
