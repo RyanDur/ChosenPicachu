@@ -9,7 +9,7 @@ import {numberField} from '@pages/Gallery/numberField';
 import {useGalleryAddress} from './useGalleryAddress';
 
 const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
-  if (event.key === 'Enter') apply(event.currentTarget);
+  if (event.key === 'Enter' && !event.nativeEvent.isComposing) apply(event.currentTarget);
 };
 
 const refusedSaysWhy = (field: HTMLInputElement): boolean => field.reportValidity();
