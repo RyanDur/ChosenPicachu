@@ -15,6 +15,11 @@ const recordedOnTheStage = (key: string) =>
 
 const theArtInstitutesOpeningPicture = '**/2d484387-2509-5e8e-2c43-22f9981972eb/info.json';
 
+const builtChunks = schema.record(schema.object({required: {file: schema.string}}));
+
+const theGalleryRoomsChunk = (): string =>
+  builtChunks.forceDecode(JSON.parse(readFileSync('build/client/.vite/manifest.json', 'utf8')))['src/pages/Gallery/route.tsx'].file;
+
 export const galleryPage = (page: Page) => {
   const wall = page.getByRole('figure');
   const searchField = page.getByRole('combobox', {name: 'Search', exact: true});
@@ -73,6 +78,14 @@ export const galleryPage = (page: Page) => {
         contentType: 'application/json',
         body: JSON.stringify({info: {record_count: 0, pages: 0, page_size: 8}, records: []})
       }));
+    },
+    holdTheGalleryRoom: async (): Promise<() => void> => {
+      const {promise: released, resolve: release} = Promise.withResolvers<void>();
+      await page.route(`**/${theGalleryRoomsChunk()}`, async route => {
+        await released;
+        await route.continue();
+      });
+      return release;
     },
     refuseEveryPicture: async (): Promise<void> => {
       await page.route('**/vam-image/*/full/**', route => route.abort());
