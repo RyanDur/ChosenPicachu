@@ -11,7 +11,7 @@ type Headers = {
 const recipe = (build: string): Promise<HTMLElement> =>
   screen.findByRole('region', {name: `build the ${build} yourself`}, untilTheTablesTabRenders);
 const part = (name: string): HTMLElement => screen.getByRole('region', {name});
-const tutorialLink = async (name: string | RegExp): Promise<HTMLElement> =>
+const link = async (name: string | RegExp): Promise<HTMLElement> =>
   within(await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders)).findByRole('link', {name}, untilTheTablesTabRenders);
 const partLink = async (name: string): Promise<HTMLElement> =>
   within(await screen.findByRole('navigation', {name: 'Parts'}, untilTheTablesTabRenders)).findByRole('link', {name}, untilTheTablesTabRenders);
@@ -21,15 +21,15 @@ const headersOf = (holder: HTMLElement): Headers =>
 export const tablesTab = () => ({
   titleShown: (name: string): HTMLElement | null => screen.queryByRole('heading', {name}),
   recipe,
-  tutorialLink,
+  link,
   features: (): HTMLElement => screen.getByRole('region', {name: 'let’s build this feature'}),
   featureLinks: (): (string | null)[][] =>
     within(screen.getByRole('region', {name: 'let’s build this feature'})).getAllByRole('link')
       .map(link => [computeAccessibleName(link), link.getAttribute('href')]),
   partLink,
-  follow: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
+  follow: async (name: string): Promise<void> => userEvent.click(await link(name)),
   followPart: async (name: string): Promise<void> => userEvent.click(await partLink(name)),
-  backToTheTab: async (): Promise<void> => userEvent.click(await tutorialLink('Tables')),
+  backToTheTab: async (): Promise<void> => userEvent.click(await link('Tables')),
   tutorialsListed: async (): Promise<string[]> =>
     within(await screen.findByRole('list', {name: 'Add what the trader asked for'}, untilTheTablesTabRenders))
       .getAllByRole('link').map(link => computeAccessibleName(link)),
