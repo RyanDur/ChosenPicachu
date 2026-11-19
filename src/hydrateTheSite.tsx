@@ -21,7 +21,10 @@ const typedValuesDropped = (open: HTMLElement): void =>
 
 // CSS can't close a popover when its query stops matching, so the phone's sheets are closed once the phone layout ends
 const sheetsClosedWhenThePhoneLayoutEnds = () =>
-  phoneLayout(window).ends(() => openIn('.phone-sheet:popover-open').forEach(sheet => sheet.hidePopover()));
+  phoneLayout(window).ends(() => openIn('.phone-sheet:popover-open').forEach(sheet => {
+    typedValuesDropped(sheet);
+    sheet.hidePopover();
+  }));
 
 // Android's back gesture closes an open popover before it goes back, so Back and Forward close whatever is open
 const popoversClosedOnBackAndForward = () =>
