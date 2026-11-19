@@ -1,4 +1,4 @@
-import {render} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demoPage} from '@pages/Demos/__test_support';
 import {tablesTab} from '@pages/Demos/Tables/__test_support';
@@ -22,4 +22,10 @@ describe('the table tutorials', () => {
     expect(demoPage.row('Widen a column')).toBeVisible();
   });
 
+  test('should take the keyboard to the features when the address names them', async () => {
+    render(<TestApp at="/#features-asked-for"><Tutorials/></TestApp>);
+    await demoPage.findTitle('let’s build this feature');
+
+    await waitFor(() => expect(tablesTab().features()).toHaveFocus());
+  });
 });
