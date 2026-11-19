@@ -6,7 +6,7 @@ import {museums} from '@pages/Gallery/museums';
 import {GallerySettingsPopover} from './GallerySettingsPopover';
 import './GallerySettings.css';
 
-const Readout: FC<{readonly popover: string}> = ({popover}) => {
+const SettingsButton: FC<{readonly popover: string}> = ({popover}) => {
   const {search, tab} = useGallery();
   const museum = maybe(tab).map(museums.named).orElse('the gallery');
   const shown = has(search) ? `${museum}, ${search}` : museum;
@@ -23,7 +23,7 @@ export const GallerySettings: FC = () => {
   const popover = useId();
   return <>
     <Search className="header-settings settings-standing"/>
-    <Readout popover={popover}/>
+    <SettingsButton popover={popover}/>
     <GallerySettingsPopover id={popover}/>
   </>;
 };
