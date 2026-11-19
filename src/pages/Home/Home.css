@@ -2,7 +2,7 @@
   --figure-column: 45%;
 
   display: grid;
-  grid-template-columns: minmax(0, 1fr) max(var(--figure-column), var(--base-x-40));
+  grid-template-columns: minmax(0, 1fr) fit-content(max(var(--figure-column), var(--base-x-40)));
   grid-template-rows: repeat(5, auto) 1fr auto;
   column-gap: var(--base-x-6);
   inline-size: 100%;

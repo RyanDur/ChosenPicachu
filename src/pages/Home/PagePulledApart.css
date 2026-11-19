@@ -29,6 +29,11 @@
 
 @media (width > 600px) and ((width > 1100px) or (height > 600px)) {
   @container home (width >= 68.8rem) {
+    .page-pulled-apart {
+      container-type: normal;
+      max-inline-size: var(--drawn-width);
+    }
+
     .page-pulled-apart .drawing {
       --drawn-least-height: calc(var(--base-x-40) * tan(atan2(var(--drawn-height), var(--drawn-width))));
 
