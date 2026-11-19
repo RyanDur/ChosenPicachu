@@ -1,8 +1,7 @@
 import {ChangeEvent, FC, KeyboardEvent, ToggleEvent, useContext, useId} from 'react';
 import {maybe} from '@ryandur/sand';
 import {KnownDoors, useGallery} from '@pages/Gallery/Context';
-import {sourceParam} from '@pages/Gallery/museums';
-import {doors} from '@pages/Gallery/doors';
+import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
 import {sheetFields} from './fields';
 
@@ -20,7 +19,8 @@ const refusedGoesBack = (field: HTMLInputElement): boolean => {
 
 const MuseumRow: FC = () => {
   const {tab, updateSearchParams} = useGallery();
-  const open = doors.openIn(useContext(KnownDoors));
+  const known = useContext(KnownDoors);
+  const offered = museums.all.filter(({param}) => known[param] === 'open' || param === tab);
   const choice = useId();
   const chosen = (event: ChangeEvent<HTMLSelectElement>) =>
     maybe(sourceParam.decode(event.currentTarget.value)).map(museum => updateSearchParams({tab: museum}));
@@ -28,7 +28,7 @@ const MuseumRow: FC = () => {
     <label className="sheet-label field bold" htmlFor={choice}>Museum</label>
     <select id={choice} className="sheet-field card ellipsis" value={maybe(tab).orElse('')}
       onChange={chosen}>
-      {open.map(({display, param}) => <option key={param} value={param}>{display}</option>)}
+      {offered.map(({display, param}) => <option key={param} value={param}>{display}</option>)}
     </select>
   </>;
 };
