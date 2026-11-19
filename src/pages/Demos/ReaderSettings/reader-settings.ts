@@ -49,12 +49,11 @@ const settingParams = [...Object.keys(decoders), deskParam];
 type ReaderSettings = {
   decoders: typeof decoders;
   deskParam: typeof deskParam;
-  keptFrom: (params: URLSearchParams, ...alsoRead: string[]) => URLSearchParams;
+  keptFrom: (params: URLSearchParams) => URLSearchParams;
 };
 
 export const readerSettings: ReaderSettings = {
   decoders,
   deskParam,
-  keptFrom: (params, ...alsoRead) =>
-    new URLSearchParams([...params].filter(([param]) => [...settingParams, ...alsoRead].includes(param)))
+  keptFrom: params => new URLSearchParams([...params].filter(([param]) => settingParams.includes(param)))
 };
