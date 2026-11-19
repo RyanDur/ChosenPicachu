@@ -52,8 +52,9 @@ export const ToMovedAddress: FC = () => {
   const location = useLocation();
   const hydrated = useHydrated();
   const keepingTheFragment = carrying(params, location.hash);
+  const leavingAStation = carrying(params, stationed.has(location.hash) ? '' : location.hash);
   return pageForFragment(location.hash).map(keepingTheFragment)
-    .or(() => pageForNamedTutorial(params).map(keepingTheFragment))
+    .or(() => pageForNamedTutorial(params).map(leavingAStation))
     .or(() => placeForStation(params, location.hash))
     .or(() => pageForNamedStory(params, location).map(keepingTheFragment))
     .either(
