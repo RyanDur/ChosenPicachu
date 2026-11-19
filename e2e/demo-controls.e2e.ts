@@ -58,6 +58,7 @@ test.describe('a phone held sideways', () => {
   test('clears the search on a piece\'s page from a finger that lands just off reset', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/O9138?tab=vam&search=lilies');
+    await siteFrame(page).hydrated();
 
     await fingerTap(page, gallery.resetSearch);
 
