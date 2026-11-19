@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {contextChooser, desktop, iPhone, wearsReportedWrong, type Worn} from './__test_support';
+import {contextChooser, wearsReportedWrong, type Worn} from './__test_support';
 
 const whereTheListOpens: readonly [Worn, 'over' | 'under'][] = [
   ['nothing', 'over'],
@@ -12,17 +12,11 @@ const whereTheListOpens: readonly [Worn, 'over' | 'under'][] = [
   ['isolation: isolate', 'under']
 ];
 
-for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
-  test.describe(`at ${size} wide`, () => {
-    test.use(device);
+test('choosing each thing card one wears in turn opens the menu over card two for the three that form no context, and under it for the four that do', {tag: ['@iPhone', '@desktop']}, async ({page}) => {
+  await page.goto('demos/z-index/what-else-forms-a-stacking-context/');
 
-    test('choosing each thing card one wears in turn opens the menu over card two for the three that form no context, and under it for the four that do', async ({page}) => {
-      await page.goto('demos/z-index/what-else-forms-a-stacking-context/');
-
-      expect(await wearsReportedWrong(page, whereTheListOpens)).toEqual([]);
-    });
-  });
-}
+  expect(await wearsReportedWrong(page, whereTheListOpens)).toEqual([]);
+});
 
 test('going back past a choice takes back the sentence, which no longer matches the cards', async ({page}) => {
   await page.goto('demos/z-index/what-else-forms-a-stacking-context/');
