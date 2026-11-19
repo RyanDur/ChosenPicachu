@@ -1,9 +1,10 @@
 import {FC} from 'react';
 import {Reveal, Snippet, lines} from '../Recipe';
 import {CardTwoOnTop} from './CardTwoOnTop';
-import {partHeadings} from './part-headings';
 import '../Runs.css';
 import './ZIndexDemo.css';
+
+const heading = 'which-card-is-on-top-heading';
 
 const cards = [
   lines.plain('<ol class="cards">'),
@@ -45,8 +46,8 @@ const theirNumbers = [
 ];
 
 export const WhichCardIsOnTop: FC = () =>
-  <section aria-labelledby={partHeadings.whichCardIsOnTop} className="stacking-part">
-    <h3 id={partHeadings.whichCardIsOnTop} className="sub-title bold">Which card is on top?</h3>
+  <section aria-labelledby={heading} className="stacking-part">
+    <h3 id={heading} className="sub-title bold">Which card is on top?</h3>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">
         <p className="paragraph">Three cards sit over the same spot. Card one has a z-index of 1, and the list inside it
