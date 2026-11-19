@@ -1,6 +1,6 @@
 import {type Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {clickWhereItIs, desktop, documentScrollY, iPhone, siteFrame} from './__test_support';
+import {clickWhereItIs, desktop, documentScrollY, iPhone, siteFrame, zIndexTab} from './__test_support';
 
 const settledScrollY = async (page: Page): Promise<number> => {
   let last = Number.NaN;
@@ -26,7 +26,7 @@ for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as cons
       await expect(page.getByRole('heading', {name: 'Add features, in the order they were asked for'})).toBeInViewport();
       const atTheTutorial = await settledScrollY(page);
       await clickWhereItIs(page, page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Z-index'}));
-      await expect(page.getByRole('heading', {name: 'Why Third is on top'})).toBeAttached();
+      await expect(zIndexTab(page).partLink('Why Third is on top')).toBeAttached();
       const onTheOtherTab = await settledScrollY(page);
 
       await page.goBack();
@@ -37,7 +37,7 @@ for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as cons
 
       await page.goForward();
 
-      await expect(page.getByRole('heading', {name: 'Why Third is on top'})).toBeAttached();
+      await expect(zIndexTab(page).partLink('Why Third is on top')).toBeAttached();
       await expect.poll(async () => Math.abs(await documentScrollY(page) - onTheOtherTab))
         .toBeLessThanOrEqual(theSamePlace);
     });
