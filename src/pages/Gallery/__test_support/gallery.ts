@@ -2,11 +2,11 @@ import {maybe, not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-const settingsSheet = () =>
+const gallerySettingsPopover = () =>
   maybe(screen.getAllByRole('group', {hidden: true})
     .find(group => not(maybe(within(group).queryByRole('combobox', {name: 'Museum', hidden: true})).isNothing)))
-    .either(sheet => within(sheet), () => {
-      throw new Error('no gallery settings sheet on the page');
+    .either(popover => within(popover), () => {
+      throw new Error('no gallery settings popover on the page');
     });
 
 export const galleryPage = {
@@ -30,24 +30,24 @@ export const galleryPage = {
       .map(({textContent}) => textContent ?? '')
       .join(),
   searchInSettings: (words: string): Promise<void> =>
-    userEvent.type(settingsSheet().getByRole('combobox', {name: 'Search', hidden: true}), `${words}{Enter}`),
+    userEvent.type(gallerySettingsPopover().getByRole('combobox', {name: 'Search', hidden: true}), `${words}{Enter}`),
   typeInSettingsAndLeave: async (words: string): Promise<void> => {
-    await userEvent.type(settingsSheet().getByRole('combobox', {name: 'Search', hidden: true}), words);
+    await userEvent.type(gallerySettingsPopover().getByRole('combobox', {name: 'Search', hidden: true}), words);
     await userEvent.tab();
   },
   clearSearchInSettings: async (): Promise<void> => {
-    const field = settingsSheet().getByRole('combobox', {name: 'Search', hidden: true});
+    const field = gallerySettingsPopover().getByRole('combobox', {name: 'Search', hidden: true});
     await userEvent.clear(field);
     await userEvent.type(field, '{Enter}');
   },
   sizeInSettings: async (size: number): Promise<void> => {
-    const field = settingsSheet().getByRole('spinbutton', {name: 'Per page', hidden: true});
+    const field = gallerySettingsPopover().getByRole('spinbutton', {name: 'Per page', hidden: true});
     await userEvent.clear(field);
     await userEvent.type(field, `${size}{Enter}`);
   },
-  pageInSettings: (): HTMLElement => settingsSheet().getByRole('spinbutton', {name: 'Page', hidden: true}),
+  pageInSettings: (): HTMLElement => gallerySettingsPopover().getByRole('spinbutton', {name: 'Page', hidden: true}),
   tapPageInSettings: (): Promise<void> =>
-    userEvent.click(settingsSheet().getByRole('spinbutton', {name: 'Page', hidden: true})),
+    userEvent.click(gallerySettingsPopover().getByRole('spinbutton', {name: 'Page', hidden: true})),
   leaveTheField: (): Promise<void> => userEvent.tab(),
   chooseMuseum: (name: string): Promise<void> =>
     userEvent.selectOptions(screen.getByRole('combobox', {name: 'Museum', hidden: true}), name),

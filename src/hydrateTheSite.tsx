@@ -21,11 +21,12 @@ const openIn = (selector: string): HTMLElement[] => [...document.querySelectorAl
 const typedValuesDropped = (popover: HTMLElement): void =>
   popover.querySelectorAll('input').forEach(field => field.value = field.defaultValue);
 
-// CSS can't close a popover when its query stops matching, so the phone's sheets are closed once the phone layout ends
-const sheetsClosedWhenThePhoneLayoutEnds = () =>
-  phoneLayout(window).ends(() => openIn('.phone-sheet:popover-open').forEach(sheet => {
-    typedValuesDropped(sheet);
-    sheet.hidePopover();
+// CSS can't close a popover when its query stops matching,
+// so the phone's popovers are closed once the phone layout ends
+const popoversClosedWhenThePhoneLayoutEnds = () =>
+  phoneLayout(window).ends(() => openIn('.phone-popover:popover-open').forEach(popover => {
+    typedValuesDropped(popover);
+    popover.hidePopover();
   }));
 
 // Back and Forward through history leave a popover open, so they close whatever is open and drop what was typed in it;
@@ -38,7 +39,7 @@ const popoversClosedOnBackAndForward = () =>
 
 export const hydrateTheSite = {
   overTheBuiltPage: (router: DataRouter): void => {
-    sheetsClosedWhenThePhoneLayoutEnds();
+    popoversClosedWhenThePhoneLayoutEnds();
     popoversClosedOnBackAndForward();
     startTransition(() => {
       hydrateRoot(document,
@@ -46,7 +47,7 @@ export const hydrateTheSite = {
     });
   },
   afresh: (router: DataRouter): void => {
-    sheetsClosedWhenThePhoneLayoutEnds();
+    popoversClosedWhenThePhoneLayoutEnds();
     popoversClosedOnBackAndForward();
     createRoot(document)
       .render(<RoutedSite router={router} arrived={arrival(window)}/>);

@@ -43,7 +43,7 @@
     }
   }
 
-  .settings-sheet:popover-open {
+  .gallery-settings-popover:popover-open {
     margin: 0;
     grid-template-columns: 1fr 2fr;
     grid-auto-rows: var(--pointer-reach);
@@ -53,13 +53,13 @@
     }
     padding-block: var(--base) 0;
 
-    .sheet-label {
+    .settings-label {
       display: flex;
       align-items: center;
       padding-inline: var(--base-x-2);
     }
 
-    .sheet-field {
+    .settings-field {
       min-width: 0;
       padding-inline: var(--base-x-2);
     }
