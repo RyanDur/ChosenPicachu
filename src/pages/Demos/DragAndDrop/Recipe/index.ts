@@ -1,1 +1,1 @@
-export {NativeStory} from './NativeStory';
+export {NativeStories} from './NativeStories';
