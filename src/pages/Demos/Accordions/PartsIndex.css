@@ -27,3 +27,11 @@
 .era-label {
   margin-block-start: var(--base);
 }
+
+@media (pointer: coarse) {
+  .parts-index-link {
+    display: inline-block;
+    min-block-size: var(--finger-reach);
+    vertical-align: top;
+  }
+}
