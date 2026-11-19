@@ -267,6 +267,21 @@ for (const {reader, device} of handhelds) {
       await expect(gallery.sheet.getByRole('button')).toHaveCount(0);
     });
 
+    test('keeps the search when Escape empties the search field and then closes the gallery settings', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam&search=roses&page=4');
+      await gallery.openSettings();
+      await gallery.searchField.focus();
+
+      await gallery.searchField.press('Escape');
+      await page.keyboard.press('Escape');
+
+      await expect(gallery.sheet).toBeHidden();
+      await expect(page).toHaveURL(/search=roses/);
+      await expect(page).toHaveURL(/[?&]page=4(&|$)/);
+    });
+
     test('Escape closes the gallery settings', async ({page}) => {
       const gallery = galleryPage(page);
       await page.goto('gallery/?tab=vam');

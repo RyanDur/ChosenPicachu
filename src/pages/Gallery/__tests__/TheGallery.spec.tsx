@@ -191,6 +191,17 @@ describe('The gallery.', () => {
     expect(appAddress.search()).toHaveTextContent('page=1');
   });
 
+  test('a search emptied in the gallery settings and sent with Enter clears the search and its page', async () => {
+    setupAICEveryPage(aicArtResponse);
+    render(<TestApp at={`${Paths.artGallery}?tab=aic&search=cat&page=4`}/>);
+    await galleryWall.framesAppear();
+
+    await galleryPage.clearSearchInSettings();
+
+    await waitFor(() => expect(appAddress.search()).not.toHaveTextContent('search'));
+    expect(appAddress.search()).not.toHaveTextContent('page=4');
+  });
+
   test('a page size chosen in the gallery settings that puts the page past the end lands on the last page', async () => {
     setupAICEveryPage(aicArtResponse);
     render(<TestApp at={`${Paths.artGallery}?tab=aic&page=50`}/>);

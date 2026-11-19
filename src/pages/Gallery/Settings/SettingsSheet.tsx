@@ -49,11 +49,16 @@ const SearchRow: FC = () => {
     else updateSearchParams({search: value, page: opening.page});
   };
 
+  const leave = (input: HTMLInputElement) => {
+    if (input.value === '') input.value = searched;
+    else apply(input);
+  };
+
   return <>
     <label className="sheet-label field bold" htmlFor={field}>Search</label>
     <input type="search" id={field} list={options} autoComplete="off" enterKeyHint="search"
       className="sheet-field bare card" defaultValue={searched} onInput={event => suggestFor(event.currentTarget.value)}
-      onKeyDown={whenEntered(apply)} onBlur={event => apply(event.currentTarget)}/>
+      onKeyDown={whenEntered(apply)} onBlur={event => leave(event.currentTarget)}/>
     <datalist id={options}>
       {suggestions.map(suggestion => <option value={suggestion} key={suggestion}>{suggestion}</option>)}
     </datalist>
