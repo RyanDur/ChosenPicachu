@@ -15,6 +15,7 @@ import {
 } from 'react';
 import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, matchRoutes, useLocation, useNavigate} from 'react-router';
 import {arrival, ArrivalDrawn} from '@navigation/arrival';
+import {PageFocus} from '@page';
 import {SiteProviders} from '../SiteProviders';
 import {Opener, RoomModule, roomsOpenedBy, siteHolding} from '../routes';
 import {Environment, environment} from '@transport';
@@ -25,6 +26,7 @@ type Props = PropsWithChildren<{
   readonly cameFrom?: string;
   readonly feed?: Feed;
   readonly environment?: Partial<Environment>;
+  readonly pageHasFocus?: () => boolean;
 }>;
 
 const Reported = createContext<readonly string[]>([]);
@@ -73,7 +75,7 @@ const routesAt = (at: string, children: ReactNode): RouteObject[] =>
       .map(({path, ErrorBoundary}): RouteObject[] => [{path, ErrorBoundary, element: children}])
       .orElse([{path: pathOf(at), element: children}]);
 
-export const TestApp: FC<Props> = ({at = '/', cameFrom, feed, environment: overrides = {}, children}) => {
+export const TestApp: FC<Props> = ({at = '/', cameFrom, feed, environment: overrides = {}, pageHasFocus = () => document.hasFocus(), children}) => {
   const backable = has(cameFrom);
   const [memory] = useState(() => createMemoryRouter([{
     id: 'probes',
@@ -93,7 +95,9 @@ export const TestApp: FC<Props> = ({at = '/', cameFrom, feed, environment: overr
         {...environment, ...(has(feed) ? {tradeFeed: feed.url} : {})},
         Object.getOwnPropertyDescriptors(overrides))}>
         <ArrivalDrawn.Provider value={arrived.drawn}>
-          <RouterProvider router={memory} onError={report}/>
+          <PageFocus.Provider value={pageHasFocus}>
+            <RouterProvider router={memory} onError={report}/>
+          </PageFocus.Provider>
         </ArrivalDrawn.Provider>
       </SiteProviders>
     </StrictMode>

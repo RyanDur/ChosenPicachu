@@ -1,5 +1,6 @@
 import {ChangeEvent, FC, FocusEvent, KeyboardEvent, ToggleEvent, useId} from 'react';
 import {has, maybe, not} from '@ryandur/sand';
+import {usePageFocus} from '@page';
 import {useGallery, useKnownDoors} from '@pages/Gallery/Context';
 import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
@@ -19,9 +20,10 @@ const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: Keyboa
 
 // A browser blurs the focused field when the whole window loses focus, as when a phone reader switches apps,
 // so only a move to something else on the page counts as leaving the field
-const whenLeftForThePage = (apply: (field: HTMLInputElement) => void) => (event: FocusEvent<HTMLInputElement>) => {
-  if (event.currentTarget.ownerDocument.hasFocus()) apply(event.currentTarget);
-};
+const whenLeftForThePage = (pageHasFocus: () => boolean) =>
+  (apply: (field: HTMLInputElement) => void) => (event: FocusEvent<HTMLInputElement>) => {
+    if (pageHasFocus()) apply(event.currentTarget);
+  };
 
 const refusedSaysWhy = (field: HTMLInputElement): boolean => field.reportValidity();
 
@@ -52,6 +54,7 @@ const MuseumRow: FC = () => {
 
 const SearchRow: FC = () => {
   const {tab, search} = useGallery();
+  const leftForThePage = whenLeftForThePage(usePageFocus());
   const address = useGalleryAddress();
   const searched = maybe(search).orElse('');
   const {suggestions, typed: suggestFor} = useSuggestions(tab);
@@ -73,7 +76,7 @@ const SearchRow: FC = () => {
     <label className="sheet-label field bold" htmlFor={field}>Search</label>
     <input type="search" id={field} list={options} autoComplete="off" enterKeyHint="search"
       className="sheet-field bare card" defaultValue={searched} onInput={event => suggestFor(event.currentTarget.value)}
-      onKeyDown={whenEntered(apply)} onBlur={whenLeftForThePage(leave)}/>
+      onKeyDown={whenEntered(apply)} onBlur={leftForThePage(leave)}/>
     <datalist id={options}>
       {suggestions.map(suggestion => <option value={suggestion} key={suggestion}>{suggestion}</option>)}
     </datalist>
@@ -91,6 +94,7 @@ const applyingNumber = (current: number, apply: (value: number) => void) =>
 
 const SizeRow: FC = () => {
   const {page, size, pagination} = useGallery();
+  const leftForThePage = whenLeftForThePage(usePageFocus());
   const address = useGalleryAddress();
   const field = useId();
   const applying = applyingNumber(size, perPage => address.update({
@@ -103,12 +107,13 @@ const SizeRow: FC = () => {
     <input type="number" id={field} min={1} max={100} required enterKeyHint="go"
       className="sheet-field bare card" defaultValue={size}
       onKeyDown={whenEntered(applying(refusedSaysWhy))}
-      onBlur={whenLeftForThePage(applying(refusedGoesBack))}/>
+      onBlur={leftForThePage(applying(refusedGoesBack))}/>
   </>;
 };
 
 const PageRow: FC = () => {
   const {page, tab, search, size, pagination} = useGallery();
+  const leftForThePage = whenLeftForThePage(usePageFocus());
   const address = useGalleryAddress();
   const field = useId();
   const shown = pages.shown(page, pagination);
@@ -121,7 +126,7 @@ const PageRow: FC = () => {
       max={pages.last(pagination).orElse(undefined)}
       required enterKeyHint="go" className="sheet-field bare card" defaultValue={shown}
       onKeyDown={whenEntered(applyingNumber(page, goTo)(refusedSaysWhy))}
-      onBlur={whenLeftForThePage(applyingNumber(shown, goTo)(refusedGoesBack))}/>
+      onBlur={leftForThePage(applyingNumber(shown, goTo)(refusedGoesBack))}/>
   </>;
 };
 
