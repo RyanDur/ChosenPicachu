@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
+import {demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
@@ -65,7 +65,7 @@ describe('why 9999 still loses, on the tab', () => {
   test('should link its title to its page, with the raised card carried', async () => {
     render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
 
-    const listing = await explanation.part(title);
+    const listing = partsIndex.entryOf(await partsIndex.find(), title);
 
     expect(explanation.linkNamed(listing, title)).toHaveAttribute('href', demosAt(stillLoses, '?raised=second'));
   });

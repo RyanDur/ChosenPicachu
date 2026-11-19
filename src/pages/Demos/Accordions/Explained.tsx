@@ -13,6 +13,7 @@ import {accordionParts} from './part-pages';
 import {tabHeadings} from './tab-headings';
 import {PartsIndex} from './PartsIndex';
 import {AccordionsSize} from './AccordionsSize';
+import {TabSidecar} from '../TabSidecar';
 import '../Runs.css';
 import './Explained.css';
 
@@ -45,14 +46,14 @@ export const AccordionsExplained: FC = () => {
         <HtmlAlone/>
       </figure>
     </header>
-    <aside aria-label="parts and dials" className="accordions-sidecar">
+    <TabSidecar label="parts and dials">
       <AccordionsSize/>
       <PartsIndex/>
       <DialGroup>
         <FoldTypeDial/>
         <FoldMotionDial/>
       </DialGroup>
-    </aside>
+    </TabSidecar>
     <section aria-labelledby="before-you-start-heading" className="before-you-start">
       <h2 id="before-you-start-heading" className="title bold">Before you start</h2>
       <p className="paragraph">Nothing here leans on another tab. Each part’s page builds the accordion another way.</p>

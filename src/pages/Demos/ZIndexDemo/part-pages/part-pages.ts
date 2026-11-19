@@ -1,30 +1,21 @@
 import {Maybe, maybe} from '@ryandur/sand';
 import names from '@navigation/names.json';
 import {demoTab, DemoTopics} from '@pages/Demos';
-import {partHeadings} from '../part-headings';
 
 export type ZIndexPart = keyof typeof names['z-index'];
 
-type Part = {title: string; heading: string; minutes: number};
+type Part = {title: string; minutes: number};
 
 const book = {
-  'why-third-is-on-top': {title: 'Why Third is on top', heading: partHeadings.thirdOnTop, minutes: 2},
-  'why-9999-still-loses': {title: 'Why 9999 still loses', heading: partHeadings.stillLoses, minutes: 2},
-  'what-else-forms-a-stacking-context': {
-    title: 'What else forms a stacking context',
-    heading: partHeadings.whatElseForms,
-    minutes: 3
-  },
-  'why-the-popover-wins': {title: 'Why the popover wins', heading: partHeadings.popoverWins, minutes: 4},
-  'why-a-fixed-banner-still-loses': {
-    title: 'Why a fixed banner still loses',
-    heading: partHeadings.fixedBannerLoses,
-    minutes: 3
-  },
-  'lets-build-this-feature': {title: 'Let’s build this feature', heading: partHeadings.buildThisFeature, minutes: 10}
+  'why-third-is-on-top': {title: 'Why Third is on top', minutes: 2},
+  'why-9999-still-loses': {title: 'Why 9999 still loses', minutes: 2},
+  'what-else-forms-a-stacking-context': {title: 'What else forms a stacking context', minutes: 3},
+  'why-the-popover-wins': {title: 'Why the popover wins', minutes: 4},
+  'why-a-fixed-banner-still-loses': {title: 'Why a fixed banner still loses', minutes: 3},
+  'lets-build-this-feature': {title: 'Let’s build this feature', minutes: 10}
 } satisfies Record<ZIndexPart, Part>;
 
-type Told = {heading: string; name: string; minutes: number; ordinal: number; says: string};
+type Told = {name: string; minutes: number; ordinal: number; says: string};
 
 type ZIndexParts = {
   told: (part: ZIndexPart) => Told;
@@ -57,8 +48,8 @@ const partAt = (pathname: string): Maybe<ZIndexPart> => {
 
 export const zIndexParts: ZIndexParts = {
   told: part => {
-    const {title, heading, minutes} = book[part];
-    return {heading, name: title, minutes, ordinal: placeOf(part) + 1, says: names['z-index'][part].description};
+    const {title, minutes} = book[part];
+    return {name: title, minutes, ordinal: placeOf(part) + 1, says: names['z-index'][part].description};
   },
   addressOf,
   shownAt: partAt,

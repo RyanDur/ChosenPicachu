@@ -2,6 +2,7 @@ import {is} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {computeAccessibleName} from 'dom-accessibility-api';
+import {partsIndex} from '@pages/Demos/__test_support';
 
 const choice = (dial: string): Promise<HTMLElement> => screen.findByRole('group', {name: dial});
 const buildIn = (part: HTMLElement): HTMLElement => within(part).getByRole('article');
@@ -33,14 +34,13 @@ export const accordionsTab = {
     within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
   openPart: async (name: string): Promise<void> => userEvent.click(await screen.findByRole('link', {name})),
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
-  partsIndex: (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'Parts'}),
+  partsIndex: partsIndex.find,
   partsAndDials: (): Promise<HTMLElement> => screen.findByRole('complementary', {name: 'parts and dials'}),
   exhibit: async (): Promise<HTMLElement> =>
     within(await screen.findByRole('region', {name: 'Accordions'})).getAllByRole('figure')[0],
-  titlesIn: (index: HTMLElement): string[] => within(index).getAllByRole('link').map(link => link.textContent),
+  titlesIn: partsIndex.titlesIn,
   titlesUnder: (index: HTMLElement, label: string): string[] =>
     within(within(index).getByRole('list', {name: label})).getAllByRole('link').map(link => link.textContent),
-  entryOf: (index: HTMLElement, title: string): HTMLElement =>
-    within(index).getAllByRole('listitem').filter(entry => is(within(entry).queryByRole('link', {name: title})))[0],
+  entryOf: partsIndex.entryOf,
   foldMeasuredByPlainScript: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByTitle('A fold measured by plain script')
 };

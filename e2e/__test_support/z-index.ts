@@ -5,7 +5,7 @@ export const zIndexTab = (page: Page) => {
     .getByRole('button', {name: 'Raise a banner', exact: true});
   return {
     partLink: (name: string): Locator =>
-      page.getByRole('heading', {level: 2, name}).getByRole('link', {name, exact: true}),
+      page.getByRole('navigation', {name: 'Parts'}).getByRole('link', {name, exact: true}),
     partTitle: (name: string): Locator => page.getByRole('heading', {level: 2, name, exact: true}),
     followsTheFoot: (name: string): Promise<void> =>
       page.getByRole('navigation', {name: 'the z-index parts'}).getByRole('link', {name, exact: true}).click(),

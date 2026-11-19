@@ -1,0 +1,44 @@
+.tab-sidecar {
+  --under-the-tab-bar: calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--base-x-2));
+
+  display: grid;
+  gap: var(--base-x-3);
+  align-content: start;
+}
+
+@media (width > 900px) and (height > 600px) {
+  .about:has(> .tab-sidecar) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 38ch;
+    grid-template-rows: auto 1fr;
+    column-gap: var(--base-x-5);
+    align-items: start;
+
+    & > :not(.tab-sidecar) {
+      grid-column: 1;
+    }
+  }
+
+  .tab-sidecar {
+    position: sticky;
+    inset-block-start: var(--under-the-tab-bar);
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    max-block-size: calc(100svh - var(--under-the-tab-bar) - var(--base-x-2));
+    overflow-y: auto;
+
+    gap: var(--base-x-2);
+
+    .parts-index {
+      gap: 0;
+    }
+
+    .parts-index-entry {
+      --entry-room: var(--base-x-0_5);
+    }
+
+    .says {
+      display: none;
+    }
+  }
+}

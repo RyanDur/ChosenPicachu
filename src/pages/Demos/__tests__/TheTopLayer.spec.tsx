@@ -13,18 +13,6 @@ beforeEach(() => seed('top-layer'));
 const buildThisFeature = 'z-index/lets-build-this-feature';
 
 describe('the top layer', () => {
-  test('the z-index tab opens on its six parts, in order, in the heading outline', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    await demoTabs.open('Z-index');
-
-    const tab = await demoTabs.arrivedOn('Z-index');
-
-    expect(explanation.partTitles(tab).slice(0, 6)).toEqual([
-      'Why Third is on top', 'Why 9999 still loses', 'What else forms a stacking context', 'Why the popover wins',
-      'Why a fixed banner still loses', 'Let’s build this feature'
-    ]);
-  });
-
   test('the user raises a banner from the demo', async () => {
     render(<TestApp at={demosAt('z-index/why-a-fixed-banner-still-loses')}/>);
 
