@@ -25,10 +25,10 @@ export const GalleryNav: FC<Props> = ({id}) => {
     {hasPrevPage && <>
       <Link to={`${path}${searchFromShown({page: firstPage})}`}
         className="page first field attentive bold">
-        <span className="way-words">first page</span>
+        <span className="off-screen-on-a-phone">first page</span>
       </Link> <Link to={`${path}${searchFromShown({page: prevPage})}`}
         className="page prev field attentive bold">
-        <span className="way-words">previous page</span>
+        <span className="off-screen-on-a-phone">previous page</span>
       </Link> </>}
     {pages.last(pagination).map(totalPages =>
       <output className="info field" key="count">
@@ -37,10 +37,10 @@ export const GalleryNav: FC<Props> = ({id}) => {
     {hasNextPage && <>
       {' '}<Link to={`${path}${searchFromShown({page: nextPage})}`}
         className="page next field attentive bold">
-        <span className="way-words">next page</span>
+        <span className="off-screen-on-a-phone">next page</span>
       </Link> <Link to={`${path}${searchFromShown({page: lastPage})}`}
         className="page last field attentive bold">
-        <span className="way-words">last page</span>
+        <span className="off-screen-on-a-phone">last page</span>
       </Link>
     </>}
   </nav>;
