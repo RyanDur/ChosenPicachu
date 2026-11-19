@@ -72,6 +72,14 @@
       .minutes {
         inset-block-start: var(--base-x-0_5);
       }
+
+      @media (pointer: coarse) {
+        .contents-link {
+          display: inline-block;
+          min-block-size: var(--finger-reach);
+          vertical-align: top;
+        }
+      }
     }
 
     .says {

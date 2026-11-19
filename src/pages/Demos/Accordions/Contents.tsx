@@ -8,7 +8,7 @@ const ordinalOf = (heading: BookPart): number => accordionParts.inOrder.indexOf(
 const Entry: FC<{heading: BookPart}> = ({heading}) => {
   const {to, heading: fragment, title, minutes, says} = accordionParts.listed(heading);
   return <li className="contents-entry muted-rule-below">
-    <DemoLink to={to} heading={fragment}>{title}</DemoLink>
+    <DemoLink className="contents-link" to={to} heading={fragment}>{title}</DemoLink>
     <time className="minutes caption muted-ink" dateTime={`PT${minutes}M`}>{`${minutes} min`}</time>
     <p className="says paragraph">{says}</p>
   </li>;
