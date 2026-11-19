@@ -18,8 +18,8 @@ const RoutedSite: FC<RoutedSiteProps> = ({router, arrived}) => {
 
 const openIn = (selector: string): HTMLElement[] => [...document.querySelectorAll<HTMLElement>(selector)];
 
-const typedValuesDropped = (open: HTMLElement): void =>
-  open.querySelectorAll('input').forEach(field => field.value = field.defaultValue);
+const typedValuesDropped = (popover: HTMLElement): void =>
+  popover.querySelectorAll('input').forEach(field => field.value = field.defaultValue);
 
 // CSS can't close a popover when its query stops matching, so the phone's sheets are closed once the phone layout ends
 const sheetsClosedWhenThePhoneLayoutEnds = () =>
@@ -31,9 +31,9 @@ const sheetsClosedWhenThePhoneLayoutEnds = () =>
 // Back and Forward through history leave a popover open, so they close whatever is open and drop what was typed in it;
 // a close request, Escape or Android's back gesture, closes a popover without moving history, so it never reaches here
 const popoversClosedOnBackAndForward = () =>
-  window.addEventListener('popstate', () => openIn(':popover-open').forEach(open => {
-    typedValuesDropped(open);
-    open.hidePopover();
+  window.addEventListener('popstate', () => openIn(':popover-open').forEach(popover => {
+    typedValuesDropped(popover);
+    popover.hidePopover();
   }));
 
 export const hydrateTheSite = {

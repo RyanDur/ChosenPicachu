@@ -14,15 +14,15 @@ import {useGalleryAddress} from './useGalleryAddress';
 const confirmsAComposition = ({nativeEvent, keyCode}: KeyboardEvent<HTMLInputElement>): boolean =>
   nativeEvent.isComposing || keyCode === 229;
 
-const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
-  if (event.key === 'Enter' && not(confirmsAComposition(event))) apply(event.currentTarget);
+const whenEntered = (send: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
+  if (event.key === 'Enter' && not(confirmsAComposition(event))) send(event.currentTarget);
 };
 
 // A browser blurs the focused field when the whole window loses focus, as when a phone reader switches apps,
 // so only a move to something else on the page counts as leaving the field
 const whenLeftForThePage = (pageHasFocus: () => boolean) =>
-  (apply: (field: HTMLInputElement) => void) => (event: FocusEvent<HTMLInputElement>) => {
-    if (pageHasFocus()) apply(event.currentTarget);
+  (send: (field: HTMLInputElement) => void) => (event: FocusEvent<HTMLInputElement>) => {
+    if (pageHasFocus()) send(event.currentTarget);
   };
 
 const refusedSaysWhy = (field: HTMLInputElement): boolean => field.reportValidity();
@@ -61,7 +61,7 @@ const SearchRow: FC = () => {
   const field = useId();
   const options = useId();
 
-  const apply = ({value}: HTMLInputElement) => {
+  const searchedFor = ({value}: HTMLInputElement) => {
     if (value === searched) return;
     if (value === '') address.remove(['search', 'page']);
     else address.update({search: value, page: opening.page});
@@ -69,7 +69,7 @@ const SearchRow: FC = () => {
 
   const leave = (input: HTMLInputElement) => {
     if (input.value === '') input.value = searched;
-    else apply(input);
+    else searchedFor(input);
   };
 
   return <>
@@ -77,7 +77,7 @@ const SearchRow: FC = () => {
     <input type="search" id={field} list={options} autoComplete="off" enterKeyHint="search"
       className="sheet-field bare card" defaultValue={searched}
       onInput={event => suggestFor(event.currentTarget.value)}
-      onKeyDown={whenEntered(apply)} onBlur={leftForThePage(leave)}/>
+      onKeyDown={whenEntered(searchedFor)} onBlur={leftForThePage(leave)}/>
     <datalist id={options}>
       {suggestions.map(suggestion => <option value={suggestion} key={suggestion}>{suggestion}</option>)}
     </datalist>
@@ -86,10 +86,10 @@ const SearchRow: FC = () => {
 
 const movedTo = {preventScrollReset: false};
 
-const applyingNumber = (current: number, apply: (value: number) => void) =>
+const sendingNumber = (current: number, send: (value: number) => void) =>
   (accepted: (field: HTMLInputElement) => boolean) => (input: HTMLInputElement): void => {
     if (input.valueAsNumber === current || not(accepted(input))) return;
-    apply(input.valueAsNumber);
+    send(input.valueAsNumber);
     numberField.shows(input, input.valueAsNumber);
   };
 
@@ -98,7 +98,7 @@ const SizeRow: FC = () => {
   const leftForThePage = whenLeftForThePage(usePageFocus());
   const address = useGalleryAddress();
   const field = useId();
-  const applying = applyingNumber(size, perPage => address.update({
+  const sending = sendingNumber(size, perPage => address.update({
     size: perPage,
     page: pages.withinTheEnd(page, perPage, pagination)
   }, movedTo));
@@ -107,8 +107,8 @@ const SizeRow: FC = () => {
     <label className="sheet-label field bold" htmlFor={field}>Per page</label>
     <input type="number" id={field} min={1} max={100} required enterKeyHint="go"
       className="sheet-field bare card" defaultValue={size}
-      onKeyDown={whenEntered(applying(refusedSaysWhy))}
-      onBlur={leftForThePage(applying(refusedGoesBackTo(size)))}/>
+      onKeyDown={whenEntered(sending(refusedSaysWhy))}
+      onBlur={leftForThePage(sending(refusedGoesBackTo(size)))}/>
   </>;
 };
 
@@ -126,8 +126,8 @@ const PageRow: FC = () => {
     <input key={movedFromOutside} type="number" id={field} min={1}
       max={pages.last(pagination).orElse(undefined)}
       required enterKeyHint="go" className="sheet-field bare card" defaultValue={shown}
-      onKeyDown={whenEntered(applyingNumber(page, goTo)(refusedSaysWhy))}
-      onBlur={leftForThePage(applyingNumber(shown, goTo)(refusedGoesBackTo(shown)))}/>
+      onKeyDown={whenEntered(sendingNumber(page, goTo)(refusedSaysWhy))}
+      onBlur={leftForThePage(sendingNumber(shown, goTo)(refusedGoesBackTo(shown)))}/>
   </>;
 };
 
