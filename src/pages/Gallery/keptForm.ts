@@ -1,8 +1,11 @@
-import {useLocation} from 'react-router';
+import {useEffect, useState} from 'react';
+import {NavigationType, useLocation, useNavigationType} from 'react-router';
 import {maybe} from '@ryandur/sand';
 import * as schema from 'schemawax';
 
 type Form = 'search' | 'pages';
+
+type BackAndForth = {readonly at: string; readonly moves: number};
 
 const keptKeys = schema.object({optional: {search: schema.string, pages: schema.string}});
 
@@ -13,10 +16,22 @@ const addressKeyOf = (form: Form, search: string): string => {
   return paramsOf[form].map(param => params.get(param) ?? '').join(' ');
 };
 
+const useBackAndForthMoves = (): number => {
+  const {key} = useLocation();
+  const moved = useNavigationType() === NavigationType.Pop;
+  const [seen, setSeen] = useState<BackAndForth>({at: key, moves: 0});
+  useEffect(() => {
+    if (key !== seen.at) setSeen({at: key, moves: moved ? seen.moves + 1 : seen.moves});
+  }, [key, moved, seen]);
+  return seen.moves;
+};
+
 export const keptForm = {
   across: (form: Form, key: string): Partial<Record<Form, string>> => ({[form]: key}),
   useKey: (form: Form): string => {
     const {state, search} = useLocation();
-    return maybe(keptKeys.decode(state)).mBind(kept => maybe(kept[form])).orElse(addressKeyOf(form, search));
+    const moves = useBackAndForthMoves();
+    return maybe(keptKeys.decode(state)).mBind(kept => maybe(kept[form]))
+      .orElse(`${addressKeyOf(form, search)} ${moves}`);
   }
 };
