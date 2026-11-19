@@ -9,6 +9,7 @@ import {
   pillSwitch,
   pressTab,
   nameOn,
+  type Part,
   showing,
   siteFrame
 } from './__test_support';
@@ -74,16 +75,21 @@ test('a link to the inclusive type opens the tab on it, and it stays after a rel
   await expect(inclusive).toBeChecked();
 });
 
-test('a keyboard reader tabs from an open part\'s bar into its text and past a closed part', async ({page}) => {
-  await page.goto(showing('the checkbox build'));
-  const tab = accordionsTab(page);
-  const [open, closed, next] = [tab.partOf('the checkbox build', 0), tab.partOf('the checkbox build', 1), tab.partOf('the checkbox build', 2)];
+const tabsIntoItsText = async (page: Page, open: Part): Promise<void> => {
   const openName = await nameOn(open.fold).textContent() ?? '';
   await open.openByKeyboard();
   await heightOnceSettled(open.fold);
 
   await pressTab(page);
   await expect(open.fold.getByRole('region', {name: openName, exact: true})).toBeFocused();
+};
+
+test('a keyboard reader tabs from an open part\'s bar into its text and past a closed part', async ({page}) => {
+  await page.goto(showing('the checkbox build'));
+  const tab = accordionsTab(page);
+  const [open, closed, next] = [tab.partOf('the checkbox build', 0), tab.partOf('the checkbox build', 1), tab.partOf('the checkbox build', 2)];
+  await tabsIntoItsText(page, open);
+
   await pressTab(page);
   await expect(closed.fold.getByRole('checkbox')).toBeFocused();
   await pressTab(page);
@@ -93,12 +99,8 @@ test('a keyboard reader tabs from an open part\'s bar into its text and past a c
 test('a keyboard reader tabs from an open radio part into its text and past the closed parts\' text', async ({page}) => {
   await page.goto(showing('the radio build'));
   const open = accordionsTab(page).partOf('the radio build', 0);
-  const openName = await nameOn(open.fold).textContent() ?? '';
-  await open.openByKeyboard();
-  await heightOnceSettled(open.fold);
+  await tabsIntoItsText(page, open);
 
-  await pressTab(page);
-  await expect(open.fold.getByRole('region', {name: openName, exact: true})).toBeFocused();
   await pressTab(page);
 
   await expect.poll(() => accordionsTab(page).holdsFocus('the radio build')).toBe(false);
