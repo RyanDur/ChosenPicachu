@@ -1,4 +1,4 @@
-:root:has(.slice-station:hover, .slice-station:focus) {
+:root:has(.slice-ordinal:hover, .slice-ordinal:focus) {
   scroll-behavior: smooth;
 }
 
@@ -252,7 +252,7 @@
     gap: var(--base-x-0_5);
   }
 
-  .slice-station {
+  .slice-ordinal {
     margin-inline-start: var(--base);
   }
 

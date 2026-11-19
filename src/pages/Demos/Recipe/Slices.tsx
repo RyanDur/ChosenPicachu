@@ -5,9 +5,9 @@ import {maybe} from '@ryandur/sand';
 import {Place, useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {stations, storiesHeading} from '@pages/Demos/headings';
 
-type Slice = [slice: string, station: number];
+type Slice = [slice: string, ordinal: number];
 
-type PlacedSlice = [slice: string, part: number, place: Place];
+type PlacedSlice = [slice: string, ordinal: number, place: Place];
 
 type OnTheTab = {
   partPage?: never;
@@ -25,12 +25,12 @@ type SlicesProps = {
   slices: ReactNode;
 } & (OnTheTab | OnAPartPage);
 
-const SliceLink: FC<{at: number; place?: Place}> = ({at, place}) => {
+const SliceLink: FC<{ordinal: number; place?: Place}> = ({ordinal, place}) => {
   const carried = useCarriedAddress();
   return maybe(place).either(
     ({to, heading}) =>
-      <Link className="slice-station signpost caption upright" to={carried(to, heading)}>part {at}</Link>,
-    () => <a className="slice-station signpost caption upright" href={`#${stations.idOf(at)}`}>station {at}</a>);
+      <Link className="slice-ordinal signpost caption upright" to={carried(to, heading)}>part {ordinal}</Link>,
+    () => <a className="slice-ordinal signpost caption upright" href={`#${stations.idOf(ordinal)}`}>station {ordinal}</a>);
 };
 
 export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, partPage}) => {
@@ -55,10 +55,10 @@ export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, partPage})
     </hgroup>
     <p className="overview paragraph muted-ink">{slices}</p>
     <ul className="sliced" aria-label="the slices">
-      {placed.map(([slice, at, place]) =>
+      {placed.map(([slice, ordinal, place]) =>
         <li className="italic muted-ink" key={slice}>
           <span>{slice}</span>
-          <SliceLink at={at} place={place}/>
+          <SliceLink ordinal={ordinal} place={place}/>
         </li>)}
     </ul>
   </section>;
