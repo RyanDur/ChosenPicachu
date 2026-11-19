@@ -3,6 +3,7 @@ import {readFileSync} from 'node:fs';
 import * as schema from 'schemawax';
 import {maybe, not} from '@ryandur/sand';
 import {assertionPatience} from './patience';
+import {siteFrame} from './site';
 
 const stageAnswers = schema.array(schema.object({
   required: {key: schema.string, contentType: schema.string, body: schema.string}
@@ -27,6 +28,7 @@ export const galleryPage = (page: Page) => {
     settings: page.getByRole('button', {name: /^Gallery settings/}),
     sheet: page.getByRole('region', {name: 'gallery settings'}),
     openSettings: async (): Promise<void> => {
+      await siteFrame(page).hydrated();
       if (await searchField.isHidden()) await page.getByRole('button', {name: /^Gallery settings/}).click();
       await searchField.waitFor();
     },
