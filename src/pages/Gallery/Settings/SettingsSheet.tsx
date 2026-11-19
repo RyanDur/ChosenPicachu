@@ -3,6 +3,7 @@ import {has, maybe} from '@ryandur/sand';
 import {KnownDoors, useGallery} from '@pages/Gallery/Context';
 import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
+import {opening} from '@pages/Gallery/opening';
 
 const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
   if (event.key === 'Enter') apply(event.currentTarget);
@@ -22,7 +23,8 @@ const MuseumRow: FC = () => {
   const offered = museums.all.filter(({param}) => known[param] === 'open' || param === tab);
   const choice = useId();
   const chosen = (event: ChangeEvent<HTMLSelectElement>) =>
-    maybe(sourceParam.decode(event.currentTarget.value)).map(museum => updateSearchParams({tab: museum}));
+    maybe(sourceParam.decode(event.currentTarget.value))
+      .map(museum => updateSearchParams({tab: museum, page: opening.page}));
   return <>
     <label className="sheet-label field bold" htmlFor={choice}>Museum</label>
     <select id={choice} className="sheet-field card ellipsis" value={maybe(tab).orElse('')}
@@ -42,8 +44,8 @@ const SearchRow: FC = () => {
 
   const apply = ({value}: HTMLInputElement) => {
     if (value === searched) return;
-    if (value === '') removeSearchParams(['search']);
-    else updateSearchParams({search: value});
+    if (value === '') removeSearchParams(['search', 'page']);
+    else updateSearchParams({search: value, page: opening.page});
   };
 
   return <>

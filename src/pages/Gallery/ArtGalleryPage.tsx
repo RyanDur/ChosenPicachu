@@ -9,6 +9,7 @@ import {Source} from '@pages/Gallery/source';
 import {museums} from '@pages/Gallery/museums';
 import missingWall from '../../assets/icons/missing-wall.svg?url';
 import {StandIn} from '@pages/Gallery/StandIn';
+import {opening} from '@pages/Gallery/opening';
 import {KnownDoors, useGallery} from '@pages/Gallery/Context';
 import {Doors, doors} from '@pages/Gallery/doors';
 import './ArtGalleryPage.css';
@@ -46,7 +47,7 @@ export const ArtGalleryPage: FC = () => {
 
   return <>
     {notEmpty(open) && <Tabs label="museums" className="museum-tabs" current={tab}
-      values={open.map(museum => ({...museum, to: `${pathname}${searchFromShown({tab: museum.param})}`}))}/>}
+      values={open.map(museum => ({...museum, to: `${pathname}${searchFromShown({tab: museum.param, page: opening.page})}`}))}/>}
     {{
       wall: <ArtGallery/>,
       noMuseumOpen: <StandIn src={missingWall} alt="no museum is open"/>,

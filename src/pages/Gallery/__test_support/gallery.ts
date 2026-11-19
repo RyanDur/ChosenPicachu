@@ -21,6 +21,8 @@ export const galleryPage = {
       .filter(({selected}) => selected)
       .map(({textContent}) => textContent ?? '')
       .join(),
+  chooseMuseum: (name: string): Promise<void> =>
+    userEvent.selectOptions(screen.getByRole('combobox', {name: 'Museum', hidden: true}), name),
   museumsOffered: (): string[] =>
     within(screen.getByRole('combobox', {name: 'Museum', hidden: true}))
       .getAllByRole('option', {hidden: true})

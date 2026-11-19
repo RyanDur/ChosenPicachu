@@ -5,6 +5,7 @@ import {classNames, PropsWithClassName} from '@components';
 import {useGallery} from '@pages/Gallery/Context';
 import {useSuggestions} from './useSuggestions';
 import {keptForm} from '@pages/Gallery/keptForm';
+import {opening} from '@pages/Gallery/opening';
 import './Search.css';
 import searchIcon from '../../../assets/icons/search.svg?url';
 import resetIcon from '../../../assets/icons/reset.svg?url';
@@ -27,13 +28,13 @@ export const Search: FC<PropsWithClassName> = ({className}) => {
     event.preventDefault();
     const words = wordsIn(event.currentTarget);
     event.currentTarget.reset();
-    void navigate({pathname: gallery, search: searchFromAddress({search: words})},
+    void navigate({pathname: gallery, search: searchFromAddress({search: words, page: opening.page})},
       {preventScrollReset: true, state: keptForm.across('search', formKey)});
   };
 
   const reset = () => {
     cleared();
-    removeSearchParams(['search'], {state: keptForm.across('search', formKey)});
+    removeSearchParams(['search', 'page'], {state: keptForm.across('search', formKey)});
   };
 
   return <search className={classNames('search', 'backdrop', className)}>

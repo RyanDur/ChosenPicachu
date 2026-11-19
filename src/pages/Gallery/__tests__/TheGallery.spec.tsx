@@ -1,3 +1,4 @@
+import {appAddress} from '@__test_support/address';
 import {TestApp} from '@__test_support/TestApp';
 import {
   aicArtResponse,
@@ -153,6 +154,18 @@ describe('The gallery.', () => {
     await waitFor(() => expect(galleryPage.museumsOffered()).toContain('Harvard Art Museums'));
 
     expect(galleryPage.museumChosen()).toBe('Choose a museum');
+  });
+
+  test('a museum chosen in the gallery settings opens on its first page', async () => {
+    setupHarvardAllArtResponse(harvardArtResponse);
+    heldVAMPictures();
+    render(<TestApp at={`${Paths.artGallery}?tab=vam&page=40`}/>);
+    await waitFor(() => expect(galleryPage.museumsOffered()).toContain('Harvard Art Museums'));
+
+    await galleryPage.chooseMuseum('Harvard Art Museums');
+
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent('tab=harvard'));
+    expect(appAddress.search()).toHaveTextContent('page=1');
   });
 
   test('the gallery settings show the address\'s museum as chosen while it is still asked', async () => {
