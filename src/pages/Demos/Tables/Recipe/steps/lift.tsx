@@ -19,10 +19,9 @@ export const LiftOnce: FC<{headerSource: Sample; buildSource: Sample}> = ({heade
       {world === 'react'
         ? <Says>The cursor’s hand is CSS before anything happens, grab on hover, grabbing on press,
           and <code className="monospaced">touch-action: none</code> is why the pointer can drag on touch at all.
-          On <code className="monospaced">pointerdown</code> the
-          header takes the survey, takes the pointer, and lifts. It listens only
-          while <code className="monospaced">movable</code> is true: its column is one that can travel, and the page’s
-          script has run. That is one dispatch, and after it the store
+          The header listens only while <code className="monospaced">movable</code> is true: its column can travel,
+          and the page’s script has run. On <code className="monospaced">pointerdown</code> the header takes the
+          survey, takes the pointer, and lifts. That is one dispatch, and after it the store
           holds the drag beside the columns and the seats: the one mark of what
           is <Term word="aloft">carried</Term>, a key a table with no carry never
           has. One word in the code comes from a small library
