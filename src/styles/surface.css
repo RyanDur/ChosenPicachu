@@ -459,3 +459,15 @@
 .gap-filled {
   box-shadow: var(--filled-gap) var(--field);
 }
+
+@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
+  .phone-sheet:popover-open {
+    position: fixed;
+    inset: auto 0 var(--menu-bar-block);
+    width: 100%;
+    max-height: calc(100dvh - var(--menu-bar-block));
+    overflow: auto;
+    display: grid;
+    gap: var(--base);
+  }
+}

@@ -8,5 +8,4 @@ export {Main} from './Main';
 export {PageError} from './PageError';
 export {phoneLayout} from './phoneLayout';
 export {phoneQuery} from './phoneQuery';
-export {phoneSheets} from './phoneSheets';
 export {WaitingRoom} from './WaitingRoom';

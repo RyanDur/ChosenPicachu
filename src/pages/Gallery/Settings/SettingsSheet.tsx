@@ -3,7 +3,6 @@ import {maybe} from '@ryandur/sand';
 import {KnownDoors, useGallery} from '@pages/Gallery/Context';
 import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
-import {sheetFields} from './fields';
 
 const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
   if (event.key === 'Enter') apply(event.currentTarget);
@@ -93,11 +92,11 @@ const PageRow: FC = () => {
 };
 
 const showingTheAddress = ({newState, currentTarget}: ToggleEvent<HTMLElement>) => {
-  if (newState === 'open') sheetFields.showTheAddress(currentTarget);
+  if (newState === 'open') currentTarget.querySelectorAll('input').forEach(field => field.value = field.defaultValue);
 };
 
 export const SettingsSheet: FC<{readonly id: string}> = ({id}) =>
-  <section id={id} popover="auto" aria-label="gallery settings" className="settings-sheet backdrop veiled"
+  <section id={id} popover="auto" aria-label="gallery settings" className="settings-sheet phone-sheet backdrop veiled"
     onBeforeToggle={showingTheAddress}>
     <MuseumRow/>
     <SearchRow/>
