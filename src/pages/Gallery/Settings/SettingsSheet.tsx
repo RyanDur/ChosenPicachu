@@ -4,7 +4,7 @@ import {KnownDoors, useGallery} from '@pages/Gallery/Context';
 import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
 import {opening} from '@pages/Gallery/opening';
-import {pageWithinTheEnd} from '@pages/Gallery/pageWithinTheEnd';
+import {pages} from '@pages/Gallery/pages';
 
 const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
   if (event.key === 'Enter') apply(event.currentTarget);
@@ -72,7 +72,7 @@ const SizeRow: FC = () => {
   const field = useId();
   const applying = applyingNumber(size, perPage => updateSearchParams({
     size: perPage,
-    page: pageWithinTheEnd(page, perPage, pagination)
+    page: pages.withinTheEnd(page, perPage, pagination)
   }, movedTo));
 
   return <>
