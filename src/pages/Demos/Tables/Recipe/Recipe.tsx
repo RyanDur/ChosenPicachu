@@ -12,10 +12,12 @@ export const Recipe: FC = () => {
   return <section aria-label="build the drag sort yourself" className="build-steps">
     <TrackDial/>
     <Stories>{pace === 'eager'
-      ? <SortStories build={eagerBuild}
-        paceStep={<EagerPace headerSource={eagerBuild.headerSource} buildSource={eagerBuild.buildSource}/>}/>
-      : <SortStories build={lazyBuild}
-        paceStep={<LazyPace headerSource={lazyBuild.headerSource} paceSource={lazyBuild.paceSource}
-          buildSource={lazyBuild.buildSource}/>}/>}</Stories>
+      ? <SortStories build={eagerBuild}>
+        <EagerPace headerSource={eagerBuild.headerSource} buildSource={eagerBuild.buildSource}/>
+      </SortStories>
+      : <SortStories build={lazyBuild}>
+        <LazyPace headerSource={lazyBuild.headerSource} paceSource={lazyBuild.paceSource}
+          buildSource={lazyBuild.buildSource}/>
+      </SortStories>}</Stories>
   </section>;
 };
