@@ -257,6 +257,14 @@ describe('the tables tab’s parts, each on its own page', () => {
     ]);
   });
 
+  test('the slices on their page name the part that builds each one', async () => {
+    render(<TestApp at={demosAt('tables/the-slices')}/>);
+
+    await tablesTab().place();
+
+    expect(demoPage.sliceLinkNames()).toEqual(['part 4', 'part 5', 'part 6', 'part 7', 'part 8']);
+  });
+
   test('the slices’ page leads back to the sketch’s page and on to the still table’s page, by number and title, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-slices', '?world=vanilla')}/>);
 
