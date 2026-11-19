@@ -1,5 +1,5 @@
 import {ChangeEvent, FC, KeyboardEvent, ToggleEvent, useId} from 'react';
-import {has, maybe} from '@ryandur/sand';
+import {has, maybe, not} from '@ryandur/sand';
 import {useGallery, useKnownDoors} from '@pages/Gallery/Context';
 import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
@@ -73,7 +73,7 @@ const movedTo = {preventScrollReset: false};
 
 const applyingNumber = (current: number, apply: (value: number) => void) =>
   (accepted: (field: HTMLInputElement) => boolean) => (input: HTMLInputElement): void => {
-    if (input.valueAsNumber === current || !accepted(input)) return;
+    if (input.valueAsNumber === current || not(accepted(input))) return;
     apply(input.valueAsNumber);
     numberField.showsWhatItSent(input, input.valueAsNumber);
   };
