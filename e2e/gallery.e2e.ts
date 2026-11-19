@@ -598,6 +598,22 @@ test.describe('a visitor at a desk', () => {
     await expect(page).toHaveURL(/[?&]page=100(&|$)/);
   });
 
+  test('shows the address\'s page in the page field after the pager moves back to it, not a page typed and never sent', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=3&size=8');
+    await siteFrame(page).hydrated();
+    await gallery.pageNumber.fill('4');
+    await gallery.go.click();
+    await expect(page).toHaveURL(/[?&]page=4(&|$)/);
+    await gallery.pageNumber.fill('9');
+
+    await page.getByRole('navigation', {name: 'pagination'}).getByRole('link', {name: 'previous page'}).click();
+
+    await expect(page).toHaveURL(/[?&]page=3(&|$)/);
+    await expect(gallery.pageNumber).toHaveValue('3');
+  });
+
   test('shows the address\'s page in the page field after Back, not a page typed and never sent', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
