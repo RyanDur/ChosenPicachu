@@ -11,9 +11,9 @@ export const Opener: FC = () =>
     <p className="thesis paragraph">Each language has its own job. HTML says what things are, CSS says how they look,
       and JavaScript says how they respond: structure, presentation and behavior.</p>
     <p className="thesis paragraph">I wrote this for developers who learned the three the way most of us did, one at a
-      time and on the job, asking one language to do most of the work. Jobs then end up wherever they can be done: a div
-      standing in for a button, a look written on the element itself, a script taking over scrolling, focus or the back
-      button. Each of those works well enough to ship. The bugs come later, when someone uses the page with a
+      time and on real projects, asking one language to do most of the work. Jobs then end up wherever they can be done:
+      a div standing in for a button, a look written on the element itself, a script taking over scrolling, focus or the
+      back button. Each of those works well enough to ship. The bugs come later, when someone uses the page with a
       keyboard, with a screen reader, or on a phone.</p>
     <p className="thesis paragraph">More code rarely fixes those bugs. Much of the work is already done by the platform:
       the browser and the standards it follows. The platform keeps getting better, too, because the people who write the
