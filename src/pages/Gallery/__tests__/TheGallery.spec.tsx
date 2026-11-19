@@ -133,6 +133,17 @@ describe('The gallery.', () => {
     expect(galleryPage.museumIfAny('The Art Institute of Chicago')).not.toBeInTheDocument();
   });
 
+  test('a gallery that crashes still offers the open museums in its settings', async () => {
+    setupHarvardAllArtResponse(harvardArtResponse);
+    const Boom = () => {
+      throw new Error('boom');
+    };
+
+    render(<TestApp at={Paths.artGallery}><Boom/></TestApp>, {onCaughtError: () => undefined});
+
+    await waitFor(() => expect(galleryPage.museumsOffered()).toContain('Harvard Art Museums'));
+  });
+
   test('a museum whose pictures are refused is not offered in the gallery settings', async () => {
     setupAICAllArtResponse(aicArtResponse);
     refuseAICPictures();
