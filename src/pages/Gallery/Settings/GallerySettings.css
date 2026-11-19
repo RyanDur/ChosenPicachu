@@ -21,7 +21,11 @@
     display: flex;
     align-items: center;
     gap: var(--base-x-2);
-    block-size: var(--finger-reach);
+    block-size: var(--pointer-reach);
+
+    @media (pointer: coarse) {
+      block-size: var(--finger-reach);
+    }
     padding-inline: var(--base-x-2);
 
     > .ellipsis {
@@ -42,7 +46,11 @@
   .settings-sheet:popover-open {
     margin: 0;
     grid-template-columns: 1fr 2fr;
-    grid-auto-rows: var(--finger-reach);
+    grid-auto-rows: var(--pointer-reach);
+
+    @media (pointer: coarse) {
+      grid-auto-rows: var(--finger-reach);
+    }
     padding-block: var(--base) 0;
 
     .sheet-label {
