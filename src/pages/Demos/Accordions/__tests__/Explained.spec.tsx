@@ -113,17 +113,17 @@ describe('the fold choices', () => {
 });
 
 describe('the fold motion', () => {
-  test('should sit after the contents, right after the fold type, before before you start, and in neither', async () => {
+  test('should sit after the parts index, right after the fold type, before before you start, and in neither', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
-    const contents = await accordionsTab.contents();
+    const partsIndex = await accordionsTab.partsIndex();
     const beforeYouStart = explanation.partIn(tab, 'Before you start');
     const foldType = accordionsTab.choiceIn(tab, 'fold type');
     const foldMotion = accordionsTab.choiceIn(tab, 'fold motion');
 
-    expect(outOfReadingOrder([contents, foldType, foldMotion, beforeYouStart])).toEqual([]);
-    expect(contents).not.toContainElement(foldMotion);
+    expect(outOfReadingOrder([partsIndex, foldType, foldMotion, beforeYouStart])).toEqual([]);
+    expect(partsIndex).not.toContainElement(foldMotion);
     expect(await accordionsTab.partsHolding(foldMotion, ['Before you start'])).toEqual([]);
   });
 
@@ -147,45 +147,45 @@ describe('the fold motion', () => {
 
 });
 
-describe('the contents', () => {
+describe('the parts index', () => {
   test('should list the six parts in order, the accordion in HTML alone first', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const contents = await accordionsTab.contents();
+    const partsIndex = await accordionsTab.partsIndex();
 
-    expect(accordionsTab.titlesIn(contents)).toEqual(titles);
+    expect(accordionsTab.titlesIn(partsIndex)).toEqual(titles);
   });
 
   test('should list the three old ways under how we used to build a fold', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const contents = await accordionsTab.contents();
+    const partsIndex = await accordionsTab.partsIndex();
 
-    expect(accordionsTab.titlesUnder(contents, 'How we used to build a fold')).toEqual(titles.slice(1, 4));
+    expect(accordionsTab.titlesUnder(partsIndex, 'How we used to build a fold')).toEqual(titles.slice(1, 4));
   });
 
   test('should list the platform and how a sliding fold moves under what the platform gives now', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const contents = await accordionsTab.contents();
+    const partsIndex = await accordionsTab.partsIndex();
 
-    expect(accordionsTab.titlesUnder(contents, 'What the platform gives now')).toEqual(titles.slice(4));
+    expect(accordionsTab.titlesUnder(partsIndex, 'What the platform gives now')).toEqual(titles.slice(4));
   });
 
   test('should come after the accordion in HTML alone, and before before you start', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const contents = await accordionsTab.contents();
+    const partsIndex = await accordionsTab.partsIndex();
     const accordion = await accordionsTab.exhibit();
     const beforeYouStart = await explanation.part('Before you start');
 
-    expect(outOfReadingOrder([accordion, contents, beforeYouStart])).toEqual([]);
+    expect(outOfReadingOrder([accordion, partsIndex, beforeYouStart])).toEqual([]);
   });
 
   test('should give the accordion in HTML alone its minutes, as 1 min', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const entry = accordionsTab.entryOf(await accordionsTab.contents(), htmlAlone);
+    const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), htmlAlone);
 
     expect(explanation.saying(entry, '1 min')).toBeInTheDocument();
   });
@@ -193,7 +193,7 @@ describe('the contents', () => {
   test('should give the measured height its minutes, as 5 min', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const entry = accordionsTab.entryOf(await accordionsTab.contents(), 'The measured height');
+    const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'The measured height');
 
     expect(explanation.saying(entry, '5 min')).toBeInTheDocument();
   });
@@ -201,7 +201,7 @@ describe('the contents', () => {
   test('should say what the accordion in HTML alone does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const entry = accordionsTab.entryOf(await accordionsTab.contents(), htmlAlone);
+    const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), htmlAlone);
 
     expect(explanation.saying(entry, accordionParts.listed('html-alone-heading').says)).toBeInTheDocument();
   });
@@ -218,7 +218,7 @@ describe('the contents', () => {
   test('should say what a box remembers the fold, and a rule reads it does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const entry = accordionsTab.entryOf(await accordionsTab.contents(), 'A box remembers the fold, and a rule reads it');
+    const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'A box remembers the fold, and a rule reads it');
 
     expect(explanation.saying(entry, names.accordions['a-box-remembers-the-fold'].description)).toBeInTheDocument();
   });
@@ -235,7 +235,7 @@ describe('the contents', () => {
   test('should say what the max-height guess does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const entry = accordionsTab.entryOf(await accordionsTab.contents(), 'The max-height guess');
+    const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'The max-height guess');
 
     expect(explanation.saying(entry, names.accordions['the-max-height-guess'].description)).toBeInTheDocument();
   });
@@ -252,7 +252,7 @@ describe('the contents', () => {
   test('should say what the measured height does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const entry = accordionsTab.entryOf(await accordionsTab.contents(), 'The measured height');
+    const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'The measured height');
 
     expect(explanation.saying(entry, names.accordions['the-measured-height'].description)).toBeInTheDocument();
   });
@@ -269,7 +269,7 @@ describe('the contents', () => {
   test('should say what what the platform gives now does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const entry = accordionsTab.entryOf(await accordionsTab.contents(), 'What the platform gives now');
+    const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'What the platform gives now');
 
     expect(explanation.saying(entry, names.accordions['what-the-platform-gives-now'].description)).toBeInTheDocument();
   });
@@ -286,14 +286,14 @@ describe('the contents', () => {
   test('should say what how a sliding fold moves does, under its title', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const entry = accordionsTab.entryOf(await accordionsTab.contents(), 'How a sliding fold moves');
+    const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'How a sliding fold moves');
 
     expect(explanation.saying(entry, names.accordions['how-a-sliding-fold-moves'].description)).toBeInTheDocument();
   });
 });
 
 describe('the accordion in HTML alone', () => {
-  test('should hold three folds above the contents, basalt, cinder and meadow, in that order', async () => {
+  test('should hold three folds above the parts index, basalt, cinder and meadow, in that order', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const exhibit = await accordionsTab.exhibit();

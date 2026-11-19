@@ -62,11 +62,11 @@
 
     gap: var(--base-x-2);
 
-    .contents {
+    .parts-index {
       gap: 0;
     }
 
-    .contents-entry {
+    .parts-index-entry {
       padding-block: var(--base-x-0_5);
 
       .minutes {
@@ -74,7 +74,7 @@
       }
 
       @media (pointer: coarse) {
-        .contents-link {
+        .parts-index-link {
           display: inline-block;
           min-block-size: var(--finger-reach);
           vertical-align: top;

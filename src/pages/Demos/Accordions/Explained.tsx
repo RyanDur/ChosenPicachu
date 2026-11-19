@@ -11,7 +11,7 @@ import {ExclusiveHtmlAloneAccordion} from './ExclusiveHtmlAlone';
 import {looks} from './looks';
 import {accordionParts} from './part-pages';
 import {tabHeadings} from './tab-headings';
-import {Contents} from './Contents';
+import {PartsIndex} from './PartsIndex';
 import {AccordionsSize} from './AccordionsSize';
 import '../Runs.css';
 import './Explained.css';
@@ -47,7 +47,7 @@ export const AccordionsExplained: FC = () => {
     </header>
     <aside aria-label="parts and dials" className="accordions-sidecar">
       <AccordionsSize/>
-      <Contents/>
+      <PartsIndex/>
       <section aria-labelledby={tabHeadings.foldChoices} className="fold-choices">
         <h2 id={tabHeadings.foldChoices} className="off-screen">fold choices</h2>
         <DialGroup>

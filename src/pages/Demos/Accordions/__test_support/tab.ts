@@ -33,15 +33,15 @@ export const accordionsTab = {
     within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
   openPart: async (name: string): Promise<void> => userEvent.click(await screen.findByRole('link', {name})),
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
-  contents: (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'Parts'}),
+  partsIndex: (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'Parts'}),
   exhibit: async (): Promise<HTMLElement> => {
     await screen.findByRole('navigation', {name: 'Parts'});
     return screen.getAllByRole('figure').filter(figure => within(figure).queryAllByRole('group').length === 3)[0];
   },
-  titlesIn: (contents: HTMLElement): string[] => within(contents).getAllByRole('link').map(link => link.textContent),
-  titlesUnder: (contents: HTMLElement, label: string): string[] =>
-    within(within(contents).getByRole('list', {name: label})).getAllByRole('link').map(link => link.textContent),
-  entryOf: (contents: HTMLElement, title: string): HTMLElement =>
-    within(contents).getAllByRole('listitem').filter(entry => is(within(entry).queryByRole('link', {name: title})))[0],
+  titlesIn: (index: HTMLElement): string[] => within(index).getAllByRole('link').map(link => link.textContent),
+  titlesUnder: (index: HTMLElement, label: string): string[] =>
+    within(within(index).getByRole('list', {name: label})).getAllByRole('link').map(link => link.textContent),
+  entryOf: (index: HTMLElement, title: string): HTMLElement =>
+    within(index).getAllByRole('listitem').filter(entry => is(within(entry).queryByRole('link', {name: title})))[0],
   foldMeasuredByPlainScript: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByTitle('A fold measured by plain script')
 };

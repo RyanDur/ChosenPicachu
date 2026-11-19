@@ -1,14 +1,14 @@
-.contents {
+.parts-index {
   display: grid;
   gap: var(--base);
 }
 
-.contents-list {
+.parts-index-list {
   display: grid;
   padding-inline-start: var(--base-x-4);
 }
 
-.contents-entry {
+.parts-index-entry {
   position: relative;
   padding-block: var(--base);
   padding-inline-end: var(--base-x-7);
@@ -24,6 +24,6 @@
   }
 }
 
-.group-label {
+.era-label {
   margin-block-start: var(--base);
 }
