@@ -22,7 +22,7 @@ test('a reader whose room fails to load keeps the built page, its words, its fol
   await roomRefused;
   const fold = accordionsTab(page).htmlAloneFold('basalt');
 
-  await expect(page.getByRole('heading', {name: 'An accordion in HTML alone'})).toBeVisible();
+  await expect(page.getByRole('heading', {name: 'Before you start'})).toBeVisible();
   await fold.open();
   await expect.poll(fold.showsText).toBe(true);
   await expect(siteFrame(page).feedback).toHaveAttribute('inert');

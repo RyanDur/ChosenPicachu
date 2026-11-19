@@ -156,6 +156,10 @@
   letter-spacing: 0.08em;
 }
 
+.numbered {
+  list-style: decimal outside;
+}
+
 .prose {
   display: grid;
   gap: var(--base-x-2);

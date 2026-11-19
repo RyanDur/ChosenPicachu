@@ -6,6 +6,7 @@ import {
   dialRow,
   heightOnceSettled,
   iPhone,
+  pillSwitch,
   pressTab,
   nameOn,
   showing,
@@ -204,4 +205,24 @@ test.describe('a reader with script turned off', () => {
 
     await expect(fold.words).toBeVisible();
   });
+});
+
+test('a reader follows part one from the tab\'s list of parts to its section and HTML under "Before you start"', async ({page}) => {
+  await page.goto('demos/accordions/');
+
+  await page.getByRole('region', {name: 'Contents'}).getByRole('link', {name: 'An accordion in HTML alone'}).click();
+
+  const beforeYouStart = page.getByRole('region', {name: 'Before you start'});
+  await expect(beforeYouStart.getByRole('heading', {name: 'An accordion in HTML alone'})).toBeVisible();
+  await expect(beforeYouStart.getByText('<summary>basalt</summary>')).toBeVisible();
+});
+
+test('a reader sets the fold type beside the demo to inclusive, follows part four, and its page shows inclusive', async ({page}) => {
+  await page.goto('demos/accordions/');
+
+  await pillSwitch(page, 'fold type').choose('Inclusive');
+  await page.getByRole('region', {name: 'Contents'}).getByRole('link', {name: 'The measured height'}).click();
+
+  await expect(accordionsTab(page).partTitle('The measured height')).toBeVisible();
+  await expect.poll(pillSwitch(page, 'fold type').chosen).toBe('Inclusive');
 });

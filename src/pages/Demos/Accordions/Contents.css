@@ -1,0 +1,29 @@
+.contents {
+  display: grid;
+  gap: var(--base);
+}
+
+.contents-list {
+  display: grid;
+  padding-inline-start: var(--base-x-4);
+}
+
+.contents-entry {
+  position: relative;
+  padding-block: var(--base);
+  padding-inline-end: var(--base-x-7);
+
+  .minutes {
+    position: absolute;
+    inset-block-start: var(--base);
+    inset-inline-end: 0;
+  }
+
+  .says {
+    margin-block-start: var(--base-x-0_5);
+  }
+}
+
+.group-label {
+  margin-block-start: var(--base);
+}

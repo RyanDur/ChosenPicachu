@@ -151,7 +151,7 @@ export const accordionsTab = (page: Page) => {
     return {...partIn[build]({page, fold, article: built(build), index}), ...readable(fold)};
   };
   const htmlAloneFold = (name: string): Part & {closeByKeyboard: () => Promise<void>} => {
-    const fold = page.getByRole('region', {name: 'An accordion in HTML alone'}).getByRole('group').filter({hasText: name});
+    const fold = page.getByRole('group').filter({hasText: name});
     return {...detailsPart(page, fold), ...readable(fold), closeByKeyboard: () => focusAndPress(page, nameOn(fold), 'Enter')};
   };
   const partsOf = async (build: Build): Promise<Part[]> =>
