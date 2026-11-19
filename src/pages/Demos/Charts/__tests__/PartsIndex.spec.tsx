@@ -34,6 +34,14 @@ describe('the charts parts index', () => {
       await chartsDesk.findChartList(), await chartsDesk.findFeatureStories()])).toEqual([]);
   });
 
+  test('should say the four parts take about 25 minutes', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await chartsDesk.size()).toHaveTextContent(/about 25 minutes/);
+  });
+
   test('should give the price line its minutes, as 8 min', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
