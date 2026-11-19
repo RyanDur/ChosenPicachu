@@ -13,5 +13,5 @@ export const lazyBuild: SortBuild = {
   buildSource,
   headerSource,
   rowSource,
-  pace: <LazyPace headerSource={headerSource} paceSource={paceSource} buildSource={buildSource}/>
+  paceStep: <LazyPace headerSource={headerSource} paceSource={paceSource} buildSource={buildSource}/>
 };
