@@ -93,10 +93,10 @@ describe('Gallery Navigation', () => {
 
   test('the pagination writes a long count the way the reader writes numbers', async () => {
     setupAICEveryPage({...aicArtResponse, pagination: {...aicArtResponse.pagination, total_pages: 12412}});
-    render(<TestApp at={Paths.artGallery}/>);
+    render(<TestApp at={`${Paths.artGallery}?page=1234`}/>);
     await galleryWall.framesAppear();
 
-    expect(galleryNav.pagination()).toHaveTextContent(`Page 1 of ${(12412).toLocaleString()}`);
+    expect(galleryNav.pagination()).toHaveTextContent(`Page ${(1234).toLocaleString()} of ${(12412).toLocaleString()}`);
   });
 
   test('the ways and the count read as separate words, even with the styles off', async () => {

@@ -32,7 +32,7 @@ export const GalleryNav: FC<Props> = ({id}) => {
       </Link> </>}
     {pagination.mBind(({totalPages}) => totalPages > 0 ? some(totalPages) : nothing()).map(totalPages =>
       <output className="info field" key="count">
-        Page {currentPage} of {totalPages.toLocaleString()}
+        Page {currentPage.toLocaleString()} of {totalPages.toLocaleString()}
       </output>).orNull()}
     {hasNextPage && <>
       {' '}<Link to={`${path}${searchFromShown({page: nextPage})}`}
