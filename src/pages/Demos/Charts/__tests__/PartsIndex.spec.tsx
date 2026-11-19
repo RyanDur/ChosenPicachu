@@ -5,6 +5,7 @@ import {chartPageAt, demosAt, feedIsSubscribed, partsIndex} from '@pages/Demos/_
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {chartPage, chartsDesk} from '@pages/Demos/Charts/__test_support';
+import {chartKinds} from '@pages/Demos/Charts/chart-kinds';
 
 describe('the charts parts index', () => {
   test('should list the four charts in order, each a link to its page', async () => {
@@ -50,6 +51,6 @@ describe('the charts parts index', () => {
 
     const entry = partsIndex.entryOf(await partsIndex.find(), 'Candles');
 
-    expect(explanation.saying(entry, 'Each bucket of time answers for itself: where it opened and closed, how far it reached, and how much conviction was underneath.')).toBeInTheDocument();
+    expect(explanation.saying(entry, chartKinds.told.candles.says)).toBeInTheDocument();
   });
 });
