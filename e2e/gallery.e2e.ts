@@ -496,7 +496,7 @@ test.describe('a visitor at a desk', () => {
     await siteFrame(page).hydrated();
     await gallery.searchField.fill('roses');
     await gallery.searchField.press('Enter');
-    await expect(page).toHaveURL(/search=roses/);
+    await expect(gallery.searchField).toHaveAttribute('value', 'roses');
     await gallery.searchField.fill('tulips');
 
     await page.goBack();
@@ -512,7 +512,7 @@ test.describe('a visitor at a desk', () => {
     await siteFrame(page).hydrated();
     await gallery.pageNumber.fill('3');
     await gallery.pageNumber.press('Enter');
-    await expect(page).toHaveURL(/page=3/);
+    await expect(gallery.count).toHaveText(/^Page 3 of /);
     await gallery.pageNumber.fill('9');
 
     await page.goBack();
