@@ -76,6 +76,15 @@ describe('search', () => {
     expect(appAddress.search()).toHaveTextContent('tab=aic');
   });
 
+  it('a reset over words never sent keeps the reader on their page', async () => {
+    render(<TestApp at={`${Paths.artGallery}?tab=aic&page=40`}/>);
+    await searchPage.bar.type('lil');
+
+    await searchPage.bar.reset();
+
+    expect(appAddress.search()).toHaveTextContent('page=40');
+  });
+
   it('a reset empties the box, and the browser holds the empty box invalid', async () => {
     render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
     await searchPage.bar.type('A');

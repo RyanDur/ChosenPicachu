@@ -7,6 +7,8 @@ import {Source} from '@pages/Gallery/source';
 import {heldAICArtPieceResponse, setupAICArtPieceResponse} from '@pages/Gallery/__test_support';
 import {anAICPieceResponse, harvardPiece, harvardPieceResponse} from '@pages/Gallery/__test_support/fixtures';
 import {piecePage} from '@pages/Gallery/ArtPiece/__test_support';
+import {searchPage} from '@pages/Gallery/Search/__test_support';
+import {appAddress} from '@__test_support/address';
 
 describe('viewing a piece', () => {
   const pieceResponse = anAICPieceResponse();
@@ -24,6 +26,16 @@ describe('viewing a piece', () => {
     await waitFor(() => expect(piecePage.loadingIfAny()).not.toBeInTheDocument());
     expect(piecePage.artist(pieceResponse.data.artist_display)).toBeInTheDocument();
     expect(piecePage.title()).toHaveTextContent(pieceResponse.data.title);
+  });
+
+  test('a reset of the header’s search over words never sent keeps the page the reader came from', async () => {
+    setupAICArtPieceResponse(pieceResponse, pieceResponse.data.id);
+    render(<TestApp at={`${Paths.artGallery}${pieceResponse.data.id}?tab=${Source.AIC}&page=40`}/>);
+    await searchPage.bar.type('lil');
+
+    await searchPage.bar.reset();
+
+    expect(appAddress.search()).toHaveTextContent('page=40');
   });
 
   test('a piece opened with no museum in its address is shown from the Art Institute', async () => {

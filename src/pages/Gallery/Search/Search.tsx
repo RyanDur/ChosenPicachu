@@ -1,5 +1,6 @@
 import {FC, SubmitEvent, useContext, useId} from 'react';
 import {useNavigate} from 'react-router';
+import {has} from '@ryandur/sand';
 import {GalleryLinks} from '@pages/Gallery/Links';
 import {classNames, PropsWithClassName} from '@components';
 import {useGallery} from '@pages/Gallery/Context';
@@ -34,7 +35,7 @@ export const Search: FC<PropsWithClassName> = ({className}) => {
 
   const reset = () => {
     cleared();
-    removeSearchParams(['search', 'page'], {state: keptForm.across('search', formKey)});
+    removeSearchParams(has(search) ? ['search', 'page'] : ['search'], {state: keptForm.across('search', formKey)});
   };
 
   return <search className={classNames('search', 'backdrop', className)}>
