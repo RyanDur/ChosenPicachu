@@ -585,6 +585,7 @@ describe('a link saved to a story when it was on the tables tab', () => {
     render(<TestApp at={`${old}#station-2`}/>);
 
     expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/the-sketch', '?world=vanilla'));
+    expect(appAddress.fragment()).toBe('');
   });
 
   test('should open the page of the story its place points to, when it names stories on two pages', async () => {
