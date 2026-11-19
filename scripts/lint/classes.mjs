@@ -1,13 +1,15 @@
 import {empty, has, is, maybe, not} from '@ryandur/sand';
-import {readFileSync, readdirSync} from 'node:fs';
+import {readFileSync, readdirSync, statSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = join(root, 'src');
 
-const sheets = directory => readdirSync(directory, {withFileTypes: true}).flatMap(entry =>
-  entry.isDirectory() ? sheets(join(directory, entry.name)) : entry.name.endsWith('.css') ? [join(directory, entry.name)] : []);
+const folders = directory => [directory, ...readdirSync(directory, {withFileTypes: true})
+  .filter(entry => entry.isDirectory()).flatMap(entry => folders(join(directory, entry.name)))];
+
+const sheetsIn = found => found.flatMap(directory => readdirSync(directory).filter(name => name.endsWith('.css')).map(name => join(directory, name)));
 
 const selectorsOf = sheet => [...readFileSync(sheet, 'utf8').replace(/\/\*[^]*?\*\//g, '').matchAll(/([^{};]+)\{/g)]
   .map(([, selector]) => selector.trim())
@@ -21,17 +23,35 @@ const isShared = sheet => {
   return path.startsWith('styles/') || path === 'index.css';
 };
 
-/** @type {Set<string>} */
-const own = new Set();
-/** @type {Set<string>} */
-const shared = new Set();
-/** @type {Map<string, Set<string>>} */
-const bySheet = new Map();
-for (const sheet of sheets(src)) {
-  const names = new Set(selectorsOf(sheet).flatMap(classesIn));
-  bySheet.set(sheet, names);
-  names.forEach(name => (isShared(sheet) ? shared : own).add(name));
-}
+const read = found => {
+  /** @type {Set<string>} */
+  const own = new Set();
+  /** @type {Set<string>} */
+  const shared = new Set();
+  /** @type {Map<string, Set<string>>} */
+  const bySheet = new Map();
+  for (const sheet of found) {
+    const names = new Set(selectorsOf(sheet).flatMap(classesIn));
+    bySheet.set(sheet, names);
+    names.forEach(name => (isShared(sheet) ? shared : own).add(name));
+  }
+  return {own, shared, bySheet};
+};
+
+const stampOf = paths => paths.map(path => `${path} ${maybe(statSync(path, {throwIfNoEntry: false})).map(({mtimeMs}) => mtimeMs).orElse(0)}`).join('\n');
+
+let lastRead = {watched: [], stamp: '', classes: read([])};
+
+// WebStorm's ESLint service keeps one process across branch switches,
+// so the sheets are read again when a sheet or a folder changes.
+const sheetClasses = () => {
+  if (has(lastRead.watched) && stampOf(lastRead.watched) === lastRead.stamp) return lastRead.classes;
+  const found = folders(src);
+  const sheets = sheetsIn(found);
+  const watched = [...found, ...sheets];
+  lastRead = {watched, stamp: stampOf(watched), classes: read(sheets)};
+  return lastRead.classes;
+};
 
 /** @param {string} directory */
 const framedBesides = directory => readdirSync(directory)
@@ -48,6 +68,7 @@ const homesOf = directory =>
 
 /** @param {string} file */
 const nearbyOf = file => {
+  const {shared, bySheet} = sheetClasses();
   const page = file.includes('.html/') ? file.slice(0, file.indexOf('.html/') + '.html'.length) : file;
   const directory = dirname(page);
   const near = new Set(shared);
@@ -147,11 +168,14 @@ const ownClassFirst = {
   meta: {type: 'problem', messages: {
     behind: '"{{name}}" is this element\'s own class and comes first, before the shared words it wears'
   }},
-  create: context => classPositions(node => {
-    const names = firstWorn(node);
-    const mine = names.find(name => own.has(name));
-    if (typeof mine === 'string' && not(own.has(names[0]))) context.report({node, messageId: 'behind', data: {name: mine}});
-  })
+  create: context => {
+    const {own} = sheetClasses();
+    return classPositions(node => {
+      const names = firstWorn(node);
+      const mine = names.find(name => own.has(name));
+      if (typeof mine === 'string' && not(own.has(names[0]))) context.report({node, messageId: 'behind', data: {name: mine}});
+    });
+  }
 };
 
 const html = {
