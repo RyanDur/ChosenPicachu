@@ -27,6 +27,19 @@
   }
 }
 
+@container (height > 0) {
+  .page-pulled-apart .drawing {
+    container-type: size;
+    inline-size: 100%;
+    block-size: 100%;
+    max-inline-size: none;
+
+    .drawn-caption {
+      --drawing-column: min(100cqi, 100cqb * tan(atan2(var(--drawn-width), var(--drawn-height))));
+    }
+  }
+}
+
 @media (width <= 1100px) and (height <= 600px) {
   .page-pulled-apart .drawing {
     --between-the-bars: calc(100svh - var(--foot-reach));
