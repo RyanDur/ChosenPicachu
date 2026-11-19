@@ -23,7 +23,7 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
   const view = useTableRead(whole => whole);
   const count = useTableRead(tableReads.columnCount);
   const travels = useTableRead(tableReads.columnTravels(column));
-  const lifts = useHydrated() && travels;
+  const movable = useHydrated() && travels;
 
   const walkedTo = (to: number, widths: PixelSizes): void => {
     dispatch(tableActions.columnWalkedTo(column, to, widths, order));
@@ -53,15 +53,15 @@ export const DraggableColumn: FC<ComponentProps<'th'> & {column: string}> = ({co
 
   return <th {...th}
     className={classNames(
-      ...looks.headerCell, className, ...looks.headerNeeds(lifts, width),
+      ...looks.headerCell, className, ...looks.headerNeeds(movable, width),
       ...looks.motionStates(carried, settlingFrom, shoved))}
     scope="col"
     aria-label={data.label}
     aria-sort={sorted}
-    tabIndex={lifts ? 0 : undefined}
-    onPointerDown={lifts ? lifting.column(column, () => order, () => standing, lift) : undefined}
+    tabIndex={movable ? 0 : undefined}
+    onPointerDown={movable ? lifting.column(column, () => order, () => standing, lift) : undefined}
     {...travel.whileHeld(drag, moved, release)}
-    onKeyDown={lifts ? arrows.column(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
+    onKeyDown={movable ? arrows.column(column, () => order, ({to, widths}) => walkedTo(to, widths)) : undefined}
     onAnimationEnd={() => dispatch(tableActions.settled({axis: 'column', held: column}))}
     style={{
       '--share': width.map(shares.width).orElse(undefined),

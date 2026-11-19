@@ -35,11 +35,11 @@ const rowHeaderCell = ['cell', 'row-header'] as const;
 
 const headerCell = ['cell', 'header-cell'] as const;
 
-const headerNeeds = (travels: boolean, width: Maybe<number>): readonly (string | false)[] => [
+const headerNeeds = (movable: boolean, width: Maybe<number>): readonly (string | false)[] => [
   'muted-rule-after',
   'muted-bar-below',
   'focus-ringed',
-  travels && 'grabbable',
+  movable && 'grabbable',
   not(width.isNothing) && 'shared'
 ];
 
