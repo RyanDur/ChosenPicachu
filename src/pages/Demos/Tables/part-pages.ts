@@ -61,6 +61,7 @@ export const tableParts = {
     ordinal: ordinalOf(part),
     says: names.tableParts[part].description
   }),
+  tabAddress,
   addressOf,
   placeOf,
   numbered,
