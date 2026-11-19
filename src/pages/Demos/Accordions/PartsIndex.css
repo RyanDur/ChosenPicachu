@@ -11,7 +11,6 @@
 .parts-index-entry {
   position: relative;
   padding-block: var(--base);
-  padding-inline-end: var(--base-x-7);
 
   .minutes {
     position: absolute;
@@ -24,14 +23,18 @@
   }
 }
 
+.parts-index-link {
+  display: inline-block;
+  vertical-align: top;
+  margin-inline-end: var(--base-x-7);
+}
+
 .era-label {
   margin-block-start: var(--base);
 }
 
 @media (pointer: coarse) {
   .parts-index-link {
-    display: inline-block;
     min-block-size: var(--finger-reach);
-    vertical-align: top;
   }
 }
