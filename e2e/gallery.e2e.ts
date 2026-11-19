@@ -23,6 +23,20 @@ for (const {reader, device} of handhelds) {
       await expect(gallery.searchField).toHaveAccessibleName('Search');
     });
 
+    test('keeps a keyboard reader in the page field after Tab from a number per page typed in the settings', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam');
+      await siteFrame(page).hydrated();
+      await gallery.openSettings();
+      await gallery.pageSize.fill('12');
+
+      await gallery.pageSize.press('Tab');
+
+      await expect(page).toHaveURL(/[?&]size=12(&|$)/);
+      await expect(gallery.pageNumber).toBeFocused();
+    });
+
     test('puts the page field in the settings back to the last page when the museum answers while it is in use', async ({page}) => {
       const gallery = galleryPage(page);
       await gallery.answerEveryWallFromTheRecording();
