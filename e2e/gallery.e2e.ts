@@ -434,6 +434,20 @@ test.describe('a desktop window made narrow', () => {
 
     await expect(gallery.sheet).toBeHidden();
   });
+  test('leaves the gallery where it was when it is no longer a phone\'s width, with words typed in its settings and never sent', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.setViewportSize(iPhone.viewport);
+    await page.goto('gallery/?tab=vam&page=3');
+    await gallery.openSettings();
+    await gallery.searchField.fill('lil');
+
+    await page.setViewportSize(desktop.viewport);
+
+    await expect(gallery.sheet).toBeHidden();
+    await expect(page).not.toHaveURL(/search=/);
+    await expect(page).toHaveURL(/[?&]page=3(&|$)/);
+  });
 });
 
 test.describe('a visitor at a desk', () => {
