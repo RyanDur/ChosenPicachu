@@ -8,7 +8,7 @@ export {dragSortTable, type FingerPress, type Hold} from './drag-sort';
 export {tableWorlds, type Stage} from './table-worlds';
 export {usersPage, type Person} from './users';
 export {violationsOf} from './axe';
-export {phone, phoneSideways, iPhone, iPadSplitView, iPadUpright, iPadSideways, iPad13Upright, desktop} from './devices';
+export {phone, phoneSideways, iPhone, iPadSplitView, iPadUpright, desktop} from './devices';
 export {clickWhereItIs, documentScrollY, twoFramesLater} from './scrolling';
 export {siteFrame} from './site';
 export {hydration} from './hydration';
