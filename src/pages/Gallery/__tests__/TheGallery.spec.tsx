@@ -179,7 +179,7 @@ describe('The gallery.', () => {
     await galleryPage.enter('Harvard Art Museums');
 
     await waitFor(() => expect(appAddress.search()).toHaveTextContent('tab=harvard'));
-    expect(appAddress.search()).toHaveTextContent('page=1');
+    expect(appAddress.search()).toHaveTextContent(/(^|[?&])page=1(&|$)/);
   });
 
   test('a search made in the gallery settings opens on its first page', async () => {
@@ -190,7 +190,7 @@ describe('The gallery.', () => {
     await galleryPage.searchInSettings('lilies');
 
     await waitFor(() => expect(appAddress.search()).toHaveTextContent('search=lilies'));
-    expect(appAddress.search()).toHaveTextContent('page=1');
+    expect(appAddress.search()).toHaveTextContent(/(^|[?&])page=1(&|$)/);
   });
 
   test('words typed in the gallery settings stay unsent when the page loses focus', async () => {
@@ -212,7 +212,7 @@ describe('The gallery.', () => {
     await galleryPage.chooseMuseum('Harvard Art Museums');
 
     await waitFor(() => expect(appAddress.search()).toHaveTextContent('tab=harvard'));
-    expect(appAddress.search()).toHaveTextContent('page=1');
+    expect(appAddress.search()).toHaveTextContent(/(^|[?&])page=1(&|$)/);
   });
 
   test('a search emptied in the gallery settings and sent with Enter clears the search and its page', async () => {
@@ -234,7 +234,7 @@ describe('The gallery.', () => {
     await galleryPage.sizeInSettings(100);
 
     await waitFor(() => expect(appAddress.search()).toHaveTextContent('size=100'));
-    expect(appAddress.search()).toHaveTextContent('page=10');
+    expect(appAddress.search()).toHaveTextContent(/(^|[?&])page=10(&|$)/);
   });
 
   test('the gallery settings show the address\'s museum as chosen while it is still asked', async () => {
