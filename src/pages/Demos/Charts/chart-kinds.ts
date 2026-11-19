@@ -15,6 +15,23 @@ const names: Record<ChartKind, string> = {
 
 const all: readonly ChartKind[] = ['price', 'candles', 'pressure', 'pie'];
 
+type Told = {
+  says: string;
+  minutes: number;
+};
+
+const told: Record<ChartKind, Told> = {
+  price: {says: 'A line shows whether the market is climbing, stalling or rolling over, without a digit to read.', minutes: 8},
+  candles: {
+    says: 'Each bucket of time answers for itself: where it opened and closed, how far it reached, and how much conviction was underneath.',
+    minutes: 7
+  },
+  pressure: {says: 'Bars show whether buyers drove the price there or the sellers stepped away.', minutes: 5},
+  pie: {says: 'One circle at the session’s end shows who owned it.', minutes: 5}
+};
+
+const minutes = all.reduce((sum, kind) => sum + told[kind].minutes, 0);
+
 const is = (kind?: string): kind is ChartKind =>
   all.some(candidate => candidate === kind);
 
@@ -29,4 +46,4 @@ const numbered = (kind: ChartKind): string => `${all.indexOf(kind) + 1}. ${names
 // generatePath drops the route's trailing slash, and the prerendered pages live at the slashed address.
 const address = (kind: ChartKind): string => `${generatePath(Paths.chartTutorial, {kind})}/`;
 
-export const chartKinds = {all, is, match, names, address, previous, next, numbered};
+export const chartKinds = {all, is, match, names, told, minutes, address, previous, next, numbered};

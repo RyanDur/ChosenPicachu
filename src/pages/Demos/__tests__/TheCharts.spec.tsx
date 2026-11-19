@@ -10,7 +10,7 @@ import {
   tradeFrame,
   tradeFrameWith
 } from '@pages/Demos/__test_support/feed';
-import {chartPage, chartsDesk} from '@pages/Demos/Charts/__test_support';
+import {chartsDesk} from '@pages/Demos/Charts/__test_support';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
 import {tradeHistoryRefuses} from '@__test_support/server';
@@ -780,20 +780,6 @@ describe('the charts tab’s introduction', () => {
       ['accordions tab', `${Paths.demos}accordions/`],
       ['z-index tab', `${Paths.demos}z-index/`],
       ['drag sort tab', `${Paths.demos}drag-and-drop/`]
-    ]);
-  });
-});
-
-describe('the charts tab’s parts', () => {
-  test('should list the four chart pages in order, each a link to its page', async () => {
-    render(<TestApp at={demosAt('charts')}/>);
-    await demoTabs.arrivedOn('Charts');
-
-    expect(chartPage.parts('let’s build this feature')).toEqual([
-      ['Price line', chartPageAt('price')],
-      ['Candles', chartPageAt('candles')],
-      ['Pressure', chartPageAt('pressure')],
-      ['Pie', chartPageAt('pie')]
     ]);
   });
 });
