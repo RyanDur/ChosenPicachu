@@ -28,6 +28,7 @@ type SearchParamsObject<T extends {[key: string]: unknown}, D> = Given<T, D> & {
   removeSearchParams: (params: string[], options?: NavigateOptions) => void;
   searchFromShown: (params: Partial<T>) => string;
   searchFromAddress: (params: Partial<T>) => string;
+  searchWithout: (params: string[]) => string;
 };
 type Params = {[p: string]: string | number};
 
@@ -52,9 +53,13 @@ export function useSearchParamsObject<T extends Params>(
   const searchFromAddress = (params = {}): string =>
     queryString.from({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)});
 
+  const without = (params: string[]): [string, string][] =>
+    Array.from(searchParams.entries()).filter(([key]) => not(params.includes(key)));
+
+  const searchWithout = (params: string[]): string => queryString.from(Object.fromEntries(without(params)));
+
   const removeSearchParams = (params: string[], options?: NavigateOptions) =>
-    setSearchParams(Array.from(searchParams.entries())
-      .filter(([key]) => not(params.includes(key))), {...keepingThePlace, ...options});
+    setSearchParams(without(params), {...keepingThePlace, ...options});
 
   const updateSearchParams = (params = {}, options?: NavigateOptions) =>
     setSearchParams({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)},
@@ -65,6 +70,7 @@ export function useSearchParamsObject<T extends Params>(
     updateSearchParams,
     searchFromShown,
     searchFromAddress,
+    searchWithout,
     removeSearchParams
   };
 }

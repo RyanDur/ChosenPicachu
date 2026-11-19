@@ -5,6 +5,7 @@ import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
 import {opening} from '@pages/Gallery/opening';
 import {pages} from '@pages/Gallery/pages';
+import {useGalleryAddress} from './useGalleryAddress';
 
 const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
   if (event.key === 'Enter') apply(event.currentTarget);
@@ -19,13 +20,14 @@ const refusedGoesBack = (field: HTMLInputElement): boolean => {
 };
 
 const MuseumRow: FC = () => {
-  const {tab, updateSearchParams} = useGallery();
+  const {tab} = useGallery();
+  const address = useGalleryAddress();
   const known = useContext(KnownDoors);
   const offered = museums.all.filter(({param}) => known[param] === 'open' || param === tab);
   const choice = useId();
   const chosen = (event: ChangeEvent<HTMLSelectElement>) =>
     maybe(sourceParam.decode(event.currentTarget.value))
-      .map(museum => updateSearchParams({tab: museum, page: opening.page}));
+      .map(museum => address.update({tab: museum, page: opening.page}));
   return <>
     <label className="sheet-label field bold" htmlFor={choice}>Museum</label>
     <select id={choice} className="sheet-field card ellipsis" value={maybe(tab).orElse('')}
@@ -37,7 +39,8 @@ const MuseumRow: FC = () => {
 };
 
 const SearchRow: FC = () => {
-  const {tab, search, updateSearchParams, removeSearchParams} = useGallery();
+  const {tab, search} = useGallery();
+  const address = useGalleryAddress();
   const searched = maybe(search).orElse('');
   const {suggestions, typed: suggestFor} = useSuggestions(tab);
   const field = useId();
@@ -45,8 +48,8 @@ const SearchRow: FC = () => {
 
   const apply = ({value}: HTMLInputElement) => {
     if (value === searched) return;
-    if (value === '') removeSearchParams(['search', 'page']);
-    else updateSearchParams({search: value, page: opening.page});
+    if (value === '') address.remove(['search', 'page']);
+    else address.update({search: value, page: opening.page});
   };
 
   const leave = (input: HTMLInputElement) => {
@@ -73,9 +76,10 @@ const applyingNumber = (current: number, apply: (value: number) => void) =>
   };
 
 const SizeRow: FC = () => {
-  const {page, size, pagination, updateSearchParams} = useGallery();
+  const {page, size, pagination} = useGallery();
+  const address = useGalleryAddress();
   const field = useId();
-  const applying = applyingNumber(size, perPage => updateSearchParams({
+  const applying = applyingNumber(size, perPage => address.update({
     size: perPage,
     page: pages.withinTheEnd(page, perPage, pagination)
   }, movedTo));
@@ -90,11 +94,12 @@ const SizeRow: FC = () => {
 };
 
 const PageRow: FC = () => {
-  const {page, tab, search, size, pagination, updateSearchParams} = useGallery();
+  const {page, tab, search, size, pagination} = useGallery();
+  const address = useGalleryAddress();
   const field = useId();
   const shown = pages.shown(page, pagination);
   const movedFromOutside = [tab, search, size].join(' ');
-  const goTo = (to: number) => updateSearchParams({page: to}, movedTo);
+  const goTo = (to: number) => address.update({page: to}, movedTo);
 
   return <>
     <label className="sheet-label field bold" htmlFor={field}>Page</label>
