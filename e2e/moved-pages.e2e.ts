@@ -59,7 +59,7 @@ test('a link saved to one story while the address named another lands on the sto
 test.describe('a reader with script turned off', () => {
   test.use({javaScriptEnabled: false});
 
-  test('follows a link saved to an old tables tutorial address to the tables tab and its list of tutorials', async ({page}) => {
+  test('follows a link saved to an old tables tutorial address to the tables tab and its parts', async ({page}) => {
     const {tutorials, partLink} = tablesDemo(page);
 
     await page.goto('demos/tables/?tut=menu');
