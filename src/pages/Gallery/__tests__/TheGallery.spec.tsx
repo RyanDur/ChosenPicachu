@@ -157,6 +157,20 @@ describe('The gallery.', () => {
     expect(galleryPage.museumChosen()).toBe('Choose a museum');
   });
 
+  test('a search made in the settings of a piece page that crashes goes to the gallery', async () => {
+    setupHarvardAllArtResponse(harvardArtResponse);
+    const Boom = () => {
+      throw new Error('boom');
+    };
+    render(<TestApp at={`${Paths.artGallery}O9138?tab=vam&page=3`}><Boom/></TestApp>, {onCaughtError: () => undefined});
+    await waitFor(() => expect(galleryPage.museumsOffered()).toContain('Harvard Art Museums'));
+
+    await galleryPage.searchInSettings('lilies');
+
+    await waitFor(() => expect(appAddress.path()).toHaveTextContent(Paths.artGallery));
+    expect(appAddress.path()).not.toHaveTextContent('O9138');
+  });
+
   test('a museum chosen from the museum tabs opens on its first page', async () => {
     setupHarvardAllArtResponse(harvardArtResponse);
     heldVAMPictures();

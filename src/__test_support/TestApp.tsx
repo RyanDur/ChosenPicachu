@@ -1,4 +1,4 @@
-import {has, maybe} from '@ryandur/sand';
+import {has, maybe, Maybe} from '@ryandur/sand';
 import {
   Children,
   FC,
@@ -13,7 +13,7 @@ import {
   useLayoutEffect,
   useState
 } from 'react';
-import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, useLocation, useNavigate} from 'react-router';
+import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, matchRoutes, useLocation, useNavigate} from 'react-router';
 import {arrival, ArrivalDrawn} from '@navigation/arrival';
 import {SiteProviders} from '../SiteProviders';
 import {Opener, RoomModule, roomsOpenedBy, siteHolding} from '../routes';
@@ -61,16 +61,15 @@ const routed = (children: ReactNode): boolean =>
 
 const pathOf = (at: string): string => new URL(at, 'http://test').pathname;
 
-const everyRoom = (rooms: RouteObject[]): RouteObject[] =>
-  rooms.flatMap(room => [room, ...everyRoom(room.children ?? [])]);
-
-const roomAt = (at: string): RouteObject | undefined =>
-  everyRoom(siteRooms).find(room => room.path === pathOf(at));
+const roomAt = (at: string): Maybe<RouteObject> =>
+  maybe(matchRoutes(siteRooms, pathOf(at)))
+    .mBind(matches => maybe(matches[matches.length - 1]))
+    .map(({route}) => route);
 
 const routesAt = (at: string, children: ReactNode): RouteObject[] =>
   routed(children)
     ? createRoutesFromElements(children)
-    : maybe(roomAt(at))
+    : roomAt(at)
       .map(({path, ErrorBoundary}): RouteObject[] => [{path, ErrorBoundary, element: children}])
       .orElse([{path: pathOf(at), element: children}]);
 
