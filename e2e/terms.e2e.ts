@@ -1,6 +1,6 @@
 import {Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {desktop, iPhone, pressTab, siteFrame, terms} from './__test_support';
+import {pressTab, siteFrame, terms} from './__test_support';
 
 const aTapShows = async (page: Page, story: string, term: string): Promise<void> => {
   const {word, definition} = await terms(page).defined(story, term);
@@ -23,9 +23,7 @@ const aTapInAStoryOpenedByATapShowsTheDefinition =
     await aTapShows(page, story, term);
   };
 
-test.describe('a phone', () => {
-  test.use(iPhone);
-
+test.describe('tapping a term', {tag: '@iPhone'}, () => {
   test('a tap on ledger shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables/the-still-table', 'The trader can read the market in a table', 'ledger'));
 
   test('a tap on store shows its definition', ({page}) => aTapShowsTheDefinition(page, 'tables/the-live-table-and-the-store', 'The page is a store, and so is the table', 'store'));
@@ -39,9 +37,7 @@ test.describe('a phone', () => {
   test('a tap on crossing, in a story opened by a tap, shows its definition', ({page}) => aTapInAStoryOpenedByATapShowsTheDefinition(page, 'drag-and-drop', 'The user can arrange the list by hand', 'crossing'));
 });
 
-test.describe('a phone, with a definition open', () => {
-  test.use(iPhone);
-
+test.describe('with a definition open', {tag: '@iPhone'}, () => {
   const opened = async (page: Page) => {
     await page.goto('demos/tables/the-live-table-and-the-store/');
     const term = await terms(page).defined('The page is a store, and so is the table', 'middleware');
@@ -85,9 +81,7 @@ test.describe('a phone, with a definition open', () => {
   });
 });
 
-test.describe('a desk', () => {
-  test.use(desktop);
-
+test.describe('opening a definition', {tag: '@desktop'}, () => {
   test('a mouse resting on a term opens its definition, and leaving it closes it', async ({page}) => {
     await page.goto('demos/tables/the-live-table-and-the-store/');
     const {word, definition} = await terms(page).defined('The page is a store, and so is the table', 'middleware');
