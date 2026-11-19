@@ -6,6 +6,7 @@ import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
+import {accordionParts} from '@pages/Demos/Accordions/part-pages';
 
 const htmlAlone = 'An accordion in HTML alone';
 
@@ -201,7 +202,7 @@ describe('the contents', () => {
 
     const entry = accordionsTab.entryOf(await accordionsTab.contents(), htmlAlone);
 
-    expect(explanation.saying(entry, 'The browser shows and hides a details element’s text and remembers whether it is open, with no CSS and no script.')).toBeInTheDocument();
+    expect(explanation.saying(entry, accordionParts.listed('html-alone-heading').says)).toBeInTheDocument();
   });
 
   test('following a box remembers the fold, and a rule reads it opens its page, with the fold choices carried', async () => {
