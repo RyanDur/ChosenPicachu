@@ -14,7 +14,6 @@ const ownLines: Record<string, string[]> = {
   '/src/pages/Practice/presentation/ClassList.css': ['860px'],
   '/src/pages/Practice/PracticeDrawing.css': ['855px'],
   '/src/pages/Home/Home.css': ['688px'],
-  '/src/pages/Home/PagePulledApart.css': ['688px'],
   '/src/pages/Demos/Runs.css': ['92ch']
 };
 

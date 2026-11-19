@@ -1,5 +1,8 @@
 .home {
-  --figure-column: 45%;
+  --drawn-width: 516px;
+  --drawn-height: 619.2px;
+  --figure-share: 0.45;
+  --figure-column: calc(var(--figure-share) * 100%);
 
   display: grid;
   grid-template-columns: minmax(0, 1fr) fit-content(max(var(--figure-column), var(--base-x-40)));
@@ -17,7 +20,6 @@
   .page-pulled-apart {
     grid-row: 2 / span 5;
     grid-column: 2;
-    grid-template-rows: minmax(0, 1fr) auto;
   }
 
   .thesis {
@@ -53,7 +55,7 @@
 
 @media (width <= 1100px) {
   .home {
-    --figure-column: 42%;
+    --figure-share: 0.42;
 
     column-gap: var(--base-x-3);
 
@@ -71,7 +73,6 @@
     }
 
     .page-pulled-apart {
-      grid-template-rows: none;
       margin: 0 0 var(--base-x-3);
     }
 
@@ -89,12 +90,47 @@
     }
 
     .page-pulled-apart {
-      grid-template-rows: none;
       margin: 0 0 var(--base-x-3);
     }
 
     .doors {
       grid-template-columns: 1fr;
     }
+  }
+}
+
+@media (width > 600px) and ((width > 1100px) or (height > 600px)) {
+  @container home (width >= 68.8rem) {
+    .page-pulled-apart {
+      display: flex;
+      flex-direction: column;
+      container-type: normal;
+      max-inline-size: var(--drawn-width);
+    }
+
+    .page-pulled-apart .drawing {
+      --drawn-across: clamp(var(--base-x-40), var(--figure-share) * 100cqi, var(--drawn-width));
+      --drawn-tall: tan(atan2(var(--drawn-height), var(--drawn-width)));
+
+      container-type: size;
+      flex: 1 1 0;
+      inline-size: 100%;
+      min-block-size: calc(var(--base-x-40) * var(--drawn-tall));
+      max-inline-size: var(--drawn-width);
+      max-block-size: calc(var(--drawn-across) * var(--drawn-tall));
+
+      .drawn-caption {
+        --drawing-column: min(100cqi, 100cqb * tan(atan2(var(--drawn-width), var(--drawn-height))));
+      }
+    }
+  }
+}
+
+@media (width <= 1100px) and (height <= 600px) {
+  .page-pulled-apart .drawing {
+    --between-the-bars: calc(100svh - var(--foot-reach));
+    --drawing-column: min(100cqi, var(--between-the-bars) * tan(atan2(var(--drawn-width), var(--drawn-height))));
+
+    max-block-size: var(--between-the-bars);
   }
 }
