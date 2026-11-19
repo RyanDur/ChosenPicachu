@@ -96,10 +96,11 @@ const showingTheAddress = ({newState, currentTarget}: ToggleEvent<HTMLElement>) 
 };
 
 export const SettingsSheet: FC<{readonly id: string}> = ({id}) =>
-  <section id={id} popover="auto" aria-label="gallery settings" className="settings-sheet phone-sheet backdrop veiled"
+  <fieldset id={id} popover="auto" className="settings-sheet phone-sheet backdrop veiled"
     onBeforeToggle={showingTheAddress}>
+    <legend className="off-screen">gallery settings</legend>
     <MuseumRow/>
     <SearchRow/>
     <SizeRow/>
     <PageRow/>
-  </section>;
+  </fieldset>;
