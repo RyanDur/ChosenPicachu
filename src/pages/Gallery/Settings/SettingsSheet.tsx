@@ -104,7 +104,7 @@ const PageRow: FC = () => {
   return <>
     <label className="sheet-label field bold" htmlFor={field}>Page</label>
     <input key={movedFromOutside} type="number" id={field} min={1}
-      max={pagination.map(({totalPages}) => totalPages).orElse(undefined)}
+      max={pages.last(pagination).orElse(undefined)}
       required enterKeyHint="go" className="sheet-field bare card" defaultValue={shown}
       onKeyDown={whenEntered(applyingNumber(page, goTo)(refusedSaysWhy))}
       onBlur={event => applyingNumber(shown, goTo)(refusedGoesBack)(event.currentTarget)}/>

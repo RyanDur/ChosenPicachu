@@ -16,7 +16,7 @@ export const PageControl = () => {
   const formKey = keptForm.useKey('pages');
 
   const firstPage = 1;
-  const lastPage = pagination.map(({totalPages}) => totalPages).orElse(undefined);
+  const lastPage = pages.last(pagination).orElse(undefined);
   const pageShown = pages.shown(page, pagination);
 
   const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {

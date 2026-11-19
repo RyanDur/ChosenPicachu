@@ -453,6 +453,19 @@ test.describe('a desktop window made narrow', () => {
 test.describe('a visitor at a desk', () => {
   test.use(desktop);
 
+  test('changes the number per page on a search that finds nothing', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEverySearchWithNothing();
+    await page.goto('gallery/?tab=vam&search=zzzz');
+    await siteFrame(page).hydrated();
+    await expect(gallery.emptyWall).toBeVisible();
+    await gallery.pageSize.fill('10');
+
+    await gallery.pageSize.press('Enter');
+
+    await expect(page).toHaveURL(/[?&]size=10(&|$)/);
+  });
+
   test('should see each picture on the wall once it arrives', async ({page}) => {
     await page.goto('gallery/?tab=vam');
     const works = galleryPage(page).wall;

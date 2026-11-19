@@ -1,4 +1,4 @@
-import {Maybe} from '@ryandur/sand';
+import {Maybe, nothing, some} from '@ryandur/sand';
 import {opening} from '@pages/Gallery/opening';
 import {Pagination} from '@pages/Gallery/museums';
 
@@ -6,6 +6,8 @@ import {Pagination} from '@pages/Gallery/museums';
 const reachable = ({total, limit, totalPages}: Pagination): number => Math.min(total, totalPages * limit);
 
 export const pages = {
+  last: (pagination: Maybe<Pagination>): Maybe<number> =>
+    pagination.mBind(({totalPages}) => totalPages > 0 ? some(totalPages) : nothing()),
   shown: (page: number, pagination: Maybe<Pagination>): number =>
     pagination.map(({totalPages}) => Math.min(page, Math.max(totalPages, opening.page))).orElse(page),
   withinTheEnd: (page: number, size: number, pagination: Maybe<Pagination>): number =>
