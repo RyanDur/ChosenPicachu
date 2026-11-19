@@ -4,6 +4,7 @@ import {KnownDoors, useGallery} from '@pages/Gallery/Context';
 import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
 import {opening} from '@pages/Gallery/opening';
+import {pageWithinTheEnd} from '@pages/Gallery/pageWithinTheEnd';
 
 const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
   if (event.key === 'Enter') apply(event.currentTarget);
@@ -67,9 +68,12 @@ const applyingNumber = (shown: number, apply: (value: number) => void) =>
   };
 
 const SizeRow: FC = () => {
-  const {size, updateSearchParams} = useGallery();
+  const {page, size, pagination, updateSearchParams} = useGallery();
   const field = useId();
-  const applying = applyingNumber(size, perPage => updateSearchParams({size: perPage}, movedTo));
+  const applying = applyingNumber(size, perPage => updateSearchParams({
+    size: perPage,
+    page: pageWithinTheEnd(page, perPage, pagination)
+  }, movedTo));
 
   return <>
     <label className="sheet-label field bold" htmlFor={field}>Per page</label>
