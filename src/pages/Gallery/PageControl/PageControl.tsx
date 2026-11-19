@@ -11,7 +11,7 @@ const typed = (form: FormData, field: string): Maybe<number> =>
   maybe(form.get(field)).mBind(value => maybe(numberParam.decode(value)));
 
 const showingWhatWasSent = (field: Element | RadioNodeList | null, sent: number): void => {
-  if (field instanceof HTMLInputElement) numberField.showsWhatItSent(field, sent);
+  if (field instanceof HTMLInputElement) numberField.shows(field, sent);
 };
 
 export const PageControl = () => {

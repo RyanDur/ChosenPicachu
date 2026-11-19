@@ -203,6 +203,18 @@ describe('The gallery.', () => {
     expect(appAddress.search()).not.toHaveTextContent('search');
   });
 
+  test('the page field in the gallery settings goes back to the last page when the museum answers while it is in use', async () => {
+    const wallArrives = heldAICAllArtResponse(aicArtResponse, {limit: limits.record, page: 99999});
+    render(<TestApp at={`${Paths.artGallery}?tab=aic&page=99999&size=${limits.record}`} pageHasFocus={() => true}/>);
+    await galleryPage.tapPageInSettings();
+    wallArrives();
+    await galleryWall.framesAppear();
+
+    await galleryPage.leaveTheField();
+
+    expect(galleryPage.pageInSettings()).toHaveValue(aicArtResponse.pagination.total_pages);
+  });
+
   test('a museum chosen in the gallery settings opens on its first page', async () => {
     setupHarvardAllArtResponse(harvardArtResponse);
     heldVAMPictures();

@@ -45,6 +45,10 @@ export const galleryPage = {
     await userEvent.clear(field);
     await userEvent.type(field, `${size}{Enter}`);
   },
+  pageInSettings: (): HTMLElement => settingsSheet().getByRole('spinbutton', {name: 'Page', hidden: true}),
+  tapPageInSettings: (): Promise<void> =>
+    userEvent.click(settingsSheet().getByRole('spinbutton', {name: 'Page', hidden: true})),
+  leaveTheField: (): Promise<void> => userEvent.tab(),
   chooseMuseum: (name: string): Promise<void> =>
     userEvent.selectOptions(screen.getByRole('combobox', {name: 'Museum', hidden: true}), name),
   museumsOffered: (): string[] =>

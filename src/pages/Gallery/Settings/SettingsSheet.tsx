@@ -27,9 +27,9 @@ const whenLeftForThePage = (pageHasFocus: () => boolean) =>
 
 const refusedSaysWhy = (field: HTMLInputElement): boolean => field.reportValidity();
 
-const refusedGoesBack = (field: HTMLInputElement): boolean => {
+const refusedGoesBackTo = (shown: number) => (field: HTMLInputElement): boolean => {
   if (field.checkValidity()) return true;
-  field.value = field.defaultValue;
+  numberField.shows(field, shown);
   return false;
 };
 
@@ -75,7 +75,8 @@ const SearchRow: FC = () => {
   return <>
     <label className="sheet-label field bold" htmlFor={field}>Search</label>
     <input type="search" id={field} list={options} autoComplete="off" enterKeyHint="search"
-      className="sheet-field bare card" defaultValue={searched} onInput={event => suggestFor(event.currentTarget.value)}
+      className="sheet-field bare card" defaultValue={searched}
+      onInput={event => suggestFor(event.currentTarget.value)}
       onKeyDown={whenEntered(apply)} onBlur={leftForThePage(leave)}/>
     <datalist id={options}>
       {suggestions.map(suggestion => <option value={suggestion} key={suggestion}>{suggestion}</option>)}
@@ -89,7 +90,7 @@ const applyingNumber = (current: number, apply: (value: number) => void) =>
   (accepted: (field: HTMLInputElement) => boolean) => (input: HTMLInputElement): void => {
     if (input.valueAsNumber === current || not(accepted(input))) return;
     apply(input.valueAsNumber);
-    numberField.showsWhatItSent(input, input.valueAsNumber);
+    numberField.shows(input, input.valueAsNumber);
   };
 
 const SizeRow: FC = () => {
@@ -107,7 +108,7 @@ const SizeRow: FC = () => {
     <input type="number" id={field} min={1} max={100} required enterKeyHint="go"
       className="sheet-field bare card" defaultValue={size}
       onKeyDown={whenEntered(applying(refusedSaysWhy))}
-      onBlur={leftForThePage(applying(refusedGoesBack))}/>
+      onBlur={leftForThePage(applying(refusedGoesBackTo(size)))}/>
   </>;
 };
 
@@ -126,7 +127,7 @@ const PageRow: FC = () => {
       max={pages.last(pagination).orElse(undefined)}
       required enterKeyHint="go" className="sheet-field bare card" defaultValue={shown}
       onKeyDown={whenEntered(applyingNumber(page, goTo)(refusedSaysWhy))}
-      onBlur={leftForThePage(applyingNumber(shown, goTo)(refusedGoesBack))}/>
+      onBlur={leftForThePage(applyingNumber(shown, goTo)(refusedGoesBackTo(shown)))}/>
   </>;
 };
 
