@@ -31,7 +31,7 @@ import lazyKeepStatic from '../LazyKeepStaticList.tsx?sample';
 import lazyHideAnimated from '../LazyHideAnimatedList.tsx?sample';
 import lazyHideStatic from '../LazyHideStaticList.tsx?sample';
 
-const lists: Record<Pace, Record<Origin, Record<Motion, Sample>>> = {
+const listSources: Record<Pace, Record<Origin, Record<Motion, Sample>>> = {
   eager: {
     keep: {animated: eagerKeepAnimated, static: eagerKeepStatic},
     hide: {animated: eagerHideAnimated, static: eagerHideStatic}
@@ -42,12 +42,12 @@ const lists: Record<Pace, Record<Origin, Record<Motion, Sample>>> = {
   }
 };
 
-const items: Record<Origin, Sample> = {keep: keepItemSource, hide: hideItemSource};
+const itemSources: Record<Origin, Sample> = {keep: keepItemSource, hide: hideItemSource};
 
-export const NativeStory: FC = () => {
+export const NativeStories: FC = () => {
   const {pace, origin, motion} = useControls();
-  const listSource = lists[pace][origin][motion];
-  const itemSource = items[origin];
+  const listSource = listSources[pace][origin][motion];
+  const itemSource = itemSources[origin];
   const slide = pace === 'eager' ? <SlideCrossed/> : <SlideSettle listSource={listSource}/>;
   return <>
     <Story titleId="native-sort-story"
