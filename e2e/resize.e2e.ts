@@ -1,6 +1,6 @@
 import {expect, Locator} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {arrivalPatience, desktop, fingertipMiss, iPadUpright, iPhone, tableWorlds} from './__test_support';
+import {arrivalPatience, fingertipMiss, tableWorlds} from './__test_support';
 
 const namingAShare = /, \d+%$/;
 
@@ -22,34 +22,28 @@ const measuredName = async (handle: Locator): Promise<string> => {
 };
 
 for (const stage of tableWorlds.stages) {
-  for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpright}, {reader: 'a phone', device: iPhone}]) {
-    test.describe(`${reader}, in ${stage.name}`, () => {
-      test.use(device);
+  test.describe(`a finger, in ${stage.name}`, {tag: ['@iPhone', '@iPadUpright']}, () => {
+    test('widens a column from a press under a coarse pointer just off its edge', async ({page}) => {
+      const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
+      await table.pressBesideEdgeAndDrag('volume', {besideBy: fingertipMiss, by: 30});
+      const before = await table.announcedShare('volume');
 
-      test('widens a column from a press under a coarse pointer just off its edge', async ({page}) => {
-        const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
-        await table.pressBesideEdgeAndDrag('volume', {besideBy: fingertipMiss, by: 30});
-        const before = await table.announcedShare('volume');
+      await table.pressBesideEdgeAndDrag('volume', {besideBy: fingertipMiss, by: 60});
 
-        await table.pressBesideEdgeAndDrag('volume', {besideBy: fingertipMiss, by: 60});
-
-        await expect.poll(() => table.announcedShare('volume')).toBeGreaterThan(before);
-      });
-
-      test('opens the sort menu from a finger on the toggle beside the edge, and resizes nothing', async ({page}) => {
-        const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
-
-        await table.sortToggle('trades').tap();
-
-        await expect(table.sortMenu('trades')).toBeVisible();
-        await expect(table.resizeHandle('trades')).toHaveAccessibleName('resize trades');
-      });
+      await expect.poll(() => table.announcedShare('volume')).toBeGreaterThan(before);
     });
-  }
 
-  test.describe(`a desktop with a mouse, in ${stage.name}`, () => {
-    test.use(desktop);
+    test('opens the sort menu from a finger on the toggle beside the edge, and resizes nothing', async ({page}) => {
+      const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
 
+      await table.sortToggle('trades').tap();
+
+      await expect(table.sortMenu('trades')).toBeVisible();
+      await expect(table.resizeHandle('trades')).toHaveAccessibleName('resize trades');
+    });
+  });
+
+  test.describe(`a mouse, in ${stage.name}`, {tag: '@desktop'}, () => {
     test('a column still narrows to 5% under a mouse', async ({page}) => {
       const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
 

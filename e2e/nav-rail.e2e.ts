@@ -1,56 +1,30 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {desktop, iPad13Upright, iPadUpright, iPhone, siteFrame} from './__test_support';
+import {siteFrame} from './__test_support';
 
-test.describe('a 13-inch iPad held upright', () => {
-  test.use(iPad13Upright);
+test('the site nav shows', {tag: '@iPad13Upright'}, async ({page}) => {
+  await page.goto('');
 
-  test('shows the site nav', async ({page}) => {
-    await page.goto('');
-
-    await expect(siteFrame(page).nav).toBeVisible();
-  });
+  await expect(siteFrame(page).nav).toBeVisible();
 });
 
-test.describe('on a tablet', () => {
-  test.use(iPadUpright);
+test('the site nav and Feedback show inside the pages and feedback rail under the real style sheet', {tag: ['@iPadUpright', '@desktop']}, async ({page}) => {
+  await page.goto('');
+  const rail = page.getByRole('region', {name: 'pages and feedback'});
 
-  test('the site nav and Feedback show inside the pages and feedback rail under the real style sheet', async ({page}) => {
-    await page.goto('');
-    const rail = page.getByRole('region', {name: 'pages and feedback'});
-
-    await expect(rail.getByRole('navigation', {name: 'site'})).toBeVisible();
-    await expect(rail.getByRole('button', {name: 'Feedback'})).toBeVisible();
-  });
+  await expect(rail.getByRole('navigation', {name: 'site'})).toBeVisible();
+  await expect(rail.getByRole('button', {name: 'Feedback'})).toBeVisible();
 });
 
-test.describe('on a desktop', () => {
-  test.use(desktop);
+test('Feedback and the site menu show inside the pages and feedback rail under the real style sheet', {tag: '@iPhone'}, async ({page}) => {
+  await page.goto('');
+  const rail = page.getByRole('region', {name: 'pages and feedback'});
 
-  test('the site nav and Feedback show inside the pages and feedback rail under the real style sheet', async ({page}) => {
-    await page.goto('');
-    const rail = page.getByRole('region', {name: 'pages and feedback'});
-
-    await expect(rail.getByRole('navigation', {name: 'site'})).toBeVisible();
-    await expect(rail.getByRole('button', {name: 'Feedback'})).toBeVisible();
-  });
+  await expect(rail.getByRole('button', {name: 'Feedback'})).toBeVisible();
+  await expect(rail.getByRole('button', {name: 'Menu', exact: true})).toBeVisible();
 });
 
-test.describe('on a phone', () => {
-  test.use(iPhone);
-
-  test('Feedback and the site menu show inside the pages and feedback rail under the real style sheet', async ({page}) => {
-    await page.goto('');
-    const rail = page.getByRole('region', {name: 'pages and feedback'});
-
-    await expect(rail.getByRole('button', {name: 'Feedback'})).toBeVisible();
-    await expect(rail.getByRole('button', {name: 'Menu', exact: true})).toBeVisible();
-  });
-});
-
-test.describe('on a desktop, the rail says which page the reader is on', () => {
-  test.use(desktop);
-
+test.describe('the rail says which page the reader is on', {tag: '@desktop'}, () => {
   test('marks the page the reader lands on, even at an address typed without its slash', async ({page}) => {
     await page.goto('users');
 
