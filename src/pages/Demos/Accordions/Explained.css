@@ -36,7 +36,7 @@
 @media (width > 900px) and (height > 600px) {
   .about:has(> .accordions-sidecar) {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 30ch;
+    grid-template-columns: minmax(0, 1fr) 38ch;
     grid-template-rows: auto 1fr;
     column-gap: var(--base-x-5);
     align-items: start;
@@ -59,6 +59,20 @@
     grid-column: 2;
     max-block-size: calc(100svh - var(--under-the-tab-bar) - var(--base-x-2));
     overflow-y: auto;
+
+    gap: var(--base-x-2);
+
+    .contents {
+      gap: 0;
+    }
+
+    .contents-entry {
+      padding-block: var(--base-x-0_5);
+
+      .minutes {
+        inset-block-start: var(--base-x-0_5);
+      }
+    }
 
     .says {
       display: none;
