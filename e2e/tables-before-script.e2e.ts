@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {dragSortTable, hydration, tableWorlds} from './__test_support';
+import {dragSortTable, hydration, tableWorlds, tabsTo} from './__test_support';
 
 const address = 'demos/tables/?world=react';
 
@@ -31,3 +31,37 @@ test('given the tables tab before its script runs, a resize handle is disabled; 
   await trades.dragEdge('volume', {by: 60, moves: 10});
   await expect.poll(() => trades.announcedShare('volume')).toBeGreaterThan(before);
 });
+
+for (const pace of ['eager', 'lazy']) {
+  const paced = `${address}&pace=${pace}`;
+
+  test(`given the tables tab at the ${pace} pace before its script runs, a movable column header offers no grab hand; once the script runs, it does, and a drag from it moves the column`, async ({page}) => {
+    await hydration(page).holdBack(paced);
+    await page.goto(paced);
+    const trades = dragSortTable(page, tableWorlds.card(page).card);
+
+    await expect(trades.columnHeader('trades')).not.toHaveClass(/\bgrabbable\b/);
+    await hydration(page).release();
+
+    await expect(trades.columnHeader('trades')).toHaveClass(/\bgrabbable\b/);
+    await trades.dragColumnPast('trades', 'buys');
+    await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+  });
+
+  test(`given the tables tab at the ${pace} pace before its script runs, Tab passes over a movable column header; once the script runs, Tab stops on it and an arrow moves the column`, async ({page}) => {
+    await hydration(page).holdBack(paced);
+    await page.goto(paced);
+    const trades = dragSortTable(page, tableWorlds.card(page).card);
+
+    await tabsTo(page, trades.columnHeader('trades'));
+    await expect(trades.columnHeader('trades')).not.toBeFocused();
+    await hydration(page).release();
+
+    await expect(trades.resizeHandle('lookback')).toBeEnabled();
+    await trades.resizeHandle('lookback').focus();
+    await tabsTo(page, trades.columnHeader('trades'));
+    await expect(trades.columnHeader('trades')).toBeFocused();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+  });
+}

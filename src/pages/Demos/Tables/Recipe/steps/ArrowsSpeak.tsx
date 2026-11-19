@@ -23,7 +23,7 @@ export const ArrowsSpeak: FC<{headerSource: Sample; buildSource: Sample}> = ({he
       <Codes>
         {world === 'react'
           ? <Snippet label="TS" lines={[
-            ...carve.unit(headerSource, 'onKeyDown={travels')
+            ...carve.unit(headerSource, 'onKeyDown={lifts')
           ]}/>
           : <Snippet label="TS" lines={[
             ...carve.unit(buildSource, "th.addEventListener('keydown'")
