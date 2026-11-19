@@ -28,17 +28,13 @@
     }
     padding-inline: var(--base-x-2);
 
-    > .ellipsis {
-      min-width: 0;
-    }
-
     > .searched {
-      flex-shrink: 0;
-      white-space: nowrap;
+      padding-inline-end: var(--base-x-0_25);
     }
 
     &::after {
       content: '⚙' / '';
+      flex-shrink: 0;
       margin-inline-start: auto;
     }
   }

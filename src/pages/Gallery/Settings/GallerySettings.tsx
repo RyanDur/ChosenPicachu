@@ -14,7 +14,7 @@ const SettingsButton: FC<{readonly popover: string}> = ({popover}) => {
     className="header-settings gallery-readout backdrop borderless reachable">
     <span className="gallery-readout-tile field bold attentive">
       <span className="ellipsis">{museum}</span>
-      {has(search) && <span className="searched italic">“{search}”</span>}
+      {has(search) && <span className="searched ellipsis italic">“{search}”</span>}
     </span>
   </button>;
 };
