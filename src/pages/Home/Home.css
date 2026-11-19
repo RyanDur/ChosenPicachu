@@ -1,11 +1,14 @@
 .home {
   --drawn-width: 516px;
   --drawn-height: 619.2px;
+  --drawn-height-per-width: tan(atan2(var(--drawn-height), var(--drawn-width)));
+  --drawn-width-per-height: tan(atan2(var(--drawn-width), var(--drawn-height)));
+  --drawn-least: min(var(--base-x-40), var(--drawn-width));
   --figure-share: 0.45;
   --figure-column: calc(var(--figure-share) * 100%);
 
   display: grid;
-  grid-template-columns: minmax(0, 1fr) fit-content(max(var(--figure-column), var(--base-x-40)));
+  grid-template-columns: minmax(0, 1fr) fit-content(max(var(--figure-column), var(--drawn-least)));
   grid-template-rows: repeat(5, auto) 1fr auto;
   column-gap: var(--base-x-6);
   inline-size: 100%;
@@ -101,35 +104,34 @@
 
 @media (width > 600px) and ((width > 1100px) or (height > 600px)) {
   @container home (width >= 68.8rem) {
-    .page-pulled-apart {
+    .home .page-pulled-apart {
       display: flex;
       flex-direction: column;
       container-type: normal;
       max-inline-size: var(--drawn-width);
-    }
 
-    .page-pulled-apart .drawing {
-      --drawn-across: clamp(var(--base-x-40), var(--figure-share) * 100cqi, var(--drawn-width));
-      --drawn-tall: tan(atan2(var(--drawn-height), var(--drawn-width)));
+      .drawing {
+        --drawn-across: clamp(var(--drawn-least), var(--figure-share) * 100cqi, var(--drawn-width));
 
-      container-type: size;
-      flex: 1 1 0;
-      inline-size: 100%;
-      min-block-size: calc(var(--base-x-40) * var(--drawn-tall));
-      max-inline-size: var(--drawn-width);
-      max-block-size: calc(var(--drawn-across) * var(--drawn-tall));
+        container-type: size;
+        flex: 1 1 0;
+        inline-size: 100%;
+        min-block-size: calc(var(--drawn-least) * var(--drawn-height-per-width));
+        max-inline-size: var(--drawn-width);
+        max-block-size: calc(var(--drawn-across) * var(--drawn-height-per-width));
+      }
 
       .drawn-caption {
-        --drawing-column: min(100cqi, 100cqb * tan(atan2(var(--drawn-width), var(--drawn-height))));
+        --drawing-column: min(100cqi, 100cqb * var(--drawn-width-per-height));
       }
     }
   }
 }
 
 @media (width <= 1100px) and (height <= 600px) {
-  .page-pulled-apart .drawing {
+  .home .page-pulled-apart .drawing {
     --between-the-bars: calc(100svh - var(--foot-reach));
-    --drawing-column: min(100cqi, var(--between-the-bars) * tan(atan2(var(--drawn-width), var(--drawn-height))));
+    --drawing-column: min(100cqi, var(--between-the-bars) * var(--drawn-width-per-height));
 
     max-block-size: var(--between-the-bars);
   }
