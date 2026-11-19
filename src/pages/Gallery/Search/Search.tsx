@@ -21,7 +21,7 @@ export const Search: FC<PropsWithClassName> = ({className}) => {
   const {suggestions, typed, cleared} = useSuggestions(tab);
   const query = useId();
   const options = useId();
-  const formKey = keptForm.useKey('search', search ?? '');
+  const formKey = keptForm.useKey('search');
 
   const submitted = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
