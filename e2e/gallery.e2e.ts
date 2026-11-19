@@ -489,6 +489,38 @@ test.describe('a visitor at a desk', () => {
     await expect(gallery.searchField).toHaveValue('lilies');
   });
 
+  test('shows the address\'s words in the search after Back, not words typed and never sent', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&search=lilies');
+    await siteFrame(page).hydrated();
+    await gallery.searchField.fill('roses');
+    await gallery.searchField.press('Enter');
+    await expect(page).toHaveURL(/search=roses/);
+    await gallery.searchField.fill('tulips');
+
+    await page.goBack();
+
+    await expect(page).toHaveURL(/search=lilies/);
+    await expect(gallery.searchField).toHaveValue('lilies');
+  });
+
+  test('shows the address\'s page in the page field after Back, not a page typed and never sent', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=2');
+    await siteFrame(page).hydrated();
+    await gallery.pageNumber.fill('3');
+    await gallery.pageNumber.press('Enter');
+    await expect(page).toHaveURL(/page=3/);
+    await gallery.pageNumber.fill('9');
+
+    await page.goBack();
+
+    await expect(page).toHaveURL(/page=2/);
+    await expect(gallery.pageNumber).toHaveValue('2');
+  });
+
   test('keeps the focus on the page field after going to a page with Enter', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
