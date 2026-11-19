@@ -1,6 +1,6 @@
-import {ChangeEvent, FC, KeyboardEvent, ToggleEvent, useContext, useId} from 'react';
+import {ChangeEvent, FC, KeyboardEvent, ToggleEvent, useId} from 'react';
 import {has, maybe} from '@ryandur/sand';
-import {KnownDoors, useGallery} from '@pages/Gallery/Context';
+import {useGallery, useKnownDoors} from '@pages/Gallery/Context';
 import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
 import {opening} from '@pages/Gallery/opening';
@@ -23,7 +23,7 @@ const refusedGoesBack = (field: HTMLInputElement): boolean => {
 const MuseumRow: FC = () => {
   const {tab} = useGallery();
   const address = useGalleryAddress();
-  const known = useContext(KnownDoors);
+  const known = useKnownDoors();
   const offered = museums.all.filter(({param}) => known[param] === 'open' || param === tab);
   const choice = useId();
   const chosen = (event: ChangeEvent<HTMLSelectElement>) =>

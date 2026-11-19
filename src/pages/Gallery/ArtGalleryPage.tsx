@@ -1,4 +1,4 @@
-import {FC, useContext, useEffect} from 'react';
+import {FC, useEffect} from 'react';
 import {useLocation} from 'react-router';
 import {useHydrated} from '@components';
 import {has, maybe, not, notEmpty} from '@ryandur/sand';
@@ -10,7 +10,7 @@ import {museums} from '@pages/Gallery/museums';
 import missingWall from '../../assets/icons/missing-wall.svg?url';
 import {StandIn} from '@pages/Gallery/StandIn';
 import {opening} from '@pages/Gallery/opening';
-import {KnownDoors, useGallery} from '@pages/Gallery/Context';
+import {useGallery, useKnownDoors} from '@pages/Gallery/Context';
 import {Doors, doors} from '@pages/Gallery/doors';
 import './ArtGalleryPage.css';
 
@@ -32,7 +32,7 @@ const shownFor = (known: Doors, tab?: Source): Shown => {
 };
 
 export const ArtGalleryPage: FC = () => {
-  const known = useContext(KnownDoors);
+  const known = useKnownDoors();
   const {tab, updateSearchParams, searchFromShown} = useGallery();
   const {pathname} = useLocation();
   const hydrated = useHydrated();
