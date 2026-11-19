@@ -31,6 +31,11 @@ export const galleryPage = {
       .join(),
   searchInSettings: (words: string): Promise<void> =>
     userEvent.type(settingsSheet().getByRole('combobox', {name: 'Search', hidden: true}), `${words}{Enter}`),
+  clearSearchInSettings: async (): Promise<void> => {
+    const field = settingsSheet().getByRole('combobox', {name: 'Search', hidden: true});
+    await userEvent.clear(field);
+    await userEvent.type(field, '{Enter}');
+  },
   sizeInSettings: async (size: number): Promise<void> => {
     const field = settingsSheet().getByRole('spinbutton', {name: 'Per page', hidden: true});
     await userEvent.clear(field);
