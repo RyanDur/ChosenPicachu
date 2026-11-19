@@ -12,5 +12,5 @@ export const eagerBuild: SortBuild = {
   buildSource,
   headerSource,
   rowSource,
-  pace: <EagerPace headerSource={headerSource} buildSource={buildSource}/>
+  paceStep: <EagerPace headerSource={headerSource} buildSource={buildSource}/>
 };

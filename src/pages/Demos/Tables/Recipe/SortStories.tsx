@@ -33,7 +33,7 @@ import {SortBuild} from './sort-build';
 import cssSource from '@components/DragSortableTable/motion.css?sample';
 
 export const SortStories: FC<{build: SortBuild}> = ({build}) => {
-  const {react, vanilla, tableSource, buildSource, headerSource, rowSource, pace} = build;
+  const {react, vanilla, tableSource, buildSource, headerSource, rowSource, paceStep} = build;
   const {track, origin, motion} = useControls();
   return track === 'pointer'
     ? <>
@@ -54,7 +54,7 @@ export const SortStories: FC<{build: SortBuild}> = ({build}) => {
           <LiftOnce headerSource={headerSource} buildSource={buildSource}/>
           <DragSurface headerSource={headerSource}/>
           <DeadZone/>
-          {pace}
+          {paceStep}
           {origin === 'hide'
             ? <HideOrigin headerSource={headerSource} cssSource={cssSource} buildSource={buildSource}/>
             : <KeepOrigin cssSource={cssSource}/>}

@@ -8,5 +8,5 @@ export type SortBuild = {
   buildSource: Sample;
   headerSource: Sample;
   rowSource: Sample;
-  pace: ReactNode;
+  paceStep: ReactNode;
 };
