@@ -25,14 +25,14 @@ export const tablesTab = () => ({
   features: (): HTMLElement => screen.getByRole('region', {name: 'let’s build this feature'}),
   featureLinks: (): (string | null)[][] =>
     within(screen.getByRole('region', {name: 'let’s build this feature'})).getAllByRole('link')
-      .map(link => [computeAccessibleName(link), link.getAttribute('href')]),
+      .map(anchor => [computeAccessibleName(anchor), anchor.getAttribute('href')]),
   partLink,
   follow: async (name: string): Promise<void> => userEvent.click(await link(name)),
   followPart: async (name: string): Promise<void> => userEvent.click(await partLink(name)),
   backToTheTab: async (): Promise<void> => userEvent.click(await link('Tables')),
   tutorialsListed: async (): Promise<string[]> =>
     within(await screen.findByRole('list', {name: 'Add what the trader asked for'}, untilTheTablesTabRenders))
-      .getAllByRole('link').map(link => computeAccessibleName(link)),
+      .getAllByRole('link').map(anchor => computeAccessibleName(anchor)),
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   opening: (): Promise<HTMLElement> =>
     screen.findByText(/^A table of live trades is the hardest thing on this site/, {}, untilTheTablesTabRenders),
@@ -40,7 +40,7 @@ export const tablesTab = () => ({
   worldDial: (): Promise<HTMLElement> => screen.findByRole('group', {name: 'world'}, untilTheTablesTabRenders),
   partsIn: async (group: string): Promise<(string | null)[][]> =>
     within(await screen.findByRole('list', {name: group}, untilTheTablesTabRenders)).getAllByRole('link')
-      .map(link => [computeAccessibleName(link), link.getAttribute('href')]),
+      .map(anchor => [computeAccessibleName(anchor), anchor.getAttribute('href')]),
   minutesOf: async (name: string): Promise<HTMLElement> => {
     const parts = await screen.findByRole('navigation', {name: 'Parts'}, untilTheTablesTabRenders);
     const [entry] = within(parts).getAllByRole('listitem').filter(item => within(item).queryByRole('link', {name}));
