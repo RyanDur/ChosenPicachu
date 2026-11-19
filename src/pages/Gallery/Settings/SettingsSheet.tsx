@@ -67,9 +67,9 @@ const SearchRow: FC = () => {
 
 const movedTo = {preventScrollReset: false};
 
-const applyingNumber = (shown: number, apply: (value: number) => void) =>
+const applyingNumber = (current: number, apply: (value: number) => void) =>
   (accepted: (field: HTMLInputElement) => boolean) => (input: HTMLInputElement): void => {
-    if (input.valueAsNumber !== shown && accepted(input)) apply(input.valueAsNumber);
+    if (input.valueAsNumber !== current && accepted(input)) apply(input.valueAsNumber);
   };
 
 const SizeRow: FC = () => {
@@ -94,15 +94,15 @@ const PageRow: FC = () => {
   const field = useId();
   const shown = pages.shown(page, pagination);
   const movedFromOutside = [tab, search, size].join(' ');
-  const applying = applyingNumber(shown, to => updateSearchParams({page: to}, movedTo));
+  const goTo = (to: number) => updateSearchParams({page: to}, movedTo);
 
   return <>
     <label className="sheet-label field bold" htmlFor={field}>Page</label>
     <input key={movedFromOutside} type="number" id={field} min={1}
       max={pagination.map(({totalPages}) => totalPages).orElse(undefined)}
       required enterKeyHint="go" className="sheet-field bare card" defaultValue={shown}
-      onKeyDown={whenEntered(applying(refusedSaysWhy))}
-      onBlur={event => applying(refusedGoesBack)(event.currentTarget)}/>
+      onKeyDown={whenEntered(applyingNumber(page, goTo)(refusedSaysWhy))}
+      onBlur={event => applyingNumber(shown, goTo)(refusedGoesBack)(event.currentTarget)}/>
   </>;
 };
 
