@@ -28,17 +28,5 @@
     overflow-y: auto;
 
     gap: var(--base-x-2);
-
-    .parts-index {
-      gap: 0;
-    }
-
-    .parts-index-entry {
-      --entry-room: var(--base-x-0_5);
-    }
-
-    .says {
-      display: none;
-    }
   }
 }
