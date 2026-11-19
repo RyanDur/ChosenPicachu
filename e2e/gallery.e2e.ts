@@ -506,6 +506,19 @@ test.describe('a visitor at a desk', () => {
     await expect(gallery.searchField).toHaveValue('lilies');
   });
 
+  test('changes the number per page from an address whose page is past the last page', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=99999&size=8');
+    await siteFrame(page).hydrated();
+    await expect(gallery.count).toHaveText(/ of /);
+
+    await gallery.pageSize.fill('25');
+    await gallery.go.click();
+
+    await expect(page).toHaveURL(/size=25/);
+  });
+
   test('shows the address\'s page in the page field after Back, not a page typed and never sent', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
