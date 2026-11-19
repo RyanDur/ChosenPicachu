@@ -8,8 +8,13 @@ import {pages} from '@pages/Gallery/pages';
 import {numberField} from '@pages/Gallery/numberField';
 import {useGalleryAddress} from './useGalleryAddress';
 
+// WebKit ends a composition before the keydown of the Enter that confirms it,
+// so only that keydown's keyCode, 229, marks it
+const confirmsAComposition = ({nativeEvent, keyCode}: KeyboardEvent<HTMLInputElement>): boolean =>
+  nativeEvent.isComposing || keyCode === 229;
+
 const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
-  if (event.key === 'Enter' && !event.nativeEvent.isComposing) apply(event.currentTarget);
+  if (event.key === 'Enter' && not(confirmsAComposition(event))) apply(event.currentTarget);
 };
 
 const refusedSaysWhy = (field: HTMLInputElement): boolean => field.reportValidity();
