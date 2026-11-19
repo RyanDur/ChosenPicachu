@@ -14,12 +14,12 @@ export const GalleryNav: FC<Props> = ({id}) => {
   const path = location.pathname;
   const firstPage = 1;
   const currentPage = page;
-  const lastPage = pagination.map(({totalPages}) => totalPages).orElse(currentPage);
+  const lastPage = pages.last(pagination).orElse(currentPage);
 
   const hasNextPage = currentPage < lastPage;
   const nextPage = hasNextPage ? currentPage + 1 : currentPage;
   const hasPrevPage = currentPage > firstPage;
-  const prevPage = hasPrevPage ? currentPage - 1 : currentPage;
+  const prevPage = hasPrevPage ? Math.min(currentPage - 1, lastPage) : currentPage;
 
   return <nav className="pagination backdrop field-before field-after" aria-label="pagination" id={id}>
     {hasPrevPage && <>

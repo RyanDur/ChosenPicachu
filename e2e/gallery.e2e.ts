@@ -469,6 +469,17 @@ test.describe('a desktop window made narrow', () => {
 test.describe('a visitor at a desk', () => {
   test.use(desktop);
 
+  test('goes back to the last page from the pager when the address\'s page is past it', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=99999&size=8');
+    await expect(gallery.count).toHaveText(/ of 1,247$/);
+
+    await gallery.previousPage.click();
+
+    await expect(page).toHaveURL(/[?&]page=1247(&|$)/);
+  });
+
   test('changes the number per page on a search that finds nothing', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEverySearchWithNothing();
@@ -663,7 +674,7 @@ test.describe('a visitor at a desk', () => {
     await expect(page).toHaveURL(/[?&]page=4(&|$)/);
     await gallery.pageNumber.fill('9');
 
-    await page.getByRole('navigation', {name: 'pagination'}).getByRole('link', {name: 'previous page'}).click();
+    await gallery.previousPage.click();
 
     await expect(page).toHaveURL(/[?&]page=3(&|$)/);
     await expect(gallery.pageNumber).toHaveValue('3');
