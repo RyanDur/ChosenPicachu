@@ -8,25 +8,20 @@
   --figure-column: calc(var(--figure-share) * 100%);
 
   display: grid;
-  grid-template-columns: minmax(0, 1fr) fit-content(max(var(--figure-column), var(--drawn-least)));
-  grid-template-rows: repeat(5, auto) 1fr auto;
   column-gap: var(--base-x-6);
   inline-size: 100%;
   container: home / inline-size;
   padding: var(--base-x-3) var(--page-inset);
 
   .claim {
-    grid-column: 1 / -1;
     margin: 0 0 var(--base-x-4);
   }
 
   .page-pulled-apart {
-    grid-row: 2 / span 5;
-    grid-column: 2;
+    margin: 0 0 var(--base-x-3);
   }
 
   .thesis {
-    grid-column: 1;
     margin: 0 0 var(--base-x-2_5);
     text-wrap: pretty;
 
@@ -36,10 +31,7 @@
   }
 
   .doors {
-    grid-row: 7;
-    grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--base-x-5);
     margin: var(--base-x-3) 0 0;
     padding: var(--base-x-4) 0 var(--base-x-2);
@@ -68,45 +60,49 @@
   }
 }
 
-@container home (width < 68.8rem) {
-  .home {
-    .claim, .page-pulled-apart, .thesis, .doors {
-      grid-row: auto;
-      grid-column: 1 / -1;
-    }
-
-    .page-pulled-apart {
-      margin: 0 0 var(--base-x-3);
-    }
-
-    .doors {
-      grid-template-columns: 1fr;
-    }
-  }
-}
-
-@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
-  .home {
-    .claim, .page-pulled-apart, .thesis, .doors {
-      grid-row: auto;
-      grid-column: 1 / -1;
-    }
-
-    .page-pulled-apart {
-      margin: 0 0 var(--base-x-3);
-    }
-
-    .doors {
-      grid-template-columns: 1fr;
-    }
-  }
-}
-
 @media not ((width <= 600px) or ((width <= 1100px) and (height <= 600px))) {
+  .home {
+    grid-template-columns: minmax(0, 1fr) fit-content(max(var(--figure-column), var(--drawn-least)));
+    grid-template-rows: repeat(5, auto) 1fr auto;
+
+    .claim {
+      grid-column: 1 / -1;
+    }
+
+    .page-pulled-apart {
+      grid-row: 2 / span 5;
+      grid-column: 2;
+    }
+
+    .thesis {
+      grid-column: 1;
+    }
+
+    .doors {
+      grid-row: 7;
+      grid-column: 1 / -1;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @container home (width < 68.8rem) {
+    .home {
+      .claim, .page-pulled-apart, .thesis, .doors {
+        grid-row: auto;
+        grid-column: 1 / -1;
+      }
+
+      .doors {
+        grid-template-columns: none;
+      }
+    }
+  }
+
   @container home (width >= 68.8rem) {
     .home .page-pulled-apart {
       display: flex;
       flex-direction: column;
+      margin: 0;
       container-type: normal;
       max-inline-size: var(--drawn-width);
 
