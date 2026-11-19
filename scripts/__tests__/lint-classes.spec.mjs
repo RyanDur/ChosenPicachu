@@ -1,4 +1,5 @@
 import {ESLint, RuleTester} from 'eslint';
+import {rmSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {classes} from '../lint/classes.mjs';
 
@@ -71,5 +72,25 @@ describe('the class rules over html', () => {
 
   test('should accept a class list a sheet reads, own class first', async () => {
     expect(await linted('<span class="fancy muted-ink"></span>')).toEqual([]);
+  });
+});
+
+describe('the class rules in a process that keeps running', () => {
+  const sheet = join(process.cwd(), 'src/pages/Users/FancyFormElements/LintProbe.css');
+  const eslint = new ESLint({overrideConfigFile: true, overrideConfig: [
+    {files: ['**/*.tsx'], plugins: {classes}, languageOptions: {parserOptions: {ecmaFeatures: {jsx: true}}}, rules: {'classes/class-defined': 'error'}}
+  ]});
+  const unreadIn = async code => {
+    const [{messages}] = await eslint.lintText(code, {filePath: fancyField});
+    return messages.length;
+  };
+
+  afterEach(() => rmSync(sheet, {force: true}));
+
+  test('should read a class a sheet began reading after the process started', async () => {
+    const code = '<p className="lint-probe-word"/>;';
+    expect(await unreadIn(code)).toBe(1);
+    writeFileSync(sheet, '.lint-probe-word {\n  display: block;\n}\n');
+    expect(await unreadIn(code)).toBe(0);
   });
 });
