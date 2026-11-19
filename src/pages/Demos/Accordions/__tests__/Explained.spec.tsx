@@ -32,21 +32,29 @@ describe('the accordions tab', () => {
     expect(names.filter((name, at) => names.indexOf(name) !== at)).toEqual([]);
   });
 
-  test('should title the parts, then the fold choices, then before you start', async () => {
+  test('should title the parts, then before you start', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
 
-    expect(explanation.partTitles(tab)).toEqual(['Parts', 'fold choices', 'Before you start']);
+    expect(explanation.partTitles(tab)).toEqual(['Parts', 'Before you start']);
   });
 
-  test('should hold both rows inside the section named by the fold choices’ heading', async () => {
+  test('should title the fold choices after part 1, before you start', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const choices = await explanation.part('fold choices');
+    const start = await explanation.part('Before you start');
 
-    expect(accordionsTab.choiceIn(choices, 'fold type')).toBeVisible();
-    expect(accordionsTab.choiceIn(choices, 'fold motion')).toBeVisible();
+    expect(explanation.sectionTitles(start)).toEqual([accordionParts.titleOf('html-alone-heading'), 'The fold choices']);
+  });
+
+  test('should hold both rows beside the parts', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const sidecar = await accordionsTab.partsAndDials();
+
+    expect(accordionsTab.choiceIn(sidecar, 'fold type')).toBeVisible();
+    expect(accordionsTab.choiceIn(sidecar, 'fold motion')).toBeVisible();
   });
 
   test('should open on the exclusive type, and write the type chosen into the address', async () => {

@@ -48,13 +48,10 @@ export const AccordionsExplained: FC = () => {
     <aside aria-label="parts and dials" className="accordions-sidecar">
       <AccordionsSize/>
       <PartsIndex/>
-      <section aria-labelledby={tabHeadings.foldChoices} className="fold-choices">
-        <h2 id={tabHeadings.foldChoices} className="off-screen">fold choices</h2>
-        <DialGroup>
-          <FoldTypeDial/>
-          <FoldMotionDial/>
-        </DialGroup>
-      </section>
+      <DialGroup>
+        <FoldTypeDial/>
+        <FoldMotionDial/>
+      </DialGroup>
     </aside>
     <section aria-labelledby="before-you-start-heading" className="before-you-start">
       <h2 id="before-you-start-heading" className="title bold">Before you start</h2>
@@ -90,16 +87,19 @@ export const AccordionsExplained: FC = () => {
           </li>
         </ol>
       </section>
-      <p className="paragraph">Two choices, the fold type and the fold motion, set the builds on each part’s own
-        page. Each choice is a dial, a control on the page that sets how a build behaves, with a line
-        beside it saying what it does. The fold type also reaches the HTML-alone accordion: with exclusive, its details
-        share a name and opening one closes the others.</p>
-      <p className="paragraph">The fold motion is set in a style sheet. A style sheet is a file of rules. A rule has a
-        selector, which names the elements it applies to. It also has properties. A property is one aspect of a look,
-        like a height or a color, given a value.</p>
-      <p className="paragraph">The fold motion does not reach the HTML-alone accordion. A browser opens a details at
-        once on its own. The site’s reset, the style sheet that sets every element’s defaults, slides every details
-        where the browser can, and the HTML-alone accordion turns that off, so you see what HTML alone does.</p>
+      <section aria-labelledby={tabHeadings.foldChoices} className="fold-choices">
+        <h3 id={tabHeadings.foldChoices} className="sub-title bold">The fold choices</h3>
+        <p className="paragraph">Two choices, the fold type and the fold motion, set the builds on each part’s own page.
+          Each choice is a dial, a control on the page that sets how a build behaves, with a line beside it saying what
+          it does. The fold type also reaches the HTML-alone accordion: with exclusive, its details share a name and
+          opening one closes the others.</p>
+        <p className="paragraph">The fold motion is set in a style sheet. A style sheet is a file of rules. A rule has a
+          selector, which names the elements it applies to. It also has properties. A property is one aspect of a look,
+          like a height or a color, given a value.</p>
+        <p className="paragraph">The fold motion does not reach the HTML-alone accordion. A browser opens a details at
+          once on its own. The site’s reset, the style sheet that sets every element’s defaults, slides every details
+          where the browser can, and the HTML-alone accordion turns that off, so you see what HTML alone does.</p>
+      </section>
     </section>
   </>;
 };
