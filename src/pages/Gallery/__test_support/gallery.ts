@@ -31,6 +31,10 @@ export const galleryPage = {
       .join(),
   searchInSettings: (words: string): Promise<void> =>
     userEvent.type(settingsSheet().getByRole('combobox', {name: 'Search', hidden: true}), `${words}{Enter}`),
+  typeInSettingsAndLeave: async (words: string): Promise<void> => {
+    await userEvent.type(settingsSheet().getByRole('combobox', {name: 'Search', hidden: true}), words);
+    await userEvent.tab();
+  },
   clearSearchInSettings: async (): Promise<void> => {
     const field = settingsSheet().getByRole('combobox', {name: 'Search', hidden: true});
     await userEvent.clear(field);

@@ -2,7 +2,7 @@ import {FC, startTransition, useEffect} from 'react';
 import {createRoot, hydrateRoot} from 'react-dom/client';
 import {DataRouter, RouterProvider} from 'react-router';
 import {Arrival, arrival, ArrivalDrawn} from '@navigation/arrival';
-import {phoneLayout} from '@page';
+import {PageFocus, phoneLayout} from '@page';
 import {Site} from './Site';
 
 type RoutedSiteProps = {router: DataRouter; arrived: Arrival};
@@ -10,7 +10,9 @@ type RoutedSiteProps = {router: DataRouter; arrived: Arrival};
 const RoutedSite: FC<RoutedSiteProps> = ({router, arrived}) => {
   useEffect(() => arrived.follow(router), [arrived, router]);
   return <Site><ArrivalDrawn.Provider value={arrived.drawn}>
-    <RouterProvider router={router} onError={error => console.error(error)}/>
+    <PageFocus.Provider value={() => document.hasFocus()}>
+      <RouterProvider router={router} onError={error => console.error(error)}/>
+    </PageFocus.Provider>
   </ArrivalDrawn.Provider></Site>;
 };
 

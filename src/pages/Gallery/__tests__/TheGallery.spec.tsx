@@ -193,6 +193,16 @@ describe('The gallery.', () => {
     expect(appAddress.search()).toHaveTextContent('page=1');
   });
 
+  test('words typed in the gallery settings stay unsent when the page loses focus', async () => {
+    setupAICEveryPage(aicArtResponse);
+    render(<TestApp at={`${Paths.artGallery}?tab=aic`} pageHasFocus={() => false}/>);
+    await galleryWall.framesAppear();
+
+    await galleryPage.typeInSettingsAndLeave('wat');
+
+    expect(appAddress.search()).not.toHaveTextContent('search');
+  });
+
   test('a museum chosen in the gallery settings opens on its first page', async () => {
     setupHarvardAllArtResponse(harvardArtResponse);
     heldVAMPictures();
