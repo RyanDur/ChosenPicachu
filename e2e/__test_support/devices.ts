@@ -1,12 +1,6 @@
-export const phone = {viewport: {width: 412, height: 823}, hasTouch: true};
-export const phoneSideways = {viewport: {width: 844, height: 390}, hasTouch: true};
-export const shortPhoneSideways = {viewport: {width: 844, height: 300}, hasTouch: true};
-export const iPhone = {viewport: {width: 390, height: 844}, hasTouch: true};
-export const iPadSplitView = {viewport: {width: 507, height: 1180}, hasTouch: true};
-export const iPadUpright = {viewport: {width: 820, height: 1180}, hasTouch: true};
-export const iPadSideways = {viewport: {width: 1180, height: 820}, hasTouch: true};
-export const desktop = {viewport: {width: 1440, height: 900}};
-export const iPad13Upright = {viewport: {width: 1024, height: 1366}, hasTouch: true};
-export const iPad11Upright = {viewport: {width: 834, height: 1194}, hasTouch: true};
-export const splitViewWide = {viewport: {width: 700, height: 1000}, hasTouch: true};
-export const justPastAPhone = {viewport: {width: 601, height: 1000}, hasTouch: true};
+import devices from './devices.json' with {type: 'json'};
+
+export const {
+  phone, phoneSideways, shortPhoneSideways, iPhone, iPadSplitView, iPadUpright, iPadSideways, iPad13Upright,
+  iPad11Upright, splitViewWide, justPastAPhone, desktop
+} = devices;

@@ -1,0 +1,16 @@
+{
+  "phone": {"viewport": {"width": 412, "height": 823}, "hasTouch": true},
+  "phoneSideways": {"viewport": {"width": 844, "height": 390}, "hasTouch": true},
+  "shortPhoneSideways": {"viewport": {"width": 844, "height": 300}, "hasTouch": true},
+  "iPhone": {"viewport": {"width": 390, "height": 844}, "hasTouch": true},
+  "iPadSplitView": {"viewport": {"width": 507, "height": 1180}, "hasTouch": true},
+  "iPadUpright": {"viewport": {"width": 820, "height": 1180}, "hasTouch": true},
+  "iPadSideways": {"viewport": {"width": 1180, "height": 820}, "hasTouch": true},
+  "iPadUprightWindow": {"viewport": {"width": 820, "height": 1180}},
+  "iPadSidewaysWindow": {"viewport": {"width": 1180, "height": 820}},
+  "desktop": {"viewport": {"width": 1440, "height": 900}},
+  "iPad13Upright": {"viewport": {"width": 1024, "height": 1366}, "hasTouch": true},
+  "iPad11Upright": {"viewport": {"width": 834, "height": 1194}, "hasTouch": true},
+  "splitViewWide": {"viewport": {"width": 700, "height": 1000}, "hasTouch": true},
+  "justPastAPhone": {"viewport": {"width": 601, "height": 1000}, "hasTouch": true}
+}
