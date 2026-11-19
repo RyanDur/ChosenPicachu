@@ -38,7 +38,7 @@ test('a reader follows a slice from the slices’ page to the still table’s pa
   await page.goto('demos/tables/the-slices/?world=vanilla');
   await siteFrame(page).hydrated();
 
-  await page.getByRole('list', {name: 'the slices'}).getByRole('link', {name: 'station 4'}).click();
+  await page.getByRole('list', {name: 'the slices'}).getByRole('link', {name: 'part 4'}).click();
 
   await expect(page).toHaveURL(/demos\/tables\/the-still-table\/\?world=vanilla$/);
   await expect(pillSwitch(page, 'world').pill('Vanilla')).toBeChecked();

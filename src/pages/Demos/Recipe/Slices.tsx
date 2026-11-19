@@ -7,7 +7,7 @@ import {stations, storiesHeading} from '@pages/Demos/headings';
 
 type Slice = [slice: string, station: number];
 
-type PlacedSlice = [slice: string, station: number, place: Place];
+type PlacedSlice = [slice: string, part: number, place: Place];
 
 type OnTheTab = {
   partPage?: never;
@@ -25,12 +25,12 @@ type SlicesProps = {
   slices: ReactNode;
 } & (OnTheTab | OnAPartPage);
 
-const StationLink: FC<{station: number; place?: Place}> = ({station, place}) => {
+const SliceLink: FC<{at: number; place?: Place}> = ({at, place}) => {
   const carried = useCarriedAddress();
   return maybe(place).either(
     ({to, heading}) =>
-      <Link className="slice-station signpost caption upright" to={carried(to, heading)}>station {station}</Link>,
-    () => <a className="slice-station signpost caption upright" href={`#${stations.idOf(station)}`}>station {station}</a>);
+      <Link className="slice-station signpost caption upright" to={carried(to, heading)}>part {at}</Link>,
+    () => <a className="slice-station signpost caption upright" href={`#${stations.idOf(at)}`}>station {at}</a>);
 };
 
 export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, partPage}) => {
@@ -55,10 +55,10 @@ export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, partPage})
     </hgroup>
     <p className="overview paragraph muted-ink">{slices}</p>
     <ul className="sliced" aria-label="the slices">
-      {placed.map(([slice, station, place]) =>
+      {placed.map(([slice, at, place]) =>
         <li className="italic muted-ink" key={slice}>
           <span>{slice}</span>
-          <StationLink station={station} place={place}/>
+          <SliceLink at={at} place={place}/>
         </li>)}
     </ul>
   </section>;

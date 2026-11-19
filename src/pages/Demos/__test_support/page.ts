@@ -1,3 +1,4 @@
+import {computeAccessibleName} from 'dom-accessibility-api';
 import {maybe, not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import {DemoTopics} from '@pages/Demos/demo-topics';
@@ -64,5 +65,6 @@ export const demoPage = {
   linksToTabs: (): string[][] => toTabs(linksOffTheRail()),
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   sliceLinks: (): (string | null)[] => within(slices()).getAllByRole('link').map(link => link.getAttribute('href')),
+  sliceLinkNames: (): string[] => within(slices()).getAllByRole('link').map(link => computeAccessibleName(link)),
   sliceLinksLandingNowhere: (): string[] => missing(sliceStations())
 };
