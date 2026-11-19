@@ -12,7 +12,7 @@ const doors = [{display: 'First', param: 'first', to: '?tab=first'}, {display: '
 
 const Doors = () => {
   const {tab} = useSearchParamsObject({tab: schema.string});
-  return <Tabs label="doors" current={tab} values={doors}/>;
+  return <Tabs label="doors" current={tab} tabs={doors}/>;
 };
 
 describe('the test app', () => {

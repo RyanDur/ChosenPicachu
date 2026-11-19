@@ -27,7 +27,7 @@ export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, ch
       with.
     </p>
     <Tabs label="demos" current={topic}
-      values={Object.values(DemoTopics).map(param =>
+      tabs={Object.values(DemoTopics).map(param =>
         ({display: demoTab.names[param], param, to: carried(demoTab.address(param))}))}/>
     <section id="about" aria-label={demoTab.names[topic]} className="about">
       {children}

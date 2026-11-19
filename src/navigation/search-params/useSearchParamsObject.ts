@@ -4,8 +4,8 @@ import {has, maybe, not} from '@ryandur/sand';
 import * as schema from 'schemawax';
 import {useSearchParamsOnceHydrated} from './useSearchParamsOnceHydrated';
 
-const filterEmpty = (obj: {[p: string]: string | number}) =>
-  Object.entries(obj).reduce((acc, [key, value]) => has(value) ? {...acc, [key]: value} : acc, {});
+const filterEmpty = (params: {[key: string]: string | number}) =>
+  Object.entries(params).reduce((kept, [key, value]) => has(value) ? {...kept, [key]: value} : kept, {});
 
 const keepingThePlace: NavigateOptions = {preventScrollReset: true};
 
@@ -30,7 +30,7 @@ type SearchParamsObject<T extends {[key: string]: unknown}, D> = Given<T, D> & {
   searchFromAddress: (params: Partial<T>) => string;
   searchWithout: (params: string[]) => string;
 };
-type Params = {[p: string]: string | number};
+type Params = {[key: string]: string | number};
 
 export function useSearchParamsObject<T extends Params>(
   decoders: ParamDecoders<T>
