@@ -209,6 +209,7 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(aggregations.card()).toBeVisible();
     expect(demoPage.title(theStory)).toBeVisible();
     expect(tablesTab().titleShown(unanswered)).not.toBeInTheDocument();
+    expect(tablesTab().tableShown('the features')).not.toBeInTheDocument();
   });
 
   test('the slices’ page cites the z-index part that teaches a user story', async () => {
@@ -435,6 +436,7 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(recipeFolds.story(live, theFlowStory)).toBeInTheDocument();
     expect(recipeFolds.story(live, theStoreStory)).toBeInTheDocument();
     expect(tablesTab().titleShown(theStillStory)).not.toBeInTheDocument();
+    expect(tablesTab().tableShown('the features')).not.toBeInTheDocument();
   });
 
   test('the live table’s page links each term it glosses, and each tab it names, to that tab', async () => {
