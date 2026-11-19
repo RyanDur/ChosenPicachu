@@ -177,12 +177,12 @@ describe('a link saved to an old tables tutorial address', () => {
     expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize', '?world=vanilla'));
   });
 
-  test('should keep the place in the page the address points to', async () => {
+  test('should leave behind a station of the old tab, which names no place on the tutorial’s page', async () => {
     const old = demosAt('tables', '?tut=resize#station-3');
     render(<TestApp at={old}/>);
 
     expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/resize'));
-    expect(appAddress.fragment()).toBe('#station-3');
+    expect(appAddress.fragment()).toBe('');
   });
 
   test('a link saved to an old tutorial address that names a story lands on the tutorial’s page without the story', async () => {
