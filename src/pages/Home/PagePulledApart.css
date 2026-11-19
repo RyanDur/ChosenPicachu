@@ -1,7 +1,4 @@
 .page-pulled-apart {
-  --drawn-width: 516px;
-  --drawn-height: 619.2px;
-
   display: grid;
   gap: var(--base);
   margin: 0;
@@ -24,39 +21,5 @@
   .slab-line {
     stroke-width: var(--hairline-x-3);
     vector-effect: non-scaling-stroke;
-  }
-}
-
-@media (width > 600px) and ((width > 1100px) or (height > 600px)) {
-  @container home (width >= 68.8rem) {
-    .page-pulled-apart {
-      container-type: normal;
-      max-inline-size: var(--drawn-width);
-    }
-
-    .page-pulled-apart .drawing {
-      --drawn-least-height: calc(var(--base-x-40) * tan(atan2(var(--drawn-height), var(--drawn-width))));
-
-      container-type: size;
-      justify-self: center;
-      inline-size: 100%;
-      block-size: 100%;
-      min-block-size: var(--drawn-least-height);
-      max-inline-size: var(--drawn-width);
-      max-block-size: var(--drawn-height);
-
-      .drawn-caption {
-        --drawing-column: min(100cqi, 100cqb * tan(atan2(var(--drawn-width), var(--drawn-height))));
-      }
-    }
-  }
-}
-
-@media (width <= 1100px) and (height <= 600px) {
-  .page-pulled-apart .drawing {
-    --between-the-bars: calc(100svh - var(--foot-reach));
-    --drawing-column: min(100cqi, var(--between-the-bars) * tan(atan2(var(--drawn-width), var(--drawn-height))));
-
-    max-block-size: var(--between-the-bars);
   }
 }
