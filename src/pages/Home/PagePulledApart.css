@@ -27,16 +27,22 @@
   }
 }
 
-@container (height > 0) {
-  .page-pulled-apart .drawing {
-    container-type: size;
-    inline-size: 100%;
-    block-size: 100%;
-    max-inline-size: var(--drawn-width);
-    max-block-size: var(--drawn-height);
+@media (width > 600px) and ((width > 1100px) or (height > 600px)) {
+  @container home (width >= 68.8rem) {
+    .page-pulled-apart .drawing {
+      --drawn-least-height: calc(var(--base-x-40) * tan(atan2(var(--drawn-height), var(--drawn-width))));
 
-    .drawn-caption {
-      --drawing-column: min(100cqi, 100cqb * tan(atan2(var(--drawn-width), var(--drawn-height))));
+      container-type: size;
+      justify-self: center;
+      inline-size: 100%;
+      block-size: 100%;
+      min-block-size: var(--drawn-least-height);
+      max-inline-size: var(--drawn-width);
+      max-block-size: var(--drawn-height);
+
+      .drawn-caption {
+        --drawing-column: min(100cqi, 100cqb * tan(atan2(var(--drawn-width), var(--drawn-height))));
+      }
     }
   }
 }
