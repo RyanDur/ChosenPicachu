@@ -27,14 +27,6 @@
     text-wrap: pretty;
   }
 
-  .tutorials-header {
-    display: flex;
-    align-items: center;
-    gap: var(--base-x-2_5);
-
-    > .pill-glider { flex-shrink: 0; }
-  }
-
   .build-steps,
   .controls {
     justify-self: stretch;
