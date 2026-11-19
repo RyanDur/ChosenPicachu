@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {hydration, iPhone, sortableList} from './__test_support';
+import {hydration, sortableList} from './__test_support';
 
 test.afterEach(async ({page}, testInfo) => {
   if (testInfo.status !== testInfo.expectedStatus) {
@@ -74,20 +74,16 @@ test('a dragged item in a lazy list says where it landed', async ({page}) => {
   await expect(list.moveReport).toHaveText('A moved to 3 of 3');
 });
 
-test.describe('a finger on a phone', () => {
-  test.use(iPhone);
+test('a finger pressed on a grip and taken over by the browser leaves its item at rest', {tag: '@iPhone'}, async ({page, browserName}) => {
+  test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol cancels a finger');
+  await page.goto('demos/drag-and-drop/');
+  const list = sortableList(page);
+  const finger = await list.fingerOnTheGrip('A');
+  await expect(list.item('A')).toHaveAttribute('draggable', 'true');
 
-  test('a finger pressed on a grip and taken over by the browser leaves its item at rest', async ({page, browserName}) => {
-    test.skip(browserName !== 'chromium', 'only Chromium\'s DevTools protocol cancels a finger');
-    await page.goto('demos/drag-and-drop/');
-    const list = sortableList(page);
-    const finger = await list.fingerOnTheGrip('A');
-    await expect(list.item('A')).toHaveAttribute('draggable', 'true');
+  await finger.takenOverByTheBrowser();
 
-    await finger.takenOverByTheBrowser();
-
-    await expect(list.item('A')).toHaveAttribute('draggable', 'false');
-  });
+  await expect(list.item('A')).toHaveAttribute('draggable', 'false');
 });
 
 test('given the drag sort tab before its script runs, a grip is disabled; once the script runs, a drag from it moves the item', async ({page}) => {
