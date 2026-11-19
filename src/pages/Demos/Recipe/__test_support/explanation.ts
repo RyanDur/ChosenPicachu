@@ -62,6 +62,7 @@ export const explanation = {
     .map(fold => within(fold).getAllByText(/\S/)[0].textContent),
   runsIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('listitem'),
   codeIn: (holder: HTMLElement): HTMLElement[] => within(holder).queryAllByRole('code'),
+  samplesIn,
   linkNamed: (part: HTMLElement, name: string | RegExp): HTMLElement => within(part).getByRole('link', {name}),
   linksNamed: (part: HTMLElement, name: string | RegExp): HTMLElement[] => within(part).getAllByRole('link', {name}),
   linksTo: (part: HTMLElement, site: string): HTMLElement[] => within(part).getAllByRole('link')

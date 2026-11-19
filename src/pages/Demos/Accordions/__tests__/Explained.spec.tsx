@@ -314,7 +314,7 @@ describe('the accordion in HTML alone', () => {
 
     const firstRun = explanation.runsIn(await explanation.part(htmlAlone))[0];
 
-    expect(explanation.codeIn(firstRun)).not.toEqual([]);
+    expect(explanation.samplesIn(firstRun)[0]).toHaveTextContent('<summary>basalt</summary>');
   });
 });
 
