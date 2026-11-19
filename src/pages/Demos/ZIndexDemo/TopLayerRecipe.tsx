@@ -4,7 +4,7 @@ import {Codes, Mdn, Says, Sample, Snippet, Step, DialStep, StepHeading, Steps, S
 import {AlignDial, SideDial, useControls} from '../Controls';
 import {PartLink} from './PartLink';
 import {PartTermLink} from './PartTermLink';
-import {topLayerStory} from './top-layer-story';
+import {topLayerStoryTitleId} from './top-layer-story';
 import bannersSource from '@banners/Banners.tsx?sample';
 import providerSource from '@banners/BannerProvider.tsx?sample';
 import bannersCss from '@banners/Banners.css?sample';
@@ -34,7 +34,7 @@ const alignSheet: Record<Align, Sample> = {
 export const TopLayerRecipe: FC = () => {
   const {side, align} = useControls();
 
-  return <Story titleId={topLayerStory}
+  return <Story titleId={topLayerStoryTitleId}
     can="The user sees the news over the page"
     soThat="no stacking context can bury the news">
     <Tell>I could give the banner a huge z-index. But a z-index counts only inside its own stacking context, the term
