@@ -44,7 +44,9 @@ export const WhyAFixedBannerStillLoses: FC = () => {
         <Snippet label="CSS" lines={carve.between(bannersCss, '.banners {', 'z-index: 3;')}/>
       </li>
       <li className="run">
-        <p className="paragraph">To build this banner yourself, go to <Link className="signpost" to={carried(zIndexParts.addressOf('lets-build-this-feature'), topLayerStory)}><cite>{zIndexParts.told('lets-build-this-feature').name}</cite></Link>. It opens at the step where the
+        <p className="paragraph">To build this banner yourself, go to <Link className="signpost"
+          to={carried(zIndexParts.addressOf('lets-build-this-feature'), topLayerStory)}>
+          <cite>{zIndexParts.told('lets-build-this-feature').name}</cite></Link>. It opens at the step where the
           panel is written at the page’s root.</p>
       </li>
     </ol>
