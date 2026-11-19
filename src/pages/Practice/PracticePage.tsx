@@ -39,7 +39,7 @@ export const PracticePage: FC<{concern: Concern}> = ({concern}) => {
     </header>
     <WhereThePageIsMade/>
     <Tabs label="practice" current={concerns.idOf(concern)}
-      values={concerns.inOrder.map(shown => ({
+      tabs={concerns.inOrder.map(shown => ({
         display: shown, param: concerns.idOf(shown), to: practiceAddress.of(shown)
       }))}/>
     <section className="practice" aria-labelledby="practice-title">

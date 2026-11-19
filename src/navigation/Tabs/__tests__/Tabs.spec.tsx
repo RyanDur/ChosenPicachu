@@ -13,25 +13,25 @@ describe('Tabs', () => {
   const tabs = tabStrip('tabs under test');
 
   it('the tab it is given is current', () => {
-    render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
+    render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} tabs={[tab1, tab2, tab3]}/></TestApp>);
 
     expect(tabs.current()).toEqual([tab1.display]);
   });
 
   it('the tab strip is a list, one item per tab', () => {
-    render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
+    render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} tabs={[tab1, tab2, tab3]}/></TestApp>);
 
     expect(tabs.names()).toEqual([tab1.display, tab2.display, tab3.display]);
   });
 
   it('marks no tab when it is given none', () => {
-    render(<TestApp at={path}><Tabs label="tabs under test" values={[tab1, tab2, tab3]}/></TestApp>);
+    render(<TestApp at={path}><Tabs label="tabs under test" tabs={[tab1, tab2, tab3]}/></TestApp>);
 
     expect(tabs.current()).toEqual([]);
   });
 
   it('each tab goes where it is told to', async () => {
-    render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} values={[tab1, tab2, tab3]}/></TestApp>);
+    render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} tabs={[tab1, tab2, tab3]}/></TestApp>);
 
     await tabs.open(tab2.display);
 
@@ -39,7 +39,7 @@ describe('Tabs', () => {
   });
 
   it('marks only the tab it is given, whatever the address says', () => {
-    render(<TestApp at={tab3.to}><Tabs label="tabs under test" current={tab2.param} values={[tab1, tab2, tab3]}/></TestApp>);
+    render(<TestApp at={tab3.to}><Tabs label="tabs under test" current={tab2.param} tabs={[tab1, tab2, tab3]}/></TestApp>);
 
     expect(tabs.current()).toEqual([tab2.display]);
   });

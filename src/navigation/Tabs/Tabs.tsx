@@ -11,14 +11,14 @@ type Tab = {
 
 type Props = PropsWithClassName<{
   current?: string;
-  values: Tab[];
+  tabs: Tab[];
   label: string;
   id?: string;
 }>;
 
-export const Tabs: FC<Props> = ({values, id, label, current, className}) =>
+export const Tabs: FC<Props> = ({tabs, id, label, current, className}) =>
   <nav aria-label={label} id={id} className={classNames('tabs backdrop backdrop-above contained swipe-scrolled', className)}>
-    <ul className="tab-list">{values.map(({param, display, to}) =>
+    <ul className="tab-list">{tabs.map(({param, display, to}) =>
       <li className="tab tab-path bold field attentive backdrop-underlined" key={param}>
         <Link to={to} preventScrollReset
           aria-current={current === param ? 'page' : undefined}

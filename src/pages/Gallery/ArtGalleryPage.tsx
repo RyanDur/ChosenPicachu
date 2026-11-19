@@ -47,7 +47,7 @@ export const ArtGalleryPage: FC = () => {
 
   return <>
     {notEmpty(open) && <Tabs label="museums" className="museum-tabs" current={tab}
-      values={open.map(museum => ({...museum, to: `${pathname}${searchFromShown({tab: museum.param, page: museum.param === tab ? undefined : opening.page})}`}))}/>}
+      tabs={open.map(museum => ({...museum, to: `${pathname}${searchFromShown({tab: museum.param, page: museum.param === tab ? undefined : opening.page})}`}))}/>}
     {{
       wall: <ArtGallery/>,
       noMuseumOpen: <StandIn src={missingWall} alt="no museum is open"/>,
