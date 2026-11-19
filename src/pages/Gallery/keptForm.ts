@@ -13,7 +13,7 @@ const paramsOf: Record<Form, string[]> = {search: ['search'], pages: ['page', 's
 
 const addressKeyOf = (form: Form, search: string): string => {
   const params = new URLSearchParams(search);
-  return paramsOf[form].map(param => params.get(param) ?? '').join(' ');
+  return paramsOf[form].map(param => maybe(params.get(param)).orElse('')).join(' ');
 };
 
 const useMoves = (): number => {
