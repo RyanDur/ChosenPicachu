@@ -22,12 +22,12 @@ const Group: FC<{label: string; headings: readonly BookPart[]}> = ({label, headi
 </>;
 
 export const Contents: FC = () =>
-  <section aria-labelledby="contents-heading" className="contents">
-    <h2 id="contents-heading" className="off-screen">Contents</h2>
+  <nav aria-labelledby="contents-heading" className="contents">
+    <h2 id="contents-heading" className="off-screen">Parts</h2>
     <ol className="contents-list numbered">
       <Entry heading="html-alone-heading"/>
     </ol>
     <Group label="How we used to build a fold"
       headings={['remembers-heading', 'max-height-guess-heading', 'measured-heading']}/>
     <Group label="What the platform gives now" headings={['platform-way-heading', 'motion-heading']}/>
-  </section>;
+  </nav>;

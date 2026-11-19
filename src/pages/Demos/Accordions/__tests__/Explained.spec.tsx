@@ -32,12 +32,12 @@ describe('the accordions tab', () => {
     expect(names.filter((name, at) => names.indexOf(name) !== at)).toEqual([]);
   });
 
-  test('should title the contents, then the fold choices, then before you start', async () => {
+  test('should title the parts, then the fold choices, then before you start', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
 
-    expect(explanation.partTitles(tab)).toEqual(['Contents', 'fold choices', 'Before you start']);
+    expect(explanation.partTitles(tab)).toEqual(['Parts', 'fold choices', 'Before you start']);
   });
 
   test('should hold both rows inside the section named by the fold choices’ heading', async () => {
@@ -117,13 +117,14 @@ describe('the fold motion', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
-    const contents = explanation.partIn(tab, 'Contents');
+    const contents = await accordionsTab.contents();
     const beforeYouStart = explanation.partIn(tab, 'Before you start');
     const foldType = accordionsTab.choiceIn(tab, 'fold type');
     const foldMotion = accordionsTab.choiceIn(tab, 'fold motion');
 
     expect(outOfReadingOrder([contents, foldType, foldMotion, beforeYouStart])).toEqual([]);
-    expect(await accordionsTab.partsHolding(foldMotion, ['Contents', 'Before you start'])).toEqual([]);
+    expect(contents).not.toContainElement(foldMotion);
+    expect(await accordionsTab.partsHolding(foldMotion, ['Before you start'])).toEqual([]);
   });
 
   test('should open on the reveal', async () => {
