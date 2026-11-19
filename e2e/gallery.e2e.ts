@@ -192,6 +192,17 @@ for (const {reader, device} of handhelds) {
       await expect(page).toHaveURL(/size=12/);
     });
 
+    test('offers the last page in the gallery settings when the address\'s page is past it', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam&page=99999&size=8');
+      await expect(gallery.count).toHaveText(/ of 1,247$/);
+
+      await gallery.openSettings();
+
+      await expect(gallery.pageNumber).toHaveValue('1247');
+    });
+
     test('puts back the page it is on when the reader leaves a page past the last', async ({page}) => {
       const gallery = galleryPage(page);
       await gallery.answerEveryWallFromTheRecording();

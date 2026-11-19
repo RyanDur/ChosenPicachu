@@ -17,7 +17,7 @@ export const PageControl = () => {
 
   const firstPage = 1;
   const lastPage = pagination.map(({totalPages}) => totalPages).orElse(undefined);
-  const pageShown = pagination.map(({totalPages}) => Math.min(page, Math.max(totalPages, firstPage))).orElse(page);
+  const pageShown = pages.shown(page, pagination);
 
   const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
