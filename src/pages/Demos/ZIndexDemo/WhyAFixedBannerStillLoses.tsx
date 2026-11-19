@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import {carve, lines, Snippet} from '../Recipe';
 import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {BannerTrap} from './BannerTrap';
-import {topLayerStory} from './top-layer-story';
+import {topLayerStoryTitleId} from './top-layer-story';
 import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@banners/Banners.tsx?sample';
 import bannersCss from '@banners/Banners.css?sample';
@@ -45,7 +45,7 @@ export const WhyAFixedBannerStillLoses: FC = () => {
       </li>
       <li className="run">
         <p className="paragraph">To build this banner yourself, go to <Link className="signpost"
-          to={carried(zIndexParts.addressOf('lets-build-this-feature'), topLayerStory)}>
+          to={carried(zIndexParts.addressOf('lets-build-this-feature'), topLayerStoryTitleId)}>
           <cite>{zIndexParts.told('lets-build-this-feature').name}</cite></Link>. It opens at the step where the
           panel is written at the page’s root.</p>
       </li>

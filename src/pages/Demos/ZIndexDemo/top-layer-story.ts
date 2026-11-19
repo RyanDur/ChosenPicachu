@@ -1,1 +1,1 @@
-export const topLayerStory = 'news-top-story';
+export const topLayerStoryTitleId = 'news-top-story';
