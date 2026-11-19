@@ -47,6 +47,15 @@ describe('search', () => {
     await waitFor(() => expect(appAddress.search()).toHaveTextContent(/[?&]search=rock\+%26\+roll(&|$)/));
   });
 
+  it('sending the search already shown keeps the reader on their page', async () => {
+    render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}&search=cats&page=5`}/>);
+    await waitFor(() => expect(searchPage.bar.query()).toHaveValue('cats'));
+
+    await searchPage.bar.submit();
+
+    expect(appAddress.search()).toHaveTextContent(/[?&]page=5(&|$)/);
+  });
+
   it('a word added to the searched word searches for both', async () => {
     render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}&search=cat`}/>);
 
