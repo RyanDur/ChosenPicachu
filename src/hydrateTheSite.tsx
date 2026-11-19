@@ -4,7 +4,7 @@ import {DataRouter, RouterProvider} from 'react-router';
 import {Arrival, arrival, ArrivalDrawn} from '@navigation/arrival';
 import {maybe} from '@ryandur/sand';
 import {phoneLayout, phoneSheets} from '@page';
-import {sheetShowsTheAddress} from '@pages/Gallery/Settings';
+import {sheetFields} from '@pages/Gallery/Settings/fields';
 import {Site} from './Site';
 
 type RoutedSiteProps = {router: DataRouter; arrived: Arrival};
@@ -25,7 +25,7 @@ const sheetsClosedWhenThePhoneLayoutEnds = () =>
 const gallerySettingsClosedOnBackAndForward = () =>
   window.addEventListener('popstate', () =>
     maybe(document.getElementById(phoneSheets.gallerySettings)).map(sheet => {
-      sheetShowsTheAddress(sheet);
+      sheetFields.showTheAddress(sheet);
       sheet.hidePopover();
     }));
 
