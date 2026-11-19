@@ -493,6 +493,21 @@ test.describe('a visitor at a desk', () => {
     await expect(page).toHaveURL(/[?&]page=1247(&|$)/);
   });
 
+  test('keeps the words sent from a piece\'s page in the search while the gallery loads', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    const galleryArrives = await gallery.holdTheGalleryRoom();
+    await page.goto('gallery/O9138?tab=vam&search=roses');
+    await siteFrame(page).hydrated();
+    await gallery.searchField.fill('lilies');
+
+    await gallery.searchField.press('Enter');
+
+    await expect(gallery.searchField).toHaveValue('lilies');
+    galleryArrives();
+    await expect(page).toHaveURL(/[?&]search=lilies(&|$)/);
+  });
+
   test('stays on its page when the museum it shows is tapped', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
