@@ -45,3 +45,17 @@
     padding-block: var(--title-reach);
   }
 }
+
+@media (width > 900px) and (height > 600px) {
+  .tab-sidecar .parts-index {
+    gap: 0;
+
+    .parts-index-entry {
+      --entry-room: var(--base-x-0_5);
+    }
+
+    .says {
+      display: none;
+    }
+  }
+}
