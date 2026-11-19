@@ -1,5 +1,5 @@
 import {ChangeEvent, FC, KeyboardEvent, ToggleEvent, useContext, useId} from 'react';
-import {maybe} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import {KnownDoors, useGallery} from '@pages/Gallery/Context';
 import {museums, sourceParam} from '@pages/Gallery/museums';
 import {useSuggestions} from '@pages/Gallery/Search';
@@ -27,6 +27,7 @@ const MuseumRow: FC = () => {
     <label className="sheet-label field bold" htmlFor={choice}>Museum</label>
     <select id={choice} className="sheet-field card ellipsis" value={maybe(tab).orElse('')}
       onChange={chosen}>
+      {has(tab) || <option value="" disabled>Choose a museum</option>}
       {offered.map(({display, param}) => <option key={param} value={param}>{display}</option>)}
     </select>
   </>;

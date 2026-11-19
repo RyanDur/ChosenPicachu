@@ -144,6 +144,17 @@ describe('The gallery.', () => {
     await waitFor(() => expect(galleryPage.museumsOffered()).toContain('Harvard Art Museums'));
   });
 
+  test('a gallery that crashes before it names a museum asks the reader to choose one in its settings', async () => {
+    setupHarvardAllArtResponse(harvardArtResponse);
+    const Boom = () => {
+      throw new Error('boom');
+    };
+    render(<TestApp at={Paths.artGallery}><Boom/></TestApp>, {onCaughtError: () => undefined});
+    await waitFor(() => expect(galleryPage.museumsOffered()).toContain('Harvard Art Museums'));
+
+    expect(galleryPage.museumChosen()).toBe('Choose a museum');
+  });
+
   test('the gallery settings show the address\'s museum as chosen while it is still asked', async () => {
     setupHarvardAllArtResponse(harvardArtResponse);
     heldVAMPictures();
