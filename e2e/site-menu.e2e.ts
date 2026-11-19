@@ -1,12 +1,10 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {clickWhereItIs, iPadSplitView, iPadUpright, iPhone, shortPhoneSideways, siteFrame, tabsTo, twoFramesLater} from './__test_support';
+import {clickWhereItIs, iPadUpright, siteFrame, tabsTo, twoFramesLater} from './__test_support';
 
 const pages = ['Home', 'Record', 'Practice', 'Demos', 'Users', 'Gallery', 'Games', 'Repo'];
 
-test.describe('a phone held upright', () => {
-  test.use(iPhone);
-
+test.describe('the site menu', {tag: '@iPhone'}, () => {
   test('opens on the page’s title, with the site menu in reach and the site’s pages out of sight', async ({page}) => {
     await page.goto('record/');
 
@@ -91,9 +89,7 @@ test.describe('a phone held upright', () => {
   });
 });
 
-test.describe('a keyboard reader on an upright phone', () => {
-  test.use(iPhone);
-
+test.describe('a keyboard reader', {tag: '@iPhone'}, () => {
   test('opens the site menu, chooses Record, and lands back on Menu', async ({page}) => {
     const site = siteFrame(page);
     await page.goto('');
@@ -113,9 +109,7 @@ test.describe('a keyboard reader on an upright phone', () => {
   });
 });
 
-test.describe('an iPad in split view widened past a phone', () => {
-  test.use(iPadSplitView);
-
+test.describe('a split view widened past a phone', {tag: '@iPadSplitView'}, () => {
   test('finds the site nav in the rail', async ({page}) => {
     const site = siteFrame(page);
     await page.goto('');
@@ -144,36 +138,28 @@ test.describe('an iPad in split view widened past a phone', () => {
   });
 });
 
-test.describe('an iPad in split view, with a keyboard', () => {
-  test.use(iPadSplitView);
+test('a Command-click on a page in the site menu opens it in a new tab and leaves the menu open', {tag: '@iPadSplitView'}, async ({page, context}) => {
+  const site = siteFrame(page);
+  await page.goto('');
+  await site.hydrated();
+  await site.menu.click();
+  await expect(site.nav).toBeVisible();
+  const newTab = context.waitForEvent('page');
 
-  test('a Command-click on a page in the site menu opens it in a new tab and leaves the menu open', async ({page, context}) => {
-    const site = siteFrame(page);
-    await page.goto('');
-    await site.hydrated();
-    await site.menu.click();
-    await expect(site.nav).toBeVisible();
-    const newTab = context.waitForEvent('page');
+  await site.nav.getByRole('link', {name: 'Record'}).click({modifiers: ['ControlOrMeta']});
 
-    await site.nav.getByRole('link', {name: 'Record'}).click({modifiers: ['ControlOrMeta']});
-
-    await expect(await newTab).toHaveURL(/\/record\/$/);
-    await expect(site.nav).toBeVisible();
-  });
+  await expect(await newTab).toHaveURL(/\/record\/$/);
+  await expect(site.nav).toBeVisible();
 });
 
-test.describe('a short phone held on its side', () => {
-  test.use(shortPhoneSideways);
+test('the site menu keeps Home in reach on a screen too short to show it whole', {tag: '@shortPhoneSideways'}, async ({page}) => {
+  await page.goto('record/');
+  await siteFrame(page).hydrated();
+  await siteFrame(page).menu.tap();
 
-  test('the site menu keeps Home in reach', async ({page}) => {
-    await page.goto('record/');
-    await siteFrame(page).hydrated();
-    await siteFrame(page).menu.tap();
+  await twoFramesLater(page);
 
-    await twoFramesLater(page);
+  await clickWhereItIs(page, siteFrame(page).nav.getByRole('link', {name: 'Home'}));
 
-    await clickWhereItIs(page, siteFrame(page).nav.getByRole('link', {name: 'Home'}));
-
-    await expect(page).toHaveURL(/\/ChosenPicachu\/$/);
-  });
+  await expect(page).toHaveURL(/\/ChosenPicachu\/$/);
 });
