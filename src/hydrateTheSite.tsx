@@ -28,7 +28,8 @@ const sheetsClosedWhenThePhoneLayoutEnds = () =>
     sheet.hidePopover();
   }));
 
-// Android's back gesture closes an open popover before it goes back, so Back and Forward close whatever is open
+// Back and Forward through history leave a popover open, so they close whatever is open and drop what was typed in it;
+// a close request, Escape or Android's back gesture, closes a popover without moving history, so it never reaches here
 const popoversClosedOnBackAndForward = () =>
   window.addEventListener('popstate', () => openIn(':popover-open').forEach(open => {
     typedValuesDropped(open);
