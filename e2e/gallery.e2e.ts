@@ -506,6 +506,20 @@ test.describe('a visitor at a desk', () => {
     await expect(gallery.searchField).toHaveValue('lilies');
   });
 
+  test('opens a new search on its first page', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=40');
+    await siteFrame(page).hydrated();
+
+    await gallery.searchField.fill('lilies');
+    await gallery.searchField.press('Enter');
+
+    await expect(page).toHaveURL(/[?&]search=lilies/);
+    await expect(page).toHaveURL(/[?&]page=1(&|$)/);
+    await expect(gallery.count).toHaveText(/^Page 1 of /);
+  });
+
   test('changes the number per page from an address whose page is past the last page', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();

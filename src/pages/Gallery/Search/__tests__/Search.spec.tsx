@@ -58,13 +58,13 @@ describe('search', () => {
     expect(searchPage.bar.submitButton()).toHaveFocus();
   });
 
-  it('a search keeps the page and museum it was made on', async () => {
-    render(<TestApp at={`${Paths.artGallery}?page=1&tab=aic`}/>);
+  it('a search keeps the museum it was made on', async () => {
+    render(<TestApp at={`${Paths.artGallery}?tab=aic`}/>);
 
     await searchPage.bar.type('a');
     await searchPage.bar.submit();
 
-    expect(appAddress.search()).toHaveTextContent('?page=1&tab=aic&search=a');
+    expect(appAddress.search()).toHaveTextContent('tab=aic');
   });
 
   it('should be able to reset the query', async () => {
