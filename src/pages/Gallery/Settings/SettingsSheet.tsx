@@ -85,14 +85,16 @@ const SizeRow: FC = () => {
 };
 
 const PageRow: FC = () => {
-  const {page, pagination, updateSearchParams} = useGallery();
+  const {page, tab, search, size, pagination, updateSearchParams} = useGallery();
   const field = useId();
   const shown = pages.shown(page, pagination);
+  const movedFromOutside = [tab, search, size].join(' ');
   const applying = applyingNumber(shown, to => updateSearchParams({page: to}, movedTo));
 
   return <>
     <label className="sheet-label field bold" htmlFor={field}>Page</label>
-    <input type="number" id={field} min={1} max={pagination.map(({totalPages}) => totalPages).orElse(undefined)}
+    <input key={movedFromOutside} type="number" id={field} min={1}
+      max={pagination.map(({totalPages}) => totalPages).orElse(undefined)}
       required enterKeyHint="go" className="sheet-field bare card" defaultValue={shown}
       onKeyDown={whenEntered(applying(refusedSaysWhy))}
       onBlur={event => applying(refusedGoesBack)(event.currentTarget)}/>
