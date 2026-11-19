@@ -1,4 +1,4 @@
-import {ChangeEvent, FC, KeyboardEvent, ToggleEvent, useId} from 'react';
+import {ChangeEvent, FC, FocusEvent, KeyboardEvent, ToggleEvent, useId} from 'react';
 import {has, maybe, not} from '@ryandur/sand';
 import {useGallery, useKnownDoors} from '@pages/Gallery/Context';
 import {museums, sourceParam} from '@pages/Gallery/museums';
@@ -15,6 +15,12 @@ const confirmsAComposition = ({nativeEvent, keyCode}: KeyboardEvent<HTMLInputEle
 
 const whenEntered = (apply: (field: HTMLInputElement) => void) => (event: KeyboardEvent<HTMLInputElement>) => {
   if (event.key === 'Enter' && not(confirmsAComposition(event))) apply(event.currentTarget);
+};
+
+// A browser blurs the focused field when the whole window loses focus, as when a phone reader switches apps,
+// so only a move to something else on the page counts as leaving the field
+const whenLeftForThePage = (apply: (field: HTMLInputElement) => void) => (event: FocusEvent<HTMLInputElement>) => {
+  if (event.currentTarget.ownerDocument.hasFocus()) apply(event.currentTarget);
 };
 
 const refusedSaysWhy = (field: HTMLInputElement): boolean => field.reportValidity();
@@ -67,7 +73,7 @@ const SearchRow: FC = () => {
     <label className="sheet-label field bold" htmlFor={field}>Search</label>
     <input type="search" id={field} list={options} autoComplete="off" enterKeyHint="search"
       className="sheet-field bare card" defaultValue={searched} onInput={event => suggestFor(event.currentTarget.value)}
-      onKeyDown={whenEntered(apply)} onBlur={event => leave(event.currentTarget)}/>
+      onKeyDown={whenEntered(apply)} onBlur={whenLeftForThePage(leave)}/>
     <datalist id={options}>
       {suggestions.map(suggestion => <option value={suggestion} key={suggestion}>{suggestion}</option>)}
     </datalist>
@@ -97,7 +103,7 @@ const SizeRow: FC = () => {
     <input type="number" id={field} min={1} max={100} required enterKeyHint="go"
       className="sheet-field bare card" defaultValue={size}
       onKeyDown={whenEntered(applying(refusedSaysWhy))}
-      onBlur={event => applying(refusedGoesBack)(event.currentTarget)}/>
+      onBlur={whenLeftForThePage(applying(refusedGoesBack))}/>
   </>;
 };
 
@@ -115,7 +121,7 @@ const PageRow: FC = () => {
       max={pages.last(pagination).orElse(undefined)}
       required enterKeyHint="go" className="sheet-field bare card" defaultValue={shown}
       onKeyDown={whenEntered(applyingNumber(page, goTo)(refusedSaysWhy))}
-      onBlur={event => applyingNumber(shown, goTo)(refusedGoesBack)(event.currentTarget)}/>
+      onBlur={whenLeftForThePage(applyingNumber(shown, goTo)(refusedGoesBack))}/>
   </>;
 };
 
