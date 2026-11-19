@@ -33,15 +33,24 @@ const refusedGoesBackTo = (shown: number) => (field: HTMLInputElement): boolean 
   return false;
 };
 
+// A change sent from inside the open popover moves the page while Page may hold the focus,
+// and react-dom leaves a focused number field's default as it was, so the row that sent it puts Page there itself
+const pageFieldShows = (page: number) => (sentFrom: HTMLElement): void => {
+  const pageField = sentFrom.closest('fieldset')?.elements.namedItem('page');
+  if (pageField instanceof HTMLInputElement) numberField.shows(pageField, page);
+};
+
 const MuseumRow: FC = () => {
   const {tab} = useGallery();
   const address = useGalleryAddress();
   const known = useKnownDoors();
   const offered = museums.all.filter(({param}) => known[param] === 'open' || param === tab);
   const choice = useId();
-  const chosen = (event: ChangeEvent<HTMLSelectElement>) =>
-    maybe(sourceParam.decode(event.currentTarget.value))
-      .map(museum => address.update({tab: museum, page: opening.page}));
+  const chosen = ({currentTarget}: ChangeEvent<HTMLSelectElement>) =>
+    maybe(sourceParam.decode(currentTarget.value)).map(museum => {
+      address.update({tab: museum, page: opening.page});
+      pageFieldShows(opening.page)(currentTarget);
+    });
   return <>
     <label className="settings-label field bold" htmlFor={choice}>Museum</label>
     <select id={choice} className="settings-field card ellipsis" value={maybe(tab).orElse('')}
@@ -61,10 +70,11 @@ const SearchRow: FC = () => {
   const fieldId = useId();
   const options = useId();
 
-  const searchedFor = ({value}: HTMLInputElement) => {
-    if (value === searched) return;
-    if (value === '') address.remove(['search', 'page']);
-    else address.update({search: value, page: opening.page});
+  const searchedFor = (input: HTMLInputElement) => {
+    if (input.value === searched) return;
+    if (input.value === '') address.remove(['search', 'page']);
+    else address.update({search: input.value, page: opening.page});
+    pageFieldShows(opening.page)(input);
   };
 
   const leave = (input: HTMLInputElement) => {
@@ -86,10 +96,10 @@ const SearchRow: FC = () => {
 
 const scrolledToTheTop = {preventScrollReset: false};
 
-const sendingNumber = (current: number, send: (value: number) => void) =>
+const sendingNumber = (current: number, send: (value: number, input: HTMLInputElement) => void) =>
   (accepted: (field: HTMLInputElement) => boolean) => (input: HTMLInputElement): void => {
     if (input.valueAsNumber === current || not(accepted(input))) return;
-    send(input.valueAsNumber);
+    send(input.valueAsNumber, input);
     numberField.shows(input, input.valueAsNumber);
   };
 
@@ -98,10 +108,11 @@ const SizeRow: FC = () => {
   const leftForThePage = whenLeftForThePage(usePageFocus());
   const address = useGalleryAddress();
   const fieldId = useId();
-  const sending = sendingNumber(size, perPage => address.update({
-    size: perPage,
-    page: pages.withinTheEnd(page, perPage, pagination)
-  }, scrolledToTheTop));
+  const sending = sendingNumber(size, (perPage, input) => {
+    const pageSent = pages.withinTheEnd(page, perPage, pagination);
+    address.update({size: perPage, page: pageSent}, scrolledToTheTop);
+    pageFieldShows(pageSent)(input);
+  });
 
   return <>
     <label className="settings-label field bold" htmlFor={fieldId}>Per page</label>
@@ -113,17 +124,16 @@ const SizeRow: FC = () => {
 };
 
 const PageRow: FC = () => {
-  const {page, tab, search, size, pagination} = useGallery();
+  const {page, pagination} = useGallery();
   const leftForThePage = whenLeftForThePage(usePageFocus());
   const address = useGalleryAddress();
   const fieldId = useId();
   const shown = pages.shown(page, pagination);
-  const movedFromOutside = [tab, search, size].join(' ');
   const goTo = (to: number) => address.update({page: to}, scrolledToTheTop);
 
   return <>
     <label className="settings-label field bold" htmlFor={fieldId}>Page</label>
-    <input key={movedFromOutside} type="number" id={fieldId} min={1}
+    <input type="number" id={fieldId} name="page" min={1}
       max={pages.last(pagination).orElse(undefined)}
       required enterKeyHint="go" className="settings-field bare card" defaultValue={shown}
       onKeyDown={whenEntered(sendingNumber(page, goTo)(refusedSaysWhy))}
