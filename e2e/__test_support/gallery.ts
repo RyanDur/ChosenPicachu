@@ -67,6 +67,12 @@ export const galleryPage = (page: Page) => {
       await page.route(/\/vam\/objects\/search\?/, route =>
         recorded ? route.fulfill({contentType: recorded.contentType, body: recorded.body}) : route.fallback());
     },
+    answerEverySearchWithNothing: async (): Promise<void> => {
+      await page.route(/\/vam\/objects\/search\?/, route => route.fulfill({
+        contentType: 'application/json',
+        body: JSON.stringify({info: {record_count: 0, pages: 0, page_size: 8}, records: []})
+      }));
+    },
     refuseEveryPicture: async (): Promise<void> => {
       await page.route('**/vam-image/*/full/**', route => route.abort());
     },
