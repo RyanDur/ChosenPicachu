@@ -31,11 +31,16 @@ export const AccordionsExplained: FC = () => {
   const {Accordion: HtmlAlone, source: htmlAloneSource} = htmlAloneBuilds[foldType];
   return <>
     <header className="tab-introduction accordions-opening">
-      <p className="paragraph">The thing is an accordion: a list of parts, each with a bar you press to show or hide
-        the text under it. This page calls one of them a fold. HTML alone can show and hide a fold.</p>
-      <p className="paragraph">By the end you can build an accordion in HTML alone, make it slide with CSS, keep one
-        fold open at a time, and say which language each job needed and why. The accordion on this page is HTML
-        alone.</p>
+      <p className="paragraph">This tab builds an accordion: a list of parts, each with a bar you press to show or hide
+        the text under it. This page calls one of them a fold. Sliding a fold open is the hard part. For years, CSS
+        could move a height to a number but not to the height the text needs, so the older ways each worked around it:
+        guess a height, measure it with script, or set one in advance. Each has a cost.</p>
+      <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
+        looks and moves, and script says what happens when you act. You don’t always need all three. HTML does some
+        jobs alone, and HTML with CSS does more, before you need script. If you know how each one works, you can
+        choose the one the job needs. By the end you can build an accordion in HTML alone, make it slide with CSS,
+        keep one fold open at a time, and say which language each job needed and why. The accordion on this page is
+        HTML alone.</p>
       <figure className={`html-alone-exhibit snapping ${looks.exhibit}`}>
         <HtmlAlone/>
       </figure>
@@ -53,15 +58,7 @@ export const AccordionsExplained: FC = () => {
     </aside>
     <section aria-labelledby="before-you-start-heading" className="before-you-start">
       <h2 id="before-you-start-heading" className="title bold">Before you start</h2>
-      <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
-        looks and moves, and script says what happens when you act.</p>
-      <p className="paragraph">Nothing here leans on another tab.</p>
-      <p className="paragraph">You don’t always need all three languages. HTML does some jobs alone, and HTML with CSS
-        does more, before you need script. If you know how each one works, you can choose the one the job needs. This
-        tab builds one small thing in HTML alone, and each part’s page builds it another way.</p>
-      <p className="paragraph">Sliding it open is the hard part. For years, CSS could move a height to a number but not
-        to the height the text needs, so the older ways each worked around it: guess a height, measure it with script,
-        or set one in advance. Each has a cost.</p>
+      <p className="paragraph">Nothing here leans on another tab. Each part’s page builds the accordion another way.</p>
       <section aria-labelledby="html-alone-heading" className="accordion-part">
         <h3 id="html-alone-heading" className="sub-title bold">{accordionParts.titleOf('html-alone-heading')}</h3>
         <ol className={looks.runs}>
