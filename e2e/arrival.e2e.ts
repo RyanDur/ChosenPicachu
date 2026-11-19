@@ -23,7 +23,7 @@ for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as cons
 
     test('Back to a tutorial from another tab, and Forward again, return the reader to where they were', async ({page}) => {
       await page.goto('demos/tables/#features-asked-for');
-      await expect(page.getByRole('table', {name: 'the features'})).toBeInViewport();
+      await expect(page.getByRole('region', {name: 'let’s build this feature'})).toBeFocused();
       const atTheTutorial = await settledScrollY(page);
       await clickWhereItIs(page, page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Z-index'}));
       await expect(zIndexTab(page).partLink('Why Third is on top')).toBeAttached();
