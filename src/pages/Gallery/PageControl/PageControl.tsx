@@ -9,6 +9,12 @@ import './PageControl.css';
 const typed = (form: FormData, field: string): Maybe<number> =>
   maybe(form.get(field)).mBind(value => maybe(numberParam.decode(value)));
 
+// react-dom leaves the default of a focused number field as it was, and Enter keeps the reader in the field,
+// so the field takes what it sent
+const showingWhatWasSent = (field: Element | RadioNodeList | null, sent: number): void => {
+  if (field instanceof HTMLInputElement) field.defaultValue = field.value = String(sent);
+};
+
 export const PageControl = () => {
   const {pagination, page, size, updateSearchParams} = useGallery();
   const goTo = useId();
@@ -21,14 +27,14 @@ export const PageControl = () => {
 
   const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const {elements} = event.currentTarget;
     const typedIn = new FormData(event.currentTarget);
-    event.currentTarget.reset();
     const sizeChosen = typed(typedIn, 'size').orElse(size);
-    const pageChosen = typed(typedIn, 'page').orElse(page);
-    updateSearchParams({
-      page: pages.withinTheEnd(pageChosen, sizeChosen, pagination),
-      size: sizeChosen
-    }, {preventScrollReset: false, state: keptForm.across('pages', formKey)});
+    const pageSent = pages.withinTheEnd(typed(typedIn, 'page').orElse(page), sizeChosen, pagination);
+    showingWhatWasSent(elements.namedItem('page'), pageSent);
+    showingWhatWasSent(elements.namedItem('size'), sizeChosen);
+    updateSearchParams({page: pageSent, size: sizeChosen},
+      {preventScrollReset: false, state: keptForm.across('pages', formKey)});
   };
 
   return <form key={formKey} onSubmit={onSubmit} className="page-control backdrop">
