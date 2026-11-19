@@ -1,7 +1,7 @@
 import {Locator, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {assertionPatience} from './__test_support/patience';
-import {boxOf, clickWhereItIs, documentScrollY, feedbackOn, recordPage, siteFrame, twoFramesLater} from './__test_support';
+import {boxOf, clickWhereItIs, documentScrollY, feedbackOn, recordPage, siteFrame, twoFramesLater, zIndexTab} from './__test_support';
 
 const topOf = async (part: Locator): Promise<number> => (await boxOf(part)).y;
 const risesAbove = async (part: Locator, mark: number): Promise<void> =>
@@ -44,7 +44,7 @@ test.describe('a keyboard and a mouse', {tag: ['@desktop', '@iPadSidewaysWindow'
 
     await clickWhereItIs(page, tabs.getByRole('link', {name: 'Z-index'}));
 
-    await expect(page.getByRole('heading', {name: 'Why Third is on top'})).toBeAttached();
+    await expect(zIndexTab(page).partLink('Why Third is on top')).toBeAttached();
     await twoFramesLater(page);
     expect(await topOf(tabs)).toBe(where);
   });
