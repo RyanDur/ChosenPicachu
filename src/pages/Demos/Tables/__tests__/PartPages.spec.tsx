@@ -570,12 +570,19 @@ describe('a link saved to a story when it was on the tables tab', () => {
     expect(await appAddress.movedOnFrom(old)).toBe(theStillTablesPage);
   });
 
-  test('should stay on the tables tab at a station it points to, without the story', async () => {
+  test('should land at the features on the tables tab when it points to their station, without the story', async () => {
     const old = demosAt('tables', '?world=vanilla&living=still');
     render(<TestApp at={`${old}#station-6`}/>);
 
     expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables', '?world=vanilla'));
-    expect(appAddress.fragment()).toBe('#station-6');
+    expect(appAddress.fragment()).toBe('#features-asked-for');
+  });
+
+  test('should open the part page of a build station it points to, with the dials', async () => {
+    const old = demosAt('tables', '?world=vanilla');
+    render(<TestApp at={`${old}#station-2`}/>);
+
+    expect(await appAddress.movedOnFrom(old)).toBe(demosAt('tables/the-sketch', '?world=vanilla'));
   });
 
   test('should open the page of the story its place points to, when it names stories on two pages', async () => {
