@@ -18,6 +18,7 @@ Dan North, Introducing BDD: https://dannorth.net/blog/introducing-bdd/
 - The name is a sentence: the thing under test should do something. Read the name and you know the behavior. Read a failing name and you know what happened: a bug came in, the behavior moved elsewhere, or a premise of the system changed, and in that last case the test is deleted, not mended.
 - "Should" is the word that invites the challenge: should it, really? A name that cannot carry it is describing structure, not behavior.
 - One sentence is one test's worth. The body verifies what the sentence says and nothing more.
+- A test may find what it acts on by the words a reader finds it by, such as a tab's opening by its first sentence, when the page gives that part no role and no name. Giving it a name only so a test can find it is words no reader asked for, so finding by words is not a finding. Why: the designer, #562 and #564, raised five times.
 - Given, when, then. The arrangement is the given, the act is the when, the assertion is the then, and a reader can find each without a comment.
 - A name that does not fit the thing under test is the behavior saying it lives elsewhere; move it before pinning it.
 - The next test to write is the next most important thing the system does not do yet.

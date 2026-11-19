@@ -44,6 +44,14 @@ Carl Alexander, The importance of naming in programming: https://carlalexander.c
 - A name never borrows a word HTML, CSS or JavaScript already defines, such as `span`, `window`, `slice`, `event`, `table` or `target`, unless it means that very thing (an index named `at` is the position `.at()` takes, so it keeps its name), and it spells American except where it mirrors a platform name such as `aria-labelledby`. Both are findings only in a file whose definition the change touches. Why: Ryan, 2026-11-08, "names like it can cognitvely conflict with names that are built into the three concerns"; 2026-10-25, "I am American."
 - A function that returns JSX and is called as `name(arguments)`, or handed to `.map` by name, is a finding, in a spec as anywhere else. AGENTS.md makes it a component, named in PascalCase and rendered as `<Name …/>`. ESLint catches a call in the same file; a call of one imported from another file is the review's to catch.
 
+## Settled by ruling
+
+These came up again and again and were ruled. Don't raise them.
+
+- A count in the site's words, such as "Six parts, about 24 minutes." or "Parts 1 to 5 build the live table", is written by hand. It is the designer's words, and a card that changes the parts rewrites them. Deriving it from the list is not asked for. Why: the designer, #562 and #564.
+- An address the site moved (a Tables station, a tutorial's old `?tut=`) moves with script. Without script it lands on the page it now belongs to, at the top, and a journey pins that. No id is kept only so an old link finds its place without script. Why: the designer, #564.
+- A frame `select` wears `card` without `bare`, because `bare` (`appearance: none`) removes the native arrow, and nothing draws one back. Why: the designer, #537 (thread 4622541582).
+
 ## How you report
 
 A finding points at a file and a line, names which section it answers to, and quotes that source. Name a pattern once and list where it recurs. Code that is merely different from how you would write it is not a finding, and a stage the site has chosen not to reach is not a finding. Nothing wrong is a true answer: never invent a finding to have something to say.
