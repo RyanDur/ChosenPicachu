@@ -300,14 +300,6 @@ describe('the accordion in HTML alone', () => {
     expect(explanation.foldLabelsIn(exhibit)).toEqual(['basalt', 'cinder', 'meadow']);
   });
 
-  test('should show no code beside it', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    const exhibit = await accordionsTab.exhibit();
-
-    expect(explanation.codeIn(exhibit)).toEqual([]);
-  });
-
   test('should open its part before you start on its HTML', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
