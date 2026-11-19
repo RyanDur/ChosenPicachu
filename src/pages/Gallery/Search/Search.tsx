@@ -28,6 +28,7 @@ export const Search: FC<PropsWithClassName> = ({className}) => {
   const submitted = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const words = wordsIn(event.currentTarget);
+    if (words === search) return;
     void navigate({pathname: gallery, search: searchFromAddress({search: words, page: opening.page})},
       {preventScrollReset: true, state: keptForm.across('search', formKey)});
   };
