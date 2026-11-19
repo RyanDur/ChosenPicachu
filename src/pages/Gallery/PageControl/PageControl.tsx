@@ -4,15 +4,14 @@ import {numberParam} from '@navigation/search-params';
 import {useGallery} from '@pages/Gallery/Context';
 import {keptForm} from '@pages/Gallery/keptForm';
 import {pages} from '@pages/Gallery/pages';
+import {numberField} from '@pages/Gallery/numberField';
 import './PageControl.css';
 
 const typed = (form: FormData, field: string): Maybe<number> =>
   maybe(form.get(field)).mBind(value => maybe(numberParam.decode(value)));
 
-// react-dom leaves the default of a focused number field as it was, and Enter keeps the reader in the field,
-// so the field takes what it sent
 const showingWhatWasSent = (field: Element | RadioNodeList | null, sent: number): void => {
-  if (field instanceof HTMLInputElement) field.defaultValue = field.value = String(sent);
+  if (field instanceof HTMLInputElement) numberField.showsWhatItSent(field, sent);
 };
 
 export const PageControl = () => {
