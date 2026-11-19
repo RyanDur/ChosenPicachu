@@ -60,20 +60,20 @@ test.describe('a reader with script turned off', () => {
   test.use({javaScriptEnabled: false});
 
   test('follows a link saved to an old tables tutorial address to the tables tab and its list of tutorials', async ({page}) => {
-    const {tutorials} = tablesDemo(page);
+    const {tutorials, partLink} = tablesDemo(page);
 
     await page.goto('demos/tables/?tut=menu');
 
-    await expect(tutorials.link('Sort menu')).toBeVisible();
+    await expect(partLink('Sort menu')).toBeVisible();
     await expect(tutorials.title('Sort menu')).toHaveCount(0);
   });
 
   test('follows a link saved to a story on the tables tab to the tables tab and its link to the story\'s page', async ({page}) => {
-    const {tutorials} = tablesDemo(page);
+    const {tutorials, partLink} = tablesDemo(page);
 
     await page.goto('demos/tables/?living=still');
 
-    await expect(tutorials.link('Build the still table')).toBeVisible();
+    await expect(partLink('Build the still table')).toBeVisible();
     await expect(tutorials.title('Build the still table')).toHaveCount(0);
   });
 });

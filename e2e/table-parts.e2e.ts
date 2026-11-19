@@ -52,7 +52,7 @@ test('a reader on a tutorial page reached by a link saved with a story follows t
   await page.getByRole('region', {name: 'Drag sort'}).getByRole('link', {name: 'Tables', exact: true}).first().click();
 
   await expect(page).toHaveURL(/demos\/tables\/\?world=vanilla$/);
-  await expect(tablesDemo(page).tutorials.link('Sort menu')).toBeVisible();
+  await expect(tablesDemo(page).partLink('Sort menu')).toBeVisible();
 });
 
 test('a reader who follows a link out of the live table’s page and comes Back is on the live table’s page', async ({page}) => {

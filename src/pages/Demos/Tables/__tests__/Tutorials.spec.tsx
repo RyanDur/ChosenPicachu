@@ -1,6 +1,6 @@
 import {render, waitFor} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demoPage} from '@pages/Demos/__test_support';
+import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {tablesTab} from '@pages/Demos/Tables/__test_support';
 import {Tutorials} from '../Tutorials';
 
@@ -20,6 +20,17 @@ describe('the table tutorials', () => {
 
     expect(tablesTab().columnHeader('by keyboard')).toBeVisible();
     expect(demoPage.row('Widen a column')).toBeVisible();
+  });
+
+  test('should lead from each tutorial the features name to its page', async () => {
+    render(<TestApp at="/"><Tutorials/></TestApp>);
+    await demoPage.findTitle('let’s build this feature');
+
+    expect(tablesTab().featureLinks()).toEqual([
+      ['Drag sort', demosAt('tables/sort')],
+      ['Sort menu', demosAt('tables/menu')],
+      ['Drag resize', demosAt('tables/resize')]
+    ]);
   });
 
   test('should take the keyboard to the features when the address names them', async () => {

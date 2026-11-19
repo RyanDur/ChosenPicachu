@@ -6,7 +6,6 @@ const storyAt = (page: Page, position: number): Locator =>
 
 export const tablesDemo = (page: Page) => ({
   tutorials: {
-    link: (name: string): Locator => page.getByRole('region', {name: 'Tables'}).getByRole('link', {name, exact: true}),
     title: (name: string): Locator => page.getByRole('heading', {level: 2, name, exact: true}),
     firstStory: page.getByRole('region', {name: /yourself$/}).getByRole('group').first()
   },
