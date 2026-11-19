@@ -43,8 +43,8 @@ const MuseumRow: FC = () => {
     maybe(sourceParam.decode(event.currentTarget.value))
       .map(museum => address.update({tab: museum, page: opening.page}));
   return <>
-    <label className="sheet-label field bold" htmlFor={choice}>Museum</label>
-    <select id={choice} className="sheet-field card ellipsis" value={maybe(tab).orElse('')}
+    <label className="settings-label field bold" htmlFor={choice}>Museum</label>
+    <select id={choice} className="settings-field card ellipsis" value={maybe(tab).orElse('')}
       onChange={chosen}>
       {has(tab) || <option value="" disabled>Choose a museum</option>}
       {offered.map(({display, param}) => <option key={param} value={param}>{display}</option>)}
@@ -73,9 +73,9 @@ const SearchRow: FC = () => {
   };
 
   return <>
-    <label className="sheet-label field bold" htmlFor={field}>Search</label>
+    <label className="settings-label field bold" htmlFor={field}>Search</label>
     <input type="search" id={field} list={options} autoComplete="off" enterKeyHint="search"
-      className="sheet-field bare card" defaultValue={searched}
+      className="settings-field bare card" defaultValue={searched}
       onInput={event => suggestFor(event.currentTarget.value)}
       onKeyDown={whenEntered(searchedFor)} onBlur={leftForThePage(leave)}/>
     <datalist id={options}>
@@ -104,9 +104,9 @@ const SizeRow: FC = () => {
   }, movedTo));
 
   return <>
-    <label className="sheet-label field bold" htmlFor={field}>Per page</label>
+    <label className="settings-label field bold" htmlFor={field}>Per page</label>
     <input type="number" id={field} min={1} max={100} required enterKeyHint="go"
-      className="sheet-field bare card" defaultValue={size}
+      className="settings-field bare card" defaultValue={size}
       onKeyDown={whenEntered(sending(refusedSaysWhy))}
       onBlur={leftForThePage(sending(refusedGoesBackTo(size)))}/>
   </>;
@@ -122,10 +122,10 @@ const PageRow: FC = () => {
   const goTo = (to: number) => address.update({page: to}, movedTo);
 
   return <>
-    <label className="sheet-label field bold" htmlFor={field}>Page</label>
+    <label className="settings-label field bold" htmlFor={field}>Page</label>
     <input key={movedFromOutside} type="number" id={field} min={1}
       max={pages.last(pagination).orElse(undefined)}
-      required enterKeyHint="go" className="sheet-field bare card" defaultValue={shown}
+      required enterKeyHint="go" className="settings-field bare card" defaultValue={shown}
       onKeyDown={whenEntered(sendingNumber(page, goTo)(refusedSaysWhy))}
       onBlur={leftForThePage(sendingNumber(shown, goTo)(refusedGoesBackTo(shown)))}/>
   </>;
@@ -135,8 +135,8 @@ const showingTheAddress = ({newState, currentTarget}: ToggleEvent<HTMLElement>) 
   if (newState === 'open') currentTarget.querySelectorAll('input').forEach(field => field.value = field.defaultValue);
 };
 
-export const SettingsSheet: FC<{readonly id: string}> = ({id}) =>
-  <fieldset id={id} popover="auto" className="settings-sheet phone-sheet backdrop veiled"
+export const GallerySettingsPopover: FC<{readonly id: string}> = ({id}) =>
+  <fieldset id={id} popover="auto" className="gallery-settings-popover phone-popover backdrop veiled"
     onBeforeToggle={showingTheAddress}>
     <legend className="off-screen">gallery settings</legend>
     <MuseumRow/>
