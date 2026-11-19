@@ -21,7 +21,6 @@ export const PageControl = () => {
   const formKey = keptForm.useKey('pages');
 
   const firstPage = 1;
-  const lastPage = pages.last(pagination).orElse(undefined);
   const pageShown = pages.shown(page, pagination);
 
   const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
@@ -42,7 +41,6 @@ export const PageControl = () => {
       id={goTo}
       defaultValue={pageShown}
       min={firstPage}
-      max={lastPage}
       name="page"
       className="go-to control borderless focus-ringed"/>
     <label className="per-page-label control-label field next-approached bold" htmlFor={perPage}>Per page</label>
