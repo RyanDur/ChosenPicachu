@@ -493,6 +493,17 @@ test.describe('a visitor at a desk', () => {
     await expect(page).toHaveURL(/[?&]page=1247(&|$)/);
   });
 
+  test('stays on its page when the museum it shows is tapped', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=40');
+    await siteFrame(page).hydrated();
+
+    await gallery.doors.filter({hasText: 'The Victoria and Albert Museum'}).click();
+
+    await expect(page).toHaveURL(/[?&]page=40(&|$)/);
+  });
+
   test('sends a page from an address whose size the per page field would refuse', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
