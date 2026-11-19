@@ -1,6 +1,6 @@
 import {Locator, Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, iPhone, nameOn, phoneSideways, recordPage, siteFrame, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
+import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, nameOn, recordPage, siteFrame, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
 const opensFromAFingerOnItsName = async (page: Page, name: string): Promise<void> => {
   await page.goto('demos/accordions/');
   const fold = accordionsTab(page).htmlAloneFold(name);
@@ -123,49 +123,17 @@ const closesABanner = async (page: Page): Promise<void> => {
   await expect(page.getByRole('alert').getByRole('button', {name: /^dismiss/})).toHaveCount(0);
 };
 
-test.describe('a phone held upright', () => {
-  test.use(iPhone);
+test('opens a page from a finger that lands just off a link in the nav', {tag: '@iPhone'}, async ({page}) => {
+  await page.goto('');
+  await siteFrame(page).hydrated();
+  await siteFrame(page).menu.tap();
 
-  test('opens a page from a finger that lands just off a link in the nav', async ({page}) => {
-    await page.goto('');
-    await siteFrame(page).hydrated();
-    await siteFrame(page).menu.tap();
+  await fingerTap(page, siteFrame(page).nav.getByRole('link', {name: 'Users'}));
 
-    await fingerTap(page, siteFrame(page).nav.getByRole('link', {name: 'Users'}));
-
-    await expect(page).toHaveURL(/users/);
-  });
-
-  test('opens and closes what am I looking at with a finger that lands just off the line', ({page}) => opensAndClosesTheExplainer(page));
-
-  test('the trap\'s menu opens and chooses from a finger that lands just off its controls', ({page}) => choosesInTheTrappedMenu(page));
-
-  test('the menu in the top layer opens and chooses from a finger that lands just off its controls', ({page}) => choosesInTheTopLayerMenu(page));
-
-  test('raises and dismisses the banners from a finger that lands just off their buttons', ({page}) => raisesAndDismissesTheBanners(page));
-
-  test('changes the trap with a finger that lands just off the checkbox\'s words', ({page}) => changesTheTrap(page));
-
-  test('opens every fold on the record from a finger that lands just off its bar', ({page}) => opensEveryFoldOnTheRecord(page));
-
-  test('opens the settings fold on the drag sort tab from a finger that lands just off its bar', ({page}) => opensTheDragSortSettings(page));
-
-  test('opens the gallery settings from a finger that lands just off their tile', ({page}) => opensTheGallerySettings(page));
-
-  test('opens every how I built it fold in an open story on the live table’s page from a finger that lands just off its bar', ({page}) => opensEveryHowIBuiltItFold(page));
-
-  test('opens basalt, in the accordion in HTML alone, from a finger that lands just off its name', ({page}) => opensFromAFingerOnItsName(page, 'basalt'));
-
-  test('opens cinder, in the accordion in HTML alone, from a finger that lands just off its name', ({page}) => opensFromAFingerOnItsName(page, 'cinder'));
-
-  test('opens meadow, in the accordion in HTML alone, from a finger that lands just off its name', ({page}) => opensFromAFingerOnItsName(page, 'meadow'));
-
-  test('closes a banner with a finger that lands just off its dismiss', ({page}) => closesABanner(page));
+  await expect(page).toHaveURL(/users/);
 });
 
-test.describe('a phone held sideways', () => {
-  test.use(phoneSideways);
-
+test.describe('a finger that lands just off a control', {tag: ['@iPhone', '@phoneSideways']}, () => {
   test('opens and closes what am I looking at with a finger that lands just off the line', ({page}) => opensAndClosesTheExplainer(page));
 
   test('the trap\'s menu opens and chooses from a finger that lands just off its controls', ({page}) => choosesInTheTrappedMenu(page));

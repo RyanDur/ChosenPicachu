@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {arrivalPatience, dragSortTable, iPadSplitView, iPhone, Person, usersPage} from './__test_support';
+import {arrivalPatience, dragSortTable, Person, usersPage} from './__test_support';
 import {usersServer} from '../src/pages/Users/usersServer';
 
 const ada: Person = {
@@ -110,30 +110,21 @@ const aFingerLandsOnTheStateChoice = async (page: Page, end: 'start' | 'end'): P
   await expect(users.homeState).toBeFocused();
 };
 
-const handhelds = [
-  {reader: 'an iPhone', device: iPhone},
-  {reader: 'an iPad in split view', device: iPadSplitView}
-];
+test.describe('the roster under a finger', {tag: ['@iPhone', '@iPadSplitView']}, () => {
+  test('scrolling the roster sideways reaches its last column', async ({page}) => {
+    const users = usersPage(page);
+    await page.goto('users');
+    await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
 
-for (const {reader, device} of handhelds) {
-  test.describe(reader, () => {
-    test.use(device);
+    await users.scrollRosterSideways();
 
-    test('scrolling the roster sideways reaches its last column', async ({page}) => {
-      const users = usersPage(page);
-      await page.goto('users');
-      await expect(users.names.first()).toBeVisible({timeout: arrivalPatience});
-
-      await users.scrollRosterSideways();
-
-      await expect(users.columns.last()).toBeInViewport({ratio: 0.5});
-    });
-
-    test('a finger at the start of the State choice\'s box lands on the State choice', ({page}) => aFingerLandsOnTheStateChoice(page, 'start'));
-
-    test('a finger at the end of the State choice\'s box lands on the State choice', ({page}) => aFingerLandsOnTheStateChoice(page, 'end'));
+    await expect(users.columns.last()).toBeInViewport({ratio: 0.5});
   });
-}
+
+  test('a finger at the start of the State choice\'s box lands on the State choice', ({page}) => aFingerLandsOnTheStateChoice(page, 'start'));
+
+  test('a finger at the end of the State choice\'s box lands on the State choice', ({page}) => aFingerLandsOnTheStateChoice(page, 'end'));
+});
 
 test.describe('when the browser allows no service workers', () => {
   test.use({serviceWorkers: 'block'});

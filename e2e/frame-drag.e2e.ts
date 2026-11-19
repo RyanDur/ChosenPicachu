@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {type FingerPress, iPadUpright, iPhone, type Stage, tableWorlds} from './__test_support';
+import {type FingerPress, type Stage, tableWorlds} from './__test_support';
 
 for (const stage of tableWorlds.stagesWith('origin=keep')) {
   test(`a column and a row still land in their new seats while their origin stays in place, in ${stage.name}`, async ({page}) => {
@@ -76,25 +76,12 @@ const aFingerCarriesTheColumn = async (
   await expect.poll(async () => (await trades.columnOrder()).indexOf('trades')).toBeGreaterThan(1);
 };
 
-for (const {reader, device} of [
-  {reader: 'an iPad held upright', device: iPadUpright},
-  {reader: 'a phone', device: iPhone}
-]) {
-  test.describe(reader, () => {
-    test.use(device);
-
-    for (const stage of tableWorlds.stages) {
-      test(`a finger pressed on a column's name carries it to a new seat, in ${stage.name}`, ({page, browserName}) =>
-        aFingerCarriesTheColumn(page, browserName, stage, 'name'));
-    }
-  });
+for (const stage of tableWorlds.stages) {
+  test(`a finger pressed on a column's name carries it to a new seat, in ${stage.name}`, {tag: ['@iPhone', '@iPadUpright']}, ({page, browserName}) =>
+    aFingerCarriesTheColumn(page, browserName, stage, 'name'));
 }
 
-test.describe('a phone', () => {
-  test.use(iPhone);
-
-  for (const stage of tableWorlds.stages) {
-    test(`a finger pressed on a column's middle carries it to a new seat, in ${stage.name}`, ({page, browserName}) =>
-      aFingerCarriesTheColumn(page, browserName, stage, 'middle'));
-  }
-});
+for (const stage of tableWorlds.stages) {
+  test(`a finger pressed on a column's middle carries it to a new seat, in ${stage.name}`, {tag: '@iPhone'}, ({page, browserName}) =>
+    aFingerCarriesTheColumn(page, browserName, stage, 'middle'));
+}
