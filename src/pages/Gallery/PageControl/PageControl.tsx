@@ -16,6 +16,7 @@ export const PageControl = () => {
 
   const firstPage = 1;
   const lastPage = pagination.map(({totalPages}) => totalPages).orElse(undefined);
+  const pageShown = pagination.map(({totalPages}) => Math.min(page, Math.max(totalPages, firstPage))).orElse(page);
 
   const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,7 +30,7 @@ export const PageControl = () => {
     <label className="go-to-label control-label field next-approached bold" htmlFor={goTo}>Page</label>
     <input type="number"
       id={goTo}
-      defaultValue={page}
+      defaultValue={pageShown}
       min={firstPage}
       max={lastPage}
       name="page"
