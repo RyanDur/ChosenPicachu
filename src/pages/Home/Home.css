@@ -2,7 +2,8 @@
   --figure-column: 45%;
 
   display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--figure-column);
+  grid-template-columns: minmax(0, 1fr) max(var(--figure-column), var(--base-x-40));
+  grid-template-rows: repeat(5, auto) 1fr auto;
   column-gap: var(--base-x-6);
   inline-size: 100%;
   container: home / inline-size;
@@ -14,10 +15,9 @@
   }
 
   .page-pulled-apart {
-    grid-row: 2 / span 4;
+    grid-row: 2 / span 5;
     grid-column: 2;
     grid-template-rows: minmax(0, 1fr) auto;
-    container-type: size;
   }
 
   .thesis {
@@ -31,6 +31,7 @@
   }
 
   .doors {
+    grid-row: 7;
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -71,7 +72,6 @@
 
     .page-pulled-apart {
       grid-template-rows: none;
-      container-type: inline-size;
       margin: 0 0 var(--base-x-3);
     }
 
@@ -90,7 +90,6 @@
 
     .page-pulled-apart {
       grid-template-rows: none;
-      container-type: inline-size;
       margin: 0 0 var(--base-x-3);
     }
 
