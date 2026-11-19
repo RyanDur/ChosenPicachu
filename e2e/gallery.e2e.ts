@@ -493,6 +493,36 @@ test.describe('a visitor at a desk', () => {
     await expect(page).toHaveURL(/[?&]page=1247(&|$)/);
   });
 
+  test('goes to a page that exists at the number per page sent with it', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&size=8');
+    await siteFrame(page).hydrated();
+    await expect(gallery.count).toHaveText(/ of 1,247$/);
+    await gallery.pageSize.fill('4');
+    await gallery.pageNumber.fill('2000');
+
+    await gallery.go.click();
+
+    await expect(page).toHaveURL(/[?&]page=2000(&|$)/);
+    await expect(page).toHaveURL(/[?&]size=4(&|$)/);
+  });
+
+  test('goes to the last page when the page sent is past the end at the number per page sent with it', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&size=8');
+    await siteFrame(page).hydrated();
+    await expect(gallery.count).toHaveText(/ of 1,247$/);
+    await gallery.pageSize.fill('100');
+    await gallery.pageNumber.fill('2000');
+
+    await gallery.go.click();
+
+    await expect(page).toHaveURL(/[?&]page=100(&|$)/);
+    await expect(page).toHaveURL(/[?&]size=100(&|$)/);
+  });
+
   test('changes the number per page on a search that finds nothing', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEverySearchWithNothing();

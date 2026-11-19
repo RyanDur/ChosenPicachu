@@ -3,7 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {render, waitFor} from '@testing-library/react';
 import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 import {Paths} from '@navigation';
-import {heldAICAllArtResponse, setupAICEveryPage, galleryWall} from '@pages/Gallery/__test_support';
+import {setupAICEveryPage, galleryWall} from '@pages/Gallery/__test_support';
 import {pageControl} from '@pages/Gallery/PageControl/__test_support';
 
 describe('The page controls', () => {
@@ -44,27 +44,6 @@ describe('The page controls', () => {
       await pageControl.typePage('0');
 
       expect(pageControl.pageField()).toBeInvalid();
-    });
-
-    it('the page field will not go past the last page the museum has', async () => {
-      setupAICEveryPage(aicArtResponse);
-      render(<TestApp at={Paths.artGallery}/>);
-      await galleryWall.framesAppear();
-
-      await pageControl.typePage(`${aicArtResponse.pagination.total_pages + 1}`);
-
-      expect(pageControl.pageField()).toBeInvalid();
-    });
-
-    it('has no ceiling until the museum says where the end is', async () => {
-      const artArrives = heldAICAllArtResponse(aicArtResponse);
-      render(<TestApp at={Paths.artGallery}/>);
-      await pageControl.typePage(`${aicArtResponse.pagination.total_pages + 1}`);
-      expect(pageControl.pageField()).toBeValid();
-
-      artArrives();
-
-      await waitFor(() => expect(pageControl.pageField()).toBeInvalid());
     });
 
     test('a page typed and then rubbed out leaves the page where the URL has it', async () => {
