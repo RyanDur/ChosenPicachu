@@ -38,6 +38,15 @@ describe('search', () => {
     await waitFor(() => expect(searchPage.bar.query()).toHaveValue('rock & roll'));
   });
 
+  it('a searched phrase holding an ampersand goes whole into the url', async () => {
+    render(<TestApp at={Paths.artGallery}/>);
+
+    await searchPage.bar.type('rock & roll');
+    await searchPage.bar.submit();
+
+    await waitFor(() => expect(appAddress.search()).toHaveTextContent(/[?&]search=rock\+%26\+roll(&|$)/));
+  });
+
   it('a word added to the searched word searches for both', async () => {
     render(<TestApp at={`${Paths.artGallery}?tab=${Source.AIC}&search=cat`}/>);
 
