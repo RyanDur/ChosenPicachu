@@ -58,7 +58,7 @@ const SearchRow: FC = () => {
   const address = useGalleryAddress();
   const searched = maybe(search).orElse('');
   const {suggestions, typed: suggestFor} = useSuggestions(tab);
-  const field = useId();
+  const fieldId = useId();
   const options = useId();
 
   const searchedFor = ({value}: HTMLInputElement) => {
@@ -73,8 +73,8 @@ const SearchRow: FC = () => {
   };
 
   return <>
-    <label className="settings-label field bold" htmlFor={field}>Search</label>
-    <input type="search" id={field} list={options} autoComplete="off" enterKeyHint="search"
+    <label className="settings-label field bold" htmlFor={fieldId}>Search</label>
+    <input type="search" id={fieldId} list={options} autoComplete="off" enterKeyHint="search"
       className="settings-field bare card" defaultValue={searched}
       onInput={event => suggestFor(event.currentTarget.value)}
       onKeyDown={whenEntered(searchedFor)} onBlur={leftForThePage(leave)}/>
@@ -84,7 +84,7 @@ const SearchRow: FC = () => {
   </>;
 };
 
-const movedTo = {preventScrollReset: false};
+const scrolledToTheTop = {preventScrollReset: false};
 
 const sendingNumber = (current: number, send: (value: number) => void) =>
   (accepted: (field: HTMLInputElement) => boolean) => (input: HTMLInputElement): void => {
@@ -97,15 +97,15 @@ const SizeRow: FC = () => {
   const {page, size, pagination} = useGallery();
   const leftForThePage = whenLeftForThePage(usePageFocus());
   const address = useGalleryAddress();
-  const field = useId();
+  const fieldId = useId();
   const sending = sendingNumber(size, perPage => address.update({
     size: perPage,
     page: pages.withinTheEnd(page, perPage, pagination)
-  }, movedTo));
+  }, scrolledToTheTop));
 
   return <>
-    <label className="settings-label field bold" htmlFor={field}>Per page</label>
-    <input type="number" id={field} min={1} max={100} required enterKeyHint="go"
+    <label className="settings-label field bold" htmlFor={fieldId}>Per page</label>
+    <input type="number" id={fieldId} min={1} max={100} required enterKeyHint="go"
       className="settings-field bare card" defaultValue={size}
       onKeyDown={whenEntered(sending(refusedSaysWhy))}
       onBlur={leftForThePage(sending(refusedGoesBackTo(size)))}/>
@@ -116,14 +116,14 @@ const PageRow: FC = () => {
   const {page, tab, search, size, pagination} = useGallery();
   const leftForThePage = whenLeftForThePage(usePageFocus());
   const address = useGalleryAddress();
-  const field = useId();
+  const fieldId = useId();
   const shown = pages.shown(page, pagination);
   const movedFromOutside = [tab, search, size].join(' ');
-  const goTo = (to: number) => address.update({page: to}, movedTo);
+  const goTo = (to: number) => address.update({page: to}, scrolledToTheTop);
 
   return <>
-    <label className="settings-label field bold" htmlFor={field}>Page</label>
-    <input key={movedFromOutside} type="number" id={field} min={1}
+    <label className="settings-label field bold" htmlFor={fieldId}>Page</label>
+    <input key={movedFromOutside} type="number" id={fieldId} min={1}
       max={pages.last(pagination).orElse(undefined)}
       required enterKeyHint="go" className="settings-field bare card" defaultValue={shown}
       onKeyDown={whenEntered(sendingNumber(page, goTo)(refusedSaysWhy))}
