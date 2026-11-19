@@ -40,16 +40,9 @@
   }
 
   .settings-sheet:popover-open {
-    position: fixed;
-    inset: auto 0 var(--menu-bar-block);
-    width: 100%;
-    max-height: calc(100dvh - var(--menu-bar-block));
     margin: 0;
-    overflow: auto;
-    display: grid;
     grid-template-columns: 1fr 2fr;
     grid-auto-rows: var(--finger-reach);
-    gap: var(--base);
     padding-block: var(--base) 0;
 
     .sheet-label {

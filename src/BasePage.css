@@ -573,15 +573,8 @@
     }
 
     .side-nav:popover-open {
-      position: fixed;
-      inset: auto 0 var(--menu-bar-block);
-      width: 100%;
-      max-height: calc(100dvh - var(--menu-bar-block));
-      overflow: auto;
-      display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-auto-rows: minmax(var(--pointer-reach), 1fr);
-      gap: var(--base);
       padding: var(--base);
 
       @media (pointer: coarse) {
