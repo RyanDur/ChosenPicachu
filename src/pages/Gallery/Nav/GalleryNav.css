@@ -62,8 +62,12 @@
 
 @media (width <= 600px), (width <= 1100px) and (height <= 600px) {
   .pagination {
-    grid-template-columns: var(--finger-reach) 1fr var(--finger-reach);
+    grid-template-columns: var(--pointer-reach) 1fr var(--pointer-reach);
     grid-template-areas: "prev info next";
+
+    @media (pointer: coarse) {
+      grid-template-columns: var(--finger-reach) 1fr var(--finger-reach);
+    }
     max-width: none;
 
     &::before {
