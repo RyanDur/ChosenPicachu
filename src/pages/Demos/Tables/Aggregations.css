@@ -33,12 +33,6 @@
 
 @media (width <= 600px) {
   .aggregations {
-    .fancy-table {
-      @media not (pointer: coarse) {
-        min-width: 64rem;
-      }
-    }
-
     .cell {
       padding: var(--base-x-0_75);
     }
