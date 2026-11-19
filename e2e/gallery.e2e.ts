@@ -496,9 +496,9 @@ test.describe('a visitor at a desk', () => {
   test('keeps the words sent from a piece\'s page in the search while the gallery loads', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
-    const galleryArrives = await gallery.holdTheGalleryRoom();
     await page.goto('gallery/O9138?tab=vam&search=roses');
     await siteFrame(page).hydrated();
+    const galleryArrives = await gallery.holdTheScriptsStillToLoad();
     await gallery.searchField.fill('lilies');
 
     await gallery.searchField.press('Enter');
