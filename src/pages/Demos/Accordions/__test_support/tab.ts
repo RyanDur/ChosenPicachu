@@ -34,10 +34,8 @@ export const accordionsTab = {
   openPart: async (name: string): Promise<void> => userEvent.click(await screen.findByRole('link', {name})),
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   partsIndex: (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'Parts'}),
-  exhibit: async (): Promise<HTMLElement> => {
-    await screen.findByRole('navigation', {name: 'Parts'});
-    return screen.getAllByRole('figure').filter(figure => within(figure).queryAllByRole('group').length === 3)[0];
-  },
+  exhibit: async (): Promise<HTMLElement> =>
+    within(await screen.findByRole('region', {name: 'Accordions'})).getAllByRole('figure')[0],
   titlesIn: (index: HTMLElement): string[] => within(index).getAllByRole('link').map(link => link.textContent),
   titlesUnder: (index: HTMLElement, label: string): string[] =>
     within(within(index).getByRole('list', {name: label})).getAllByRole('link').map(link => link.textContent),
