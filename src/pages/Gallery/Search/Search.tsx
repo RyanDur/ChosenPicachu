@@ -7,6 +7,7 @@ import {useGallery} from '@pages/Gallery/Context';
 import {useSuggestions} from './useSuggestions';
 import {keptForm} from '@pages/Gallery/keptForm';
 import {opening} from '@pages/Gallery/opening';
+import {useOnTheGallery} from '@pages/Gallery/useOnTheGallery';
 import './Search.css';
 import searchIcon from '../../../assets/icons/search.svg?url';
 import resetIcon from '../../../assets/icons/reset.svg?url';
@@ -24,11 +25,12 @@ export const Search: FC<PropsWithClassName> = ({className}) => {
   const query = useId();
   const options = useId();
   const formKey = keptForm.useKey('search');
+  const onTheGallery = useOnTheGallery();
 
   const submitted = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const words = wordsIn(event.currentTarget);
-    if (words === search) return;
+    if (words === search && onTheGallery) return;
     void navigate({pathname: gallery, search: searchFromAddress({search: words, page: opening.page})},
       {preventScrollReset: true, state: keptForm.across('search', formKey)});
   };

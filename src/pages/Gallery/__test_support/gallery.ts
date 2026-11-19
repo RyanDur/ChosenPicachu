@@ -31,6 +31,8 @@ export const galleryPage = {
       .join(),
   searchInSettings: (words: string): Promise<void> =>
     userEvent.type(gallerySettingsPopover().getByRole('combobox', {name: 'Search', hidden: true}), `${words}{Enter}`),
+  sendSearchInSettings: (): Promise<void> =>
+    userEvent.type(gallerySettingsPopover().getByRole('combobox', {name: 'Search', hidden: true}), '{Enter}'),
   typeInSettingsAndLeave: async (words: string): Promise<void> => {
     await userEvent.type(gallerySettingsPopover().getByRole('combobox', {name: 'Search', hidden: true}), words);
     await userEvent.tab();

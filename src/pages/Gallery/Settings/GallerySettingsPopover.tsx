@@ -7,6 +7,7 @@ import {useSuggestions} from '@pages/Gallery/Search';
 import {opening} from '@pages/Gallery/opening';
 import {pages} from '@pages/Gallery/pages';
 import {numberField} from '@pages/Gallery/numberField';
+import {useOnTheGallery} from '@pages/Gallery/useOnTheGallery';
 import {useGalleryAddress} from './useGalleryAddress';
 
 // WebKit ends a composition before the keydown of the Enter that confirms it,
@@ -66,20 +67,25 @@ const SearchRow: FC = () => {
   const leftForThePage = whenLeftForThePage(usePageFocus());
   const address = useGalleryAddress();
   const searched = maybe(search).orElse('');
+  const onTheGallery = useOnTheGallery();
   const {suggestions, typed: suggestFor} = useSuggestions(tab);
   const fieldId = useId();
   const options = useId();
 
-  const searchedFor = (input: HTMLInputElement) => {
-    if (input.value === searched) return;
+  const sent = (input: HTMLInputElement) => {
     if (input.value === '') address.remove(['search', 'page']);
     else address.update({search: input.value, page: opening.page});
     pageFieldShows(opening.page)(input);
   };
 
+  const searchedFor = (input: HTMLInputElement) => {
+    if (input.value === searched && onTheGallery) return;
+    sent(input);
+  };
+
   const leave = (input: HTMLInputElement) => {
     if (input.value === '') input.value = searched;
-    else searchedFor(input);
+    else if (input.value !== searched) sent(input);
   };
 
   return <>
