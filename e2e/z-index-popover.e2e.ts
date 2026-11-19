@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {desktop, iPhone, topLayerMenu, trappedMenu} from './__test_support';
+import {topLayerMenu, trappedMenu} from './__test_support';
 
 const overEverything = 'The list opened over everything around it. It is in the top layer, which the browser draws above the whole page, so no z-index is compared with it.';
 
@@ -22,29 +22,21 @@ const opensOverEverythingWithCardOne = async (page: Page, state: 'contained' | '
   await theTopLayerMenuIsOverEverything(page);
 };
 
-for (const {size, device} of [{size: 390, device: iPhone}, {size: 1440, device: desktop}]) {
-  test.describe(`at ${size} wide`, () => {
-    test.use(device);
+test.describe('the menu in the top layer', {tag: ['@iPhone', '@desktop']}, () => {
+  test('the menu in the top layer opens over everything around it with card one contained, and the exhibit says so', ({page}) =>
+    opensOverEverythingWithCardOne(page, 'contained'));
 
-    test('the menu in the top layer opens over everything around it with card one contained, and the exhibit says so', ({page}) =>
-      opensOverEverythingWithCardOne(page, 'contained'));
+  test('the menu in the top layer opens over everything around it with card one free, and the exhibit says so', ({page}) =>
+    opensOverEverythingWithCardOne(page, 'free'));
+});
 
-    test('the menu in the top layer opens over everything around it with card one free, and the exhibit says so', ({page}) =>
-      opensOverEverythingWithCardOne(page, 'free'));
-  });
-}
+test('the menu in the top layer, pressed at the bottom edge of the view, opens over everything around it, and the exhibit says so', {tag: '@iPhone'}, async ({page}) => {
+  await page.goto('demos/z-index/why-9999-still-loses/');
+  const menu = topLayerMenu(page);
 
-test.describe('a phone', () => {
-  test.use(iPhone);
+  await menu.openFromTheBottomEdge();
 
-  test('the menu in the top layer, pressed at the bottom edge of the view, opens over everything around it, and the exhibit says so', async ({page}) => {
-    await page.goto('demos/z-index/why-9999-still-loses/');
-    const menu = topLayerMenu(page);
-
-    await menu.openFromTheBottomEdge();
-
-    await theTopLayerMenuIsOverEverything(page);
-  });
+  await theTopLayerMenuIsOverEverything(page);
 });
 
 test('Escape from a choice closes the menu in the top layer and gives focus back to its button', async ({page}) => {
