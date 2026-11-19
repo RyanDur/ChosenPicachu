@@ -1,404 +1,393 @@
 import {Locator, expect} from '@playwright/test';
 import {maybe} from '@ryandur/sand';
 import {test} from './__test_support/journey';
-import {clickWhereItIs, desktop, documentScrollY, galleryPage, hydration, iPad13Upright, iPadSideways, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame, twoFramesLater} from './__test_support';
+import {clickWhereItIs, desktop, documentScrollY, galleryPage, hydration, iPhone, pressTab, siteFrame, twoFramesLater} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> =>
   region.evaluate(element => element.contains(document.activeElement));
 
-const handhelds = [
-  {reader: 'a phone', device: iPhone},
-  {reader: 'a phone held sideways', device: phoneSideways}
-];
-
-for (const {reader, device} of handhelds) {
-  test.describe(reader, () => {
-    test.use(device);
-
-    test('reads the search label once the settings are open', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await gallery.openSettings();
-      await expect(gallery.searchField).toBeVisible();
-
-      await expect(gallery.searchField).toHaveAccessibleName('Search');
-    });
-
-    test('keeps a keyboard reader in the page field after Tab from a number per page typed in the settings', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam');
-      await siteFrame(page).hydrated();
-      await gallery.openSettings();
-      await gallery.pageSize.fill('12');
-
-      await gallery.pageSize.press('Tab');
-
-      await expect(page).toHaveURL(/[?&]size=12(&|$)/);
-      await expect(gallery.pageNumber).toBeFocused();
-    });
-
-    test('puts the page field in the settings back to the last page when the museum answers while it is in use', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      const {promise: answered, resolve: answer} = Promise.withResolvers<void>();
-      await page.route(/\/vam\/objects\/search\?.*page=99999/, async route => {
-        await answered;
-        await route.fallback();
-      });
-      await page.goto('gallery/?tab=vam&page=99999&size=8');
-      await siteFrame(page).hydrated();
-      await gallery.openSettings();
-      await gallery.pageNumber.click();
-      answer();
-      await expect(gallery.count).toHaveText(/ of [\d,]+$/);
-      const lastPage = maybe(await gallery.count.textContent())
-        .map(count => count.replace(/^.* of /, '').replaceAll(',', '')).orElse('');
-
-      await gallery.pageNumber.press('Tab');
-
-      await expect(gallery.pageNumber).toHaveValue(lastPage);
-    });
-
-    test('lands in the search field from a tap on its label', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await gallery.openSettings();
-      await expect(gallery.searchField).toBeVisible();
-
-      await gallery.tapSearchLabel();
-      await expect(gallery.searchField).toBeFocused();
-    });
-
-    test('leaves no gallery settings panel beside the gallery', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.wall.first()).toBeVisible();
-
-      await expect(gallery.settingsPanel).toHaveCount(0);
-    });
-
-    test('shows a work of art on the first screen', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-
-      await expect(gallery.wall.first()).toBeInViewport({ratio: 0.5});
-    });
-
-    test('has the search, the page number and the page size within one tap of the first screen', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.wall.first()).toBeVisible();
-
-      await expect(gallery.settings).toBeInViewport();
-      await gallery.openSettings();
-
-      await expect(gallery.searchField).toBeVisible();
-      await expect(gallery.pageNumber).toBeVisible();
-      await expect(gallery.pageSize).toBeVisible();
-    });
-
-    test('reads the museum on the Gallery settings button', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-
-      await expect(gallery.settings).toContainText('The Victoria and Albert Museum');
-    });
-
-    test('reads the search word in quotes on the Gallery settings button once there is one', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam&search=100%25');
-
-      await expect(gallery.settings).toContainText('“100%”');
-    });
-
-    test('names the Gallery settings button with the words it shows', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam&search=100%25');
-
-      await expect(gallery.settings).toHaveAccessibleName('Gallery settings: The Victoria and Albert Museum, 100%');
-    });
-
-    test('reads the next page on the pager after the arrow moves on', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.hangPageOneOnEveryPage();
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.wall.first()).toBeVisible();
-
-      await gallery.nextPage.tap();
-
-      await expect(gallery.count).toHaveText(/^Page 2 of /);
-    });
-
-    test('opens the gallery settings on the museum the gallery shows', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-
-      await gallery.openSettings();
-
-      await expect(gallery.museum.getByRole('option', {selected: true})).toHaveText('The Victoria and Albert Museum');
-    });
-
-    test('shows another museum\'s pieces once it is chosen, with the settings still open on the choice', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam&page=1&size=8');
-      await gallery.openSettings();
-      await gallery.museum.focus();
-
-      await gallery.museum.selectOption({label: 'Harvard Art Museums'});
-
-      await expect(page).toHaveURL(/tab=harvard/);
-      await expect(gallery.wall.first()).toBeVisible();
-      await expect(gallery.sheet).toBeVisible();
-      await expect(gallery.museum).toBeFocused();
-    });
-
-    test('leaves the museum tabs to the gallery settings', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.wall.first()).toBeVisible();
-
-      await expect(gallery.doors.first()).toBeHidden();
-    });
-
-    test('searches from the gallery settings on Enter, with them still open on the search', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam');
-      await gallery.openSettings();
-      await gallery.searchField.fill('lilies');
-
-      await gallery.searchField.press('Enter');
-
-      await expect(page).toHaveURL(/search=lilies/);
-      await expect(gallery.sheet).toBeVisible();
-      await expect(gallery.searchField).toBeFocused();
-    });
-
-    test('shows the first page in the gallery settings after a search made there from a later page', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam&page=40');
-      await gallery.openSettings();
-      await gallery.searchField.fill('lilies');
-
-      await gallery.searchField.press('Enter');
-
-      await expect(page).toHaveURL(/[?&]page=1(&|$)/);
-      await expect(gallery.pageNumber).toHaveValue('1');
-    });
-
-    test('closes the gallery settings on Back from a search made there, and opens them again on the address\'s words', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam');
-      await gallery.openSettings();
-      await gallery.searchField.fill('lilies');
-      await gallery.searchField.press('Enter');
-      await expect(page).toHaveURL(/search=lilies/);
-
-      await page.goBack();
-
-      await expect(page).not.toHaveURL(/search=/);
-      await expect(gallery.sheet).toBeHidden();
-      await gallery.openSettings();
-      await expect(gallery.searchField).toHaveValue('');
-    });
-
-    test('waits for Enter before searching the words typed in the gallery settings', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam');
-      await gallery.openSettings();
-
-      await gallery.searchField.pressSequentially('lilies');
-
-      await expect(gallery.searchField).toHaveValue('lilies');
-      await expect(page).not.toHaveURL(/search=/);
-    });
-
-    test('goes to the page typed in the gallery settings once the reader leaves the field', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam');
-      await gallery.openSettings();
-      await gallery.pageNumber.fill('2');
-
-      await gallery.pageNumber.press('Tab');
-
-      await expect(page).toHaveURL(/page=2/);
-      await expect(gallery.sheet).toBeVisible();
-    });
-
-    test('shows the number per page typed in the gallery settings on Enter', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam');
-      await gallery.openSettings();
-      await gallery.pageSize.fill('12');
-
-      await gallery.pageSize.press('Enter');
-
-      await expect(page).toHaveURL(/size=12/);
-    });
-
-    test('opens the gallery settings again on the number per page sent from them with Enter', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam&size=30');
-      await gallery.openSettings();
-      await gallery.pageSize.fill('10');
-      await gallery.pageSize.press('Enter');
-      await expect(page).toHaveURL(/[?&]size=10(&|$)/);
-      await page.keyboard.press('Escape');
-      await expect(gallery.sheet).toBeHidden();
-
-      await gallery.openSettings();
-
-      await expect(gallery.pageSize).toHaveValue('10');
-    });
-
-    test('goes to the last page offered in the gallery settings on Enter, when the address\'s page is past it', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam&page=99999&size=8');
-      await expect(gallery.count).toHaveText(/ of 1,247$/);
-      await gallery.openSettings();
-
-      await gallery.pageNumber.press('Enter');
-
-      await expect(page).toHaveURL(/[?&]page=1247(&|$)/);
-    });
-
-    test('keeps the reader in the page field after Enter in the gallery settings', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam&page=3');
-      await gallery.openSettings();
-      await gallery.pageNumber.fill('2');
-
-      await gallery.pageNumber.press('Enter');
-
-      await expect(page).toHaveURL(/[?&]page=2(&|$)/);
-      await expect(gallery.pageNumber).toBeFocused();
-    });
-
-    test('offers the last page in the gallery settings when the address\'s page is past it', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam&page=99999&size=8');
-      await expect(gallery.count).toHaveText(/ of 1,247$/);
-
-      await gallery.openSettings();
-
-      await expect(gallery.pageNumber).toHaveValue('1247');
-    });
-
-    test('puts back the page it is on when the reader leaves a page past the last', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam&page=3');
-      await expect(gallery.count).toHaveText(/^Page 3 of /);
-      await gallery.openSettings();
-      await gallery.pageNumber.fill('999999');
-
-      await gallery.pageNumber.press('Tab');
-
-      await expect(gallery.pageNumber).toHaveValue('3');
-      await expect(page).toHaveURL(/page=3/);
-    });
-
-    test('keeps a refused page in the field on Enter, for the browser to say why, with the gallery where it was', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam&page=3');
-      await expect(gallery.count).toHaveText(/^Page 3 of /);
-      await gallery.openSettings();
-      await gallery.pageNumber.fill('0');
-
-      await gallery.pageNumber.press('Enter');
-
-      await expect(gallery.pageNumber).toHaveValue('0');
-      await expect(gallery.pageNumber).toBeFocused();
-      await expect(page).toHaveURL(/page=3/);
-    });
-
-    test('asks for no button to apply the gallery settings', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-
-      await gallery.openSettings();
-
-      await expect(gallery.sheet.getByRole('button')).toHaveCount(0);
-    });
-
-    test('keeps the search when Escape empties the search field and then closes the gallery settings', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam&search=roses&page=4');
-      await gallery.openSettings();
-      await gallery.searchField.focus();
-
-      await gallery.searchField.press('Escape');
-      await page.keyboard.press('Escape');
-
-      await expect(gallery.sheet).toBeHidden();
-      await expect(page).toHaveURL(/search=roses/);
-      await expect(page).toHaveURL(/[?&]page=4(&|$)/);
-    });
-
-    test('Escape closes the gallery settings', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await gallery.openSettings();
-
-      await page.keyboard.press('Escape');
-
-      await expect(gallery.sheet).toBeHidden();
-    });
-
-    test('a tap outside the gallery settings closes them, with the gallery where it was', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.wall.first()).toBeVisible();
-      await gallery.openSettings();
-
-      await page.touchscreen.tap(10, 10);
-
-      await expect(gallery.sheet).toBeHidden();
-      await expect(page).toHaveURL(/\?tab=vam$/);
-    });
-
-    test('goes to a page typed in the gallery settings once Escape closes them', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam');
-      await gallery.openSettings();
-      await gallery.pageNumber.fill('2');
-
-      await page.keyboard.press('Escape');
-
-      await expect(page).toHaveURL(/page=2/);
-    });
-
-    test('goes to a page typed in the gallery settings once a tap outside closes them', async ({page}) => {
-      const gallery = galleryPage(page);
-      await gallery.answerEveryWallFromTheRecording();
-      await page.goto('gallery/?tab=vam');
-      await gallery.openSettings();
-      await gallery.pageNumber.fill('2');
-
-      await page.touchscreen.tap(10, 10);
-
-      await expect(page).toHaveURL(/page=2/);
-    });
+test.describe('a reader at a phone\'s width', {tag: ['@iPhone', '@phoneSideways']}, () => {
+  test('reads the search label once the settings are open', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await gallery.openSettings();
+    await expect(gallery.searchField).toBeVisible();
+
+    await expect(gallery.searchField).toHaveAccessibleName('Search');
   });
-}
 
-test.describe('a phone held upright', () => {
-  test.use(iPhone);
+  test('keeps a keyboard reader in the page field after Tab from a number per page typed in the settings', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await siteFrame(page).hydrated();
+    await gallery.openSettings();
+    await gallery.pageSize.fill('12');
 
-  test('pages on from the pager while partway down the wall', async ({page}) => {
+    await gallery.pageSize.press('Tab');
+
+    await expect(page).toHaveURL(/[?&]size=12(&|$)/);
+    await expect(gallery.pageNumber).toBeFocused();
+  });
+
+  test('puts the page field in the settings back to the last page when the museum answers while it is in use', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    const {promise: answered, resolve: answer} = Promise.withResolvers<void>();
+    await page.route(/\/vam\/objects\/search\?.*page=99999/, async route => {
+      await answered;
+      await route.fallback();
+    });
+    await page.goto('gallery/?tab=vam&page=99999&size=8');
+    await siteFrame(page).hydrated();
+    await gallery.openSettings();
+    await gallery.pageNumber.click();
+    answer();
+    await expect(gallery.count).toHaveText(/ of [\d,]+$/);
+    const lastPage = maybe(await gallery.count.textContent())
+      .map(count => count.replace(/^.* of /, '').replaceAll(',', '')).orElse('');
+
+    await gallery.pageNumber.press('Tab');
+
+    await expect(gallery.pageNumber).toHaveValue(lastPage);
+  });
+
+  test('lands in the search field from a tap on its label', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await gallery.openSettings();
+    await expect(gallery.searchField).toBeVisible();
+
+    await gallery.tapSearchLabel();
+    await expect(gallery.searchField).toBeFocused();
+  });
+
+  test('leaves no gallery settings panel beside the gallery', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.first()).toBeVisible();
+
+    await expect(gallery.settingsPanel).toHaveCount(0);
+  });
+
+  test('shows a work of art on the first screen', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+
+    await expect(gallery.wall.first()).toBeInViewport({ratio: 0.5});
+  });
+
+  test('has the search, the page number and the page size within one tap of the first screen', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.first()).toBeVisible();
+
+    await expect(gallery.settings).toBeInViewport();
+    await gallery.openSettings();
+
+    await expect(gallery.searchField).toBeVisible();
+    await expect(gallery.pageNumber).toBeVisible();
+    await expect(gallery.pageSize).toBeVisible();
+  });
+
+  test('reads the museum on the Gallery settings button', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+
+    await expect(gallery.settings).toContainText('The Victoria and Albert Museum');
+  });
+
+  test('reads the search word in quotes on the Gallery settings button once there is one', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam&search=100%25');
+
+    await expect(gallery.settings).toContainText('“100%”');
+  });
+
+  test('names the Gallery settings button with the words it shows', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam&search=100%25');
+
+    await expect(gallery.settings).toHaveAccessibleName('Gallery settings: The Victoria and Albert Museum, 100%');
+  });
+
+  test('reads the next page on the pager after the arrow moves on', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.hangPageOneOnEveryPage();
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.first()).toBeVisible();
+
+    await gallery.nextPage.tap();
+
+    await expect(gallery.count).toHaveText(/^Page 2 of /);
+  });
+
+  test('opens the gallery settings on the museum the gallery shows', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+
+    await gallery.openSettings();
+
+    await expect(gallery.museum.getByRole('option', {selected: true})).toHaveText('The Victoria and Albert Museum');
+  });
+
+  test('shows another museum\'s pieces once it is chosen, with the settings still open on the choice', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam&page=1&size=8');
+    await gallery.openSettings();
+    await gallery.museum.focus();
+
+    await gallery.museum.selectOption({label: 'Harvard Art Museums'});
+
+    await expect(page).toHaveURL(/tab=harvard/);
+    await expect(gallery.wall.first()).toBeVisible();
+    await expect(gallery.sheet).toBeVisible();
+    await expect(gallery.museum).toBeFocused();
+  });
+
+  test('leaves the museum tabs to the gallery settings', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.first()).toBeVisible();
+
+    await expect(gallery.doors.first()).toBeHidden();
+  });
+
+  test('searches from the gallery settings on Enter, with them still open on the search', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await gallery.openSettings();
+    await gallery.searchField.fill('lilies');
+
+    await gallery.searchField.press('Enter');
+
+    await expect(page).toHaveURL(/search=lilies/);
+    await expect(gallery.sheet).toBeVisible();
+    await expect(gallery.searchField).toBeFocused();
+  });
+
+  test('shows the first page in the gallery settings after a search made there from a later page', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=40');
+    await gallery.openSettings();
+    await gallery.searchField.fill('lilies');
+
+    await gallery.searchField.press('Enter');
+
+    await expect(page).toHaveURL(/[?&]page=1(&|$)/);
+    await expect(gallery.pageNumber).toHaveValue('1');
+  });
+
+  test('closes the gallery settings on Back from a search made there, and opens them again on the address\'s words', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await gallery.openSettings();
+    await gallery.searchField.fill('lilies');
+    await gallery.searchField.press('Enter');
+    await expect(page).toHaveURL(/search=lilies/);
+
+    await page.goBack();
+
+    await expect(page).not.toHaveURL(/search=/);
+    await expect(gallery.sheet).toBeHidden();
+    await gallery.openSettings();
+    await expect(gallery.searchField).toHaveValue('');
+  });
+
+  test('waits for Enter before searching the words typed in the gallery settings', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await gallery.openSettings();
+
+    await gallery.searchField.pressSequentially('lilies');
+
+    await expect(gallery.searchField).toHaveValue('lilies');
+    await expect(page).not.toHaveURL(/search=/);
+  });
+
+  test('goes to the page typed in the gallery settings once the reader leaves the field', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await gallery.openSettings();
+    await gallery.pageNumber.fill('2');
+
+    await gallery.pageNumber.press('Tab');
+
+    await expect(page).toHaveURL(/page=2/);
+    await expect(gallery.sheet).toBeVisible();
+  });
+
+  test('shows the number per page typed in the gallery settings on Enter', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await gallery.openSettings();
+    await gallery.pageSize.fill('12');
+
+    await gallery.pageSize.press('Enter');
+
+    await expect(page).toHaveURL(/size=12/);
+  });
+
+  test('opens the gallery settings again on the number per page sent from them with Enter', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&size=30');
+    await gallery.openSettings();
+    await gallery.pageSize.fill('10');
+    await gallery.pageSize.press('Enter');
+    await expect(page).toHaveURL(/[?&]size=10(&|$)/);
+    await page.keyboard.press('Escape');
+    await expect(gallery.sheet).toBeHidden();
+
+    await gallery.openSettings();
+
+    await expect(gallery.pageSize).toHaveValue('10');
+  });
+
+  test('goes to the last page offered in the gallery settings on Enter, when the address\'s page is past it', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=99999&size=8');
+    await expect(gallery.count).toHaveText(/ of 1,247$/);
+    await gallery.openSettings();
+
+    await gallery.pageNumber.press('Enter');
+
+    await expect(page).toHaveURL(/[?&]page=1247(&|$)/);
+  });
+
+  test('keeps the reader in the page field after Enter in the gallery settings', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=3');
+    await gallery.openSettings();
+    await gallery.pageNumber.fill('2');
+
+    await gallery.pageNumber.press('Enter');
+
+    await expect(page).toHaveURL(/[?&]page=2(&|$)/);
+    await expect(gallery.pageNumber).toBeFocused();
+  });
+
+  test('offers the last page in the gallery settings when the address\'s page is past it', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=99999&size=8');
+    await expect(gallery.count).toHaveText(/ of 1,247$/);
+
+    await gallery.openSettings();
+
+    await expect(gallery.pageNumber).toHaveValue('1247');
+  });
+
+  test('puts back the page it is on when the reader leaves a page past the last', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=3');
+    await expect(gallery.count).toHaveText(/^Page 3 of /);
+    await gallery.openSettings();
+    await gallery.pageNumber.fill('999999');
+
+    await gallery.pageNumber.press('Tab');
+
+    await expect(gallery.pageNumber).toHaveValue('3');
+    await expect(page).toHaveURL(/page=3/);
+  });
+
+  test('keeps a refused page in the field on Enter, for the browser to say why, with the gallery where it was', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&page=3');
+    await expect(gallery.count).toHaveText(/^Page 3 of /);
+    await gallery.openSettings();
+    await gallery.pageNumber.fill('0');
+
+    await gallery.pageNumber.press('Enter');
+
+    await expect(gallery.pageNumber).toHaveValue('0');
+    await expect(gallery.pageNumber).toBeFocused();
+    await expect(page).toHaveURL(/page=3/);
+  });
+
+  test('asks for no button to apply the gallery settings', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+
+    await gallery.openSettings();
+
+    await expect(gallery.sheet.getByRole('button')).toHaveCount(0);
+  });
+
+  test('keeps the search when Escape empties the search field and then closes the gallery settings', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam&search=roses&page=4');
+    await gallery.openSettings();
+    await gallery.searchField.focus();
+
+    await gallery.searchField.press('Escape');
+    await page.keyboard.press('Escape');
+
+    await expect(gallery.sheet).toBeHidden();
+    await expect(page).toHaveURL(/search=roses/);
+    await expect(page).toHaveURL(/[?&]page=4(&|$)/);
+  });
+
+  test('Escape closes the gallery settings', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await gallery.openSettings();
+
+    await page.keyboard.press('Escape');
+
+    await expect(gallery.sheet).toBeHidden();
+  });
+
+  test('a tap outside the gallery settings closes them, with the gallery where it was', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.first()).toBeVisible();
+    await gallery.openSettings();
+
+    await page.touchscreen.tap(10, 10);
+
+    await expect(gallery.sheet).toBeHidden();
+    await expect(page).toHaveURL(/\?tab=vam$/);
+  });
+
+  test('goes to a page typed in the gallery settings once Escape closes them', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await gallery.openSettings();
+    await gallery.pageNumber.fill('2');
+
+    await page.keyboard.press('Escape');
+
+    await expect(page).toHaveURL(/page=2/);
+  });
+
+  test('goes to a page typed in the gallery settings once a tap outside closes them', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('gallery/?tab=vam');
+    await gallery.openSettings();
+    await gallery.pageNumber.fill('2');
+
+    await page.touchscreen.tap(10, 10);
+
+    await expect(page).toHaveURL(/page=2/);
+  });
+});
+
+test.describe('a reader partway down the wall', {tag: '@iPhone'}, () => {
+  test('pages on from the pager', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.hangPageOneOnEveryPage();
     await page.goto('gallery/?tab=vam');
@@ -412,59 +401,45 @@ test.describe('a phone held upright', () => {
   });
 });
 
-for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpright}, {reader: 'a 13-inch iPad held upright', device: iPad13Upright}]) {
-  test.describe(reader, () => {
-    test.use(device);
+test.describe('a reader at a tablet\'s width', {tag: ['@iPadUpright', '@iPad13Upright']}, () => {
+  test('reads the search label', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.searchField).toBeVisible();
 
-    test('reads the search label', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.searchField).toBeVisible();
-
-      await expect(gallery.searchField).toHaveAccessibleName('Search');
-    });
-
-    test('lands in the search field from a tap on its label', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.searchField).toBeVisible();
-
-      await gallery.tapSearchLabel();
-      await expect(gallery.searchField).toBeFocused();
-    });
+    await expect(gallery.searchField).toHaveAccessibleName('Search');
   });
-}
 
-for (const {reader, device} of [
-  {reader: 'an iPad held sideways', device: iPadSideways},
-  {reader: 'a desktop', device: desktop},
-  {reader: 'a short desktop window', device: {viewport: {width: 1300, height: 580}}}
-]) {
-  test.describe(reader, () => {
-    test.use(device);
+  test('lands in the search field from a tap on its label', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.searchField).toBeVisible();
 
-    test('shows the search and the page controls with no Gallery settings button', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-      await expect(gallery.wall.first()).toBeVisible();
-
-      await expect(page.getByRole('banner').getByRole('combobox', {name: 'Search', exact: true})).toBeVisible();
-      await expect(gallery.settingsPanel.getByRole('spinbutton', {name: 'Page', exact: true})).toBeVisible();
-      await expect(gallery.settings).toBeHidden();
-    });
-
-    test('shows the museum tabs', async ({page}) => {
-      const gallery = galleryPage(page);
-      await page.goto('gallery/?tab=vam');
-
-      await expect(gallery.doors.first()).toBeVisible();
-    });
+    await gallery.tapSearchLabel();
+    await expect(gallery.searchField).toBeFocused();
   });
-}
+});
 
-test.describe('a desktop window made narrow', () => {
-  test.use(desktop);
+test.describe('a reader at a desk\'s width', {tag: ['@iPadSideways', '@desktop', '@shortDesktopWindow']}, () => {
+  test('shows the search and the page controls with no Gallery settings button', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+    await expect(gallery.wall.first()).toBeVisible();
 
+    await expect(page.getByRole('banner').getByRole('combobox', {name: 'Search', exact: true})).toBeVisible();
+    await expect(gallery.settingsPanel.getByRole('spinbutton', {name: 'Page', exact: true})).toBeVisible();
+    await expect(gallery.settings).toBeHidden();
+  });
+
+  test('shows the museum tabs', async ({page}) => {
+    const gallery = galleryPage(page);
+    await page.goto('gallery/?tab=vam');
+
+    await expect(gallery.doors.first()).toBeVisible();
+  });
+});
+
+test.describe('a desktop window made narrow', {tag: '@desktop'}, () => {
   test('offers the Gallery settings once it is a phone\'s width', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
@@ -501,9 +476,7 @@ test.describe('a desktop window made narrow', () => {
   });
 });
 
-test.describe('a visitor at a desk', () => {
-  test.use(desktop);
-
+test.describe('a visitor at a desk', {tag: '@desktop'}, () => {
   test('leaves the gallery with one Back after a reset over words never sent', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
@@ -943,9 +916,7 @@ test.describe('a visitor at a desk', () => {
   });
 });
 
-test.describe('a phone held sideways, partway down the gallery', () => {
-  test.use(phoneSideways);
-
+test.describe('a reader partway down the gallery', {tag: '@phoneSideways'}, () => {
   test('following NEXT opens the next page at its top', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
@@ -961,9 +932,7 @@ test.describe('a phone held sideways, partway down the gallery', () => {
   });
 });
 
-test.describe('a keyboard reader on a desktop', () => {
-  test.use(desktop);
-
+test.describe('a keyboard reader', {tag: '@desktop'}, () => {
   test('meets the gallery right after the page controls', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
@@ -976,9 +945,7 @@ test.describe('a keyboard reader on a desktop', () => {
   });
 });
 
-test.describe('a phone, while another museum has not answered', () => {
-  test.use(iPhone);
-
+test.describe('while another museum has not answered', {tag: '@iPhone'}, () => {
   test('shows one loading bar from the first until the wall\'s first piece, then none', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.holdTheArtInstitute();

@@ -1,48 +1,42 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {chartsPage, fingerTap, galleryPage, iPadUpright, iPhone, phoneSideways, siteFrame, sortableList, usersPage} from './__test_support';
+import {chartsPage, fingerTap, galleryPage, siteFrame, sortableList, usersPage} from './__test_support';
 
-for (const {reader, device} of [{reader: 'an iPad held upright', device: iPadUpright}, {reader: 'a phone', device: iPhone}]) {
-  test.describe(reader, () => {
-    test.use(device);
+test.describe('a finger that lands just off a control', {tag: ['@iPhone', '@iPadUpright']}, () => {
+  test('lifts a list item from a press just beside its grip and moves it to a new seat', async ({page}) => {
+    const list = sortableList(page);
+    await page.goto('demos/drag-and-drop/');
+    await expect(list.items.first()).toBeVisible();
+    const first = await list.items.first().textContent();
 
-    test('lifts a list item from a press just beside its grip and moves it to a new seat', async ({page}) => {
-      const list = sortableList(page);
-      await page.goto('demos/drag-and-drop/');
-      await expect(list.items.first()).toBeVisible();
-      const first = await list.items.first().textContent();
+    await list.pressBesideAGripAndDropOnItsNeighbor();
 
-      await list.pressBesideAGripAndDropOnItsNeighbor();
-
-      await expect.poll(() => list.items.first().textContent()).not.toBe(first);
-    });
-
-    test('opens a row\'s actions from a finger that lands just off the toggle', async ({page}) => {
-      const users = usersPage(page);
-      await page.goto('users');
-      await expect(users.firstRowActions).toBeVisible({timeout: 30_000});
-
-      await fingerTap(page, users.firstRowActions);
-
-      await expect(await users.actionsOf()).toBeVisible();
-    });
-
-    test('changes the price period from a finger that lands just off the toggle', async ({page}) => {
-      const charts = chartsPage(page);
-      await page.goto('demos/charts/');
-      await expect(charts.periodToggle).toBeVisible({timeout: 30_000});
-
-      await fingerTap(page, charts.periodToggle);
-      await charts.period('week').tap();
-
-      await expect(charts.periodToggle).toContainText('week');
-    });
+    await expect.poll(() => list.items.first().textContent()).not.toBe(first);
   });
-}
 
-test.describe('a phone held sideways', () => {
-  test.use(phoneSideways);
+  test('opens a row\'s actions from a finger that lands just off the toggle', async ({page}) => {
+    const users = usersPage(page);
+    await page.goto('users');
+    await expect(users.firstRowActions).toBeVisible({timeout: 30_000});
 
+    await fingerTap(page, users.firstRowActions);
+
+    await expect(await users.actionsOf()).toBeVisible();
+  });
+
+  test('changes the price period from a finger that lands just off the toggle', async ({page}) => {
+    const charts = chartsPage(page);
+    await page.goto('demos/charts/');
+    await expect(charts.periodToggle).toBeVisible({timeout: 30_000});
+
+    await fingerTap(page, charts.periodToggle);
+    await charts.period('week').tap();
+
+    await expect(charts.periodToggle).toContainText('week');
+  });
+});
+
+test.describe('a finger that lands just off a control on a piece\'s page', {tag: '@phoneSideways'}, () => {
   test('runs a search on a piece\'s page from a finger that lands just off submit', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
