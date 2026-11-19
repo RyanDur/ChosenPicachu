@@ -17,12 +17,12 @@ const tellers = new Map<string, TablePart>([
 
 type Moved = Omit<Path, 'hash'>;
 
-const carrying = (params: URLSearchParams, ...alsoRead: string[]) => (pathname: string): Moved =>
-  ({pathname, search: readerSettings.keptFrom(params, ...alsoRead).toString()});
+const carrying = (params: URLSearchParams) => (pathname: string): Moved =>
+  ({pathname, search: readerSettings.keptFrom(params).toString()});
 
 const pageForNamedTutorial = (params: URLSearchParams): Maybe<Moved> =>
   maybe(tableTutorials.all().find(tutorial => tutorial === params.get(tutorialParam)))
-    .map(tutorial => carrying(params, tutorial)(tableTutorials.addressOf(tutorial)));
+    .map(tutorial => carrying(params)(tableTutorials.addressOf(tutorial)));
 
 const pageTelling = (story: string): Maybe<string> => maybe(tellers.get(story)).map(tableParts.addressOf);
 
