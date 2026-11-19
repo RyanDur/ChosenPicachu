@@ -1,10 +1,26 @@
 import {FC} from 'react';
 import {Align, Side} from '@banners';
-import {Codes, Mdn, Says, Sample, Snippet, Step, DialStep, StepHeading, Steps, Story, Want, Words, Tell, lines, carve} from '../Recipe';
+import {
+  carve,
+  Codes,
+  DialStep,
+  lines,
+  Mdn,
+  Sample,
+  Says,
+  Snippet,
+  Step,
+  StepHeading,
+  Steps,
+  Story,
+  Tell,
+  Want,
+  Words
+} from '../Recipe';
 import {AlignDial, SideDial, useControls} from '../Controls';
 import {PartLink} from './PartLink';
 import {PartTermLink} from './PartTermLink';
-import {topLayerStoryTitleId} from './top-layer-story';
+import {topLayerStoryTitleId} from './top-layer-story-title-id';
 import bannersSource from '@banners/Banners.tsx?sample';
 import providerSource from '@banners/BannerProvider.tsx?sample';
 import bannersCss from '@banners/Banners.css?sample';
@@ -102,7 +118,8 @@ export const TopLayerRecipe: FC = () => {
             the browser’s element reads, for this page’s choice, {side} {align}.</Says>
         </Words>
         <Codes>
-          <Snippet label="HTML" lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
+          <Snippet label="HTML"
+            lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
           <Snippet label="CSS" lines={[
             ...carve.between(bannersCss, '.banners {', 'z-index: 3;'), lines.blank,
             ...carve.unit(bannersCss, `.${side} {`), lines.blank,
