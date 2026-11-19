@@ -5,15 +5,6 @@ import {tablesTab} from '@pages/Demos/Tables/__test_support';
 import {Tutorials} from '../Tutorials';
 
 describe('the table tutorials', () => {
-  test('should head the recipe’s walk from need to design', async () => {
-    render(<TestApp at="/"><Tutorials/></TestApp>);
-    await demoPage.findTitle('let’s build this feature');
-
-    expect(demoPage.title('let’s build this feature')).toBeVisible();
-    expect(demoPage.title('Start with the need, and let it pick the element')).toBeVisible();
-    expect(demoPage.title('Sketch a design from the need')).toBeVisible();
-  });
-
   test('the recipe’s tables name their rows and columns', async () => {
     render(<TestApp at="/"><Tutorials/></TestApp>);
     await demoPage.findTitle('let’s build this feature');
@@ -27,7 +18,6 @@ describe('the table tutorials', () => {
     render(<TestApp at="/"><Tutorials/></TestApp>);
     await demoPage.findTitle('let’s build this feature');
 
-    expect(demoPage.title('Add features, in the order they were asked for')).toBeVisible();
     expect(tablesTab().columnHeader('by keyboard')).toBeVisible();
     expect(demoPage.row('Widen a column')).toBeVisible();
   });

@@ -7,4 +7,7 @@ const worldCopy: Record<World, string> = {
   vanilla: 'The table stands in its own document: markup, style sheet, and script, no framework.'
 };
 
-export const WorldNote: FC = () => <p className="paragraph">{worldCopy[useControls().world]}</p>;
+export const WorldNote: FC = () => <>
+  <p className="paragraph">{worldCopy[useControls().world]}</p>
+  <p className="paragraph">The build you choose carries from part to part.</p>
+</>;

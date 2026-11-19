@@ -22,19 +22,21 @@ export const tablesTab = () => ({
   tutorialLink,
   follow: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
   backToTheTab: async (): Promise<void> => userEvent.click(await tutorialLink('Tables')),
-  tutorialReadingTimeOf: async (name: string): Promise<HTMLElement> => {
-    const tutorials = await screen.findByRole('list', {name: 'the tutorials'}, untilTheTablesTabRenders);
-    const [entry] = within(tutorials).getAllByRole('listitem').filter(item => within(item).queryByRole('link', {name}));
-    return within(entry).getByText(/to read$/);
-  },
   tutorialsListed: async (): Promise<string[]> =>
-    within(await screen.findByRole('list', {name: 'the tutorials'}, untilTheTablesTabRenders)).getAllByRole('link')
-      .map(link => computeAccessibleName(link)),
+    within(await screen.findByRole('list', {name: 'Add what the trader asked for'}, untilTheTablesTabRenders))
+      .getAllByRole('link').map(link => computeAccessibleName(link)),
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
-  readingTimeOf: async (title: string): Promise<HTMLElement> => {
-    await tutorialLink(title);
-    const [entry] = screen.getAllByRole('listitem').filter(item => within(item).queryByRole('heading', {name: title}));
-    return within(entry).getByText(/to read$/);
+  opening: (): Promise<HTMLElement> =>
+    screen.findByText(/^A table of live trades is the hardest thing on this site/, {}, untilTheTablesTabRenders),
+  size: (): Promise<HTMLElement> => screen.findByText(/^Eight parts, about \d+ minutes\.$/, {}, untilTheTablesTabRenders),
+  worldDial: (): Promise<HTMLElement> => screen.findByRole('group', {name: 'world'}, untilTheTablesTabRenders),
+  partsIn: async (group: string): Promise<(string | null)[][]> =>
+    within(await screen.findByRole('list', {name: group}, untilTheTablesTabRenders)).getAllByRole('link')
+      .map(link => [computeAccessibleName(link), link.getAttribute('href')]),
+  minutesOf: async (name: string): Promise<HTMLElement> => {
+    const parts = await screen.findByRole('navigation', {name: 'Parts'}, untilTheTablesTabRenders);
+    const [entry] = within(parts).getAllByRole('listitem').filter(item => within(item).queryByRole('link', {name}));
+    return within(entry).getByRole('time');
   },
   titles: (name: string, level?: number): HTMLElement[] => screen.queryAllByRole('heading', {name, level}),
   tableShown: (name: string): HTMLElement | null => screen.queryByRole('table', {name}),

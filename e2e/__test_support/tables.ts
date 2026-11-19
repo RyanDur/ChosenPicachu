@@ -10,6 +10,8 @@ export const tablesDemo = (page: Page) => ({
     title: (name: string): Locator => page.getByRole('heading', {level: 2, name, exact: true}),
     firstStory: page.getByRole('region', {name: /yourself$/}).getByRole('group').first()
   },
+  partLink: (name: string): Locator =>
+    page.getByRole('navigation', {name: 'Parts', exact: true}).getByRole('link', {name, exact: true}),
   controls: page.getByRole('region', {name: 'table controls'}),
   howIBuiltItInTheFirstStory: async (): Promise<Locator> => {
     await siteFrame(page).hydrated();

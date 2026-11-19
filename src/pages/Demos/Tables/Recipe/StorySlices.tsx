@@ -1,23 +1,23 @@
 import {FC} from 'react';
 import {DemoTopics} from '@pages/Demos';
-import {tableParts} from '../part-pages';
+import {TablePart, tableParts} from '../part-pages';
+import {Tutorial, tableTutorials} from '../tutorial-pages';
 import {Place} from '@pages/Demos/useCarriedAddress';
 import {Exercise, Slices} from '../../Recipe';
 import {TabLink} from '@pages/Demos/TabLink';
 
-const stillTable = tableParts.told('the-still-table').ordinal;
-const liveTable = tableParts.told('the-live-table-and-the-store').ordinal;
+const atPart = (part: TablePart): [number, Place] => [tableParts.told(part).ordinal, {to: tableParts.addressOf(part)}];
 
-const slicedAt: [string, number][] = [
-  ['The trader can read the market in a table', stillTable],
-  ['The trader can watch the market live, one lookback beside another', liveTable],
-  ['The trader can sort by column, and by row', tableParts.featuresStation],
-  ['The trader can sort the lookbacks by any measure, or take the order back', tableParts.featuresStation],
-  ['The trader can widen a column', tableParts.featuresStation]
+const atTutorial = (tutorial: Tutorial): [number, Place] =>
+  [tableTutorials.ordinalOf(tutorial), {to: tableTutorials.addressOf(tutorial)}];
+
+const placed: [string, number, Place][] = [
+  ['The trader can read the market in a table', ...atPart('the-still-table')],
+  ['The trader can watch the market live, one lookback beside another', ...atPart('the-live-table-and-the-store')],
+  ['The trader can sort by column, and by row', ...atTutorial('sort')],
+  ['The trader can sort the lookbacks by any measure, or take the order back', ...atTutorial('menu')],
+  ['The trader can widen a column', ...atTutorial('resize')]
 ];
-
-const placed = slicedAt.map(([slice, station]): [string, number, Place] =>
-  [slice, station, tableParts.whereIs(station)]);
 
 export const StorySlices: FC<{headedBy: string}> = ({headedBy}) => <>
   <Slices partPage={{headedBy}} can="The trader can watch the live market over lookbacks they arrange"

@@ -20,7 +20,6 @@ const theLiveTable = 'Make the table live';
 const theFlowStory = 'The trader can watch the market live, one lookback beside another';
 const theStoreStory = 'The page is a store, and so is the table';
 const theLiveTablesPage = demosAt('tables/the-live-table-and-the-store');
-const theFeatures = 'Add features, in the order they were asked for';
 
 describe('the tables tab’s parts, each on its own page', () => {
   test('following the need and its clues from the tables tab opens its page', async () => {
@@ -174,16 +173,16 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titleShown(unanswered)).not.toBeInTheDocument();
   });
 
-  test('the tables tab says the need takes one minute to read', async () => {
+  test('the tables tab gives the need its minutes, as 1 min', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    expect(await tablesTab().readingTimeOf(theNeed)).toHaveTextContent(/^1 minute to read$/);
+    expect(await tablesTab().minutesOf(theNeed)).toHaveTextContent(/^1 min$/);
   });
 
-  test('the tables tab says the sketch takes one minute to read', async () => {
+  test('the tables tab gives the sketch its minutes, as 1 min', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    expect(await tablesTab().readingTimeOf(theSketch)).toHaveTextContent(/^1 minute to read$/);
+    expect(await tablesTab().minutesOf(theSketch)).toHaveTextContent(/^1 min$/);
   });
 
   test('should title the sketch’s page with the tab and the part', async () => {
@@ -210,7 +209,6 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(aggregations.card()).toBeVisible();
     expect(demoPage.title(theStory)).toBeVisible();
     expect(tablesTab().titleShown(unanswered)).not.toBeInTheDocument();
-    expect(tablesTab().titleShown('Add features, in the order they were asked for')).not.toBeInTheDocument();
   });
 
   test('the slices’ page cites the z-index part that teaches a user story', async () => {
@@ -245,29 +243,18 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titles('The trader can watch the live market over lookbacks they arrange', 3)).toHaveLength(1);
   });
 
-  test('the slices on their page point at the still table’s and the live table’s pages and the later stations on the tables tab, with the build carried', async () => {
+  test('the slices on their page point at the pages of the parts that build them, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-slices', '?world=vanilla')}/>);
 
     await tablesTab().place();
 
-    const station = (at: number) => `${demosAt('tables', '?world=vanilla')}#station-${at}`;
     expect(demoPage.sliceLinks()).toEqual([
       demosAt('tables/the-still-table', '?world=vanilla'),
       demosAt('tables/the-live-table-and-the-store', '?world=vanilla'),
-      station(6), station(6), station(6)
+      demosAt('tables/sort', '?world=vanilla'),
+      demosAt('tables/menu', '?world=vanilla'),
+      demosAt('tables/resize', '?world=vanilla')
     ]);
-  });
-
-  test('the tables tab holds every station the slices on their page point at', async () => {
-    const {unmount} = render(<TestApp at={theSlicesPage}/>);
-    await tablesTab().place();
-    const stations = demoPage.sliceStationsOn(demosAt('tables'));
-    unmount();
-
-    render(<TestApp at={demosAt('tables')}/>);
-    await demoPage.findTitle('let’s build this feature');
-
-    expect(demoPage.missing(stations)).toEqual([]);
   });
 
   test('the slices’ page leads back to the sketch’s page and on to the still table’s page, by number and title, with the build carried', async () => {
@@ -287,10 +274,10 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titleShown(theStory)).not.toBeInTheDocument();
   });
 
-  test('the tables tab says the slices take two minutes to read', async () => {
+  test('the tables tab gives the slices their minutes, as 2 min', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    expect(await tablesTab().readingTimeOf(theSlices)).toHaveTextContent(/^2 minutes to read$/);
+    expect(await tablesTab().minutesOf(theSlices)).toHaveTextContent(/^2 min$/);
   });
 
   test('should title the slices’ page with the tab and the part', async () => {
@@ -440,7 +427,6 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(recipeFolds.story(live, theFlowStory)).toBeInTheDocument();
     expect(recipeFolds.story(live, theStoreStory)).toBeInTheDocument();
     expect(tablesTab().titleShown(theStillStory)).not.toBeInTheDocument();
-    expect(tablesTab().titleShown(theFeatures)).not.toBeInTheDocument();
   });
 
   test('the live table’s page links each term it glosses, and each tab it names, to that tab', async () => {
@@ -491,10 +477,10 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titleShown(theFlowStory)).not.toBeInTheDocument();
   });
 
-  test('the tables tab says the live table takes twelve minutes to read', async () => {
+  test('the tables tab gives the live table its minutes, as 12 min', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    expect(await tablesTab().readingTimeOf(theLiveTable)).toHaveTextContent(/^12 minutes to read$/);
+    expect(await tablesTab().minutesOf(theLiveTable)).toHaveTextContent(/^12 min$/);
   });
 
   test('should title the live table’s page with the tab and the part', async () => {

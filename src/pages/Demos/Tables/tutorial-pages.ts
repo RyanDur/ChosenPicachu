@@ -9,6 +9,7 @@ type TableTutorials = {
   all: () => readonly Tutorial[];
   nameOf: (tutorial: Tutorial) => string;
   minutesOf: (tutorial: Tutorial) => number;
+  saysOf: (tutorial: Tutorial) => string;
   addressOf: (tutorial: Tutorial) => string;
   ordinalOf: (tutorial: Tutorial) => number;
   placeOf: (tutorial: Tutorial) => PartPlace;
@@ -38,6 +39,7 @@ export const tableTutorials: TableTutorials = {
   all: () => inOrder,
   nameOf: tutorial => named[tutorial],
   minutesOf: tutorial => minutes[tutorial],
+  saysOf: tutorial => names.tables[tutorial].description,
   addressOf,
   ordinalOf,
   placeOf: tutorial => ({

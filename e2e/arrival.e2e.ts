@@ -22,8 +22,8 @@ for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as cons
     test.use(device);
 
     test('Back to a tutorial from another tab, and Forward again, return the reader to where they were', async ({page}) => {
-      await page.goto('demos/tables/#station-6');
-      await expect(page.getByRole('heading', {name: 'Add features, in the order they were asked for'})).toBeInViewport();
+      await page.goto('demos/tables/#features-asked-for');
+      await expect(page.getByRole('table', {name: 'the features'})).toBeInViewport();
       const atTheTutorial = await settledScrollY(page);
       await clickWhereItIs(page, page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Z-index'}));
       await expect(zIndexTab(page).partLink('Why Third is on top')).toBeAttached();
@@ -31,7 +31,7 @@ for (const [frame, device] of [['a phone', iPhone], ['a desk', desktop]] as cons
 
       await page.goBack();
 
-      await expect(page.getByRole('heading', {name: 'Slice the design into stories'})).toBeAttached();
+      await expect(page.getByRole('table', {name: 'the features'})).toBeAttached();
       await expect.poll(async () => Math.abs(await documentScrollY(page) - atTheTutorial))
         .toBeLessThanOrEqual(theSamePlace);
 
