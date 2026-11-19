@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {NavigationType, useLocation, useNavigationType} from 'react-router';
-import {maybe} from '@ryandur/sand';
+import {maybe, nothing} from '@ryandur/sand';
 import * as schema from 'schemawax';
 
 type Form = 'search' | 'pages';
@@ -30,7 +30,8 @@ export const keptForm = {
   useKey: (form: Form): string => {
     const {state, search} = useLocation();
     const moves = useMoves();
-    return maybe(keptKeys.decode(state)).mBind(kept => maybe(kept[form]))
+    const sentFromTheForm = useNavigationType() === NavigationType.Pop ? nothing() : maybe(keptKeys.decode(state));
+    return sentFromTheForm.mBind(kept => maybe(kept[form]))
       .orElse(`${addressKeyOf(form, search)} ${moves}`);
   }
 };
