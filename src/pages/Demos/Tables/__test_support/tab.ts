@@ -20,6 +20,7 @@ export const tablesTab = () => ({
   titleShown: (name: string): HTMLElement | null => screen.queryByRole('heading', {name}),
   recipe,
   tutorialLink,
+  features: (): HTMLElement => screen.getByRole('region', {name: 'let’s build this feature'}),
   follow: async (name: string): Promise<void> => userEvent.click(await tutorialLink(name)),
   backToTheTab: async (): Promise<void> => userEvent.click(await tutorialLink('Tables')),
   tutorialsListed: async (): Promise<string[]> =>

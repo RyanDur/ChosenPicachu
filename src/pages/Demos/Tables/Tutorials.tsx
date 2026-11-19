@@ -4,7 +4,7 @@ import '../Tutorials.css';
 
 export const Tutorials: FC = () => {
   const titled = `tutorials${useId()}`;
-  return <section id="features-asked-for" aria-labelledby={titled} className="tutorials">
+  return <section id="features-asked-for" aria-labelledby={titled} className="tutorials" tabIndex={-1}>
     <h2 id={titled} className="title">let’s build this feature</h2>
     <FeaturesAskedFor/>
     <p className="paragraph">
