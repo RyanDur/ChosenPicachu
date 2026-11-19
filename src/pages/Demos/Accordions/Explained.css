@@ -26,7 +26,7 @@
 
 .fold-choices {
   display: grid;
-  gap: var(--base);
+  gap: var(--base-x-2);
 }
 
 .snapping ::details-content {

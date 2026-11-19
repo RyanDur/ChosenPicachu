@@ -34,6 +34,7 @@ export const accordionsTab = {
   openPart: async (name: string): Promise<void> => userEvent.click(await screen.findByRole('link', {name})),
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   partsIndex: (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'Parts'}),
+  partsAndDials: (): Promise<HTMLElement> => screen.findByRole('complementary', {name: 'parts and dials'}),
   exhibit: async (): Promise<HTMLElement> =>
     within(await screen.findByRole('region', {name: 'Accordions'})).getAllByRole('figure')[0],
   titlesIn: (index: HTMLElement): string[] => within(index).getAllByRole('link').map(link => link.textContent),
