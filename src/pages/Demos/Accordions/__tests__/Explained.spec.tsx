@@ -206,7 +206,7 @@ describe('the parts index', () => {
     expect(explanation.saying(entry, '5 min')).toBeInTheDocument();
   });
 
-  test('should say what the part “An accordion in HTML alone” does, under its title', async () => {
+  test('should say what the part “An accordion in HTML alone” does, under its title, on a one-column page', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), htmlAlone);
@@ -223,7 +223,7 @@ describe('the parts index', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/a-box-remembers-the-fold', '?type=inclusive&style=drawer'));
   });
 
-  test('should say what the part “A box remembers the fold, and a rule reads it” does, under its title', async () => {
+  test('should say what the part “A box remembers the fold, and a rule reads it” does, under its title, on a one-column page', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'A box remembers the fold, and a rule reads it');
@@ -240,7 +240,7 @@ describe('the parts index', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/the-max-height-guess', '?type=inclusive&style=drawer'));
   });
 
-  test('should say what the part “The max-height guess” does, under its title', async () => {
+  test('should say what the part “The max-height guess” does, under its title, on a one-column page', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'The max-height guess');
@@ -257,7 +257,7 @@ describe('the parts index', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/the-measured-height', '?type=inclusive&style=drawer'));
   });
 
-  test('should say what the part “The measured height” does, under its title', async () => {
+  test('should say what the part “The measured height” does, under its title, on a one-column page', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'The measured height');
@@ -274,7 +274,7 @@ describe('the parts index', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/what-the-platform-gives-now', '?type=inclusive&style=drawer'));
   });
 
-  test('should say what the part “What the platform gives now” does, under its title', async () => {
+  test('should say what the part “What the platform gives now” does, under its title, on a one-column page', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'What the platform gives now');
@@ -291,7 +291,7 @@ describe('the parts index', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/how-a-sliding-fold-moves', '?type=inclusive&style=drawer'));
   });
 
-  test('should say what the part “How a sliding fold moves” does, under its title', async () => {
+  test('should say what the part “How a sliding fold moves” does, under its title, on a one-column page', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const entry = accordionsTab.entryOf(await accordionsTab.partsIndex(), 'How a sliding fold moves');
