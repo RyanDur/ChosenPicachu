@@ -29,11 +29,14 @@ type Listing = {heading: BookPart; minutes: number};
 
 type Told = {heading: BookPart; name: string; minutes: number; ordinal: number; says: string};
 
+type Listed = Place & {title: string; minutes: number; says: string};
+
 type AccordionParts = {
   told: (part: AccordionPart) => Told;
   addressOf: (part: AccordionPart) => string;
   shownAt: (pathname: string) => Maybe<AccordionPart>;
   whereIs: (heading: BookPart) => Place;
+  listed: (heading: BookPart) => Listed;
   titleOf: (heading: BookPart) => string;
   numbered: (heading: BookPart) => string;
   previousOf: (part: AccordionPart) => Maybe<BookPart>;
@@ -51,7 +54,10 @@ const listings: Record<AccordionPart, Listing> = {
   'how-a-sliding-fold-moves': {heading: 'motion-heading', minutes: 2}
 };
 
-const htmlAloneMinutes = 1;
+const htmlAlone = {
+  minutes: 1,
+  says: 'The browser shows and hides a details element’s text and remembers whether it is open, with no CSS and no script.'
+};
 
 const tabAddress = demoTab.address(DemoTopics.accordions);
 
@@ -66,10 +72,21 @@ const isPart = (name: string): name is AccordionPart => Object.keys(listings).in
 
 const parts = Object.keys(listings).filter(isPart);
 
+const partWith = (heading: BookPart): Maybe<AccordionPart> =>
+  maybe(parts.find(part => listings[part].heading === heading));
+
 const whereIs = (heading: BookPart): Place =>
-  maybe(parts.find(part => listings[part].heading === heading)).either(
+  partWith(heading).either(
     part => ({to: addressOf(part)}),
     () => ({to: tabAddress, heading}));
+
+const listed = (heading: BookPart): Listed => ({
+  ...whereIs(heading),
+  title: titles[heading],
+  ...partWith(heading).either(
+    part => ({minutes: listings[part].minutes, says: names.accordions[part].description}),
+    () => htmlAlone)
+});
 
 const partAt = (pathname: string): Maybe<AccordionPart> => {
   const named = pathname.slice(tabAddress.length, -1);
@@ -90,11 +107,12 @@ export const accordionParts: AccordionParts = {
   addressOf,
   shownAt: partAt,
   whereIs,
+  listed,
   titleOf: heading => titles[heading],
   numbered: heading => `${placeOf(heading) + 1}. ${titles[heading]}`,
   previousOf: part => besidePart(part, -1),
   nextOf: part => besidePart(part, 1),
   inTheBook: bookParts.length,
   inOrder: bookParts,
-  minutes: Object.values(listings).reduce((sum, {minutes}) => sum + minutes, htmlAloneMinutes)
+  minutes: Object.values(listings).reduce((sum, {minutes}) => sum + minutes, htmlAlone.minutes)
 };
