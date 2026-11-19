@@ -8,13 +8,21 @@
   padding-inline-start: var(--base-x-4);
 }
 
+@property --title-reach {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
 .parts-index-entry {
+  --entry-room: var(--base);
+
   position: relative;
-  padding-block: var(--base);
+  padding-block: var(--entry-room);
 
   .minutes {
     position: absolute;
-    inset-block-start: var(--base);
+    inset-block-start: calc(var(--entry-room) + var(--title-reach));
     inset-inline-end: 0;
   }
 
@@ -24,8 +32,7 @@
 }
 
 .parts-index-link {
-  display: inline-block;
-  vertical-align: top;
+  display: inline-flex;
   margin-inline-end: var(--base-x-7);
 }
 
@@ -34,7 +41,11 @@
 }
 
 @media (pointer: coarse) {
+  .parts-index-entry {
+    --title-reach: calc((var(--finger-reach) - 1lh) / 2);
+  }
+
   .parts-index-link {
-    min-block-size: var(--finger-reach);
+    padding-block: var(--title-reach);
   }
 }
