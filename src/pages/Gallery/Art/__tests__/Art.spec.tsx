@@ -54,8 +54,8 @@ describe('The gallery.', () => {
   });
 
   test('a museum with nothing to show leaves the wall empty', async () => {
-    setupAICAllArtResponse({...aicArtResponse, data: []}, {page: 0, search: 'g', limit: 8});
-    render(<TestApp at={`${Paths.artGallery}?page=0&search=g&size=8&tab=${Source.AIC}`}><GalleryProviders gallery={Paths.artGallery}><ArtGallery/></GalleryProviders></TestApp>);
+    setupAICAllArtResponse({...aicArtResponse, data: []}, {page: 1, search: 'g', limit: 8});
+    render(<TestApp at={`${Paths.artGallery}?page=1&search=g&size=8&tab=${Source.AIC}`}><GalleryProviders gallery={Paths.artGallery}><ArtGallery/></GalleryProviders></TestApp>);
 
     expect(await galleryWall.standIn('the museum answered with nothing')).toBeInTheDocument();
     expect(galleryWall.frames()).toEqual([]);
