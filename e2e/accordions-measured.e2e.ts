@@ -1,4 +1,4 @@
-import {Page, expect} from '@playwright/test';
+import {expect} from '@playwright/test';
 import {
   accordionsTab,
   gapUnder,
@@ -7,7 +7,6 @@ import {
   measuredHeightPage,
   plainFold,
   siteFrame,
-  type Build,
   type Part
 } from './__test_support';
 import {everyBuildJourneys, layoutRounding, test} from './__test_support/fold-journeys';
@@ -29,18 +28,6 @@ const tallestOf = async (parts: Part[]): Promise<Part> => {
   return parts[heights.indexOf(Math.max(...heights))];
 };
 
-const itsFirstPartOpensAndCloses = async (page: Page, build: Build): Promise<void> => {
-  await accordionsTab(page).goTo(build);
-  const part = accordionsTab(page).firstPartOf(build);
-  await expect(part.fold).toBeVisible();
-
-  await part.open();
-
-  await expect.poll(part.showsText).toBe(true);
-  await part.close();
-  await expect.poll(part.showsText).toBe(false);
-};
-
 for (const build of measuredBuilds) {
   test(`an open part of ${build} still ends at its text after the window narrows and widens`, {tag: '@desktop'}, async ({page}) => {
     await accordionsTab(page).goTo(build);
@@ -59,7 +46,15 @@ for (const build of measuredBuilds) {
 for (const build of measuredBuilds) {
   test(`a reader who allows motion opens and then closes a part of ${build}, and its text goes`, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
-    await itsFirstPartOpensAndCloses(page, build);
+    await accordionsTab(page).goTo(build);
+    const part = accordionsTab(page).firstPartOf(build);
+    await expect(part.fold).toBeVisible();
+
+    await part.open();
+    await expect.poll(part.showsText).toBe(true);
+    await part.close();
+
+    await expect.poll(part.showsText).toBe(false);
   });
 }
 
@@ -69,7 +64,15 @@ const pressesNeverReachTheScript = (): void => ['click', 'change'].forEach(press
 for (const build of measuredBuilds) {
   test(`with its script never hearing the press, a part of ${build} still opens and closes`, async ({page}) => {
     await page.addInitScript(pressesNeverReachTheScript);
-    await itsFirstPartOpensAndCloses(page, build);
+    await accordionsTab(page).goTo(build);
+    const part = accordionsTab(page).firstPartOf(build);
+    await expect(part.fold).toBeVisible();
+
+    await part.open();
+
+    await expect.poll(part.showsText).toBe(true);
+    await part.close();
+    await expect.poll(part.showsText).toBe(false);
   });
 }
 
