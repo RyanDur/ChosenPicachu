@@ -5,7 +5,7 @@ import * as schema from 'schemawax';
 
 type Form = 'search' | 'pages';
 
-type BackAndForth = {readonly at: string; readonly moves: number};
+type BackAndForth = {readonly locationKey: string; readonly moves: number};
 
 const keptKeys = schema.object({optional: {search: schema.string, pages: schema.string}});
 
@@ -19,8 +19,8 @@ const addressKeyOf = (form: Form, search: string): string => {
 const useBackAndForthMoves = (): number => {
   const {key} = useLocation();
   const moved = useNavigationType() === NavigationType.Pop;
-  const [seen, setSeen] = useState<BackAndForth>({at: key, moves: 0});
-  const now = key === seen.at ? seen : {at: key, moves: moved ? seen.moves + 1 : seen.moves};
+  const [seen, setSeen] = useState<BackAndForth>({locationKey: key, moves: 0});
+  const now = key === seen.locationKey ? seen : {locationKey: key, moves: moved ? seen.moves + 1 : seen.moves};
   if (now !== seen) setSeen(now);
   return now.moves;
 };
