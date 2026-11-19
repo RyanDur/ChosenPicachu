@@ -26,7 +26,7 @@ export const galleryPage = (page: Page) => {
     pageSize: page.getByRole('spinbutton', {name: 'Per page', exact: true}),
     museum: page.getByRole('combobox', {name: 'Museum', exact: true}),
     settings: page.getByRole('button', {name: /^Gallery settings/}),
-    sheet: page.getByRole('region', {name: 'gallery settings'}),
+    sheet: page.getByRole('group', {name: 'gallery settings'}),
     openSettings: async (): Promise<void> => {
       await siteFrame(page).hydrated();
       if (await searchField.isHidden()) await page.getByRole('button', {name: /^Gallery settings/}).click();
