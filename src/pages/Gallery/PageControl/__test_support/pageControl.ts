@@ -1,9 +1,9 @@
 import {screen, waitFor} from '@testing-library/react';
-import {gallerySettings} from '@pages/Gallery/__test_support';
+import {galleryRegions} from '@pages/Gallery/__test_support';
 import userEvent from '@testing-library/user-event';
 
-const pageField = (): HTMLElement => gallerySettings().getByRole('spinbutton', {name: 'Page'});
-const sizeField = (): HTMLElement => gallerySettings().getByRole('spinbutton', {name: 'Per page'});
+const pageField = (): HTMLElement => galleryRegions.settings().getByRole('spinbutton', {name: 'Page'});
+const sizeField = (): HTMLElement => galleryRegions.settings().getByRole('spinbutton', {name: 'Per page'});
 
 const typedOver = async (field: HTMLElement, words: string): Promise<void> => {
   await userEvent.clear(field);
@@ -21,6 +21,6 @@ export const pageControl = {
   typePage: (page: string): Promise<void> => typedOver(pageField(), page),
   rubOutPage: (): Promise<void> => userEvent.clear(pageField()),
   typeSize: (size: string): Promise<void> => typedOver(sizeField(), size),
-  go: (): Promise<void> => userEvent.click(gallerySettings().getByRole('button', {name: 'Go'})),
+  go: (): Promise<void> => userEvent.click(galleryRegions.settings().getByRole('button', {name: 'Go'})),
   nextPage: (): Promise<void> => userEvent.click(screen.getByRole('link', {name: 'next page'}))
 };

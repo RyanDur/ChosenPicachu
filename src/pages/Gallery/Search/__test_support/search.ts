@@ -1,12 +1,12 @@
-import {galleryBanner} from '@pages/Gallery/__test_support';
+import {galleryRegions} from '@pages/Gallery/__test_support';
 import {within} from '@testing-library/react';
 import {heldClock} from '@__test_support/heldClock';
 import userEvent, {type UserEvent} from '@testing-library/user-event';
 
 const searchBarOf = (user: Pick<UserEvent, 'type' | 'click' | 'tab'>) => {
-  const query = (): HTMLElement => galleryBanner().getByRole('combobox', {name: 'Search'});
-  const submitButton = (): HTMLElement => galleryBanner().getByRole('button', {name: 'submit search'});
-  const resetButton = (): HTMLElement => galleryBanner().getByRole('button', {name: 'reset search'});
+  const query = (): HTMLElement => galleryRegions.banner().getByRole('combobox', {name: 'Search'});
+  const submitButton = (): HTMLElement => galleryRegions.banner().getByRole('button', {name: 'submit search'});
+  const resetButton = (): HTMLElement => galleryRegions.banner().getByRole('button', {name: 'reset search'});
   const suggestions = (): HTMLElement => {
     const field = query();
     if (field instanceof HTMLInputElement && field.list) return field.list;
