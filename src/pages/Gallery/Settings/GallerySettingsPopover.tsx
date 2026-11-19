@@ -37,8 +37,11 @@ const refusedGoesBackTo = (shown: number) => (field: HTMLInputElement): boolean 
 // A change sent from inside the open popover moves the page while Page may hold the focus,
 // and react-dom leaves a focused number field's default as it was, so the row that sent it puts Page there itself
 const pageFieldShows = (page: number) => (sentFrom: HTMLElement): void => {
-  const pageField = sentFrom.closest('fieldset')?.elements.namedItem('page');
-  if (pageField instanceof HTMLInputElement) numberField.shows(pageField, page);
+  maybe(sentFrom.closest('fieldset'))
+    .mBind(fieldset => maybe(fieldset.elements.namedItem('page')))
+    .map(pageField => {
+      if (pageField instanceof HTMLInputElement) numberField.shows(pageField, page);
+    });
 };
 
 const MuseumRow: FC = () => {

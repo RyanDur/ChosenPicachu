@@ -27,7 +27,7 @@ export const galleryPage = {
     within(screen.getByRole('combobox', {name: 'Museum', hidden: true}))
       .getAllByRole<HTMLOptionElement>('option', {hidden: true})
       .filter(({selected}) => selected)
-      .map(({textContent}) => textContent ?? '')
+      .map(({textContent}) => maybe(textContent).orElse(''))
       .join(),
   searchInSettings: (words: string): Promise<void> =>
     userEvent.type(gallerySettingsPopover().getByRole('combobox', {name: 'Search', hidden: true}), `${words}{Enter}`),
@@ -52,5 +52,5 @@ export const galleryPage = {
   museumsOffered: (): string[] =>
     within(screen.getByRole('combobox', {name: 'Museum', hidden: true}))
       .getAllByRole('option', {hidden: true})
-      .map(({textContent}) => textContent ?? '')
+      .map(({textContent}) => maybe(textContent).orElse(''))
 };
