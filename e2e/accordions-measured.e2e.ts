@@ -1,7 +1,6 @@
 import {expect} from '@playwright/test';
 import {
   accordionsTab,
-  desktop,
   gapUnder,
   heightOnceSettled,
   measuredBuilds,
@@ -29,24 +28,20 @@ const tallestOf = async (parts: Part[]): Promise<Part> => {
   return parts[heights.indexOf(Math.max(...heights))];
 };
 
-test.describe('a desktop', () => {
-  test.use(desktop);
+for (const build of measuredBuilds) {
+  test(`an open part of ${build} still ends at its text after the window narrows and widens`, {tag: '@desktop'}, async ({page}) => {
+    await accordionsTab(page).goTo(build);
+    await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
+    const part = await tallestOf(await accordionsTab(page).partsOf(build));
+    await part.open();
+    await heightOnceSettled(part.fold);
 
-  for (const build of measuredBuilds) {
-    test(`an open part of ${build} still ends at its text after the window narrows and widens`, async ({page}) => {
-      await accordionsTab(page).goTo(build);
-      await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
-      const part = await tallestOf(await accordionsTab(page).partsOf(build));
-      await part.open();
-      await heightOnceSettled(part.fold);
-
-      for (const width of [390, 1440]) {
-        await page.setViewportSize({width, height: 900});
-        await settlesWithinRounding(() => gapUnderItsText(part));
-      }
-    });
-  }
-});
+    for (const width of [390, 1440]) {
+      await page.setViewportSize({width, height: 900});
+      await settlesWithinRounding(() => gapUnderItsText(part));
+    }
+  });
+}
 
 for (const build of measuredBuilds) {
   test(`a reader who allows motion opens and then closes a part of ${build}, and its text goes`, async ({page}) => {
@@ -82,34 +77,30 @@ for (const build of measuredBuilds) {
 }
 
 for (const build of measuredBuilds) {
-  test.describe('a desktop', () => {
-    test.use(desktop);
+  test(`an opening part of ${build} switched to Static mid-motion still ends at its text after the window narrows`, {tag: '@desktop'}, async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'no-preference'});
+    await accordionsTab(page).goTo(build);
+    const part = accordionsTab(page).firstPartOf(build);
+    await expect(part.fold).toBeVisible();
 
-    test(`an opening part of ${build} switched to Static mid-motion still ends at its text after the window narrows`, async ({page}) => {
-      await page.emulateMedia({reducedMotion: 'no-preference'});
-      await accordionsTab(page).goTo(build);
-      const part = accordionsTab(page).firstPartOf(build);
-      await expect(part.fold).toBeVisible();
+    await accordionsTab(page).opensTheFirstPartThenChoosesOnceItStartsMoving(build, 'Static');
+    await page.setViewportSize({width: 390, height: 900});
 
-      await accordionsTab(page).opensTheFirstPartThenChoosesOnceItStartsMoving(build, 'Static');
-      await page.setViewportSize({width: 390, height: 900});
+    await settlesWithinRounding(() => gapUnderItsText(part));
+  });
 
-      await settlesWithinRounding(() => gapUnderItsText(part));
-    });
+  test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, {tag: '@desktop'}, async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'no-preference'});
+    await accordionsTab(page).goTo(build);
+    const part = accordionsTab(page).firstPartOf(build);
+    await part.open();
+    await heightOnceSettled(part.fold);
 
-    test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, async ({page}) => {
-      await page.emulateMedia({reducedMotion: 'no-preference'});
-      await accordionsTab(page).goTo(build);
-      const part = accordionsTab(page).firstPartOf(build);
-      await part.open();
-      await heightOnceSettled(part.fold);
+    await accordionsTab(page).closesThenOpensTheFirstPartInOneFrame(build);
+    await heightOnceSettled(part.fold);
+    await page.setViewportSize({width: 390, height: 900});
 
-      await accordionsTab(page).closesThenOpensTheFirstPartInOneFrame(build);
-      await heightOnceSettled(part.fold);
-      await page.setViewportSize({width: 390, height: 900});
-
-      await settlesWithinRounding(() => gapUnderItsText(part));
-    });
+    await settlesWithinRounding(() => gapUnderItsText(part));
   });
 }
 
@@ -127,20 +118,16 @@ test.describe('the fold measured by plain script', () => {
     await expect(fold.text).toBeHidden();
   });
 
-  test.describe('a desktop', () => {
-    test.use(desktop);
+  test('still ends at its text after the window narrows', {tag: '@desktop'}, async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'no-preference'});
+    const fold = plainFold(page);
+    await fold.goTo();
+    await fold.bar.click();
+    await settlesWithinRounding(fold.gapUnderItsText);
 
-    test('still ends at its text after the window narrows', async ({page}) => {
-      await page.emulateMedia({reducedMotion: 'no-preference'});
-      const fold = plainFold(page);
-      await fold.goTo();
-      await fold.bar.click();
-      await settlesWithinRounding(fold.gapUnderItsText);
+    await page.setViewportSize({width: 390, height: 900});
 
-      await page.setViewportSize({width: 390, height: 900});
-
-      await settlesWithinRounding(fold.gapUnderItsText);
-    });
+    await settlesWithinRounding(fold.gapUnderItsText);
   });
 
   test('with its script never hearing the press, still opens and shuts', async ({page}) => {

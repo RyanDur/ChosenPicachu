@@ -1,10 +1,8 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {demoSettings, phone, tablesDemo} from './__test_support';
+import {demoSettings, tablesDemo} from './__test_support';
 
-test.use(phone);
-
-test('a reader on a phone opens the settings fold and reaches the table\'s controls', async ({page}) => {
+test('a reader opens the settings fold and reaches the table\'s controls', {tag: '@phone'}, async ({page}) => {
   await page.goto('demos/tables/sort/');
   const settings = demoSettings(page);
   const tables = tablesDemo(page);
