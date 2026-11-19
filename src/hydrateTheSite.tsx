@@ -2,7 +2,7 @@ import {FC, startTransition, useEffect} from 'react';
 import {createRoot, hydrateRoot} from 'react-dom/client';
 import {DataRouter, RouterProvider} from 'react-router';
 import {Arrival, arrival, ArrivalDrawn} from '@navigation/arrival';
-import {PageFocus, popoversClosedOnBackAndForward, popoversClosedWhenThePhoneLayoutEnds} from '@page';
+import {PageFocus, popovers} from '@page';
 import {galleryForms} from '@pages/Gallery';
 import {Site} from './Site';
 
@@ -19,8 +19,8 @@ const RoutedSite: FC<RoutedSiteProps> = ({router, arrived}) => {
 
 export const hydrateTheSite = {
   overTheBuiltPage: (router: DataRouter): void => {
-    popoversClosedWhenThePhoneLayoutEnds(window);
-    popoversClosedOnBackAndForward(window);
+    popovers(window).closedWhenThePhoneLayoutEnds();
+    popovers(window).closedOnBackAndForward();
     galleryForms(window).putBackOnBackAndForward();
     startTransition(() => {
       hydrateRoot(document,
@@ -28,8 +28,8 @@ export const hydrateTheSite = {
     });
   },
   afresh: (router: DataRouter): void => {
-    popoversClosedWhenThePhoneLayoutEnds(window);
-    popoversClosedOnBackAndForward(window);
+    popovers(window).closedWhenThePhoneLayoutEnds();
+    popovers(window).closedOnBackAndForward();
     galleryForms(window).putBackOnBackAndForward();
     createRoot(document)
       .render(<RoutedSite router={router} arrived={arrival(window)}/>);
