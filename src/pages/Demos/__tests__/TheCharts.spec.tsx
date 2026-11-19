@@ -239,21 +239,20 @@ describe('a list of charts', () => {
     expect(chartsDesk.place('Price line')).not.toHaveAttribute('draggable', 'true');
   });
 
-  test('should land a saved link that names the workspace story under let’s build this feature', async () => {
+  test('should land a saved link that names the workspace story on the charts tab with the story closed', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
-    expect(await chartsDesk.findTitle('let’s build this feature')).toBeVisible();
-    expect(recipeFolds.story(chartsDesk.recipe('charts'), 'The trader can lay out the workspace')).toBeInTheDocument();
+    expect(recipeFolds.story(chartsDesk.recipe('charts'), 'The trader can lay out the workspace')).not.toHaveAttribute('open');
   });
 
   test('a chart is a doorway to its own tutorial', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
@@ -316,7 +315,7 @@ describe('a list of charts', () => {
   test("a chart tutorial's outline steps down from its own heading to its first step", async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
 
     expect(await chartsDesk.findTitle('price line tutorial', 2)).toBeInTheDocument();
     expect(chartsDesk.title('let’s build this feature', 3)).toBeInTheDocument();
@@ -327,7 +326,7 @@ describe('a list of charts', () => {
   describe('the price line’s story', () => {
     const priceStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
-      render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
+      render(<TestApp at={chartPageAt('price')} feed={feed}/>);
       await chartsDesk.findTitle('price line tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can watch the price move, live');
     };
@@ -353,7 +352,7 @@ describe('a list of charts', () => {
 
   test('should link the pressure chart’s story to the candles chart’s steps', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={chartPageAt('pressure', '?graph=pressure')} feed={feed}/>);
+    render(<TestApp at={chartPageAt('pressure')} feed={feed}/>);
     await chartsDesk.findTitle('pressure tutorial', 2);
 
     expect(demoPage.signpost('the candles chart’s steps')).toHaveAttribute('href', chartPageAt('candles'));
@@ -362,7 +361,7 @@ describe('a list of charts', () => {
   describe('the candles’ story', () => {
     const candlesStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
-      render(<TestApp at={chartPageAt('candles', '?graph=candles')} feed={feed}/>);
+      render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
       await chartsDesk.findTitle('candles tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can read the same trades as candles');
     };
@@ -380,7 +379,7 @@ describe('a list of charts', () => {
   describe('the pressure chart’s story', () => {
     const pressureStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
-      render(<TestApp at={chartPageAt('pressure', '?graph=pressure')} feed={feed}/>);
+      render(<TestApp at={chartPageAt('pressure')} feed={feed}/>);
       await chartsDesk.findTitle('pressure tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can see who is driving the move');
     };
@@ -397,7 +396,7 @@ describe('a list of charts', () => {
   describe('the pie’s story', () => {
     const pieStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
-      render(<TestApp at={chartPageAt('pie', '?graph=pie')} feed={feed}/>);
+      render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
       await chartsDesk.findTitle('pie tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can see who owns the session');
     };
@@ -414,7 +413,7 @@ describe('a list of charts', () => {
   test('the workspace tutorial names its story and steps in the heading outline', async () => {
     const feed = await listeningFeed();
 
-    render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
     expect(await chartsDesk.findTitle('The trader can lay out the workspace', 3)).toBeInTheDocument();
@@ -441,16 +440,6 @@ describe('a list of charts', () => {
     await chartsDesk.findChart('live trades');
 
     expect(chartsDesk.titleIn(chartsDesk.tutorial('price line'), 'let’s build this feature', 3)).toBeVisible();
-    expect(recipeFolds.story(chartsDesk.recipe('price line'), 'The trader can watch the price move, live')).toBeInTheDocument();
-  });
-
-  test('should land a saved link that names the price story on the price line’s page', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={chartPageAt('price', '?graph=price')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
-
     expect(recipeFolds.story(chartsDesk.recipe('price line'), 'The trader can watch the price move, live')).toBeInTheDocument();
   });
 
@@ -883,7 +872,7 @@ describe('the workspace’s doorways', () => {
 describe('the workspace story', () => {
   const workspaceStory = async (): Promise<HTMLElement> => {
     const feed = await listeningFeed();
-    render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
+    render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
     return recipeFolds.story(await chartsDesk.findFeatureStories(), 'The trader can lay out the workspace');
   };
