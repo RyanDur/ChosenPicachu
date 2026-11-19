@@ -469,6 +469,21 @@ test.describe('a desktop window made narrow', () => {
 test.describe('a visitor at a desk', () => {
   test.use(desktop);
 
+  test('leaves the gallery with one Back after a reset over words never sent', async ({page}) => {
+    const gallery = galleryPage(page);
+    await gallery.answerEveryWallFromTheRecording();
+    await page.goto('');
+    await page.goto('gallery/?tab=vam&page=2');
+    await siteFrame(page).hydrated();
+    await gallery.searchField.fill('lil');
+    await gallery.resetSearch.click();
+    await expect(gallery.searchField).toHaveValue('');
+
+    await page.goBack();
+
+    await expect(page).not.toHaveURL(/gallery/);
+  });
+
   test('goes back to the last page from the pager when the address\'s page is past it', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();

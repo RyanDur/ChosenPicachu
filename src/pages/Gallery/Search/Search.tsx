@@ -35,7 +35,7 @@ export const Search: FC<PropsWithClassName> = ({className}) => {
 
   const reset = () => {
     cleared();
-    removeSearchParams(has(search) ? ['search', 'page'] : ['search'], {state: keptForm.across('search', formKey)});
+    if (has(search)) removeSearchParams(['search', 'page'], {state: keptForm.across('search', formKey)});
   };
 
   return <search className={classNames('search', 'backdrop', className)}>
