@@ -1,27 +1,37 @@
 .home {
-  display: flow-root;
+  --figure-column: 45%;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--figure-column);
+  column-gap: var(--base-x-6);
   inline-size: 100%;
   container: home / inline-size;
   padding: var(--base-x-3) var(--page-inset);
 
-  .page-pulled-apart {
-    float: inline-end;
-    inline-size: max(30%, var(--base-x-40));
-    margin-block-end: var(--base-x-3);
-    margin-inline-start: var(--base-x-6);
-  }
-
   .claim {
+    grid-column: 1 / -1;
     margin: 0 0 var(--base-x-4);
   }
 
+  .page-pulled-apart {
+    grid-row: 2 / span 4;
+    grid-column: 2;
+    grid-template-rows: minmax(0, 1fr) auto;
+    container-type: size;
+  }
+
   .thesis {
+    grid-column: 1;
     margin: 0 0 var(--base-x-2_5);
     text-wrap: pretty;
+
+    &:last-of-type {
+      margin-block-end: 0;
+    }
   }
 
   .doors {
-    clear: both;
+    grid-column: 1 / -1;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--base-x-5);
@@ -42,10 +52,9 @@
 
 @media (width <= 1100px) {
   .home {
-    .page-pulled-apart {
-      inline-size: max(42%, var(--base-x-40));
-      margin-inline-start: var(--base-x-3);
-    }
+    --figure-column: 42%;
+
+    column-gap: var(--base-x-3);
 
     .doors {
       gap: var(--base-x-3);
@@ -55,9 +64,14 @@
 
 @container home (width < 68.8rem) {
   .home {
+    .claim, .page-pulled-apart, .thesis, .doors {
+      grid-row: auto;
+      grid-column: 1 / -1;
+    }
+
     .page-pulled-apart {
-      float: none;
-      inline-size: auto;
+      grid-template-rows: none;
+      container-type: inline-size;
       margin: 0 0 var(--base-x-3);
     }
 
@@ -69,9 +83,14 @@
 
 @media (width <= 600px), (width <= 1100px) and (height <= 600px) {
   .home {
+    .claim, .page-pulled-apart, .thesis, .doors {
+      grid-row: auto;
+      grid-column: 1 / -1;
+    }
+
     .page-pulled-apart {
-      float: none;
-      inline-size: auto;
+      grid-template-rows: none;
+      container-type: inline-size;
       margin: 0 0 var(--base-x-3);
     }
 
