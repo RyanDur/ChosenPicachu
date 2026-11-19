@@ -144,6 +144,16 @@ describe('The gallery.', () => {
     await waitFor(() => expect(galleryPage.museumsOffered()).toContain('Harvard Art Museums'));
   });
 
+  test('the gallery settings show the address\'s museum as chosen while it is still asked', async () => {
+    setupHarvardAllArtResponse(harvardArtResponse);
+    heldVAMPictures();
+
+    render(<TestApp at={`${Paths.artGallery}?tab=vam`}/>);
+    await waitFor(() => expect(galleryPage.museumsOffered()).toContain('Harvard Art Museums'));
+
+    expect(galleryPage.museumChosen()).toBe('The Victoria and Albert Museum');
+  });
+
   test('a museum whose pictures are refused is not offered in the gallery settings', async () => {
     setupAICAllArtResponse(aicArtResponse);
     refuseAICPictures();

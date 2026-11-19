@@ -15,6 +15,12 @@ export const galleryPage = {
   urlSearch: (): HTMLElement => screen.getByRole('status', {name: 'url search'}),
   pagination: (): HTMLElement => screen.getByRole('navigation', {name: 'pagination'}),
   nextPage: (): Promise<void> => userEvent.click(screen.getByRole('link', {name: 'next page'})),
+  museumChosen: (): string =>
+    within(screen.getByRole('combobox', {name: 'Museum', hidden: true}))
+      .getAllByRole<HTMLOptionElement>('option', {hidden: true})
+      .filter(({selected}) => selected)
+      .map(({textContent}) => textContent ?? '')
+      .join(),
   museumsOffered: (): string[] =>
     within(screen.getByRole('combobox', {name: 'Museum', hidden: true}))
       .getAllByRole('option', {hidden: true})
