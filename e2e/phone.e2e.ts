@@ -1,10 +1,8 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {documentScrollY, phone, recordPage} from './__test_support';
+import {documentScrollY, recordPage} from './__test_support';
 
-test.use(phone);
-
-test('following a link lands at the top of the next page', async ({page}) => {
+test('following a link lands at the top of the next page', {tag: '@phone'}, async ({page}) => {
   await page.goto('record/');
   const away = recordPage(page).linkToTheDemos;
   await away.scrollIntoViewIfNeeded();
