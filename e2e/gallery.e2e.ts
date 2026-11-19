@@ -138,6 +138,19 @@ for (const {reader, device} of handhelds) {
       await expect(gallery.searchField).toBeFocused();
     });
 
+    test('shows the first page in the gallery settings after a search made there from a later page', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam&page=40');
+      await gallery.openSettings();
+      await gallery.searchField.fill('lilies');
+
+      await gallery.searchField.press('Enter');
+
+      await expect(page).toHaveURL(/[?&]page=1(&|$)/);
+      await expect(gallery.pageNumber).toHaveValue('1');
+    });
+
     test('closes the gallery settings on Back from a search made there, and opens them again on the address\'s words', async ({page}) => {
       const gallery = galleryPage(page);
       await gallery.answerEveryWallFromTheRecording();
@@ -190,6 +203,19 @@ for (const {reader, device} of handhelds) {
       await gallery.pageSize.press('Enter');
 
       await expect(page).toHaveURL(/size=12/);
+    });
+
+    test('keeps the reader in the page field after Enter in the gallery settings', async ({page}) => {
+      const gallery = galleryPage(page);
+      await gallery.answerEveryWallFromTheRecording();
+      await page.goto('gallery/?tab=vam&page=3');
+      await gallery.openSettings();
+      await gallery.pageNumber.fill('2');
+
+      await gallery.pageNumber.press('Enter');
+
+      await expect(page).toHaveURL(/[?&]page=2(&|$)/);
+      await expect(gallery.pageNumber).toBeFocused();
     });
 
     test('offers the last page in the gallery settings when the address\'s page is past it', async ({page}) => {
