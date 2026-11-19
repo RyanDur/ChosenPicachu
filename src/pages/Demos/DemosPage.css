@@ -14,3 +14,40 @@
 .demos-opening {
   padding: var(--base-x-5) var(--page-inset);
 }
+
+@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
+  .demo-tabs {
+    display: grid;
+    grid-template-columns: var(--pointer-reach) 1fr var(--pointer-reach);
+    grid-template-areas: "prev info next";
+    column-gap: var(--base);
+    block-size: var(--tab-bar-reach);
+
+    @media (pointer: coarse) {
+      grid-template-columns: var(--finger-reach) 1fr var(--finger-reach);
+    }
+
+    &::before {
+      grid-area: prev;
+    }
+
+    &::after {
+      grid-area: next;
+    }
+
+    &:not(:has(.prev))::before,
+    &:not(:has(.next))::after {
+      content: '';
+    }
+
+    .tab-list {
+      display: none;
+    }
+  }
+}
+
+@media (width <= 1100px) and (height <= 600px) {
+  .demo-tabs {
+    position: static;
+  }
+}

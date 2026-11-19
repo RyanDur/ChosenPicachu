@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {demosAt, demoTabRow, demoTabs} from '@pages/Demos/__test_support';
 import {expect, test} from 'vitest';
 import {render} from '@testing-library/react';
 import {appAddress} from '@__test_support/address';
@@ -29,6 +29,48 @@ describe('The Demos page', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     expect(await demoTabs.names()).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
+  });
+
+  test('the tab row on the Z-index tab names the tab the reader is on', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    expect(await demoTabRow.current()).toBe('Z-index');
+  });
+
+  test('the tab row on the Z-index tab offers Accordions as the tab before it', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    expect(await demoTabRow.previous()).toHaveAccessibleName('Previous tab, Accordions');
+  });
+
+  test('the tab row on the Z-index tab leads back to the Accordions tab', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    expect(await demoTabRow.previous()).toHaveAttribute('href', demosAt('accordions'));
+  });
+
+  test('the tab row on the Z-index tab offers Drag sort as the tab after it', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    expect(await demoTabRow.next()).toHaveAccessibleName('Next tab, Drag sort');
+  });
+
+  test('the tab row on the Z-index tab leads on to the Drag sort tab', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    expect(await demoTabRow.next()).toHaveAttribute('href', demosAt('drag-and-drop'));
+  });
+
+  test('the tab row on the first tab, Accordions, offers no tab before it', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    expect(await demoTabRow.previous()).not.toBeInTheDocument();
+  });
+
+  test('the tab row on the last tab, Tables, offers no tab after it', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    expect(await demoTabRow.next()).not.toBeInTheDocument();
   });
 
   test('the charts a reader set up come back when they return to the charts tab', async () => {

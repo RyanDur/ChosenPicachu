@@ -1,21 +1,20 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {assumedLinksIn} from './page';
-
-const tabList = (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'demos'});
+import {demosNav} from './demos-nav';
 
 export const demoTabs = {
-  names: async (): Promise<string[]> => within(await tabList()).getAllByRole('link').map(tab => tab.textContent),
+  names: async (): Promise<string[]> => within(await demosNav.bar()).getAllByRole('link').map(tab => tab.textContent),
   current: async (): Promise<string[]> =>
-    within(await tabList()).getAllByRole('link', {current: 'page'}).map(tab => tab.textContent),
+    within(await demosNav.bar()).getAllByRole('link', {current: 'page'}).map(tab => tab.textContent),
   headingRepeatingItsName: async (name: string): Promise<HTMLElement | null> =>
     within(await screen.findByRole('region', {name})).queryByRole('heading', {name}),
   title: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name}),
   arrivedOn: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}),
-  tab: async (name: string): Promise<HTMLElement> => within(await tabList()).getByRole('link', {name}),
+  tab: async (name: string): Promise<HTMLElement> => within(await demosNav.bar()).getByRole('link', {name}),
   open: async (name: string): Promise<void> =>
-    userEvent.click(within(await tabList()).getByRole('link', {name})),
+    userEvent.click(within(await demosNav.bar()).getByRole('link', {name})),
   assumedLinks: async (name: string): Promise<(string | null)[][]> => assumedLinksIn(await screen.findByRole('region', {name})),
   addresses: async (): Promise<(string | null)[]> =>
-    within(await tabList()).getAllByRole('link').map(tab => tab.getAttribute('href'))
+    within(await demosNav.bar()).getAllByRole('link').map(tab => tab.getAttribute('href'))
 };

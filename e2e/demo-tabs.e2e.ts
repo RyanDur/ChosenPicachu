@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {chartsPage, rememberedFolds, rememberedFoldLabels, siteFrame} from './__test_support';
+import {chartsPage, iPhone, rememberedFolds, rememberedFoldLabels, siteFrame} from './__test_support';
 
 test('the accordion labels survive a visit to the streaming charts', async ({page}) => {
   await chartsPage(page).scriptedMarket([50000, 50001]);
@@ -29,4 +29,21 @@ test('a reader who opens a chart the site does not have lands on the Charts tab'
 
   await expect(page.getByRole('region', {name: 'Charts', exact: true})).toBeVisible();
   await expect(page).toHaveURL(/\/demos\/charts\/$/);
+});
+
+test.describe('a reader on a phone', () => {
+  test.use(iPhone);
+
+  test('moves along the course with the tab row, which then names the tab they are on and its neighbors', async ({page}) => {
+    await page.goto('demos/z-index/');
+    await siteFrame(page).hydrated();
+    const row = page.getByRole('navigation', {name: 'demos'});
+
+    await row.getByRole('link', {name: 'Next tab, Drag sort'}).click();
+
+    await expect(page.getByRole('region', {name: 'Drag sort', exact: true})).toBeVisible();
+    await expect(row.getByText('Drag sort', {exact: true}).filter({visible: true})).toBeVisible();
+    await expect(row.getByRole('link', {name: 'Previous tab, Z-index'})).toBeVisible();
+    await expect(row.getByRole('link', {name: 'Next tab, Charts'})).toBeVisible();
+  });
 });
