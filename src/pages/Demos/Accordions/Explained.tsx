@@ -32,15 +32,15 @@ export const AccordionsExplained: FC = () => {
   return <>
     <header className="tab-introduction accordions-opening">
       <p className="paragraph">This tab builds an accordion: a list of parts, each with a bar you press to show or hide
-        the text under it. This page calls one of them a fold. Sliding a fold open is the hard part. For years, CSS
-        could move a height to a number but not to the height the text needs, so the older ways each worked around it:
-        guess a height, measure it with script, or set one in advance. Each has a cost.</p>
-      <p className="paragraph">A web page is written in three languages. HTML says what is on the page, CSS says how it
-        looks and moves, and script says what happens when you act. You don’t always need all three. HTML does some
-        jobs alone, and HTML with CSS does more, before you need script. If you know how each one works, you can
-        choose the one the job needs. By the end you can build an accordion in HTML alone, make it slide with CSS,
-        keep one fold open at a time, and say which language each job needed and why. The accordion on this page is
-        HTML alone.</p>
+        the text under it. This page calls one of them a fold. Sliding a fold open is the hard part. A web page is
+        written in three languages. HTML says what is on the page, CSS says how it looks and moves, and script says
+        what happens when you act. For years, CSS could move a height to a number but not to the height the text
+        needs, so the older ways each worked around it: guess a height, measure it with script, or set one in advance.
+        Each has a cost.</p>
+      <p className="paragraph">You don’t always need all three. HTML does some jobs alone, and HTML with CSS does more,
+        before you need script. If you know how each one works, you can choose the one the job needs. By the end you
+        can build an accordion in HTML alone, make it slide with CSS, keep one fold open at a time, and say which
+        language each job needed and why. The accordion on this page is HTML alone.</p>
       <figure className={`html-alone-exhibit snapping ${looks.exhibit}`}>
         <HtmlAlone/>
       </figure>
