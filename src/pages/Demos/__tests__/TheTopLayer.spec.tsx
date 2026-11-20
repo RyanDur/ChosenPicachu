@@ -158,6 +158,37 @@ describe('a z-index part’s page', () => {
 
     expect(partsIndex.currentIn(index)).toHaveAccessibleName('Why 9999 still loses');
   });
+
+  test('says beside the part how long the parts take together', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    expect(await demoPage.panel('parts and minutes')).toHaveTextContent(/about 24 minutes/);
+  });
+
+  test('leads from the panel to every part, with the reader’s choices carried', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses', '?raised=second')}/>);
+
+    const index = await partsIndex.find();
+
+    expect(partsIndex.addressesIn(index)).toEqual(zIndexParts.inOrder.map(part =>
+      demosAt(`z-index/${part}`, '?raised=second')));
+  });
+
+  test('lists the parts once, beside the part', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    await partsIndex.find();
+
+    expect(demoPage.listedSignposts(/Why the popover wins$/)).toHaveLength(1);
+  });
+});
+
+describe('the z-index tab’s panel', () => {
+  test('says how long the parts take together', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    expect(await demoPage.panel('parts and minutes')).toHaveTextContent(/about 24 minutes/);
+  });
 });
 
 describe('the z-index tab’s introduction', () => {

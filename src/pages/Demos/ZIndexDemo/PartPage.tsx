@@ -3,7 +3,6 @@ import {classNames} from '@components';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {ZIndexPart, zIndexParts} from './part-pages';
 import {PartFoot} from './PartFoot';
-import {ZIndexMap} from './ZIndexMap';
 import './PartPage.css';
 
 type Props = {
@@ -20,7 +19,6 @@ export const PartPage: FC<PropsWithChildren<Props>> = ({part, className, childre
       <h2 id={titled} className="title">{name}</h2>
     </hgroup>
     {children}
-    <ZIndexMap/>
     <PartFoot part={part}/>
   </section>;
 };
