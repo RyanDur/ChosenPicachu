@@ -51,6 +51,7 @@ export const views: readonly View[] = [
   {
     name: 'a tab pressed',
     page: named('demos'),
+    atWidths: [1440, 1000],
     into: async page => {
       const box = await boxOf(page.getByRole('navigation', {name: 'demos'}).getByRole('listitem').nth(1), 'no tab to press');
       await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
