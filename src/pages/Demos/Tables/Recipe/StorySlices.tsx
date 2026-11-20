@@ -19,8 +19,8 @@ const placed: [string, number, Place][] = [
   ['The trader can widen a column', ...atTutorial('resize')]
 ];
 
-export const StorySlices: FC<{headedBy: string}> = ({headedBy}) => <>
-  <Slices partPage={{headedBy}} can="The trader can watch the live market over lookbacks they arrange"
+export const StorySlices: FC = () => <>
+  <Slices onAPartPage can="The trader can watch the live market over lookbacks they arrange"
     soThat="so that what they compare sits side by side, and what matters most sits on top"
     slices="Too big to build in one motion, so I slice it: the smallest table that honors the shape first, then the flow of data, then each arrangement the trader asked for."
     sliced={placed}/>

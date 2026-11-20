@@ -30,7 +30,7 @@ const Sketch: FC = () =>
     </tbody>
   </table>;
 
-export const DesignAsk: FC<{headedBy?: string}> = ({headedBy}) =>
-  <Design headedBy={headedBy} sketch={<Sketch/>}
+export const DesignAsk: FC = () =>
+  <Design onAPartPage sketch={<Sketch/>}
     answers="The design answers shape: which measures, which lookbacks, how much precision, how dense."
     unanswered={unanswered}/>;
