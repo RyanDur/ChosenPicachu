@@ -67,6 +67,8 @@ const keys = async (chart: string, key: string): Promise<void> => {
   await userEvent.keyboard(`{${key}}`);
 };
 
+const sizeLine = /^Four parts, about \d+ minutes\.$/;
+
 export const chartsDesk = {
   addMenu,
   addChart,
@@ -100,7 +102,8 @@ export const chartsDesk = {
   findFeatureStories: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'let’s build this feature'}),
   findChartsTab: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'Charts'}),
   opening: (): Promise<HTMLElement> => screen.findByText(/^A live chart draws numbers that are still arriving\./),
-  size: (): Promise<HTMLElement> => screen.findByText(/^Four parts, about \d+ minutes\.$/),
+  size: (): Promise<HTMLElement> => screen.findByText(sizeLine),
+  sizeIn: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByText(sizeLine),
   findChartList: (): Promise<HTMLElement> => screen.findByRole('list', {name: 'charts'}),
   tutorial: (chart: string): HTMLElement => screen.getByRole('article', {name: `${chart} tutorial`}),
   findTutorial: (chart: string): Promise<HTMLElement> => screen.findByRole('article', {name: `${chart} tutorial`}),
