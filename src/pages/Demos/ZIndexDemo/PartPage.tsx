@@ -65,7 +65,7 @@ export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
       </hgroup>
       {partWritings[part].introduction}
     </header>
-    <PartsAndMinutes/>
+    <PartsAndMinutes level={3}/>
     <section className="part-body">
       {partWritings[part].exhibitAndRuns}
     </section>

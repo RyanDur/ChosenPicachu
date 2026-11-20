@@ -6,10 +6,10 @@ import {FoldMotionDial} from './FoldMotionDial';
 import {FoldTypeDial} from './FoldTypeDial';
 import {PartsIndex} from './PartsIndex';
 
-export const PartsAndDials: FC = () =>
+export const PartsAndDials: FC<{readonly level: 2 | 3}> = ({level}) =>
   <TabSidecar label="parts and dials">
     <AccordionsSize/>
-    <PartsIndex/>
+    <PartsIndex level={level}/>
     <DialGroup>
       <FoldTypeDial/>
       <FoldMotionDial/>
