@@ -4,8 +4,6 @@ import {Aggregations} from './Aggregations';
 import {TablePart, tableParts} from './part-pages';
 import {PartFoot} from './PartFoot';
 import {tablesBook} from './tables-book';
-import {WorldGlider, WorldNote} from './World';
-import {TablesMap} from './TablesMap';
 import {DesignAsk, FlowTableRecipe, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
 import '../Tutorials.css';
 import './TutorialPage.css';
@@ -28,10 +26,7 @@ export const PartPage: FC<{part: TablePart}> = ({part}) => {
       <h2 id={titled} className="title">{name}</h2>
     </hgroup>
     <Aggregations/>
-    <WorldGlider/>
-    <WorldNote/>
     <Part headedBy={titled}/>
-    <TablesMap/>
     <PartFoot part={part}/>
   </article>;
 };

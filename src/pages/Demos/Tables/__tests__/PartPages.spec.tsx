@@ -25,7 +25,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('following the need and its clues from the tables tab opens its page', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    await tablesTab().follow(theNeed);
+    await tablesTab().followPart(theNeed);
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(theNeedsPage);
     expect(await tablesTab().place()).toBeVisible();
@@ -70,7 +70,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the build chosen on the tables tab carries into the part it opens', async () => {
     render(<TestApp at={demosAt('tables', '?world=vanilla')}/>);
 
-    await tablesTab().follow(theNeed);
+    await tablesTab().followPart(theNeed);
 
     expect(await appAddress.movedOnFrom(demosAt('tables', '?world=vanilla'))).toBe(demosAt('tables/the-need-and-its-clues', '?world=vanilla'));
   });
@@ -106,7 +106,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('following the sketch from the tables tab opens its page', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    await tablesTab().follow(theSketch);
+    await tablesTab().followPart(theSketch);
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(theSketchsPage);
     expect(await tablesTab().place()).toBeVisible();
@@ -194,7 +194,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('following the slices from the tables tab opens their page', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    await tablesTab().follow(theSlices);
+    await tablesTab().followPart(theSlices);
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(theSlicesPage);
     expect(await tablesTab().place()).toBeVisible();
@@ -298,7 +298,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('following the still table from the tables tab opens its page with its story open', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    await tablesTab().follow(theStillTable);
+    await tablesTab().followPart(theStillTable);
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(theStillTablesPage);
     await tablesTab().place();
@@ -392,7 +392,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('following the live table from the tables tab opens its page with both its stories open', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    await tablesTab().follow(theLiveTable);
+    await tablesTab().followPart(theLiveTable);
 
     expect(await appAddress.movedOnFrom(demosAt('tables'))).toBe(theLiveTablesPage);
     await tablesTab().place();

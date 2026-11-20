@@ -1,6 +1,7 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {computeAccessibleName} from 'dom-accessibility-api';
+import {not} from '@ryandur/sand';
 import {untilTheTablesTabRenders} from './controls';
 
 type Headers = {
@@ -11,8 +12,13 @@ type Headers = {
 const recipe = (build: string): Promise<HTMLElement> =>
   screen.findByRole('region', {name: `build the ${build} yourself`}, untilTheTablesTabRenders);
 const part = (name: string): HTMLElement => screen.getByRole('region', {name});
-const link = async (name: string | RegExp): Promise<HTMLElement> =>
-  within(await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders)).findByRole('link', {name}, untilTheTablesTabRenders);
+const link = async (name: string | RegExp): Promise<HTMLElement> => {
+  const panel = await screen.findByRole('complementary', {name: 'parts and dials'}, untilTheTablesTabRenders);
+  const links = await within(await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders))
+    .findAllByRole('link', {name}, untilTheTablesTabRenders);
+  const [inTheText] = links.filter(found => not(panel.contains(found)));
+  return inTheText;
+};
 const partLink = async (name: string): Promise<HTMLElement> =>
   within(await screen.findByRole('navigation', {name: 'Parts'}, untilTheTablesTabRenders)).findByRole('link', {name}, untilTheTablesTabRenders);
 const headersOf = (holder: HTMLElement): Headers =>
