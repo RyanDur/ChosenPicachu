@@ -9,6 +9,7 @@ import {Spot, thePage} from './thePage';
 
 const sparkRadius = 1.2;
 const besideTheSpark = sparkRadius * 4.4;
+const turnHeadWidth = sparkRadius * 1.3;
 const lineUnder = thePage.letterSize * 1.3;
 const eventNameSize = thePage.letterSize * 1.3;
 
@@ -17,7 +18,7 @@ const readsRightward = ({u}: Spot): boolean => u < thePage.plate.across / 2;
 export const BehaviorPlate: FC<PropsWithClassName> = ({className}) =>
   <Plate className={className}>
     <Edge className="drawn-line drawn"/>
-    <TurnHead/>
+    <TurnHead markerWidth={turnHeadWidth}/>
     {thePage.events.map(({word, call, spark, motion}) => {
       const rightward = readsRightward(spark);
       const wordsAcross = rightward ? spark.u + besideTheSpark : spark.u - besideTheSpark;

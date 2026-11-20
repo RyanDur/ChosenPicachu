@@ -42,6 +42,7 @@ const face = (from: Spot, to: Spot): string => pointsOf([
 
 const sparkRadius = 1.6 * unitsPerStep;
 const ellipseRatio = 0.5;
+const turnHeadWidth = 5;
 
 const nameLineOf = ({y}: Point): number => y + sparkRadius * 0.6;
 
@@ -69,7 +70,7 @@ export const PagePulledApart: FC = () =>
     <svg className="drawing center" viewBox={`${35 * unitsPerStep} 0 ${215 * unitsPerStep} ${258 * unitsPerStep}`}
       width={215 * unitsPerStep}
       height={258 * unitsPerStep} aria-hidden="true">
-      <TurnHead/>
+      <TurnHead markerWidth={turnHeadWidth}/>
       <polygon className="slab-line drawn paper-filled"
         points={face({u: 0, v: plate.down}, {u: plate.across, v: plate.down})}/>
       <polygon className="slab-line drawn paper-filled"
