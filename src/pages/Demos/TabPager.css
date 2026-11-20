@@ -28,7 +28,7 @@
 }
 
 @media not ((width <= 600px) or ((width <= 1100px) and (height <= 600px))) {
-  .tabs .tab-pager {
+  .demo-tabs .tab-pager {
     display: none;
   }
 }
