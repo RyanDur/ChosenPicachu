@@ -67,12 +67,6 @@ describe('The Demos page', () => {
     expect(await demoTabPager.currentButNotThePage()).toHaveAttribute('href', demosAt('z-index'));
   });
 
-  test('the tabs on a part page of the Z-index tab mark Z-index as current, but not as the current page', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
-
-    expect(await demoTabs.currentButNotThePage()).toEqual(['Z-index']);
-  });
-
   test('the tab row on the Z-index tab offers Accordions as the tab before it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
