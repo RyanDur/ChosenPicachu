@@ -18,7 +18,7 @@ import '../PartPage.css';
 
 type Draws = ReturnType<typeof seeded>;
 
-const paragraphs = (count: number, dealt: () => string, {randNumber, randParagraph}: Draws) =>
+const dealFolds = (count: number, dealt: () => string, {randNumber, randParagraph}: Draws) =>
   Array.from({length: count}, () => ({
     heading: dealt(),
     story: Array.from({length: randNumber({min: 1, max: 6})}, () => randParagraph()).join(' ')
@@ -26,10 +26,10 @@ const paragraphs = (count: number, dealt: () => string, {randNumber, randParagra
 
 const draws = seeded('the accordion exhibits');
 const dealt = draws.wordDeck();
-const measuredFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
-const knownFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
-const platformFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
-const slidingFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
+const measuredFolds = {inclusive: dealFolds(5, dealt, draws), exclusive: dealFolds(5, dealt, draws)};
+const knownFolds = {inclusive: dealFolds(5, dealt, draws), exclusive: dealFolds(5, dealt, draws)};
+const platformFolds = {inclusive: dealFolds(5, dealt, draws), exclusive: dealFolds(5, dealt, draws)};
+const slidingFolds = {inclusive: dealFolds(5, dealt, draws), exclusive: dealFolds(5, dealt, draws)};
 
 type PartWriting = {
   readonly introduction: ReactNode;
