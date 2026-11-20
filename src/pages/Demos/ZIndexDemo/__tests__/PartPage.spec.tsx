@@ -131,7 +131,7 @@ describe('a z-index part’s page', () => {
 
     await partsIndex.find();
 
-    expect(demoPage.listedSignposts(/Why the popover wins$/)).toHaveLength(1);
+    expect(demoPage.entriesLinking(/Why the popover wins$/)).toHaveLength(1);
   });
 });
 

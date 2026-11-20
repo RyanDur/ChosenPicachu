@@ -24,7 +24,7 @@ export const demoTabPager = {
     const [currentTab] = await currentLinks('page');
     return currentTab;
   },
-  currentButNotThePage: async (): Promise<HTMLElement> => {
+  currentTabButNotThePage: async (): Promise<HTMLElement> => {
     const [currentTab] = await currentLinks(true);
     return currentTab;
   },
