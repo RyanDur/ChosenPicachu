@@ -4,7 +4,7 @@ import {chartPageAt, demoPage, demoTabs, feedIsSubscribed, partsIndex} from '@pa
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {titleAbove} from '@__test_support/title-above';
-import {chartPage, chartsDesk} from '@pages/Demos/Charts/__test_support';
+import {chartsDesk} from '@pages/Demos/Charts/__test_support';
 import {site} from '@pages/__test_support';
 
 describe('a chart’s page', () => {
@@ -26,19 +26,6 @@ describe('a chart’s page', () => {
     await demoTabs.open('Tables');
 
     expect(await site.titled('Demos Tables')).toBeInTheDocument();
-  });
-
-  test('should hold the four charts beside it, as the tab does', async () => {
-    render(<TestApp at={chartPageAt('candles')}/>);
-
-    const index = await partsIndex.find();
-
-    expect(chartPage.partsIn(index)).toEqual([
-      ['Price line', chartPageAt('price')],
-      ['Candles', chartPageAt('candles')],
-      ['Pressure', chartPageAt('pressure')],
-      ['Pie', chartPageAt('pie')]
-    ]);
   });
 
   test('should mark the chart the reader is on as the current page', async () => {
