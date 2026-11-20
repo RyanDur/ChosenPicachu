@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Outlet, useLocation} from 'react-router';
-import {Maybe, maybe} from '@ryandur/sand';
+import {Maybe} from '@ryandur/sand';
 import {Header, Listing, Main, PageError} from '@page';
 import {Room as NoSuchRoom} from '@pages/NoRoom';
 import names from '@navigation/names.json';
@@ -35,7 +35,7 @@ const shownDemoAt = (pathname: string): Maybe<ShownDemo> => tableTutorials.at(pa
     title: `Demos ${demoTab.names[DemoTopics.zIndex]} · ${zIndexParts.told(part).name}`,
     listed: names['z-index'][part]
   })))
-  .or(() => maybe(Object.values(DemoTopics).find(topic => demoTab.isAddressOf(pathname, topic)))
+  .or(() => demoTab.tabAt(pathname)
     .map((topic): ShownDemo => ({topic, title: `Demos ${demoTab.names[topic]}`, listed: names.demos[topic]})));
 
 const useShownDemo = (): Maybe<ShownDemo> => shownDemoAt(useLocation().pathname);
