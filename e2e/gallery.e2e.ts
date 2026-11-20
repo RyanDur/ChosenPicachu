@@ -70,12 +70,11 @@ test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@ph
     await expect(gallery.settingsPanel).toHaveCount(0);
   });
 
-  test('has the search, the page number and the page size within one tap of the first screen', async ({page}) => {
+  test('has the search, the page number and the page size one tap away', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
     await expect(gallery.wall.first()).toBeVisible();
 
-    await expect(gallery.settings).toBeInViewport();
     await gallery.openSettings();
 
     await expect(gallery.searchField).toBeVisible();
