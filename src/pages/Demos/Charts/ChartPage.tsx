@@ -59,7 +59,7 @@ const neighbor = (kind: ChartKind) => ({title: chartKinds.numbered(kind), addres
 
 export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const {name, reference, quote, chart: Chart} = features[kind];
-  return <PartSection title={`${chartKinds.names[kind]} tutorial`} panel={<PartsAndMinutes/>} wears="tutorials"
+  return <PartSection heading={`${chartKinds.names[kind]} tutorial`} panel={<PartsAndMinutes/>} wears="tutorials"
     foot={<PageFoot label="the chart pages" previous={chartKinds.previous(kind).map(neighbor)}
       next={chartKinds.next(kind).map(neighbor)}/>}>
     <Chart/>

@@ -27,13 +27,13 @@ export const TutorialPage: FC = () => {
   const to = tableParts.addressOf(tableTutorials.startingPart);
   return useShownTutorial().either(tutorial => {
     const TutorialRecipe = recipes[tutorial];
-    const caption = <>
+    const place = <>
       <Link className="signpost" to={carried(demoTab.address(DemoTopics.tables))}>
         {demoTab.names[DemoTopics.tables]}
       </Link>
       {` · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`}
     </>;
-    return <PartSection title={tableTutorials.nameOf(tutorial)} caption={caption}
+    return <PartSection heading={tableTutorials.nameOf(tutorial)} place={place}
       panel={<PartsAndDials/>} foot={<PartFoot part={tutorial}/>} wears="tutorial-page">
       <Aggregations/>
       <p className="paragraph">

@@ -22,7 +22,7 @@ export const PartPage: FC<{readonly part: TablePart}> = ({part}) => {
   const {name, ordinal} = tableParts.told(part);
   const Part = parts[part];
   const place = `${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`;
-  return <PartSection title={name} caption={place}
+  return <PartSection heading={name} place={place}
     panel={<PartsAndDials/>} foot={<PartFoot part={part}/>} wears="tutorial-page tutorials">
     <Aggregations/>
     <Part/>

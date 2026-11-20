@@ -54,7 +54,7 @@ const partWears: Partial<Record<ZIndexPart, string>> = {'lets-build-this-feature
 export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
   const {name, ordinal} = zIndexParts.told(part);
   const place = `${demoTab.names[DemoTopics.zIndex]} · part ${ordinal} of ${zIndexParts.inTheBook}`;
-  return <PartSection title={name} caption={place} introduction={partWritings[part].introduction}
+  return <PartSection heading={name} place={place} introduction={partWritings[part].introduction}
     panel={<PartsAndMinutes/>} foot={<PartFoot part={part}/>} wears={partWears[part]}>
     {partWritings[part].exhibitAndRuns}
   </PartSection>;
