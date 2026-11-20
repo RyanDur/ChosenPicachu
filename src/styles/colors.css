@@ -27,6 +27,14 @@
   --code-ink: rgb(169, 183, 198);
   --code-attribute: rgb(187, 181, 226);
 
+  --plan-mint: rgb(207, 232, 214);
+  --plan-sand: rgb(239, 227, 200);
+  --plan-blue: rgb(214, 226, 238);
+  --plan-rose: rgb(236, 214, 214);
+  --source-tag: rgb(47, 93, 138);
+  --source-attribute: rgb(138, 90, 47);
+  --source-bracket: rgb(138, 138, 138);
+
   --mint-ink: color-mix(in srgb, var(--mint) 45%, var(--black));
   --mint-shade: color-mix(in srgb, var(--mint) 85%, var(--black));
   --mint-dim: color-mix(in srgb, var(--mint) 75%, var(--black));

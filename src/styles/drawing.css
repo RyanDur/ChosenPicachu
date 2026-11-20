@@ -36,6 +36,24 @@
 
 .dashed-drawn { stroke-dasharray: 4 3; }
 
+.dotted-drawn { stroke-dasharray: 1 2; }
+
+.plan-mint-filled { fill: var(--plan-mint); }
+
+.plan-sand-filled { fill: var(--plan-sand); }
+
+.plan-blue-filled { fill: var(--plan-blue); }
+
+.plan-rose-filled { fill: var(--plan-rose); }
+
+.source-tag-filled { fill: var(--source-tag); }
+
+.source-attribute-filled { fill: var(--source-attribute); }
+
+.source-attribute-drawn { stroke: var(--source-attribute); }
+
+.source-bracket-filled { fill: var(--source-bracket); }
+
 .buy-side {
   --side-face: var(--mint-shade);
   --side-wall: var(--mint-ink);
