@@ -386,7 +386,7 @@ test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@ph
   });
 });
 
-test.describe('a reader partway down the wall', {tag: '@iPhone'}, () => {
+test.describe('a reader on a phone, partway down the wall', {tag: '@iPhone'}, () => {
   test('pages on from the pager', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.hangPageOneOnEveryPage();
