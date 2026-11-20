@@ -20,7 +20,6 @@ const besides = (part: BookPart, step: number): Maybe<PartPlace> =>
   maybe(signposts[inOrder.findIndex(signposted => signposted.part === part) + step]);
 
 export const tablesBook = {
-  signposts,
   minutes,
   inTheBook: signposts.length,
   previousOf: (part: BookPart): Maybe<PartPlace> => besides(part, -1),
