@@ -28,7 +28,7 @@ describe('the measured height, on its own page', () => {
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/a-box-remembers-the-fold', '?type=inclusive&style=drawer'));
   });
 
-  test('should hold its title in the part’s own region, so a reader who jumps to the part hears it first', async () => {
+  test('should be named by the title its region holds, so a reader who jumps to the part hears which part it is', async () => {
     render(<TestApp at={demosAt(measuredHeight)}/>);
 
     const part = await explanation.part('The measured height');
