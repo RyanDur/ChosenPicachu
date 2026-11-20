@@ -1,14 +1,10 @@
-import {expect, Locator, Page} from '@playwright/test';
+import {expect} from '@playwright/test';
 import {test} from './__test_support/history-writes';
 import {
   bannerTrap, boxOf, dialRow, hydration, pillSwitch, pressTab, siteFrame, tabsTo, zIndexTab
 } from './__test_support';
 
 const fixedBannerPage = 'demos/z-index/why-a-fixed-banner-still-loses/';
-
-const toTheBannerStory = (page: Page): Locator => page.getByRole('region', {name: 'Why a fixed banner still loses'})
-  .getByRole('paragraph').filter({hasText: 'To build this banner yourself'})
-  .getByRole('link', {name: 'Let’s build this feature', exact: true});
 
 test.describe('the fixed banners', {tag: ['@iPhone', '@desktop']}, () => {
   test('the old banner stays on the window, and card two passes over it while its edge still shows', async ({page}) => {
@@ -38,7 +34,7 @@ test.describe('the fixed banners', {tag: ['@iPhone', '@desktop']}, () => {
     await page.goto(fixedBannerPage);
     await siteFrame(page).hydrated();
 
-    await toTheBannerStory(page).click();
+    await zIndexTab(page).linkToTheBannerStory().click();
 
     await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
     await expect(page.getByText('The user sees the news over the page')).toBeInViewport();
@@ -48,7 +44,7 @@ test.describe('the fixed banners', {tag: ['@iPhone', '@desktop']}, () => {
 test('Back from Let’s build this feature returns the reader to the link they followed, and Forward to the tutorial\'s story', {tag: ['@iPhone', '@desktop']}, async ({page}) => {
   await page.goto(fixedBannerPage);
   await siteFrame(page).hydrated();
-  const link = toTheBannerStory(page);
+  const link = zIndexTab(page).linkToTheBannerStory();
   await link.click();
   await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
 
@@ -62,7 +58,7 @@ test('Back from Let’s build this feature returns the reader to the link they f
 test('a keyboard reader who follows Let’s build this feature reaches the story\'s opener with one Tab, and Enter folds the story', async ({page}) => {
   await page.goto(fixedBannerPage);
   await siteFrame(page).hydrated();
-  const link = toTheBannerStory(page);
+  const link = zIndexTab(page).linkToTheBannerStory();
   await tabsTo(page, link);
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/\/lets-build-this-feature\/#news-top-story$/);
@@ -81,7 +77,7 @@ test('a reader who follows Let’s build this feature with motion allowed lands 
   await page.goto(fixedBannerPage);
   await siteFrame(page).hydrated();
 
-  await toTheBannerStory(page).click();
+  await zIndexTab(page).linkToTheBannerStory().click();
 
   await expect(page).toHaveURL(/\/lets-build-this-feature\/#news-top-story$/);
   await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();

@@ -9,6 +9,9 @@ export const zIndexTab = (page: Page) => {
     partTitle: (name: string): Locator => page.getByRole('heading', {level: 2, name, exact: true}),
     followsTheFoot: (name: string): Promise<void> =>
       page.getByRole('navigation', {name: 'the z-index parts'}).getByRole('link', {name, exact: true}).click(),
+    linkToTheBannerStory: (): Locator => page.getByRole('region', {name: 'Why a fixed banner still loses'})
+      .getByRole('paragraph').filter({hasText: 'To build this banner yourself'})
+      .getByRole('link', {name: 'Let’s build this feature', exact: true}),
     raiser,
     raisesABanner: (): Promise<void> => raiser.click(),
     newestBanner: (): Locator => page.getByRole('alert').getByRole('listitem').last()
