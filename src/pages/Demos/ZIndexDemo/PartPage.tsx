@@ -55,7 +55,7 @@ const partWears: Partial<Record<ZIndexPart, string>> = {'lets-build-this-feature
 export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
   const titled = `part${useId()}`;
   const {name, ordinal} = zIndexParts.told(part);
-  return <section aria-labelledby={titled} className={classNames('part-page', partWears[part])}>
+  return <section aria-labelledby={titled} className="part-page">
     <header className="part-opening">
       <hgroup>
         <p className="caption">
@@ -66,7 +66,7 @@ export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
       {partWritings[part].introduction}
     </header>
     <PartsAndMinutes level={3}/>
-    <section className="part-body">
+    <section className={classNames('part-body', partWears[part])}>
       {partWritings[part].exhibitAndRuns}
     </section>
     <PartFoot part={part}/>
