@@ -9,6 +9,8 @@ type Headers = {
   readonly rows: HTMLElement[];
 };
 
+const sizeLine = /^Eight parts, about \d+ minutes\.$/;
+
 const recipe = (build: string): Promise<HTMLElement> =>
   screen.findByRole('region', {name: `build the ${build} yourself`}, untilTheTablesTabRenders);
 const part = (name: string): HTMLElement => screen.getByRole('region', {name});
@@ -42,7 +44,9 @@ export const tablesTab = () => ({
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   opening: (): Promise<HTMLElement> =>
     screen.findByText(/^A table of live trades is the hardest thing on this site/, {}, untilTheTablesTabRenders),
-  size: (): Promise<HTMLElement> => screen.findByText(/^Eight parts, about \d+ minutes\.$/, {}, untilTheTablesTabRenders),
+  size: (): Promise<HTMLElement> => screen.findByText(sizeLine, {}, untilTheTablesTabRenders),
+  sizeIn: (holder: HTMLElement): Promise<HTMLElement> =>
+    within(holder).findByText(sizeLine, {}, untilTheTablesTabRenders),
   worldDial: (): Promise<HTMLElement> => screen.findByRole('group', {name: 'world'}, untilTheTablesTabRenders),
   partsIn: async (group: string): Promise<(string | null)[][]> =>
     within(await screen.findByRole('list', {name: group}, untilTheTablesTabRenders)).getAllByRole('link')
