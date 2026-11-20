@@ -52,7 +52,9 @@ describe('a chart’s page', () => {
   test('should say beside the chart how long the charts take together', async () => {
     render(<TestApp at={chartPageAt('candles')}/>);
 
-    expect(await chartsDesk.size()).toHaveTextContent(/about 25 minutes/);
+    const page = await chartsDesk.findTutorial('candles');
+
+    expect(await chartsDesk.sizeIn(page)).toHaveTextContent(/about 25 minutes/);
   });
 
   test('should list the charts once', async () => {
