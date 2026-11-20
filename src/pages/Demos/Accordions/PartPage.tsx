@@ -60,7 +60,7 @@ const partWritings: Record<AccordionPart, PartWriting> = {
 export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   const {name, ordinal} = accordionParts.told(part);
   const place = `${demoTab.names[DemoTopics.accordions]} · part ${ordinal} of ${accordionParts.inTheBook}`;
-  return <PartSection title={name} caption={place} introduction={partWritings[part].introduction}
+  return <PartSection heading={name} place={place} introduction={partWritings[part].introduction}
     panel={<PartsAndDials/>} foot={<PartFoot part={part}/>}>
     {partWritings[part].exhibitAndRuns}
   </PartSection>;
