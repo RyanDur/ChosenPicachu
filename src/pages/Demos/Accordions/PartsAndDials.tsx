@@ -6,8 +6,8 @@ import {FoldMotionDial} from './FoldMotionDial';
 import {FoldTypeDial} from './FoldTypeDial';
 import {PartsIndex} from './PartsIndex';
 
-export const PartsAndDials: FC<{readonly titled?: boolean}> = ({titled}) =>
-  <TabSidecar label="parts and dials">
+export const PartsAndDials: FC<{readonly titled?: boolean}> = ({titled = false}) =>
+  <TabSidecar label={titled ? 'parts and dials' : undefined}>
     <AccordionsSize/>
     <PartsIndex titled={titled}/>
     <DialGroup>

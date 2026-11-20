@@ -28,7 +28,7 @@ describe('the accordions panel', () => {
   test('should say on a part’s page how long the parts take together', async () => {
     render(<TestApp at={demosAt(maxHeightGuess)}/>);
 
-    expect(await accordionsTab.partsAndDials()).toHaveTextContent(howLong);
+    expect(await accordionsTab.size()).toHaveTextContent(howLong);
   });
 
   test('should hold the six parts beside a part, as the tab does', async () => {
@@ -77,10 +77,10 @@ describe('the accordions panel', () => {
     render(<TestApp at={demosAt('accordions/the-measured-height')}/>);
 
     const introduction = explanation.opener(await explanation.part('The measured height'));
-    const foldType = accordionsTab.choiceIn(await accordionsTab.partsAndDials(), 'fold type');
+    const index = await partsIndex.find();
     const exhibit = await accordionsTab.exhibit();
 
-    expect(outOfReadingOrder([introduction, foldType, exhibit])).toEqual([]);
+    expect(outOfReadingOrder([introduction, index, exhibit])).toEqual([]);
   });
 
   test('should leave a part’s exhibit under the part’s own title, not under the parts', async () => {
