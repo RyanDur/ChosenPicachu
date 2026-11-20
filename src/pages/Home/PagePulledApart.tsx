@@ -61,10 +61,13 @@ const letterSize = advance / 0.6;
 
 const baselineOf = (line: number): number => firstBaseline + line * lineStep;
 
-const ellipsisIn = (line: number): Spot => ({
-  u: margin + (source[line].indexOf('…') + 0.5) * advance,
-  v: baselineOf(line) - midLetter
-});
+const ellipsisInside = (element: string): Spot => {
+  const line = source.findIndex(written => written.trimStart().startsWith(`<${element}`));
+  return {
+    u: margin + (source[line].indexOf('…') + 0.5) * advance,
+    v: baselineOf(line) - midLetter
+  };
+};
 
 const inks = {
   bracket: 'source-bracket-filled',
@@ -112,8 +115,8 @@ const Rippling: FC<{at: Point}> = ({at: {x, y}}) => <>
 </>;
 
 const events = [
-  {word: 'toggle', call: 'addEventListener("toggle", …)', spark: {u: 16, v: 26}, landsOn: ellipsisIn(3), Motion: Turning},
-  {word: 'sort', call: 'rows.sort(by(column))', spark: {u: 70, v: 40}, landsOn: ellipsisIn(7), Motion: Rippling}
+  {word: 'toggle', call: 'addEventListener("toggle", …)', spark: {u: 16, v: 26}, landsOn: ellipsisInside('nav'), Motion: Turning},
+  {word: 'sort', call: 'rows.sort(by(column))', spark: {u: 70, v: 40}, landsOn: ellipsisInside('table'), Motion: Rippling}
 ];
 
 const languages = [
