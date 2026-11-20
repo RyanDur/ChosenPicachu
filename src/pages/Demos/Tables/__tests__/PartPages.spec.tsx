@@ -322,6 +322,12 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(demoPage.part(theStillTable)).toBeVisible();
   });
 
+  test('the still table’s page names its steps for what they build', async () => {
+    render(<TestApp at={theStillTablesPage}/>);
+
+    expect(await tablesTab().recipe('still table')).toBeVisible();
+  });
+
   test('the still table’s page shows the live table, then only the still table', async () => {
     render(<TestApp at={theStillTablesPage}/>);
 
@@ -433,6 +439,12 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().place();
 
     expect(demoPage.part(theLiveTable)).toBeVisible();
+  });
+
+  test('the live table’s page names its steps for what they build', async () => {
+    render(<TestApp at={theLiveTablesPage}/>);
+
+    expect(await tablesTab().recipe('live table')).toBeVisible();
   });
 
   test('the live table’s page shows the live table, then only the live table and the store', async () => {

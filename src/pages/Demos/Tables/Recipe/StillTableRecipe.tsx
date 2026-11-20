@@ -162,6 +162,6 @@ const StillStory: FC = () => {
 };
 
 export const StillTableRecipe: FC = () =>
-  <section className="build-steps">
+  <section aria-label="build the still table yourself" className="build-steps">
     <Stories><StillStory/></Stories>
   </section>;
