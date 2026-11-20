@@ -1,51 +1,8 @@
-import {FC, ReactNode} from 'react';
-import {seeded} from '@components/fibs';
+import {FC} from 'react';
 import {AccordionsExplained} from './Explained';
-import {MaxHeightGuess} from './MaxHeightGuess';
-import {MeasuredHeight} from './MeasuredHeight';
-import {PlatformGivesNow} from './PlatformGivesNow';
-import {SlidingFoldMoves} from './SlidingFoldMoves';
-import {RemembersTheFold} from './RemembersTheFold';
 import {PartPage} from './PartPage';
-import {PartsAndDials} from './PartsAndDials';
-import {AccordionPart} from './part-pages';
 import {useShownPart} from './useShownPart';
-import {RemembersTheFoldIntroduction} from './RemembersTheFoldIntroduction';
-import {MaxHeightGuessIntroduction} from './MaxHeightGuessIntroduction';
-import {MeasuredHeightIntroduction} from './MeasuredHeightIntroduction';
-import {PlatformGivesNowIntroduction} from './PlatformGivesNowIntroduction';
-import {SlidingFoldMovesIntroduction} from './SlidingFoldMovesIntroduction';
-
-type Draws = ReturnType<typeof seeded>;
-
-const paragraphs = (count: number, dealt: () => string, {randNumber, randParagraph}: Draws) =>
-  Array.from({length: count}, () => ({
-    heading: dealt(),
-    story: Array.from({length: randNumber({min: 1, max: 6})}, () => randParagraph()).join(' ')
-  }));
-
-const draws = seeded('the accordion exhibits');
-const dealt = draws.wordDeck();
-const measuredFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
-const knownFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
-const platformFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
-const slidingFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
-
-type PartWriting = {
-  readonly introduction: ReactNode;
-  readonly exhibitAndRuns: ReactNode;
-};
-
-const partWritings: Record<AccordionPart, PartWriting> = {
-  'a-box-remembers-the-fold': {introduction: <RemembersTheFoldIntroduction/>, exhibitAndRuns: <RemembersTheFold folds={knownFolds}/>},
-  'the-max-height-guess': {introduction: <MaxHeightGuessIntroduction/>, exhibitAndRuns: <MaxHeightGuess/>},
-  'the-measured-height': {introduction: <MeasuredHeightIntroduction/>, exhibitAndRuns: <MeasuredHeight folds={measuredFolds}/>},
-  'what-the-platform-gives-now': {introduction: <PlatformGivesNowIntroduction/>, exhibitAndRuns: <PlatformGivesNow folds={platformFolds}/>},
-  'how-a-sliding-fold-moves': {introduction: <SlidingFoldMovesIntroduction/>, exhibitAndRuns: <SlidingFoldMoves folds={slidingFolds}/>}
-};
 
 export const Room: FC = () => useShownPart().either(
-  part => <PartPage part={part} introduction={partWritings[part].introduction} panel={<PartsAndDials/>}>
-    {partWritings[part].exhibitAndRuns}
-  </PartPage>,
+  part => <PartPage part={part}/>,
   () => <AccordionsExplained/>);
