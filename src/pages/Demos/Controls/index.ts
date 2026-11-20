@@ -1,6 +1,7 @@
 export type {Copy, Dials} from './Controls';
 export type {Motion, Origin} from './useControls';
 export {Controls} from './Controls';
+export {ControlDials} from './ControlDials';
 export {useControls} from './useControls';
 export {DialGroup} from './DialGroup';
 export {DialRow} from './DialRow';
