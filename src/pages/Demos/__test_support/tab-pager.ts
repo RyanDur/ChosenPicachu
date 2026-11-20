@@ -10,6 +10,12 @@ export const demoTabPager = {
     within(await demosNav.navigation()).getByRole('link', {name: /^Next tab/}).focus();
     await userEvent.keyboard('{Enter}');
   },
+  currentTab: async (): Promise<HTMLElement> => {
+    const bar = await demosNav.bar();
+    const [currentTab] = within(await demosNav.navigation()).getAllByRole('link', {current: 'page'})
+      .filter(link => not(bar.contains(link)));
+    return currentTab;
+  },
   current: async (): Promise<string[]> => {
     const bar = await demosNav.bar();
     return within(await demosNav.navigation()).getAllByText(/./, {selector: '[aria-current="page"]'})
