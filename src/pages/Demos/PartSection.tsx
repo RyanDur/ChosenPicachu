@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, ReactNode, useId} from 'react';
-import {is} from '@ryandur/sand';
+import {is, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import './PartPage.css';
 
@@ -24,9 +24,8 @@ export const PartSection: FC<PropsWithChildren<PartSectionProps>> = (
   {title, caption, introduction, panel, foot, wears, children}
 ) => {
   const titled = `part${useId()}`;
-  const opened = is(caption);
-  return <section aria-labelledby={titled} className={classNames('part-page', !opened && 'body-first')}>
-    {opened
+  return <section aria-labelledby={titled} className={classNames('part-page', not(caption) && 'body-first')}>
+    {is(caption)
       ? <header className="part-opening">
         <hgroup>
           <p className="caption">{caption}</p>
