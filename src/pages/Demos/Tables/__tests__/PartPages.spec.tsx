@@ -3,7 +3,8 @@ import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {aggregations, tablesTab} from '@pages/Demos/Tables/__test_support';
-import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {titleAbove} from '@__test_support/title-above';
 
 const theNeed = 'Start with the need, and let it pick the element';
 const theNeedsPage = demosAt('tables/the-need-and-its-clues');
@@ -154,6 +155,14 @@ describe('the tables tab’s parts, each on its own page', () => {
     await tablesTab().place();
 
     expect(tablesTab().titles('what a design cannot tell you', 3)).toHaveLength(1);
+  });
+
+  test('the sketch’s page holds what a design cannot tell you as a section of its own, its questions under its title', async () => {
+    render(<TestApp at={theSketchsPage}/>);
+
+    const [firstQuestion] = explanation.runsIn(await explanation.part(unanswered));
+
+    expect(titleAbove(firstQuestion)).toBe(unanswered);
   });
 
   test('the sketch’s page leads back to the need’s page and on to the slices’ page, by number and title, with the build carried', async () => {

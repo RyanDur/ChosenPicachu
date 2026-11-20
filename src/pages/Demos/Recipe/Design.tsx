@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {maybe} from '@ryandur/sand';
 import {designHeading} from '@pages/Demos/headings';
 
@@ -11,6 +11,7 @@ type DesignProps = {
 
 export const Design: FC<DesignProps> = ({sketch, answers, unanswered, headedBy}) => {
   const Subtitle: 'h3' | 'h4' = maybe(headedBy).either(() => 'h3', () => 'h4');
+  const unansweredTitle = `unanswered${useId()}`;
   return <section className="phase card rounded-corners lifted" aria-labelledby={maybe(headedBy).orElse(designHeading.id)}>
     {maybe(headedBy).either(
       () => null,
@@ -24,12 +25,14 @@ export const Design: FC<DesignProps> = ({sketch, answers, unanswered, headedBy})
       {sketch}
       <figcaption className="paragraph">{answers}</figcaption>
     </figure>
-    <aside className="unanswered field rounded-corners" aria-label="what a design cannot tell you">
-      <Subtitle className="unanswered-title caption muted-ink uppercase">what a design cannot tell you</Subtitle>
+    <section aria-labelledby={unansweredTitle} className="unanswered field rounded-corners">
+      <Subtitle id={unansweredTitle} className="unanswered-title caption muted-ink uppercase">
+        what a design cannot tell you
+      </Subtitle>
       <ul className="unanswered-list">
         {unanswered.map(question => <li key={question}>{question}</li>)}
       </ul>
-    </aside>
+    </section>
     <p className="overview paragraph muted-ink">
       These are questions for the people asking for the feature. Ask them, and keep building
       on your best interpretation in the meantime: markup organized well is cheap to change
