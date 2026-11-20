@@ -1,4 +1,4 @@
-import {is, not} from '@ryandur/sand';
+import {is, maybe, not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {computeAccessibleName} from 'dom-accessibility-api';
@@ -39,7 +39,9 @@ export const accordionsTab = {
   followInText: async (name: string): Promise<void> => {
     const panel = await partsAndDials();
     const [inTheText] = (await screen.findAllByRole('link', {name})).filter(link => not(panel.contains(link)));
-    return userEvent.click(inTheText);
+    return maybe(inTheText).either(link => userEvent.click(link), () => {
+      throw new Error(`no link named ${name} outside the panel`);
+    });
   },
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   partsIndex: partsIndex.find,
