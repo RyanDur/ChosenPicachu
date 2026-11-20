@@ -9,7 +9,7 @@ test('a desk reader follows Pressure from the panel beside the Candles page to t
   await chartsPage(page).partLink('Pressure').click();
 
   await expect(page).toHaveURL(/demos\/charts\/pressure\/$/);
-  await expect(page.getByRole('region', {name: 'Pressure tutorial'})).toBeVisible();
+  await expect(page.getByRole('region', {name: 'Pressure', exact: true})).toBeVisible();
 });
 
 test('a desk reader goes from the Candles page to the Tables tab by its tab', {tag: '@desktop'}, async ({page}) => {

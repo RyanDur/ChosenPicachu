@@ -60,7 +60,7 @@ const neighbor = (kind: ChartKind) => ({title: chartKinds.numbered(kind), addres
 export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const {name, reference, quote, chart: Chart} = features[kind];
   return <section aria-labelledby={`tutorial-${kind}`} className="part-page">
-    <h2 id={`tutorial-${kind}`} className="off-screen">{`${name} tutorial`}</h2>
+    <h2 id={`tutorial-${kind}`} className="off-screen">{chartKinds.names[kind]}</h2>
     <PartsAndMinutes/>
     <section className="part-body tutorials">
       <Chart/>
