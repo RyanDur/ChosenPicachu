@@ -15,14 +15,14 @@ export const TabPager: FC<{readonly topic: DemoTopics}> = ({topic}) => {
   const next = maybe(course[place + 1]);
 
   return <>
-    {previous.map(before =>
-      <Link key="previous" to={carried(demoTab.address(before))} preventScrollReset className="tab-pager previous field attentive bold">
-        <span className="off-screen">Previous tab, {demoTab.names[before]}</span>
+    {previous.map(previousTopic =>
+      <Link key="previous" to={carried(demoTab.address(previousTopic))} preventScrollReset className="tab-pager previous field attentive bold">
+        <span className="off-screen">Previous tab, {demoTab.names[previousTopic]}</span>
       </Link>).orNull()}
     <span aria-current="page" className="tab-pager current field bold">{demoTab.names[topic]}</span>
-    {next.map(after =>
-      <Link key="next" to={carried(demoTab.address(after))} preventScrollReset className="tab-pager next field attentive bold">
-        <span className="off-screen">Next tab, {demoTab.names[after]}</span>
+    {next.map(nextTopic =>
+      <Link key="next" to={carried(demoTab.address(nextTopic))} preventScrollReset className="tab-pager next field attentive bold">
+        <span className="off-screen">Next tab, {demoTab.names[nextTopic]}</span>
       </Link>).orNull()}
   </>;
 };
