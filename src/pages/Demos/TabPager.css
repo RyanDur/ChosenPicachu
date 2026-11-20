@@ -30,9 +30,3 @@
     }
   }
 }
-
-@media (width <= 1100px) and (height <= 600px) {
-  :root:has(.tabs.demo-tabs) {
-    --foot-reach: var(--menu-bar-block);
-  }
-}
