@@ -44,12 +44,16 @@ for (const stage of tableWorlds.stages) {
   });
 
   test.describe(`a mouse, in ${stage.name}`, {tag: '@desktop'}, () => {
-    test('a column still narrows to 5% under a mouse', async ({page}) => {
-      const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
+    test('a column narrows under a mouse to the same floor the keyboard stops at', async ({page, context}) => {
+      const keyed = await tableWorlds.opened(await context.newPage(), stage, {patience: arrivalPatience});
+      const dragged = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
+      const startingName = await measuredName(keyed.resizeHandle('buys'));
+      await keyed.narrowByKeys('buys', 40);
+      const floorName = await nameOnceMoved(keyed.resizeHandle('buys'), startingName);
 
-      await table.dragEdge('buys', {by: -600, moves: 20});
+      await dragged.dragEdge('buys', {by: -300, moves: 20});
 
-      await expect(table.resizeHandle('buys')).toHaveAccessibleName('resize buys, 5%');
+      await expect(dragged.resizeHandle('buys')).toHaveAccessibleName(floorName);
     });
 
     test('a flick that leaves the edge in one move widens a column as far as a slow drag does', async ({page, context}) => {
