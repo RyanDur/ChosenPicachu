@@ -25,7 +25,7 @@ describe('the table tutorials, each on its own page', () => {
     expect(tablesTab().recipeShown('drag resize')).not.toBeInTheDocument();
   });
 
-  test('should give each tutorial its minutes on the tables tab, as 7 min for the sort menu', async () => {
+  test('should give the sort menu its minutes on the tables tab, as 7 min', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
     expect(await tablesTab().minutesOf('Sort menu')).toHaveTextContent(/^7 min$/);
