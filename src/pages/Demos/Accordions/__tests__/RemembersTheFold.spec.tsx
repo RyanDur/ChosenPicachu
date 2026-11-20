@@ -69,7 +69,7 @@ describe('a box remembers the fold, on its own page', () => {
   test('should keep Accordions as the current tab', async () => {
     render(<TestApp at={demosAt(remembers)}/>);
 
-    expect(await demoTabs.current()).toEqual(['Accordions']);
+    expect(await demoTabs.currentButNotThePage()).toEqual(['Accordions']);
   });
 
   test('should link part one on the tab, with the fold choices carried', async () => {

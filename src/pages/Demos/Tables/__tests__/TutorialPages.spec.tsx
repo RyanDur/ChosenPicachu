@@ -144,7 +144,7 @@ describe('the table tutorials, each on its own page', () => {
   test('should keep Tables as the current tab on a tutorial’s page', async () => {
     render(<TestApp at={demosAt('tables/resize')}/>);
 
-    expect(await demoTabs.current()).toEqual(['Tables']);
+    expect(await demoTabs.currentButNotThePage()).toEqual(['Tables']);
   });
 });
 

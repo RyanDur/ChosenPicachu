@@ -133,7 +133,7 @@ describe('the measured height, on its own page', () => {
   test('should keep Accordions as the current tab on the measured height’s page', async () => {
     render(<TestApp at={demosAt(measuredHeight)}/>);
 
-    expect(await demoTabs.current()).toEqual(['Accordions']);
+    expect(await demoTabs.currentButNotThePage()).toEqual(['Accordions']);
   });
 
   test('an address naming no part of the accordions tab says there is no room there', async () => {

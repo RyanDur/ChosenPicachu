@@ -7,6 +7,8 @@ export const demoTabs = {
   names: async (): Promise<string[]> => within(await demosNav.bar()).getAllByRole('link').map(tab => tab.textContent),
   current: async (): Promise<string[]> =>
     within(await demosNav.bar()).getAllByRole('link', {current: 'page'}).map(tab => tab.textContent),
+  currentButNotThePage: async (): Promise<string[]> =>
+    within(await demosNav.bar()).getAllByRole('link', {current: true}).map(tab => tab.textContent),
   headingRepeatingItsName: async (name: string): Promise<HTMLElement | null> =>
     within(await screen.findByRole('region', {name})).queryByRole('heading', {name}),
   title: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {level: 1, name}),

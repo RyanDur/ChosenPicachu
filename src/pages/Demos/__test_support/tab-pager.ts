@@ -3,9 +3,9 @@ import userEvent from '@testing-library/user-event';
 import {not} from '@ryandur/sand';
 import {demosNav} from './demos-nav';
 
-const currentLinks = async (): Promise<HTMLElement[]> => {
+const currentLinks = async (current: 'page' | true): Promise<HTMLElement[]> => {
   const bar = await demosNav.bar();
-  return within(await demosNav.navigation()).getAllByRole('link', {current: 'page'})
+  return within(await demosNav.navigation()).getAllByRole('link', {current})
     .filter(link => not(bar.contains(link)));
 };
 
@@ -21,8 +21,12 @@ export const demoTabPager = {
     await userEvent.keyboard('{Enter}');
   },
   currentTab: async (): Promise<HTMLElement> => {
-    const [currentTab] = await currentLinks();
+    const [currentTab] = await currentLinks('page');
     return currentTab;
   },
-  current: async (): Promise<string[]> => (await currentLinks()).map(({textContent}) => textContent)
+  currentButNotThePage: async (): Promise<HTMLElement> => {
+    const [currentTab] = await currentLinks(true);
+    return currentTab;
+  },
+  current: async (): Promise<string[]> => (await currentLinks('page')).map(({textContent}) => textContent)
 };
