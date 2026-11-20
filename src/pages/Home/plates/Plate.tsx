@@ -3,9 +3,8 @@ import {classNames, PropsWithClassName} from '@components';
 import {edgeBox} from './edgeBox';
 import './Plate.css';
 
-const {x, y, width, height} = edgeBox;
-
 export const Plate: FC<PropsWithChildren<PropsWithClassName>> = ({className, children}) =>
-  <svg className={classNames('page-plate', className)} viewBox={`${x} ${y} ${width} ${height}`} aria-hidden="true">
+  <svg className={classNames('page-plate', className)}
+    viewBox={`${edgeBox.x} ${edgeBox.y} ${edgeBox.width} ${edgeBox.height}`} aria-hidden="true">
     {children}
   </svg>;
