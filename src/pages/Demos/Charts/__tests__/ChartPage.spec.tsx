@@ -31,7 +31,7 @@ describe('a chart’s page', () => {
   test('should say on the chart’s page how long the charts take together', async () => {
     render(<TestApp at={chartPageAt('candles')}/>);
 
-    const page = await chartsDesk.findTutorial('candles');
+    const page = await chartsDesk.findChartPage('Candles');
 
     expect(await chartsDesk.sizeIn(page)).toHaveTextContent(/about 25 minutes/);
   });
@@ -49,9 +49,9 @@ describe('a chart’s page', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const page = await chartsDesk.findTutorial('price line');
+    const page = await chartsDesk.findChartPage('Price line');
 
-    expect(chartsDesk.titleIn(page, 'price line tutorial', 2)).toBeInTheDocument();
+    expect(chartsDesk.titleIn(page, 'Price line', 2)).toBeInTheDocument();
   });
 
   test('should hold the panel after its title and before its chart', async () => {
@@ -59,7 +59,7 @@ describe('a chart’s page', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const title = chartsDesk.title('price line tutorial', 2);
+    const title = chartsDesk.title('Price line', 2);
     const index = await partsIndex.find();
     const chart = await chartsDesk.findTitle('live trades', 3);
 
@@ -71,7 +71,7 @@ describe('a chart’s page', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(titleAbove(await chartsDesk.findTitle('live trades', 3))).toBe('price line tutorial');
+    expect(titleAbove(await chartsDesk.findTitle('live trades', 3))).toBe('Price line');
   });
 
   test('an address naming no chart should say there is no room there', async () => {
