@@ -4,6 +4,8 @@ import {DemoTopics} from './demo-topics';
 
 const address = (topic: DemoTopics): string => `${Paths.demos}${topic}/`;
 
+const isAddressOf = (pathname: string, topic: DemoTopics): boolean => pathname === address(topic);
+
 const names: Record<DemoTopics, string> = {
   [DemoTopics.accordions]: 'Accordions',
   [DemoTopics.zIndex]: 'Z-index',
@@ -22,8 +24,9 @@ const topicOf = (tab = ''): DemoTopics =>
 
 type DemoTab = {
   address: (topic: DemoTopics) => string;
+  isAddressOf: (pathname: string, topic: DemoTopics) => boolean;
   names: Record<DemoTopics, string>;
   topicOf: (tab?: string) => DemoTopics;
 };
 
-export const demoTab: DemoTab = {address, names, topicOf};
+export const demoTab: DemoTab = {address, isAddressOf, names, topicOf};
