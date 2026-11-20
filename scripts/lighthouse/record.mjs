@@ -55,14 +55,14 @@ await page.goto(`${site}demos/charts/candles/`);
 await page.waitForSelector('figure svg', {timeout: 30_000});
 await page.waitForTimeout(2000);
 for (const period of ['day', 'week']) {
-  await page.getByRole('button', {name: 'price period'}).first().click();
+  await page.getByRole('button', {name: /^candle period/}).click();
   await page.getByRole('button', {name: period, exact: true}).click();
   await page.waitForTimeout(2000);
 }
 
 console.log('recording the feed…');
-framing = true;
 await page.goto(`${site}demos/tables/`);
+framing = true;
 await page.waitForSelector('table th', {timeout: 30_000});
 await page.waitForTimeout(6000);
 
