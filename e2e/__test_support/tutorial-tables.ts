@@ -4,7 +4,7 @@ import {pressTab} from './keyboard';
 const steps = {
   'the clues': {
     step: (page: Page): Locator => page.getByRole('region', {name: 'Start with the need, and let it pick the element', exact: true}),
-    before: (step: Locator): Locator => step.getByRole('figure')
+    before: (step: Locator): Locator => step.getByRole('figure', {name: 'a trader'})
   },
   'the features': {
     step: (page: Page): Locator => page.getByRole('region', {name: 'let’s build this feature', exact: true}),

@@ -344,7 +344,7 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     await tablesTab().place();
 
-    expect(demoPage.linksToPageIn(demoPage.part(theStillTable), demosAt('accordions/a-box-remembers-the-fold')))
+    expect(demoPage.linksToPageIn(await tablesTab().recipe('still table'), demosAt('accordions/a-box-remembers-the-fold')))
       .toEqual([['A box remembers the fold, and a rule reads it', demosAt('accordions/a-box-remembers-the-fold')]]);
   });
 
@@ -353,7 +353,7 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     await tablesTab().place();
 
-    expect(demoPage.linksToPageIn(demoPage.part(theStillTable), demosAt('accordions/a-box-remembers-the-fold')))
+    expect(demoPage.linksToPageIn(await tablesTab().recipe('still table'), demosAt('accordions/a-box-remembers-the-fold')))
       .toEqual([['A box remembers the fold, and a rule reads it', demosAt('accordions/a-box-remembers-the-fold')]]);
   });
 
@@ -362,7 +362,7 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     await tablesTab().place();
 
-    expect(demoPage.linksToPageIn(demoPage.part(theStillTable), demosAt('z-index/why-the-popover-wins')))
+    expect(demoPage.linksToPageIn(await tablesTab().recipe('still table'), demosAt('z-index/why-the-popover-wins')))
       .toEqual([['Why the popover wins', demosAt('z-index/why-the-popover-wins')]]);
   });
 
@@ -465,7 +465,7 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     await tablesTab().place();
 
-    expect(demoPage.linksToTabsIn(demoPage.part(theLiveTable))).toEqual([
+    expect(demoPage.linksToTabsIn(await tablesTab().recipe('live table'))).toEqual([
       ['charts tab', demosAt('charts')]
     ]);
   });
