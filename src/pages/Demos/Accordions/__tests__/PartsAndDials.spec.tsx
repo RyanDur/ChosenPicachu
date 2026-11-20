@@ -28,7 +28,7 @@ describe('the accordions panel', () => {
   test('should say on a part’s page how long the parts take together', async () => {
     render(<TestApp at={demosAt(maxHeightGuess)}/>);
 
-    expect(await accordionsTab.size()).toHaveTextContent(howLong);
+    expect(await accordionsTab.sizeIn(await explanation.part('The max-height guess'))).toHaveTextContent(howLong);
   });
 
   test('should hold the six parts beside a part, as the tab does', async () => {

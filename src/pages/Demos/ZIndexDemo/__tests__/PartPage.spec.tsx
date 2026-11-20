@@ -119,7 +119,9 @@ describe('a z-index part’s page', () => {
   test('says beside the part how long the parts take together', async () => {
     render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
 
-    expect(await zIndexTab.size()).toHaveTextContent(/about 24 minutes/);
+    const part = explanation.partIn(await explanation.part('Z-index'), 'Why 9999 still loses');
+
+    expect(await zIndexTab.sizeIn(part)).toHaveTextContent(/about 24 minutes/);
   });
 
   test('leads from the panel to every part, with the reader’s choices carried', async () => {
