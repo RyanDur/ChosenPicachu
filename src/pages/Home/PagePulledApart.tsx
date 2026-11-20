@@ -100,6 +100,8 @@ const regions = [
 const sparkRadius = 1.6 * unitsPerStep;
 const flattened = 0.5;
 
+const nameLineOf = ({y}: Point): number => y + sparkRadius * 0.6;
+
 const Turning: FC<{at: Point}> = ({at: {x, y}}) => <>
   <ellipse className="drawn-line markup-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 3}
     ry={sparkRadius * 3 * flattened}/>
@@ -129,7 +131,9 @@ const RegionName: FC<{name: string; place: Point}> = ({name, place}) =>
   <text className="drawn-caption monospaced ink-filled paper-haloed thin-haloed" {...place}>{name}</text>;
 
 const Call: FC<{words: string; place: Point}> = ({words, place}) =>
-  <text className="drawn-caption monospaced ink-filled paper-haloed" {...place} textAnchor="middle">{words}</text>;
+  <text className="drawn-caption monospaced ink-filled paper-haloed" {...place} dy="1.5em" textAnchor="middle">
+    {words}
+  </text>;
 
 const EventName: FC<{word: string; place: Point}> = ({word, place}) =>
   <text className="drawn-caption monospaced markup-attribute-filled paper-haloed" {...place}>{word}</text>;
@@ -168,7 +172,7 @@ export const PagePulledApart: FC = () =>
         return <Fragment key={word}>
           <Motion at={at}/>
           <circle className="markup-attribute-filled" cx={at.x} cy={at.y} r={sparkRadius}/>
-          <EventName word={word} place={{x: at.x + sparkRadius * 3.4, y: at.y + sparkRadius * 0.6}}/>
+          <EventName word={word} place={{x: at.x + sparkRadius * 3.4, y: nameLineOf(at)}}/>
         </Fragment>;
       })}
       {events.map(({word, spark, landsOn}) => {
@@ -183,7 +187,7 @@ export const PagePulledApart: FC = () =>
       })}
       {events.map(({word, call, spark}) => {
         const at = projected(spark, elevations.behavior);
-        return <Call key={word} words={call} place={{x: at.x, y: at.y + sparkRadius * 4.6}}/>;
+        return <Call key={word} words={call} place={{x: at.x, y: nameLineOf(at)}}/>;
       })}
       {languages.map(({word, elevation}) => {
         const {x, y} = projected({u: 0, v: plate.down / 2}, elevation);
