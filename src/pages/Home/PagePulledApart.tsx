@@ -1,5 +1,5 @@
 import {FC, Fragment} from 'react';
-import {has, is} from '@ryandur/sand';
+import {Ink, markup} from './markup';
 import './PagePulledApart.css';
 
 type Spot = {readonly u: number; readonly v: number};
@@ -70,24 +70,12 @@ const ellipsisInside = (element: string): Spot => {
   };
 };
 
-const inks = {
+const inks: Record<Ink, string> = {
   bracket: 'markup-bracket-filled',
   tag: 'markup-tag-filled',
   attribute: 'markup-attribute-filled',
   words: 'ink-filled'
 };
-
-type Token = {readonly ink: keyof typeof inks; readonly text: string};
-
-const tokensOf = (line: string): readonly Token[] => [...line.trim().matchAll(/(<\/?)([a-z][a-z0-9]*)((?: [a-z][a-z0-9-]*(?:="[^"]*"|='[^']*')?)*)(>)|([^<]+|<)/g)]
-  .flatMap(([, openingBracket, tag, attributes, closingBracket, words]): Token[] => is(words)
-    ? [{ink: 'words', text: words}]
-    : ([
-      {ink: 'bracket', text: openingBracket},
-      {ink: 'tag', text: tag},
-      {ink: 'attribute', text: attributes},
-      {ink: 'bracket', text: closingBracket}
-    ] satisfies Token[]).filter(({text}) => has(text)));
 
 const indentOf = (line: string): number => line.length - line.trimStart().length;
 
@@ -159,7 +147,7 @@ export const PagePulledApart: FC = () =>
         {markupLines.map((line, index) =>
           <text key={line} x={inset + indentOf(line) * advance} y={baselineOf(index)}
             textLength={line.trim().length * advance} lengthAdjust="spacingAndGlyphs">
-            {tokensOf(line).map(({ink, text}, at) => <tspan key={at} className={inks[ink]}>{text}</tspan>)}
+            {markup.tokensOf(line).map(({ink, text}, at) => <tspan key={at} className={inks[ink]}>{text}</tspan>)}
           </text>)}
       </g>
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.presentation)}/>
