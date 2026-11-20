@@ -932,7 +932,7 @@ test.describe('a reader on a phone held sideways, partway down the gallery', {ta
   });
 });
 
-test.describe('a keyboard reader', {tag: '@desktop'}, () => {
+test.describe('a keyboard reader at a desk', {tag: '@desktop'}, () => {
   test('meets the gallery right after the page controls', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
