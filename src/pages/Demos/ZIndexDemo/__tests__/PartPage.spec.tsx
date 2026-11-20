@@ -11,7 +11,7 @@ import {titleAbove} from '@__test_support/title-above';
 const thirdOnTop = 'z-index/why-third-is-on-top';
 
 describe('why Third is on top, on its own page', () => {
-  test('should hold its title in the part’s own region, so a reader who jumps to the part hears it first', async () => {
+  test('should be named by the title its region holds, so a reader who jumps to the part hears which part it is', async () => {
     render(<TestApp at={demosAt(thirdOnTop)}/>);
 
     const part = await explanation.part('Why Third is on top');
