@@ -37,7 +37,7 @@ const face = (from: Spot, to: Spot): string => pointsOf([
   projected(from, elevations.structure), projected(to, elevations.structure),
   projected(to, elevations.structure - slabDepth), projected(from, elevations.structure - slabDepth)]);
 
-const source = [
+const markupLines = [
   '<header>',
   '  <h1>…</h1>',
   '</header>',
@@ -50,10 +50,10 @@ const source = [
   '</main>'
 ];
 
-const margin = 6;
+const inset = 6;
 const edgeClearance = 5;
-const longestLine = Math.max(...source.map(line => line.length));
-const advance = (plate.across - margin - edgeClearance) / longestLine;
+const longestLine = Math.max(...markupLines.map(line => line.length));
+const advance = (plate.across - inset - edgeClearance) / longestLine;
 const firstBaseline = 10;
 const lineStep = 6.2;
 const midLetter = 1.5;
@@ -62,17 +62,17 @@ const letterSize = advance / 0.6;
 const baselineOf = (line: number): number => firstBaseline + line * lineStep;
 
 const ellipsisInside = (element: string): Spot => {
-  const line = source.findIndex(written => written.trimStart().startsWith(`<${element}`));
+  const line = markupLines.findIndex(written => written.trimStart().startsWith(`<${element}`));
   return {
-    u: margin + (source[line].indexOf('…') + 0.5) * advance,
+    u: inset + (markupLines[line].indexOf('…') + 0.5) * advance,
     v: baselineOf(line) - midLetter
   };
 };
 
 const inks = {
-  bracket: 'source-bracket-filled',
-  tag: 'source-tag-filled',
-  attribute: 'source-attribute-filled',
+  bracket: 'markup-bracket-filled',
+  tag: 'markup-tag-filled',
+  attribute: 'markup-attribute-filled',
   words: 'ink-filled'
 };
 
@@ -101,16 +101,16 @@ const sparkRadius = 1.6 * unitsPerStep;
 const flattened = 0.5;
 
 const Turning: FC<{at: Point}> = ({at: {x, y}}) => <>
-  <ellipse className="drawn-line source-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 3}
+  <ellipse className="drawn-line markup-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 3}
     ry={sparkRadius * 3 * flattened}/>
-  <path className="drawn-line source-attribute-drawn hollow" markerEnd="url(#page-pulled-apart-turn)"
+  <path className="drawn-line markup-attribute-drawn hollow" markerEnd="url(#page-pulled-apart-turn)"
     d={`M ${x - sparkRadius * 2.2} ${y + sparkRadius * 0.6} A ${sparkRadius * 2.2} ${sparkRadius * 2.2} 0 0 1 ${x + sparkRadius * 0.4} ${y - sparkRadius * 2.2}`}/>
 </>;
 
 const Rippling: FC<{at: Point}> = ({at: {x, y}}) => <>
-  <ellipse className="drawn-line source-attribute-drawn hollow" cx={x} cy={y} rx={sparkRadius * 2.4}
+  <ellipse className="drawn-line markup-attribute-drawn hollow" cx={x} cy={y} rx={sparkRadius * 2.4}
     ry={sparkRadius * 2.4 * flattened}/>
-  <ellipse className="drawn-line source-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 4}
+  <ellipse className="drawn-line markup-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 4}
     ry={sparkRadius * 4 * flattened}/>
 </>;
 
@@ -132,7 +132,7 @@ const Call: FC<{words: string; place: Point}> = ({words, place}) =>
   <text className="drawn-caption drawn-note monospaced ink-filled paper-haloed" {...place} textAnchor="middle">{words}</text>;
 
 const EventName: FC<{word: string; place: Point}> = ({word, place}) =>
-  <text className="drawn-caption monospaced source-attribute-filled paper-haloed" {...place}>{word}</text>;
+  <text className="drawn-caption monospaced markup-attribute-filled paper-haloed" {...place}>{word}</text>;
 
 export const PagePulledApart: FC = () =>
   <figure className="page-pulled-apart">
@@ -142,7 +142,7 @@ export const PagePulledApart: FC = () =>
       <defs>
         <marker id="page-pulled-apart-turn" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="5" markerHeight="5"
           orient="auto-start-reverse">
-          <path className="source-attribute-filled" d="M 0 0 L 6 3 L 0 6 z"/>
+          <path className="markup-attribute-filled" d="M 0 0 L 6 3 L 0 6 z"/>
         </marker>
       </defs>
       <polygon className="slab-line drawn paper-filled"
@@ -151,8 +151,8 @@ export const PagePulledApart: FC = () =>
         points={face({u: plate.across, v: 0}, {u: plate.across, v: plate.down})}/>
       <polygon className="slab-line drawn paper-filled" points={regionPoints(plate, elevations.structure)}/>
       <g className="monospaced" fontSize={letterSize} transform={`matrix(${onThePlateAt(elevations.structure)})`}>
-        {source.map((line, index) =>
-          <text key={line} x={margin + indentOf(line) * advance} y={baselineOf(index)}
+        {markupLines.map((line, index) =>
+          <text key={line} x={inset + indentOf(line) * advance} y={baselineOf(index)}
             textLength={line.trim().length * advance} lengthAdjust="spacingAndGlyphs">
             {tokensOf(line).map(({ink, text}, at) => <tspan key={at} className={inks[ink]}>{text}</tspan>)}
           </text>)}
@@ -167,7 +167,7 @@ export const PagePulledApart: FC = () =>
         const at = projected(spark, elevations.behavior);
         return <Fragment key={word}>
           <Motion at={at}/>
-          <circle className="source-attribute-filled" cx={at.x} cy={at.y} r={sparkRadius}/>
+          <circle className="markup-attribute-filled" cx={at.x} cy={at.y} r={sparkRadius}/>
           <EventName word={word} place={{x: at.x + sparkRadius * 3.4, y: at.y + sparkRadius * 0.6}}/>
         </Fragment>;
       })}
