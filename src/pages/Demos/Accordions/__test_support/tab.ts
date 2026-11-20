@@ -1,8 +1,9 @@
-import {is, maybe, not} from '@ryandur/sand';
+import {is} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {computeAccessibleName} from 'dom-accessibility-api';
 import {partsIndex} from '@pages/Demos/__test_support';
+import {explanation} from '@pages/Demos/Recipe/__test_support';
 
 const partsAndDials = (): Promise<HTMLElement> => screen.findByRole('complementary', {name: 'parts and dials'});
 
@@ -36,13 +37,8 @@ export const accordionsTab = {
     within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
   openPart: async (name: string): Promise<void> =>
     userEvent.click(within(await partsIndex.find()).getByRole('link', {name})),
-  followInText: async (name: string): Promise<void> => {
-    const panel = await partsAndDials();
-    const [inTheText] = (await screen.findAllByRole('link', {name})).filter(link => not(panel.contains(link)));
-    return maybe(inTheText).either(link => userEvent.click(link), () => {
-      throw new Error(`no link named ${name} outside the panel`);
-    });
-  },
+  followInIntroduction: async (part: string, name: string): Promise<void> =>
+    userEvent.click(explanation.linkNamed(explanation.opener(await explanation.part(part)), name)),
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   partsIndex: partsIndex.find,
   partsAndDials,
