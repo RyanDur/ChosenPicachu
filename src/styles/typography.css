@@ -55,13 +55,17 @@
   initial-value: 9999px;
 }
 
-.drawn-caption,
-.drawn-small-caption {
-  font-size: calc(var(--drawn-text, var(--text-caption)) / min(1, tan(atan2(var(--drawing-column), var(--drawn-width, 1px)))));
+.drawn-caption {
+  --drawn-type-size: var(--text-caption);
 }
 
 .drawn-small-caption {
-  --drawn-text: var(--text-small-caption);
+  --drawn-type-size: var(--text-small-caption);
+}
+
+.drawn-caption,
+.drawn-small-caption {
+  font-size: calc(var(--drawn-type-size) / min(1, tan(atan2(var(--drawing-column), var(--drawn-width, 1px)))));
 }
 
 .page-title {
