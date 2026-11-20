@@ -33,7 +33,7 @@ export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, ch
     <Tabs label="demos" className="demo-tabs field-before field-after" current={topic} aria-current={ariaCurrent}
       tabs={Object.values(DemoTopics).map(param =>
         ({display: demoTab.names[param], param, to: carried(demoTab.address(param))}))}>
-      <TabPager topic={topic} aria-current={ariaCurrent}/>
+      <TabPager topic={topic}/>
     </Tabs>
     <section id="about" aria-label={demoTab.names[topic]} className="about">
       {children}
