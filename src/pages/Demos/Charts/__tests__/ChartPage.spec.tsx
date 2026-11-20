@@ -3,6 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {chartPageAt, demoPage, demosAt, demoTabs, feedIsSubscribed, partsIndex} from '@pages/Demos/__test_support';
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {outOfReadingOrder} from '@__test_support/reading-order';
+import {titleAbove} from '@__test_support/title-above';
 import {chartPage, chartsDesk} from '@pages/Demos/Charts/__test_support';
 import {site} from '@pages/__test_support';
 
@@ -81,6 +82,14 @@ describe('a chart’s page', () => {
     const chart = await chartsDesk.findTitle('live trades', 3);
 
     expect(outOfReadingOrder([panel, chart])).toEqual([]);
+  });
+
+  test('should leave its chart under the chart’s own title, not under the parts', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(titleAbove(await chartsDesk.findTitle('live trades', 3))).toBe('price line tutorial');
   });
 
   test('an address naming no chart should say there is no room there', async () => {
