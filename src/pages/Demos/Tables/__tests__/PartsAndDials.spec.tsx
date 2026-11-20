@@ -29,7 +29,7 @@ describe('the tables panel', () => {
   test('should say beside a part how long the parts take together', async () => {
     render(<TestApp at={demosAt(theSlices)}/>);
 
-    const page = await tablesTab().partPage('Slice the design into stories');
+    const page = await tablesTab().page('Slice the design into stories');
 
     expect(await tablesTab().sizeIn(page)).toHaveTextContent(howLong);
   });
@@ -87,7 +87,7 @@ describe('the tables panel', () => {
   test('should sit inside a part’s page, which holds its own title', async () => {
     render(<TestApp at={demosAt(theSlices)}/>);
 
-    const page = await tablesTab().partPage('Slice the design into stories');
+    const page = await tablesTab().page('Slice the design into stories');
 
     expect(tablesTab().titlesIn(page)).toEqual(['Slice the design into stories']);
   });
@@ -95,7 +95,7 @@ describe('the tables panel', () => {
   test('should sit inside a tutorial’s page, which holds its own title', async () => {
     render(<TestApp at={demosAt(sortMenu)}/>);
 
-    const page = await tablesTab().tutorialPage('Sort menu');
+    const page = await tablesTab().page('Sort menu');
 
     expect(tablesTab().titlesIn(page)).toEqual(['Sort menu']);
   });
