@@ -28,7 +28,7 @@ describe('the max-height guess, on its own page', () => {
     const from = demosAt(guess, build);
     render(<TestApp at={from}/>);
 
-    await accordionsTab.openPart('A box remembers the fold, and a rule reads it');
+    await accordionsTab.followInText('A box remembers the fold, and a rule reads it');
 
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/a-box-remembers-the-fold', build));
   });

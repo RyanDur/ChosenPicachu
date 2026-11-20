@@ -3,14 +3,12 @@ import {PartTermLink} from '@pages/Demos/ZIndexDemo';
 import {classNames} from '@components';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
-import {DialGroup, useControls} from '../Controls';
+import {useControls} from '../Controls';
 import {FoldType} from '../ReaderSettings';
 import {carve, Line, lines, Mdn, Snippet} from '../Recipe';
 import {Fold} from './accordion-props';
 import {ExclusiveAccordion} from './ExclusiveAccordion';
 import {InclusiveAccordion} from './InclusiveAccordion';
-import {FoldMotionDial} from './FoldMotionDial';
-import {FoldTypeDial} from './FoldTypeDial';
 import {FocusOnTheBar, OffScreenNotGone, OneNameOneChoice, TheKnownHeight, TheRuleMatchesTheBox, TwoBordersTurned} from './Diagrams';
 import {foldInput} from './fold-input';
 import {looks} from './looks';
@@ -63,10 +61,6 @@ export const RemembersTheFold: FC<Props> = ({folds}) => {
       “<HeadingLink heading="html-alone-heading"/>”, for elements, tags and screen readers,
       and <TabLink to={DemoTopics.accordions} heading={tabHeadings.foldChoices}>the fold choices</TabLink> after it, for
       style sheets, rules, selectors, properties and the dials.</p>
-    <DialGroup>
-      <FoldTypeDial/>
-      <FoldMotionDial/>
-    </DialGroup>
     <KnownHeight className={classNames(looks.exhibit, foldMotion)} folds={folds[foldType]}/>
     <ol className={looks.runs}>
       <li className="run">

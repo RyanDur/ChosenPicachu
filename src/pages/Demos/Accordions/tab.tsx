@@ -7,6 +7,7 @@ import {PlatformGivesNow} from './PlatformGivesNow';
 import {SlidingFoldMoves} from './SlidingFoldMoves';
 import {RemembersTheFold} from './RemembersTheFold';
 import {PartPage} from './PartPage';
+import {PartsAndDials} from './PartsAndDials';
 import {AccordionPart} from './part-pages';
 import {useShownPart} from './useShownPart';
 
@@ -34,5 +35,8 @@ const pagesOfParts: Record<AccordionPart, ReactNode> = {
 };
 
 export const Room: FC = () => useShownPart().either(
-  part => <PartPage part={part}>{pagesOfParts[part]}</PartPage>,
+  part => <>
+    <PartPage part={part}>{pagesOfParts[part]}</PartPage>
+    <PartsAndDials/>
+  </>,
   () => <AccordionsExplained/>);

@@ -1,8 +1,6 @@
 import {FC} from 'react';
-import {DialGroup, useControls} from '../Controls';
+import {useControls} from '../Controls';
 import {FoldType} from '../ReaderSettings';
-import {FoldMotionDial} from './FoldMotionDial';
-import {FoldTypeDial} from './FoldTypeDial';
 import {carve, Mdn, Sample, Snippet} from '../Recipe';
 import inclusiveHtmlAloneSource from './InclusiveHtmlAlone.tsx?sample';
 import exclusiveHtmlAloneSource from './ExclusiveHtmlAlone.tsx?sample';
@@ -11,9 +9,7 @@ import {ExclusiveHtmlAloneAccordion} from './ExclusiveHtmlAlone';
 import {looks} from './looks';
 import {accordionParts} from './part-pages';
 import {tabHeadings} from './tab-headings';
-import {PartsIndex} from './PartsIndex';
-import {AccordionsSize} from './AccordionsSize';
-import {TabSidecar} from '../TabSidecar';
+import {PartsAndDials} from './PartsAndDials';
 import '../Runs.css';
 import './Explained.css';
 
@@ -46,14 +42,7 @@ export const AccordionsExplained: FC = () => {
         <HtmlAlone/>
       </figure>
     </header>
-    <TabSidecar label="parts and dials">
-      <AccordionsSize/>
-      <PartsIndex/>
-      <DialGroup>
-        <FoldTypeDial/>
-        <FoldMotionDial/>
-      </DialGroup>
-    </TabSidecar>
+    <PartsAndDials/>
     <section aria-labelledby="before-you-start-heading" className="before-you-start">
       <h2 id="before-you-start-heading" className="title bold">Before you start</h2>
       <p className="paragraph">Nothing here leans on another tab. Each part’s page builds the accordion another way.</p>

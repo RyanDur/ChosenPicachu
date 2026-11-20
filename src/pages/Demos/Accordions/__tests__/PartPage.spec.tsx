@@ -14,7 +14,7 @@ describe('the measured height, on its own page', () => {
     const from = demosAt(measuredHeight, '?type=inclusive&style=drawer');
     render(<TestApp at={from}/>);
 
-    await accordionsTab.openPart('The max-height guess');
+    await accordionsTab.followInText('The max-height guess');
 
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/the-max-height-guess', '?type=inclusive&style=drawer'));
   });
@@ -23,7 +23,7 @@ describe('the measured height, on its own page', () => {
     const from = demosAt(measuredHeight, '?type=inclusive&style=drawer');
     render(<TestApp at={from}/>);
 
-    await accordionsTab.openPart('A box remembers the fold, and a rule reads it');
+    await accordionsTab.followInText('A box remembers the fold, and a rule reads it');
 
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/a-box-remembers-the-fold', '?type=inclusive&style=drawer'));
   });
