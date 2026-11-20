@@ -75,7 +75,7 @@ const inks = {
 
 type Token = {readonly ink: keyof typeof inks; readonly text: string};
 
-const tokensOf = (line: string): readonly Token[] => [...line.trim().matchAll(/(<\/?)([a-z0-9]+)((?: [a-z]+)*)(>)|([^<]+)/g)]
+const tokensOf = (line: string): readonly Token[] => [...line.trim().matchAll(/(<\/?)([a-z0-9]+)((?: [a-z]+)*)(>)|([^<]+|<)/g)]
   .flatMap(([, open, tag, attributes, close, words]): Token[] => words
     ? [{ink: 'words', text: words}]
     : ([
