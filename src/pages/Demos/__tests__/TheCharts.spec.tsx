@@ -279,20 +279,18 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('candles');
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
 
     expect(await recipeFolds.press(recipe, 'The trader can read the same trades as candles')).toHaveAttribute('open');
   });
 
-  test('a story the trader opened folds shut when they press its summary again', async () => {
+  test('should fold an open story shut when the trader presses its summary again', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('charts', '?charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('candles');
     const recipe = await chartsDesk.walkThrough('Candles', 'build the candles yourself');
-    expect(await recipeFolds.press(recipe, 'The trader can read the same trades as candles')).toHaveAttribute('open');
+    await recipeFolds.press(recipe, 'The trader can read the same trades as candles');
 
     const story = await recipeFolds.press(recipe, 'The trader can read the same trades as candles');
 
@@ -448,7 +446,6 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('pressure');
     const recipe = await chartsDesk.walkThrough('Pressure', 'build the pressure yourself');
 
     expect(await recipeFolds.press(recipe, 'The trader can see who is driving the move')).toHaveAttribute('open');
@@ -522,7 +519,6 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=pie,price')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('pie');
     const recipe = await chartsDesk.walkThrough('Pie', 'build the pie yourself');
 
     expect(await recipeFolds.press(recipe, 'The trader can see who owns the session')).toHaveAttribute('open');

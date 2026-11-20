@@ -13,7 +13,7 @@ const addChart = async (name: string): Promise<void> =>
 const doorway = (chart: string): HTMLElement => screen.getByRole('link', {name: `${chart} tutorial`});
 
 const walkThrough = async (chart: string, recipe: string): Promise<HTMLElement> => {
-  await userEvent.click(doorway(chart));
+  await userEvent.click(await screen.findByRole('link', {name: `${chart} tutorial`}));
   return screen.findByRole('region', {name: recipe});
 };
 
