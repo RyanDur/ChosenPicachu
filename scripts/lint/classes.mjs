@@ -1,5 +1,5 @@
 import {empty, has, is, maybe, not} from '@ryandur/sand';
-import {readFileSync, readdirSync, statSync} from 'node:fs';
+import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -9,7 +9,7 @@ const src = join(root, 'src');
 const folders = directory => [directory, ...readdirSync(directory, {withFileTypes: true})
   .filter(entry => entry.isDirectory()).flatMap(entry => folders(join(directory, entry.name)))];
 
-const sheetsIn = found => found.flatMap(directory => readdirSync(directory).filter(name => name.endsWith('.css')).map(name => join(directory, name)));
+const sheetsIn = directories => directories.flatMap(directory => readdirSync(directory).filter(name => name.endsWith('.css')).map(name => join(directory, name)));
 
 const selectorsOf = sheet => [...readFileSync(sheet, 'utf8').replace(/\/\*[^]*?\*\//g, '').matchAll(/([^{};]+)\{/g)]
   .map(([, selector]) => selector.trim())
@@ -23,14 +23,14 @@ const isShared = sheet => {
   return path.startsWith('styles/') || path === 'index.css';
 };
 
-const read = found => {
+const classesOf = sheets => {
   /** @type {Set<string>} */
   const own = new Set();
   /** @type {Set<string>} */
   const shared = new Set();
   /** @type {Map<string, Set<string>>} */
   const bySheet = new Map();
-  for (const sheet of found) {
+  for (const sheet of sheets.filter(existsSync)) {
     const names = new Set(selectorsOf(sheet).flatMap(classesIn));
     bySheet.set(sheet, names);
     names.forEach(name => (isShared(sheet) ? shared : own).add(name));
@@ -40,16 +40,17 @@ const read = found => {
 
 const stampOf = paths => paths.map(path => `${path} ${maybe(statSync(path, {throwIfNoEntry: false})).map(({mtimeMs}) => mtimeMs).orElse(0)}`).join('\n');
 
-let lastRead = {watched: [], stamp: '', classes: read([])};
+let lastRead = {watched: [], stamp: '', classes: classesOf([])};
 
 // WebStorm's ESLint service keeps one process across branch switches,
-// so the sheets are read again when a sheet or a folder changes.
+// so the sheets are read again when a sheet or a folder changes. The folders are
+// stamped before they are listed, so a sheet added in between changes the next stamp.
 const sheetClasses = () => {
   if (has(lastRead.watched) && stampOf(lastRead.watched) === lastRead.stamp) return lastRead.classes;
-  const found = folders(src);
-  const sheets = sheetsIn(found);
-  const watched = [...found, ...sheets];
-  lastRead = {watched, stamp: stampOf(watched), classes: read(sheets)};
+  const directories = folders(src);
+  const directoriesStamp = stampOf(directories);
+  const sheets = sheetsIn(directories);
+  lastRead = {watched: [...directories, ...sheets], stamp: `${directoriesStamp}\n${stampOf(sheets)}`, classes: classesOf(sheets)};
   return lastRead.classes;
 };
 
