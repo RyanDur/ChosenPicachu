@@ -31,18 +31,18 @@ const usePlacingTheBanners = (): void => {
   useEffect(() => () => dispatchBanner(bannerChange.unplaced()), [dispatchBanner]);
 };
 
-type Contents = {
+type PartWriting = {
   readonly introduction: ReactNode;
-  readonly body: ReactNode;
+  readonly exhibitAndRuns: ReactNode;
 };
 
-const partContents: Record<ZIndexPart, Contents> = {
-  'why-third-is-on-top': {introduction: <WhyThirdIsOnTopIntroduction/>, body: <WhyThirdIsOnTop/>},
-  'why-9999-still-loses': {introduction: <Why9999StillLosesIntroduction/>, body: <Why9999StillLoses/>},
-  'what-else-forms-a-stacking-context': {introduction: <WhatElseFormsAStackingContextIntroduction/>, body: <WhatElseFormsAStackingContext/>},
-  'why-the-popover-wins': {introduction: <WhyThePopoverWinsIntroduction/>, body: <WhyThePopoverWins/>},
-  'why-a-fixed-banner-still-loses': {introduction: <WhyAFixedBannerStillLosesIntroduction/>, body: <WhyAFixedBannerStillLoses/>},
-  'lets-build-this-feature': {introduction: <LetsBuildThisFeatureIntroduction/>, body: <LetsBuildThisFeature/>}
+const partWritings: Record<ZIndexPart, PartWriting> = {
+  'why-third-is-on-top': {introduction: <WhyThirdIsOnTopIntroduction/>, exhibitAndRuns: <WhyThirdIsOnTop/>},
+  'why-9999-still-loses': {introduction: <Why9999StillLosesIntroduction/>, exhibitAndRuns: <Why9999StillLoses/>},
+  'what-else-forms-a-stacking-context': {introduction: <WhatElseFormsAStackingContextIntroduction/>, exhibitAndRuns: <WhatElseFormsAStackingContext/>},
+  'why-the-popover-wins': {introduction: <WhyThePopoverWinsIntroduction/>, exhibitAndRuns: <WhyThePopoverWins/>},
+  'why-a-fixed-banner-still-loses': {introduction: <WhyAFixedBannerStillLosesIntroduction/>, exhibitAndRuns: <WhyAFixedBannerStillLoses/>},
+  'lets-build-this-feature': {introduction: <LetsBuildThisFeatureIntroduction/>, exhibitAndRuns: <LetsBuildThisFeature/>}
 };
 
 const partWears: Partial<Record<ZIndexPart, string>> = {'lets-build-this-feature': 'tutorials'};
@@ -57,8 +57,8 @@ export const Room: FC = () => {
   usePlacingTheBanners();
 
   return useShownPart().either(
-    part => <PartPage part={part} className={partWears[part]} introduction={partContents[part].introduction}
-      panel={<PartsAndMinutes/>}>{partContents[part].body}</PartPage>,
+    part => <PartPage part={part} className={partWears[part]} introduction={partWritings[part].introduction}
+      panel={<PartsAndMinutes/>}>{partWritings[part].exhibitAndRuns}</PartPage>,
     () => <>
       <ZIndexIntroduction/>
       <NaturalZIndex className="card rounded-corners lifted padded"/>

@@ -31,21 +31,21 @@ const knownFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraph
 const platformFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
 const slidingFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
 
-type Contents = {
+type PartWriting = {
   readonly introduction: ReactNode;
-  readonly body: ReactNode;
+  readonly exhibitAndRuns: ReactNode;
 };
 
-const pagesOfParts: Record<AccordionPart, Contents> = {
-  'a-box-remembers-the-fold': {introduction: <RemembersTheFoldIntroduction/>, body: <RemembersTheFold folds={knownFolds}/>},
-  'the-max-height-guess': {introduction: <MaxHeightGuessIntroduction/>, body: <MaxHeightGuess/>},
-  'the-measured-height': {introduction: <MeasuredHeightIntroduction/>, body: <MeasuredHeight folds={measuredFolds}/>},
-  'what-the-platform-gives-now': {introduction: <PlatformGivesNowIntroduction/>, body: <PlatformGivesNow folds={platformFolds}/>},
-  'how-a-sliding-fold-moves': {introduction: <SlidingFoldMovesIntroduction/>, body: <SlidingFoldMoves folds={slidingFolds}/>}
+const partWritings: Record<AccordionPart, PartWriting> = {
+  'a-box-remembers-the-fold': {introduction: <RemembersTheFoldIntroduction/>, exhibitAndRuns: <RemembersTheFold folds={knownFolds}/>},
+  'the-max-height-guess': {introduction: <MaxHeightGuessIntroduction/>, exhibitAndRuns: <MaxHeightGuess/>},
+  'the-measured-height': {introduction: <MeasuredHeightIntroduction/>, exhibitAndRuns: <MeasuredHeight folds={measuredFolds}/>},
+  'what-the-platform-gives-now': {introduction: <PlatformGivesNowIntroduction/>, exhibitAndRuns: <PlatformGivesNow folds={platformFolds}/>},
+  'how-a-sliding-fold-moves': {introduction: <SlidingFoldMovesIntroduction/>, exhibitAndRuns: <SlidingFoldMoves folds={slidingFolds}/>}
 };
 
 export const Room: FC = () => useShownPart().either(
-  part => <PartPage part={part} introduction={pagesOfParts[part].introduction} panel={<PartsAndDials/>}>
-    {pagesOfParts[part].body}
+  part => <PartPage part={part} introduction={partWritings[part].introduction} panel={<PartsAndDials/>}>
+    {partWritings[part].exhibitAndRuns}
   </PartPage>,
   () => <AccordionsExplained/>);
