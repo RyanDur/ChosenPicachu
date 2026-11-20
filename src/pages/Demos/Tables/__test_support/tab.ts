@@ -53,6 +53,10 @@ export const tablesTab = () => ({
     return within(entry).getByRole('time');
   },
   titles: (name: string, level?: number): HTMLElement[] => screen.queryAllByRole('heading', {name, level}),
+  partPage: (name: string): Promise<HTMLElement> => screen.findByRole('article', {name}, untilTheTablesTabRenders),
+  tutorialPage: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}, untilTheTablesTabRenders),
+  titlesIn: (page: HTMLElement): (string | null)[] =>
+    within(page).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
   tableShown: (name: string): HTMLElement | null => screen.queryByRole('table', {name}),
   recipeShown: (build: string): HTMLElement | null => screen.queryByRole('region', {name: `build the ${build} yourself`}),
   frame: (): HTMLElement | null => screen.queryByTitle('the living table, in vanilla'),

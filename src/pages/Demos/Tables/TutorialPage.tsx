@@ -1,4 +1,4 @@
-import {FC, ReactNode, useId} from 'react';
+import {FC, useId} from 'react';
 import {Link} from 'react-router';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {Aggregations} from './Aggregations';
@@ -11,6 +11,8 @@ import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {tableParts} from './part-pages';
 import {tablesBook} from './tables-book';
 import {PartFoot} from './PartFoot';
+import {PartsAndDials} from './PartsAndDials';
+import '../PartPage.css';
 import './TutorialPage.css';
 
 const recipes: Record<Tutorial, FC> = {
@@ -19,14 +21,14 @@ const recipes: Record<Tutorial, FC> = {
   resize: ResizeRecipe
 };
 
-export const TutorialPage: FC<{panel: ReactNode}> = ({panel}) => {
+export const TutorialPage: FC = () => {
   const carried = useCarriedAddress();
   const titled = `tutorial${useId()}`;
   const startingAt = tableParts.told(tableTutorials.startingPart);
   const to = tableParts.addressOf(tableTutorials.startingPart);
   return useShownTutorial().either(tutorial => {
     const TutorialRecipe = recipes[tutorial];
-    return <>
+    return <section aria-labelledby={titled} className="part-page">
       <hgroup>
         <p className="caption">
           <Link className="signpost" to={carried(demoTab.address(DemoTopics.tables))}>
@@ -36,8 +38,8 @@ export const TutorialPage: FC<{panel: ReactNode}> = ({panel}) => {
         </p>
         <h2 id={titled} className="title">{tableTutorials.nameOf(tutorial)}</h2>
       </hgroup>
-      {panel}
-      <section aria-labelledby={titled} className="tutorial-page">
+      <PartsAndDials/>
+      <section className="part-body tutorial-page">
         <Aggregations/>
         <p className="paragraph">
           This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
@@ -46,8 +48,8 @@ export const TutorialPage: FC<{panel: ReactNode}> = ({panel}) => {
           those are new to you, read that part first.
         </p>
         <TutorialRecipe/>
-        <PartFoot part={tutorial}/>
       </section>
-    </>;
+      <PartFoot part={tutorial}/>
+    </section>;
   }, () => null);
 };
