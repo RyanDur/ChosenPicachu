@@ -34,7 +34,7 @@ describe('The Demos page', () => {
   test('the tab row on the Z-index tab names the tab the reader is on', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    expect(await demoTabPager.current()).toBe('Z-index');
+    expect(await demoTabPager.current()).toEqual(['Z-index']);
   });
 
   test('the tab row on the Z-index tab offers Accordions as the tab before it', async () => {
