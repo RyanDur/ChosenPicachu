@@ -5,5 +5,4 @@ export {demoTabs} from './tabs';
 export {demoTabPager} from './tab-pager';
 export {demoPage} from './page';
 export {pageFoot} from './foot';
-export {bookMap} from './book-map';
 export {partsIndex} from './parts-index';
