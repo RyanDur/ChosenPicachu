@@ -8,9 +8,7 @@ import {foldInput} from './fold-input';
 import {looks} from './looks';
 import {PlatformExhibit} from './PlatformExhibit';
 import {platformBuilds} from './platform-builds';
-import {PartLink} from './PartLink';
 import {RemembersTheFoldLink} from './RemembersTheFoldLink';
-import {HeadingLink} from './HeadingLink';
 import accordionsCss from './Accordions.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
 import '../Runs.css';
@@ -25,9 +23,6 @@ export const PlatformGivesNow: FC<Props> = ({folds}) => {
   const input = foldInput.of(foldType);
   const platform = platformBuilds[foldType];
   return <>
-    <p className="paragraph">This part builds on two before it: “<HeadingLink heading="html-alone-heading"/>”, on the
-      tab, for details and summary, and “<PartLink part="a-box-remembers-the-fold"/>”, for the {input} build it
-      replaces.</p>
     <PlatformExhibit folds={folds}/>
     <ol className={looks.runs}>
       <li className="run">

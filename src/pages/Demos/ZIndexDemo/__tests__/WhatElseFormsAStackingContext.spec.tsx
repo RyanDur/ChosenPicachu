@@ -19,7 +19,7 @@ describe('what else forms a stacking context, on its own page', () => {
 
     const part = await explanation.part(title);
 
-    expect(explanation.linkNamed(part, 'Why Third is on top')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?wears=opacity'));
+    expect(explanation.linkNamed(explanation.opener(part), 'Why Third is on top')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?wears=opacity'));
   });
 
   test('should link part two, which it builds on, to its page with the wear carried', async () => {

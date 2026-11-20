@@ -10,6 +10,11 @@ import {PartPage} from './PartPage';
 import {PartsAndDials} from './PartsAndDials';
 import {AccordionPart} from './part-pages';
 import {useShownPart} from './useShownPart';
+import {RemembersTheFoldIntroduction} from './RemembersTheFoldIntroduction';
+import {MaxHeightGuessIntroduction} from './MaxHeightGuessIntroduction';
+import {MeasuredHeightIntroduction} from './MeasuredHeightIntroduction';
+import {PlatformGivesNowIntroduction} from './PlatformGivesNowIntroduction';
+import {SlidingFoldMovesIntroduction} from './SlidingFoldMovesIntroduction';
 
 type Draws = ReturnType<typeof seeded>;
 
@@ -26,17 +31,21 @@ const knownFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraph
 const platformFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
 const slidingFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
 
-const pagesOfParts: Record<AccordionPart, ReactNode> = {
-  'a-box-remembers-the-fold': <RemembersTheFold folds={knownFolds}/>,
-  'the-max-height-guess': <MaxHeightGuess/>,
-  'the-measured-height': <MeasuredHeight folds={measuredFolds}/>,
-  'what-the-platform-gives-now': <PlatformGivesNow folds={platformFolds}/>,
-  'how-a-sliding-fold-moves': <SlidingFoldMoves folds={slidingFolds}/>
+type Contents = {
+  readonly introduction: ReactNode;
+  readonly body: ReactNode;
+};
+
+const pagesOfParts: Record<AccordionPart, Contents> = {
+  'a-box-remembers-the-fold': {introduction: <RemembersTheFoldIntroduction/>, body: <RemembersTheFold folds={knownFolds}/>},
+  'the-max-height-guess': {introduction: <MaxHeightGuessIntroduction/>, body: <MaxHeightGuess/>},
+  'the-measured-height': {introduction: <MeasuredHeightIntroduction/>, body: <MeasuredHeight folds={measuredFolds}/>},
+  'what-the-platform-gives-now': {introduction: <PlatformGivesNowIntroduction/>, body: <PlatformGivesNow folds={platformFolds}/>},
+  'how-a-sliding-fold-moves': {introduction: <SlidingFoldMovesIntroduction/>, body: <SlidingFoldMoves folds={slidingFolds}/>}
 };
 
 export const Room: FC = () => useShownPart().either(
-  part => <>
-    <PartPage part={part}>{pagesOfParts[part]}</PartPage>
-    <PartsAndDials/>
-  </>,
+  part => <PartPage part={part} introduction={pagesOfParts[part].introduction} panel={<PartsAndDials/>}>
+    {pagesOfParts[part].body}
+  </PartPage>,
   () => <AccordionsExplained/>);

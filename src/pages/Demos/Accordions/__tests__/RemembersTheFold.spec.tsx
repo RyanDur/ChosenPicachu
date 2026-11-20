@@ -77,7 +77,7 @@ describe('a box remembers the fold, on its own page', () => {
 
     const part = await explanation.part(title);
 
-    expect(explanation.linkNamed(part, 'An accordion in HTML alone'))
+    expect(explanation.linkNamed(explanation.opener(part), 'An accordion in HTML alone'))
       .toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#html-alone-heading`);
   });
 

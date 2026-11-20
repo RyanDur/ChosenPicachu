@@ -2,13 +2,10 @@ import {FC} from 'react';
 import {lines, Mdn, Snippet} from '../Recipe';
 import {OneGuessTwoFolds} from './Diagrams';
 import {looks} from './looks';
-import {PartLink} from './PartLink';
 import {RemembersTheFoldLink} from './RemembersTheFoldLink';
 import '../Runs.css';
 
 export const MaxHeightGuess: FC = () => <>
-  <p className="paragraph">This part builds on “<PartLink part="a-box-remembers-the-fold"/>”, for the known height
-    and the rule that reads the box.</p>
   <ol className={looks.runs}>
     <li className="run">
       <p className="paragraph">When the height isn’t known ahead of time, most of us slid a fold open with a
