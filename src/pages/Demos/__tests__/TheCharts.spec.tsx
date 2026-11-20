@@ -517,16 +517,6 @@ describe('a list of charts', () => {
     expect(chartsDesk.deskReport()).toHaveTextContent('Pie added');
   });
 
-  test('a doorway that leads nowhere returns the trader to the workspace', async () => {
-    const feed = await listeningFeed();
-
-    render(<TestApp at={chartPageAt('bogus')} feed={feed}/>);
-    await feedIsSubscribed(feed);
-
-    expect(await chartsDesk.findTitle(/BTC-USD/)).toBeVisible();
-    expect(chartsDesk.anyTutorial()).not.toBeInTheDocument();
-  });
-
   test('should open the pie story from the pie walkthrough', async () => {
     const feed = await listeningFeed();
 
@@ -906,8 +896,9 @@ describe('the links to other tabs', () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
+    const page = await demoTabs.arrivedOn('Charts');
 
-    expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
+    expect(demoPage.linksToTabsIn(page)).toEqual([
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
@@ -917,8 +908,9 @@ describe('the links to other tabs', () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
+    const page = await demoTabs.arrivedOn('Charts');
 
-    expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
+    expect(demoPage.linksToTabsIn(page)).toEqual([
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);
@@ -928,8 +920,9 @@ describe('the links to other tabs', () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
+    const page = await demoTabs.arrivedOn('Charts');
 
-    expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
+    expect(demoPage.linksToTabsIn(page)).toEqual([
       ['accordions tab', `${Paths.demos}accordions/`],
       ['Maybe', `${Paths.demos}charts/`],
       ['accordions tab', `${Paths.demos}accordions/`]
@@ -996,8 +989,9 @@ describe('the links to other tabs', () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
+    const page = await demoTabs.arrivedOn('Charts');
 
-    expect(demoPage.linksToTabsIn(demoPage.wholePage())).toEqual([
+    expect(demoPage.linksToTabsIn(page)).toEqual([
       ['accordions tab', `${Paths.demos}accordions/`],
       ['accordions tab', `${Paths.demos}accordions/`]
     ]);

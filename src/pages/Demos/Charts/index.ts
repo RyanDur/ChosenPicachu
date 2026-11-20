@@ -1,1 +1,1 @@
-export {};
+export {chartKinds} from './chart-kinds';
