@@ -35,8 +35,9 @@ page.on('response', async response => {
   });
 });
 
+let framing = false;
 page.on('websocket', socket => socket.on('framereceived', frame => {
-  if (frames.length < frameCap) frames.push(frame.payload.toString());
+  if (framing && frames.length < frameCap) frames.push(frame.payload.toString());
 }));
 
 console.log('recording the gallery…');
@@ -49,14 +50,21 @@ await page.goto(`${site}gallery/O9138?tab=vam`);
 await page.waitForSelector('figure.art-work img', {timeout: 30_000});
 await page.waitForTimeout(2000);
 
-console.log('recording the feed…');
-await page.goto(`${site}demos/tables/`);
-await page.waitForSelector('table th', {timeout: 30_000});
-await page.waitForTimeout(6000);
-
+console.log('recording the candles before the feed, so the replayed trades come after them…');
 await page.goto(`${site}demos/charts/candles/`);
 await page.waitForSelector('figure svg', {timeout: 30_000});
 await page.waitForTimeout(2000);
+for (const period of ['day', 'week']) {
+  await page.getByRole('button', {name: 'price period'}).first().click();
+  await page.getByRole('button', {name: period, exact: true}).click();
+  await page.waitForTimeout(2000);
+}
+
+console.log('recording the feed…');
+framing = true;
+await page.goto(`${site}demos/tables/`);
+await page.waitForSelector('table th', {timeout: 30_000});
+await page.waitForTimeout(6000);
 
 await page.goto(`${site}demos/drag-and-drop/`);
 await page.waitForSelector('.sortable-list .draggable', {timeout: 30_000});

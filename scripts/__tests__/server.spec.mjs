@@ -175,6 +175,8 @@ describe('the stub stage answers the gallery’s museums from recordings', () =>
   });
 });
 
+const rowsOf = answer => JSON.parse(answer.slice(answer.indexOf('[['), answer.lastIndexOf(']]') + 2));
+
 describe('the stub stage answers the charts’ candle history from recordings', () => {
   test('should answer an hour of candles asked for from today’s clock with its recording', async () => {
     const {stage, port} = await stageUp();
@@ -183,8 +185,20 @@ describe('the stub stage answers the charts’ candle history from recordings', 
       get('/trade-history/products/BTC-USD/candles?granularity=60&start=2026-11-20T07%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
     stage.kill();
 
+    const [first, second] = rowsOf(answer);
     expect(answer).toMatch(/^HTTP\/1\.1 200/);
-    expect(answer).toMatch(/\r\ncontent-type: application\/json/i);
+    expect(first[0] - second[0]).toBe(60);
+  });
+
+  test('should answer a week of candles with six-hour candles, not the hour’s minutes', async () => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port,
+      get('/trade-history/products/BTC-USD/candles?granularity=21600&start=2026-11-13T08%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
+    stage.kill();
+
+    const [first, second] = rowsOf(answer);
+    expect(first[0] - second[0]).toBe(21600);
   });
 
   test('should refuse candles of a length it has no recording for', async () => {
