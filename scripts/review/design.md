@@ -49,8 +49,8 @@ Carl Alexander, The importance of naming in programming: https://carlalexander.c
 These came up again and again and were ruled. Don't raise them.
 
 - The number of parts in the site's words, such as "Six parts" in a size line or "Parts 1 to 5 build the live table." on the Tables tab, is written by hand. It is the designer's words, and a card that changes the parts rewrites them. Deriving it from the list is not asked for. The minutes are computed and stay computed. Why: the designer, #562 and #564.
-- An address the site moved (a Tables station, a tutorial's old `?tut=`) moves with script. Without script it lands on the page it now belongs to, at the top, and a journey pins that. No id is kept only so an old link finds its place without script. Why: the designer, #564.
-- A frame `select` wears `card` without `bare`, because `bare` (`appearance: none`) removes the native arrow, and nothing draws one back. Why: the designer, #537 (thread 4622541582).
+- An address the site moved (a Tables station, a tutorial's old `?tut=`) moves with script. Without script it lands on the page it now belongs to, and a journey pins that. No id is kept only so an old link finds its place without script. Why: the designer, #564.
+- A frame `select` wears `card` without `bare`, because `bare` (`appearance: none`) removes the native arrow. The shared `chevroned` arrow comes with an exhibit's white ground and silver rule, which the frame doesn't wear. Why: the designer, #537 (thread 4622541582).
 - The home drawing's fixed data needs no guard where a lookup can't fail on that data, such as `ellipsisInside` finding the line an event names. A wrong entry throws while the home renders, and the home journeys run on every push. The page drawing's lettering and inks, on the home's slab and on the Record's aria-hidden plates (calls, event names, region names), are part of the picture, so they shrink with the drawing and have no contrast floor. Why: the designer, #584.
 
 ## How you report
