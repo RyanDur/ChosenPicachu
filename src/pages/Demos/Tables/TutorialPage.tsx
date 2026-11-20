@@ -1,4 +1,4 @@
-import {FC, useId} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {Link} from 'react-router';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {Aggregations} from './Aggregations';
@@ -19,14 +19,14 @@ const recipes: Record<Tutorial, FC> = {
   resize: ResizeRecipe
 };
 
-export const TutorialPage: FC = () => {
+export const TutorialPage: FC<{panel: ReactNode}> = ({panel}) => {
   const carried = useCarriedAddress();
   const titled = `tutorial${useId()}`;
   const startingAt = tableParts.told(tableTutorials.startingPart);
   const to = tableParts.addressOf(tableTutorials.startingPart);
   return useShownTutorial().either(tutorial => {
     const TutorialRecipe = recipes[tutorial];
-    return <section aria-labelledby={titled} className="tutorial-page">
+    return <>
       <hgroup>
         <p className="caption">
           <Link className="signpost" to={carried(demoTab.address(DemoTopics.tables))}>
@@ -36,15 +36,18 @@ export const TutorialPage: FC = () => {
         </p>
         <h2 id={titled} className="title">{tableTutorials.nameOf(tutorial)}</h2>
       </hgroup>
-      <Aggregations/>
-      <p className="paragraph">
-        This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
-        “<DemoLink to={to}>{startingAt.name}</DemoLink>”, ends,
-        with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
-        those are new to you, read that part first.
-      </p>
-      <TutorialRecipe/>
-      <PartFoot part={tutorial}/>
-    </section>;
+      {panel}
+      <section aria-labelledby={titled} className="tutorial-page">
+        <Aggregations/>
+        <p className="paragraph">
+          This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
+          “<DemoLink to={to}>{startingAt.name}</DemoLink>”, ends,
+          with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
+          those are new to you, read that part first.
+        </p>
+        <TutorialRecipe/>
+        <PartFoot part={tutorial}/>
+      </section>
+    </>;
   }, () => null);
 };

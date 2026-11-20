@@ -1,4 +1,4 @@
-import {FC, useId} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {Aggregations} from './Aggregations';
 import {TablePart, tableParts} from './part-pages';
@@ -16,17 +16,20 @@ const parts: Record<TablePart, FC<{headedBy: string}>> = {
   'the-live-table-and-the-store': FlowTableRecipe
 };
 
-export const PartPage: FC<{part: TablePart}> = ({part}) => {
+export const PartPage: FC<{part: TablePart; panel: ReactNode}> = ({part, panel}) => {
   const titled = `part${useId()}`;
   const {name, ordinal} = tableParts.told(part);
   const Part = parts[part];
-  return <article aria-labelledby={titled} className="tutorial-page tutorials">
+  return <>
     <hgroup>
       <p className="caption">{`${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`}</p>
       <h2 id={titled} className="title">{name}</h2>
     </hgroup>
-    <Aggregations/>
-    <Part headedBy={titled}/>
-    <PartFoot part={part}/>
-  </article>;
+    {panel}
+    <article aria-labelledby={titled} className="tutorial-page tutorials">
+      <Aggregations/>
+      <Part headedBy={titled}/>
+      <PartFoot part={part}/>
+    </article>
+  </>;
 };

@@ -1,7 +1,8 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demoPage, demosAt, partsIndex} from '@pages/Demos/__test_support';
-import {tablesTab} from '@pages/Demos/Tables/__test_support';
+import {aggregations, tablesTab} from '@pages/Demos/Tables/__test_support';
+import {outOfReadingOrder} from '@__test_support/reading-order';
 
 const sortMenu = 'tables/menu';
 const theSlices = 'tables/the-slices';
@@ -78,5 +79,25 @@ describe('the tables panel', () => {
     await partsIndex.find();
 
     expect(demoPage.entriesLinking(/Drag resize$/)).toHaveLength(1);
+  });
+
+  test('should come after a part’s title and before its live table', async () => {
+    render(<TestApp at={demosAt(theSlices)}/>);
+
+    const [title] = tablesTab().titles('Slice the design into stories', 2);
+    const panel = await demoPage.panel('parts and dials');
+    const liveTable = await aggregations.arrived();
+
+    expect(outOfReadingOrder([title, panel, liveTable])).toEqual([]);
+  });
+
+  test('should come after a tutorial’s title and before its live table', async () => {
+    render(<TestApp at={demosAt(sortMenu)}/>);
+
+    const panel = await demoPage.panel('parts and dials');
+    const [title] = tablesTab().titles('Sort menu', 2);
+    const liveTable = await aggregations.arrived();
+
+    expect(outOfReadingOrder([title, panel, liveTable])).toEqual([]);
   });
 });

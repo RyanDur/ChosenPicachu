@@ -39,7 +39,7 @@ test('a reader on a tutorial page reached by a link saved with a story follows t
   await page.goto('demos/tables/sort/?world=vanilla&living=flow%2Cstore');
   await siteFrame(page).hydrated();
 
-  await page.getByRole('region', {name: 'Drag sort'}).getByRole('link', {name: 'Tables', exact: true}).first().click();
+  await page.getByRole('region', {name: 'Tables'}).getByRole('link', {name: 'Tables', exact: true}).first().click();
 
   await expect(page).toHaveURL(/demos\/tables\/\?world=vanilla$/);
   await expect(tablesDemo(page).partLink('Sort menu')).toBeVisible();
