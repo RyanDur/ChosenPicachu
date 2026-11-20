@@ -6,7 +6,7 @@ import {clickWhereItIs, desktop, documentScrollY, galleryPage, hydration, iPhone
 const focusIsIn = (region: Locator): Promise<boolean> =>
   region.evaluate(element => element.contains(document.activeElement));
 
-test.describe('a reader at a phone\'s width', {tag: ['@iPhone', '@phoneSideways']}, () => {
+test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@phoneSideways']}, () => {
   test('reads the search label once the settings are open', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
