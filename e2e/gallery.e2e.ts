@@ -916,7 +916,7 @@ test.describe('a visitor at a desk', {tag: '@desktop'}, () => {
   });
 });
 
-test.describe('a reader partway down the gallery', {tag: '@phoneSideways'}, () => {
+test.describe('a reader on a phone held sideways, partway down the gallery', {tag: '@phoneSideways'}, () => {
   test('following NEXT opens the next page at its top', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
