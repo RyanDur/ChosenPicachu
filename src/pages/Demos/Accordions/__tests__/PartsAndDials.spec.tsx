@@ -4,6 +4,7 @@ import {demoPage, demosAt, partsIndex} from '@pages/Demos/__test_support';
 import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
+import {titleAbove} from '@__test_support/title-above';
 
 const maxHeightGuess = 'accordions/the-max-height-guess';
 const chosen = '?type=inclusive&style=drawer';
@@ -82,15 +83,15 @@ describe('the accordions panel', () => {
     expect(outOfReadingOrder([introduction, foldType, exhibit])).toEqual([]);
   });
 
-  test('should title its parts beneath the part’s own title, so the part’s runs stay under the part', async () => {
-    render(<TestApp at={demosAt('accordions/the-measured-height')}/>);
+  test('should leave a part’s exhibit under the part’s own title, not under the parts', async () => {
+    render(<TestApp at={demosAt(maxHeightGuess)}/>);
 
-    expect(await partsIndex.titledAt(3)).toBeInTheDocument();
+    expect(titleAbove(await accordionsTab.exhibit())).toBe('The max-height guess');
   });
 
   test('should title its parts beside the tab’s sections on the tab', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    expect(await partsIndex.titledAt(2)).toBeInTheDocument();
+    expect(await partsIndex.title()).toBeInTheDocument();
   });
 });
