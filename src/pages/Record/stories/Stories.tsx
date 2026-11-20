@@ -1,5 +1,7 @@
 import {FC} from 'react';
 import {Link} from 'react-router';
+import {PropsWithClassName} from '@components';
+import {BehaviorPlate, PresentationPlate, StructurePlate} from '@pages/Home/plates';
 import {Concern, concerns} from '../concerns';
 import {moments} from '../calendar';
 import {recordAddress} from '../addresses';
@@ -13,9 +15,17 @@ const stories: Record<Concern, FC> = {
   'Behavior': BehaviorStory
 };
 
+const plates: Record<Concern, FC<PropsWithClassName>> = {
+  'Structure': StructurePlate,
+  'Presentation': PresentationPlate,
+  'Behavior': BehaviorPlate
+};
+
 const StoryOf: FC<{concern: Concern}> = ({concern}) => {
   const Essay = stories[concern];
+  const Plate = plates[concern];
   return <section className="story trim-rule-above" aria-labelledby={concerns.idOf(concern)} tabIndex={-1}>
+    <Plate className="story-plate"/>
     <h2 className="record-title title" id={concerns.idOf(concern)}>{concern}</h2>
     <Essay/>
     <h3 className="sub-title">the moments it rests on</h3>

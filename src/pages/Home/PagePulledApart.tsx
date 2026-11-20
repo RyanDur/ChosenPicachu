@@ -1,10 +1,8 @@
 import {FC, Fragment, PropsWithChildren} from 'react';
-import {Ink, markup} from './markup';
+import {MarkupLines, Motion, Point, Region, Spot, thePage, TurnHead} from './plates';
 import './PagePulledApart.css';
 
-type Spot = {readonly u: number; readonly v: number};
-type Region = Spot & {readonly across: number; readonly down: number};
-type Point = {readonly x: number; readonly y: number};
+const {plate, regions, events} = thePage;
 
 const unitsPerStep = 2.4;
 const tilt = 0.42;
@@ -12,7 +10,6 @@ const cosine30 = 0.866;
 const lift = 82;
 const slabDepth = 6;
 const projectionStart: Point = {x: 150, y: 170};
-const plate: Region = {u: 0, v: 0, across: 112, down: 72};
 
 const elevations = {structure: 0, presentation: lift, behavior: lift * 2};
 
@@ -43,77 +40,10 @@ const face = (from: Spot, to: Spot): string => pointsOf([
   projected(from, elevations.structure), projected(to, elevations.structure),
   projected(to, elevations.structure - slabDepth), projected(from, elevations.structure - slabDepth)]);
 
-const markupLines = [
-  '<header class="app-header">',
-  '  <h1>…</h1>',
-  '</header>',
-  '<nav class="rail" id="pages" popover>…</nav>',
-  '<button popovertarget="pages">Menu</button>',
-  '<main class="app-main">',
-  '  <article>',
-  '    <table class="table">…</table>',
-  '  </article>',
-  '</main>'
-];
-
-const inset = 6;
-const edgeClearance = 5;
-const longestLine = Math.max(...markupLines.map(line => line.length));
-const advance = (plate.across - inset - edgeClearance) / longestLine;
-const firstBaseline = 10;
-const lineStep = 6.2;
-const letterSize = advance / 0.6;
-const halfLetterHeight = letterSize * 0.4;
-
-const baselineOf = (row: number): number => firstBaseline + row * lineStep;
-
-const ellipsisInside = (tag: string): Spot => {
-  const row = markupLines.findIndex(written => written.trimStart().startsWith(`<${tag}`));
-  return {
-    u: inset + (markupLines[row].indexOf('…') + 0.5) * advance,
-    v: baselineOf(row) - halfLetterHeight
-  };
-};
-
-const inkClasses: Record<Ink, string> = {
-  bracket: 'markup-bracket-filled',
-  tag: 'markup-tag-filled',
-  attribute: 'markup-attribute-filled',
-  words: 'ink-filled'
-};
-
-const indentOf = (line: string): number => line.length - line.trimStart().length;
-
-const regions = [
-  {name: '.rail', tint: 'plan-mint-filled', footprint: {u: 4, v: 4, across: 26, down: 64}, namedAt: {u: 11.6, v: 44.8}},
-  {name: '.app-header', tint: 'plan-sand-filled', footprint: {u: 34, v: 4, across: 74, down: 12}, namedAt: {u: 56.1, v: 27.6}},
-  {name: '.app-main', tint: 'plan-blue-filled', footprint: {u: 34, v: 20, across: 74, down: 48}, namedAt: {u: 36.5, v: 65.3}},
-  {name: '.table', tint: 'plan-rose-filled', footprint: {u: 42, v: 28, across: 58, down: 30}, namedAt: {u: 63.1, v: 53.2}}
-];
-
 const sparkRadius = 1.6 * unitsPerStep;
 const ellipseRatio = 0.5;
 
 const nameLineOf = ({y}: Point): number => y + sparkRadius * 0.6;
-
-const Turning: FC<{cx: number; cy: number}> = ({cx: x, cy: y}) => <>
-  <ellipse className="drawn-line markup-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 3}
-    ry={sparkRadius * 3 * ellipseRatio}/>
-  <path className="drawn-line markup-attribute-drawn hollow" markerEnd="url(#page-pulled-apart-turn)"
-    d={`M ${x - sparkRadius * 2.2} ${y + sparkRadius * 0.6} A ${sparkRadius * 2.2} ${sparkRadius * 2.2} 0 0 1 ${x + sparkRadius * 0.4} ${y - sparkRadius * 2.2}`}/>
-</>;
-
-const Rippling: FC<{cx: number; cy: number}> = ({cx: x, cy: y}) => <>
-  <ellipse className="drawn-line markup-attribute-drawn hollow" cx={x} cy={y} rx={sparkRadius * 2.4}
-    ry={sparkRadius * 2.4 * ellipseRatio}/>
-  <ellipse className="drawn-line markup-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 4}
-    ry={sparkRadius * 4 * ellipseRatio}/>
-</>;
-
-const events = [
-  {word: 'toggle', call: 'addEventListener("toggle", …)', spark: {u: 16, v: 26}, landsOn: ellipsisInside('nav'), Motion: Turning},
-  {word: 'click', call: 'rows.sort(by(column))', spark: {u: 70, v: 40}, landsOn: ellipsisInside('table'), Motion: Rippling}
-];
 
 const languages = [
   {word: 'behavior', elevation: elevations.behavior},
@@ -139,23 +69,14 @@ export const PagePulledApart: FC = () =>
     <svg className="drawing center" viewBox={`${35 * unitsPerStep} 0 ${215 * unitsPerStep} ${258 * unitsPerStep}`}
       width={215 * unitsPerStep}
       height={258 * unitsPerStep} aria-hidden="true">
-      <defs>
-        <marker id="page-pulled-apart-turn" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="5" markerHeight="5"
-          orient="auto-start-reverse">
-          <path className="markup-attribute-filled" d="M 0 0 L 6 3 L 0 6 z"/>
-        </marker>
-      </defs>
+      <TurnHead/>
       <polygon className="slab-line drawn paper-filled"
         points={face({u: 0, v: plate.down}, {u: plate.across, v: plate.down})}/>
       <polygon className="slab-line drawn paper-filled"
         points={face({u: plate.across, v: 0}, {u: plate.across, v: plate.down})}/>
       <polygon className="slab-line drawn paper-filled" points={regionPoints(plate, elevations.structure)}/>
-      <g className="monospaced" fontSize={letterSize} transform={`matrix(${onThePlateAt(elevations.structure)})`}>
-        {markupLines.map((line, row) =>
-          <text key={row} x={inset + indentOf(line) * advance} y={baselineOf(row)}
-            textLength={line.trim().length * advance} lengthAdjust="spacingAndGlyphs">
-            {markup.tokensOf(line).map(({ink, text}, at) => <tspan key={at} className={inkClasses[ink]}>{text}</tspan>)}
-          </text>)}
+      <g transform={`matrix(${onThePlateAt(elevations.structure)})`}>
+        <MarkupLines/>
       </g>
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.presentation)}/>
       {regions.map(({name, tint, footprint}) =>
@@ -163,10 +84,10 @@ export const PagePulledApart: FC = () =>
       {regions.map(({name, namedAt}) =>
         <RegionName key={name} {...projected(namedAt, elevations.presentation)}>{name}</RegionName>)}
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.behavior)}/>
-      {events.map(({word, spark, Motion}) => {
+      {events.map(({word, spark, motion}) => {
         const center = projected(spark, elevations.behavior);
         return <Fragment key={word}>
-          <Motion cx={center.x} cy={center.y}/>
+          <Motion kind={motion} cx={center.x} cy={center.y} radius={sparkRadius} ellipseRatio={ellipseRatio}/>
           <circle className="markup-attribute-filled" cx={center.x} cy={center.y} r={sparkRadius}/>
           <EventName x={center.x + sparkRadius * 3.4} y={nameLineOf(center)}>{word}</EventName>
         </Fragment>;
