@@ -48,13 +48,13 @@
 
 .plan-rose-filled { fill: var(--plan-rose); }
 
-.source-tag-filled { fill: var(--source-tag); }
+.markup-tag-filled { fill: var(--markup-tag); }
 
-.source-attribute-filled { fill: var(--source-attribute); }
+.markup-attribute-filled { fill: var(--markup-attribute); }
 
-.source-attribute-drawn { stroke: var(--source-attribute); }
+.markup-attribute-drawn { stroke: var(--markup-attribute); }
 
-.source-bracket-filled { fill: var(--source-bracket); }
+.markup-bracket-filled { fill: var(--markup-bracket); }
 
 .buy-side {
   --side-face: var(--mint-shade);
