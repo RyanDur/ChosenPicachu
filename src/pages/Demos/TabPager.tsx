@@ -10,7 +10,7 @@ const course = Object.values(DemoTopics);
 
 export const TabPager: FC<{readonly topic: DemoTopics}> = ({topic}) => {
   const carried = useCarriedAddress();
-  const ariaCurrent = demoTab.isAddressOf(useLocation().pathname, topic) ? 'page' : 'true';
+  const ariaCurrent = demoTab.currentAt(useLocation().pathname, topic);
   const place = course.indexOf(topic);
   const previous = maybe(course[place - 1]);
   const next = maybe(course[place + 1]);
