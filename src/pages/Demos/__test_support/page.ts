@@ -59,6 +59,7 @@ export const demoPage = {
   row: (name: string | RegExp): HTMLElement => screen.getByRole('rowheader', {name}),
   unanswered: (name: string): HTMLElement => screen.getByRole('complementary', {name}),
   wholePage: (): HTMLElement => screen.getByRole('main'),
+  introduction: (): HTMLElement | null => screen.queryByText(/^Each tab below is one feature a page needs/),
   linksToTabsIn,
   linksToPageIn,
   linksToPage: (address: string): string[][] => toPage(linksOffTheRail(), address),

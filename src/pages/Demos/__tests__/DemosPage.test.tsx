@@ -1,5 +1,5 @@
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt, demoTabPager, demoTabs} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, demoTabPager, demoTabs} from '@pages/Demos/__test_support';
 import {expect, test} from 'vitest';
 import {render, waitFor} from '@testing-library/react';
 import {appAddress} from '@__test_support/address';
@@ -29,6 +29,30 @@ describe('The Demos page', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     expect(await demoTabs.names()).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
+  });
+
+  test('a part’s page opens on the part, with no Demos introduction before it', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    await demoPage.findTitle('Why 9999 still loses');
+
+    expect(demoPage.introduction()).not.toBeInTheDocument();
+  });
+
+  test('a tables tutorial’s page opens on the tutorial, with no Demos introduction before it', async () => {
+    render(<TestApp at={demosAt('tables/menu')}/>);
+
+    await demoPage.findTitle('Demos Tables · Sort menu');
+
+    expect(demoPage.introduction()).not.toBeInTheDocument();
+  });
+
+  test('the Tables tab opens with the Demos introduction above its tabs', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    await demoPage.findTitle('Demos Tables');
+
+    expect(demoPage.introduction()).toBeInTheDocument();
   });
 
   test('the tab row on the Z-index tab names the tab the reader is on', async () => {
