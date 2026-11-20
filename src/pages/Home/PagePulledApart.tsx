@@ -150,7 +150,7 @@ export const PagePulledApart: FC = () =>
       <polygon className="slab-line drawn paper-filled" points={regionPoints(plate, elevations.structure)}/>
       <g className="monospaced" fontSize={letterSize} transform={`matrix(${onThePlateAt(elevations.structure)})`}>
         {markupLines.map((line, row) =>
-          <text key={line} x={inset + indentOf(line) * advance} y={baselineOf(row)}
+          <text key={row} x={inset + indentOf(line) * advance} y={baselineOf(row)}
             textLength={line.trim().length * advance} lengthAdjust="spacingAndGlyphs">
             {markup.tokensOf(line).map(({ink, text}, at) => <tspan key={at} className={inks[ink]}>{text}</tspan>)}
           </text>)}
