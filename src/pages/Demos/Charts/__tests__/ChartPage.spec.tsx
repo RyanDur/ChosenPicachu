@@ -62,6 +62,16 @@ describe('a chart’s page', () => {
     expect(demoPage.entriesLinking(/Pressure$/)).toHaveLength(1);
   });
 
+  test('should hold its title in the chart’s own page, so a reader who jumps to it hears it first', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    const page = await chartsDesk.findTutorial('price line');
+
+    expect(chartsDesk.titleIn(page, 'price line tutorial', 2)).toBeInTheDocument();
+  });
+
   test('should hold the panel after its title and before its chart', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
