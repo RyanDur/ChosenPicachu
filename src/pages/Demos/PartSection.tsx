@@ -3,14 +3,22 @@ import {is} from '@ryandur/sand';
 import {classNames} from '@components';
 import './PartPage.css';
 
+type Opening = {
+  readonly caption: ReactNode;
+  readonly introduction?: ReactNode;
+};
+
+type BodyFirst = {
+  readonly caption?: never;
+  readonly introduction?: never;
+};
+
 type PartSectionProps = {
   readonly title: string;
-  readonly caption?: ReactNode;
-  readonly introduction?: ReactNode;
   readonly panel: ReactNode;
   readonly foot: ReactNode;
   readonly wears?: string;
-};
+} & (Opening | BodyFirst);
 
 export const PartSection: FC<PropsWithChildren<PartSectionProps>> = (
   {title, caption, introduction, panel, foot, wears, children}
