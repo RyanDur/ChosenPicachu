@@ -187,7 +187,8 @@ describe('why 9999 still loses', () => {
 
     const part = await explanation.part('Why 9999 still loses');
 
-    expect(explanation.linkNamed(part, 'What else forms a stacking context'))
+    expect(explanation.linkNamed(explanation.saying(part, /^A z-index is compared only with the others/),
+      'What else forms a stacking context'))
       .toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context'));
   });
 });

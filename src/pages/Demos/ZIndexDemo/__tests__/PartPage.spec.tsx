@@ -10,6 +10,14 @@ import {outOfReadingOrder} from '@__test_support/reading-order';
 const thirdOnTop = 'z-index/why-third-is-on-top';
 
 describe('why Third is on top, on its own page', () => {
+  test('should hold its title in the part’s own region, so a reader who jumps to the part hears it first', async () => {
+    render(<TestApp at={demosAt(thirdOnTop)}/>);
+
+    const part = await explanation.part('Why Third is on top');
+
+    expect(explanation.partTitles(part)).toEqual(['Why Third is on top']);
+  });
+
   test('should say its place in the z-index book', async () => {
     render(<TestApp at={demosAt(thirdOnTop)}/>);
 
