@@ -1,4 +1,5 @@
 :root {
+  --text-small-caption: var(--base-x-1_125);
   --text-caption: var(--base-x-1_5);
   --text-body: var(--base-x-1_75);
   --text-title: var(--base-x-2_25);
@@ -54,8 +55,13 @@
   initial-value: 9999px;
 }
 
-.drawn-caption {
-  font-size: calc(var(--text-caption) / min(1, tan(atan2(var(--drawing-column), var(--drawn-width, 1px)))));
+.drawn-caption,
+.drawn-small-caption {
+  font-size: calc(var(--drawn-text, var(--text-caption)) / min(1, tan(atan2(var(--drawing-column), var(--drawn-width, 1px)))));
+}
+
+.drawn-small-caption {
+  --drawn-text: var(--text-small-caption);
 }
 
 .page-title {

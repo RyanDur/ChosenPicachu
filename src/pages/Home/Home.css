@@ -117,7 +117,8 @@
         max-block-size: calc(var(--drawn-across) * var(--drawn-height-per-width));
       }
 
-      .drawn-caption {
+      .drawn-caption,
+      .drawn-small-caption {
         --drawing-column: min(100cqi, 100cqb * var(--drawn-width-per-height));
       }
     }
