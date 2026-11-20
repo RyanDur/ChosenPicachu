@@ -6,6 +6,8 @@ const address = (topic: DemoTopics): string => `${Paths.demos}${topic}/`;
 
 const isAddressOf = (pathname: string, topic: DemoTopics): boolean => pathname === address(topic);
 
+const currentAt = (pathname: string, topic: DemoTopics): 'page' | 'true' => isAddressOf(pathname, topic) ? 'page' : 'true';
+
 const names: Record<DemoTopics, string> = {
   [DemoTopics.accordions]: 'Accordions',
   [DemoTopics.zIndex]: 'Z-index',
@@ -25,8 +27,9 @@ const topicOf = (tab = ''): DemoTopics =>
 type DemoTab = {
   address: (topic: DemoTopics) => string;
   isAddressOf: (pathname: string, topic: DemoTopics) => boolean;
+  currentAt: (pathname: string, topic: DemoTopics) => 'page' | 'true';
   names: Record<DemoTopics, string>;
   topicOf: (tab?: string) => DemoTopics;
 };
 
-export const demoTab: DemoTab = {address, isAddressOf, names, topicOf};
+export const demoTab: DemoTab = {address, isAddressOf, currentAt, names, topicOf};

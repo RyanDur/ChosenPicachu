@@ -11,8 +11,8 @@ import {useCarriedAddress} from './useCarriedAddress';
 
 export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, children}) => {
   const carried = useCarriedAddress();
-  const onTheTab = demoTab.isAddressOf(useLocation().pathname, topic);
-  const ariaCurrent = onTheTab ? 'page' : 'true';
+  const {pathname} = useLocation();
+  const onTheTab = demoTab.isAddressOf(pathname, topic);
 
   return <>
     {onTheTab && <p className="demos-opening paragraph">
@@ -30,7 +30,7 @@ export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, ch
       to you. Otherwise start at the first tab that adds something you don’t know, or go to the tab whose bug you came
       with.
     </p>}
-    <Tabs label="demos" className="demo-tabs field-before field-after" current={topic} aria-current={ariaCurrent}
+    <Tabs label="demos" className="demo-tabs field-before field-after" current={topic} aria-current={demoTab.currentAt(pathname, topic)}
       tabs={Object.values(DemoTopics).map(param =>
         ({display: demoTab.names[param], param, to: carried(demoTab.address(param))}))}>
       <TabPager topic={topic}/>
