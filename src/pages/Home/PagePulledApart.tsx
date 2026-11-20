@@ -22,11 +22,16 @@ const projected = ({u, v}: Spot, elevation: number): Point =>
     y: (projectionStart.y + (u + v) * tilt - elevation) * unitsPerStep
   });
 
-const onThePlateAt = (elevation: number): string => [
-  cosine30 * unitsPerStep, tilt * unitsPerStep,
-  -cosine30 * unitsPerStep, tilt * unitsPerStep,
-  projectionStart.x * unitsPerStep, (projectionStart.y - elevation) * unitsPerStep
-].join(' ');
+const onThePlateAt = (elevation: number): string => {
+  const origin = projected({u: 0, v: 0}, elevation);
+  const alongU = projected({u: 1, v: 0}, elevation);
+  const alongV = projected({u: 0, v: 1}, elevation);
+  return [
+    alongU.x - origin.x, alongU.y - origin.y,
+    alongV.x - origin.x, alongV.y - origin.y,
+    origin.x, origin.y
+  ].join(' ');
+};
 
 const pointsOf = (corners: readonly Point[]): string => corners.map(({x, y}) => `${x},${y}`).join(' ');
 
