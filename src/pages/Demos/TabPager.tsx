@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Link} from 'react-router';
+import {Link, useLocation} from 'react-router';
 import {maybe} from '@ryandur/sand';
 import {DemoTopics} from './demo-topics';
 import {demoTab} from './demo-tab';
@@ -8,8 +8,9 @@ import './TabPager.css';
 
 const course = Object.values(DemoTopics);
 
-export const TabPager: FC<{readonly topic: DemoTopics; readonly 'aria-current': 'page' | 'true'}> = ({topic, 'aria-current': ariaCurrent}) => {
+export const TabPager: FC<{readonly topic: DemoTopics}> = ({topic}) => {
   const carried = useCarriedAddress();
+  const ariaCurrent = demoTab.isAddressOf(useLocation().pathname, topic) ? 'page' : 'true';
   const place = course.indexOf(topic);
   const previous = maybe(course[place - 1]);
   const next = maybe(course[place + 1]);
