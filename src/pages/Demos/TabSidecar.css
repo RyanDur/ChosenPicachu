@@ -29,19 +29,4 @@
 
     gap: var(--base-x-2);
   }
-
-  .about:has(> .tab-sidecar.beside-the-opening) {
-    grid-template-rows: none;
-
-    & > :not(.tab-introduction, .tab-sidecar) {
-      grid-column: 1 / -1;
-    }
-  }
-
-  .tab-sidecar.beside-the-opening {
-    position: static;
-    grid-row: 1;
-    max-block-size: none;
-    overflow-y: visible;
-  }
 }
