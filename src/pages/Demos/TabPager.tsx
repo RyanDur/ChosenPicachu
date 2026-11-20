@@ -20,7 +20,7 @@ export const TabPager: FC<{readonly topic: DemoTopics}> = ({topic}) => {
       <Link key="previous" to={carried(demoTab.address(previousTopic))} className="tab-pager previous icon-button borderless field attentive reachable">
         <span className="off-screen">Previous tab, {demoTab.names[previousTopic]}</span>
       </Link>).orNull()}
-    <Link key={currentSlot} to={carried(demoTab.address(topic))} aria-current="page" className="tab-pager current field attentive bold">
+    <Link key={currentSlot} to={carried(demoTab.address(topic))} aria-current="page" className="tab-pager current path field attentive bold reachable">
       {demoTab.names[topic]}
     </Link>
     {next.map(nextTopic =>
