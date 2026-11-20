@@ -1,7 +1,6 @@
 import {FC, useId} from 'react';
 import {Clues, Design, Slices} from '../Recipe';
 import {DialNote, Exercise, Station} from '../Recipe';
-import {ListControls} from './ListControls';
 import {NativeRecipe} from './NativeRecipe';
 import '../Tutorials.css';
 
@@ -62,7 +61,6 @@ export const ListTutorials: FC = () => {
       <Station at={4}>
         <h3 className="phase-title title">Add features, in the order they were asked for</h3>
         <DialNote reads="list"/>
-        <ListControls/>
         <NativeRecipe/>
       </Station>
     </ol>

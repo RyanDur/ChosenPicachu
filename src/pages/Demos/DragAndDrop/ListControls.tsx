@@ -1,6 +1,7 @@
 import {FC} from 'react';
-import {Controls, Copy} from '../Controls';
+import {ControlDials, Copy, useControls} from '../Controls';
 import {capitalized} from '../capitalized';
+import {TabSidecar} from '../TabSidecar';
 
 const copy: Copy = {
   kind: 'list',
@@ -20,4 +21,10 @@ const copy: Copy = {
   }
 };
 
-export const ListControls: FC = () => <Controls copy={copy}/>;
+export const ListControls: FC = () => {
+  const {pace, origin, motion} = useControls();
+  return <TabSidecar label="dials">
+    <ControlDials copy={copy}/>
+    <code className="caption monospaced">{copy.readout(pace, origin, motion)}</code>
+  </TabSidecar>;
+};
