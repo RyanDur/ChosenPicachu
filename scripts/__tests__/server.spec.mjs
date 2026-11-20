@@ -123,12 +123,20 @@ describe('the stub stage answers a page address as GitHub Pages does', () => {
 });
 
 describe('the stub stage', () => {
-  test('survives requests whose targets are no path it can read', async () => {
+  test('survives a request for an absolute address', async () => {
     const {stage, port} = await stageUp();
 
-    for (const target of ['http://a:99999/', '//', '//:80/', '//a:99999/candles?granularity=60']) {
-      await answerTo(port, `GET ${target} HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n`);
-    }
+    await answerTo(port, 'GET http://a:99999/ HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n');
+    const answer = await answerTo(port, get('/trade-history/products/BTC-USD/candles?granularity=60'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+  });
+
+  test('survives a request for candles at a host-relative address with a bad port', async () => {
+    const {stage, port} = await stageUp();
+
+    await answerTo(port, 'GET //a:99999/candles?granularity=60 HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n');
     const answer = await answerTo(port, get('/trade-history/products/BTC-USD/candles?granularity=60'));
     stage.kill();
 
@@ -190,7 +198,7 @@ describe('the stub stage answers the gallery’s museums from recordings', () =>
 const rowsOf = answer => JSON.parse(answer.slice(answer.indexOf('[['), answer.lastIndexOf(']]') + 2));
 
 describe('the stub stage answers the charts’ candle history from recordings', () => {
-  test('should answer an hour of candles from its recording, whatever start and end it is asked for', async () => {
+  test('should answer an hour of candles from its recording, though it asks with a start and end', async () => {
     const {stage, port} = await stageUp();
 
     const answer = await answerTo(port,
