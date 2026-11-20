@@ -178,15 +178,25 @@ describe('the stub stage answers the gallery’s museums from recordings', () =>
 const rowsOf = answer => JSON.parse(answer.slice(answer.indexOf('[['), answer.lastIndexOf(']]') + 2));
 
 describe('the stub stage answers the charts’ candle history from recordings', () => {
-  test('should answer an hour of candles asked for from today’s clock with its recording', async () => {
+  test('should survive a request whose target is an absolute address', async () => {
+    const {stage, port} = await stageUp();
+
+    await answerTo(port, 'GET http://a:99999/ HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n');
+    const answer = await answerTo(port, get('/trade-history/products/BTC-USD/candles?granularity=60'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+  });
+
+  test('should answer an hour of candles from its recording, whatever start and end it is asked for', async () => {
     const {stage, port} = await stageUp();
 
     const answer = await answerTo(port,
       get('/trade-history/products/BTC-USD/candles?granularity=60&start=2026-11-20T07%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
     stage.kill();
 
-    const [first, second] = rowsOf(answer);
     expect(answer).toMatch(/^HTTP\/1\.1 200/);
+    const [first, second] = rowsOf(answer);
     expect(first[0] - second[0]).toBe(60);
   });
 
@@ -197,6 +207,7 @@ describe('the stub stage answers the charts’ candle history from recordings', 
       get('/trade-history/products/BTC-USD/candles?granularity=21600&start=2026-11-13T08%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
     stage.kill();
 
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
     const [first, second] = rowsOf(answer);
     expect(first[0] - second[0]).toBe(21600);
   });
