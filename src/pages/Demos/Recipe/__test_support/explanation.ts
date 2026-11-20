@@ -63,6 +63,8 @@ export const explanation = {
   runsIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('listitem'),
   samplesIn,
   linkNamed: (part: HTMLElement, name: string | RegExp): HTMLElement => within(part).getByRole('link', {name}),
+  linkInProse: (part: HTMLElement, name: string): HTMLElement => within(part).getAllByRole('paragraph')
+    .flatMap(paragraph => within(paragraph).queryAllByRole('link', {name}))[0],
   linksNamed: (part: HTMLElement, name: string | RegExp): HTMLElement[] => within(part).getAllByRole('link', {name}),
   linksTo: (part: HTMLElement, site: string): HTMLElement[] => within(part).getAllByRole('link')
     .filter(link => link.getAttribute('href')?.startsWith(site) ?? false),
