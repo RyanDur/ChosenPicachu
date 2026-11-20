@@ -19,7 +19,7 @@
   .tabs.demo-tabs {
     display: grid;
     grid-template-columns: var(--pointer-reach) 1fr var(--pointer-reach);
-    grid-template-areas: "prev info next";
+    grid-template-areas: "previous current next";
     column-gap: var(--base);
     block-size: var(--tab-bar-reach);
 
@@ -28,14 +28,14 @@
     }
 
     &::before {
-      grid-area: prev;
+      grid-area: previous;
     }
 
     &::after {
       grid-area: next;
     }
 
-    &:not(:has(.prev))::before,
+    &:not(:has(.previous))::before,
     &:not(:has(.next))::after {
       content: '';
     }
