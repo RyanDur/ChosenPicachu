@@ -13,10 +13,10 @@ const recipe = (build: string): Promise<HTMLElement> =>
   screen.findByRole('region', {name: `build the ${build} yourself`}, untilTheTablesTabRenders);
 const part = (name: string): HTMLElement => screen.getByRole('region', {name});
 const link = async (name: string | RegExp): Promise<HTMLElement> => {
-  const panel = await screen.findByRole('complementary', {name: 'parts and dials'}, untilTheTablesTabRenders);
+  const index = await screen.findByRole('navigation', {name: 'Parts'}, untilTheTablesTabRenders);
   const links = await within(await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders))
     .findAllByRole('link', {name}, untilTheTablesTabRenders);
-  const [inTheText] = links.filter(found => not(panel.contains(found)));
+  const [inTheText] = links.filter(found => not(index.contains(found)));
   return inTheText;
 };
 const partLink = async (name: string): Promise<HTMLElement> =>

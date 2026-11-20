@@ -29,7 +29,7 @@ describe('the tables panel', () => {
   test('should say beside a part how long the parts take together', async () => {
     render(<TestApp at={demosAt(theSlices)}/>);
 
-    expect(await demoPage.panel('parts and dials')).toHaveTextContent(howLong);
+    expect(await tablesTab().size()).toHaveTextContent(howLong);
   });
 
   test('should hold the eight parts beside a tutorial, as the tab does', async () => {
@@ -102,20 +102,20 @@ describe('the tables panel', () => {
     render(<TestApp at={demosAt(theSlices)}/>);
 
     const [title] = tablesTab().titles('Slice the design into stories', 2);
-    const panel = await demoPage.panel('parts and dials');
+    const index = await partsIndex.find();
     const liveTable = await aggregations.arrived();
 
-    expect(outOfReadingOrder([title, panel, liveTable])).toEqual([]);
+    expect(outOfReadingOrder([title, index, liveTable])).toEqual([]);
   });
 
   test('should come after a tutorial’s title and before its live table', async () => {
     render(<TestApp at={demosAt(sortMenu)}/>);
 
-    const panel = await demoPage.panel('parts and dials');
+    const index = await partsIndex.find();
     const [title] = tablesTab().titles('Sort menu', 2);
     const liveTable = await aggregations.arrived();
 
-    expect(outOfReadingOrder([title, panel, liveTable])).toEqual([]);
+    expect(outOfReadingOrder([title, index, liveTable])).toEqual([]);
   });
 
   test('should leave a part’s live table under the part’s own title, not under the parts', async () => {
