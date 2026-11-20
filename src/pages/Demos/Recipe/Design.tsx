@@ -5,14 +5,15 @@ type DesignProps = {
   sketch: ReactNode;
   answers: string;
   unanswered: string[];
-  onAPartPage?: boolean;
+  headedByThePart?: boolean;
 };
 
-export const Design: FC<DesignProps> = ({sketch, answers, unanswered, onAPartPage = false}) => {
-  const Subtitle: 'h3' | 'h4' = onAPartPage ? 'h3' : 'h4';
+export const Design: FC<DesignProps> = ({sketch, answers, unanswered, headedByThePart = false}) => {
+  const Subtitle: 'h3' | 'h4' = headedByThePart ? 'h3' : 'h4';
   const unansweredTitle = `unanswered${useId()}`;
-  return <section className="phase card rounded-corners lifted" aria-labelledby={onAPartPage ? undefined : designHeading.id}>
-    {onAPartPage ? null : <h3 id={designHeading.id} className="phase-title title">{designHeading.title}</h3>}
+  return <section className="phase card rounded-corners lifted"
+    aria-labelledby={headedByThePart ? undefined : designHeading.id}>
+    {headedByThePart ? null : <h3 id={designHeading.id} className="phase-title title">{designHeading.title}</h3>}
     <p className="overview paragraph muted-ink">
       The need has a visual answer, so the next artifact is a design: enough shape to argue
       with, before any code. What the sketch cannot answer goes back to the people asking, as

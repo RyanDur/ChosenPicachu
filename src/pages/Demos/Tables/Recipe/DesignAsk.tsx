@@ -31,6 +31,6 @@ const Sketch: FC = () =>
   </table>;
 
 export const DesignAsk: FC = () =>
-  <Design onAPartPage sketch={<Sketch/>}
+  <Design headedByThePart sketch={<Sketch/>}
     answers="The design answers shape: which measures, which lookbacks, how much precision, how dense."
     unanswered={unanswered}/>;
