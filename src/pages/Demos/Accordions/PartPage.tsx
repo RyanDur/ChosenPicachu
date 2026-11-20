@@ -1,16 +1,50 @@
-import {FC, PropsWithChildren, ReactNode, useId} from 'react';
+import {FC, ReactNode, useId} from 'react';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {AccordionPart, accordionParts} from './part-pages';
 import {PartFoot} from './PartFoot';
+import {seeded} from '@components/fibs';
+import {MaxHeightGuess} from './MaxHeightGuess';
+import {MeasuredHeight} from './MeasuredHeight';
+import {PlatformGivesNow} from './PlatformGivesNow';
+import {SlidingFoldMoves} from './SlidingFoldMoves';
+import {RemembersTheFold} from './RemembersTheFold';
+import {PartsAndDials} from './PartsAndDials';
+import {RemembersTheFoldIntroduction} from './RemembersTheFoldIntroduction';
+import {MaxHeightGuessIntroduction} from './MaxHeightGuessIntroduction';
+import {MeasuredHeightIntroduction} from './MeasuredHeightIntroduction';
+import {PlatformGivesNowIntroduction} from './PlatformGivesNowIntroduction';
+import {SlidingFoldMovesIntroduction} from './SlidingFoldMovesIntroduction';
 import '../PartPage.css';
 
-type Props = {
-  part: AccordionPart;
-  introduction: ReactNode;
-  panel: ReactNode;
+type Draws = ReturnType<typeof seeded>;
+
+const paragraphs = (count: number, dealt: () => string, {randNumber, randParagraph}: Draws) =>
+  Array.from({length: count}, () => ({
+    heading: dealt(),
+    story: Array.from({length: randNumber({min: 1, max: 6})}, () => randParagraph()).join(' ')
+  }));
+
+const draws = seeded('the accordion exhibits');
+const dealt = draws.wordDeck();
+const measuredFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
+const knownFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
+const platformFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
+const slidingFolds = {inclusive: paragraphs(5, dealt, draws), exclusive: paragraphs(5, dealt, draws)};
+
+type PartWriting = {
+  readonly introduction: ReactNode;
+  readonly exhibitAndRuns: ReactNode;
 };
 
-export const PartPage: FC<PropsWithChildren<Props>> = ({part, introduction, panel, children}) => {
+const partWritings: Record<AccordionPart, PartWriting> = {
+  'a-box-remembers-the-fold': {introduction: <RemembersTheFoldIntroduction/>, exhibitAndRuns: <RemembersTheFold folds={knownFolds}/>},
+  'the-max-height-guess': {introduction: <MaxHeightGuessIntroduction/>, exhibitAndRuns: <MaxHeightGuess/>},
+  'the-measured-height': {introduction: <MeasuredHeightIntroduction/>, exhibitAndRuns: <MeasuredHeight folds={measuredFolds}/>},
+  'what-the-platform-gives-now': {introduction: <PlatformGivesNowIntroduction/>, exhibitAndRuns: <PlatformGivesNow folds={platformFolds}/>},
+  'how-a-sliding-fold-moves': {introduction: <SlidingFoldMovesIntroduction/>, exhibitAndRuns: <SlidingFoldMoves folds={slidingFolds}/>}
+};
+
+export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   const titled = `part${useId()}`;
   const {name, ordinal} = accordionParts.told(part);
   return <>
@@ -19,11 +53,11 @@ export const PartPage: FC<PropsWithChildren<Props>> = ({part, introduction, pane
         <p className="caption">{`${demoTab.names[DemoTopics.accordions]} · part ${ordinal} of ${accordionParts.inTheBook}`}</p>
         <h2 id={titled} className="title">{name}</h2>
       </hgroup>
-      {introduction}
+      {partWritings[part].introduction}
     </header>
-    {panel}
+    <PartsAndDials/>
     <section aria-labelledby={titled} className="part-page">
-      {children}
+      {partWritings[part].exhibitAndRuns}
       <PartFoot part={part}/>
     </section>
   </>;
