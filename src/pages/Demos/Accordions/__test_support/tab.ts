@@ -1,8 +1,10 @@
-import {is} from '@ryandur/sand';
+import {is, not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {computeAccessibleName} from 'dom-accessibility-api';
 import {partsIndex} from '@pages/Demos/__test_support';
+
+const partsAndDials = (): Promise<HTMLElement> => screen.findByRole('complementary', {name: 'parts and dials'});
 
 const choice = (dial: string): Promise<HTMLElement> => screen.findByRole('group', {name: dial});
 const buildIn = (part: HTMLElement): HTMLElement => within(part).getByRole('article');
@@ -32,10 +34,16 @@ export const accordionsTab = {
   buildIn,
   buildsIn: (part: HTMLElement): string[] =>
     within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
-  openPart: async (name: string): Promise<void> => userEvent.click(await screen.findByRole('link', {name})),
+  openPart: async (name: string): Promise<void> =>
+    userEvent.click(within(await partsIndex.find()).getByRole('link', {name})),
+  followInText: async (name: string): Promise<void> => {
+    const panel = await partsAndDials();
+    const [inTheText] = (await screen.findAllByRole('link', {name})).filter(link => not(panel.contains(link)));
+    return userEvent.click(inTheText);
+  },
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   partsIndex: partsIndex.find,
-  partsAndDials: (): Promise<HTMLElement> => screen.findByRole('complementary', {name: 'parts and dials'}),
+  partsAndDials,
   exhibit: async (): Promise<HTMLElement> =>
     within(await screen.findByRole('region', {name: 'Accordions'})).getAllByRole('figure')[0],
   titlesIn: partsIndex.titlesIn,

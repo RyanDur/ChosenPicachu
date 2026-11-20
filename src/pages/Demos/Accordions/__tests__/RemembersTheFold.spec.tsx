@@ -75,9 +75,9 @@ describe('a box remembers the fold, on its own page', () => {
   test('should link part one on the tab, with the fold choices carried', async () => {
     render(<TestApp at={demosAt(remembers, '?type=inclusive&style=drawer')}/>);
 
-    const page = await demoTabs.arrivedOn('Accordions');
+    const part = await explanation.part(title);
 
-    expect(explanation.linkNamed(page, 'An accordion in HTML alone'))
+    expect(explanation.linkNamed(part, 'An accordion in HTML alone'))
       .toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#html-alone-heading`);
   });
 

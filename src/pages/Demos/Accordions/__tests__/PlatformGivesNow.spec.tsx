@@ -21,7 +21,7 @@ describe('what the platform gives now, on its own page', () => {
     const from = demosAt(platformWay, build);
     render(<TestApp at={from}/>);
 
-    await accordionsTab.openPart('An accordion in HTML alone');
+    await accordionsTab.followInText('An accordion in HTML alone');
 
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions', build));
     expect(appAddress.fragment()).toBe('#html-alone-heading');
@@ -31,7 +31,7 @@ describe('what the platform gives now, on its own page', () => {
     const from = demosAt(platformWay, build);
     render(<TestApp at={from}/>);
 
-    await accordionsTab.openPart('A box remembers the fold, and a rule reads it');
+    await accordionsTab.followInText('A box remembers the fold, and a rule reads it');
 
     expect(await appAddress.movedOnFrom(from)).toBe(remembers);
   });

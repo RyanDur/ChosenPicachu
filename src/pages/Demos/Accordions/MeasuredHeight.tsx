@@ -1,14 +1,12 @@
 import {FC} from 'react';
 import {classNames} from '@components';
 import {PartLink as ZIndexPartLink} from '@pages/Demos/ZIndexDemo';
-import {DialGroup, useControls} from '../Controls';
+import {useControls} from '../Controls';
 import {FoldType} from '../ReaderSettings';
 import {carve, Line, lines, Sample, Snippet} from '../Recipe';
 import {Fold} from './accordion-props';
 import {ExclusiveMeasuredAccordion} from './ExclusiveMeasuredAccordion';
 import {InclusiveMeasuredAccordion} from './InclusiveMeasuredAccordion';
-import {FoldMotionDial} from './FoldMotionDial';
-import {FoldTypeDial} from './FoldTypeDial';
 import {foldInput} from './fold-input';
 import {looks} from './looks';
 import {PartLink} from './PartLink';
@@ -46,10 +44,6 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
     <p className="paragraph">This part builds on two before it:
       “<PartLink part="a-box-remembers-the-fold"/>”, for the {input} and its label, and
       “<PartLink part="the-max-height-guess"/>”, which this part answers.</p>
-    <DialGroup>
-      <FoldTypeDial/>
-      <FoldMotionDial/>
-    </DialGroup>
     <figure className={looks.exhibit}>
       <PlainFold/>
       <figcaption className="caption">This fold is a separate page, placed inside this one, so the choices the address

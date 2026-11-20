@@ -45,7 +45,7 @@ describe('how a sliding fold moves, on its own page', () => {
     const from = demosAt(slidingFold, build);
     render(<TestApp at={from}/>);
 
-    await accordionsTab.openPart('A box remembers the fold, and a rule reads it');
+    await accordionsTab.followInText('A box remembers the fold, and a rule reads it');
 
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/a-box-remembers-the-fold', build));
   });
@@ -54,7 +54,7 @@ describe('how a sliding fold moves, on its own page', () => {
     const from = demosAt(slidingFold, build);
     render(<TestApp at={from}/>);
 
-    await accordionsTab.openPart('What the platform gives now');
+    await accordionsTab.followInText('What the platform gives now');
 
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions/what-the-platform-gives-now', build));
   });

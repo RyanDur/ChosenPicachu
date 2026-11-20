@@ -77,12 +77,12 @@ test('a reader opens how a sliding fold moves from the tab, and its details fold
   await expect(page.getByRole('heading', {name: 'Inclusive accordion using details elements', exact: true})).toBeVisible();
 });
 
-test('a reader follows the accordions map from the max-height guess to what the platform gives now, with the dials kept', async ({page}) => {
+test('a reader follows the panel from the max-height guess to what the platform gives now, with the dials kept', async ({page}) => {
   await page.goto('demos/accordions/the-max-height-guess/?type=inclusive&style=drawer');
   await siteFrame(page).hydrated();
 
-  await page.getByRole('navigation', {name: 'the accordions map'})
-    .getByRole('link', {name: '5. What the platform gives now'}).click();
+  await page.getByRole('navigation', {name: 'Parts', exact: true})
+    .getByRole('link', {name: 'What the platform gives now'}).click();
 
   await expect(page).toHaveURL(/demos\/accordions\/what-the-platform-gives-now\/\?type=inclusive&style=drawer$/);
   await expect(page.getByRole('heading', {name: 'Inclusive accordion using details elements', exact: true})).toBeVisible();
