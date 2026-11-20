@@ -116,7 +116,7 @@ const Rippling: FC<{at: Point}> = ({at: {x, y}}) => <>
 
 const events = [
   {word: 'toggle', call: 'addEventListener("toggle", …)', spark: {u: 16, v: 26}, landsOn: ellipsisInside('nav'), Motion: Turning},
-  {word: 'sort', call: 'rows.sort(by(column))', spark: {u: 70, v: 40}, landsOn: ellipsisInside('table'), Motion: Rippling}
+  {word: 'click', call: 'rows.sort(by(column))', spark: {u: 70, v: 40}, landsOn: ellipsisInside('table'), Motion: Rippling}
 ];
 
 const languages = [
