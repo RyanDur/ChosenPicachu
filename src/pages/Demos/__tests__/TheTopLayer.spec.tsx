@@ -1,7 +1,8 @@
 import {TestApp} from '@__test_support/TestApp';
 import {paragraphOpening} from '@__test_support/paragraph';
 import {Paths} from '@navigation';
-import {demoPage, demosAt, demoTabs} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, demoTabs, partsIndex} from '@pages/Demos/__test_support';
+import {zIndexParts} from '@pages/Demos/ZIndexDemo/part-pages';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {render} from '@testing-library/react';
 import {seed} from '@components/fibs';
@@ -139,6 +140,24 @@ describe('the banner tutorial’s second story', () => {
     ]);
   });
 
+});
+
+describe('a z-index part’s page', () => {
+  test('holds the six parts beside the part, as the tab does', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    const index = await partsIndex.find();
+
+    expect(partsIndex.titlesIn(index)).toEqual(zIndexParts.inOrder.map(part => zIndexParts.told(part).name));
+  });
+
+  test('marks the part the reader is on as the current page', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    const index = await partsIndex.find();
+
+    expect(partsIndex.currentIn(index)).toHaveAccessibleName('Why 9999 still loses');
+  });
 });
 
 describe('the z-index tab’s introduction', () => {

@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {useLocation} from 'react-router';
 import {DemoLink} from '@pages/Demos/DemoLink';
 import './PartsNavigation.css';
 
@@ -6,7 +7,7 @@ type Props = {to: string; heading?: string; name: string; minutes: number; says:
 
 export const PartsNavigationEntry: FC<Props> = ({to, heading, name, minutes, says}) =>
   <li className="parts-index-entry muted-rule-below">
-    <DemoLink className="parts-index-link" to={to} heading={heading}>{name}</DemoLink>
+    <DemoLink className="parts-index-link" to={to} heading={heading} current={useLocation().pathname === to}>{name}</DemoLink>
     <time className="minutes caption muted-ink" dateTime={`PT${minutes}M`}>{`${minutes} min`}</time>
     <p className="says paragraph">{says}</p>
   </li>;

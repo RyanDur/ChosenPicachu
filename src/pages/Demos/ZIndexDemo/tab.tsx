@@ -36,17 +36,23 @@ const partContents: Record<ZIndexPart, ReactNode> = {
 
 const partWears: Partial<Record<ZIndexPart, string>> = {'lets-build-this-feature': 'tutorials'};
 
+const PartsAndMinutes: FC = () =>
+  <TabSidecar label="parts and minutes">
+    <ZIndexSize/>
+    <PartsIndex/>
+  </TabSidecar>;
+
 export const Room: FC = () => {
   usePlacingTheBanners();
 
   return useShownPart().either(
-    part => <PartPage part={part} className={partWears[part]}>{partContents[part]}</PartPage>,
+    part => <>
+      <PartPage part={part} className={partWears[part]}>{partContents[part]}</PartPage>
+      <PartsAndMinutes/>
+    </>,
     () => <>
       <ZIndexIntroduction/>
       <NaturalZIndex className="card rounded-corners lifted padded"/>
-      <TabSidecar label="parts and minutes">
-        <ZIndexSize/>
-        <PartsIndex/>
-      </TabSidecar>
+      <PartsAndMinutes/>
     </>);
 };
