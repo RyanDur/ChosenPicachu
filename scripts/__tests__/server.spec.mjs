@@ -175,6 +175,29 @@ describe('the stub stage answers the gallery’s museums from recordings', () =>
   });
 });
 
+describe('the stub stage answers the charts’ candle history from recordings', () => {
+  test('should answer an hour of candles asked for from today’s clock with its recording', async () => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port,
+      get('/trade-history/products/BTC-USD/candles?granularity=60&start=2026-11-20T07%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+    expect(answer).toMatch(/\r\ncontent-type: application\/json/i);
+  });
+
+  test('should refuse candles of a length it has no recording for', async () => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port,
+      get('/trade-history/products/BTC-USD/candles?granularity=900&start=2026-11-20T07%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 404/);
+  });
+});
+
 describe('the stub stage answers Feedback’s questions in place of GitHub', () => {
   test('should name its own endpoint in env.js', async () => {
     const {stage, port} = await stageUp();

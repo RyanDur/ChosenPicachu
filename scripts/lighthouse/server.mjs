@@ -6,6 +6,7 @@ import {gzipSync} from 'node:zlib';
 import {is, maybe, not} from '@ryandur/sand';
 import {WebSocketServer} from 'ws';
 import {pageLoading} from '../page-loading.mjs';
+import {recordedAddress} from './recorded-address.mjs';
 import {stageEnvironment} from './stage-environment.mjs';
 
 const port = Number(maybe(process.env.STAGE_PORT).orElse(4517));
@@ -116,8 +117,8 @@ const answers = (request, response) => {
     return send(200, readFileSync(existsSync(sized) ? sized : fallback), 'image/jpeg', false);
   }
 
-  const recorded = [url, url.split('?')[0]].find(key => rest.has(key));
-  if (is(recorded)) {
+  const recorded = recordedAddress(url);
+  if (rest.has(recorded)) {
     const {contentType, body} = rest.get(recorded);
     return send(200, body, contentType, true);
   }

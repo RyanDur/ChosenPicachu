@@ -3,6 +3,7 @@ import {mkdirSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {empty, maybe, not} from '@ryandur/sand';
+import {recordedAddress} from './recorded-address.mjs';
 
 const site = 'https://ryandur.github.io/ChosenPicachu/';
 const fixtures = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
@@ -27,8 +28,7 @@ page.on('response', async response => {
   const url = response.url();
   const prefix = Object.keys(localized).find(domain => url.startsWith(domain));
   if (empty(prefix)) return;
-  const address = url.replace(prefix, localized[prefix]);
-  const key = address.includes('/candles?') ? address.split('?')[0] : address;
+  const key = recordedAddress(url.replace(prefix, localized[prefix]));
   rest.set(key, {
     contentType: maybe(response.headers()['content-type']).orElse('application/json'),
     body: await response.text()
