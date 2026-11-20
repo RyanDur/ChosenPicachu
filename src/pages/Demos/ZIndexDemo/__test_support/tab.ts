@@ -8,10 +8,13 @@ const findExpand = (): Promise<HTMLElement> => screen.findByRole('button', {name
 const linkToTheBannerStory = (part: HTMLElement): HTMLElement =>
   explanation.linkInProse(part, 'Let’s build this feature');
 
+const sizeLine = /^Six parts, about \d+ minutes\.$/;
+
 export const zIndexTab = {
   opening: (): Promise<HTMLElement> => screen.findByText(/^Where two boxes on a page overlap/),
   pile: (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^The pile\./}),
-  size: (): Promise<HTMLElement> => screen.findByText(/^Six parts, about \d+ minutes\.$/),
+  size: (): Promise<HTMLElement> => screen.findByText(sizeLine),
+  sizeIn: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByText(sizeLine),
   findFeatureStories: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'Let’s build this feature'}),
   fragmentOf: (heading: string): string => `#${screen.getByRole('heading', {name: heading}).id}`,
   linkToTheBannerStory,
