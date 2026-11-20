@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {Ink, markup} from '../markup';
+import {Ink, markup} from './markup';
 import {thePage} from './thePage';
 
 const inkClasses: Record<Ink, string> = {
