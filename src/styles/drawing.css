@@ -1,5 +1,15 @@
 .drawn { stroke: var(--charcoal); }
 
+.drawn-line {
+  stroke-width: var(--hairline);
+  vector-effect: non-scaling-stroke;
+}
+
+.slab-line {
+  stroke-width: var(--hairline-x-3);
+  vector-effect: non-scaling-stroke;
+}
+
 .paper-filled { fill: var(--paper); }
 
 .paper-haloed {
