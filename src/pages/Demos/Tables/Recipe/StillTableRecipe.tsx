@@ -97,7 +97,7 @@ const dealCodes: Record<World, ReactNode> = {
       ...carve.between(dealSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
     ]}/>
     <Snippet label="HTML" lines={[
-      ...elidedHeaders(carve.between(dealSource, 'return <DragSortable value={sortable}>', '</Headers>')), lines.blank,
+      ...elidedHeaders(carve.between(dealSource, 'DragSortable value={sortable}>', '</Headers>')), lines.blank,
       ...carve.between(dealSource, '</table>', '</DragSortable>')
     ]}/>
     <Snippet label="CSS" lines={[
