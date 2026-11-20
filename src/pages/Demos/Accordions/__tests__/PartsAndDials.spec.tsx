@@ -75,8 +75,7 @@ describe('the accordions panel', () => {
   test('should come after a part’s introduction and before its first exhibit', async () => {
     render(<TestApp at={demosAt('accordions/the-measured-height')}/>);
 
-    const page = await explanation.part('Accordions');
-    const introduction = explanation.saying(page, /^This part builds on two before it/);
+    const introduction = explanation.opener(await explanation.part('The measured height'));
     const foldType = accordionsTab.choiceIn(await accordionsTab.partsAndDials(), 'fold type');
     const exhibit = await accordionsTab.exhibit();
 
