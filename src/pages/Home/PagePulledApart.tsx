@@ -2,8 +2,6 @@ import {FC, Fragment, PropsWithChildren, useId} from 'react';
 import {MarkupLines, motions, Point, Region, Spot, thePage, TurnHead} from './plates';
 import './PagePulledApart.css';
 
-const {plate, regions, events} = thePage;
-
 const unitsPerStep = 2.4;
 const tilt = 0.42;
 const cosine30 = 0.866;
@@ -73,20 +71,20 @@ export const PagePulledApart: FC = () => {
       height={258 * unitsPerStep} aria-hidden="true">
       <TurnHead id={turnHead} markerWidth={turnHeadWidth}/>
       <polygon className="slab-line drawn paper-filled"
-        points={face({u: 0, v: plate.down}, {u: plate.across, v: plate.down})}/>
+        points={face({u: 0, v: thePage.plate.down}, {u: thePage.plate.across, v: thePage.plate.down})}/>
       <polygon className="slab-line drawn paper-filled"
-        points={face({u: plate.across, v: 0}, {u: plate.across, v: plate.down})}/>
-      <polygon className="slab-line drawn paper-filled" points={regionPoints(plate, elevations.structure)}/>
+        points={face({u: thePage.plate.across, v: 0}, {u: thePage.plate.across, v: thePage.plate.down})}/>
+      <polygon className="slab-line drawn paper-filled" points={regionPoints(thePage.plate, elevations.structure)}/>
       <g transform={`matrix(${onThePlateAt(elevations.structure)})`}>
         <MarkupLines/>
       </g>
-      <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.presentation)}/>
-      {regions.map(({name, tint, footprint}) =>
+      <polygon className="drawn-line drawn paper-filled" points={regionPoints(thePage.plate, elevations.presentation)}/>
+      {thePage.regions.map(({name, tint, footprint}) =>
         <polygon key={name} className={`drawn-line drawn ${tint}`} points={regionPoints(footprint, elevations.presentation)}/>)}
-      {regions.map(({name, namedAt}) =>
+      {thePage.regions.map(({name, namedAt}) =>
         <RegionName key={name} {...projected(namedAt, elevations.presentation)}>{name}</RegionName>)}
-      <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.behavior)}/>
-      {events.map(({word, spark, motion}) => {
+      <polygon className="drawn-line drawn paper-filled" points={regionPoints(thePage.plate, elevations.behavior)}/>
+      {thePage.events.map(({word, spark, motion}) => {
         const center = projected(spark, elevations.behavior);
         const Moving = motions[motion];
         return <Fragment key={word}>
@@ -96,7 +94,7 @@ export const PagePulledApart: FC = () => {
           <EventName x={center.x + sparkRadius * 3.4} y={nameLineOf(center)}>{word}</EventName>
         </Fragment>;
       })}
-      {events.map(({word, spark, landsOn}) => {
+      {thePage.events.map(({word, spark, landsOn}) => {
         const above = projected(spark, elevations.behavior);
         const onTheSheet = projected(spark, elevations.presentation);
         const onTheSlab = projected(landsOn, elevations.structure);
@@ -106,12 +104,12 @@ export const PagePulledApart: FC = () => {
           <circle className="drawn-filled" cx={onTheSheet.x} cy={onTheSheet.y} r={0.9 * unitsPerStep}/>
         </Fragment>;
       })}
-      {events.map(({word, call, spark}) => {
+      {thePage.events.map(({word, call, spark}) => {
         const center = projected(spark, elevations.behavior);
         return <Call key={word} x={center.x} y={nameLineOf(center)}>{call}</Call>;
       })}
       {languages.map(({word, elevation}) => {
-        const {x, y} = projected({u: 0, v: plate.down / 2}, elevation);
+        const {x, y} = projected({u: 0, v: thePage.plate.down / 2}, elevation);
         return <text key={word} className="drawn-caption uppercase ink-filled paper-haloed" x={x - 6 * unitsPerStep}
           y={y + 2 * unitsPerStep} textAnchor="end">{word}</text>;
       })}
