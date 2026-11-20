@@ -1,5 +1,5 @@
 import {FC, Fragment, PropsWithChildren} from 'react';
-import {MarkupLines, Motion, Point, Region, Spot, thePage, TurnHead} from './plates';
+import {MarkupLines, motions, Point, Region, Spot, thePage, TurnHead} from './plates';
 import './PagePulledApart.css';
 
 const {plate, regions, events} = thePage;
@@ -86,8 +86,9 @@ export const PagePulledApart: FC = () =>
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.behavior)}/>
       {events.map(({word, spark, motion}) => {
         const center = projected(spark, elevations.behavior);
+        const Moving = motions[motion];
         return <Fragment key={word}>
-          <Motion kind={motion} cx={center.x} cy={center.y} radius={sparkRadius} ellipseRatio={ellipseRatio}/>
+          <Moving cx={center.x} cy={center.y} rx={sparkRadius} ry={sparkRadius * ellipseRatio}/>
           <circle className="markup-attribute-filled" cx={center.x} cy={center.y} r={sparkRadius}/>
           <EventName x={center.x + sparkRadius * 3.4} y={nameLineOf(center)}>{word}</EventName>
         </Fragment>;

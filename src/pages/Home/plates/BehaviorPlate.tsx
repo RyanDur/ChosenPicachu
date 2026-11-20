@@ -3,7 +3,7 @@ import {PropsWithClassName} from '@components';
 import {Frame} from './Frame';
 import {Plate} from './Plate';
 import {Lettered} from './Lettered';
-import {Motion} from './Motion';
+import {motions} from './motions';
 import {TurnHead} from './TurnHead';
 import {Spot, thePage} from './thePage';
 
@@ -23,8 +23,9 @@ export const BehaviorPlate: FC<PropsWithClassName> = ({className}) =>
       const wordsAcross = rightward ? spark.u + besideTheSpark : spark.u - besideTheSpark;
       const anchor = rightward ? 'start' : 'end';
       const nameLine = spark.v + sparkRadius;
+      const Moving = motions[motion];
       return <Fragment key={word}>
-        <Motion kind={motion} cx={spark.u} cy={spark.v} radius={sparkRadius} ellipseRatio={1}/>
+        <Moving cx={spark.u} cy={spark.v} rx={sparkRadius} ry={sparkRadius}/>
         <circle className="markup-attribute-filled" cx={spark.u} cy={spark.v} r={sparkRadius}/>
         <Lettered className="markup-attribute-filled" x={wordsAcross} y={nameLine} fontSize={eventNameSize}
           textLength={thePage.widthOf(word, eventNameSize)} textAnchor={anchor}>{word}</Lettered>
