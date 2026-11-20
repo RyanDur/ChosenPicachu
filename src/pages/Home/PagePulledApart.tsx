@@ -1,4 +1,4 @@
-import {FC, Fragment, PropsWithChildren} from 'react';
+import {FC, Fragment, PropsWithChildren, useId} from 'react';
 import {MarkupLines, motions, Point, Region, Spot, thePage, TurnHead} from './plates';
 import './PagePulledApart.css';
 
@@ -65,12 +65,13 @@ const Call: Lettering = ({x, y, children}) =>
 const EventName: Lettering = ({x, y, children}) =>
   <text className="drawn-caption monospaced markup-attribute-filled paper-haloed" x={x} y={y}>{children}</text>;
 
-export const PagePulledApart: FC = () =>
-  <figure className="page-pulled-apart">
+export const PagePulledApart: FC = () => {
+  const turnHead = useId();
+  return <figure className="page-pulled-apart">
     <svg className="drawing center" viewBox={`${35 * unitsPerStep} 0 ${215 * unitsPerStep} ${258 * unitsPerStep}`}
       width={215 * unitsPerStep}
       height={258 * unitsPerStep} aria-hidden="true">
-      <TurnHead markerWidth={turnHeadWidth}/>
+      <TurnHead id={turnHead} markerWidth={turnHeadWidth}/>
       <polygon className="slab-line drawn paper-filled"
         points={face({u: 0, v: plate.down}, {u: plate.across, v: plate.down})}/>
       <polygon className="slab-line drawn paper-filled"
@@ -89,7 +90,8 @@ export const PagePulledApart: FC = () =>
         const center = projected(spark, elevations.behavior);
         const Moving = motions[motion];
         return <Fragment key={word}>
-          <Moving cx={center.x} cy={center.y} rx={sparkRadius} ry={sparkRadius * ellipseRatio}/>
+          <Moving cx={center.x} cy={center.y} rx={sparkRadius} ry={sparkRadius * ellipseRatio}
+            markerEnd={`url(#${turnHead})`}/>
           <circle className="markup-attribute-filled" cx={center.x} cy={center.y} r={sparkRadius}/>
           <EventName x={center.x + sparkRadius * 3.4} y={nameLineOf(center)}>{word}</EventName>
         </Fragment>;
@@ -120,3 +122,4 @@ export const PagePulledApart: FC = () =>
       its element: that is together.
     </figcaption>
   </figure>;
+};
