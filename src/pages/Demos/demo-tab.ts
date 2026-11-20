@@ -6,7 +6,7 @@ const address = (topic: DemoTopics): string => `${Paths.demos}${topic}/`;
 
 const isAddressOf = (pathname: string, topic: DemoTopics): boolean => pathname === address(topic);
 
-const tabAt = (pathname: string): Maybe<DemoTopics> =>
+const addressedAt = (pathname: string): Maybe<DemoTopics> =>
   maybe(Object.values(DemoTopics).find(topic => isAddressOf(pathname, topic)));
 
 const currentAt = (pathname: string, topic: DemoTopics): 'page' | 'true' => isAddressOf(pathname, topic) ? 'page' : 'true';
@@ -30,10 +30,10 @@ const topicOf = (tab = ''): DemoTopics =>
 type DemoTab = {
   address: (topic: DemoTopics) => string;
   isAddressOf: (pathname: string, topic: DemoTopics) => boolean;
-  tabAt: (pathname: string) => Maybe<DemoTopics>;
+  addressedAt: (pathname: string) => Maybe<DemoTopics>;
   currentAt: (pathname: string, topic: DemoTopics) => 'page' | 'true';
   names: Record<DemoTopics, string>;
   topicOf: (tab?: string) => DemoTopics;
 };
 
-export const demoTab: DemoTab = {address, isAddressOf, tabAt, currentAt, names, topicOf};
+export const demoTab: DemoTab = {address, isAddressOf, addressedAt, currentAt, names, topicOf};
