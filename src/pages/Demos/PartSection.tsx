@@ -4,7 +4,7 @@ import {classNames} from '@components';
 import './PartPage.css';
 
 type Opening = {
-  readonly caption: ReactNode;
+  readonly caption: NonNullable<ReactNode>;
   readonly introduction?: ReactNode;
 };
 
