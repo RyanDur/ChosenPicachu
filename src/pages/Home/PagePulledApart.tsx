@@ -62,8 +62,8 @@ const longestLine = Math.max(...markupLines.map(line => line.length));
 const advance = (plate.across - inset - edgeClearance) / longestLine;
 const firstBaseline = 10;
 const lineStep = 6.2;
-const halfLetterHeight = 1.5;
 const letterSize = advance / 0.6;
+const halfLetterHeight = letterSize * 0.4;
 
 const baselineOf = (row: number): number => firstBaseline + row * lineStep;
 
