@@ -76,6 +76,24 @@ describe('The Demos page', () => {
     expect(await demoTabPager.next()).toHaveFocus();
   });
 
+  test('the tab row keeps a keyboard reader on the name of the last tab after they press their way onto it', async () => {
+    render(<TestApp at={demosAt('charts')}/>);
+
+    await demoTabPager.goNextByKeyboard();
+
+    await waitFor(async () => expect(await demoTabPager.current()).toEqual(['Tables']));
+    expect(await demoTabPager.currentTab()).toHaveFocus();
+  });
+
+  test('the tab row keeps a keyboard reader on the name of the first tab after they press their way back onto it', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    await demoTabPager.goPreviousByKeyboard();
+
+    await waitFor(async () => expect(await demoTabPager.current()).toEqual(['Accordions']));
+    expect(await demoTabPager.currentTab()).toHaveFocus();
+  });
+
   test('the tab row on the first tab, Accordions, offers no tab before it', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 

@@ -6,6 +6,10 @@ import {demosNav} from './demos-nav';
 export const demoTabPager = {
   previous: async (): Promise<HTMLElement | null> => within(await demosNav.navigation()).queryByRole('link', {name: /^Previous tab/}),
   next: async (): Promise<HTMLElement | null> => within(await demosNav.navigation()).queryByRole('link', {name: /^Next tab/}),
+  goPreviousByKeyboard: async (): Promise<void> => {
+    within(await demosNav.navigation()).getByRole('link', {name: /^Previous tab/}).focus();
+    await userEvent.keyboard('{Enter}');
+  },
   goNextByKeyboard: async (): Promise<void> => {
     within(await demosNav.navigation()).getByRole('link', {name: /^Next tab/}).focus();
     await userEvent.keyboard('{Enter}');
