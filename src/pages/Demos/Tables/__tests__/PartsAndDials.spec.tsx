@@ -29,7 +29,9 @@ describe('the tables panel', () => {
   test('should say beside a part how long the parts take together', async () => {
     render(<TestApp at={demosAt(theSlices)}/>);
 
-    expect(await tablesTab().size()).toHaveTextContent(howLong);
+    const page = await tablesTab().partPage('Slice the design into stories');
+
+    expect(await tablesTab().sizeIn(page)).toHaveTextContent(howLong);
   });
 
   test('should hold the eight parts beside a tutorial, as the tab does', async () => {
