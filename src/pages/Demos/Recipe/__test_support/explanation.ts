@@ -7,6 +7,9 @@ const linkInProse = (part: HTMLElement, name: string): HTMLElement => {
   if (not(found.length)) {
     throw new Error(`no link named ${name} in the part's prose`);
   }
+  if (found.length > 1) {
+    throw new Error(`${found.length} links named ${name} in the part's prose`);
+  }
   return found[0];
 };
 
