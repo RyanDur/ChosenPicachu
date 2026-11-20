@@ -14,7 +14,6 @@ import {PartsAndMinutes} from './PartsAndMinutes';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
 import '../PartPage.css';
-import './ChartPage.css';
 
 type Feature = {
   name: string;
@@ -63,7 +62,7 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   return <article aria-labelledby={`tutorial-${kind}`} className="part-page">
     <h2 id={`tutorial-${kind}`} className="off-screen">{`${name} tutorial`}</h2>
     <PartsAndMinutes/>
-    <section className="part-body chart-page tutorials">
+    <section className="part-body tutorials">
       <Chart/>
       <h3 className="title">let’s build this feature</h3>
       <p className="overview paragraph">
