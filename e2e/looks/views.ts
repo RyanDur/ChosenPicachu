@@ -59,6 +59,16 @@ export const views: readonly View[] = [
     }
   },
   {
+    name: 'a pager arrow pressed',
+    page: named('demos'),
+    atWidths: [390],
+    into: async page => {
+      const box = await boxOf(page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: /^Next tab/}), 'no next tab to press');
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+    }
+  },
+  {
     name: 'every fold open',
     page: named('home'),
     into: async page => {
