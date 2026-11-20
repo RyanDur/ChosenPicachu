@@ -945,7 +945,7 @@ test.describe('a keyboard reader', {tag: '@desktop'}, () => {
   });
 });
 
-test.describe('while another museum has not answered', {tag: '@iPhone'}, () => {
+test.describe('a reader on a phone, while another museum has not answered', {tag: '@iPhone'}, () => {
   test('shows one loading bar from the first until the wall\'s first piece, then none', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.holdTheArtInstitute();
