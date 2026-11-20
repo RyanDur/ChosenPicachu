@@ -23,46 +23,49 @@
     --plate-height: var(--base-x-14);
     --plate-width: calc(var(--plate-height) * 1.5);
 
-    position: relative;
-    display: grid;
-    gap: var(--base-x-1_5);
+    display: flow-root;
     padding-block-start: var(--base-x-3);
 
+    > * {
+      margin-block: 0;
+    }
+
+    > :where(:not(.story-plate)) + * {
+      margin-block-start: var(--base-x-1_5);
+    }
+
+    > .quotation {
+      display: block;
+
+      .attribution {
+        margin-block-start: var(--base);
+      }
+    }
+
     .paragraph {
-      margin: 0;
       text-wrap: pretty;
     }
   }
 
   .story-plate {
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline-end: 0;
+    float: inline-end;
     inline-size: var(--plate-width);
     block-size: var(--plate-height);
-  }
-
-  .story > .record-title,
-  .story > .quotation {
-    padding-inline-end: calc(var(--plate-width) + var(--base-x-1_5));
+    margin-block-start: calc(-1 * var(--base-x-3));
+    margin-inline-start: var(--base-x-1_5);
   }
 
   @media (width <= 600px), (height <= 500px) {
     .story-plate {
-      position: static;
-      justify-self: end;
-    }
-
-    .story > .record-title,
-    .story > .quotation {
-      padding-inline-end: 0;
+      float: none;
+      margin-block: 0 var(--base-x-1_5);
+      margin-inline-start: auto;
     }
   }
 
   .story-moments {
     display: grid;
     row-gap: var(--base-x-1_5);
-    margin: 0;
   }
 
   .story-moment {
