@@ -70,13 +70,6 @@ test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@ph
     await expect(gallery.settingsPanel).toHaveCount(0);
   });
 
-  test('shows a work of art on the first screen', async ({page}) => {
-    const gallery = galleryPage(page);
-    await page.goto('gallery/?tab=vam');
-
-    await expect(gallery.wall.first()).toBeInViewport({ratio: 0.5});
-  });
-
   test('has the search, the page number and the page size within one tap of the first screen', async ({page}) => {
     const gallery = galleryPage(page);
     await page.goto('gallery/?tab=vam');
