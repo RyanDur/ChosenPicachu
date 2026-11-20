@@ -36,7 +36,7 @@ describe('The Demos page', () => {
 
     await demoPage.findTitle('Why 9999 still loses');
 
-    expect(demoPage.introduction()).not.toBeInTheDocument();
+    expect(demoPage.introductionIfAny()).not.toBeInTheDocument();
   });
 
   test('a tables tutorial’s page opens on the tutorial, with no Demos introduction before it', async () => {
@@ -44,7 +44,7 @@ describe('The Demos page', () => {
 
     await demoPage.findTitle('Demos Tables · Sort menu');
 
-    expect(demoPage.introduction()).not.toBeInTheDocument();
+    expect(demoPage.introductionIfAny()).not.toBeInTheDocument();
   });
 
   test('the Tables tab opens with the Demos introduction above its tabs', async () => {
