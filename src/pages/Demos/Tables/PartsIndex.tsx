@@ -14,8 +14,8 @@ const FeatureEntry: FC<{tutorial: Tutorial}> = ({tutorial}) =>
   <PartsNavigationEntry to={tableTutorials.addressOf(tutorial)} name={tableTutorials.nameOf(tutorial)}
     minutes={tableTutorials.minutesOf(tutorial)} says={tableTutorials.saysOf(tutorial)}/>;
 
-export const PartsIndex: FC<{readonly titled?: boolean}> = ({titled}) =>
-  <PartsNavigation titled={titled}>
+export const PartsIndex: FC = () =>
+  <PartsNavigation>
     <PartsNavigationGroup label="Build the live table" start={1}>
       {tableParts.inOrder.map(part => <BuildEntry key={part} part={part}/>)}
     </PartsNavigationGroup>
