@@ -18,8 +18,8 @@ const runTelling = (part: HTMLElement, words: RegExp): HTMLElement =>
   runWith(part, run => is(within(run).queryByText(words)), `tells ${words}`);
 
 const openerOf = (part: HTMLElement): HTMLElement => {
-  const title = within(part).getByRole('heading', {level: 2});
-  const afterTitle = within(part).getAllByRole('paragraph')
+  const title = screen.getByRole('heading', {level: 2, name: computeAccessibleName(part)});
+  const afterTitle = screen.getAllByRole('paragraph')
     .filter(paragraph => is(title.compareDocumentPosition(paragraph) & Node.DOCUMENT_POSITION_FOLLOWING));
   if (not(afterTitle.length)) {
     throw new Error('no paragraph after the part\'s title');

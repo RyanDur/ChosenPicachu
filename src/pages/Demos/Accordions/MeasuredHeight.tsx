@@ -9,7 +9,6 @@ import {ExclusiveMeasuredAccordion} from './ExclusiveMeasuredAccordion';
 import {InclusiveMeasuredAccordion} from './InclusiveMeasuredAccordion';
 import {foldInput} from './fold-input';
 import {looks} from './looks';
-import {PartLink} from './PartLink';
 import {RemembersTheFoldLink} from './RemembersTheFoldLink';
 import {PlainFold} from './Plain';
 import exclusiveMeasuredAccordionSource from './ExclusiveMeasuredAccordion.tsx?sample';
@@ -19,8 +18,8 @@ import panelSource from './MeasuredPanel.tsx?sample';
 import foldSource from './Plain/fold.main.ts?sample';
 import accordionsCss from './Accordions.css?sample';
 import oldWayMotionCss from './OldWayMotion.css?sample';
-import '../Runs.css';
 import {Build} from './build';
+import '../Runs.css';
 import './PartDepth.css';
 
 const sharedOpenFolds = (source: Sample): Line[] =>
@@ -41,9 +40,6 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
   const input = foldInput.of(foldType);
   const {Accordion: Measured, sample} = measuredBuilds[foldType];
   return <>
-    <p className="paragraph">This part builds on two before it:
-      “<PartLink part="a-box-remembers-the-fold"/>”, for the {input} and its label, and
-      “<PartLink part="the-max-height-guess"/>”, which this part answers.</p>
     <figure className={looks.exhibit}>
       <PlainFold/>
       <figcaption className="caption">This fold is a separate page, placed inside this one, so the choices the address

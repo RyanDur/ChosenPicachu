@@ -5,15 +5,10 @@ import {ContextChooser} from './ContextChooser';
 import zIndexCss from './ZIndexDemo.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
 import tabsCss from '@navigation/Tabs/Tabs.css?sample';
-import '../Runs.css';
 import {zIndexParts} from './part-pages';
-import {PartLink} from './PartLink';
+import '../Runs.css';
 
 export const WhatElseFormsAStackingContext: FC = () => <>
-  <p className="paragraph">A card with no z-index at all can still trap the list inside it. This part shows which
-    properties form a stacking context, and three common ones that do not. It assumes
-    what <PartLink part="why-third-is-on-top"/> and <PartLink part="why-9999-still-loses"/> give: positioned and auto, a
-    stacking context, and a z-index compared only inside its own.</p>
   <ContextChooser/>
   <ol className="runs card rounded-corners lifted padded">
     <li className="run">

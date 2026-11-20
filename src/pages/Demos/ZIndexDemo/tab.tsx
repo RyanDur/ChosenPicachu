@@ -15,6 +15,12 @@ import {WhatElseFormsAStackingContext} from './WhatElseFormsAStackingContext';
 import {WhyThePopoverWins} from './WhyThePopoverWins';
 import {WhyAFixedBannerStillLoses} from './WhyAFixedBannerStillLoses';
 import {LetsBuildThisFeature} from './LetsBuildThisFeature';
+import {WhyThirdIsOnTopIntroduction} from './WhyThirdIsOnTopIntroduction';
+import {Why9999StillLosesIntroduction} from './Why9999StillLosesIntroduction';
+import {WhatElseFormsAStackingContextIntroduction} from './WhatElseFormsAStackingContextIntroduction';
+import {WhyThePopoverWinsIntroduction} from './WhyThePopoverWinsIntroduction';
+import {WhyAFixedBannerStillLosesIntroduction} from './WhyAFixedBannerStillLosesIntroduction';
+import {LetsBuildThisFeatureIntroduction} from './LetsBuildThisFeatureIntroduction';
 
 const usePlacingTheBanners = (): void => {
   const {side, align, enter, stack} = useControls();
@@ -25,13 +31,18 @@ const usePlacingTheBanners = (): void => {
   useEffect(() => () => dispatchBanner(bannerChange.unplaced()), [dispatchBanner]);
 };
 
-const partContents: Record<ZIndexPart, ReactNode> = {
-  'why-third-is-on-top': <WhyThirdIsOnTop/>,
-  'why-9999-still-loses': <Why9999StillLoses/>,
-  'what-else-forms-a-stacking-context': <WhatElseFormsAStackingContext/>,
-  'why-the-popover-wins': <WhyThePopoverWins/>,
-  'why-a-fixed-banner-still-loses': <WhyAFixedBannerStillLoses/>,
-  'lets-build-this-feature': <LetsBuildThisFeature/>
+type Contents = {
+  readonly introduction: ReactNode;
+  readonly body: ReactNode;
+};
+
+const partContents: Record<ZIndexPart, Contents> = {
+  'why-third-is-on-top': {introduction: <WhyThirdIsOnTopIntroduction/>, body: <WhyThirdIsOnTop/>},
+  'why-9999-still-loses': {introduction: <Why9999StillLosesIntroduction/>, body: <Why9999StillLoses/>},
+  'what-else-forms-a-stacking-context': {introduction: <WhatElseFormsAStackingContextIntroduction/>, body: <WhatElseFormsAStackingContext/>},
+  'why-the-popover-wins': {introduction: <WhyThePopoverWinsIntroduction/>, body: <WhyThePopoverWins/>},
+  'why-a-fixed-banner-still-loses': {introduction: <WhyAFixedBannerStillLosesIntroduction/>, body: <WhyAFixedBannerStillLoses/>},
+  'lets-build-this-feature': {introduction: <LetsBuildThisFeatureIntroduction/>, body: <LetsBuildThisFeature/>}
 };
 
 const partWears: Partial<Record<ZIndexPart, string>> = {'lets-build-this-feature': 'tutorials'};
@@ -46,10 +57,8 @@ export const Room: FC = () => {
   usePlacingTheBanners();
 
   return useShownPart().either(
-    part => <>
-      <PartPage part={part} className={partWears[part]}>{partContents[part]}</PartPage>
-      <PartsAndMinutes/>
-    </>,
+    part => <PartPage part={part} className={partWears[part]} introduction={partContents[part].introduction}
+      panel={<PartsAndMinutes/>}>{partContents[part].body}</PartPage>,
     () => <>
       <ZIndexIntroduction/>
       <NaturalZIndex className="card rounded-corners lifted padded"/>

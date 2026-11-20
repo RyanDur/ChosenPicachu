@@ -1,8 +1,4 @@
-import {TabLink} from '@pages/Demos/TabLink';
-import {DemoTopics} from '@pages/Demos';
-import {DemoLink} from '@pages/Demos/DemoLink';
 import {ClassGloss} from '@pages/Demos/Accordions';
-import {accordionParts} from '@pages/Demos/Accordions/part-pages';
 import {FC} from 'react';
 import {Snippet, lines, carve} from '../Recipe';
 import {NaturalZIndex} from './NaturalZIndex';
@@ -13,13 +9,7 @@ import zIndexCss from './ZIndexDemo.css?sample';
 import '../Runs.css';
 import './ZIndexDemo.css';
 
-const remembersTheFoldAt = accordionParts.addressOf('a-box-remembers-the-fold');
-
 export const WhyThirdIsOnTop: FC = () => <>
-  <p className="paragraph">Even with no z-index anywhere, one of three overlapping cards ends up on top. This part
-    shows why, and then what one z-index does to it. It assumes what
-    the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> gives: an element
-    and <DemoLink to={remembersTheFoldAt}>a class</DemoLink>.</p>
   <NaturalZIndex className="card rounded-corners lifted padded"/>
   <ol className="runs card rounded-corners lifted padded">
     <li className="run">

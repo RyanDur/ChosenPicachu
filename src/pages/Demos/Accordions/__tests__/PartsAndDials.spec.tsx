@@ -2,6 +2,8 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demoPage, demosAt, partsIndex} from '@pages/Demos/__test_support';
 import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
+import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {outOfReadingOrder} from '@__test_support/reading-order';
 
 const maxHeightGuess = 'accordions/the-max-height-guess';
 const chosen = '?type=inclusive&style=drawer';
@@ -68,5 +70,28 @@ describe('the accordions panel', () => {
     await partsIndex.find();
 
     expect(demoPage.entriesLinking(/An accordion in HTML alone$/)).toHaveLength(1);
+  });
+
+  test('should come after a part’s introduction and before its first exhibit', async () => {
+    render(<TestApp at={demosAt('accordions/the-measured-height')}/>);
+
+    const page = await explanation.part('Accordions');
+    const introduction = explanation.saying(page, /^This part builds on two before it/);
+    const foldType = accordionsTab.choiceIn(await accordionsTab.partsAndDials(), 'fold type');
+    const exhibit = await accordionsTab.exhibit();
+
+    expect(outOfReadingOrder([introduction, foldType, exhibit])).toEqual([]);
+  });
+
+  test('should title its parts beneath the part’s own title, so the part’s runs stay under the part', async () => {
+    render(<TestApp at={demosAt('accordions/the-measured-height')}/>);
+
+    expect(await partsIndex.titledAt(3)).toBeInTheDocument();
+  });
+
+  test('should title its parts beside the tab’s sections on the tab', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    expect(await partsIndex.titledAt(2)).toBeInTheDocument();
   });
 });

@@ -19,7 +19,7 @@ describe('why 9999 still loses, on its own page', () => {
 
     const part = await explanation.part(title);
 
-    expect(explanation.linkNamed(part, 'Why Third is on top')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
+    expect(explanation.linkNamed(explanation.opener(part), 'Why Third is on top')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 
   test('should link Why the popover wins, where its opener glosses the top layer, to its page with the raised card carried', async () => {

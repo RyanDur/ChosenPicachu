@@ -5,15 +5,11 @@ import {TrappedMenu} from './TrappedMenu';
 import topLayerSource from './TopLayerMenu.tsx?sample';
 import menuCss from '@components/Menu/Menu.css?sample';
 import itemSource from '@components/Menu/Item.tsx?sample';
-import '../Runs.css';
 import {PartLink} from './PartLink';
 import {PartTermLink} from './PartTermLink';
+import '../Runs.css';
 
 export const WhyThePopoverWins: FC = () => <>
-  <p className="paragraph">A menu opened as a popover shows over every card, whatever stacking context sits around it.
-    This part shows why, and what the menu costs to place once it leaves its card. It assumes
-    what <PartLink part="why-9999-still-loses"/> gives: the Sort by built the old way, whose list opens under the next
-    card, and a z-index compared only inside its own stacking context.</p>
   <TrappedMenu/>
   <ol className="runs card rounded-corners lifted padded">
     <li className="run">
