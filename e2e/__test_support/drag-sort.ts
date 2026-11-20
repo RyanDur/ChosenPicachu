@@ -6,8 +6,7 @@ type Point = {x: number; y: number};
 
 const centerOf = ({x, y, width, height}: Box): Point => ({x: x + width / 2, y: y + height / 2});
 
-const carry = async (page: Page, from: Box, to: Point): Promise<void> => {
-  const start = centerOf(from);
+const carry = async (page: Page, start: Point, to: Point): Promise<void> => {
   await page.mouse.move(start.x, start.y);
   await page.mouse.down();
   for (let step = 1; step <= 16; step++) {
@@ -22,11 +21,11 @@ export type Hold = {
   readonly letGoOutsideThePage: () => Promise<void>;
 };
 
-const held = async (page: Page, grip: Locator, along: 'x' | 'y'): Promise<Hold> => {
+const held = async (page: Page, grip: Locator, along: 'x' | 'y', pressedAt: (grip: Locator) => Promise<Point>): Promise<Hold> => {
   await siteFrame(page).hydrated();
   // a carry that runs past the edge of the view scrolls the page under the pointer, which no hand can do
   await grip.evaluate(element => element.scrollIntoView({block: 'center', inline: 'center'}));
-  const home = centerOf(await boxOf(grip));
+  const home = await pressedAt(grip);
   let at = home;
   const moveTo = async (to: Point): Promise<void> => {
     for (let step = 1; step <= 16; step++) {
@@ -50,9 +49,9 @@ const held = async (page: Page, grip: Locator, along: 'x' | 'y'): Promise<Hold> 
   };
 };
 
-const dragTo = async (page: Page, from: Box, x: number, y: number): Promise<void> => {
+const dragTo = async (page: Page, start: Point, x: number, y: number): Promise<void> => {
   await siteFrame(page).hydrated();
-  await carry(page, from, {x, y});
+  await carry(page, start, {x, y});
   await page.mouse.up();
 };
 
@@ -106,7 +105,7 @@ export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
       await handle.scrollIntoViewIfNeeded();
       const edge = await boxOf(handle);
       const from = {...edge, x: edge.x - besideBy};
-      await dragTo(page, from, from.x + from.width / 2 + by, from.y + from.height / 2);
+      await dragTo(page, centerOf(from), from.x + from.width / 2 + by, from.y + from.height / 2);
     },
     dragEdge: async (name: string, {by, moves}: {by: number; moves: number}): Promise<void> => {
       const middle = await centerOfHandle(name);
@@ -170,15 +169,15 @@ export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
       await handle.scrollIntoViewIfNeeded();
       const box = await boxOf(handle);
       const edge = {...box, x: box.x + box.width - 1, width: 0};
-      await dragTo(page, edge, edge.x + by, edge.y + edge.height / 2);
+      await dragTo(page, centerOf(edge), edge.x + by, edge.y + edge.height / 2);
     },
     columnOrder: (): Promise<(string | null)[]> =>
       holder.getByRole('columnheader').evaluateAll(headers => headers.map(header => header.getAttribute('aria-label'))),
     rowOrder: (): Promise<string[]> =>
       holder.getByRole('rowheader').evaluateAll(cells =>
         cells.map(cell => cell.getAttribute('aria-label') ?? (cell.textContent ?? '').trim())),
-    holdColumn: (column: string): Promise<Hold> => held(page, columnHeader(column), 'x'),
-    holdRow: (row: number): Promise<Hold> => held(page, grip(row), 'y'),
+    holdColumn: (column: string): Promise<Hold> => held(page, columnHeader(column), 'x', header => pressedOn(header, 'name')),
+    holdRow: (row: number): Promise<Hold> => held(page, grip(row), 'y', async rowGrip => centerOf(await boxOf(rowGrip))),
     reading: async (): Promise<string[]> => (await holder.getByRole('table').ariaSnapshot()).split('\n')
       .map(line => line.trim())
       .filter(line => /^- (table|caption|columnheader|rowheader|img)\b/.test(line)),
@@ -197,14 +196,15 @@ export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
       await columnHeader(column).scrollIntoViewIfNeeded();
       const from = await boxOf(columnHeader(column));
       const to = await boxOf(columnHeader(past));
-      await dragTo(page, from, to.x + to.width * (to.x < from.x ? 0.2 : 0.8), from.y + from.height / 2);
+      const start = await pressedOn(columnHeader(column), 'name');
+      await dragTo(page, start, to.x + to.width * (to.x < from.x ? 0.2 : 0.8), start.y);
     },
     dragRowPast: async (row: number, past: RegExp): Promise<void> => {
       await holder.getByRole('row', {name: past}).scrollIntoViewIfNeeded();
       await grip(row).scrollIntoViewIfNeeded();
       const from = await boxOf(grip(row));
       const pastRow = await boxOf(holder.getByRole('row', {name: past}));
-      await dragTo(page, from, from.x + from.width / 2, pastRow.y + pastRow.height * 0.8);
+      await dragTo(page, centerOf(from), from.x + from.width / 2, pastRow.y + pastRow.height * 0.8);
     },
     moveReport: (): Locator => holder.getByRole('status', {name: 'move report'}),
     listenToTheMoveReport: async (): Promise<void> => {
