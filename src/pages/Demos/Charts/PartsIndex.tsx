@@ -9,8 +9,8 @@ const Entry: FC<{kind: ChartKind}> = ({kind}) => {
     minutes={minutes} says={says}/>;
 };
 
-export const PartsIndex: FC<{readonly titled?: boolean}> = ({titled}) =>
-  <PartsNavigation titled={titled}>
+export const PartsIndex: FC = () =>
+  <PartsNavigation titled>
     <ol className="parts-index-list numbered">
       {chartKinds.all.map(kind => <Entry key={kind} kind={kind}/>)}
     </ol>
