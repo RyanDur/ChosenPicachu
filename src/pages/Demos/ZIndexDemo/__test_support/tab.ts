@@ -1,11 +1,12 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {readingOf} from '@pages/Demos/Controls/__test_support/reading';
+import {explanation} from '@pages/Demos/Recipe/__test_support';
 
 const findExpand = (): Promise<HTMLElement> => screen.findByRole('button', {name: 'Expand', expanded: false});
 
 const linkToTheBannerStory = (part: HTMLElement): HTMLElement =>
-  within(within(part).getByText(/^To build this banner yourself/)).getByRole('link', {name: 'Let’s build this feature'});
+  explanation.linkInProse(part, 'Let’s build this feature');
 
 export const zIndexTab = {
   opening: (): Promise<HTMLElement> => screen.findByText(/^Where two boxes on a page overlap/),
