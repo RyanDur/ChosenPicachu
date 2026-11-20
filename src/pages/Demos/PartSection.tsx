@@ -1,10 +1,10 @@
-import {FC, PropsWithChildren, ReactNode, useId} from 'react';
+import {FC, PropsWithChildren, ReactElement, ReactNode, useId} from 'react';
 import {is, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import './PartPage.css';
 
 type Opening = {
-  readonly caption: NonNullable<ReactNode>;
+  readonly caption: string | ReactElement;
   readonly introduction?: ReactNode;
 };
 
