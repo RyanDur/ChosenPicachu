@@ -1,6 +1,8 @@
 export type Spot = {readonly u: number; readonly v: number};
 export type Region = Spot & {readonly across: number; readonly down: number};
 export type MotionKind = 'turning' | 'rippling';
+export type SheetRegion = '.rail' | '.app-header' | '.app-main' | '.table';
+export type EventWord = 'toggle' | 'click';
 
 const plate: Region = {u: 0, v: 0, across: 112, down: 72};
 
@@ -40,7 +42,7 @@ const startOf = (line: string): number => inset + (line.length - line.trimStart(
 
 const lengthOf = (line: string): number => line.trim().length * advance;
 
-const regions = [
+const regions: readonly {name: SheetRegion; tint: string; footprint: Region; namedFlatAt: Spot}[] = [
   {
     name: '.rail', tint: 'plan-mint-filled', footprint: {u: 4, v: 4, across: 26, down: 64},
     namedFlatAt: {u: 17, v: 26}
@@ -59,7 +61,7 @@ const regions = [
   }
 ];
 
-const events: readonly {word: string; call: string; spark: Spot; motion: MotionKind}[] = [
+const events: readonly {word: EventWord; call: string; spark: Spot; motion: MotionKind}[] = [
   {word: 'toggle', call: 'addEventListener("toggle", …)', spark: {u: 16, v: 26}, motion: 'turning'},
   {word: 'click', call: 'rows.sort(by(column))', spark: {u: 70, v: 40}, motion: 'rippling'}
 ];

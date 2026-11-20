@@ -1,5 +1,5 @@
 import {FC, Fragment, PropsWithChildren, useId} from 'react';
-import {MarkupLines, motions, Region, Spot, thePage, TurnHead} from './plates';
+import {EventWord, MarkupLines, motions, Region, SheetRegion, Spot, thePage, TurnHead} from './plates';
 import './PagePulledApart.css';
 
 type Point = {readonly x: number; readonly y: number};
@@ -49,9 +49,9 @@ const ellipsisInside = (tag: string): Spot => {
   return thePage.letterAt(row, thePage.markupLines[row].indexOf('…'));
 };
 
-const landings: Record<string, Spot> = {toggle: ellipsisInside('nav'), click: ellipsisInside('table')};
+const landings: Record<EventWord, Spot> = {toggle: ellipsisInside('nav'), click: ellipsisInside('table')};
 
-const regionNamedAt: Record<string, Spot> = {
+const regionNamedAt: Record<SheetRegion, Spot> = {
   '.rail': {u: 11.6, v: 44.8},
   '.app-header': {u: 56.1, v: 27.6},
   '.app-main': {u: 36.5, v: 65.3},
