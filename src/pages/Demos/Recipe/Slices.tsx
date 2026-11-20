@@ -10,12 +10,12 @@ type Slice = [slice: string, ordinal: number];
 type PlacedSlice = [slice: string, ordinal: number, place: Place];
 
 type OnTheTab = {
-  onAPartPage?: false;
+  headedByThePart?: false;
   sliced: Slice[];
 };
 
-type OnAPartPage = {
-  onAPartPage: true;
+type HeadedByThePart = {
+  headedByThePart: true;
   sliced: PlacedSlice[];
 };
 
@@ -23,7 +23,7 @@ type SlicesProps = {
   can: string;
   soThat: string;
   slices: ReactNode;
-} & (OnTheTab | OnAPartPage);
+} & (OnTheTab | HeadedByThePart);
 
 const SliceLink: FC<{ordinal: number; place?: Place}> = ({ordinal, place}) => {
   const carried = useCarriedAddress();
@@ -33,12 +33,12 @@ const SliceLink: FC<{ordinal: number; place?: Place}> = ({ordinal, place}) => {
     () => <a className="slice-ordinal signpost caption upright" href={`#${stations.idOf(ordinal)}`}>station {ordinal}</a>);
 };
 
-export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, onAPartPage = false}) => {
+export const Slices: FC<SlicesProps> = ({can, soThat, slices, sliced, headedByThePart = false}) => {
   const placed: [string, number, Place?][] = sliced;
-  const Can: 'h3' | 'h4' = onAPartPage ? 'h3' : 'h4';
+  const Can: 'h3' | 'h4' = headedByThePart ? 'h3' : 'h4';
   return <section className="phase card rounded-corners lifted"
-    aria-labelledby={onAPartPage ? undefined : storiesHeading.id}>
-    {onAPartPage ? null : <h3 id={storiesHeading.id} className="phase-title title">{storiesHeading.title}</h3>}
+    aria-labelledby={headedByThePart ? undefined : storiesHeading.id}>
+    {headedByThePart ? null : <h3 id={storiesHeading.id} className="phase-title title">{storiesHeading.title}</h3>}
     <p className="overview paragraph muted-ink">
       Once the need is heard and the design has answered shape, I split the work into stories. Each is
       a <a className="signpost"
