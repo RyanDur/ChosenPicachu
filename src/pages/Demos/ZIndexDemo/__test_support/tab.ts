@@ -14,7 +14,6 @@ export const zIndexTab = {
   size: (): Promise<HTMLElement> => screen.findByText(/^Six parts, about \d+ minutes\.$/),
   findFeatureStories: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'Let’s build this feature'}),
   fragmentOf: (heading: string): string => `#${screen.getByRole('heading', {name: heading}).id}`,
-  follow: async (holder: HTMLElement, name: string): Promise<void> => userEvent.click(within(holder).getByRole('link', {name})),
   linkToTheBannerStory,
   followToTheBannerStory: async (part: HTMLElement): Promise<void> => userEvent.click(linkToTheBannerStory(part)),
   findBannerControls: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'banner controls'}),
