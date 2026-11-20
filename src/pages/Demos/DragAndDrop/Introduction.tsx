@@ -17,8 +17,8 @@ export const DragSortIntroduction: FC<PropsWithChildren> = ({children}) =>
       browser’s own drag, and write script only for what the platform does not yet do: making room as you hover,
       or holding still until the drop; showing the item where it came from, or hiding it; sliding the neighbors, or
       not.</p>
-    <p className="paragraph">Each of those is a dial. A dial is a control that sets how a build behaves, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says. The dials sit beside the exhibit, and it changes
-      to match.</p>
+    <p className="paragraph">Each of those is a dial. A dial is a control that sets how a build behaves, as the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> says. The dials sit in their own panel, and the
+      exhibit changes to match them.</p>
     <p className="paragraph">By the end you can build a sortable list on the browser’s own drag and drop, choose each of
       those three behaviors and say what it costs, and give a keyboard user the same list, since the keyboard has the
       same moves as the pointer. The exhibit below is three items; drag one by its grip, or focus the grip and use the
