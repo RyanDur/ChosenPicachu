@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import {PartSection} from '@pages/Demos/PartSection';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PartLink} from '@pages/Demos/ZIndexDemo';
@@ -13,7 +14,6 @@ import {ChartStories} from './ChartStories';
 import {PartsAndMinutes} from './PartsAndMinutes';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
-import '../PartPage.css';
 
 type Feature = {
   name: string;
@@ -59,41 +59,37 @@ const neighbor = (kind: ChartKind) => ({title: chartKinds.numbered(kind), addres
 
 export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const {name, reference, quote, chart: Chart} = features[kind];
-  return <section aria-labelledby={`tutorial-${kind}`} className="part-page">
-    <h2 id={`tutorial-${kind}`} className="off-screen">{chartKinds.names[kind]}</h2>
-    <PartsAndMinutes/>
-    <section className="part-body tutorials">
-      <Chart/>
-      <h3 className="title">let’s build this feature</h3>
-      <p className="overview paragraph">
-        We are going to build the <a className="signpost"
-          href={reference}
-          target="_blank"
-          rel="noreferrer">{name}</a> above. The card below tells it as a <a className="signpost"
-          href="https://initialcapacity.io/insights/user-story"
-          target="_blank"
-          rel="noreferrer">user story</a>, a card, a conversation and a confirmation, as taught in the z-index
-        part <PartLink part="lets-build-this-feature"/>. Open the card and you get the plan and the steps
-        that build it, with the real code from this site, so what you read is what runs. The steps build on
-        the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> and link to MDN, Mozilla’s web reference, if
-        you want more.
-      </p>
-      <figure className="feedback">
-        <blockquote className="quote paragraph italic trim-bar-beside">{quote}</blockquote>
-        <figcaption className="attribution caption muted-ink">a trader</figcaption>
-      </figure>
-      <p className="overview paragraph">
-        If you want the exercise, stop here and build the story yourself first. The chart
-        above is my interpretation of that; the card below tells how I built it. Open it
-        to see the steps, or to compare them with yours.
-      </p>
-      <section aria-label={`build the ${name} yourself`} className="build-steps">
-        <StoryDepth.Provider value={4}>
-          <ChartStories kind={kind}/>
-        </StoryDepth.Provider>
-      </section>
+  return <PartSection title={chartKinds.names[kind]} panel={<PartsAndMinutes/>} wears="tutorials"
+    foot={<PageFoot label="the chart pages" previous={chartKinds.previous(kind).map(neighbor)}
+      next={chartKinds.next(kind).map(neighbor)}/>}>
+    <Chart/>
+    <h3 className="title">let’s build this feature</h3>
+    <p className="overview paragraph">
+      We are going to build the <a className="signpost"
+        href={reference}
+        target="_blank"
+        rel="noreferrer">{name}</a> above. The card below tells it as a <a className="signpost"
+        href="https://initialcapacity.io/insights/user-story"
+        target="_blank"
+        rel="noreferrer">user story</a>, a card, a conversation and a confirmation, as taught in the z-index
+      part <PartLink part="lets-build-this-feature"/>. Open the card and you get the plan and the steps
+      that build it, with the real code from this site, so what you read is what runs. The steps build on
+      the <TabLink to={DemoTopics.accordions}>accordions tab</TabLink> and link to MDN, Mozilla’s web reference, if
+      you want more.
+    </p>
+    <figure className="feedback">
+      <blockquote className="quote paragraph italic trim-bar-beside">{quote}</blockquote>
+      <figcaption className="attribution caption muted-ink">a trader</figcaption>
+    </figure>
+    <p className="overview paragraph">
+      If you want the exercise, stop here and build the story yourself first. The chart
+      above is my interpretation of that; the card below tells how I built it. Open it
+      to see the steps, or to compare them with yours.
+    </p>
+    <section aria-label={`build the ${name} yourself`} className="build-steps">
+      <StoryDepth.Provider value={4}>
+        <ChartStories kind={kind}/>
+      </StoryDepth.Provider>
     </section>
-    <PageFoot label="the chart pages" previous={chartKinds.previous(kind).map(neighbor)}
-      next={chartKinds.next(kind).map(neighbor)}/>
-  </section>;
+  </PartSection>;
 };

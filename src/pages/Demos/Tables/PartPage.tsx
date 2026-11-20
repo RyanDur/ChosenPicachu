@@ -1,4 +1,5 @@
-import {FC, useId} from 'react';
+import {FC} from 'react';
+import {PartSection} from '@pages/Demos/PartSection';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {Aggregations} from './Aggregations';
 import {TablePart, tableParts} from './part-pages';
@@ -7,7 +8,6 @@ import {PartsAndDials} from './PartsAndDials';
 import {tablesBook} from './tables-book';
 import {DesignAsk, FlowTableRecipe, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
 import '../Tutorials.css';
-import '../PartPage.css';
 import './TutorialPage.css';
 
 const parts: Record<TablePart, FC> = {
@@ -19,21 +19,12 @@ const parts: Record<TablePart, FC> = {
 };
 
 export const PartPage: FC<{readonly part: TablePart}> = ({part}) => {
-  const titled = `part${useId()}`;
   const {name, ordinal} = tableParts.told(part);
   const Part = parts[part];
-  return <section aria-labelledby={titled} className="part-page">
-    <hgroup>
-      <p className="caption">
-        {`${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`}
-      </p>
-      <h2 id={titled} className="title">{name}</h2>
-    </hgroup>
-    <PartsAndDials/>
-    <section className="part-body tutorial-page tutorials">
-      <Aggregations/>
-      <Part/>
-    </section>
-    <PartFoot part={part}/>
-  </section>;
+  const place = `${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`;
+  return <PartSection title={name} caption={place}
+    panel={<PartsAndDials/>} foot={<PartFoot part={part}/>} wears="tutorial-page tutorials">
+    <Aggregations/>
+    <Part/>
+  </PartSection>;
 };

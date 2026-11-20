@@ -1,4 +1,5 @@
-import {FC, ReactNode, useId} from 'react';
+import {FC, ReactNode} from 'react';
+import {PartSection} from '@pages/Demos/PartSection';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {AccordionPart, accordionParts} from './part-pages';
 import {PartFoot} from './PartFoot';
@@ -14,7 +15,6 @@ import {MaxHeightGuessIntroduction} from './MaxHeightGuessIntroduction';
 import {MeasuredHeightIntroduction} from './MeasuredHeightIntroduction';
 import {PlatformGivesNowIntroduction} from './PlatformGivesNowIntroduction';
 import {SlidingFoldMovesIntroduction} from './SlidingFoldMovesIntroduction';
-import '../PartPage.css';
 
 const draws = seeded('the accordion exhibits');
 const dealt = draws.wordDeck();
@@ -58,21 +58,10 @@ const partWritings: Record<AccordionPart, PartWriting> = {
 };
 
 export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
-  const titled = `part${useId()}`;
   const {name, ordinal} = accordionParts.told(part);
   const place = `${demoTab.names[DemoTopics.accordions]} · part ${ordinal} of ${accordionParts.inTheBook}`;
-  return <section aria-labelledby={titled} className="part-page">
-    <header className="part-opening">
-      <hgroup>
-        <p className="caption">{place}</p>
-        <h2 id={titled} className="title">{name}</h2>
-      </hgroup>
-      {partWritings[part].introduction}
-    </header>
-    <PartsAndDials/>
-    <section className="part-body">
-      {partWritings[part].exhibitAndRuns}
-    </section>
-    <PartFoot part={part}/>
-  </section>;
+  return <PartSection title={name} caption={place} introduction={partWritings[part].introduction}
+    panel={<PartsAndDials/>} foot={<PartFoot part={part}/>}>
+    {partWritings[part].exhibitAndRuns}
+  </PartSection>;
 };

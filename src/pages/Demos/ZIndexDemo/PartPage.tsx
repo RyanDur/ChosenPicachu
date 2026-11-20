@@ -1,5 +1,5 @@
-import {FC, ReactNode, useId} from 'react';
-import {classNames} from '@components';
+import {FC, ReactNode} from 'react';
+import {PartSection} from '@pages/Demos/PartSection';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {ZIndexPart, zIndexParts} from './part-pages';
 import {PartFoot} from './PartFoot';
@@ -16,7 +16,6 @@ import {WhyThePopoverWinsIntroduction} from './WhyThePopoverWinsIntroduction';
 import {WhyAFixedBannerStillLosesIntroduction} from './WhyAFixedBannerStillLosesIntroduction';
 import {LetsBuildThisFeatureIntroduction} from './LetsBuildThisFeatureIntroduction';
 import {PartsAndMinutes} from './PartsAndMinutes';
-import '../PartPage.css';
 
 type PartWriting = {
   readonly introduction: ReactNode;
@@ -53,21 +52,10 @@ const partWritings: Record<ZIndexPart, PartWriting> = {
 const partWears: Partial<Record<ZIndexPart, string>> = {'lets-build-this-feature': 'tutorials'};
 
 export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
-  const titled = `part${useId()}`;
   const {name, ordinal} = zIndexParts.told(part);
   const place = `${demoTab.names[DemoTopics.zIndex]} · part ${ordinal} of ${zIndexParts.inTheBook}`;
-  return <section aria-labelledby={titled} className="part-page">
-    <header className="part-opening">
-      <hgroup>
-        <p className="caption">{place}</p>
-        <h2 id={titled} className="title">{name}</h2>
-      </hgroup>
-      {partWritings[part].introduction}
-    </header>
-    <PartsAndMinutes/>
-    <section className={classNames('part-body', partWears[part])}>
-      {partWritings[part].exhibitAndRuns}
-    </section>
-    <PartFoot part={part}/>
-  </section>;
+  return <PartSection title={name} caption={place} introduction={partWritings[part].introduction}
+    panel={<PartsAndMinutes/>} foot={<PartFoot part={part}/>} wears={partWears[part]}>
+    {partWritings[part].exhibitAndRuns}
+  </PartSection>;
 };
