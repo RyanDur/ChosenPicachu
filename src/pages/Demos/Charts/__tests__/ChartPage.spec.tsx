@@ -65,7 +65,7 @@ describe('a chart’s page', () => {
     expect(demoPage.entriesLinking(/Pressure$/)).toHaveLength(1);
   });
 
-  test('should hold its title in the chart’s own page, so a reader who jumps to it hears it first', async () => {
+  test('should hold its title in the chart’s own page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -80,10 +80,11 @@ describe('a chart’s page', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
+    const title = chartsDesk.title('price line tutorial', 2);
     const index = await partsIndex.find();
     const chart = await chartsDesk.findTitle('live trades', 3);
 
-    expect(outOfReadingOrder([index, chart])).toEqual([]);
+    expect(outOfReadingOrder([title, index, chart])).toEqual([]);
   });
 
   test('should leave its chart under the chart’s own title, not under the parts', async () => {
