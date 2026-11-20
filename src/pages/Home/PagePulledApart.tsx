@@ -1,4 +1,4 @@
-import {FC, Fragment} from 'react';
+import {FC, Fragment, PropsWithChildren} from 'react';
 import {Ink, markup} from './markup';
 import './PagePulledApart.css';
 
@@ -96,14 +96,14 @@ const ellipseRatio = 0.5;
 
 const nameLineOf = ({y}: Point): number => y + sparkRadius * 0.6;
 
-const Turning: FC<{center: Point}> = ({center: {x, y}}) => <>
+const Turning: FC<{cx: number; cy: number}> = ({cx: x, cy: y}) => <>
   <ellipse className="drawn-line markup-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 3}
     ry={sparkRadius * 3 * ellipseRatio}/>
   <path className="drawn-line markup-attribute-drawn hollow" markerEnd="url(#page-pulled-apart-turn)"
     d={`M ${x - sparkRadius * 2.2} ${y + sparkRadius * 0.6} A ${sparkRadius * 2.2} ${sparkRadius * 2.2} 0 0 1 ${x + sparkRadius * 0.4} ${y - sparkRadius * 2.2}`}/>
 </>;
 
-const Rippling: FC<{center: Point}> = ({center: {x, y}}) => <>
+const Rippling: FC<{cx: number; cy: number}> = ({cx: x, cy: y}) => <>
   <ellipse className="drawn-line markup-attribute-drawn hollow" cx={x} cy={y} rx={sparkRadius * 2.4}
     ry={sparkRadius * 2.4 * ellipseRatio}/>
   <ellipse className="drawn-line markup-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 4}
@@ -121,16 +121,18 @@ const languages = [
   {word: 'structure', elevation: elevations.structure}
 ];
 
-const RegionName: FC<{name: string; place: Point}> = ({name, place}) =>
-  <text className="drawn-caption monospaced ink-filled paper-haloed thin-haloed" {...place}>{name}</text>;
+type Lettering = FC<PropsWithChildren<Point>>;
 
-const Call: FC<{words: string; place: Point}> = ({words, place}) =>
-  <text className="drawn-caption monospaced ink-filled paper-haloed" {...place} dy="1.5em" textAnchor="middle">
-    {words}
+const RegionName: Lettering = ({x, y, children}) =>
+  <text className="drawn-caption monospaced ink-filled paper-haloed thin-haloed" x={x} y={y}>{children}</text>;
+
+const Call: Lettering = ({x, y, children}) =>
+  <text className="drawn-caption monospaced ink-filled paper-haloed" x={x} y={y} dy="1.5em" textAnchor="middle">
+    {children}
   </text>;
 
-const EventName: FC<{word: string; place: Point}> = ({word, place}) =>
-  <text className="drawn-caption monospaced markup-attribute-filled paper-haloed" {...place}>{word}</text>;
+const EventName: Lettering = ({x, y, children}) =>
+  <text className="drawn-caption monospaced markup-attribute-filled paper-haloed" x={x} y={y}>{children}</text>;
 
 export const PagePulledApart: FC = () =>
   <figure className="page-pulled-apart">
@@ -159,14 +161,14 @@ export const PagePulledApart: FC = () =>
       {regions.map(({name, tint, footprint}) =>
         <polygon key={name} className={`drawn-line drawn ${tint}`} points={regionPoints(footprint, elevations.presentation)}/>)}
       {regions.map(({name, namedAt}) =>
-        <RegionName key={name} name={name} place={projected(namedAt, elevations.presentation)}/>)}
+        <RegionName key={name} {...projected(namedAt, elevations.presentation)}>{name}</RegionName>)}
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.behavior)}/>
       {events.map(({word, spark, Motion}) => {
         const center = projected(spark, elevations.behavior);
         return <Fragment key={word}>
-          <Motion center={center}/>
+          <Motion cx={center.x} cy={center.y}/>
           <circle className="markup-attribute-filled" cx={center.x} cy={center.y} r={sparkRadius}/>
-          <EventName word={word} place={{x: center.x + sparkRadius * 3.4, y: nameLineOf(center)}}/>
+          <EventName x={center.x + sparkRadius * 3.4} y={nameLineOf(center)}>{word}</EventName>
         </Fragment>;
       })}
       {events.map(({word, spark, landsOn}) => {
@@ -181,7 +183,7 @@ export const PagePulledApart: FC = () =>
       })}
       {events.map(({word, call, spark}) => {
         const center = projected(spark, elevations.behavior);
-        return <Call key={word} words={call} place={{x: center.x, y: nameLineOf(center)}}/>;
+        return <Call key={word} x={center.x} y={nameLineOf(center)}>{call}</Call>;
       })}
       {languages.map(({word, elevation}) => {
         const {x, y} = projected({u: 0, v: plate.down / 2}, elevation);
