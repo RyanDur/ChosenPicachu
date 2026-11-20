@@ -24,7 +24,7 @@
       margin: 0;
     }
 
-    &:has(> [aria-current="page"]) {
+    &:has(> [aria-current="page"], > [aria-current="true"]) {
       scroll-initial-target: nearest;
     }
 

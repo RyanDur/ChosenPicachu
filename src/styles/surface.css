@@ -84,7 +84,7 @@
 .backdrop-underlined {
   box-shadow: inset 0 calc(-1 * var(--base)) 0 var(--backdrop);
 
-  &:has(> [aria-current="page"]) {
+  &:has(> [aria-current="page"], > [aria-current="true"]) {
     box-shadow: none;
   }
 }
