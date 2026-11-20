@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt, demoTabPager, demoTabs} from '@pages/Demos/__test_support';
 import {expect, test} from 'vitest';
-import {render} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {appAddress} from '@__test_support/address';
 import {site} from '@pages/__test_support';
 import {Paths} from '@navigation';
@@ -59,6 +59,15 @@ describe('The Demos page', () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
     expect(await demoTabPager.next()).toHaveAttribute('href', demosAt('drag-and-drop'));
+  });
+
+  test('the tab row keeps a keyboard reader on its next tab after they press it', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    await demoTabPager.goNextByKeyboard();
+
+    await waitFor(async () => expect(await demoTabPager.next()).toHaveAccessibleName('Next tab, Charts'));
+    expect(await demoTabPager.next()).toHaveFocus();
   });
 
   test('the tab row on the first tab, Accordions, offers no tab before it', async () => {

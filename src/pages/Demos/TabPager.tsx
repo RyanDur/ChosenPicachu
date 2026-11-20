@@ -16,12 +16,12 @@ export const TabPager: FC<{readonly topic: DemoTopics}> = ({topic}) => {
 
   return <>
     {previous.map(before =>
-      <Link key={before} to={carried(demoTab.address(before))} preventScrollReset className="tab-pager previous field attentive bold">
+      <Link key="previous" to={carried(demoTab.address(before))} preventScrollReset className="tab-pager previous field attentive bold">
         <span className="off-screen">Previous tab, {demoTab.names[before]}</span>
       </Link>).orNull()}
     <span aria-current="page" className="tab-pager current field bold">{demoTab.names[topic]}</span>
     {next.map(after =>
-      <Link key={after} to={carried(demoTab.address(after))} preventScrollReset className="tab-pager next field attentive bold">
+      <Link key="next" to={carried(demoTab.address(after))} preventScrollReset className="tab-pager next field attentive bold">
         <span className="off-screen">Next tab, {demoTab.names[after]}</span>
       </Link>).orNull()}
   </>;
