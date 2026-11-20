@@ -88,10 +88,10 @@ const tokensOf = (line: string): readonly Token[] => [...line.trim().matchAll(/(
 const indentOf = (line: string): number => line.length - line.trimStart().length;
 
 const regions = [
-  {name: '.rail', tint: 'plan-mint-filled', area: {u: 4, v: 4, across: 26, down: 64}, namedAt: {u: 17, v: 46}},
-  {name: '.app-header', tint: 'plan-sand-filled', area: {u: 34, v: 4, across: 74, down: 12}, namedAt: {u: 88, v: 11}},
-  {name: '.app-main', tint: 'plan-blue-filled', area: {u: 34, v: 20, across: 74, down: 48}, namedAt: {u: 40, v: 64}},
-  {name: '.table', tint: 'plan-rose-filled', area: {u: 42, v: 28, across: 58, down: 30}, namedAt: {u: 74, v: 52}}
+  {name: '.rail', tint: 'plan-mint-filled', area: {u: 4, v: 4, across: 26, down: 64}, namedAt: {u: 11.6, v: 44.8}},
+  {name: '.app-header', tint: 'plan-sand-filled', area: {u: 34, v: 4, across: 74, down: 12}, namedAt: {u: 56.1, v: 27.6}},
+  {name: '.app-main', tint: 'plan-blue-filled', area: {u: 34, v: 20, across: 74, down: 48}, namedAt: {u: 36.5, v: 65.3}},
+  {name: '.table', tint: 'plan-rose-filled', area: {u: 42, v: 28, across: 58, down: 30}, namedAt: {u: 63.1, v: 53.2}}
 ];
 
 const sparkRadius = 1.6 * unitsPerStep;
@@ -122,8 +122,8 @@ const languages = [
   {word: 'structure', elevation: elevations.structure}
 ];
 
-const Lettering: FC<{word: string; place: Point; anchor?: 'middle'}> = ({word, place, anchor}) =>
-  <text className="drawn-caption monospaced ink-filled paper-haloed" {...place} textAnchor={anchor}>{word}</text>;
+const RegionName: FC<{name: string; place: Point}> = ({name, place}) =>
+  <text className="drawn-caption drawn-label monospaced ink-filled paper-haloed thin-haloed" {...place}>{name}</text>;
 
 const Call: FC<{words: string; place: Point}> = ({words, place}) =>
   <text className="drawn-caption drawn-note monospaced ink-filled paper-haloed" {...place} textAnchor="middle">{words}</text>;
@@ -158,7 +158,7 @@ export const PagePulledApart: FC = () =>
       {regions.map(({name, tint, area}) =>
         <polygon key={name} className={`drawn-line drawn ${tint}`} points={regionPoints(area, elevations.presentation)}/>)}
       {regions.map(({name, namedAt}) =>
-        <Lettering key={name} word={name} place={projected(namedAt, elevations.presentation)} anchor="middle"/>)}
+        <RegionName key={name} name={name} place={projected(namedAt, elevations.presentation)}/>)}
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.behavior)}/>
       {events.map(({word, spark, Motion}) => {
         const at = projected(spark, elevations.behavior);

@@ -62,6 +62,8 @@
 
 .drawn-note { --drawn-text: var(--base); }
 
+.drawn-label { --drawn-text: var(--base-x-1_25); }
+
 .page-title {
   font-size: var(--base-x-4);
 }

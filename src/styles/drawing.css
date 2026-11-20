@@ -9,6 +9,8 @@
   stroke-linejoin: round;
 }
 
+.thin-haloed { stroke-width: 0.15em; }
+
 .faded-leather-filled { fill: var(--faded-leather); }
 
 .faded-mint-filled { fill: var(--faded-mint); }
