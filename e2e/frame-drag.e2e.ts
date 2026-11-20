@@ -76,12 +76,16 @@ const aFingerCarriesTheColumn = async (
   await expect.poll(async () => (await trades.columnOrder()).indexOf('trades')).toBeGreaterThan(1);
 };
 
-for (const stage of tableWorlds.stages) {
-  test(`a finger pressed on a column's name carries it to a new seat, in ${stage.name}`, {tag: ['@iPhone', '@iPadUpright']}, ({page, browserName}) =>
-    aFingerCarriesTheColumn(page, browserName, stage, 'name'));
-}
+test.describe('a reader on a phone or an iPad held upright', {tag: ['@iPhone', '@iPadUpright']}, () => {
+  for (const stage of tableWorlds.stages) {
+    test(`a finger pressed on a column's name carries it to a new seat, in ${stage.name}`, ({page, browserName}) =>
+      aFingerCarriesTheColumn(page, browserName, stage, 'name'));
+  }
+});
 
-for (const stage of tableWorlds.stages) {
-  test(`a finger pressed on a column's middle carries it to a new seat, in ${stage.name}`, {tag: '@iPhone'}, ({page, browserName}) =>
-    aFingerCarriesTheColumn(page, browserName, stage, 'middle'));
-}
+test.describe('a reader on a phone', {tag: '@iPhone'}, () => {
+  for (const stage of tableWorlds.stages) {
+    test(`a finger pressed on a column's middle carries it to a new seat, in ${stage.name}`, ({page, browserName}) =>
+      aFingerCarriesTheColumn(page, browserName, stage, 'middle'));
+  }
+});

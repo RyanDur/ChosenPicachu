@@ -123,17 +123,19 @@ const closesABanner = async (page: Page): Promise<void> => {
   await expect(page.getByRole('alert').getByRole('button', {name: /^dismiss/})).toHaveCount(0);
 };
 
-test('opens a page from a finger that lands just off a link in the nav', {tag: '@iPhone'}, async ({page}) => {
-  await page.goto('');
-  await siteFrame(page).hydrated();
-  await siteFrame(page).menu.tap();
+test.describe('a reader on a phone held upright', {tag: '@iPhone'}, () => {
+  test('opens a page from a finger that lands just off a link in the nav', async ({page}) => {
+    await page.goto('');
+    await siteFrame(page).hydrated();
+    await siteFrame(page).menu.tap();
 
-  await fingerTap(page, siteFrame(page).nav.getByRole('link', {name: 'Users'}));
+    await fingerTap(page, siteFrame(page).nav.getByRole('link', {name: 'Users'}));
 
-  await expect(page).toHaveURL(/users/);
+    await expect(page).toHaveURL(/users/);
+  });
 });
 
-test.describe('a finger that lands just off a control', {tag: ['@iPhone', '@phoneSideways']}, () => {
+test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@phoneSideways']}, () => {
   test('opens and closes what am I looking at with a finger that lands just off the line', ({page}) => opensAndClosesTheExplainer(page));
 
   test('the trap\'s menu opens and chooses from a finger that lands just off its controls', ({page}) => choosesInTheTrappedMenu(page));

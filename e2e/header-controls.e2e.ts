@@ -3,7 +3,7 @@ import {test} from './__test_support/journey';
 import {arrivalPatience, tableWorlds} from './__test_support';
 
 for (const stage of tableWorlds.stages) {
-  test.describe(`in ${stage.name}`, {tag: ['@iPhone', '@phoneSideways']}, () => {
+  test.describe(`a reader on a phone, upright or sideways, in ${stage.name}`, {tag: ['@iPhone', '@phoneSideways']}, () => {
     test('narrows buys to a stop, and buys\' sort control still opens its menu', async ({page}) => {
       const table = await tableWorlds.opened(page, stage, {patience: arrivalPatience});
       await table.dragEdge('buys', {by: -400, moves: 20});

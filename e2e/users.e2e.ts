@@ -110,7 +110,7 @@ const aFingerLandsOnTheStateChoice = async (page: Page, end: 'start' | 'end'): P
   await expect(users.homeState).toBeFocused();
 };
 
-test.describe('the roster under a finger', {tag: ['@iPhone', '@iPadSplitView']}, () => {
+test.describe('a reader on an iPhone or an iPad in split view', {tag: ['@iPhone', '@iPadSplitView']}, () => {
   test('scrolling the roster sideways reaches its last column', async ({page}) => {
     const users = usersPage(page);
     await page.goto('users');
