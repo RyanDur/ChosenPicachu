@@ -7,7 +7,8 @@
 }
 
 @media (width > 900px) and (height > 600px) {
-  .about:has(> .tab-sidecar) {
+  .about:has(> .tab-sidecar),
+  .part-page:has(> .tab-sidecar) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 38ch;
     grid-template-rows: auto 1fr;
@@ -19,10 +20,14 @@
     }
   }
 
+  .part-page:has(> .tab-sidecar) {
+    grid-template-rows: auto 1fr auto;
+  }
+
   .tab-sidecar {
     position: sticky;
     inset-block-start: var(--under-the-tab-bar);
-    grid-row: 1 / span 2;
+    grid-row: 1 / -1;
     grid-column: 2;
     max-block-size: calc(100svh - var(--under-the-tab-bar) - var(--base-x-2));
     overflow-y: auto;

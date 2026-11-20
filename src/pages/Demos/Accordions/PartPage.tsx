@@ -60,7 +60,7 @@ const partWritings: Record<AccordionPart, PartWriting> = {
 export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   const titled = `part${useId()}`;
   const {name, ordinal} = accordionParts.told(part);
-  return <>
+  return <section aria-labelledby={titled} className="part-page">
     <header className="part-opening">
       <hgroup>
         <p className="caption">
@@ -71,9 +71,9 @@ export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
       {partWritings[part].introduction}
     </header>
     <PartsAndDials/>
-    <section aria-labelledby={titled} className="part-page">
+    <section className="part-body">
       {partWritings[part].exhibitAndRuns}
-      <PartFoot part={part}/>
     </section>
-  </>;
+    <PartFoot part={part}/>
+  </section>;
 };

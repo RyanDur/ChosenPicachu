@@ -66,7 +66,7 @@ describe('why a fixed banner still loses', () => {
 
     const part = await explanation.part('Why a fixed banner still loses');
 
-    expect(explanation.linkNamed(part, 'Let’s build this feature'))
+    expect(explanation.linkNamed(explanation.saying(part, /^To build this banner yourself/), 'Let’s build this feature'))
       .toHaveAttribute('href', `${demosAt('z-index/lets-build-this-feature', '?raised=second')}#news-top-story`);
   });
 
@@ -74,7 +74,7 @@ describe('why a fixed banner still loses', () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
     const part = await explanation.part('Why a fixed banner still loses');
 
-    await zIndexTab.follow(part, 'Let’s build this feature');
+    await zIndexTab.follow(explanation.saying(part, /^To build this banner yourself/), 'Let’s build this feature');
 
     await waitFor(() => expect(demoPage.says('Write the panel last, at the page’s root')).toBeVisible());
     expect(appAddress.search()).toHaveTextContent('raised=second');
@@ -94,7 +94,7 @@ describe('why a fixed banner still loses', () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
     const part = await explanation.part('Why a fixed banner still loses');
 
-    await zIndexTab.follow(part, 'Let’s build this feature');
+    await zIndexTab.follow(explanation.saying(part, /^To build this banner yourself/), 'Let’s build this feature');
 
     const story = recipeFolds.story(document.body, 'The user sees the news over the page');
     await waitFor(() => expect(recipeFolds.itemOf(story)).toHaveFocus());
