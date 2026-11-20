@@ -28,7 +28,7 @@ describe('a chart’s page', () => {
     expect(partsIndex.currentIn(index)).toHaveAccessibleName('Candles');
   });
 
-  test('should say beside the chart how long the charts take together', async () => {
+  test('should say on the chart’s page how long the charts take together', async () => {
     render(<TestApp at={chartPageAt('candles')}/>);
 
     const page = await chartsDesk.findTutorial('candles');
