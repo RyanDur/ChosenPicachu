@@ -3,6 +3,7 @@ export type Region = Spot & {readonly across: number; readonly down: number};
 export type MotionKind = 'turning' | 'rippling';
 export type SheetRegion = '.rail' | '.app-header' | '.app-main' | '.table';
 export type EventWord = 'toggle' | 'click';
+type PlanTint = 'plan-mint-filled' | 'plan-sand-filled' | 'plan-blue-filled' | 'plan-rose-filled';
 
 const plate: Region = {u: 0, v: 0, across: 112, down: 72};
 
@@ -42,7 +43,7 @@ const startOf = (line: string): number => inset + (line.length - line.trimStart(
 
 const lengthOf = (line: string): number => line.trim().length * advance;
 
-const regions: readonly {name: SheetRegion; tint: string; footprint: Region; namedFlatAt: Spot}[] = [
+const regions: readonly {name: SheetRegion; tint: PlanTint; footprint: Region; namedFlatAt: Spot}[] = [
   {
     name: '.rail', tint: 'plan-mint-filled', footprint: {u: 4, v: 4, across: 26, down: 64},
     namedFlatAt: {u: 17, v: 26}
