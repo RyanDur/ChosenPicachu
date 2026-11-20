@@ -1,14 +1,3 @@
 .page-plate {
-  display: block;
   inline-size: auto;
-
-  .drawn-line {
-    stroke-width: var(--hairline);
-    vector-effect: non-scaling-stroke;
-  }
-
-  .slab-line {
-    stroke-width: var(--hairline-x-3);
-    vector-effect: non-scaling-stroke;
-  }
 }
