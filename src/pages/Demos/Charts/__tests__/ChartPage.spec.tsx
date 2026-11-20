@@ -52,7 +52,7 @@ describe('a chart’s page', () => {
   test('should say beside the chart how long the charts take together', async () => {
     render(<TestApp at={chartPageAt('candles')}/>);
 
-    expect(await demoPage.panel('parts and minutes')).toHaveTextContent(/about 25 minutes/);
+    expect(await chartsDesk.size()).toHaveTextContent(/about 25 minutes/);
   });
 
   test('should list the charts once', async () => {
@@ -78,10 +78,10 @@ describe('a chart’s page', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const panel = await demoPage.panel('parts and minutes');
+    const index = await partsIndex.find();
     const chart = await chartsDesk.findTitle('live trades', 3);
 
-    expect(outOfReadingOrder([panel, chart])).toEqual([]);
+    expect(outOfReadingOrder([index, chart])).toEqual([]);
   });
 
   test('should leave its chart under the chart’s own title, not under the parts', async () => {
