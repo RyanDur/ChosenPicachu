@@ -13,7 +13,8 @@ const sizeLine = /^Eight parts, about \d+ minutes\.$/;
 
 const recipe = (build: string): Promise<HTMLElement> =>
   screen.findByRole('region', {name: `build the ${build} yourself`}, untilTheTablesTabRenders);
-const sketch = (): HTMLElement => screen.getByRole('figure', {name: /^The design answers shape/});
+const sketch = async (part: string): Promise<HTMLElement> =>
+  within(await screen.findByRole('region', {name: part}, untilTheTablesTabRenders)).getByRole('figure');
 const link = async (name: string | RegExp): Promise<HTMLElement> => {
   const index = await screen.findByRole('navigation', {name: 'Parts'}, untilTheTablesTabRenders);
   const links = await within(await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders))
@@ -73,8 +74,9 @@ export const tablesTab = () => ({
   },
   columnHeader: (name: string): HTMLElement => screen.getByRole('columnheader', {name}),
   table: (name: string): Headers => headersOf(screen.getByRole('table', {name})),
-  sketchHeaders: (): Headers => headersOf(sketch()),
-  sketchColumns: (): string[] => within(sketch()).getAllByRole('columnheader').map(column => computeAccessibleName(column)),
+  sketchHeaders: async (part: string): Promise<Headers> => headersOf(await sketch(part)),
+  sketchColumns: async (part: string): Promise<string[]> =>
+    within(await sketch(part)).getAllByRole('columnheader').map(column => computeAccessibleName(column)),
   linksIn: async (build: string, name: string | RegExp): Promise<HTMLElement[]> =>
     within(await recipe(build)).getAllByRole('link', {name}),
   radioIn: async (build: string, name: string): Promise<HTMLElement | null> => within(await recipe(build)).queryByRole('radio', {name}),
