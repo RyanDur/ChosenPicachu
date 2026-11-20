@@ -213,7 +213,7 @@ describe('the stub stage answers the charts’ candle history from recordings', 
   });
 
   test('should refuse candles of a length it has no recording for', async () => {
-    const {stage, port} = await stageUp();
+    const {stage, port} = await stageUp({STAGE_SITE: siteWithAUsersPage()});
 
     const answer = await answerTo(port,
       get('/trade-history/products/BTC-USD/candles?granularity=900&start=2026-11-20T07%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
