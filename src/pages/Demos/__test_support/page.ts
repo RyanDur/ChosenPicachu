@@ -59,7 +59,12 @@ export const demoPage = {
   row: (name: string | RegExp): HTMLElement => screen.getByRole('rowheader', {name}),
   unanswered: (name: string): HTMLElement => screen.getByRole('complementary', {name}),
   wholePage: (): HTMLElement => screen.getByRole('main'),
-  introduction: (): HTMLElement | null => screen.queryByText(/^Each tab below is one feature a page needs/),
+  introduction: (): HTMLElement | null => {
+    const tabs = screen.getByRole('navigation', {name: 'demos'});
+    const firstBeforeTheTabs = within(screen.getByRole('main')).queryAllByRole('paragraph')
+      .find(paragraph => tabs.compareDocumentPosition(paragraph) === Node.DOCUMENT_POSITION_PRECEDING);
+    return firstBeforeTheTabs ?? null;
+  },
   linksToTabsIn,
   linksToPageIn,
   linksToPage: (address: string): string[][] => toPage(linksOffTheRail(), address),
