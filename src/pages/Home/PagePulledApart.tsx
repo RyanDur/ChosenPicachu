@@ -75,7 +75,7 @@ const ellipsisInside = (tag: string): Spot => {
   };
 };
 
-const inks: Record<Ink, string> = {
+const inkClasses: Record<Ink, string> = {
   bracket: 'markup-bracket-filled',
   tag: 'markup-tag-filled',
   attribute: 'markup-attribute-filled',
@@ -154,7 +154,7 @@ export const PagePulledApart: FC = () =>
         {markupLines.map((line, row) =>
           <text key={row} x={inset + indentOf(line) * advance} y={baselineOf(row)}
             textLength={line.trim().length * advance} lengthAdjust="spacingAndGlyphs">
-            {markup.tokensOf(line).map(({ink, text}, at) => <tspan key={at} className={inks[ink]}>{text}</tspan>)}
+            {markup.tokensOf(line).map(({ink, text}, at) => <tspan key={at} className={inkClasses[ink]}>{text}</tspan>)}
           </text>)}
       </g>
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.presentation)}/>
