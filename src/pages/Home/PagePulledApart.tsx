@@ -192,8 +192,8 @@ export const PagePulledApart: FC = () =>
       })}
     </svg>
     <figcaption className="caption"><strong className="bold">A page, pulled apart.</strong> The markup is the slab. The
-      sheet makes the regions and names them. The script touches two points, and each wire finds the element its event
-      fires on. Lift the sheet or the script off and the page still stands: that is separate. Set them back and every
-      mark lands on its element: that is together.
+      sheet makes the regions. The script touches two points, and each wire finds the element its event fires on. Lift
+      the sheet or the script off and the page still stands: that is separate. Set them back and every mark lands on
+      its element: that is together.
     </figcaption>
   </figure>;
