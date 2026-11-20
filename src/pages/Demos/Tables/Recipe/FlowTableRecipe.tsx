@@ -125,6 +125,6 @@ const FlowStory: FC = () => {
 };
 
 export const FlowTableRecipe: FC = () =>
-  <section className="build-steps">
+  <section aria-label="build the live table yourself" className="build-steps">
     <Stories><FlowStory/><StoreStory/></Stories>
   </section>;
