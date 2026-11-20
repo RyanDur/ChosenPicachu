@@ -31,7 +31,7 @@ describe('a chart’s page', () => {
   test('should say on the chart’s page how long the charts take together', async () => {
     render(<TestApp at={chartPageAt('candles')}/>);
 
-    const page = await chartsDesk.findChartPage('Candles');
+    const page = await chartsDesk.findChartPage('Candles tutorial');
 
     expect(await chartsDesk.sizeIn(page)).toHaveTextContent(/about 25 minutes/);
   });
@@ -44,14 +44,22 @@ describe('a chart’s page', () => {
     expect(demoPage.entriesLinking(/Pressure$/)).toHaveLength(1);
   });
 
+  test('should be named apart from the chart it holds, so a reader hears each region once', async () => {
+    render(<TestApp at={chartPageAt('candles')}/>);
+
+    await chartsDesk.findChartPage('Candles tutorial');
+
+    expect(chartsDesk.regionsNamed(/^candles$/i)).toHaveLength(1);
+  });
+
   test('should hold its title in the chart’s own page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const page = await chartsDesk.findChartPage('Price line');
+    const page = await chartsDesk.findChartPage('Price line tutorial');
 
-    expect(chartsDesk.titleIn(page, 'Price line', 2)).toBeInTheDocument();
+    expect(chartsDesk.titleIn(page, 'Price line tutorial', 2)).toBeInTheDocument();
   });
 
   test('should hold the panel after its title and before its chart', async () => {
@@ -59,7 +67,7 @@ describe('a chart’s page', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const title = chartsDesk.title('Price line', 2);
+    const title = chartsDesk.title('Price line tutorial', 2);
     const index = await partsIndex.find();
     const chart = await chartsDesk.findTitle('live trades', 3);
 
@@ -71,7 +79,7 @@ describe('a chart’s page', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(titleAbove(await chartsDesk.findTitle('live trades', 3))).toBe('Price line');
+    expect(titleAbove(await chartsDesk.findTitle('live trades', 3))).toBe('Price line tutorial');
   });
 
   test('an address naming no chart should say there is no room there', async () => {

@@ -317,7 +317,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
 
-    expect(await chartsDesk.findTitle('Price line', 2)).toBeInTheDocument();
+    expect(await chartsDesk.findTitle('Price line tutorial', 2)).toBeInTheDocument();
     expect(chartsDesk.title('let’s build this feature', 3)).toBeInTheDocument();
     expect(chartsDesk.title('The trader can watch the price move, live', 4)).toBeInTheDocument();
     expect(chartsDesk.title('Open a socket, and keep only what decodes', 5)).toBeInTheDocument();
@@ -327,7 +327,7 @@ describe('a list of charts', () => {
     const priceStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('price')} feed={feed}/>);
-      await chartsDesk.findTitle('Price line', 2);
+      await chartsDesk.findTitle('Price line tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can watch the price move, live');
     };
 
@@ -353,7 +353,7 @@ describe('a list of charts', () => {
   test('should link the pressure chart’s story to the candles chart’s steps', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('pressure')} feed={feed}/>);
-    await chartsDesk.findTitle('Pressure', 2);
+    await chartsDesk.findTitle('Pressure tutorial', 2);
 
     expect(demoPage.signpost('the candles chart’s steps')).toHaveAttribute('href', chartPageAt('candles'));
   });
@@ -362,7 +362,7 @@ describe('a list of charts', () => {
     const candlesStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
-      await chartsDesk.findTitle('Candles', 2);
+      await chartsDesk.findTitle('Candles tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can read the same trades as candles');
     };
 
@@ -380,7 +380,7 @@ describe('a list of charts', () => {
     const pressureStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('pressure')} feed={feed}/>);
-      await chartsDesk.findTitle('Pressure', 2);
+      await chartsDesk.findTitle('Pressure tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can see who is driving the move');
     };
 
@@ -397,7 +397,7 @@ describe('a list of charts', () => {
     const pieStory = async (): Promise<HTMLElement> => {
       const feed = await listeningFeed();
       render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
-      await chartsDesk.findTitle('Pie', 2);
+      await chartsDesk.findTitle('Pie tutorial', 2);
       return recipeFolds.story(document.body, 'The trader can see who owns the session');
     };
 
@@ -439,7 +439,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
-    expect(chartsDesk.titleIn(chartsDesk.chartPage('Price line'), 'let’s build this feature', 3)).toBeVisible();
+    expect(chartsDesk.titleIn(chartsDesk.chartPage('Price line tutorial'), 'let’s build this feature', 3)).toBeVisible();
     expect(recipeFolds.story(chartsDesk.recipe('price line'), 'The trader can watch the price move, live')).toBeInTheDocument();
   });
 
@@ -778,7 +778,7 @@ describe('a chart page’s foot', () => {
   test('should lead to the chart before it and the chart after it, by number and title', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
-    await chartsDesk.findTitle('Candles', 2);
+    await chartsDesk.findTitle('Candles tutorial', 2);
 
     expect(await pageFoot.leadsOn('the chart pages')).toEqual([
       ['Previous: 1. Price line', chartPageAt('price')],
@@ -789,7 +789,7 @@ describe('a chart page’s foot', () => {
   test('should lead only onward from the first chart', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
-    await chartsDesk.findTitle('Price line', 2);
+    await chartsDesk.findTitle('Price line tutorial', 2);
 
     expect(await pageFoot.leadsOn('the chart pages')).toEqual([
       ['Next: 2. Candles', chartPageAt('candles')]
@@ -799,7 +799,7 @@ describe('a chart page’s foot', () => {
   test('should lead only back from the last chart', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
-    await chartsDesk.findTitle('Pie', 2);
+    await chartsDesk.findTitle('Pie tutorial', 2);
 
     expect(await pageFoot.leadsOn('the chart pages')).toEqual([
       ['Previous: 3. Pressure', chartPageAt('pressure')]

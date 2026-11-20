@@ -105,6 +105,7 @@ export const chartsDesk = {
   size: (): Promise<HTMLElement> => screen.findByText(sizeLine),
   sizeIn: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByText(sizeLine),
   findChartList: (): Promise<HTMLElement> => screen.findByRole('list', {name: 'charts'}),
+  regionsNamed: (name: RegExp): HTMLElement[] => screen.queryAllByRole('region', {name}),
   chartPage: (chart: string): HTMLElement => screen.getByRole('region', {name: chart}),
   findChartPage: (chart: string): Promise<HTMLElement> => screen.findByRole('region', {name: chart}),
   findPieLegend: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pie'})).getByRole('list'),
