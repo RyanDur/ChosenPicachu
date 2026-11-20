@@ -19,7 +19,9 @@ export const TabPager: FC<{readonly topic: DemoTopics}> = ({topic}) => {
       <Link key="previous" to={carried(demoTab.address(previousTopic))} preventScrollReset className="tab-pager previous field attentive bold">
         <span className="off-screen">Previous tab, {demoTab.names[previousTopic]}</span>
       </Link>).orNull()}
-    <span aria-current="page" className="tab-pager current field bold">{demoTab.names[topic]}</span>
+    <Link to={carried(demoTab.address(topic))} aria-current="page" className="tab-pager current field attentive bold">
+      {demoTab.names[topic]}
+    </Link>
     {next.map(nextTopic =>
       <Link key="next" to={carried(demoTab.address(nextTopic))} preventScrollReset className="tab-pager next field attentive bold">
         <span className="off-screen">Next tab, {demoTab.names[nextTopic]}</span>

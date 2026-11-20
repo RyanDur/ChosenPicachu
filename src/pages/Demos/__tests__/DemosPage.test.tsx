@@ -37,6 +37,12 @@ describe('The Demos page', () => {
     expect(await demoTabPager.current()).toEqual(['Z-index']);
   });
 
+  test('the tab row on a part page of the Z-index tab leads back to the Z-index tab', async () => {
+    render(<TestApp at={demosAt('z-index/why-third-is-on-top')}/>);
+
+    expect(await demoTabPager.currentTab()).toHaveAttribute('href', demosAt('z-index'));
+  });
+
   test('the tab row on the Z-index tab offers Accordions as the tab before it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
