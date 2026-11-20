@@ -10,7 +10,7 @@ import '../Tutorials.css';
 import '../PartPage.css';
 import './TutorialPage.css';
 
-const parts: Record<TablePart, FC<{headedBy: string}>> = {
+const parts: Record<TablePart, FC> = {
   'the-need-and-its-clues': StoryClues,
   'the-sketch': DesignAsk,
   'the-slices': StorySlices,
@@ -22,7 +22,7 @@ export const PartPage: FC<{readonly part: TablePart}> = ({part}) => {
   const titled = `part${useId()}`;
   const {name, ordinal} = tableParts.told(part);
   const Part = parts[part];
-  return <article aria-labelledby={titled} className="part-page">
+  return <section aria-labelledby={titled} className="part-page">
     <hgroup>
       <p className="caption">
         {`${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`}
@@ -32,8 +32,8 @@ export const PartPage: FC<{readonly part: TablePart}> = ({part}) => {
     <PartsAndDials/>
     <section className="part-body tutorial-page tutorials">
       <Aggregations/>
-      <Part headedBy={titled}/>
+      <Part/>
     </section>
     <PartFoot part={part}/>
-  </article>;
+  </section>;
 };

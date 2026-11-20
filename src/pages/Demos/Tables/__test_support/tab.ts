@@ -13,7 +13,7 @@ const sizeLine = /^Eight parts, about \d+ minutes\.$/;
 
 const recipe = (build: string): Promise<HTMLElement> =>
   screen.findByRole('region', {name: `build the ${build} yourself`}, untilTheTablesTabRenders);
-const part = (name: string): HTMLElement => screen.getByRole('region', {name});
+const sketch = (): HTMLElement => screen.getByRole('figure', {name: /^The design answers shape/});
 const link = async (name: string | RegExp): Promise<HTMLElement> => {
   const index = await screen.findByRole('navigation', {name: 'Parts'}, untilTheTablesTabRenders);
   const links = await within(await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders))
@@ -59,7 +59,7 @@ export const tablesTab = () => ({
     return within(entry).getByRole('time');
   },
   titles: (name: string, level?: number): HTMLElement[] => screen.queryAllByRole('heading', {name, level}),
-  partPage: (name: string): Promise<HTMLElement> => screen.findByRole('article', {name}, untilTheTablesTabRenders),
+  partPage: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}, untilTheTablesTabRenders),
   tutorialPage: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}, untilTheTablesTabRenders),
   titlesIn: (page: HTMLElement): (string | null)[] =>
     within(page).getAllByRole('heading', {level: 2}).map(heading => heading.textContent),
@@ -74,8 +74,8 @@ export const tablesTab = () => ({
   },
   columnHeader: (name: string): HTMLElement => screen.getByRole('columnheader', {name}),
   table: (name: string): Headers => headersOf(screen.getByRole('table', {name})),
-  headersIn: (name: string): Headers => headersOf(part(name)),
-  columnsIn: (name: string): string[] => within(part(name)).getAllByRole('columnheader').map(column => computeAccessibleName(column)),
+  sketchHeaders: (): Headers => headersOf(sketch()),
+  sketchColumns: (): string[] => within(sketch()).getAllByRole('columnheader').map(column => computeAccessibleName(column)),
   linksIn: async (build: string, name: string | RegExp): Promise<HTMLElement[]> =>
     within(await recipe(build)).getAllByRole('link', {name}),
   radioIn: async (build: string, name: string): Promise<HTMLElement | null> => within(await recipe(build)).queryByRole('radio', {name}),

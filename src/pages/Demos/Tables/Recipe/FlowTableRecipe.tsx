@@ -124,7 +124,7 @@ const FlowStory: FC = () => {
   </DrawnStory>;
 };
 
-export const FlowTableRecipe: FC<{headedBy: string}> = ({headedBy}) =>
-  <section aria-labelledby={headedBy} className="build-steps">
+export const FlowTableRecipe: FC = () =>
+  <section className="build-steps">
     <Stories><FlowStory/><StoreStory/></Stories>
   </section>;

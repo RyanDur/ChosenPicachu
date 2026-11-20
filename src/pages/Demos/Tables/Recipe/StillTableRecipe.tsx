@@ -161,7 +161,7 @@ const StillStory: FC = () => {
   </DrawnStory>;
 };
 
-export const StillTableRecipe: FC<{headedBy: string}> = ({headedBy}) =>
-  <section aria-labelledby={headedBy} className="build-steps">
+export const StillTableRecipe: FC = () =>
+  <section className="build-steps">
     <Stories><StillStory/></Stories>
   </section>;

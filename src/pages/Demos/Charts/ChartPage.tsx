@@ -59,7 +59,7 @@ const neighbor = (kind: ChartKind) => ({title: chartKinds.numbered(kind), addres
 
 export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const {name, reference, quote, chart: Chart} = features[kind];
-  return <article aria-labelledby={`tutorial-${kind}`} className="part-page">
+  return <section aria-labelledby={`tutorial-${kind}`} className="part-page">
     <h2 id={`tutorial-${kind}`} className="off-screen">{`${name} tutorial`}</h2>
     <PartsAndMinutes/>
     <section className="part-body tutorials">
@@ -95,5 +95,5 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
     </section>
     <PageFoot label="the chart pages" previous={chartKinds.previous(kind).map(neighbor)}
       next={chartKinds.next(kind).map(neighbor)}/>
-  </article>;
+  </section>;
 };
