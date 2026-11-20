@@ -79,22 +79,22 @@ const inks = {
 type Token = {readonly ink: keyof typeof inks; readonly text: string};
 
 const tokensOf = (line: string): readonly Token[] => [...line.trim().matchAll(/(<\/?)([a-z0-9]+)((?: [a-z]+(?:="[^"]*")?)*)(>)|([^<]+|<)/g)]
-  .flatMap(([, open, tag, attributes, close, words]): Token[] => words
+  .flatMap(([, openingBracket, tag, attributes, closingBracket, words]): Token[] => words
     ? [{ink: 'words', text: words}]
     : ([
-      {ink: 'bracket', text: open},
+      {ink: 'bracket', text: openingBracket},
       {ink: 'tag', text: tag},
       {ink: 'attribute', text: attributes},
-      {ink: 'bracket', text: close}
+      {ink: 'bracket', text: closingBracket}
     ] satisfies Token[]).filter(({text}) => text !== ''));
 
 const indentOf = (line: string): number => line.length - line.trimStart().length;
 
 const regions = [
-  {name: '.rail', tint: 'plan-mint-filled', area: {u: 4, v: 4, across: 26, down: 64}, namedAt: {u: 11.6, v: 44.8}},
-  {name: '.app-header', tint: 'plan-sand-filled', area: {u: 34, v: 4, across: 74, down: 12}, namedAt: {u: 56.1, v: 27.6}},
-  {name: '.app-main', tint: 'plan-blue-filled', area: {u: 34, v: 20, across: 74, down: 48}, namedAt: {u: 36.5, v: 65.3}},
-  {name: '.table', tint: 'plan-rose-filled', area: {u: 42, v: 28, across: 58, down: 30}, namedAt: {u: 63.1, v: 53.2}}
+  {name: '.rail', tint: 'plan-mint-filled', footprint: {u: 4, v: 4, across: 26, down: 64}, namedAt: {u: 11.6, v: 44.8}},
+  {name: '.app-header', tint: 'plan-sand-filled', footprint: {u: 34, v: 4, across: 74, down: 12}, namedAt: {u: 56.1, v: 27.6}},
+  {name: '.app-main', tint: 'plan-blue-filled', footprint: {u: 34, v: 20, across: 74, down: 48}, namedAt: {u: 36.5, v: 65.3}},
+  {name: '.table', tint: 'plan-rose-filled', footprint: {u: 42, v: 28, across: 58, down: 30}, namedAt: {u: 63.1, v: 53.2}}
 ];
 
 const sparkRadius = 1.6 * unitsPerStep;
@@ -102,14 +102,14 @@ const flattened = 0.5;
 
 const nameLineOf = ({y}: Point): number => y + sparkRadius * 0.6;
 
-const Turning: FC<{at: Point}> = ({at: {x, y}}) => <>
+const Turning: FC<{center: Point}> = ({center: {x, y}}) => <>
   <ellipse className="drawn-line markup-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 3}
     ry={sparkRadius * 3 * flattened}/>
   <path className="drawn-line markup-attribute-drawn hollow" markerEnd="url(#page-pulled-apart-turn)"
     d={`M ${x - sparkRadius * 2.2} ${y + sparkRadius * 0.6} A ${sparkRadius * 2.2} ${sparkRadius * 2.2} 0 0 1 ${x + sparkRadius * 0.4} ${y - sparkRadius * 2.2}`}/>
 </>;
 
-const Rippling: FC<{at: Point}> = ({at: {x, y}}) => <>
+const Rippling: FC<{center: Point}> = ({center: {x, y}}) => <>
   <ellipse className="drawn-line markup-attribute-drawn hollow" cx={x} cy={y} rx={sparkRadius * 2.4}
     ry={sparkRadius * 2.4 * flattened}/>
   <ellipse className="drawn-line markup-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 4}
@@ -162,17 +162,17 @@ export const PagePulledApart: FC = () =>
           </text>)}
       </g>
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.presentation)}/>
-      {regions.map(({name, tint, area}) =>
-        <polygon key={name} className={`drawn-line drawn ${tint}`} points={regionPoints(area, elevations.presentation)}/>)}
+      {regions.map(({name, tint, footprint}) =>
+        <polygon key={name} className={`drawn-line drawn ${tint}`} points={regionPoints(footprint, elevations.presentation)}/>)}
       {regions.map(({name, namedAt}) =>
         <RegionName key={name} name={name} place={projected(namedAt, elevations.presentation)}/>)}
       <polygon className="drawn-line drawn paper-filled" points={regionPoints(plate, elevations.behavior)}/>
       {events.map(({word, spark, Motion}) => {
-        const at = projected(spark, elevations.behavior);
+        const center = projected(spark, elevations.behavior);
         return <Fragment key={word}>
-          <Motion at={at}/>
-          <circle className="markup-attribute-filled" cx={at.x} cy={at.y} r={sparkRadius}/>
-          <EventName word={word} place={{x: at.x + sparkRadius * 3.4, y: nameLineOf(at)}}/>
+          <Motion center={center}/>
+          <circle className="markup-attribute-filled" cx={center.x} cy={center.y} r={sparkRadius}/>
+          <EventName word={word} place={{x: center.x + sparkRadius * 3.4, y: nameLineOf(center)}}/>
         </Fragment>;
       })}
       {events.map(({word, spark, landsOn}) => {
@@ -186,8 +186,8 @@ export const PagePulledApart: FC = () =>
         </Fragment>;
       })}
       {events.map(({word, call, spark}) => {
-        const at = projected(spark, elevations.behavior);
-        return <Call key={word} words={call} place={{x: at.x, y: nameLineOf(at)}}/>;
+        const center = projected(spark, elevations.behavior);
+        return <Call key={word} words={call} place={{x: center.x, y: nameLineOf(center)}}/>;
       })}
       {languages.map(({word, elevation}) => {
         const {x, y} = projected({u: 0, v: plate.down / 2}, elevation);
