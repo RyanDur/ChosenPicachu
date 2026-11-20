@@ -4,5 +4,5 @@ const demos = (): Promise<HTMLElement> => screen.findByRole('navigation', {name:
 
 export const demosNav = {
   bar: async (): Promise<HTMLElement> => within(await demos()).getByRole('list'),
-  pager: demos
+  navigation: demos
 };
