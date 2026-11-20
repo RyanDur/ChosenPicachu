@@ -4,8 +4,8 @@ import {PartsIndex} from './PartsIndex';
 import {TablesSize} from './TablesSize';
 import {WorldGlider, WorldNote} from './World';
 
-export const PartsAndDials: FC<{readonly titled?: boolean}> = ({titled = false}) =>
-  <TabSidecar label={titled ? 'parts and dials' : undefined}>
+export const PartsAndDials: FC<{readonly label?: string}> = ({label}) =>
+  <TabSidecar label={label}>
     <TablesSize/>
     <PartsIndex/>
     <WorldGlider/>

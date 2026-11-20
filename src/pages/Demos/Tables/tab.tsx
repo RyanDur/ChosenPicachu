@@ -12,7 +12,7 @@ import {useShownPart} from './useShownPart';
 const TabContents: FC = () => <>
   <ToMovedAddress/>
   <TablesIntroduction/>
-  <PartsAndDials titled/>
+  <PartsAndDials label="parts and dials"/>
   <Aggregations/>
   <Tutorials/>
 </>;
