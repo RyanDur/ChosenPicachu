@@ -2,7 +2,7 @@ import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {chartsPage, fingerTap, galleryPage, siteFrame, sortableList, usersPage} from './__test_support';
 
-test.describe('a finger that lands just off a control', {tag: ['@iPhone', '@iPadUpright']}, () => {
+test.describe('a reader on a phone or an upright tablet', {tag: ['@iPhone', '@iPadUpright']}, () => {
   test('lifts a list item from a press just beside its grip and moves it to a new seat', async ({page}) => {
     const list = sortableList(page);
     await page.goto('demos/drag-and-drop/');
@@ -36,7 +36,7 @@ test.describe('a finger that lands just off a control', {tag: ['@iPhone', '@iPad
   });
 });
 
-test.describe('a finger that lands just off a control on a piece\'s page', {tag: '@phoneSideways'}, () => {
+test.describe('a reader on a phone held sideways', {tag: '@phoneSideways'}, () => {
   test('runs a search on a piece\'s page from a finger that lands just off submit', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
