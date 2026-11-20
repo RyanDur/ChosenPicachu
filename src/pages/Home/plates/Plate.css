@@ -1,3 +1,4 @@
 .page-plate {
   inline-size: auto;
+  overflow: visible;
 }
