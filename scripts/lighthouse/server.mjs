@@ -116,8 +116,9 @@ const answers = (request, response) => {
     return send(200, readFileSync(existsSync(sized) ? sized : fallback), 'image/jpeg', false);
   }
 
-  if (rest.has(url)) {
-    const {contentType, body} = rest.get(url);
+  const recorded = [url, url.split('?')[0]].find(key => rest.has(key));
+  if (is(recorded)) {
+    const {contentType, body} = rest.get(recorded);
     return send(200, body, contentType, true);
   }
 
