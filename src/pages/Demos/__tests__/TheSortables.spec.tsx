@@ -179,7 +179,7 @@ describe('the sortable list demo', () => {
     expect(demoPage.title('Start with the need, and let it pick the element')).toBeVisible();
     expect(demoPage.row(/pick it up and put it there/)).toBeVisible();
     expect(demoPage.title('Sketch a design from the need')).toBeVisible();
-    expect(demoPage.unanswered('what a design cannot tell you')).toBeVisible();
+    expect(await demoPage.panel('what a design cannot tell you')).toBeVisible();
     expect(demoPage.title('The user can keep the list in the order they mean')).toBeVisible();
     expect(demoPage.signpost('user story'))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
