@@ -31,7 +31,7 @@ describe('a chart’s page', () => {
   test('should say on the chart’s page how long the charts take together', async () => {
     render(<TestApp at={chartPageAt('candles')}/>);
 
-    const page = await chartsDesk.findChartPage('Candles tutorial');
+    const page = await chartsDesk.findPage('Candles tutorial');
 
     expect(await chartsDesk.sizeIn(page)).toHaveTextContent(/about 25 minutes/);
   });
@@ -47,7 +47,7 @@ describe('a chart’s page', () => {
   test('should be named apart from the chart it holds, so a reader hears each region once', async () => {
     render(<TestApp at={chartPageAt('candles')}/>);
 
-    await chartsDesk.findChartPage('Candles tutorial');
+    await chartsDesk.findPage('Candles tutorial');
 
     expect(chartsDesk.regionsNamed(/^candles$/i)).toHaveLength(1);
   });
@@ -57,7 +57,7 @@ describe('a chart’s page', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const page = await chartsDesk.findChartPage('Price line tutorial');
+    const page = await chartsDesk.findPage('Price line tutorial');
 
     expect(chartsDesk.titleIn(page, 'Price line tutorial', 2)).toBeInTheDocument();
   });

@@ -439,7 +439,7 @@ describe('a list of charts', () => {
     await feedIsSubscribed(feed);
     await chartsDesk.findChart('live trades');
 
-    expect(chartsDesk.titleIn(chartsDesk.chartPage('Price line tutorial'), 'let’s build this feature', 3)).toBeVisible();
+    expect(chartsDesk.titleIn(chartsDesk.page('Price line tutorial'), 'let’s build this feature', 3)).toBeVisible();
     expect(recipeFolds.story(chartsDesk.recipe('price line'), 'The trader can watch the price move, live')).toBeInTheDocument();
   });
 
