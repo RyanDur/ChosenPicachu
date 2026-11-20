@@ -10,6 +10,7 @@ import {LazyKeepStaticList} from './LazyKeepStaticList';
 import {ListTutorials} from './Tutorials';
 import {DragSortIntroduction} from './Introduction';
 import {useControls} from '../Controls';
+import {ListControls} from './ListControls';
 
 const lists = {
   eager: {
@@ -27,8 +28,10 @@ export const Room: FC = () => {
   const List = lists[pace][origin][motion];
 
   return <>
-    <DragSortIntroduction/>
-    <List list={new Set(['A', 'B', 'C'])}/>
+    <DragSortIntroduction>
+      <List list={new Set(['A', 'B', 'C'])}/>
+    </DragSortIntroduction>
+    <ListControls/>
     <ListTutorials/>
   </>;
 };

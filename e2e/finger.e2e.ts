@@ -86,8 +86,8 @@ const opensEveryFoldOnTheRecord = async (page: Page): Promise<void> => {
     .toEqual([]);
 };
 
-const opensTheDragSortSettings = async (page: Page): Promise<void> => {
-  await page.goto('demos/drag-and-drop/');
+const opensTheTablesSettings = async (page: Page): Promise<void> => {
+  await page.goto('demos/tables/sort/');
   const settings = demoSettings(page).fold;
   await expect(settings).toBeVisible();
 
@@ -148,7 +148,7 @@ test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@ph
 
   test('opens every fold on the record from a finger that lands just off its bar', ({page}) => opensEveryFoldOnTheRecord(page));
 
-  test('opens the settings fold on the drag sort tab from a finger that lands just off its bar', ({page}) => opensTheDragSortSettings(page));
+  test('opens the settings fold on the tables tab from a finger that lands just off its bar', ({page}) => opensTheTablesSettings(page));
 
   test('opens the gallery settings from a finger that lands just off their tile', ({page}) => opensTheGallerySettings(page));
 

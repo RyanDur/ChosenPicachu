@@ -38,12 +38,16 @@ describe('the sortable list demo', () => {
     expect(first).toHaveAttribute('draggable', 'false');
   });
 
-  test('the list controls are headed at level four', async () => {
+  test('the tab holds its pace, origin and motion dials in a panel named dials', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await listControls.heading()).toBeInTheDocument();
+    await listControls.panel();
+
+    expect(listControls.dial('pace')).toBeInTheDocument();
+    expect(listControls.dial('origin')).toBeInTheDocument();
+    expect(listControls.dial('motion')).toBeInTheDocument();
   });
 
   test('should read the motion dial, animated, in plain words', async () => {
