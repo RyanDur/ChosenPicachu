@@ -57,16 +57,16 @@ const longestLine = Math.max(...markupLines.map(line => line.length));
 const advance = (plate.across - inset - edgeClearance) / longestLine;
 const firstBaseline = 10;
 const lineStep = 6.2;
-const midLetter = 1.5;
+const halfLetterHeight = 1.5;
 const letterSize = advance / 0.6;
 
-const baselineOf = (line: number): number => firstBaseline + line * lineStep;
+const baselineOf = (row: number): number => firstBaseline + row * lineStep;
 
-const ellipsisInside = (element: string): Spot => {
-  const line = markupLines.findIndex(written => written.trimStart().startsWith(`<${element}`));
+const ellipsisInside = (tag: string): Spot => {
+  const row = markupLines.findIndex(written => written.trimStart().startsWith(`<${tag}`));
   return {
-    u: inset + (markupLines[line].indexOf('…') + 0.5) * advance,
-    v: baselineOf(line) - midLetter
+    u: inset + (markupLines[row].indexOf('…') + 0.5) * advance,
+    v: baselineOf(row) - halfLetterHeight
   };
 };
 
@@ -87,22 +87,22 @@ const regions = [
 ];
 
 const sparkRadius = 1.6 * unitsPerStep;
-const flattened = 0.5;
+const ellipseRatio = 0.5;
 
 const nameLineOf = ({y}: Point): number => y + sparkRadius * 0.6;
 
 const Turning: FC<{center: Point}> = ({center: {x, y}}) => <>
   <ellipse className="drawn-line markup-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 3}
-    ry={sparkRadius * 3 * flattened}/>
+    ry={sparkRadius * 3 * ellipseRatio}/>
   <path className="drawn-line markup-attribute-drawn hollow" markerEnd="url(#page-pulled-apart-turn)"
     d={`M ${x - sparkRadius * 2.2} ${y + sparkRadius * 0.6} A ${sparkRadius * 2.2} ${sparkRadius * 2.2} 0 0 1 ${x + sparkRadius * 0.4} ${y - sparkRadius * 2.2}`}/>
 </>;
 
 const Rippling: FC<{center: Point}> = ({center: {x, y}}) => <>
   <ellipse className="drawn-line markup-attribute-drawn hollow" cx={x} cy={y} rx={sparkRadius * 2.4}
-    ry={sparkRadius * 2.4 * flattened}/>
+    ry={sparkRadius * 2.4 * ellipseRatio}/>
   <ellipse className="drawn-line markup-attribute-drawn hollow dotted-drawn" cx={x} cy={y} rx={sparkRadius * 4}
-    ry={sparkRadius * 4 * flattened}/>
+    ry={sparkRadius * 4 * ellipseRatio}/>
 </>;
 
 const events = [
@@ -144,8 +144,8 @@ export const PagePulledApart: FC = () =>
         points={face({u: plate.across, v: 0}, {u: plate.across, v: plate.down})}/>
       <polygon className="slab-line drawn paper-filled" points={regionPoints(plate, elevations.structure)}/>
       <g className="monospaced" fontSize={letterSize} transform={`matrix(${onThePlateAt(elevations.structure)})`}>
-        {markupLines.map((line, index) =>
-          <text key={line} x={inset + indentOf(line) * advance} y={baselineOf(index)}
+        {markupLines.map((line, row) =>
+          <text key={line} x={inset + indentOf(line) * advance} y={baselineOf(row)}
             textLength={line.trim().length * advance} lengthAdjust="spacingAndGlyphs">
             {markup.tokensOf(line).map(({ink, text}, at) => <tspan key={at} className={inks[ink]}>{text}</tspan>)}
           </text>)}
