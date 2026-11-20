@@ -24,12 +24,30 @@ type PartWriting = {
 };
 
 const partWritings: Record<ZIndexPart, PartWriting> = {
-  'why-third-is-on-top': {introduction: <WhyThirdIsOnTopIntroduction/>, exhibitAndRuns: <WhyThirdIsOnTop/>},
-  'why-9999-still-loses': {introduction: <Why9999StillLosesIntroduction/>, exhibitAndRuns: <Why9999StillLoses/>},
-  'what-else-forms-a-stacking-context': {introduction: <WhatElseFormsAStackingContextIntroduction/>, exhibitAndRuns: <WhatElseFormsAStackingContext/>},
-  'why-the-popover-wins': {introduction: <WhyThePopoverWinsIntroduction/>, exhibitAndRuns: <WhyThePopoverWins/>},
-  'why-a-fixed-banner-still-loses': {introduction: <WhyAFixedBannerStillLosesIntroduction/>, exhibitAndRuns: <WhyAFixedBannerStillLoses/>},
-  'lets-build-this-feature': {introduction: <LetsBuildThisFeatureIntroduction/>, exhibitAndRuns: <LetsBuildThisFeature/>}
+  'why-third-is-on-top': {
+    introduction: <WhyThirdIsOnTopIntroduction/>,
+    exhibitAndRuns: <WhyThirdIsOnTop/>
+  },
+  'why-9999-still-loses': {
+    introduction: <Why9999StillLosesIntroduction/>,
+    exhibitAndRuns: <Why9999StillLoses/>
+  },
+  'what-else-forms-a-stacking-context': {
+    introduction: <WhatElseFormsAStackingContextIntroduction/>,
+    exhibitAndRuns: <WhatElseFormsAStackingContext/>
+  },
+  'why-the-popover-wins': {
+    introduction: <WhyThePopoverWinsIntroduction/>,
+    exhibitAndRuns: <WhyThePopoverWins/>
+  },
+  'why-a-fixed-banner-still-loses': {
+    introduction: <WhyAFixedBannerStillLosesIntroduction/>,
+    exhibitAndRuns: <WhyAFixedBannerStillLoses/>
+  },
+  'lets-build-this-feature': {
+    introduction: <LetsBuildThisFeatureIntroduction/>,
+    exhibitAndRuns: <LetsBuildThisFeature/>
+  }
 };
 
 const partWears: Partial<Record<ZIndexPart, string>> = {'lets-build-this-feature': 'tutorials'};
@@ -40,7 +58,9 @@ export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
   return <>
     <header className="part-opening">
       <hgroup>
-        <p className="caption">{`${demoTab.names[DemoTopics.zIndex]} · part ${ordinal} of ${zIndexParts.inTheBook}`}</p>
+        <p className="caption">
+          {`${demoTab.names[DemoTopics.zIndex]} · part ${ordinal} of ${zIndexParts.inTheBook}`}
+        </p>
         <h2 id={titled} className="title">{name}</h2>
       </hgroup>
       {partWritings[part].introduction}
