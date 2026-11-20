@@ -27,7 +27,8 @@ page.on('response', async response => {
   const url = response.url();
   const prefix = Object.keys(localized).find(domain => url.startsWith(domain));
   if (empty(prefix)) return;
-  const key = url.replace(prefix, localized[prefix]);
+  const address = url.replace(prefix, localized[prefix]);
+  const key = address.includes('/candles?') ? address.split('?')[0] : address;
   rest.set(key, {
     contentType: maybe(response.headers()['content-type']).orElse('application/json'),
     body: await response.text()
@@ -52,6 +53,10 @@ console.log('recording the feed…');
 await page.goto(`${site}demos/tables/`);
 await page.waitForSelector('table th', {timeout: 30_000});
 await page.waitForTimeout(6000);
+
+await page.goto(`${site}demos/charts/candles/`);
+await page.waitForSelector('figure svg', {timeout: 30_000});
+await page.waitForTimeout(2000);
 
 await page.goto(`${site}demos/drag-and-drop/`);
 await page.waitForSelector('.sortable-list .draggable', {timeout: 30_000});
