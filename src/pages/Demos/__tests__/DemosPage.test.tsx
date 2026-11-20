@@ -75,6 +75,7 @@ describe('The Demos page', () => {
     render(<TestApp at={from}/>);
 
     expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables/the-live-table-and-the-store'));
+    expect(appAddress.fragment()).toBe('');
   });
 
   test('an old tables address repeating a dial lands on the Tables tab with every value kept', async () => {
