@@ -19,7 +19,7 @@ describe('Tabs', () => {
   });
 
   it('marks the tab it is given as current but not as the page, when told the reader is below it', () => {
-    render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} currentAs="true" tabs={[tab1, tab2, tab3]}/></TestApp>);
+    render(<TestApp at={path}><Tabs label="tabs under test" current={tab1.param} aria-current="true" tabs={[tab1, tab2, tab3]}/></TestApp>);
 
     expect(tabs.currentButNotThePage()).toEqual([tab1.display]);
   });
