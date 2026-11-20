@@ -5,6 +5,7 @@ import {demoPage, demosAt, demoTabs, feedIsSubscribed} from '@pages/Demos/__test
 import {render, waitFor} from '@testing-library/react';
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {titleAbove} from '@__test_support/title-above';
 import {dragSortTab, listControls, sortableList} from '@pages/Demos/DragAndDrop/__test_support';
 
 const nativeRecipe = async (): Promise<HTMLElement> => {
@@ -173,13 +174,21 @@ describe('the sortable list demo', () => {
     expect(clues.rows).toHaveLength(4);
   });
 
+  test('should hold what a design cannot tell you as a section of its own, its questions under its title', async () => {
+    await nativeRecipe();
+
+    const [firstQuestion] = explanation.runsIn(await explanation.part('what a design cannot tell you'));
+
+    expect(titleAbove(firstQuestion)).toBe('what a design cannot tell you');
+  });
+
   test('should head the stations from need to design to layers, linking the user story and dataTransfer', async () => {
     const recipe = await nativeRecipe();
 
     expect(demoPage.title('Start with the need, and let it pick the element')).toBeVisible();
     expect(demoPage.row(/pick it up and put it there/)).toBeVisible();
     expect(demoPage.title('Sketch a design from the need')).toBeVisible();
-    expect(await demoPage.panel('what a design cannot tell you')).toBeVisible();
+    expect(await explanation.part('what a design cannot tell you')).toBeVisible();
     expect(demoPage.title('The user can keep the list in the order they mean')).toBeVisible();
     expect(demoPage.signpost('user story'))
       .toHaveAttribute('href', expect.stringContaining('initialcapacity.io/insights/user-story'));
