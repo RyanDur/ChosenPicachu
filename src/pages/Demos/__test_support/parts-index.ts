@@ -3,7 +3,7 @@ import {screen, within} from '@testing-library/react';
 
 export const partsIndex = {
   find: (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'Parts'}),
-  title: (): Promise<HTMLElement> => screen.findByRole('heading', {name: 'Parts', level: 2}),
+  titleIn: (index: HTMLElement): HTMLElement => within(index).getByRole('heading', {name: 'Parts', level: 2}),
   titlesIn: (index: HTMLElement): string[] => within(index).getAllByRole('link').map(link => link.textContent),
   currentIn: (index: HTMLElement): HTMLElement => within(index).getByRole('link', {current: 'page'}),
   addressesIn: (index: HTMLElement): (string | null)[] =>

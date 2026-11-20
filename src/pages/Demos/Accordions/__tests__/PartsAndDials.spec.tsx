@@ -92,6 +92,6 @@ describe('the accordions panel', () => {
   test('should title its parts beside the tab’s sections on the tab', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    expect(await partsIndex.title()).toBeInTheDocument();
+    expect(partsIndex.titleIn(await partsIndex.find())).toBeInTheDocument();
   });
 });
