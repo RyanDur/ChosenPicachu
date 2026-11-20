@@ -11,6 +11,7 @@ import {Trading} from './Market/Trading';
 import {tableParts, tableTutorials} from './Tables';
 import {accordionParts} from './Accordions/part-pages';
 import {zIndexParts} from './ZIndexDemo/part-pages';
+import {chartKinds} from './Charts';
 
 type ShownDemo = {topic: DemoTopics; title: string; listed: Listing};
 
@@ -34,6 +35,11 @@ const shownDemoAt = (pathname: string): Maybe<ShownDemo> => tableTutorials.at(pa
     topic: DemoTopics.zIndex,
     title: `Demos ${demoTab.names[DemoTopics.zIndex]} · ${zIndexParts.told(part).name}`,
     listed: names['z-index'][part]
+  })))
+  .or(() => chartKinds.shownAt(pathname).map((kind): ShownDemo => ({
+    topic: DemoTopics.charts,
+    title: `Demos ${demoTab.names[DemoTopics.charts]} · ${chartKinds.names[kind]}`,
+    listed: names.charts[kind]
   })))
   .or(() => demoTab.addressedAt(pathname)
     .map((topic): ShownDemo => ({topic, title: `Demos ${demoTab.names[topic]}`, listed: names.demos[topic]})));

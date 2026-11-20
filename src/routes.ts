@@ -47,10 +47,10 @@ export const roomsOpenedBy = (open: Opener): RouteObject[] => [
       ...Object.entries(demoTabs).map(([topic, file]) => ({path: `${Paths.demos}${topic}/`, ...open(file)})),
       {path: `${Paths.demos}accordions/:part/`, ...open(demoTabs.accordions)},
       {path: `${Paths.demos}z-index/:part/`, ...open(demoTabs['z-index'])},
-      {path: `${Paths.demos}tables/:page/`, ...open(demoTabs.tables)}
+      {path: `${Paths.demos}tables/:page/`, ...open(demoTabs.tables)},
+      {path: Paths.chartTutorial, ...open(demoTabs.charts)}
     ]
   },
-  {path: Paths.chartTutorial, ...open('pages/Demos/Charts/route.tsx')},
   {path: Paths.users, ...open('pages/Users/route.tsx')},
   {path: `${Paths.artGallery}${GalleryPaths.home}`, ...open('pages/Gallery/route.tsx')},
   {path: `${Paths.artGallery}${GalleryPaths.piece}`, ...open('pages/Gallery/Piece/route.tsx')},

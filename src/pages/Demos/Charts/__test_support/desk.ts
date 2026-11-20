@@ -103,7 +103,6 @@ export const chartsDesk = {
   size: (): Promise<HTMLElement> => screen.findByText(/^Four parts, about \d+ minutes\.$/),
   findChartList: (): Promise<HTMLElement> => screen.findByRole('list', {name: 'charts'}),
   tutorial: (chart: string): HTMLElement => screen.getByRole('article', {name: `${chart} tutorial`}),
-  anyTutorial: (): HTMLElement | null => screen.queryByRole('article', {name: /tutorial/}),
   findPieLegend: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pie'})).getByRole('list'),
   pieShares: (): string[] => within(within(chart('pie')).getByRole('list')).getAllByRole('listitem').map(share => share.textContent),
   title: (name: string, level: number): HTMLElement => screen.getByRole('heading', {name, level}),

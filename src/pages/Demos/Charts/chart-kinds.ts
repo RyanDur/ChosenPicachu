@@ -46,4 +46,6 @@ const numbered = (kind: ChartKind): string => `${all.indexOf(kind) + 1}. ${names
 // generatePath drops the route's trailing slash, and the prerendered pages live at the slashed address.
 const address = (kind: ChartKind): string => `${generatePath(Paths.chartTutorial, {kind})}/`;
 
-export const chartKinds = {all, is, match, names, told, minutes, address, previous, next, numbered};
+const shownAt = (pathname: string): Maybe<ChartKind> => maybe(all.find(kind => pathname === address(kind)));
+
+export const chartKinds = {all, is, match, names, told, minutes, address, shownAt, previous, next, numbered};
