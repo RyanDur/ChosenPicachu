@@ -130,8 +130,9 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     await tablesTab().place();
 
-    expect(tablesTab().sketchColumns()).toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
-    expect(tablesTab().sketchHeaders().rows).toHaveLength(5);
+    expect(await tablesTab().sketchColumns(theSketch))
+      .toEqual(['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change']);
+    expect((await tablesTab().sketchHeaders(theSketch)).rows).toHaveLength(5);
   });
 
   test('the sketch’s page says its place among the parts', async () => {
