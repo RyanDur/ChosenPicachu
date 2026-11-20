@@ -54,13 +54,17 @@ await page.waitForSelector('figure.art-work img', {timeout: 30_000});
 await page.waitForTimeout(2000);
 
 console.log('recording the candles before the feed, so the replayed trades come after them…');
+const candlesOf = granularity => page.waitForResponse(
+  answer => answer.url().includes('/candles?') && answer.url().includes(`granularity=${granularity}`) && answer.ok(),
+  {timeout: 30_000});
+const hour = candlesOf(60);
 await page.goto(`${site}demos/charts/candles/`);
-await page.waitForSelector('figure svg', {timeout: 30_000});
-await page.waitForTimeout(2000);
-for (const period of ['day', 'week']) {
+await hour;
+for (const [period, granularity] of [['day', 3600], ['week', 21600]]) {
+  const answered = candlesOf(granularity);
   await page.getByRole('button', {name: /^candle period/}).click();
   await page.getByRole('button', {name: period, exact: true}).click();
-  await page.waitForTimeout(2000);
+  await answered;
 }
 
 console.log('recording the feed…');
