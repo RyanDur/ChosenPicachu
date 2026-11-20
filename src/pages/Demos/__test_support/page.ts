@@ -1,5 +1,5 @@
 import {computeAccessibleName} from 'dom-accessibility-api';
-import {maybe, not} from '@ryandur/sand';
+import {is, maybe, not} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
 import {DemoTopics} from '@pages/Demos/demo-topics';
 import {demoTab} from '@pages/Demos/demo-tab';
@@ -64,6 +64,9 @@ export const demoPage = {
   signpostAddresses: (name: string): string[] => screen.getAllByRole('link', {name}).map(hrefOf),
   row: (name: string | RegExp): HTMLElement => screen.getByRole('rowheader', {name}),
   unanswered: (name: string): HTMLElement => screen.getByRole('complementary', {name}),
+  panel: (name: string): Promise<HTMLElement> => screen.findByRole('complementary', {name}),
+  listedSignposts: (name: RegExp): HTMLElement[] => screen.getAllByRole('listitem')
+    .filter(entry => is(within(entry).queryByRole('link', {name}))),
   wholePage: (): HTMLElement => screen.getByRole('main'),
   introduction: (): HTMLElement => maybe(introductionBeforeTheTabs()).either(introduction => introduction, () => {
     throw new Error('No paragraph stands before the demos tabs');
