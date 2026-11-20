@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {outOfReadingOrder} from '@__test_support/reading-order';
-import {chartPageAt, demosAt, feedIsSubscribed, partsIndex} from '@pages/Demos/__test_support';
+import {chartPageAt, demoPage, demosAt, feedIsSubscribed, partsIndex} from '@pages/Demos/__test_support';
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {chartPage, chartsDesk} from '@pages/Demos/Charts/__test_support';
@@ -34,12 +34,12 @@ describe('the charts parts index', () => {
       await chartsDesk.findChartList(), await chartsDesk.findFeatureStories()])).toEqual([]);
   });
 
-  test('should say the four parts take about 25 minutes', async () => {
+  test('should say in its panel that the four parts take about 25 minutes', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.size()).toHaveTextContent(/about 25 minutes/);
+    expect(await demoPage.panel('parts and minutes')).toHaveTextContent(/about 25 minutes/);
   });
 
   test('should give the price line its minutes, as 8 min', async () => {
