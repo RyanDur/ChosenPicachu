@@ -16,7 +16,6 @@ import '../Recipe/Recipe.css';
 import '../Tutorials.css';
 
 type Feature = {
-  name: string;
   reference: string;
   quote: string;
   chart: FC;
@@ -24,7 +23,6 @@ type Feature = {
 
 const features: Record<ChartKind, Feature> = {
   price: {
-    name: 'price line',
     reference: 'https://en.wikipedia.org/wiki/Line_chart',
     chart: PriceChart,
     quote: 'The ticker tells me now; it doesn’t tell me the way here. I want to glance up ' +
@@ -32,7 +30,6 @@ const features: Record<ChartKind, Feature> = {
       'a single digit.'
   },
   candles: {
-    name: 'candles',
     reference: 'https://en.wikipedia.org/wiki/Candlestick_chart',
     chart: Candles,
     quote: 'The line smooths over the fight. A drift and a battle can draw the same shape, ' +
@@ -40,14 +37,12 @@ const features: Record<ChartKind, Feature> = {
       'reached, and how much conviction was underneath.'
   },
   pressure: {
-    name: 'pressure',
     reference: 'https://en.wikipedia.org/wiki/Order_flow_trading',
     chart: Pressure,
     quote: 'I can see the price move; I can’t see who is pushing it. When it breaks out, I ' +
       'want to know whether buyers drove it there or the sellers just stepped away.'
   },
   pie: {
-    name: 'pie',
     reference: 'https://en.wikipedia.org/wiki/Pie_chart',
     chart: Pie,
     quote: 'The bars tell me the battle, minute by minute. At the end I want the war: one ' +
@@ -58,8 +53,9 @@ const features: Record<ChartKind, Feature> = {
 const neighbor = (kind: ChartKind) => ({title: chartKinds.numbered(kind), address: chartKinds.address(kind)});
 
 export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
-  const {name, reference, quote, chart: Chart} = features[kind];
-  return <PartSection heading={`${chartKinds.names[kind]} tutorial`} panel={<PartsAndMinutes/>} wears="tutorials"
+  const {reference, quote, chart: Chart} = features[kind];
+  const name = chartKinds.names[kind];
+  return <PartSection heading={`${name} tutorial`} panel={<PartsAndMinutes/>} wears="tutorials"
     foot={<PageFoot label="the chart pages" previous={chartKinds.previous(kind).map(neighbor)}
       next={chartKinds.next(kind).map(neighbor)}/>}>
     <Chart/>
@@ -68,7 +64,7 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
       We are going to build the <a className="signpost"
         href={reference}
         target="_blank"
-        rel="noreferrer">{name}</a> above. The card below tells it as a <a className="signpost"
+        rel="noreferrer">{name.toLowerCase()}</a> above. The card below tells it as a <a className="signpost"
         href="https://initialcapacity.io/insights/user-story"
         target="_blank"
         rel="noreferrer">user story</a>, a card, a conversation and a confirmation, as taught in the z-index
@@ -86,7 +82,7 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
       above is my interpretation of that; the card below tells how I built it. Open it
       to see the steps, or to compare them with yours.
     </p>
-    <section aria-label={`build the ${name} yourself`} className="build-steps">
+    <section aria-label={`build the ${name.toLowerCase()} yourself`} className="build-steps">
       <StoryDepth.Provider value={4}>
         <ChartStories kind={kind}/>
       </StoryDepth.Provider>
