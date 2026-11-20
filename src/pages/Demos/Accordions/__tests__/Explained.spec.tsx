@@ -190,6 +190,14 @@ describe('the parts index', () => {
     expect(outOfReadingOrder([accordion, partsIndex, beforeYouStart])).toEqual([]);
   });
 
+  test('should mark no part as the current page on the tab, though the accordion in HTML alone stands on it', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const partsIndex = await accordionsTab.partsIndex();
+
+    expect(accordionsTab.currentPagesIn(partsIndex)).toEqual([]);
+  });
+
   test('should give the accordion in HTML alone its minutes, as 1 min', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 

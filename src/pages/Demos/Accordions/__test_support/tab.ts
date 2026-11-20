@@ -39,6 +39,8 @@ export const accordionsTab = {
   exhibit: async (): Promise<HTMLElement> =>
     within(await screen.findByRole('region', {name: 'Accordions'})).getAllByRole('figure')[0],
   titlesIn: partsIndex.titlesIn,
+  currentPagesIn: (index: HTMLElement): string[] =>
+    within(index).queryAllByRole('link', {current: 'page'}).map(link => link.textContent),
   titlesUnder: (index: HTMLElement, label: string): string[] =>
     within(within(index).getByRole('list', {name: label})).getAllByRole('link').map(link => link.textContent),
   entryOf: partsIndex.entryOf,
