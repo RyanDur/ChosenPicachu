@@ -50,4 +50,8 @@
   .tabs.demo-tabs {
     position: static;
   }
+
+  :root:has(.tabs.demo-tabs) {
+    --foot-reach: var(--menu-bar-block);
+  }
 }
