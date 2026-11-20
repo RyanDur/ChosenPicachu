@@ -3,8 +3,8 @@ import {TabSidecar} from '../TabSidecar';
 import {PartsIndex} from './PartsIndex';
 import {ZIndexSize} from './ZIndexSize';
 
-export const PartsAndMinutes: FC<{readonly titled?: boolean}> = ({titled}) =>
-  <TabSidecar label="parts and minutes">
+export const PartsAndMinutes: FC<{readonly titled?: boolean}> = ({titled = false}) =>
+  <TabSidecar label={titled ? 'parts and minutes' : undefined}>
     <ZIndexSize/>
     <PartsIndex titled={titled}/>
   </TabSidecar>;

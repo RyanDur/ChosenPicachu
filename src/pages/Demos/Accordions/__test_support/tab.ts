@@ -42,6 +42,7 @@ export const accordionsTab = {
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   partsIndex: partsIndex.find,
   partsAndDials,
+  size: (): Promise<HTMLElement> => screen.findByText(/^Six parts, about \d+ minutes\.$/),
   exhibit: async (): Promise<HTMLElement> =>
     within(await screen.findByRole('region', {name: 'Accordions'})).getAllByRole('figure')[0],
   titlesIn: partsIndex.titlesIn,
