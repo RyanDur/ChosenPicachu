@@ -3,7 +3,6 @@ import {Link} from 'react-router';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {Aggregations} from './Aggregations';
 import {Tutorial, tableTutorials} from './tutorial-pages';
-import {WorldGlider, WorldNote} from './World';
 import {useShownTutorial} from './useShownTutorial';
 import {DragSortTutorial} from './DragSort';
 import {MenuRecipe, ResizeRecipe} from './Recipe';
@@ -12,7 +11,6 @@ import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {tableParts} from './part-pages';
 import {tablesBook} from './tables-book';
 import {PartFoot} from './PartFoot';
-import {TablesMap} from './TablesMap';
 import './TutorialPage.css';
 
 const recipes: Record<Tutorial, FC> = {
@@ -39,8 +37,6 @@ export const TutorialPage: FC = () => {
         <h2 id={titled} className="title">{tableTutorials.nameOf(tutorial)}</h2>
       </hgroup>
       <Aggregations/>
-      <WorldGlider/>
-      <WorldNote/>
       <p className="paragraph">
         This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
         “<DemoLink to={to}>{startingAt.name}</DemoLink>”, ends,
@@ -48,7 +44,6 @@ export const TutorialPage: FC = () => {
         those are new to you, read that part first.
       </p>
       <TutorialRecipe/>
-      <TablesMap/>
       <PartFoot part={tutorial}/>
     </section>;
   }, () => null);

@@ -1,9 +1,6 @@
 import {FC} from 'react';
-import {TabSidecar} from '../TabSidecar';
 import {TablesIntroduction} from './Introduction';
-import {TablesSize} from './TablesSize';
-import {PartsIndex} from './PartsIndex';
-import {WorldGlider, WorldNote} from './World';
+import {PartsAndDials} from './PartsAndDials';
 import {Aggregations} from './Aggregations';
 import {Tutorials} from './Tutorials';
 import {TutorialPage} from './TutorialPage';
@@ -15,12 +12,7 @@ import {useShownPart} from './useShownPart';
 const TabContents: FC = () => <>
   <ToMovedAddress/>
   <TablesIntroduction/>
-  <TabSidecar label="parts and dials">
-    <TablesSize/>
-    <PartsIndex/>
-    <WorldGlider/>
-    <WorldNote/>
-  </TabSidecar>
+  <PartsAndDials/>
   <Aggregations/>
   <Tutorials/>
 </>;
@@ -28,6 +20,6 @@ const TabContents: FC = () => <>
 export const Room: FC = () => {
   const part = useShownPart();
   return useShownTutorial().either(
-    () => <TutorialPage/>,
-    () => part.either(shown => <PartPage part={shown}/>, () => <TabContents/>));
+    () => <><TutorialPage/><PartsAndDials/></>,
+    () => part.either(shown => <><PartPage part={shown}/><PartsAndDials/></>, () => <TabContents/>));
 };
