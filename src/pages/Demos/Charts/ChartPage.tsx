@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC} from 'react';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PartLink} from '@pages/Demos/ZIndexDemo';
@@ -10,8 +10,10 @@ import {Pie} from './Pie';
 import {ChartKind, chartKinds} from './chart-kinds';
 import {StoryDepth} from '../Recipe';
 import {ChartStories} from './ChartStories';
+import {PartsAndMinutes} from './PartsAndMinutes';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
+import '../PartPage.css';
 import './ChartPage.css';
 
 type Feature = {
@@ -54,19 +56,14 @@ const features: Record<ChartKind, Feature> = {
   }
 };
 
-type Props = {
-  readonly kind: ChartKind;
-  readonly panel: ReactNode;
-};
-
 const neighbor = (kind: ChartKind) => ({title: chartKinds.numbered(kind), address: chartKinds.address(kind)});
 
-export const ChartPage: FC<Props> = ({kind, panel}) => {
+export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const {name, reference, quote, chart: Chart} = features[kind];
-  return <>
+  return <article aria-labelledby={`tutorial-${kind}`} className="part-page">
     <h2 id={`tutorial-${kind}`} className="off-screen">{`${name} tutorial`}</h2>
-    {panel}
-    <article aria-labelledby={`tutorial-${kind}`} className="chart-page tutorials">
+    <PartsAndMinutes/>
+    <section className="part-body chart-page tutorials">
       <Chart/>
       <h3 className="title">let’s build this feature</h3>
       <p className="overview paragraph">
@@ -96,8 +93,8 @@ export const ChartPage: FC<Props> = ({kind, panel}) => {
           <ChartStories kind={kind}/>
         </StoryDepth.Provider>
       </section>
-      <PageFoot label="the chart pages" previous={chartKinds.previous(kind).map(neighbor)}
-        next={chartKinds.next(kind).map(neighbor)}/>
-    </article>
-  </>;
+    </section>
+    <PageFoot label="the chart pages" previous={chartKinds.previous(kind).map(neighbor)}
+      next={chartKinds.next(kind).map(neighbor)}/>
+  </article>;
 };
