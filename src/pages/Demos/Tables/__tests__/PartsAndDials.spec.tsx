@@ -84,7 +84,7 @@ describe('the tables panel', () => {
     expect(demoPage.entriesLinking(/Drag resize$/)).toHaveLength(1);
   });
 
-  test('should sit inside a part’s page, which holds its own title, so a reader who jumps to the part hears it first', async () => {
+  test('should sit inside a part’s page, which holds its own title', async () => {
     render(<TestApp at={demosAt(theSlices)}/>);
 
     const page = await tablesTab().partPage('Slice the design into stories');
@@ -92,7 +92,7 @@ describe('the tables panel', () => {
     expect(tablesTab().titlesIn(page)).toEqual(['Slice the design into stories']);
   });
 
-  test('should sit inside a tutorial’s page, which holds its own title, so a reader who jumps to it hears it first', async () => {
+  test('should sit inside a tutorial’s page, which holds its own title', async () => {
     render(<TestApp at={demosAt(sortMenu)}/>);
 
     const page = await tablesTab().tutorialPage('Sort menu');
