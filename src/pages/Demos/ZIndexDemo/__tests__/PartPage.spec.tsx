@@ -141,7 +141,7 @@ describe('a z-index part’s page', () => {
 
     const page = await explanation.part('Z-index');
     const part = explanation.partIn(page, 'Why 9999 still loses');
-    const introduction = explanation.saying(page, /^A list with a z-index of 9999/);
+    const introduction = explanation.opener(part);
     const panel = await demoPage.panel('parts and minutes');
     const exhibit = zIndexTab.firstExhibitIn(part);
 
