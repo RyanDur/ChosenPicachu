@@ -1,4 +1,5 @@
 import {FC, PropsWithChildren} from 'react';
+import {useLocation} from 'react-router';
 import './DemosPage.css';
 import './Tutorials.css';
 import {Tabs} from '@navigation/Tabs';
@@ -10,9 +11,10 @@ import {useCarriedAddress} from './useCarriedAddress';
 
 export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, children}) => {
   const carried = useCarriedAddress();
+  const onTheTab = useLocation().pathname === demoTab.address(topic);
 
   return <>
-    <p className="demos-opening paragraph">
+    {onTheTab && <p className="demos-opening paragraph">
       Each tab below is one feature a page needs. I built each one here and explain it. The tabs run from simple to
       expert, and each adds one thing to the tabs before
       it. <TabLink to={DemoTopics.accordions}>The accordions</TabLink> build one fold several ways, from HTML alone up
@@ -26,7 +28,7 @@ export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, ch
       lists its parts, and each part is a page of its own. Start with the accordions if HTML, CSS and JavaScript are new
       to you. Otherwise start at the first tab that adds something you don’t know, or go to the tab whose bug you came
       with.
-    </p>
+    </p>}
     <Tabs label="demos" className="demo-tabs field-before field-after" current={topic}
       tabs={Object.values(DemoTopics).map(param =>
         ({display: demoTab.names[param], param, to: carried(demoTab.address(param))}))}>
