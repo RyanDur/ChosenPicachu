@@ -16,6 +16,12 @@ const toTabs = (links: HTMLElement[]): string[][] => links
   .map(link => [link.textContent, hrefOf(link)])
   .filter(([, address]) => tabAddresses.includes(address));
 
+const introductionBeforeTheTabs = (): HTMLElement | undefined => {
+  const tabs = screen.getByRole('navigation', {name: 'demos'});
+  return within(screen.getByRole('main')).queryAllByRole('paragraph')
+    .find(paragraph => tabs.compareDocumentPosition(paragraph) === Node.DOCUMENT_POSITION_PRECEDING);
+};
+
 const linksToTabsIn = (holder: HTMLElement): string[][] => toTabs(within(holder).getAllByRole('link'));
 
 const pageAndPlaceOf = (link: HTMLElement): string => {
@@ -59,12 +65,10 @@ export const demoPage = {
   row: (name: string | RegExp): HTMLElement => screen.getByRole('rowheader', {name}),
   unanswered: (name: string): HTMLElement => screen.getByRole('complementary', {name}),
   wholePage: (): HTMLElement => screen.getByRole('main'),
-  introduction: (): HTMLElement | null => {
-    const tabs = screen.getByRole('navigation', {name: 'demos'});
-    const firstBeforeTheTabs = within(screen.getByRole('main')).queryAllByRole('paragraph')
-      .find(paragraph => tabs.compareDocumentPosition(paragraph) === Node.DOCUMENT_POSITION_PRECEDING);
-    return firstBeforeTheTabs ?? null;
-  },
+  introduction: (): HTMLElement => maybe(introductionBeforeTheTabs()).either(introduction => introduction, () => {
+    throw new Error('No paragraph stands before the demos tabs');
+  }),
+  introductionIfAny: (): HTMLElement | null => introductionBeforeTheTabs() ?? null,
   linksToTabsIn,
   linksToPageIn,
   linksToPage: (address: string): string[][] => toPage(linksOffTheRail(), address),
