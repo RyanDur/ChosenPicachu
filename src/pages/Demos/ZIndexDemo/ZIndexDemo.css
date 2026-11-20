@@ -73,6 +73,12 @@
         gap: var(--base-x-2_5);
     }
 
+    &.banner-trap .old-way-cards {
+        --below-the-window: 100lvh;
+
+        gap: var(--below-the-window);
+    }
+
     .old-way-cards:has(.sort-choices, :popover-open) {
         padding-block-end: var(--base-x-7);
     }
