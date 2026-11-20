@@ -1,4 +1,5 @@
-import {FC, useId} from 'react';
+import {FC} from 'react';
+import {PartSection} from '@pages/Demos/PartSection';
 import {Link} from 'react-router';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {Aggregations} from './Aggregations';
@@ -12,7 +13,6 @@ import {tableParts} from './part-pages';
 import {tablesBook} from './tables-book';
 import {PartFoot} from './PartFoot';
 import {PartsAndDials} from './PartsAndDials';
-import '../PartPage.css';
 import './TutorialPage.css';
 
 const recipes: Record<Tutorial, FC> = {
@@ -23,33 +23,26 @@ const recipes: Record<Tutorial, FC> = {
 
 export const TutorialPage: FC = () => {
   const carried = useCarriedAddress();
-  const titled = `tutorial${useId()}`;
   const startingAt = tableParts.told(tableTutorials.startingPart);
   const to = tableParts.addressOf(tableTutorials.startingPart);
   return useShownTutorial().either(tutorial => {
     const TutorialRecipe = recipes[tutorial];
-    return <section aria-labelledby={titled} className="part-page">
-      <hgroup>
-        <p className="caption">
-          <Link className="signpost" to={carried(demoTab.address(DemoTopics.tables))}>
-            {demoTab.names[DemoTopics.tables]}
-          </Link>
-          {` · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`}
-        </p>
-        <h2 id={titled} className="title">{tableTutorials.nameOf(tutorial)}</h2>
-      </hgroup>
-      <PartsAndDials/>
-      <section className="part-body tutorial-page">
-        <Aggregations/>
-        <p className="paragraph">
-          This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
-          “<DemoLink to={to}>{startingAt.name}</DemoLink>”, ends,
-          with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
-          those are new to you, read that part first.
-        </p>
-        <TutorialRecipe/>
-      </section>
-      <PartFoot part={tutorial}/>
-    </section>;
+    const caption = <>
+      <Link className="signpost" to={carried(demoTab.address(DemoTopics.tables))}>
+        {demoTab.names[DemoTopics.tables]}
+      </Link>
+      {` · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`}
+    </>;
+    return <PartSection title={tableTutorials.nameOf(tutorial)} caption={caption}
+      panel={<PartsAndDials/>} foot={<PartFoot part={tutorial}/>} wears="tutorial-page">
+      <Aggregations/>
+      <p className="paragraph">
+        This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
+        “<DemoLink to={to}>{startingAt.name}</DemoLink>”, ends,
+        with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
+        those are new to you, read that part first.
+      </p>
+      <TutorialRecipe/>
+    </PartSection>;
   }, () => null);
 };
