@@ -35,7 +35,7 @@ const shownDemoAt = (pathname: string): Maybe<ShownDemo> => tableTutorials.at(pa
     title: `Demos ${demoTab.names[DemoTopics.zIndex]} · ${zIndexParts.told(part).name}`,
     listed: names['z-index'][part]
   })))
-  .or(() => maybe(Object.values(DemoTopics).find(topic => pathname === demoTab.address(topic)))
+  .or(() => maybe(Object.values(DemoTopics).find(topic => demoTab.isAddressOf(pathname, topic)))
     .map((topic): ShownDemo => ({topic, title: `Demos ${demoTab.names[topic]}`, listed: names.demos[topic]})));
 
 const useShownDemo = (): Maybe<ShownDemo> => shownDemoAt(useLocation().pathname);

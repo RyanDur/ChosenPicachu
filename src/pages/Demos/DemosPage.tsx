@@ -11,7 +11,7 @@ import {useCarriedAddress} from './useCarriedAddress';
 
 export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, children}) => {
   const carried = useCarriedAddress();
-  const onTheTab = useLocation().pathname === demoTab.address(topic);
+  const onTheTab = demoTab.isAddressOf(useLocation().pathname, topic);
 
   return <>
     {onTheTab && <p className="demos-opening paragraph">
