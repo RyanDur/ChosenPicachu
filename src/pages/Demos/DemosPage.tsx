@@ -5,7 +5,7 @@ import {Tabs} from '@navigation/Tabs';
 import {DemoTopics} from './demo-topics';
 import {demoTab} from './demo-tab';
 import {TabLink} from './TabLink';
-import {TabRow} from './TabRow';
+import {TabPager} from './TabPager';
 import {useCarriedAddress} from './useCarriedAddress';
 
 export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, children}) => {
@@ -30,7 +30,7 @@ export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, ch
     <Tabs label="demos" className="demo-tabs field-before field-after" current={topic}
       tabs={Object.values(DemoTopics).map(param =>
         ({display: demoTab.names[param], param, to: carried(demoTab.address(param))}))}>
-      <TabRow topic={topic}/>
+      <TabPager topic={topic}/>
     </Tabs>
     <section id="about" aria-label={demoTab.names[topic]} className="about">
       {children}
