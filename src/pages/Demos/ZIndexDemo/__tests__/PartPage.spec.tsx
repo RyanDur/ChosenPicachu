@@ -1,7 +1,8 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@navigation';
-import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
+import {zIndexParts} from '@pages/Demos/ZIndexDemo/part-pages';
 import {stackingPile, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 import {site} from '@pages/__test_support';
 
@@ -83,5 +84,54 @@ describe('why Third is on top, on its own page', () => {
     render(<TestApp at={demosAt('z-index/why-first-is-on-top')}/>);
 
     expect(await site.roomSays('There is no room at this address.')).toBeVisible();
+  });
+});
+
+describe('a z-index part’s page', () => {
+  test('holds the six parts beside the part, as the tab does', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    const index = await partsIndex.find();
+
+    expect(partsIndex.titlesIn(index)).toEqual(zIndexParts.inOrder.map(part => zIndexParts.told(part).name));
+  });
+
+  test('marks the part the reader is on as the current page', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    const index = await partsIndex.find();
+
+    expect(partsIndex.currentIn(index)).toHaveAccessibleName('Why 9999 still loses');
+  });
+
+  test('says beside the part how long the parts take together', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    expect(await demoPage.panel('parts and minutes')).toHaveTextContent(/about 24 minutes/);
+  });
+
+  test('leads from the panel to every part, with the reader’s choices carried', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses', '?raised=second')}/>);
+
+    const index = await partsIndex.find();
+
+    expect(partsIndex.addressesIn(index)).toEqual(zIndexParts.inOrder.map(part =>
+      demosAt(`z-index/${part}`, '?raised=second')));
+  });
+
+  test('lists the parts once, beside the part', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    await partsIndex.find();
+
+    expect(demoPage.listedSignposts(/Why the popover wins$/)).toHaveLength(1);
+  });
+});
+
+describe('the z-index tab’s panel', () => {
+  test('says how long the parts take together', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+
+    expect(await demoPage.panel('parts and minutes')).toHaveTextContent(/about 24 minutes/);
   });
 });
