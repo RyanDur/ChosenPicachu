@@ -210,6 +210,18 @@ describe('the stub stage answers the charts’ candle history from recordings', 
     expect(first[0] - second[0]).toBe(60);
   });
 
+  test('should answer a day of candles with hour candles', async () => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port,
+      get('/trade-history/products/BTC-USD/candles?granularity=3600&start=2026-11-19T08%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+    const [first, second] = rowsOf(answer);
+    expect(first[0] - second[0]).toBe(3600);
+  });
+
   test('should answer a week of candles with six-hour candles, not the hour’s minutes', async () => {
     const {stage, port} = await stageUp();
 

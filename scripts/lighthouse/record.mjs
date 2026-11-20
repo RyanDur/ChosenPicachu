@@ -54,9 +54,10 @@ await page.waitForSelector('figure.art-work img', {timeout: 30_000});
 await page.waitForTimeout(2000);
 
 console.log('recording the candles before the feed, so the replayed trades come after them…');
-const candlesOf = granularity => page.waitForResponse(
-  answer => answer.url().includes('/candles?') && answer.url().includes(`granularity=${granularity}`) && answer.ok(),
-  {timeout: 30_000});
+const candlesOf = granularity => page.waitForResponse(answer => {
+  const asked = new URL(answer.url());
+  return asked.pathname.endsWith('/candles') && asked.searchParams.get('granularity') === String(granularity) && answer.ok();
+}, {timeout: 30_000}).then(answer => answer.finished());
 const hour = candlesOf(60);
 await page.goto(`${site}demos/charts/candles/`);
 await hour;
