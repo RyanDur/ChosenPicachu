@@ -671,6 +671,18 @@ describe('the record\'s three stories', () => {
     expect(recordPage.storyEpigraphSource('Structure')).toHaveAttribute('href', 'https://html.com/html5/');
   });
 
+  test('should keep Structure\'s plate from a screen reader, since its heading names the language', () => {
+    expect(recordPage.plateLetteringHeard('Structure', ['Menu'])).toEqual([]);
+  });
+
+  test('should keep Presentation\'s plate from a screen reader, since its heading names the language', () => {
+    expect(recordPage.plateLetteringHeard('Presentation', ['.rail'])).toEqual([]);
+  });
+
+  test('should keep Behavior\'s plate from a screen reader, since its heading names the language', () => {
+    expect(recordPage.plateLetteringHeard('Behavior', ['toggle'])).toEqual([]);
+  });
+
   test('should open Presentation\'s story on the W3C’s words on HTML and CSS, before the story itself', () => {
     expect(outOfReadingOrder([recordPage.storyHeading('Presentation'), recordPage.storyEpigraph('Presentation'), ...recordPage.storyParagraphs('Presentation')])).toEqual([]);
   });

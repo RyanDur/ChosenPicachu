@@ -1,5 +1,5 @@
 import {is, maybe, not} from '@ryandur/sand';
-import {screen, within} from '@testing-library/react';
+import {isInaccessible, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {itemHeadedBy} from '@__test_support/headed-item';
 import {paragraphOpening} from '@__test_support/paragraph';
@@ -28,6 +28,8 @@ export const recordPage = {
   parts: (): HTMLElement => screen.getByText(/^The page supports that in four parts/),
   openingQuotation: (): HTMLElement => screen.getByText(/a web of nodes in which the user can browse at will/),
   storyHeading: (name: string): HTMLElement => within(story(name)).getByRole('heading', {level: 2, name}),
+  plateLetteringHeard: (name: string, words: string[]): string[] =>
+    words.filter(word => not(isInaccessible(within(story(name)).getByText(word)))),
   storyEpigraph: (name: string): HTMLElement => within(epigraphOf(name)).getByRole('blockquote'),
   storyEpigraphSource: (name: string): HTMLElement => within(epigraphOf(name)).getByRole('link'),
   storyParagraphs: (name: string): HTMLElement[] => within(story(name)).getAllByRole('paragraph')
