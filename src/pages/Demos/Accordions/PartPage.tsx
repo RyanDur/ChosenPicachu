@@ -37,11 +37,26 @@ type PartWriting = {
 };
 
 const partWritings: Record<AccordionPart, PartWriting> = {
-  'a-box-remembers-the-fold': {introduction: <RemembersTheFoldIntroduction/>, exhibitAndRuns: <RemembersTheFold folds={knownFolds}/>},
-  'the-max-height-guess': {introduction: <MaxHeightGuessIntroduction/>, exhibitAndRuns: <MaxHeightGuess/>},
-  'the-measured-height': {introduction: <MeasuredHeightIntroduction/>, exhibitAndRuns: <MeasuredHeight folds={measuredFolds}/>},
-  'what-the-platform-gives-now': {introduction: <PlatformGivesNowIntroduction/>, exhibitAndRuns: <PlatformGivesNow folds={platformFolds}/>},
-  'how-a-sliding-fold-moves': {introduction: <SlidingFoldMovesIntroduction/>, exhibitAndRuns: <SlidingFoldMoves folds={slidingFolds}/>}
+  'a-box-remembers-the-fold': {
+    introduction: <RemembersTheFoldIntroduction/>,
+    exhibitAndRuns: <RemembersTheFold folds={knownFolds}/>
+  },
+  'the-max-height-guess': {
+    introduction: <MaxHeightGuessIntroduction/>,
+    exhibitAndRuns: <MaxHeightGuess/>
+  },
+  'the-measured-height': {
+    introduction: <MeasuredHeightIntroduction/>,
+    exhibitAndRuns: <MeasuredHeight folds={measuredFolds}/>
+  },
+  'what-the-platform-gives-now': {
+    introduction: <PlatformGivesNowIntroduction/>,
+    exhibitAndRuns: <PlatformGivesNow folds={platformFolds}/>
+  },
+  'how-a-sliding-fold-moves': {
+    introduction: <SlidingFoldMovesIntroduction/>,
+    exhibitAndRuns: <SlidingFoldMoves folds={slidingFolds}/>
+  }
 };
 
 export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
@@ -50,7 +65,9 @@ export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   return <>
     <header className="part-opening">
       <hgroup>
-        <p className="caption">{`${demoTab.names[DemoTopics.accordions]} · part ${ordinal} of ${accordionParts.inTheBook}`}</p>
+        <p className="caption">
+          {`${demoTab.names[DemoTopics.accordions]} · part ${ordinal} of ${accordionParts.inTheBook}`}
+        </p>
         <h2 id={titled} className="title">{name}</h2>
       </hgroup>
       {partWritings[part].introduction}
