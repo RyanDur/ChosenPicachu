@@ -17,7 +17,7 @@ const TabContents: FC = () => <>
   <TablesIntroduction/>
   <TabSidecar label="parts and dials">
     <TablesSize/>
-    <PartsIndex/>
+    <PartsIndex level={2}/>
     <WorldGlider/>
     <WorldNote/>
   </TabSidecar>

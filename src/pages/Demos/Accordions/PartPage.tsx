@@ -70,7 +70,7 @@ export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
       </hgroup>
       {partWritings[part].introduction}
     </header>
-    <PartsAndDials/>
+    <PartsAndDials level={3}/>
     <section className="part-body">
       {partWritings[part].exhibitAndRuns}
     </section>

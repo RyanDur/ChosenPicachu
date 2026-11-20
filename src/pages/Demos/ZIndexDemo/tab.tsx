@@ -24,6 +24,6 @@ export const Room: FC = () => {
     () => <>
       <ZIndexIntroduction/>
       <NaturalZIndex className="card rounded-corners lifted padded"/>
-      <PartsAndMinutes/>
+      <PartsAndMinutes level={2}/>
     </>);
 };
