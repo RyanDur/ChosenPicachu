@@ -24,6 +24,10 @@
     grid-template-rows: auto 1fr auto;
   }
 
+  .part-page:has(> .tab-sidecar):has(> .off-screen:first-child) {
+    grid-template-rows: 1fr auto;
+  }
+
   .tab-sidecar {
     position: sticky;
     inset-block-start: var(--under-the-tab-bar);
