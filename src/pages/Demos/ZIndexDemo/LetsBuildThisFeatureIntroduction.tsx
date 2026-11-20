@@ -4,7 +4,7 @@ import {FC} from 'react';
 import {PartLink} from './PartLink';
 
 export const LetsBuildThisFeatureIntroduction: FC = () =>
-  <p className="overview paragraph">
+  <p className="paragraph">
     We are going to build this site’s banner: the panel that carries the news, whatever the news is. Elsewhere on
     this site it reports real trouble. On this page, the <TabLink to={DemoTopics.accordions}>dials</TabLink> are
     controls that set how the banner behaves, and the Raise a banner button under them raises random nonsense
