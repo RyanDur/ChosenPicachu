@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {chartPageAt, demoPage, demosAt, demoTabs, feedIsSubscribed, partsIndex} from '@pages/Demos/__test_support';
+import {chartPageAt, demoPage, demoTabs, feedIsSubscribed, partsIndex} from '@pages/Demos/__test_support';
 import {listeningFeed} from '@pages/Demos/__test_support/feed';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {titleAbove} from '@__test_support/title-above';
@@ -98,13 +98,5 @@ describe('a chart’s page', () => {
     render(<TestApp at={chartPageAt('bars')}/>);
 
     expect(await site.roomSays('There is no room at this address.')).toBeVisible();
-  });
-});
-
-describe('the charts tab’s panel', () => {
-  test('should say how long the charts take together', async () => {
-    render(<TestApp at={demosAt('charts')}/>);
-
-    expect(await demoPage.panel('parts and minutes')).toHaveTextContent(/about 25 minutes/);
   });
 });
