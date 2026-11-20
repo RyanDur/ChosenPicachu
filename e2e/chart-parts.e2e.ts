@@ -16,7 +16,7 @@ test('a desk reader follows Pressure from the panel beside the Candles page to t
   await page.goto('demos/charts/candles/');
   await siteFrame(page).hydrated();
 
-  await page.getByRole('complementary', {name: 'parts and minutes'}).getByRole('link', {name: 'Pressure'}).click();
+  await chartsPage(page).partLink('Pressure').click();
 
   await expect(page).toHaveURL(/demos\/charts\/pressure\/$/);
   await expect(page.getByRole('article', {name: 'Pressure tutorial'})).toBeVisible();
