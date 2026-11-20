@@ -2,7 +2,6 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@navigation';
 import {demoPage, demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
-import {zIndexParts} from '@pages/Demos/ZIndexDemo/part-pages';
 import {stackingPile, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 import {site} from '@pages/__test_support';
 
@@ -93,7 +92,9 @@ describe('a z-index part’s page', () => {
 
     const index = await partsIndex.find();
 
-    expect(partsIndex.titlesIn(index)).toEqual(zIndexParts.inOrder.map(part => zIndexParts.told(part).name));
+    expect(partsIndex.titlesIn(index)).toEqual(['Why Third is on top', 'Why 9999 still loses',
+      'What else forms a stacking context', 'Why the popover wins', 'Why a fixed banner still loses',
+      'Let’s build this feature']);
   });
 
   test('marks the part the reader is on as the current page', async () => {
@@ -115,8 +116,14 @@ describe('a z-index part’s page', () => {
 
     const index = await partsIndex.find();
 
-    expect(partsIndex.addressesIn(index)).toEqual(zIndexParts.inOrder.map(part =>
-      demosAt(`z-index/${part}`, '?raised=second')));
+    expect(partsIndex.addressesIn(index)).toEqual([
+      demosAt('z-index/why-third-is-on-top', '?raised=second'),
+      demosAt('z-index/why-9999-still-loses', '?raised=second'),
+      demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'),
+      demosAt('z-index/why-the-popover-wins', '?raised=second'),
+      demosAt('z-index/why-a-fixed-banner-still-loses', '?raised=second'),
+      demosAt('z-index/lets-build-this-feature', '?raised=second')
+    ]);
   });
 
   test('lists the parts once, beside the part', async () => {
