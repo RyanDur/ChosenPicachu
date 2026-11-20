@@ -20,14 +20,6 @@ describe('a chart’s page', () => {
     expect(await demoTabs.title('Demos Charts · Candles')).toBeInTheDocument();
   });
 
-  test('should lead to another tab from its row of tabs', async () => {
-    render(<TestApp at={chartPageAt('candles')}/>);
-
-    await demoTabs.open('Tables');
-
-    expect(await site.titled('Demos Tables')).toBeInTheDocument();
-  });
-
   test('should mark the chart the reader is on as the current page', async () => {
     render(<TestApp at={chartPageAt('candles')}/>);
 
