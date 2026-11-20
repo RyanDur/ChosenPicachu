@@ -38,14 +38,14 @@ const face = (from: Spot, to: Spot): string => pointsOf([
   projected(to, elevations.structure - slabDepth), projected(from, elevations.structure - slabDepth)]);
 
 const markupLines = [
-  '<header>',
+  '<header class="app-header">',
   '  <h1>…</h1>',
   '</header>',
-  '<nav id="pages" popover>…</nav>',
+  '<nav class="rail" id="pages" popover>…</nav>',
   '<button popovertarget="pages">Menu</button>',
-  '<main>',
+  '<main class="app-main">',
   '  <article>',
-  '    <table>…</table>',
+  '    <table class="table">…</table>',
   '  </article>',
   '</main>'
 ];
