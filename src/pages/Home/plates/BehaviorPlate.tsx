@@ -1,6 +1,6 @@
 import {FC, Fragment} from 'react';
 import {PropsWithClassName} from '@components';
-import {Frame} from './Frame';
+import {Edge} from './Edge';
 import {Plate} from './Plate';
 import {Lettered} from './Lettered';
 import {motions} from './motions';
@@ -16,7 +16,7 @@ const readsRightward = ({u}: Spot): boolean => u < thePage.plate.across / 2;
 
 export const BehaviorPlate: FC<PropsWithClassName> = ({className}) =>
   <Plate className={className}>
-    <Frame className="drawn-line drawn"/>
+    <Edge className="drawn-line drawn"/>
     <TurnHead/>
     {thePage.events.map(({word, call, spark, motion}) => {
       const rightward = readsRightward(spark);

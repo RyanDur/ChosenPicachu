@@ -1,13 +1,13 @@
 import {FC} from 'react';
 import {classNames, PropsWithClassName} from '@components';
-import {Frame} from './Frame';
+import {Edge} from './Edge';
 import {Plate} from './Plate';
 import {Lettered} from './Lettered';
 import {thePage} from './thePage';
 
 export const PresentationPlate: FC<PropsWithClassName> = ({className}) =>
   <Plate className={className}>
-    <Frame className="drawn-line drawn"/>
+    <Edge className="drawn-line drawn"/>
     {thePage.regions.map(({name, tint, footprint}) =>
       <rect key={name} className={classNames('drawn-line drawn', tint)} x={footprint.u} y={footprint.v} width={footprint.across}
         height={footprint.down}/>)}
