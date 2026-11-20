@@ -220,7 +220,6 @@ const WidenStory: FC = () => {
           <Says>When the pointer is coarse, the platform’s word for a finger on a touchscreen, each header carries a
             fingertip-wide resize handle and sort toggle, and they need room. So the minimum is 86rem at every width,
             and the columns take shares cut for that wider table, which give vwap and change more of it.</Says>
-          <Says>In a browser window 600px wide or less the minimum drops to 64rem, unless the pointer is coarse.</Says>
           {ledgerCodes[world]}
         </Reveal>
       </Step>
