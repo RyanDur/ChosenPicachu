@@ -8,7 +8,7 @@ import './TabPager.css';
 
 const course = Object.values(DemoTopics);
 
-export const TabPager: FC<{readonly topic: DemoTopics}> = ({topic}) => {
+export const TabPager: FC<{readonly topic: DemoTopics; readonly currentAs: 'page' | 'true'}> = ({topic, currentAs}) => {
   const carried = useCarriedAddress();
   const place = course.indexOf(topic);
   const previous = maybe(course[place - 1]);
@@ -20,7 +20,7 @@ export const TabPager: FC<{readonly topic: DemoTopics}> = ({topic}) => {
       <Link key="previous" to={carried(demoTab.address(previousTopic))} className="tab-pager previous icon-button borderless field attentive reachable">
         <span className="off-screen">Previous tab, {demoTab.names[previousTopic]}</span>
       </Link>).orNull()}
-    <Link key={currentSlot} to={carried(demoTab.address(topic))} aria-current="page" className="tab-pager current path field attentive bold reachable">
+    <Link key={currentSlot} to={carried(demoTab.address(topic))} aria-current={currentAs} className="tab-pager current path field attentive bold reachable">
       {demoTab.names[topic]}
     </Link>
     {next.map(nextTopic =>

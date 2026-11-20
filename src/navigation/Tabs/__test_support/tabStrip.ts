@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 type TabStrip = {
   names: () => string[];
   current: () => string[];
+  currentButNotThePage: () => string[];
   open: (name: string) => Promise<void>;
 };
 
@@ -12,6 +13,7 @@ export const tabStrip = (label: string): TabStrip => {
   return {
     names: () => within(strip()).getAllByRole('listitem').map(item => within(item).getByRole('link').textContent),
     current: () => within(strip()).queryAllByRole('link', {current: 'page'}).map(tab => tab.textContent),
+    currentButNotThePage: () => within(strip()).queryAllByRole('link', {current: true}).map(tab => tab.textContent),
     open: name => userEvent.click(within(strip()).getByRole('link', {name}))
   };
 };

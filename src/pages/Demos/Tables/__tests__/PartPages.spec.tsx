@@ -100,7 +100,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('should keep Tables as the current tab on the need’s page', async () => {
     render(<TestApp at={theNeedsPage}/>);
 
-    expect(await demoTabs.current()).toEqual(['Tables']);
+    expect(await demoTabs.currentButNotThePage()).toEqual(['Tables']);
   });
 
   test('following the sketch from the tables tab opens its page', async () => {

@@ -76,7 +76,7 @@ describe('why Third is on top, on its own page', () => {
   test('should keep Z-index as the current tab', async () => {
     render(<TestApp at={demosAt(thirdOnTop)}/>);
 
-    expect(await demoTabs.current()).toEqual(['Z-index']);
+    expect(await demoTabs.currentButNotThePage()).toEqual(['Z-index']);
   });
 
   test('an address naming no part of the z-index tab says there is no room there', async () => {

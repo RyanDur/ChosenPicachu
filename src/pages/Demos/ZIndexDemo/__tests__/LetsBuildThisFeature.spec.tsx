@@ -62,7 +62,7 @@ describe('let’s build this feature, on its own page', () => {
   test('should keep Z-index as the current tab', async () => {
     render(<TestApp at={demosAt(buildThisFeature)}/>);
 
-    expect(await demoTabs.current()).toEqual(['Z-index']);
+    expect(await demoTabs.currentButNotThePage()).toEqual(['Z-index']);
   });
 });
 
