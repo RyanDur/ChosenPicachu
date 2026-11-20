@@ -2,6 +2,14 @@ import {screen, within} from '@testing-library/react';
 import {is, not} from '@ryandur/sand';
 import {computeAccessibleName} from 'dom-accessibility-api';
 
+const linkInProse = (part: HTMLElement, name: string): HTMLElement => {
+  const found = within(part).getAllByRole('paragraph').flatMap(paragraph => within(paragraph).queryAllByRole('link', {name}));
+  if (not(found.length)) {
+    throw new Error(`no link named ${name} in the part's prose`);
+  }
+  return found[0];
+};
+
 const runWith = (part: HTMLElement, holds: (run: HTMLElement) => boolean, what: string): HTMLElement => {
   const holding = within(part).getAllByRole('listitem').filter(holds);
   const innermost = holding.filter(run => not(holding.some(other => other !== run && run.contains(other))));
@@ -63,8 +71,7 @@ export const explanation = {
   runsIn: (holder: HTMLElement): HTMLElement[] => within(holder).getAllByRole('listitem'),
   samplesIn,
   linkNamed: (part: HTMLElement, name: string | RegExp): HTMLElement => within(part).getByRole('link', {name}),
-  linkInProse: (part: HTMLElement, name: string): HTMLElement => within(part).getAllByRole('paragraph')
-    .flatMap(paragraph => within(paragraph).queryAllByRole('link', {name}))[0],
+  linkInProse,
   linksNamed: (part: HTMLElement, name: string | RegExp): HTMLElement[] => within(part).getAllByRole('link', {name}),
   linksTo: (part: HTMLElement, site: string): HTMLElement[] => within(part).getAllByRole('link')
     .filter(link => link.getAttribute('href')?.startsWith(site) ?? false),
