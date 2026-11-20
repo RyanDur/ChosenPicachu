@@ -3,6 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {demoPage, demosAt, partsIndex} from '@pages/Demos/__test_support';
 import {aggregations, tablesTab} from '@pages/Demos/Tables/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
+import {titleAbove} from '@__test_support/title-above';
 
 const sortMenu = 'tables/menu';
 const theSlices = 'tables/the-slices';
@@ -115,5 +116,11 @@ describe('the tables panel', () => {
     const liveTable = await aggregations.arrived();
 
     expect(outOfReadingOrder([title, panel, liveTable])).toEqual([]);
+  });
+
+  test('should leave a part’s live table under the part’s own title, not under the parts', async () => {
+    render(<TestApp at={demosAt(theSlices)}/>);
+
+    expect(titleAbove(await aggregations.arrived())).toBe('Slice the design into stories');
   });
 });
