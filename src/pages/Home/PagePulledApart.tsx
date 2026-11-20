@@ -72,7 +72,7 @@ const RegionName: Lettering = ({x, y, children}) =>
   <text className="drawn-caption monospaced ink-filled paper-haloed thin-haloed" x={x} y={y}>{children}</text>;
 
 const Call: Lettering = ({x, y, children}) =>
-  <text className="drawn-caption monospaced ink-filled paper-haloed" x={x} y={y} dy="1.5em" textAnchor="middle">
+  <text className="drawn-small-caption monospaced ink-filled paper-haloed" x={x} y={y} dy="1.5em" textAnchor="middle">
     {children}
   </text>;
 
