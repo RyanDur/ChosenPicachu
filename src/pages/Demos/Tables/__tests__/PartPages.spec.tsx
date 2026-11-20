@@ -87,7 +87,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the tables tab leads to the need’s page instead of showing its clues', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    await tablesTab().link(theNeed);
+    await tablesTab().partLink(theNeed);
 
     expect(tablesTab().tableShown('the clues')).not.toBeInTheDocument();
   });
@@ -177,7 +177,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the tables tab leads to the sketch’s page instead of showing the sketch', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    await tablesTab().link(theSketch);
+    await tablesTab().partLink(theSketch);
 
     expect(tablesTab().titleShown(unanswered)).not.toBeInTheDocument();
   });
@@ -287,7 +287,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the tables tab leads to the slices’ page instead of showing the slices', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    await tablesTab().link(theSlices);
+    await tablesTab().partLink(theSlices);
 
     expect(tablesTab().titleShown(theStory)).not.toBeInTheDocument();
   });
@@ -387,7 +387,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the tables tab leads to the still table’s page instead of showing the still table', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    await tablesTab().link(theStillTable);
+    await tablesTab().partLink(theStillTable);
 
     expect(tablesTab().titleShown(theStillStory)).not.toBeInTheDocument();
   });
@@ -491,7 +491,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the tables tab leads to the live table’s page instead of showing the live table', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    await tablesTab().link(theLiveTable);
+    await tablesTab().partLink(theLiveTable);
 
     expect(tablesTab().titleShown(theFlowStory)).not.toBeInTheDocument();
   });
@@ -608,7 +608,7 @@ describe('a link saved to a story when it was on the tables tab', () => {
     const old = demosAt('tables', '?living=nowhere');
     render(<TestApp at={old}/>);
 
-    await tablesTab().link(theLiveTable);
+    await tablesTab().partLink(theLiveTable);
     expect(appAddress.shown()).toBe(old);
   });
 });

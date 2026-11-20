@@ -18,8 +18,11 @@ const link = async (name: string | RegExp): Promise<HTMLElement> => {
   const index = await screen.findByRole('navigation', {name: 'Parts'}, untilTheTablesTabRenders);
   const links = await within(await screen.findByRole('region', {name: 'Tables'}, untilTheTablesTabRenders))
     .findAllByRole('link', {name}, untilTheTablesTabRenders);
-  const [inTheText] = links.filter(found => not(index.contains(found)));
-  return inTheText;
+  const inTheText = links.filter(found => not(index.contains(found)));
+  if (not(inTheText.length)) {
+    throw new Error(`no link named ${String(name)} outside the parts index`);
+  }
+  return inTheText[0];
 };
 const partLink = async (name: string): Promise<HTMLElement> =>
   within(await screen.findByRole('navigation', {name: 'Parts'}, untilTheTablesTabRenders)).findByRole('link', {name}, untilTheTablesTabRenders);
@@ -29,7 +32,6 @@ const headersOf = (holder: HTMLElement): Headers =>
 export const tablesTab = () => ({
   titleShown: (name: string): HTMLElement | null => screen.queryByRole('heading', {name}),
   recipe,
-  link,
   features: (): HTMLElement => screen.getByRole('region', {name: 'let’s build this feature'}),
   featureLinks: (): (string | null)[][] =>
     within(screen.getByRole('region', {name: 'let’s build this feature'})).getAllByRole('link')
