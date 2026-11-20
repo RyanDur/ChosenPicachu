@@ -16,20 +16,18 @@ import {PlatformGivesNowIntroduction} from './PlatformGivesNowIntroduction';
 import {SlidingFoldMovesIntroduction} from './SlidingFoldMovesIntroduction';
 import '../PartPage.css';
 
-type Draws = ReturnType<typeof seeded>;
-
-const dealFolds = (count: number, dealt: () => string, {randNumber, randParagraph}: Draws) =>
-  Array.from({length: count}, () => ({
-    heading: dealt(),
-    story: Array.from({length: randNumber({min: 1, max: 6})}, () => randParagraph()).join(' ')
-  }));
-
 const draws = seeded('the accordion exhibits');
 const dealt = draws.wordDeck();
-const measuredFolds = {inclusive: dealFolds(5, dealt, draws), exclusive: dealFolds(5, dealt, draws)};
-const knownFolds = {inclusive: dealFolds(5, dealt, draws), exclusive: dealFolds(5, dealt, draws)};
-const platformFolds = {inclusive: dealFolds(5, dealt, draws), exclusive: dealFolds(5, dealt, draws)};
-const slidingFolds = {inclusive: dealFolds(5, dealt, draws), exclusive: dealFolds(5, dealt, draws)};
+
+const dealFolds = (count: number) =>
+  Array.from({length: count}, () => ({
+    heading: dealt(),
+    story: Array.from({length: draws.randNumber({min: 1, max: 6})}, () => draws.randParagraph()).join(' ')
+  }));
+const measuredFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
+const knownFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
+const platformFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
+const slidingFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
 
 type PartWriting = {
   readonly introduction: ReactNode;
