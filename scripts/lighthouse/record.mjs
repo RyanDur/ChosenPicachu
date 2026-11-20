@@ -36,9 +36,12 @@ page.on('response', async response => {
 });
 
 let framing = false;
-page.on('websocket', socket => socket.on('framereceived', frame => {
-  if (framing && frames.length < frameCap) frames.push(frame.payload.toString());
-}));
+page.on('websocket', socket => {
+  if (not(framing)) return;
+  socket.on('framereceived', frame => {
+    if (frames.length < frameCap) frames.push(frame.payload.toString());
+  });
+});
 
 console.log('recording the gallery…');
 await page.goto(`${site}gallery/?tab=vam`);
@@ -61,8 +64,8 @@ for (const period of ['day', 'week']) {
 }
 
 console.log('recording the feed…');
-await page.goto(`${site}demos/tables/`);
 framing = true;
+await page.goto(`${site}demos/tables/`);
 await page.waitForSelector('table th', {timeout: 30_000});
 await page.waitForTimeout(6000);
 
