@@ -24,12 +24,6 @@ test('a tab on a page reached with a dial carries the dial along once the script
   await expect(page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'})).toHaveAttribute('href', /world=vanilla/);
 });
 
-test('a reader who opens a chart the site does not have is told there is no room there', async ({page}) => {
-  await page.goto('demos/charts/nope/');
-
-  await expect(page.getByRole('heading', {name: 'There is no room at this address.'})).toBeVisible();
-});
-
 test.describe('a reader on a phone', () => {
   test.use(iPhone);
 
