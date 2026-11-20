@@ -12,7 +12,7 @@ export const Room: FC = () => {
 
   return <>
     <ChartsIntroduction/>
-    <TabSidecar label="parts and minutes" className="beside-the-opening"><ChartsSize/><PartsIndex/></TabSidecar>
+    <TabSidecar label="parts and minutes"><ChartsSize/><PartsIndex/></TabSidecar>
     <Workspace product={tradeProduct}/>
     <ChartsTutorial/>
   </>;

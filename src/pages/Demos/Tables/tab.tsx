@@ -15,7 +15,7 @@ import {useShownPart} from './useShownPart';
 const TabContents: FC = () => <>
   <ToMovedAddress/>
   <TablesIntroduction/>
-  <TabSidecar label="parts and dials" className="beside-the-opening">
+  <TabSidecar label="parts and dials">
     <TablesSize/>
     <PartsIndex/>
     <WorldGlider/>
