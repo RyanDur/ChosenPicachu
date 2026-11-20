@@ -2,7 +2,7 @@ import {thePage} from './thePage';
 
 const rim = 4;
 
-export const plateFrame = {
+export const edgeBox = {
   x: -rim,
   y: -rim,
   width: thePage.plate.across + 2 * rim,
