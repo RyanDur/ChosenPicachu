@@ -1,7 +1,5 @@
 .quotation {
   margin: 0;
-  display: grid;
-  gap: var(--base);
 
   .quote {
     margin: 0;
@@ -10,6 +8,7 @@
   }
 
   .attribution {
+    margin-block-start: var(--base);
     padding-inline-start: calc(var(--base-x-2) + var(--hairline-x-3));
   }
 }

@@ -34,14 +34,6 @@
       margin-block-start: var(--base-x-1_5);
     }
 
-    > .quotation {
-      display: block;
-
-      .attribution {
-        margin-block-start: var(--base);
-      }
-    }
-
     .paragraph {
       text-wrap: pretty;
     }
