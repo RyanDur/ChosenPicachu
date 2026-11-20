@@ -15,8 +15,8 @@ const Entry: FC<{heading: BookPart}> = ({heading}) => {
   return <PartsNavigationEntry to={to} heading={fragment} name={title} minutes={minutes} says={says}/>;
 };
 
-export const PartsIndex: FC<{readonly level: 2 | 3}> = ({level}) =>
-  <PartsNavigation level={level}>
+export const PartsIndex: FC<{readonly titled?: boolean}> = ({titled}) =>
+  <PartsNavigation titled={titled}>
     <ol className="parts-index-list numbered">
       <Entry heading="html-alone-heading"/>
     </ol>

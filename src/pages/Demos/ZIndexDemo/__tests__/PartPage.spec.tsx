@@ -6,6 +6,7 @@ import {stackingPile, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 import {site} from '@pages/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
+import {titleAbove} from '@__test_support/title-above';
 
 const thirdOnTop = 'z-index/why-third-is-on-top';
 
@@ -146,6 +147,14 @@ describe('a z-index part’s page', () => {
     const exhibit = zIndexTab.firstExhibitIn(part);
 
     expect(outOfReadingOrder([introduction, panel, exhibit])).toEqual([]);
+  });
+
+  test('leaves the part’s first exhibit under the part’s own title, not under the parts', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    const part = explanation.partIn(await explanation.part('Z-index'), 'Why 9999 still loses');
+
+    expect(titleAbove(zIndexTab.firstExhibitIn(part))).toBe('Why 9999 still loses');
   });
 
   test('lists the parts once, beside the part', async () => {

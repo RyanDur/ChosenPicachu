@@ -1,6 +1,7 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {outOfReadingOrder} from '@__test_support/reading-order';
+import {titleAbove} from '@__test_support/title-above';
 import {demoPage, demosAt, partsIndex} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {aggregations, tablesTab} from '@pages/Demos/Tables/__test_support';
@@ -37,6 +38,14 @@ describe('the tables parts index', () => {
     expect(outOfReadingOrder([await tablesTab().opening(), await tablesTab().size(), index,
       await tablesTab().worldDial(), aggregations.card(), await demoPage.findTitle('let’s build this feature')]))
       .toEqual([]);
+  });
+
+  test('should leave the live table under the tab’s own title, not under the parts', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    await partsIndex.find();
+
+    expect(titleAbove(aggregations.card())).toBe('Demos Tables');
   });
 
   test('should say under the sort menu what its part is about', async () => {

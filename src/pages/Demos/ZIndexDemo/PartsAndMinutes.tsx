@@ -3,8 +3,8 @@ import {TabSidecar} from '../TabSidecar';
 import {PartsIndex} from './PartsIndex';
 import {ZIndexSize} from './ZIndexSize';
 
-export const PartsAndMinutes: FC<{readonly level: 2 | 3}> = ({level}) =>
+export const PartsAndMinutes: FC<{readonly titled?: boolean}> = ({titled}) =>
   <TabSidecar label="parts and minutes">
     <ZIndexSize/>
-    <PartsIndex level={level}/>
+    <PartsIndex titled={titled}/>
   </TabSidecar>;
