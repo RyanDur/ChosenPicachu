@@ -126,10 +126,10 @@ const languages = [
 ];
 
 const RegionName: FC<{name: string; place: Point}> = ({name, place}) =>
-  <text className="drawn-caption drawn-label monospaced ink-filled paper-haloed thin-haloed" {...place}>{name}</text>;
+  <text className="drawn-caption monospaced ink-filled paper-haloed thin-haloed" {...place}>{name}</text>;
 
 const Call: FC<{words: string; place: Point}> = ({words, place}) =>
-  <text className="drawn-caption drawn-note monospaced ink-filled paper-haloed" {...place} textAnchor="middle">{words}</text>;
+  <text className="drawn-caption monospaced ink-filled paper-haloed" {...place} textAnchor="middle">{words}</text>;
 
 const EventName: FC<{word: string; place: Point}> = ({word, place}) =>
   <text className="drawn-caption monospaced markup-attribute-filled paper-haloed" {...place}>{word}</text>;

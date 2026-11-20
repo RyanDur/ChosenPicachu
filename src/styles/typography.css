@@ -55,14 +55,8 @@
 }
 
 .drawn-caption {
-  --drawn-text: var(--text-caption);
-
-  font-size: calc(var(--drawn-text) / min(1, tan(atan2(var(--drawing-column), var(--drawn-width, 1px)))));
+  font-size: calc(var(--text-caption) / min(1, tan(atan2(var(--drawing-column), var(--drawn-width, 1px)))));
 }
-
-.drawn-note { --drawn-text: var(--base); }
-
-.drawn-label { --drawn-text: var(--base-x-1_25); }
 
 .page-title {
   font-size: var(--base-x-4);
