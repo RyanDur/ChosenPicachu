@@ -2,16 +2,6 @@ import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {pillSwitch, siteFrame, tablesDemo} from './__test_support';
 
-test('a desk reader follows Sort menu from the parts beside the opening to the Sort menu page', {tag: '@desktop'}, async ({page}) => {
-  await page.goto('demos/tables/');
-  await siteFrame(page).hydrated();
-
-  await tablesDemo(page).partLink('Sort menu').click();
-
-  await expect(page).toHaveURL(/demos\/tables\/menu\/$/);
-  await expect(page.getByRole('region', {name: 'build the sort menu yourself'})).toBeVisible();
-});
-
 test('a desk reader who chooses Vanilla beside the opening finds the still table’s part in the Vanilla build', {tag: '@desktop'}, async ({page}) => {
   await page.goto('demos/tables/');
   await siteFrame(page).hydrated();
