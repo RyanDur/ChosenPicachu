@@ -202,16 +202,21 @@ const githubHoldingItsAnswer = async (page: Page): Promise<() => Promise<void>> 
   };
 };
 
+const aNoteSendingWhileGitHubHoldsIt = async (page: Page, words: string) => {
+  const answer = await githubHoldingItsAnswer(page);
+  const feedback = feedbackOn(page);
+  await page.goto('demos/tables/');
+  await siteFrame(page).hydrated();
+  await feedback.open.click();
+  await feedback.words.pressSequentially(words);
+  await feedback.send.click();
+  await expect(feedback.status).toHaveText('Sending the note to GitHub.');
+  return {feedback, answer};
+};
+
 test.describe('a phone', {tag: '@iPhone'}, () => {
   test('reads where a note sent after Feedback closed is on GitHub once Feedback opens again', async ({page}) => {
-    const answer = await githubHoldingItsAnswer(page);
-    const feedback = feedbackOn(page);
-    await page.goto('demos/tables/');
-    await siteFrame(page).hydrated();
-    await feedback.open.click();
-    await feedback.words.pressSequentially('The sort menu hides behind the header.');
-    await feedback.send.click();
-    await expect(feedback.status).toHaveText('Sending the note to GitHub.');
+    const {feedback, answer} = await aNoteSendingWhileGitHubHoldsIt(page, 'The sort menu hides behind the header.');
     await feedback.cancel.click();
     await expect(feedback.dialog).toBeHidden();
     await answer();
@@ -244,14 +249,7 @@ test.describe('a phone', {tag: '@iPhone'}, () => {
 });
 
 test('words added while a note is sending stay once GitHub has it', async ({page}) => {
-  const answer = await githubHoldingItsAnswer(page);
-  const feedback = feedbackOn(page);
-  await page.goto('demos/tables/');
-  await siteFrame(page).hydrated();
-  await feedback.open.click();
-  await feedback.words.pressSequentially('The sort menu hides.');
-  await feedback.send.click();
-  await expect(feedback.status).toHaveText('Sending the note to GitHub.');
+  const {feedback, answer} = await aNoteSendingWhileGitHubHoldsIt(page, 'The sort menu hides.');
   await feedback.words.pressSequentially(' It also flickers.');
 
   await answer();
@@ -261,14 +259,7 @@ test('words added while a note is sending stay once GitHub has it', async ({page
 });
 
 test('a way to reach added while a note is sending stays, and the sent words leave the field, once GitHub has it', async ({page}) => {
-  const answer = await githubHoldingItsAnswer(page);
-  const feedback = feedbackOn(page);
-  await page.goto('demos/tables/');
-  await siteFrame(page).hydrated();
-  await feedback.open.click();
-  await feedback.words.pressSequentially('The sort menu hides.');
-  await feedback.send.click();
-  await expect(feedback.status).toHaveText('Sending the note to GitHub.');
+  const {feedback, answer} = await aNoteSendingWhileGitHubHoldsIt(page, 'The sort menu hides.');
   await feedback.reach.pressSequentially('reader@example.test');
 
   await answer();
