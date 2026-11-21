@@ -30,7 +30,8 @@ test('First raised while the pile is spread covers no other card, so the raise c
 
   await pile.raise('First');
 
-  await expect.poll(() => pile.cardsFromTheTop()).toEqual(['Third']);
+  await expect(page).toHaveURL(/\?raised=first$/);
+  await expect.poll(pile.cardsFromTheTopAtEachCard).toEqual([['First'], ['Second'], ['Third']]);
 });
 
 test('Second raised while the pile is spread comes down on top when it is collapsed', async ({page}) => {
