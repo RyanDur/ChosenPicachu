@@ -114,6 +114,12 @@ describe('the class rules in a process that keeps running', () => {
     expect(await findingsIn(code)).toEqual(['classes/class-defined']);
   });
 
+  test('should judge a file whose folder is gone by the shared words alone', async () => {
+    const [{messages}] = await eslint.lintText('<p className="muted-ink lint-probe-word"/>;',
+      {filePath: join(process.cwd(), 'src/pages/NoSuchFolder/Gone.tsx')});
+    expect(messages.map(({ruleId}) => ruleId)).toEqual(['classes/class-defined']);
+  });
+
   test('should put an own class first once a sheet beside it begins reading it', async () => {
     const code = '<p className="muted-ink lint-probe-word"/>;';
     expect(await findingsIn(code)).toEqual(['classes/class-defined']);
