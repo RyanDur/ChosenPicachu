@@ -67,6 +67,7 @@ tester.run('tags-are-devices', tests.rules['tags-are-devices'], {
     {name: 'should accept a tag on something that runs no test', code: "label('x', {tag: '@iphone'});"},
     {name: 'should accept a lone @ before a space in a title', code: "test('meet @ noon', () => {});"},
     {name: 'should accept a tag option given to a fixture, which declares no test', code: "test.extend({tag: 'reader'});"},
+    {name: 'should accept a tag option given to configure, which declares no test', code: "test.describe.configure({tag: '@reader'});"},
     {name: 'should accept an @word in a step\'s title, which Playwright reads no tag from', code: "test.step('saves the @2x image', () => {});"}
   ],
   invalid: [
@@ -76,6 +77,7 @@ tester.run('tags-are-devices', tests.rules['tags-are-devices'], {
     {name: 'should refuse a tag built in a template', code: "test('x', {tag: [`@${reader}`]}, () => {});", errors: [{messageId: 'unread'}]},
     {name: 'should refuse a tag written in a title', code: "test('a phone reader @iphone', () => {});", errors: [{messageId: 'titled'}]},
     {name: 'should refuse a tag written in a describe\'s title', code: "test.describe('a phone reader @iphone', () => {});", errors: [{messageId: 'titled'}]},
+    {name: 'should refuse a tag written in a serial describe\'s title', code: "test.describe.serial('a phone reader @iphone', () => {});", errors: [{messageId: 'titled'}]},
     {name: 'should refuse a tag written in a template title', code: 'test(`an open part of ${build} @iphone`, () => {});', errors: [{messageId: 'titled'}]},
     {name: 'should refuse a tag that a template title builds from a reader', code: 'test(`a @${reader}`, () => {});', errors: [{messageId: 'titled'}]}
   ]
