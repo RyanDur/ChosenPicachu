@@ -94,7 +94,7 @@ const SearchRow: FC = () => {
   return <>
     <label className="settings-label field bold" htmlFor={fieldId}>Search</label>
     <input type="search" id={fieldId} list={options} autoComplete="off" enterKeyHint="search"
-      className="settings-field bare card" defaultValue={searched}
+      className="settings-field bare card borderless" defaultValue={searched}
       onInput={event => suggestFor(event.currentTarget.value)}
       onKeyDown={whenEntered(searchedFor)} onBlur={leftForThePage(leave)}/>
     <datalist id={options}>
@@ -126,7 +126,7 @@ const SizeRow: FC = () => {
   return <>
     <label className="settings-label field bold" htmlFor={fieldId}>Per page</label>
     <input type="number" id={fieldId} min={1} max={100} required enterKeyHint="go"
-      className="settings-field bare card" defaultValue={size}
+      className="settings-field bare card borderless" defaultValue={size}
       onKeyDown={whenEntered(sending(refusedSaysWhy))}
       onBlur={leftForThePage(sending(refusedGoesBackTo(size)))}/>
   </>;
@@ -144,7 +144,7 @@ const PageRow: FC = () => {
     <label className="settings-label field bold" htmlFor={fieldId}>Page</label>
     <input type="number" id={fieldId} name="page" min={1}
       max={pages.last(pagination).orElse(undefined)}
-      required enterKeyHint="go" className="settings-field bare card" defaultValue={shown}
+      required enterKeyHint="go" className="settings-field bare card borderless" defaultValue={shown}
       onKeyDown={whenEntered(sendingNumber(page, goTo)(refusedSaysWhy))}
       onBlur={leftForThePage(sendingNumber(shown, goTo)(refusedGoesBackTo(shown)))}/>
   </>;
