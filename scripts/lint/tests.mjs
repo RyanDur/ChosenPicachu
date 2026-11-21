@@ -150,6 +150,15 @@ const modifiersOf = callee => callee.type === 'MemberExpression'
 const declaresATest = call => callsPlaywrightsTest(call)
   && modifiersOf(call.callee).every(modifier => declarers.has(modifier));
 
+/**
+ * @param {any} title
+ * @returns {string[]}
+ */
+const wordsOf = title => {
+  if (title.type === 'TemplateLiteral') return title.quasis.map(/** @param {any} quasi */ quasi => quasi.value.cooked);
+  return isLiteralWords(title) ? [title.value] : [];
+};
+
 /** @type {import('eslint').Rule.RuleModule} */
 const tagsAreDevices = {
   meta: {
@@ -162,8 +171,8 @@ const tagsAreDevices = {
     }
   },
   create: context => ({
-    'CallExpression > Literal.arguments:first-child': title => {
-      if (declaresATest(title.parent) && isLiteralWords(title) && titleTag.test(title.value)) {
+    'CallExpression > :matches(Literal, TemplateLiteral).arguments:first-child': title => {
+      if (declaresATest(title.parent) && wordsOf(title).some(words => titleTag.test(words))) {
         context.report({node: title, messageId: 'titled'});
       }
     },
