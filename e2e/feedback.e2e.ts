@@ -148,14 +148,7 @@ test('on a desk, the rail keeps the sent note’s link once Close shuts the dial
 });
 
 const sentAndClosed = async (page: Page): Promise<void> => {
-  await github(page);
-  const feedback = feedbackOn(page);
-  await page.goto('demos/tables/');
-  await siteFrame(page).hydrated();
-  await feedback.open.click();
-  await feedback.words.pressSequentially('The sort menu hides behind the header.');
-  await feedback.send.click();
-  await expect(feedback.status.getByRole('link', {name: 'Read it on GitHub'})).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions/9');
+  const feedback = await aNoteGitHubHas(page);
   await feedback.close.click();
   await expect(feedback.dialog).toBeHidden();
   await twoFramesLater(page);
