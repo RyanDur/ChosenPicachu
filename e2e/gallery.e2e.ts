@@ -1,10 +1,21 @@
-import {Locator, expect} from '@playwright/test';
+import {Locator, type Page, expect} from '@playwright/test';
 import {maybe} from '@ryandur/sand';
 import {test} from './__test_support/journey';
 import {clickWhereItIs, devices, documentScrollY, galleryPage, hydration, pressTab, siteFrame, twoFramesLater} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> =>
   region.evaluate(element => element.contains(document.activeElement));
+
+const pageThreeSentFromPageTwo = async (page: Page) => {
+  const gallery = galleryPage(page);
+  await gallery.answerEveryWallFromTheRecording();
+  await page.goto('gallery/?tab=vam&page=2');
+  await siteFrame(page).hydrated();
+  await gallery.pageNumber.fill('3');
+  await gallery.pageNumber.press('Enter');
+  await expect(gallery.count).toHaveText(/^Page 3 of /);
+  return gallery;
+};
 
 test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@phoneSideways']}, () => {
   test('reads the search label once the settings are open', async ({page}) => {
@@ -795,13 +806,7 @@ test.describe('a visitor at a desk', {tag: '@desktop'}, () => {
   });
 
   test('shows the address\'s page in the page field after Back between two pages sent with Enter', async ({page}) => {
-    const gallery = galleryPage(page);
-    await gallery.answerEveryWallFromTheRecording();
-    await page.goto('gallery/?tab=vam&page=2');
-    await siteFrame(page).hydrated();
-    await gallery.pageNumber.fill('3');
-    await gallery.pageNumber.press('Enter');
-    await expect(gallery.count).toHaveText(/^Page 3 of /);
+    const gallery = await pageThreeSentFromPageTwo(page);
     await gallery.pageNumber.fill('4');
     await gallery.pageNumber.press('Enter');
     await expect(gallery.count).toHaveText(/^Page 4 of /);
@@ -813,13 +818,7 @@ test.describe('a visitor at a desk', {tag: '@desktop'}, () => {
   });
 
   test('shows the address\'s page in the page field after Back, not a page typed and never sent', async ({page}) => {
-    const gallery = galleryPage(page);
-    await gallery.answerEveryWallFromTheRecording();
-    await page.goto('gallery/?tab=vam&page=2');
-    await siteFrame(page).hydrated();
-    await gallery.pageNumber.fill('3');
-    await gallery.pageNumber.press('Enter');
-    await expect(gallery.count).toHaveText(/^Page 3 of /);
+    const gallery = await pageThreeSentFromPageTwo(page);
     await gallery.pageNumber.fill('9');
 
     await page.goBack();
