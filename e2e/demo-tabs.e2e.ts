@@ -1,20 +1,20 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {chartsPage, iPhone, rememberedFolds, rememberedFoldLabels, siteFrame} from './__test_support';
+import {accordions, chartsPage, iPhone, siteFrame} from './__test_support';
 
 test('the accordion labels survive a visit to the streaming charts', async ({page}) => {
   await chartsPage(page).scriptedMarket([50000, 50001]);
   await page.goto('demos/accordions/a-box-remembers-the-fold/?type=exclusive');
   await siteFrame(page).hydrated();
   const demos = page.getByRole('navigation', {name: 'demos'});
-  await expect(rememberedFolds(page).first()).toBeAttached();
-  const before = await rememberedFoldLabels(page);
+  await expect(accordions.rememberedFolds(page).first()).toBeAttached();
+  const before = await accordions.rememberedFoldLabels(page);
 
   await demos.getByRole('link', {name: 'Charts'}).click();
   await expect(chartsPage(page).priceCard.getByText('$50,001.00')).toBeVisible();
   await page.goBack();
 
-  await expect.poll(() => rememberedFoldLabels(page)).toEqual(before);
+  await expect.poll(() => accordions.rememberedFoldLabels(page)).toEqual(before);
 });
 
 test('a tab on a page reached with a dial carries the dial along once the script runs', async ({page}) => {

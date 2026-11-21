@@ -1,7 +1,7 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {pages} from './pages';
-import {accordionsTab, siteFrame, twoFramesLater} from './__test_support';
+import {accordions, siteFrame, twoFramesLater} from './__test_support';
 
 const addressesBesideThePages = ['gallery/?page=1&size=8&tab=aic', 'gallery/O9138?tab=vam', 'games/colorGame'];
 
@@ -20,7 +20,7 @@ test('a reader whose room fails to load keeps the built page, its words, its fol
     message.type() === 'error' && message.text().includes('/demos/accordions/ did not load'));
   await page.goto('demos/accordions/');
   await roomRefused;
-  const fold = accordionsTab(page).htmlAloneFold('basalt');
+  const fold = accordions.tab(page).htmlAloneFold('basalt');
 
   await expect(page.getByRole('heading', {name: 'Before you start'})).toBeVisible();
   await fold.open();

@@ -1,15 +1,5 @@
 import {expect, type Page} from '@playwright/test';
-import {
-  accordionsTab,
-  type Build,
-  heightOnceSettled,
-  measuredBuilds,
-  measuredHeightPage,
-  type Part,
-  plainFold,
-  siteFrame,
-  textBelow
-} from './__test_support';
+import {accordions, type Build, heightOnceSettled, type Part, siteFrame} from './__test_support';
 import {everyBuildJourneys, layoutRounding, test} from './__test_support/fold-journeys';
 import {assertionPatience} from './__test_support/patience';
 
@@ -17,8 +7,8 @@ import {assertionPatience} from './__test_support/patience';
 // worker; a worker of their own keeps them apart
 test.use({workerOfItsOwn: 'the measured folds'});
 
-everyBuildJourneys(measuredBuilds);
-const textBelowItsFold = (part: Part): Promise<number> => textBelow(part.fold, part.words);
+everyBuildJourneys(accordions.measuredBuilds);
+const textBelowItsFold = (part: Part): Promise<number> => accordions.textBelow(part.fold, part.words);
 
 const settlesWithinRounding = async (measure: () => Promise<number>): Promise<void> =>
   expect(async () => expect(await measure()).toBeLessThanOrEqual(layoutRounding)).toPass({timeout: assertionPatience});
@@ -29,11 +19,11 @@ const tallestOf = async (parts: Part[]): Promise<Part> => {
   return parts[heights.indexOf(Math.max(...heights))];
 };
 
-for (const build of measuredBuilds) {
+for (const build of accordions.measuredBuilds) {
   test(`an open part of ${build} still shows all its text after the window narrows`, {tag: '@desktop'}, async ({page}) => {
-    await accordionsTab(page).goTo(build);
-    await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
-    const part = await tallestOf(await accordionsTab(page).partsOf(build));
+    await accordions.tab(page).goTo(build);
+    await expect(accordions.tab(page).firstPartOf(build).fold).toBeVisible();
+    const part = await tallestOf(await accordions.tab(page).partsOf(build));
     await part.open();
     await heightOnceSettled(part.fold);
 
@@ -44,8 +34,8 @@ for (const build of measuredBuilds) {
 }
 
 const opensAndClosesTheFirstPartOf = async (page: Page, build: Build): Promise<void> => {
-  await accordionsTab(page).goTo(build);
-  const part = accordionsTab(page).firstPartOf(build);
+  await accordions.tab(page).goTo(build);
+  const part = accordions.tab(page).firstPartOf(build);
   await expect(part.fold).toBeVisible();
 
   await part.open();
@@ -55,7 +45,7 @@ const opensAndClosesTheFirstPartOf = async (page: Page, build: Build): Promise<v
   await expect.poll(part.showsText).toBe(false);
 };
 
-for (const build of measuredBuilds) {
+for (const build of accordions.measuredBuilds) {
   test(`a reader who allows motion opens and then closes a part of ${build}, and its text goes`, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
     await opensAndClosesTheFirstPartOf(page, build);
@@ -65,21 +55,21 @@ for (const build of measuredBuilds) {
 const pressesNeverReachTheScript = (): void => ['click', 'change'].forEach(press =>
   window.addEventListener(press, event => event.stopImmediatePropagation(), true));
 
-for (const build of measuredBuilds) {
+for (const build of accordions.measuredBuilds) {
   test(`with its script never hearing the press, a part of ${build} still opens and closes`, async ({page}) => {
     await page.addInitScript(pressesNeverReachTheScript);
     await opensAndClosesTheFirstPartOf(page, build);
   });
 }
 
-for (const build of measuredBuilds) {
+for (const build of accordions.measuredBuilds) {
   test(`an opening part of ${build} switched to Static mid-motion still shows all its text after the window narrows`, {tag: '@desktop'}, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
-    await accordionsTab(page).goTo(build);
-    const part = accordionsTab(page).firstPartOf(build);
+    await accordions.tab(page).goTo(build);
+    const part = accordions.tab(page).firstPartOf(build);
     await expect(part.fold).toBeVisible();
 
-    await accordionsTab(page).opensTheFirstPartThenChoosesOnceItStartsMoving(build, 'Static');
+    await accordions.tab(page).opensTheFirstPartThenChoosesOnceItStartsMoving(build, 'Static');
     await page.setViewportSize({width: 390, height: 900});
 
     await settlesWithinRounding(() => textBelowItsFold(part));
@@ -87,12 +77,12 @@ for (const build of measuredBuilds) {
 
   test(`an open part of ${build} closed and opened again in one frame still shows all its text after the window narrows`, {tag: '@desktop'}, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
-    await accordionsTab(page).goTo(build);
-    const part = accordionsTab(page).firstPartOf(build);
+    await accordions.tab(page).goTo(build);
+    const part = accordions.tab(page).firstPartOf(build);
     await part.open();
     await heightOnceSettled(part.fold);
 
-    await accordionsTab(page).closesThenOpensTheFirstPartInOneFrame(build);
+    await accordions.tab(page).closesThenOpensTheFirstPartInOneFrame(build);
     await heightOnceSettled(part.fold);
     await page.setViewportSize({width: 390, height: 900});
 
@@ -103,7 +93,7 @@ for (const build of measuredBuilds) {
 test.describe('the fold measured by plain script', () => {
   test('opens on a press to show all its text, and shuts on a second press', async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
-    const fold = plainFold(page);
+    const fold = accordions.plainFold(page);
     await fold.goTo();
 
     await fold.bar.click();
@@ -116,7 +106,7 @@ test.describe('the fold measured by plain script', () => {
 
   test('still shows all its text after the window narrows', {tag: '@desktop'}, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
-    const fold = plainFold(page);
+    const fold = accordions.plainFold(page);
     await fold.goTo();
     await fold.bar.click();
     await settlesWithinRounding(fold.textBelowItsPanel);
@@ -129,7 +119,7 @@ test.describe('the fold measured by plain script', () => {
   test('with its script never hearing the press, still opens and shuts', async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
     await page.addInitScript(pressesNeverReachTheScript);
-    const fold = plainFold(page);
+    const fold = accordions.plainFold(page);
     await fold.goTo();
 
     await fold.bar.click();
@@ -144,11 +134,11 @@ test.describe('the fold measured by plain script', () => {
       await assembly.promise;
       await route.continue();
     });
-    const fold = plainFold(page);
+    const fold = accordions.plainFold(page);
     await fold.countsFrameLoads();
     await page.goto('demos/accordions/');
     await siteFrame(page).hydrated();
-    await accordionsTab(page).partLink('The measured height').click();
+    await accordions.tab(page).partLink('The measured height').click();
     await expect.poll(fold.frameLoaded).toBe(true);
     assembly.resolve();
 
@@ -161,7 +151,7 @@ test.describe('the fold measured by plain script', () => {
 test('the measured height’s page says the plain fold could not be assembled when its script never arrives', async ({page}) => {
   await page.route('**/assets/assemble-*.js', route => route.abort());
 
-  await page.goto(measuredHeightPage);
+  await page.goto(accordions.measuredHeightPage);
 
   await expect(page.getByRole('alert')).toContainText('the plain fold could not be assembled');
 });
