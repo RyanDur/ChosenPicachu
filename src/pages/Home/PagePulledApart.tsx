@@ -57,7 +57,7 @@ const regionNamedAt: Record<SheetRegion, Spot> = {
   '.rail': {u: 11.6, v: 44.8},
   '.app-header': {u: 56.1, v: 27.6},
   '.app-main': {u: 36.5, v: 65.3},
-  '.table': {u: 63.1, v: 53.2}
+  '.table': {u: 82, v: 55}
 };
 
 const nameStartOf = ({x}: Point): number => x + sparkRadius * 3.4;
