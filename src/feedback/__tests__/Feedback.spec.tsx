@@ -110,7 +110,7 @@ describe('Feedback while a note is on its way', () => {
     render(<TestApp at="/"/>);
     await site.pageTitled();
     await feedback.open();
-    await feedback.sendThenCancelAndReopen('The sort menu hides.');
+    await feedback.writeSendCancelAndReopen('The sort menu hides.');
 
     await feedback.send();
     github.answers();
@@ -124,10 +124,7 @@ describe('Feedback while a note is on its way', () => {
     render(<TestApp at="/"/>);
     await site.pageTitled();
     await feedback.open();
-    await feedback.write('The first.');
-    await feedback.send();
-    await feedback.cancel();
-    await feedback.open();
+    await feedback.writeSendCancelAndReopen('The first.');
     await feedback.rewrite('The second.');
 
     github.answers();
@@ -142,7 +139,7 @@ describe('Feedback while a note is on its way', () => {
     render(<TestApp at="/"/>);
     await site.pageTitled();
     await feedback.open();
-    await feedback.sendThenCancelAndReopen('The sort menu hides.');
+    await feedback.writeSendCancelAndReopen('The sort menu hides.');
 
     github.answers();
 
@@ -154,7 +151,7 @@ describe('Feedback while a note is on its way', () => {
     render(<TestApp at="/"/>);
     await site.pageTitled();
     await feedback.open();
-    await feedback.sendThenCancelAndReopen('The sort menu hides.');
+    await feedback.writeSendCancelAndReopen('The sort menu hides.');
 
     github.answers();
 
@@ -167,7 +164,7 @@ describe('Feedback while a note is on its way', () => {
     render(<TestApp at="/"/>);
     await site.pageTitled();
     await feedback.open();
-    await feedback.sendThenCancelAndReopen('The sort menu hides.');
+    await feedback.writeSendCancelAndReopen('The sort menu hides.');
 
     github.answers();
 
@@ -181,7 +178,7 @@ describe('Feedback while a note is on its way', () => {
     await site.pageTitled();
     await feedback.open();
     await feedback.leaveAWayToReach('reader@example.test');
-    await feedback.sendThenCancelAndReopen('The sort menu hides.');
+    await feedback.writeSendCancelAndReopen('The sort menu hides.');
     await feedback.changeTheWayToReach('another@example.test');
 
     github.answers();
@@ -196,7 +193,7 @@ describe('Feedback while a note is on its way', () => {
     await site.pageTitled();
     await feedback.open();
     await feedback.leaveAWayToReach('reader@example.test');
-    await feedback.sendThenCancelAndReopen('The sort menu hides.');
+    await feedback.writeSendCancelAndReopen('The sort menu hides.');
 
     github.answers();
 
