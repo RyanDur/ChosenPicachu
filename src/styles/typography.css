@@ -63,8 +63,16 @@
   --drawn-type-size: var(--text-small-caption);
 }
 
+/* any tokens and no initial value: a page that names no words column leaves the drawing column to inherit */
+@property --drawn-words-column {
+  syntax: '*';
+  inherits: true;
+}
+
 .drawn-caption,
 .drawn-small-caption {
+  --drawing-column: var(--drawn-words-column);
+
   font-size: calc(var(--drawn-type-size) / min(1, tan(atan2(var(--drawing-column), var(--drawn-width, 1px)))));
 }
 
