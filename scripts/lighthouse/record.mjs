@@ -57,7 +57,8 @@ console.log('recording the candles before the feed, so the replayed trades come 
 const candlesOf = granularity => page.waitForResponse(answer => {
   const asked = new URL(answer.url());
   return asked.pathname.endsWith('/candles') && asked.searchParams.get('granularity') === String(granularity) && answer.ok();
-}, {timeout: 30_000}).then(answer => answer.finished());
+}, {timeout: 30_000}).then(answer => answer.finished())
+  .catch(error => console.warn(`no candles of ${granularity}s recorded, so the stage will refuse them: ${error.message}`));
 const hour = candlesOf(60);
 await page.goto(`${site}demos/charts/candles/`);
 await hour;

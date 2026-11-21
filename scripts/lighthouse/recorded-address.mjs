@@ -6,5 +6,5 @@ export const recordedAddress = address => {
   const query = new URLSearchParams(address.slice(queryAt + 1));
   query.delete('start');
   query.delete('end');
-  return `${address.slice(0, queryAt)}?${query}`;
+  return query.size ? `${address.slice(0, queryAt)}?${query}` : address.slice(0, queryAt);
 };

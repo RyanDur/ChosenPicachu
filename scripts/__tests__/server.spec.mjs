@@ -123,7 +123,7 @@ describe('the stub stage answers a page address as GitHub Pages does', () => {
 });
 
 describe('the stub stage', () => {
-  test('survives a request for an absolute address', async () => {
+  test('should still answer candles after a request for an absolute address', async () => {
     const {stage, port} = await stageUp();
 
     await answerTo(port, 'GET http://a:99999/ HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n');
@@ -133,7 +133,7 @@ describe('the stub stage', () => {
     expect(answer).toMatch(/^HTTP\/1\.1 200/);
   });
 
-  test('survives a request for candles at a host-relative address with a bad port', async () => {
+  test('should still answer candles after a request for them at a host-relative address with a bad port', async () => {
     const {stage, port} = await stageUp();
 
     await answerTo(port, 'GET //a:99999/candles?granularity=60 HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n');
@@ -143,7 +143,7 @@ describe('the stub stage', () => {
     expect(answer).toMatch(/^HTTP\/1\.1 200/);
   });
 
-  test('survives a feed client that sends a frame it cannot read', async () => {
+  test('should keep running after a feed client sends a frame it cannot read', async () => {
     const {stage, port, life} = await stageUp();
     try {
       const client = await feedClient(port);
