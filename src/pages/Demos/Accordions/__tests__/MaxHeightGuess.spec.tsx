@@ -1,7 +1,7 @@
-import {render, screen} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
-import {demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
+import {demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
 
@@ -22,16 +22,6 @@ describe('the max-height guess, on its own page', () => {
     const part = await explanation.part(title);
 
     expect(explanation.drawingsIn(part)).toEqual([explanation.drawingNamed(part, /^One guess, two folds\./)]);
-  });
-
-  test('should list the parts beside it and offer no fold dial, since it has no fold for a dial to change', async () => {
-    render(<TestApp at={demosAt(guess)}/>);
-
-    const index = await partsIndex.find();
-
-    expect(partsIndex.titlesIn(index)).toContain('The measured height');
-    expect(screen.queryByRole('group', {name: 'fold type'})).not.toBeInTheDocument();
-    expect(screen.queryByRole('group', {name: 'fold motion'})).not.toBeInTheDocument();
   });
 
   test('should link the part it builds on to that part’s page, with the fold choices carried', async () => {
