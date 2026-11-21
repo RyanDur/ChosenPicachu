@@ -23,6 +23,16 @@ test('First raised by a pointer lands on top, and the others keep their order un
 test('Second raised by the keyboard lands on top, and the others keep their order under it', ({page}) =>
   raisedLandsOnTop(page, () => stackingPile(page).raiseByKeyboard('Second'), ['Second', 'Third', 'First']));
 
+test('First raised while the pile is spread covers no other card, so the raise changes nothing the reader sees', async ({page}) => {
+  await page.goto('demos/z-index/');
+  const pile = stackingPile(page);
+  await pile.expand();
+
+  await pile.raise('First');
+
+  await expect.poll(() => pile.cardsFromTheTop()).toEqual(['Third']);
+});
+
 test('Second raised while the pile is spread comes down on top when it is collapsed', async ({page}) => {
   await page.goto('demos/z-index/');
   const pile = stackingPile(page);
