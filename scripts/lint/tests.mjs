@@ -87,7 +87,8 @@ const devicesAreProjects = {
   meta: {
     type: 'problem',
     messages: {
-      pinned: 'a journey names its devices by tag, and a project runs it on each; test.use never sets a device'
+      pinned: 'test.use takes a literal object that names no device; a journey names its devices by tag, and a project ' +
+        'runs it on each'
     }
   },
   create: context => ({
