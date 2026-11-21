@@ -79,10 +79,11 @@ export const AccordionsExplained: FC = () => {
       </section>
       <section aria-labelledby={tabHeadings.foldChoices} className="fold-choices">
         <h3 id={tabHeadings.foldChoices} className="sub-title bold">The fold choices</h3>
-        <p className="paragraph">Two choices, the fold type and the fold motion, set the builds on each part’s own page.
+        <p className="paragraph">Two choices, the fold type and the fold motion, set the builds on the parts’ pages.
           Each choice is a dial, a control on the page that sets how a build behaves, with a line beside it saying what
-          it does. The fold type also reaches the HTML-alone accordion: with exclusive, its details share a name and
-          opening one closes the others.</p>
+          it does. The max-height guess has no build, only its CSS, so its page has no dials. The fold type also
+          reaches the HTML-alone accordion: with exclusive, its details share a name and opening one closes the
+          others.</p>
         <p className="paragraph">The fold motion is set in a style sheet. A style sheet is a file of rules. A rule has a
           selector, which names the elements it applies to. It also has properties. A property is one aspect of a look,
           like a height or a color, given a value.</p>
