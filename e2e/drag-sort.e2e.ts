@@ -24,6 +24,7 @@ test('an arrow key walks an item in an animated list past its neighbor, and back
 
   await list.stepByKey('A', 'ArrowRight');
   await expect.poll(list.seats).toEqual(['B', 'A', 'C']);
+  await expect.poll(list.atRest).toBe(true);
 
   await list.stepByKey('A', 'ArrowLeft');
 

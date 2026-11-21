@@ -46,6 +46,12 @@ export const sortableList = (page: Page) => {
     item: seatOf,
     grip: gripNamed,
     moveReport: page.getByRole('status', {name: 'move report'}),
+    atRest: (): Promise<boolean> => list.evaluate(holder => {
+      const places = (): string =>
+        [...holder.children].map(seat => JSON.stringify(seat.getBoundingClientRect())).join();
+      const before = places();
+      return new Promise(answer => requestAnimationFrame(() => answer(places() === before)));
+    }),
     stepByKey: async (item: string, key: 'ArrowLeft' | 'ArrowRight'): Promise<void> => {
       await (await pressable(gripFor(item))).focus();
       await page.keyboard.press(key);
