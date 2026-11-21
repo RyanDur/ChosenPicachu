@@ -21,6 +21,7 @@ export {courseStations} from './stations';
 export {fingerTap, fingertipMiss, foldsAFingerLeavesShut} from './finger';
 export {dialRow, pillSwitch, pillsAFingerCannotChoose} from './pills';
 export {sortableList} from './lists';
+export {heightOnceSettled} from './motion';
 export {accordionsTab, plainFold, textBelow, rememberedFolds, rememberedFoldLabels, builds, measuredBuilds, measuredHeightPage, type Build, showing, type Part, nameOn} from './accordions';
 export {stackingPile, type Card} from './stacking';
 export {zIndexTab} from './z-index';
