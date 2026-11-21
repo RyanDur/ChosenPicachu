@@ -45,7 +45,8 @@ export const AccordionsExplained: FC = () => {
     <PartsAndDials titled offersTheFoldDials/>
     <section aria-labelledby="before-you-start-heading" className="before-you-start">
       <h2 id="before-you-start-heading" className="title bold">Before you start</h2>
-      <p className="paragraph">Nothing here leans on another tab. Each part’s page builds the accordion another way.</p>
+      <p className="paragraph">Nothing here leans on another tab. Each part’s page shows another way to build the
+        accordion.</p>
       <section aria-labelledby="html-alone-heading" className="accordion-part">
         <h3 id="html-alone-heading" className="sub-title bold">{accordionParts.titleOf('html-alone-heading')}</h3>
         <ol className={looks.runs}>
