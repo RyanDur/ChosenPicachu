@@ -1,7 +1,8 @@
 import {ESLint, RuleTester} from 'eslint';
-import {rmSync, writeFileSync} from 'node:fs';
-import {join} from 'node:path';
-import {classes} from '../lint/classes.mjs';
+import {mkdirSync, mkdtempSync, rmSync, writeFileSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {dirname, join} from 'node:path';
+import {classes, classesOver} from '../lint/classes.mjs';
 
 const fancyField = join(process.cwd(), 'src/pages/Users/FancyFormElements/Probe.tsx');
 const banners = join(process.cwd(), 'src/banners/Probe.tsx');
@@ -76,20 +77,27 @@ describe('the class rules over html', () => {
 });
 
 describe('the class rules in a process that keeps running', () => {
-  const sheet = join(process.cwd(), 'src/pages/Users/FancyFormElements/LintProbe.css');
-  const eslint = new ESLint({overrideConfigFile: true, overrideConfig: [
-    {files: ['**/*.tsx'], plugins: {classes}, languageOptions: {parserOptions: {ecmaFeatures: {jsx: true}}},
-      rules: {'classes/class-defined': 'error', 'classes/own-class-first': 'error'}}
-  ]});
-  const findingsIn = async code => {
-    const [{messages}] = await eslint.lintText(code, {filePath: fancyField});
+  let src;
+  let eslint;
+  const sheetAt = () => join(src, 'pages', 'LintProbe.css');
+  const findingsIn = async (code, filePath = join(src, 'pages', 'Probe.tsx')) => {
+    const [{messages}] = await eslint.lintText(code, {filePath});
     return messages.map(({ruleId}) => ruleId);
   };
-  const reads = name => writeFileSync(sheet, `.${name} {\n  display: block;\n}\n`);
-  const removeSheet = () => rmSync(sheet, {force: true});
+  const reads = name => writeFileSync(sheetAt(), `.${name} {\n  display: block;\n}\n`);
 
-  beforeEach(removeSheet);
-  afterEach(removeSheet);
+  beforeEach(() => {
+    src = join(mkdtempSync(join(tmpdir(), 'lint-classes-')), 'src');
+    mkdirSync(join(src, 'pages'), {recursive: true});
+    mkdirSync(join(src, 'styles'));
+    writeFileSync(join(src, 'styles', 'words.css'), '.muted-ink {\n  color: gray;\n}\n');
+    eslint = new ESLint({cwd: dirname(src), overrideConfigFile: true, overrideConfig: [
+      {files: ['**/*.tsx'], plugins: {classes: classesOver(src)},
+        languageOptions: {parserOptions: {ecmaFeatures: {jsx: true}}},
+        rules: {'classes/class-defined': 'error', 'classes/own-class-first': 'error'}}
+    ]});
+  });
+  afterEach(() => rmSync(dirname(src), {recursive: true, force: true}));
 
   test('should read a class a sheet began reading after the process started', async () => {
     const code = '<p className="lint-probe-word"/>;';
@@ -110,14 +118,13 @@ describe('the class rules in a process that keeps running', () => {
     const code = '<p className="lint-probe-word"/>;';
     reads('lint-probe-word');
     expect(await findingsIn(code)).toEqual([]);
-    removeSheet();
+    rmSync(sheetAt());
     expect(await findingsIn(code)).toEqual(['classes/class-defined']);
   });
 
   test('should judge a file whose folder is gone by the shared words alone', async () => {
-    const [{messages}] = await eslint.lintText('<p className="muted-ink lint-probe-word"/>;',
-      {filePath: join(process.cwd(), 'src/pages/NoSuchFolder/Gone.tsx')});
-    expect(messages.map(({ruleId}) => ruleId)).toEqual(['classes/class-defined']);
+    const code = '<p className="muted-ink lint-probe-word"/>;';
+    expect(await findingsIn(code, join(src, 'pages', 'NoSuchFolder', 'Gone.tsx'))).toEqual(['classes/class-defined']);
   });
 
   test('should put an own class first once a sheet beside it begins reading it', async () => {
