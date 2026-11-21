@@ -103,6 +103,7 @@ test('a reader who chooses Exclusive and Static on a box remembers the fold keep
   await page.goto('demos/accordions/a-box-remembers-the-fold/?type=inclusive&style=drawer');
   await pillSwitch(page, 'fold type').choose('Exclusive');
   await pillSwitch(page, 'fold motion').choose('Static');
+  await expect(page).toHaveURL(/\?type=exclusive&style=static$/);
   const foot = page.getByRole('navigation', {name: 'the accordions parts'});
 
   await foot.getByRole('link', {name: 'Next: 3. The max-height guess'}).click();
