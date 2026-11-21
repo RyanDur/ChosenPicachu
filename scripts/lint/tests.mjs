@@ -180,7 +180,7 @@ const tagsAreDevices = {
       }
     },
     'CallExpression > ObjectExpression.arguments': options => {
-      if (not(callsPlaywrightsTest(options.parent))) return;
+      if (not(declaresATest(options.parent))) return;
       tagsIn(options).forEach(tag => {
         if (not(isLiteralWords(tag))) context.report({node: maybe(tag).orElse(options), messageId: 'unread'});
         else if (not(deviceTags.has(tag.value))) context.report({node: tag, messageId: 'unknown'});
