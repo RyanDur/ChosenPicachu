@@ -1,4 +1,4 @@
-import {is, not} from '@ryandur/sand';
+import {is, maybe, not} from '@ryandur/sand';
 import devices from '../../e2e/__test_support/devices.json' with {type: 'json'};
 
 const runners = new Set(['test', 'it', 'describe']);
@@ -108,10 +108,18 @@ const deviceTags = new Set(Object.keys(devices).map(device => `@${device}`));
  * @returns {any[]}
  */
 const tagsIn = options => {
-  const tag = options.properties.find(/** @param {any} option */ option => spelled(option.key) === 'tag')?.value;
-  if (not(is(tag))) return [];
-  return tag.type === 'ArrayExpression' ? tag.elements : [tag];
+  const tagOption = options.properties.find(/** @param {any} option */ option => spelled(option.key) === 'tag');
+  return maybe(tagOption)
+    .mBind(({value}) => maybe(value))
+    .map(tag => tag.type === 'ArrayExpression' ? tag.elements : [tag])
+    .orElse([]);
 };
+
+/**
+ * @param {any} tag
+ * @returns {boolean}
+ */
+const isLiteralWords = tag => is(tag) && tag.type === 'Literal' && typeof tag.value === 'string';
 
 /** @type {import('eslint').Rule.RuleModule} */
 const tagsAreDevices = {
@@ -128,7 +136,7 @@ const tagsAreDevices = {
       const root = rootOf(options.parent.callee);
       if (root.type !== 'Identifier' || root.name !== 'test') return;
       tagsIn(options).forEach(tag => {
-        if (tag?.type !== 'Literal' || typeof tag.value !== 'string') context.report({node: tag ?? options, messageId: 'unread'});
+        if (not(isLiteralWords(tag))) context.report({node: maybe(tag).orElse(options), messageId: 'unread'});
         else if (not(deviceTags.has(tag.value))) context.report({node: tag, messageId: 'unknown'});
       });
     }
