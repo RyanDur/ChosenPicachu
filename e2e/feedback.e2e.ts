@@ -15,16 +15,16 @@ const findsFeedbackWithoutScrolling = async (page: Page, path: string): Promise<
   await expect(feedback.words).toBeFocused();
 };
 
-const onADeskAndAPhone = {tag: ['@desktop', '@iPhone']};
+test.describe('a reader on a desk or an upright phone', {tag: ['@desktop', '@iPhone']}, () => {
+  test('finds Feedback on the home page without scrolling and opens it onto the field', ({page}) =>
+    findsFeedbackWithoutScrolling(page, ''));
 
-test('finds Feedback on the home page without scrolling and opens it onto the field', onADeskAndAPhone, ({page}) =>
-  findsFeedbackWithoutScrolling(page, ''));
+  test('finds Feedback on the accordions tab without scrolling and opens it onto the field', ({page}) =>
+    findsFeedbackWithoutScrolling(page, 'demos/accordions/'));
 
-test('finds Feedback on the accordions tab without scrolling and opens it onto the field', onADeskAndAPhone, ({page}) =>
-  findsFeedbackWithoutScrolling(page, 'demos/accordions/'));
-
-test('finds Feedback on the tables tab without scrolling and opens it onto the field', onADeskAndAPhone, ({page}) =>
-  findsFeedbackWithoutScrolling(page, 'demos/tables/'));
+  test('finds Feedback on the tables tab without scrolling and opens it onto the field', ({page}) =>
+    findsFeedbackWithoutScrolling(page, 'demos/tables/'));
+});
 
 const closesFeedbackGivingFocusBack = async (page: Page, closing: () => Promise<void>): Promise<void> => {
   await github(page);
@@ -325,13 +325,17 @@ test('a page with no thread yet links its first line to the Discussions page', a
   await expect(feedback.thread).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions');
 });
 
-test('opens Feedback onto its field, with Send shown', {tag: ['@iPhone', '@phoneSideways', '@iPadUpright', '@desktop']}, async ({page}) => {
-  await github(page);
-  const feedback = feedbackOn(page);
-  await page.goto('demos/accordions/');
-  const toggles = await feedback.pressed();
-  await expect.poll(toggles, 'the dialog\'s toggles since the press').toEqual(['open']);
-  await expect(feedback.words).toBeFocused();
+test.describe('a reader on a phone upright or sideways, an upright iPad or a desk', {
+  tag: ['@iPhone', '@phoneSideways', '@iPadUpright', '@desktop']
+}, () => {
+  test('opens Feedback onto its field, with Send shown', async ({page}) => {
+    await github(page);
+    const feedback = feedbackOn(page);
+    await page.goto('demos/accordions/');
+    const toggles = await feedback.pressed();
+    await expect.poll(toggles, 'the dialog\'s toggles since the press').toEqual(['open']);
+    await expect(feedback.words).toBeFocused();
 
-  await expect(feedback.send).toBeVisible();
+    await expect(feedback.send).toBeVisible();
+  });
 });
