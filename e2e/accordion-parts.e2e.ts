@@ -88,7 +88,7 @@ test('a reader follows the panel from the max-height guess to what the platform 
   await expect(page.getByRole('heading', {name: 'Inclusive accordion using details elements', exact: true})).toBeVisible();
 });
 
-test.describe('a reader on the max-height guess, on a phone and at a desk', {tag: ['@iPhone', '@desktop']}, () => {
+test.describe('the max-height guess, on a phone and at a desk', {tag: ['@iPhone', '@desktop']}, () => {
   test('finds the parts listed beside the part and no fold dial, since the part has no fold for a dial to change', async ({page}) => {
     await page.goto('demos/accordions/the-max-height-guess/');
     await siteFrame(page).hydrated();
