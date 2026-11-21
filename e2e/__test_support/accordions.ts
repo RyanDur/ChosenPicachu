@@ -5,9 +5,9 @@ import {siteFrame} from './site';
 
 export type Build = 'the measured checkbox build' | 'the measured radio build' | 'the checkbox build' | 'the radio build' | 'the inclusive details build' | 'the details build';
 
-export const builds: Build[] = ['the checkbox build', 'the radio build', 'the inclusive details build', 'the details build'];
+const builds: Build[] = ['the checkbox build', 'the radio build', 'the inclusive details build', 'the details build'];
 
-export const measuredBuilds: Build[] = ['the measured checkbox build', 'the measured radio build'];
+const measuredBuilds: Build[] = ['the measured checkbox build', 'the measured radio build'];
 
 const headings: Record<Build, string> = {
   'the measured checkbox build': 'Accordion using checkboxes and a measured height',
@@ -28,7 +28,7 @@ export type Part = {
   isOpen: () => Promise<boolean>;
 };
 
-export const nameOn = (fold: Locator): Locator => fold.getByText(/^\w+$/).first();
+const nameOn = (fold: Locator): Locator => fold.getByText(/^\w+$/).first();
 
 const focusAndPress = async (page: Page, control: Locator, key: string, times = 1): Promise<void> => {
   await control.focus();
@@ -98,7 +98,7 @@ const partIn: Record<Build, (where: Where) => Controls> = {
 
 const exclusiveBuilds: Build[] = ['the measured radio build', 'the radio build', 'the details build'];
 
-export const measuredHeightPage = 'demos/accordions/the-measured-height/';
+const measuredHeightPage = 'demos/accordions/the-measured-height/';
 
 const remembersPage = 'demos/accordions/a-box-remembers-the-fold/';
 
@@ -113,7 +113,7 @@ const pageOf: Record<Build, string> = {
   'the details build': platformPage
 };
 
-export const showing = (build: Build, style: 'reveal' | 'drawer' | 'static' = 'reveal'): string =>
+const showing = (build: Build, style: 'reveal' | 'drawer' | 'static' = 'reveal'): string =>
   `${pageOf[build]}?type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}&style=${style}`;
 
 const detailsBuilds: Build[] = ['the inclusive details build', 'the details build'];
@@ -136,7 +136,7 @@ const pressedOnceItStartsMoving = async (fold: Locator, first: Locator, second: 
     firstPress.click();
   }), {firstPress: await first.elementHandle(), secondPress: await second.elementHandle()});
 
-export const accordionsTab = (page: Page) => {
+const tab = (page: Page) => {
   const built = (build: Build): Locator =>
     page.getByRole('article').filter({has: page.getByRole('heading', {name: headings[build], exact: true})}).first();
   const folds = (build: Build): Locator =>
@@ -192,22 +192,22 @@ export const accordionsTab = (page: Page) => {
   };
 };
 
-export const rememberedFolds = (page: Page): Locator =>
+const rememberedFolds = (page: Page): Locator =>
   page.getByRole('article').filter({has: page.getByRole('heading', {name: /and a known height$/})}).getByRole('radio');
 
-export const rememberedFoldLabels = async (page: Page): Promise<string[]> =>
+const rememberedFoldLabels = async (page: Page): Promise<string[]> =>
   rememberedFolds(page)
     .evaluateAll(toggles => toggles.map(toggle =>
       toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? '' : ''));
 
-export const textBelow = async (around: Locator, inside: Locator): Promise<number> => {
+const textBelow = async (around: Locator, inside: Locator): Promise<number> => {
   const [outer, inner] = await Promise.all([boxOf(around), boxOf(inside)]);
   return inner.y + inner.height - outer.y - outer.height;
 };
 
 const plainFoldTitle = 'A fold measured by plain script';
 
-export const plainFold = (page: Page) => {
+const plainFold = (page: Page) => {
   const frame = page.getByTitle(plainFoldTitle);
   const inside = frame.contentFrame();
   const bar = inside.getByText('measured', {exact: true});
@@ -236,4 +236,17 @@ export const plainFold = (page: Page) => {
     textBelowItsPanel: (): Promise<number> => textBelow(panel, text),
     textBelowTheFrame: (): Promise<number> => textBelow(frame, text)
   };
+};
+
+export const accordions = {
+  builds,
+  measuredBuilds,
+  measuredHeightPage,
+  showing,
+  nameOn,
+  tab,
+  plainFold,
+  rememberedFolds,
+  rememberedFoldLabels,
+  textBelow
 };

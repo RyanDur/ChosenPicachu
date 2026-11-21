@@ -1,12 +1,12 @@
 import {Locator, Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {accordionsTab, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, nameOn, recordPage, siteFrame, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
+import {accordions, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, recordPage, siteFrame, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
 const opensFromAFingerOnItsName = async (page: Page, name: string): Promise<void> => {
   await page.goto('demos/accordions/');
-  const fold = accordionsTab(page).htmlAloneFold(name);
-  await expect(nameOn(fold.fold)).toBeVisible();
+  const fold = accordions.tab(page).htmlAloneFold(name);
+  await expect(accordions.nameOn(fold.fold)).toBeVisible();
 
-  await fingerTap(page, nameOn(fold.fold));
+  await fingerTap(page, accordions.nameOn(fold.fold));
 
   await expect.poll(fold.isOpen).toBe(true);
 };
