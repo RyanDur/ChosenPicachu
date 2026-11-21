@@ -108,6 +108,7 @@
 
       .drawing {
         --drawn-across: clamp(var(--drawn-least), var(--figure-share) * 100cqi, var(--drawn-width));
+        --drawn-words-column: min(100cqi, 100cqb * var(--drawn-width-per-height));
 
         container-type: size;
         flex: 1 1 0;
@@ -115,11 +116,6 @@
         min-block-size: calc(var(--drawn-least) * var(--drawn-height-per-width));
         max-inline-size: var(--drawn-width);
         max-block-size: calc(var(--drawn-across) * var(--drawn-height-per-width));
-      }
-
-      .drawn-caption,
-      .drawn-small-caption {
-        --drawing-column: min(100cqi, 100cqb * var(--drawn-width-per-height));
       }
     }
   }
