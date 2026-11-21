@@ -95,8 +95,8 @@ test('a reader on the max-height guess finds the parts listed beside it and no f
   const parts = page.getByRole('navigation', {name: 'Parts', exact: true});
 
   await expect(parts.getByRole('link', {name: 'The measured height'})).toBeVisible();
-  await expect(page.getByRole('group', {name: 'fold type'})).toHaveCount(0);
-  await expect(page.getByRole('group', {name: 'fold motion'})).toHaveCount(0);
+  await expect(page.getByRole('group', {name: 'fold type', includeHidden: true})).toHaveCount(0);
+  await expect(page.getByRole('group', {name: 'fold motion', includeHidden: true})).toHaveCount(0);
 });
 
 test('a reader who chooses Exclusive and Static on a box remembers the fold keeps them through the max-height guess to the measured height', async ({page}) => {
