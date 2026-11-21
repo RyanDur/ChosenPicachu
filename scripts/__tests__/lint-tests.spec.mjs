@@ -75,6 +75,7 @@ tester.run('tags-are-devices', tests.rules['tags-are-devices'], {
     {name: 'should refuse a tag built in a template', code: "test('x', {tag: [`@${reader}`]}, () => {});", errors: [{messageId: 'unread'}]},
     {name: 'should refuse a tag written in a title', code: "test('a phone reader @iphone', () => {});", errors: [{messageId: 'titled'}]},
     {name: 'should refuse a tag written in a describe\'s title', code: "test.describe('a phone reader @iphone', () => {});", errors: [{messageId: 'titled'}]},
-    {name: 'should refuse a tag written in a template title', code: 'test(`an open part of ${build} @iphone`, () => {});', errors: [{messageId: 'titled'}]}
+    {name: 'should refuse a tag written in a template title', code: 'test(`an open part of ${build} @iphone`, () => {});', errors: [{messageId: 'titled'}]},
+    {name: 'should refuse a tag that a template title builds from a reader', code: 'test(`a @${reader}`, () => {});', errors: [{messageId: 'titled'}]}
   ]
 });

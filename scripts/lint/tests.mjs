@@ -151,12 +151,15 @@ const declaresATest = call => callsPlaywrightsTest(call)
   && modifiersOf(call.callee).every(modifier => declarers.has(modifier));
 
 /**
+ * Playwright reads the title as it runs, with each expression filled in, so each one stands in as a word here.
  * @param {any} title
- * @returns {string[]}
+ * @returns {string}
  */
-const wordsOf = title => {
-  if (title.type === 'TemplateLiteral') return title.quasis.map(/** @param {any} quasi */ quasi => quasi.value.cooked);
-  return isLiteralWords(title) ? [title.value] : [];
+const titleOf = title => {
+  if (title.type === 'TemplateLiteral') {
+    return title.quasis.map(/** @param {any} quasi */ quasi => quasi.value.cooked).join('x');
+  }
+  return isLiteralWords(title) ? title.value : '';
 };
 
 /** @type {import('eslint').Rule.RuleModule} */
@@ -172,7 +175,7 @@ const tagsAreDevices = {
   },
   create: context => ({
     'CallExpression > :matches(Literal, TemplateLiteral).arguments:first-child': title => {
-      if (declaresATest(title.parent) && wordsOf(title).some(words => titleTag.test(words))) {
+      if (declaresATest(title.parent) && titleTag.test(titleOf(title))) {
         context.report({node: title, messageId: 'titled'});
       }
     },
