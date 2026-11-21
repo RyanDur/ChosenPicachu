@@ -46,7 +46,9 @@ const turnHeadWidth = 5;
 
 const ellipsisInside = (tag: string): Spot => {
   const row = thePage.markupLines.findIndex(written => written.trimStart().startsWith(`<${tag}`));
-  return thePage.letterAt(row, thePage.markupLines[row].indexOf('…'));
+  const column = thePage.markupLines[row].indexOf('…');
+  if (column < 0) throw new Error(`The slab's <${tag}> line has no ellipsis for its wire to land on`);
+  return thePage.letterAt(row, column);
 };
 
 const landings: Record<EventWord, Spot> = {toggle: ellipsisInside('nav'), click: ellipsisInside('table')};
@@ -57,6 +59,8 @@ const regionNamedAt: Record<SheetRegion, Spot> = {
   '.app-main': {u: 36.5, v: 65.3},
   '.table': {u: 63.1, v: 53.2}
 };
+
+const nameStartOf = ({x}: Point): number => x + sparkRadius * 3.4;
 
 const nameLineOf = ({y}: Point): number => y + sparkRadius * 0.6;
 
@@ -72,7 +76,7 @@ const RegionName: Lettering = ({x, y, children}) =>
   <text className="drawn-caption monospaced ink-filled paper-haloed thin-haloed" x={x} y={y}>{children}</text>;
 
 const Call: Lettering = ({x, y, children}) =>
-  <text className="drawn-caption monospaced ink-filled paper-haloed" x={x} y={y} dy="1.5em" textAnchor="middle">
+  <text className="drawn-small-caption monospaced ink-filled paper-haloed" x={x} y={y} dy="1.5em">
     {children}
   </text>;
 
@@ -107,7 +111,7 @@ export const PagePulledApart: FC = () => {
           <Moving cx={center.x} cy={center.y} rx={sparkRadius} ry={sparkRadius * ellipseRatio}
             markerEnd={`url(#${turnHead})`}/>
           <circle className="markup-attribute-filled" cx={center.x} cy={center.y} r={sparkRadius}/>
-          <EventName x={center.x + sparkRadius * 3.4} y={nameLineOf(center)}>{word}</EventName>
+          <EventName x={nameStartOf(center)} y={nameLineOf(center)}>{word}</EventName>
         </Fragment>;
       })}
       {thePage.events.map(({word, spark}) => {
@@ -122,7 +126,7 @@ export const PagePulledApart: FC = () => {
       })}
       {thePage.events.map(({word, call, spark}) => {
         const center = projected(spark, elevations.behavior);
-        return <Call key={word} x={center.x} y={nameLineOf(center)}>{call}</Call>;
+        return <Call key={word} x={nameStartOf(center)} y={nameLineOf(center)}>{call}</Call>;
       })}
       {languages.map(({word, elevation}) => {
         const {x, y} = projected({u: 0, v: thePage.plate.down / 2}, elevation);
@@ -131,9 +135,9 @@ export const PagePulledApart: FC = () => {
       })}
     </svg>
     <figcaption className="caption"><strong className="bold">A page, pulled apart.</strong> The markup is the slab. The
-      sheet makes the regions. The script touches two points, and each wire finds the element its event fires on. Lift
-      the sheet or the script off and the page still stands: that is separate. Set them back and every mark lands on
-      its element: that is together.
+      style sheet makes the regions. The script touches two points, and each wire finds the element its event fires on.
+      Lift the style sheet or the script off and the page still stands: that is separate. Set them back and every mark
+      lands on its element: that is together.
     </figcaption>
   </figure>;
 };
