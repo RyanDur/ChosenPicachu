@@ -24,15 +24,18 @@ const frames = [];
 const browser = await chromium.launch();
 const page = await browser.newPage();
 
-page.on('response', async response => {
+const bodiesRead = [];
+const bodiesStored = () => Promise.all(bodiesRead.splice(0));
+const store = async (key, response) => rest.set(key, {
+  contentType: maybe(response.headers()['content-type']).orElse('application/json'),
+  body: await response.text()
+});
+
+page.on('response', response => {
   const url = response.url();
   const prefix = Object.keys(localized).find(domain => url.startsWith(domain));
-  if (empty(prefix)) return;
-  const key = recordedAddress(url.replace(prefix, localized[prefix]));
-  rest.set(key, {
-    contentType: maybe(response.headers()['content-type']).orElse('application/json'),
-    body: await response.text()
-  });
+  if (empty(prefix) || not(response.ok())) return;
+  bodiesRead.push(store(recordedAddress(url.replace(prefix, localized[prefix])), response));
 });
 
 let framing = false;
@@ -54,20 +57,20 @@ await page.waitForSelector('figure.art-work img', {timeout: 30_000});
 await page.waitForTimeout(2000);
 
 console.log('recording the candles before the feed, so the replayed trades come after them…');
-const candlesOf = granularity => page.waitForResponse(answer => {
-  const asked = new URL(answer.url());
-  return asked.pathname.endsWith('/candles') && asked.searchParams.get('granularity') === String(granularity) && answer.ok();
-}, {timeout: 30_000}).then(answer => answer.finished())
-  .catch(error => console.warn(`no candles of ${granularity}s recorded, so the stage will refuse them: ${error.message}`));
-const hour = candlesOf(60);
+const candlesOf = granularity => page.waitForResponse(response => {
+  const address = new URL(response.url());
+  return address.pathname.endsWith('/candles') && address.searchParams.get('granularity') === String(granularity) && response.ok();
+}, {timeout: 30_000});
+const minuteCandles = candlesOf(60);
 await page.goto(`${site}demos/charts/candles/`);
-await hour;
+await minuteCandles;
 for (const [period, granularity] of [['day', 3600], ['week', 21600]]) {
-  const answered = candlesOf(granularity);
+  const periodCandles = candlesOf(granularity);
   await page.getByRole('button', {name: /^candle period/}).click();
   await page.getByRole('button', {name: period, exact: true}).click();
-  await answered;
+  await periodCandles;
 }
+await bodiesStored();
 
 console.log('recording the feed…');
 framing = true;
@@ -78,6 +81,7 @@ await page.waitForTimeout(6000);
 await page.goto(`${site}demos/drag-and-drop/`);
 await page.waitForSelector('.sortable-list .draggable', {timeout: 30_000});
 await page.waitForTimeout(2000);
+await bodiesStored();
 
 await browser.close();
 

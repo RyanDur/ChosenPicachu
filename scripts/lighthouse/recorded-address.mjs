@@ -1,4 +1,4 @@
-import {not} from '@ryandur/sand';
+import {is, not} from '@ryandur/sand';
 
 export const recordedAddress = address => {
   const queryAt = address.indexOf('?');
@@ -6,5 +6,5 @@ export const recordedAddress = address => {
   const query = new URLSearchParams(address.slice(queryAt + 1));
   query.delete('start');
   query.delete('end');
-  return query.size ? `${address.slice(0, queryAt)}?${query}` : address.slice(0, queryAt);
+  return is(query.size) ? `${address.slice(0, queryAt)}?${query}` : address.slice(0, queryAt);
 };
