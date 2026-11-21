@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {accordionsTab, siteFrame} from './__test_support';
+import {accordionsTab, pillSwitch, siteFrame} from './__test_support';
 
 test('a reader follows a box remembers the fold from the accordions tab to its page, with the known-height fold at its top', async ({page}) => {
   await page.goto('demos/accordions/');
@@ -86,4 +86,32 @@ test('a reader follows the panel from the max-height guess to what the platform 
 
   await expect(page).toHaveURL(/demos\/accordions\/what-the-platform-gives-now\/\?type=inclusive&style=drawer$/);
   await expect(page.getByRole('heading', {name: 'Inclusive accordion using details elements', exact: true})).toBeVisible();
+});
+
+test.describe('a reader on the max-height guess, on a phone and at a desk', {tag: ['@iPhone', '@desktop']}, () => {
+  test('finds the parts listed beside the part and no fold dial, since the part has no fold for a dial to change', async ({page}) => {
+    await page.goto('demos/accordions/the-max-height-guess/');
+    await siteFrame(page).hydrated();
+
+    const parts = page.getByRole('navigation', {name: 'Parts', exact: true});
+
+    await expect(parts.getByRole('link', {name: 'The measured height'})).toBeVisible();
+    await expect(page.getByRole('group', {name: 'fold type'})).toHaveCount(0);
+    await expect(page.getByRole('group', {name: 'fold motion'})).toHaveCount(0);
+  });
+
+  test('keeps Exclusive and Static, chosen on a box remembers the fold, through the max-height guess to the measured height', async ({page}) => {
+    await page.goto('demos/accordions/a-box-remembers-the-fold/?type=inclusive&style=drawer');
+    await pillSwitch(page, 'fold type').choose('Exclusive');
+    await pillSwitch(page, 'fold motion').choose('Static');
+    const foot = page.getByRole('navigation', {name: 'the accordions parts'});
+
+    await foot.getByRole('link', {name: 'Next: 3. The max-height guess'}).click();
+    await expect(accordionsTab(page).partTitle('The max-height guess')).toBeVisible();
+    await foot.getByRole('link', {name: 'Next: 4. The measured height'}).click();
+
+    await expect(page).toHaveURL(/demos\/accordions\/the-measured-height\/\?type=exclusive&style=static$/);
+    await expect.poll(pillSwitch(page, 'fold type').chosen).toBe('Exclusive');
+    await expect.poll(pillSwitch(page, 'fold motion').chosen).toBe('Static');
+  });
 });

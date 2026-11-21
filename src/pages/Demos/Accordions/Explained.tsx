@@ -42,7 +42,7 @@ export const AccordionsExplained: FC = () => {
         <HtmlAlone/>
       </figure>
     </header>
-    <PartsAndDials titled/>
+    <PartsAndDials titled dialed/>
     <section aria-labelledby="before-you-start-heading" className="before-you-start">
       <h2 id="before-you-start-heading" className="title bold">Before you start</h2>
       <p className="paragraph">Nothing here leans on another tab. Each part’s page builds the accordion another way.</p>

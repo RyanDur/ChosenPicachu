@@ -58,7 +58,7 @@ describe('the accordions panel', () => {
   });
 
   test('should carry the fold type a reader chooses in it on a part’s page to every part', async () => {
-    render(<TestApp at={demosAt(maxHeightGuess)}/>);
+    render(<TestApp at={demosAt('accordions/the-measured-height')}/>);
 
     await accordionsTab.choose('fold type', 'Inclusive');
 

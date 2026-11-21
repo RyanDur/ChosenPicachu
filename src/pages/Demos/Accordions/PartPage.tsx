@@ -32,36 +32,43 @@ const slidingFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
 type PartWriting = {
   readonly introduction: ReactNode;
   readonly exhibitAndRuns: ReactNode;
+  readonly dialed: boolean;
 };
 
 const partWritings: Record<AccordionPart, PartWriting> = {
   'a-box-remembers-the-fold': {
     introduction: <RemembersTheFoldIntroduction/>,
-    exhibitAndRuns: <RemembersTheFold folds={knownFolds}/>
+    exhibitAndRuns: <RemembersTheFold folds={knownFolds}/>,
+    dialed: true
   },
   'the-max-height-guess': {
     introduction: <MaxHeightGuessIntroduction/>,
-    exhibitAndRuns: <MaxHeightGuess/>
+    exhibitAndRuns: <MaxHeightGuess/>,
+    dialed: false
   },
   'the-measured-height': {
     introduction: <MeasuredHeightIntroduction/>,
-    exhibitAndRuns: <MeasuredHeight folds={measuredFolds}/>
+    exhibitAndRuns: <MeasuredHeight folds={measuredFolds}/>,
+    dialed: true
   },
   'what-the-platform-gives-now': {
     introduction: <PlatformGivesNowIntroduction/>,
-    exhibitAndRuns: <PlatformGivesNow folds={platformFolds}/>
+    exhibitAndRuns: <PlatformGivesNow folds={platformFolds}/>,
+    dialed: true
   },
   'how-a-sliding-fold-moves': {
     introduction: <SlidingFoldMovesIntroduction/>,
-    exhibitAndRuns: <SlidingFoldMoves folds={slidingFolds}/>
+    exhibitAndRuns: <SlidingFoldMoves folds={slidingFolds}/>,
+    dialed: true
   }
 };
 
 export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   const {name, ordinal} = accordionParts.told(part);
   const place = `${demoTab.names[DemoTopics.accordions]} · part ${ordinal} of ${accordionParts.inTheBook}`;
-  return <PartSection heading={name} place={place} introduction={partWritings[part].introduction}
-    panel={<PartsAndDials/>} foot={<PartFoot part={part}/>}>
-    {partWritings[part].exhibitAndRuns}
+  const {introduction, exhibitAndRuns, dialed} = partWritings[part];
+  return <PartSection heading={name} place={place} introduction={introduction}
+    panel={<PartsAndDials dialed={dialed}/>} foot={<PartFoot part={part}/>}>
+    {exhibitAndRuns}
   </PartSection>;
 };

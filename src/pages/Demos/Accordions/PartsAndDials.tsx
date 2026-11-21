@@ -6,12 +6,17 @@ import {FoldMotionDial} from './FoldMotionDial';
 import {FoldTypeDial} from './FoldTypeDial';
 import {PartsIndex} from './PartsIndex';
 
-export const PartsAndDials: FC<{readonly titled?: boolean}> = ({titled = false}) =>
+type Props = {
+  readonly titled?: boolean;
+  readonly dialed: boolean;
+};
+
+export const PartsAndDials: FC<Props> = ({titled = false, dialed}) =>
   <TabSidecar label={titled ? 'parts and dials' : undefined}>
     <AccordionsSize/>
     <PartsIndex titled={titled}/>
-    <DialGroup>
+    {dialed && <DialGroup>
       <FoldTypeDial/>
       <FoldMotionDial/>
-    </DialGroup>
+    </DialGroup>}
   </TabSidecar>;
