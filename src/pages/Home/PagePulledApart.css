@@ -11,5 +11,6 @@
     inline-size: auto;
     max-inline-size: 100%;
     block-size: auto;
+    overflow: visible;
   }
 }
