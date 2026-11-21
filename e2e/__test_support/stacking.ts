@@ -12,7 +12,6 @@ export const stackingPile = (page: Page) => {
   return {
     expander,
     collapser: pile.getByRole('button', {name: 'Collapse'}),
-    cards: () => pile.getByRole('listitem'),
     cardsFromTheTop: (): Promise<string[]> => pile.getByRole('list').evaluate(list => {
       list.scrollIntoView({block: 'center'});
       const cards = [...list.children];
