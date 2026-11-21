@@ -34,7 +34,7 @@ for (const build of measuredBuilds) {
     await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
     const part = await tallestOf(await accordionsTab(page).partsOf(build));
     await part.open();
-    await expect.poll(part.showsText).toBe(true);
+    await settlesWithinRounding(() => textBelowItsFold(part));
 
     for (const width of [390, 1440]) {
       await page.setViewportSize({width, height: 900});
@@ -90,10 +90,10 @@ for (const build of measuredBuilds) {
     await accordionsTab(page).goTo(build);
     const part = accordionsTab(page).firstPartOf(build);
     await part.open();
-    await expect.poll(part.showsText).toBe(true);
+    await settlesWithinRounding(() => textBelowItsFold(part));
 
     await accordionsTab(page).closesThenOpensTheFirstPartInOneFrame(build);
-    await expect.poll(part.showsText).toBe(true);
+    await settlesWithinRounding(() => textBelowItsFold(part));
     await page.setViewportSize({width: 390, height: 900});
 
     await settlesWithinRounding(() => textBelowItsFold(part));
