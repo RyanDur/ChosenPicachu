@@ -137,8 +137,8 @@ const tagsAreDevices = {
   meta: {
     type: 'problem',
     messages: {
-      unknown: 'a journey\'s tag names a device in e2e/__test_support/devices.json; any other tag matches no project, ' +
-        'so the journey runs on no device it names',
+      unknown: 'a journey\'s tag names a device in e2e/__test_support/devices.json; any other tag names no device, ' +
+        'so the journey never runs on the device it means',
       unread: 'a journey\'s tag is a literal string, so the lint can check it names a device',
       titled: 'a journey\'s title holds no @word; Playwright reads one as a tag, and only the tag option names a device'
     }
