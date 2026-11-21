@@ -70,6 +70,7 @@ tester.run('tags-are-devices', tests.rules['tags-are-devices'], {
     {name: 'should refuse a misspelled device', code: "test('x', {tag: '@iphone'}, () => {});", errors: [{messageId: 'unknown'}]},
     {name: 'should refuse an unknown device among known ones', code: "test.describe('x', {tag: ['@desktop', '@tablet']}, () => {});", errors: [{messageId: 'unknown'}]},
     {name: 'should refuse a tag held in a variable', code: "test('x', {tag: onAPhone}, () => {});", errors: [{messageId: 'unread'}]},
-    {name: 'should refuse a tag built in a template', code: "test('x', {tag: [`@${reader}`]}, () => {});", errors: [{messageId: 'unread'}]}
+    {name: 'should refuse a tag built in a template', code: "test('x', {tag: [`@${reader}`]}, () => {});", errors: [{messageId: 'unread'}]},
+    {name: 'should refuse a tag written in a title', code: "test('a phone reader @iphone', () => {});", errors: [{messageId: 'titled'}]}
   ]
 });

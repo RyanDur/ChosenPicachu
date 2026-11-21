@@ -10,6 +10,15 @@ const runners = new Set(['test', 'it', 'describe']);
 const rootOf = node => node.type === 'MemberExpression' ? rootOf(node.object) : node;
 
 /**
+ * @param {any} call
+ * @returns {boolean}
+ */
+const callsPlaywrightsTest = call => {
+  const root = rootOf(call.callee);
+  return root.type === 'Identifier' && root.name === 'test';
+};
+
+/**
  * @param {any} node
  * @returns {string}
  */
@@ -94,9 +103,7 @@ const devicesAreProjects = {
   },
   create: context => ({
     'CallExpression[callee.type="MemberExpression"][callee.property.name="use"]': node => {
-      const root = rootOf(node.callee.object);
-      if (root.type !== 'Identifier' || root.name !== 'test') return;
-      if (not(namesNoDevice(node.arguments[0]))) context.report({node, messageId: 'pinned'});
+      if (callsPlaywrightsTest(node) && not(namesNoDevice(node.arguments[0]))) context.report({node, messageId: 'pinned'});
     }
   })
 };
@@ -121,6 +128,9 @@ const tagsIn = options => {
  */
 const isLiteralWords = tag => is(tag) && tag.type === 'Literal' && typeof tag.value === 'string';
 
+/** Playwright reads every word of a title that begins with @ as a tag. */
+const titleTag = /@\S+/;
+
 /** @type {import('eslint').Rule.RuleModule} */
 const tagsAreDevices = {
   meta: {
@@ -128,13 +138,18 @@ const tagsAreDevices = {
     messages: {
       unknown: 'a journey\'s tag names a device in e2e/__test_support/devices.json; any other tag matches no project, ' +
         'so the journey runs on no device it names',
-      unread: 'a journey\'s tag is a literal string, so the lint can check it names a device'
+      unread: 'a journey\'s tag is a literal string, so the lint can check it names a device',
+      titled: 'a journey\'s title holds no @word; Playwright reads one as a tag, and only the tag option names a device'
     }
   },
   create: context => ({
+    'CallExpression > Literal.arguments:first-child': title => {
+      if (callsPlaywrightsTest(title.parent) && isLiteralWords(title) && titleTag.test(title.value)) {
+        context.report({node: title, messageId: 'titled'});
+      }
+    },
     'CallExpression > ObjectExpression.arguments': options => {
-      const root = rootOf(options.parent.callee);
-      if (root.type !== 'Identifier' || root.name !== 'test') return;
+      if (not(callsPlaywrightsTest(options.parent))) return;
       tagsIn(options).forEach(tag => {
         if (not(isLiteralWords(tag))) context.report({node: maybe(tag).orElse(options), messageId: 'unread'});
         else if (not(deviceTags.has(tag.value))) context.report({node: tag, messageId: 'unknown'});
