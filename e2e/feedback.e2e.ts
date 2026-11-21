@@ -130,6 +130,7 @@ const aNoteGitHubHas = async (page: Page) => {
   await github(page);
   const feedback = feedbackOn(page);
   await page.goto('demos/tables/');
+  await siteFrame(page).hydrated();
   await feedback.open.click();
   await feedback.words.pressSequentially('The sort menu hides behind the header.');
   await feedback.send.click();
