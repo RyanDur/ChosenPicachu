@@ -103,7 +103,8 @@ const devicesAreProjects = {
   },
   create: context => ({
     'CallExpression[callee.type="MemberExpression"][callee.property.name="use"]': node => {
-      if (callsPlaywrightsTest(node) && not(namesNoDevice(node.arguments[0]))) context.report({node, messageId: 'pinned'});
+      if (not(callsPlaywrightsTest(node))) return;
+      if (not(namesNoDevice(node.arguments[0]))) context.report({node, messageId: 'pinned'});
     }
   })
 };
