@@ -30,7 +30,7 @@ export const feedback = {
   send: async (): Promise<void> => userEvent.type(note(), '{Enter}'),
   sendControl: (): HTMLElement => within(dialog()).getByRole('button', {name: 'Send'}),
   cancel: async (): Promise<void> => userEvent.click(within(dialog()).getByRole('button', {name: 'Cancel'})),
-  sendThenCancelAndReopen: async (words: string): Promise<void> => {
+  writeSendCancelAndReopen: async (words: string): Promise<void> => {
     await feedback.write(words);
     await feedback.send();
     await feedback.cancel();
