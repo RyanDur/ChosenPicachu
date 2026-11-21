@@ -64,7 +64,7 @@ const regions: readonly {name: SheetRegion; tint: PlanTint; footprint: Region; n
 
 const events: readonly {word: EventWord; call: string; spark: Spot; motion: MotionKind}[] = [
   {word: 'toggle', call: 'addEventListener("toggle", …)', spark: {u: 16, v: 26}, motion: 'turning'},
-  {word: 'click', call: 'rows.sort(by(column))', spark: {u: 70, v: 40}, motion: 'rippling'}
+  {word: 'click', call: 'rows.sort(by(column))', spark: {u: 66, v: 42}, motion: 'rippling'}
 ];
 
 export const thePage = {
