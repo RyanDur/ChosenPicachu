@@ -1,7 +1,7 @@
 import {Locator, expect} from '@playwright/test';
 import {maybe} from '@ryandur/sand';
 import {test} from './__test_support/journey';
-import {clickWhereItIs, desktop, documentScrollY, galleryPage, hydration, iPhone, pressTab, siteFrame, twoFramesLater} from './__test_support';
+import {clickWhereItIs, devices, documentScrollY, galleryPage, hydration, pressTab, siteFrame, twoFramesLater} from './__test_support';
 
 const focusIsIn = (region: Locator): Promise<boolean> =>
   region.evaluate(element => element.contains(document.activeElement));
@@ -437,30 +437,30 @@ test.describe('a desktop window made narrow', {tag: '@desktop'}, () => {
     await page.goto('gallery/?tab=vam');
     await expect(gallery.settings).toBeHidden();
 
-    await page.setViewportSize(iPhone.viewport);
+    await page.setViewportSize(devices.iPhone.viewport);
 
     await expect(gallery.settings).toBeVisible();
   });
 
   test('closes the gallery settings once it is no longer a phone\'s width', async ({page}) => {
     const gallery = galleryPage(page);
-    await page.setViewportSize(iPhone.viewport);
+    await page.setViewportSize(devices.iPhone.viewport);
     await page.goto('gallery/?tab=vam');
     await gallery.openSettings();
 
-    await page.setViewportSize(desktop.viewport);
+    await page.setViewportSize(devices.desktop.viewport);
 
     await expect(gallery.sheet).toBeHidden();
   });
   test('leaves the gallery where it was when it is no longer a phone\'s width, with words typed in its settings and never sent', async ({page}) => {
     const gallery = galleryPage(page);
     await gallery.answerEveryWallFromTheRecording();
-    await page.setViewportSize(iPhone.viewport);
+    await page.setViewportSize(devices.iPhone.viewport);
     await page.goto('gallery/?tab=vam&page=3');
     await gallery.openSettings();
     await gallery.searchField.fill('lil');
 
-    await page.setViewportSize(desktop.viewport);
+    await page.setViewportSize(devices.desktop.viewport);
 
     await expect(gallery.sheet).toBeHidden();
     await expect(page).not.toHaveURL(/search=/);

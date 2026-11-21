@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {demoSettings, phone, tablesDemo} from './__test_support';
+import {demoSettings, devices, tablesDemo} from './__test_support';
 
 test('the settings a reader left open stay open when the window is made narrow', {tag: '@desktop'}, async ({page}) => {
   const tables = tablesDemo(page);
@@ -8,7 +8,7 @@ test('the settings a reader left open stay open when the window is made narrow',
   await demoSettings(page).press();
   await expect(tables.controls).toBeVisible();
 
-  await page.setViewportSize(phone.viewport);
+  await page.setViewportSize(devices.phone.viewport);
 
   await expect(tables.controls).toBeVisible();
 });

@@ -1,6 +1,6 @@
-import {type Page, expect} from '@playwright/test';
+import {type Locator, type Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {clickWhereItIs, desktop, documentScrollY, iPhone, siteFrame, zIndexTab} from './__test_support';
+import {clickWhereItIs, documentScrollY, siteFrame, zIndexTab} from './__test_support';
 
 const settledScrollY = async (page: Page): Promise<number> => {
   let last = Number.NaN;
@@ -17,54 +17,37 @@ const settledScrollY = async (page: Page): Promise<number> => {
 // a desk
 const theSamePlace = 2;
 
-test.describe('a phone', () => {
-  test.use(iPhone);
+const backAndForwardReturnTheReader = async (
+  page: Page, otherTab: string, arrivedOnTheOtherTab: Locator
+): Promise<void> => {
+  await page.goto('demos/tables/#features-asked-for');
+  await expect(page.getByRole('region', {name: 'let’s build this feature'})).toBeFocused();
+  const atTheTutorial = await settledScrollY(page);
+  await clickWhereItIs(page, page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: otherTab}));
+  await expect(arrivedOnTheOtherTab).toBeAttached();
+  const onTheOtherTab = await settledScrollY(page);
 
-  test('Back to a tutorial from another tab, and Forward again, return the reader to where they were', async ({page}) => {
-    await page.goto('demos/tables/#features-asked-for');
-    await expect(page.getByRole('region', {name: 'let’s build this feature'})).toBeFocused();
-    const atTheTutorial = await settledScrollY(page);
-    await clickWhereItIs(page, page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Previous tab, Charts'}));
-    await expect(page.getByRole('heading', {name: 'Demos Charts'})).toBeAttached();
-    const onTheOtherTab = await settledScrollY(page);
+  await page.goBack();
 
-    await page.goBack();
+  await expect(page.getByRole('table', {name: 'the features'})).toBeAttached();
+  await expect.poll(async () => Math.abs(await documentScrollY(page) - atTheTutorial))
+    .toBeLessThanOrEqual(theSamePlace);
 
-    await expect(page.getByRole('table', {name: 'the features'})).toBeAttached();
-    await expect.poll(async () => Math.abs(await documentScrollY(page) - atTheTutorial))
-      .toBeLessThanOrEqual(theSamePlace);
+  await page.goForward();
 
-    await page.goForward();
+  await expect(arrivedOnTheOtherTab).toBeAttached();
+  await expect.poll(async () => Math.abs(await documentScrollY(page) - onTheOtherTab))
+    .toBeLessThanOrEqual(theSamePlace);
+};
 
-    await expect(page.getByRole('heading', {name: 'Demos Charts'})).toBeAttached();
-    await expect.poll(async () => Math.abs(await documentScrollY(page) - onTheOtherTab))
-      .toBeLessThanOrEqual(theSamePlace);
-  });
+test.describe('a phone', {tag: '@iPhone'}, () => {
+  test('Back to a tutorial from another tab, and Forward again, return the reader to where they were', ({page}) =>
+    backAndForwardReturnTheReader(page, 'Previous tab, Charts', page.getByRole('heading', {name: 'Demos Charts'})));
 });
 
-test.describe('a desk', () => {
-  test.use(desktop);
-
-  test('Back to a tutorial from another tab, and Forward again, return the reader to where they were', async ({page}) => {
-    await page.goto('demos/tables/#features-asked-for');
-    await expect(page.getByRole('region', {name: 'let’s build this feature'})).toBeFocused();
-    const atTheTutorial = await settledScrollY(page);
-    await clickWhereItIs(page, page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Z-index'}));
-    await expect(zIndexTab(page).partLink('Why Third is on top')).toBeAttached();
-    const onTheOtherTab = await settledScrollY(page);
-
-    await page.goBack();
-
-    await expect(page.getByRole('table', {name: 'the features'})).toBeAttached();
-    await expect.poll(async () => Math.abs(await documentScrollY(page) - atTheTutorial))
-      .toBeLessThanOrEqual(theSamePlace);
-
-    await page.goForward();
-
-    await expect(zIndexTab(page).partLink('Why Third is on top')).toBeAttached();
-    await expect.poll(async () => Math.abs(await documentScrollY(page) - onTheOtherTab))
-      .toBeLessThanOrEqual(theSamePlace);
-  });
+test.describe('a desk', {tag: '@desktop'}, () => {
+  test('Back to a tutorial from another tab, and Forward again, return the reader to where they were', ({page}) =>
+    backAndForwardReturnTheReader(page, 'Z-index', zIndexTab(page).partLink('Why Third is on top')));
 });
 
 test('a page opened by its address after another opens at its top, not where the reader left the other', async ({page}) => {
