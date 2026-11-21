@@ -55,6 +55,7 @@ const findingTold = (finding, at, commit) => [
 /**
  * @param {{file: string, line: number, severity: string, rubric: string, summary: string,
  *   failure_scenario: string}[]} findings
+ * @param {{commit?: {repository: string, sha: string}, subject?: string}} [push]
  */
 export const summaryOf = (findings, {commit, subject} = {}) => [
   `## ${empty(subject) ? 'This push' : `“${told(subject)}”`} ${verdictTold(findings)}`,
