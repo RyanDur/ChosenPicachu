@@ -45,7 +45,7 @@ export const Search: FC<PropsWithClassName> = ({className}) => {
       <label className="query-label field next-approached ellipsis bold" htmlFor={query}>Search</label>
       <input type="search" name="search" autoComplete="off" list={options} id={query} required
         defaultValue={search}
-        className="query bare card"
+        className="query bare card borderless"
         onInput={event => typed(event.currentTarget.value)}/>
       <button className="reset-query button icon-button borderless field attentive reachable" type="reset"
         aria-label="reset search" onClick={reset}><img className="icon" src={resetIcon} width="24" height="24" alt=""/></button>
