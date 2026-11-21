@@ -2,6 +2,7 @@ import {expect, type Page} from '@playwright/test';
 import {
   accordionsTab,
   type Build,
+  heightOnceSettled,
   measuredBuilds,
   measuredHeightPage,
   type Part,
@@ -34,7 +35,7 @@ for (const build of measuredBuilds) {
     await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
     const part = await tallestOf(await accordionsTab(page).partsOf(build));
     await part.open();
-    await settlesWithinRounding(() => textBelowItsFold(part));
+    await heightOnceSettled(part.fold);
 
     await page.setViewportSize({width: 390, height: 900});
 
@@ -89,10 +90,10 @@ for (const build of measuredBuilds) {
     await accordionsTab(page).goTo(build);
     const part = accordionsTab(page).firstPartOf(build);
     await part.open();
-    await settlesWithinRounding(() => textBelowItsFold(part));
+    await heightOnceSettled(part.fold);
 
     await accordionsTab(page).closesThenOpensTheFirstPartInOneFrame(build);
-    await settlesWithinRounding(() => textBelowItsFold(part));
+    await heightOnceSettled(part.fold);
     await page.setViewportSize({width: 390, height: 900});
 
     await settlesWithinRounding(() => textBelowItsFold(part));
