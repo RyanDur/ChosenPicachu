@@ -129,7 +129,7 @@ const tagsIn = options => {
  */
 const isLiteralWords = tag => is(tag) && tag.type === 'Literal' && typeof tag.value === 'string';
 
-/** Playwright reads every word of a title that begins with @ as a tag. */
+/** Playwright reads an @ anywhere in a title, mid-word too, and everything after it up to a space, as a tag. */
 const titleTag = /@\S+/;
 
 const declarers = new Set(['describe', 'only', 'skip', 'fixme', 'fail', 'serial', 'parallel']);
