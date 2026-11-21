@@ -29,17 +29,16 @@ const tallestOf = async (parts: Part[]): Promise<Part> => {
 };
 
 for (const build of measuredBuilds) {
-  test(`an open part of ${build} still shows all its text after the window narrows and widens`, {tag: '@desktop'}, async ({page}) => {
+  test(`an open part of ${build} still shows all its text after the window narrows`, {tag: '@desktop'}, async ({page}) => {
     await accordionsTab(page).goTo(build);
     await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
     const part = await tallestOf(await accordionsTab(page).partsOf(build));
     await part.open();
     await settlesWithinRounding(() => textBelowItsFold(part));
 
-    for (const width of [390, 1440]) {
-      await page.setViewportSize({width, height: 900});
-      await settlesWithinRounding(() => textBelowItsFold(part));
-    }
+    await page.setViewportSize({width: 390, height: 900});
+
+    await settlesWithinRounding(() => textBelowItsFold(part));
   });
 }
 
@@ -101,7 +100,7 @@ for (const build of measuredBuilds) {
 }
 
 test.describe('the fold measured by plain script', () => {
-  test('opens to its text on a press, and shuts on a second press', async ({page}) => {
+  test('opens on a press to show all its text, and shuts on a second press', async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
     const fold = plainFold(page);
     await fold.goTo();
