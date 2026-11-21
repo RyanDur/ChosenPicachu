@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {clickWhereItIs, iPadUpright, siteFrame, tabsTo, twoFramesLater} from './__test_support';
+import {clickWhereItIs, devices, siteFrame, tabsTo, twoFramesLater} from './__test_support';
 
 const pages = ['Home', 'Record', 'Practice', 'Demos', 'Users', 'Gallery', 'Games', 'Repo'];
 
@@ -117,7 +117,7 @@ test.describe('a split view widened past a phone', {tag: '@iPadSplitView'}, () =
     await site.menu.click();
     await expect(site.nav).toBeVisible();
 
-    await page.setViewportSize(iPadUpright.viewport);
+    await page.setViewportSize(devices.iPadUpright.viewport);
 
     await expect(page.getByRole('region', {name: 'pages and feedback'}).getByRole('navigation', {name: 'site'})).toBeVisible();
   });
@@ -131,7 +131,7 @@ test.describe('a split view widened past a phone', {tag: '@iPadSplitView'}, () =
     await page.keyboard.press('Enter');
     await tabsTo(page, record);
 
-    await page.setViewportSize(iPadUpright.viewport);
+    await page.setViewportSize(devices.iPadUpright.viewport);
 
     await expect(record).toBeFocused();
     await expect(record).toBeVisible();

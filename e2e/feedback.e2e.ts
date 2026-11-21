@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {clickWhereItIs, desktop, feedbackOn, github, iPadUpright, iPhone, phoneSideways, pressTab, siteFrame, twoFramesLater} from './__test_support';
+import {clickWhereItIs, feedbackOn, github, pressTab, siteFrame, twoFramesLater} from './__test_support';
 
 const findsFeedbackWithoutScrolling = async (page: Page, path: string): Promise<void> => {
   await github(page);
@@ -15,18 +15,16 @@ const findsFeedbackWithoutScrolling = async (page: Page, path: string): Promise<
   await expect(feedback.words).toBeFocused();
 };
 
-for (const {reader, device} of [{reader: 'a desktop', device: desktop}, {reader: 'a phone held upright', device: iPhone}] as const) {
-  test.describe(reader, () => {
-    test.use(device);
+const onADeskAndAPhone = {tag: ['@desktop', '@iPhone']};
 
-    test('finds Feedback on the home page without scrolling and opens it onto the field', ({page}) => findsFeedbackWithoutScrolling(page, ''));
+test('finds Feedback on the home page without scrolling and opens it onto the field', onADeskAndAPhone, ({page}) =>
+  findsFeedbackWithoutScrolling(page, ''));
 
-    test('finds Feedback on the accordions tab without scrolling and opens it onto the field', ({page}) =>
-      findsFeedbackWithoutScrolling(page, 'demos/accordions/'));
+test('finds Feedback on the accordions tab without scrolling and opens it onto the field', onADeskAndAPhone, ({page}) =>
+  findsFeedbackWithoutScrolling(page, 'demos/accordions/'));
 
-    test('finds Feedback on the tables tab without scrolling and opens it onto the field', ({page}) => findsFeedbackWithoutScrolling(page, 'demos/tables/'));
-  });
-}
+test('finds Feedback on the tables tab without scrolling and opens it onto the field', onADeskAndAPhone, ({page}) =>
+  findsFeedbackWithoutScrolling(page, 'demos/tables/'));
 
 const closesFeedbackGivingFocusBack = async (page: Page, closing: () => Promise<void>): Promise<void> => {
   await github(page);
@@ -157,9 +155,7 @@ const sentAndClosed = async (page: Page): Promise<void> => {
   await twoFramesLater(page);
 };
 
-test.describe('a phone on a page with tabs', () => {
-  test.use(iPhone);
-
+test.describe('a phone on a page with tabs', {tag: '@iPhone'}, () => {
   test('reaches Feedback once the sent note’s dialog closes', async ({page}) => {
     await sentAndClosed(page);
 
@@ -201,9 +197,7 @@ const githubHoldingItsAnswer = async (page: Page): Promise<() => Promise<void>> 
   };
 };
 
-test.describe('a phone', () => {
-  test.use(iPhone);
-
+test.describe('a phone', {tag: '@iPhone'}, () => {
   test('reads where a note sent after Feedback closed is on GitHub once Feedback opens again', async ({page}) => {
     const answer = await githubHoldingItsAnswer(page);
     const feedback = feedbackOn(page);
@@ -331,24 +325,13 @@ test('a page with no thread yet links its first line to the Discussions page', a
   await expect(feedback.thread).toHaveAttribute('href', 'https://github.com/RyanDur/ChosenPicachu/discussions');
 });
 
-for (const {reader, device} of [
-  {reader: 'a phone held upright', device: iPhone},
-  {reader: 'a phone held sideways', device: phoneSideways},
-  {reader: 'an iPad held upright', device: iPadUpright},
-  {reader: 'a desktop', device: desktop}
-] as const) {
-  test.describe(reader, () => {
-    test.use(device);
+test('opens Feedback onto its field, with Send shown', {tag: ['@iPhone', '@phoneSideways', '@iPadUpright', '@desktop']}, async ({page}) => {
+  await github(page);
+  const feedback = feedbackOn(page);
+  await page.goto('demos/accordions/');
+  const toggles = await feedback.pressed();
+  await expect.poll(toggles, 'the dialog\'s toggles since the press').toEqual(['open']);
+  await expect(feedback.words).toBeFocused();
 
-    test('opens Feedback onto its field, with Send shown', async ({page}) => {
-      await github(page);
-      const feedback = feedbackOn(page);
-      await page.goto('demos/accordions/');
-      const toggles = await feedback.pressed();
-      await expect.poll(toggles, 'the dialog\'s toggles since the press').toEqual(['open']);
-      await expect(feedback.words).toBeFocused();
-
-      await expect(feedback.send).toBeVisible();
-    });
-  });
-}
+  await expect(feedback.send).toBeVisible();
+});
