@@ -63,7 +63,7 @@
   --drawn-type-size: var(--text-small-caption);
 }
 
-/* any tokens and no initial value: a page that names no words column leaves the drawing column to inherit */
+/* declared only so stylelint's csstools/value-no-unknown-custom-properties knows the name; it changes nothing at runtime */
 @property --drawn-words-column {
   syntax: '*';
   inherits: true;
