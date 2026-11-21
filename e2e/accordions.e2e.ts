@@ -3,7 +3,6 @@ import {
   accordionsTab,
   builds,
   dialRow,
-  heightOnceSettled,
   pillSwitch,
   pressTab,
   nameOn,
@@ -76,7 +75,7 @@ test('a link to the inclusive type opens the tab on it, and it stays after a rel
 const tabsIntoItsText = async (page: Page, open: Part): Promise<void> => {
   const openName = await nameOn(open.fold).textContent() ?? '';
   await open.openByKeyboard();
-  await heightOnceSettled(open.fold);
+  await expect.poll(open.showsText).toBe(true);
 
   await pressTab(page);
   await expect(open.fold.getByRole('region', {name: openName, exact: true})).toBeFocused();

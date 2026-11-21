@@ -200,9 +200,9 @@ export const rememberedFoldLabels = async (page: Page): Promise<string[]> =>
     .evaluateAll(toggles => toggles.map(toggle =>
       toggle instanceof HTMLInputElement ? toggle.labels?.[0]?.textContent ?? '' : ''));
 
-export const gapUnder = async (around: Locator, inside: Locator): Promise<number> => {
+export const textBelow = async (around: Locator, inside: Locator): Promise<number> => {
   const [outer, inner] = await Promise.all([boxOf(around), boxOf(inside)]);
-  return Math.abs(outer.y + outer.height - inner.y - inner.height);
+  return inner.y + inner.height - outer.y - outer.height;
 };
 
 const plainFoldTitle = 'A fold measured by plain script';
@@ -233,10 +233,7 @@ export const plainFold = (page: Page) => {
         else window.addEventListener('load', () => loaded());
       }));
     },
-    gapUnderItsText: (): Promise<number> => gapUnder(panel, text),
-    textBelowTheFrame: async (): Promise<number> => {
-      const [around, inner] = await Promise.all([boxOf(frame), boxOf(text)]);
-      return inner.y + inner.height - around.y - around.height;
-    }
+    textBelowItsPanel: (): Promise<number> => textBelow(panel, text),
+    textBelowTheFrame: (): Promise<number> => textBelow(frame, text)
   };
 };

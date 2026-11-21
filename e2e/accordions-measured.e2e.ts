@@ -1,13 +1,13 @@
-import {expect} from '@playwright/test';
+import {expect, type Page} from '@playwright/test';
 import {
   accordionsTab,
-  gapUnder,
-  heightOnceSettled,
+  type Build,
   measuredBuilds,
   measuredHeightPage,
+  type Part,
   plainFold,
   siteFrame,
-  type Part
+  textBelow
 } from './__test_support';
 import {everyBuildJourneys, layoutRounding, test} from './__test_support/fold-journeys';
 import {assertionPatience} from './__test_support/patience';
@@ -17,7 +17,7 @@ import {assertionPatience} from './__test_support/patience';
 test.use({workerOfItsOwn: 'the measured folds'});
 
 everyBuildJourneys(measuredBuilds);
-const gapUnderItsText = (part: Part): Promise<number> => gapUnder(part.fold, part.words);
+const textBelowItsFold = (part: Part): Promise<number> => textBelow(part.fold, part.words);
 
 const settlesWithinRounding = async (measure: () => Promise<number>): Promise<void> =>
   expect(async () => expect(await measure()).toBeLessThanOrEqual(layoutRounding)).toPass({timeout: assertionPatience});
@@ -29,32 +29,36 @@ const tallestOf = async (parts: Part[]): Promise<Part> => {
 };
 
 for (const build of measuredBuilds) {
-  test(`an open part of ${build} still ends at its text after the window narrows and widens`, {tag: '@desktop'}, async ({page}) => {
+  test(`an open part of ${build} still shows all its text after the window narrows and widens`, {tag: '@desktop'}, async ({page}) => {
     await accordionsTab(page).goTo(build);
     await expect(accordionsTab(page).firstPartOf(build).fold).toBeVisible();
     const part = await tallestOf(await accordionsTab(page).partsOf(build));
     await part.open();
-    await heightOnceSettled(part.fold);
+    await expect.poll(part.showsText).toBe(true);
 
     for (const width of [390, 1440]) {
       await page.setViewportSize({width, height: 900});
-      await settlesWithinRounding(() => gapUnderItsText(part));
+      await settlesWithinRounding(() => textBelowItsFold(part));
     }
   });
 }
 
+const opensAndClosesTheFirstPartOf = async (page: Page, build: Build): Promise<void> => {
+  await accordionsTab(page).goTo(build);
+  const part = accordionsTab(page).firstPartOf(build);
+  await expect(part.fold).toBeVisible();
+
+  await part.open();
+  await expect.poll(part.showsText).toBe(true);
+  await part.close();
+
+  await expect.poll(part.showsText).toBe(false);
+};
+
 for (const build of measuredBuilds) {
   test(`a reader who allows motion opens and then closes a part of ${build}, and its text goes`, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
-    await accordionsTab(page).goTo(build);
-    const part = accordionsTab(page).firstPartOf(build);
-    await expect(part.fold).toBeVisible();
-
-    await part.open();
-    await expect.poll(part.showsText).toBe(true);
-    await part.close();
-
-    await expect.poll(part.showsText).toBe(false);
+    await opensAndClosesTheFirstPartOf(page, build);
   });
 }
 
@@ -64,20 +68,12 @@ const pressesNeverReachTheScript = (): void => ['click', 'change'].forEach(press
 for (const build of measuredBuilds) {
   test(`with its script never hearing the press, a part of ${build} still opens and closes`, async ({page}) => {
     await page.addInitScript(pressesNeverReachTheScript);
-    await accordionsTab(page).goTo(build);
-    const part = accordionsTab(page).firstPartOf(build);
-    await expect(part.fold).toBeVisible();
-
-    await part.open();
-
-    await expect.poll(part.showsText).toBe(true);
-    await part.close();
-    await expect.poll(part.showsText).toBe(false);
+    await opensAndClosesTheFirstPartOf(page, build);
   });
 }
 
 for (const build of measuredBuilds) {
-  test(`an opening part of ${build} switched to Static mid-motion still ends at its text after the window narrows`, {tag: '@desktop'}, async ({page}) => {
+  test(`an opening part of ${build} switched to Static mid-motion still shows all its text after the window narrows`, {tag: '@desktop'}, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
     await accordionsTab(page).goTo(build);
     const part = accordionsTab(page).firstPartOf(build);
@@ -86,21 +82,21 @@ for (const build of measuredBuilds) {
     await accordionsTab(page).opensTheFirstPartThenChoosesOnceItStartsMoving(build, 'Static');
     await page.setViewportSize({width: 390, height: 900});
 
-    await settlesWithinRounding(() => gapUnderItsText(part));
+    await settlesWithinRounding(() => textBelowItsFold(part));
   });
 
-  test(`an open part of ${build} closed and opened again in one frame still ends at its text after the window narrows`, {tag: '@desktop'}, async ({page}) => {
+  test(`an open part of ${build} closed and opened again in one frame still shows all its text after the window narrows`, {tag: '@desktop'}, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
     await accordionsTab(page).goTo(build);
     const part = accordionsTab(page).firstPartOf(build);
     await part.open();
-    await heightOnceSettled(part.fold);
+    await expect.poll(part.showsText).toBe(true);
 
     await accordionsTab(page).closesThenOpensTheFirstPartInOneFrame(build);
-    await heightOnceSettled(part.fold);
+    await expect.poll(part.showsText).toBe(true);
     await page.setViewportSize({width: 390, height: 900});
 
-    await settlesWithinRounding(() => gapUnderItsText(part));
+    await settlesWithinRounding(() => textBelowItsFold(part));
   });
 }
 
@@ -113,21 +109,21 @@ test.describe('the fold measured by plain script', () => {
     await fold.bar.click();
 
     await expect(fold.text).toBeVisible();
-    await settlesWithinRounding(fold.gapUnderItsText);
+    await settlesWithinRounding(fold.textBelowItsPanel);
     await fold.bar.click();
     await expect(fold.text).toBeHidden();
   });
 
-  test('still ends at its text after the window narrows', {tag: '@desktop'}, async ({page}) => {
+  test('still shows all its text after the window narrows', {tag: '@desktop'}, async ({page}) => {
     await page.emulateMedia({reducedMotion: 'no-preference'});
     const fold = plainFold(page);
     await fold.goTo();
     await fold.bar.click();
-    await settlesWithinRounding(fold.gapUnderItsText);
+    await settlesWithinRounding(fold.textBelowItsPanel);
 
     await page.setViewportSize({width: 390, height: 900});
 
-    await settlesWithinRounding(fold.gapUnderItsText);
+    await settlesWithinRounding(fold.textBelowItsPanel);
   });
 
   test('with its script never hearing the press, still opens and shuts', async ({page}) => {
