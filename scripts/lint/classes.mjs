@@ -126,7 +126,7 @@ export const classesOver = src => {
     return path.startsWith('styles/') || path === 'index.css';
   };
 
-  const classesOf = sheets => {
+  const readingOf = sheets => {
     /** @type {Set<string>} */
     const own = new Set();
     /** @type {Set<string>} */
@@ -150,20 +150,21 @@ export const classesOver = src => {
 
   const stampOfBoth = (directories, sheets) => `${stampOf(directories)}\n${stampOf(sheets)}`;
 
-  let lastRead = {directories: [], sheets: [], stamp: '', classes: classesOf([])};
+  let lastRead = {directories: [], sheets: [], stamp: '', reading: readingOf([])};
 
   // WebStorm's ESLint service keeps one process across branch switches.
   const sheetClasses = () => {
     const {directories: watched, sheets: read, stamp: stamped} = lastRead;
-    if (has(watched) && stampOfBoth(watched, read) === stamped) return lastRead.classes;
+    if (has(watched) && stampOfBoth(watched, read) === stamped) return lastRead.reading;
     const {directories, stamp} = stampedFolders();
     const sheets = sheetsIn(directories);
-    lastRead = {directories, sheets, stamp: `${stamp}\n${stampOf(sheets)}`, classes: classesOf(sheets)};
-    return lastRead.classes;
+    lastRead = {directories, sheets, stamp: `${stamp}\n${stampOf(sheets)}`, reading: readingOf(sheets)};
+    return lastRead.reading;
   };
 
   /** @param {string} directory */
-  const framedBesides = directory => entriesOf(directory).map(({name}) => name)
+  const framedBesides = directory => entriesOf(directory)
+    .filter(entry => not(entry.isDirectory())).map(({name}) => name)
     .filter(name => /\.tsx?$/.test(name))
     .flatMap(name => [...textOf(join(directory, name)).matchAll(/import\s+\w+\s+from\s+'([^']+\.css)\?frame'/g)])
     .map(([, specifier]) => specifier.startsWith('@components/') ? join(src, 'components', specifier.slice('@components/'.length)) : join(directory, specifier));
