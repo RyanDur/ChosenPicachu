@@ -1,4 +1,4 @@
-import {bannerChange} from '../bannerChange';
+import {bannerChange} from '@banners';
 import {bannerNews} from '../bannerNews';
 
 const raised = (message: string) => bannerNews.reduce(bannerNews.initial, bannerChange.raised(message));

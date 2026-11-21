@@ -5,7 +5,7 @@ import {aicArtResponse} from '@pages/Gallery/__test_support/fixtures';
 import {galleryWall, setupAICEveryPage} from '@pages/Gallery/__test_support';
 import {searchPage} from '@pages/Gallery/Search/__test_support';
 import {pageControl} from '@pages/Gallery/PageControl/__test_support';
-import {galleryForms} from '../galleryForms';
+import {galleryForms} from '@pages/Gallery';
 
 const historyMovesBackBeforeReactDrawsTheMove = (): void => {
   window.history.pushState(null, '', '#moved');

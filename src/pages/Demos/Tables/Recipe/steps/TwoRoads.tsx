@@ -1,6 +1,6 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {FC} from 'react';
-import {DemoTopics} from '../../../demo-topics';
+import {DemoTopics} from '@pages/Demos';
 import {Mdn, Tell} from '../../../Recipe';
 
 export const TwoRoads: FC = () =>
