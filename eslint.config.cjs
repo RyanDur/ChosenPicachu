@@ -245,7 +245,7 @@ module.exports = [
   {
     files: ['e2e/**/*.e2e.ts'],
     plugins: {tests},
-    rules: {'tests/devices-are-projects': 'error'}
+    rules: {'tests/devices-are-projects': 'error', 'tests/tags-are-devices': 'error'}
   },
   {
     files: ['src/**/*.tsx'],
