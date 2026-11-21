@@ -88,13 +88,11 @@ test('a reader follows the panel from the max-height guess to what the platform 
   await expect(page.getByRole('heading', {name: 'Inclusive accordion using details elements', exact: true})).toBeVisible();
 });
 
-test('a reader on the max-height guess finds the parts listed beside it and no fold dial, since it has no fold for a dial to change', async ({page}) => {
+test('a reader on the max-height guess finds no fold dial, since it has no fold for a dial to change', async ({page}) => {
   await page.goto('demos/accordions/the-max-height-guess/');
   await siteFrame(page).hydrated();
 
-  const parts = page.getByRole('navigation', {name: 'Parts', exact: true});
-
-  await expect(parts.getByRole('link', {name: 'The measured height'})).toBeVisible();
+  await expect(accordionsTab(page).partTitle('The max-height guess')).toBeVisible();
   await expect(page.getByRole('group', {name: 'fold type', includeHidden: true})).toHaveCount(0);
   await expect(page.getByRole('group', {name: 'fold motion', includeHidden: true})).toHaveCount(0);
 });
