@@ -1,5 +1,5 @@
 import {ESLint, RuleTester} from 'eslint';
-import {mkdirSync, mkdtempSync, rmSync, writeFileSync} from 'node:fs';
+import {mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {dirname, join} from 'node:path';
 import {classes, classesOver} from '../lint/classes.mjs';
@@ -120,6 +120,20 @@ describe('the class rules in a process that keeps running', () => {
     expect(await findingsIn(code)).toEqual([]);
     rmSync(sheetAt());
     expect(await findingsIn(code)).toEqual(['classes/class-defined']);
+  });
+
+  test('should read a style sheet that is a link to one elsewhere', async () => {
+    const elsewhere = join(dirname(src), 'Linked.css');
+    writeFileSync(elsewhere, '.lint-probe-linked {\n  display: block;\n}\n');
+    symlinkSync(elsewhere, join(src, 'pages', 'Linked.css'));
+
+    expect(await findingsIn('<p className="lint-probe-linked"/>;')).toEqual([]);
+  });
+
+  test('should skip a folder named like a source file beside the linted file', async () => {
+    mkdirSync(join(src, 'pages', 'folder.tsx'));
+
+    expect(await findingsIn('<p className="muted-ink"/>;')).toEqual([]);
   });
 
   test('should judge a file whose folder is gone by the shared words alone', async () => {
