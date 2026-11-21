@@ -78,19 +78,46 @@ describe('the class rules over html', () => {
 describe('the class rules in a process that keeps running', () => {
   const sheet = join(process.cwd(), 'src/pages/Users/FancyFormElements/LintProbe.css');
   const eslint = new ESLint({overrideConfigFile: true, overrideConfig: [
-    {files: ['**/*.tsx'], plugins: {classes}, languageOptions: {parserOptions: {ecmaFeatures: {jsx: true}}}, rules: {'classes/class-defined': 'error'}}
+    {files: ['**/*.tsx'], plugins: {classes}, languageOptions: {parserOptions: {ecmaFeatures: {jsx: true}}},
+      rules: {'classes/class-defined': 'error', 'classes/own-class-first': 'error'}}
   ]});
-  const unreadIn = async code => {
+  const findingsIn = async code => {
     const [{messages}] = await eslint.lintText(code, {filePath: fancyField});
-    return messages.length;
+    return messages.map(({ruleId}) => ruleId);
   };
+  const reads = name => writeFileSync(sheet, `.${name} {\n  display: block;\n}\n`);
+  const removeSheet = () => rmSync(sheet, {force: true});
 
-  afterEach(() => rmSync(sheet, {force: true}));
+  beforeEach(removeSheet);
+  afterEach(removeSheet);
 
   test('should read a class a sheet began reading after the process started', async () => {
     const code = '<p className="lint-probe-word"/>;';
-    expect(await unreadIn(code)).toBe(1);
-    writeFileSync(sheet, '.lint-probe-word {\n  display: block;\n}\n');
-    expect(await unreadIn(code)).toBe(0);
+    expect(await findingsIn(code)).toEqual(['classes/class-defined']);
+    reads('lint-probe-word');
+    expect(await findingsIn(code)).toEqual([]);
+  });
+
+  test('should read a sheet again after it is edited', async () => {
+    const code = '<p className="lint-probe-edited"/>;';
+    reads('lint-probe-word');
+    expect(await findingsIn(code)).toEqual(['classes/class-defined']);
+    reads('lint-probe-edited');
+    expect(await findingsIn(code)).toEqual([]);
+  });
+
+  test('should refuse a class again after its sheet is deleted', async () => {
+    const code = '<p className="lint-probe-word"/>;';
+    reads('lint-probe-word');
+    expect(await findingsIn(code)).toEqual([]);
+    removeSheet();
+    expect(await findingsIn(code)).toEqual(['classes/class-defined']);
+  });
+
+  test('should put an own class first once a sheet beside it begins reading it', async () => {
+    const code = '<p className="muted-ink lint-probe-word"/>;';
+    expect(await findingsIn(code)).toEqual(['classes/class-defined']);
+    reads('lint-probe-word');
+    expect(await findingsIn(code)).toEqual(['classes/own-class-first']);
   });
 });
