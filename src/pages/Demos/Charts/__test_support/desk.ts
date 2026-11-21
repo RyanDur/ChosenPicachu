@@ -10,15 +10,20 @@ const theAddMenu = (): HTMLElement => screen.getByLabelText('charts to add');
 const addChart = async (name: string): Promise<void> =>
   userEvent.click(within(theAddMenu()).getByRole('button', {name, hidden: true}));
 
-const doorway = (chart: string): HTMLElement => screen.getByRole('link', {name: `${chart} tutorial`});
+const doorwayName = (chart: string): string => `${chart} tutorial`;
+
+const doorway = (chart: string): HTMLElement => screen.getByRole('link', {name: doorwayName(chart)});
+
+const findDoorway = (chart: string): Promise<HTMLElement> => screen.findByRole('link', {name: doorwayName(chart)});
 
 const walkThrough = async (chart: string, recipe: string): Promise<HTMLElement> => {
-  await userEvent.click(await screen.findByRole('link', {name: `${chart} tutorial`}));
+  await userEvent.click(await findDoorway(chart));
   return screen.findByRole('region', {name: recipe});
 };
 
 const place = (chart: string): HTMLElement => {
-  const seat = screen.getAllByRole('listitem').find(item => is(within(item).queryByRole('link', {name: `${chart} tutorial`})));
+  const seat = screen.getAllByRole('listitem')
+    .find(item => is(within(item).queryByRole('link', {name: doorwayName(chart)})));
   if (seat) {
     return seat;
   }
