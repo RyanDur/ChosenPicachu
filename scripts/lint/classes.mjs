@@ -4,7 +4,6 @@ import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const src = join(root, 'src');
 
 /**
  * @template T
@@ -38,73 +37,9 @@ const selectorsOf = sheet => [...textOf(sheet).replace(/\/\*[^]*?\*\//g, '').mat
 
 const classesIn = selector => [...selector.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map(([, name]) => name);
 
-const isShared = sheet => {
-  const path = relative(src, sheet);
-  return path.startsWith('styles/') || path === 'index.css';
-};
-
-const classesOf = sheets => {
-  /** @type {Set<string>} */
-  const own = new Set();
-  /** @type {Set<string>} */
-  const shared = new Set();
-  /** @type {Map<string, Set<string>>} */
-  const bySheet = new Map();
-  for (const sheet of sheets) {
-    const names = new Set(selectorsOf(sheet).flatMap(classesIn));
-    bySheet.set(sheet, names);
-    names.forEach(name => (isShared(sheet) ? shared : own).add(name));
-  }
-  return {own, shared, bySheet};
-};
-
 const stampOf = paths => paths.map(path => `${path} ${maybe(statSync(path, {throwIfNoEntry: false}))
   .map(({mtimeMs, ctimeMs, size, ino}) => [mtimeMs, ctimeMs, size, ino].join(' ')).orElse('gone')}`).join('\n');
 
-const stampedFolders = () => {
-  const directories = folders(src);
-  const stamp = stampOf(directories);
-  return folders(src).join('\n') === directories.join('\n') ? {directories, stamp} : stampedFolders();
-};
-
-let lastRead = {watched: [], stamp: '', classes: classesOf([])};
-
-// WebStorm's ESLint service keeps one process across branch switches.
-const sheetClasses = () => {
-  if (has(lastRead.watched) && stampOf(lastRead.watched) === lastRead.stamp) return lastRead.classes;
-  const {directories, stamp} = stampedFolders();
-  const sheets = sheetsIn(directories);
-  lastRead = {watched: [...directories, ...sheets], stamp: `${stamp}\n${stampOf(sheets)}`, classes: classesOf(sheets)};
-  return lastRead.classes;
-};
-
-/** @param {string} directory */
-const framedBesides = directory => entriesOf(directory).map(({name}) => name)
-  .filter(name => /\.tsx?$/.test(name))
-  .flatMap(name => [...textOf(join(directory, name)).matchAll(/import\s+\w+\s+from\s+'([^']+\.css)\?frame'/g)])
-  .map(([, specifier]) => specifier.startsWith('@components/') ? join(src, 'components', specifier.slice('@components/'.length)) : join(directory, specifier));
-
-/**
- * @param {string} directory
- * @returns {string[]}
- */
-const homesOf = directory =>
-  directory === src || not(directory.startsWith(src)) ? [src] : [directory, ...homesOf(dirname(directory))];
-
-/** @param {string} file */
-const nearbyOf = file => {
-  const {shared, bySheet} = sheetClasses();
-  const page = file.includes('.html/') ? file.slice(0, file.indexOf('.html/') + '.html'.length) : file;
-  const directory = dirname(page);
-  const near = new Set(shared);
-  for (const [sheet, names] of bySheet) {
-    const home = dirname(sheet);
-    if (directory === home || directory.startsWith(home + '/')) names.forEach(name => near.add(name));
-  }
-  homesOf(directory).flatMap(framedBesides)
-    .forEach(sheet => maybe(bySheet.get(sheet)).orElse(new Set()).forEach(name => near.add(name)));
-  return near;
-};
 /**
  * @param {Set<string>} near
  * @param {string} prefix
@@ -175,34 +110,6 @@ const classPositions = visit => ({
   }
 });
 
-const classDefined = {
-  meta: {type: 'problem', messages: {
-    undefined: '"{{name}}" is read by no sheet beside this file, above it, or in src/styles; a class an element wears is one a sheet near it reads',
-    unopened: 'no class begins "{{prefix}}"; a class an element wears is one a sheet reads'
-  }},
-  create: context => {
-    const near = nearbyOf(context.filename);
-    return classPositions(node => wornClasses(node, (at, names, prefixes = []) => {
-      names.filter(name => not(near.has(name))).forEach(name => context.report({node: at, messageId: 'undefined', data: {name}}));
-      prefixes.filter(prefix => not(opens(near, prefix))).forEach(prefix => context.report({node: at, messageId: 'unopened', data: {prefix}}));
-    }));
-  }
-};
-
-const ownClassFirst = {
-  meta: {type: 'problem', messages: {
-    behind: '"{{name}}" is this element\'s own class and comes first, before the shared words it wears'
-  }},
-  create: context => {
-    const {own} = sheetClasses();
-    return classPositions(node => {
-      const names = firstWorn(node);
-      const mine = names.find(name => own.has(name));
-      if (typeof mine === 'string' && not(own.has(names[0]))) context.report({node, messageId: 'behind', data: {name: mine}});
-    });
-  }
-};
-
 const html = {
   preprocess: text => [{
     text: text.split('\n').map(line => [...line.matchAll(/class="([^"]*)"/g)]
@@ -212,7 +119,109 @@ const html = {
   postprocess: messages => messages.flat()
 };
 
-export const classes = {
-  rules: {'class-defined': classDefined, 'own-class-first': ownClassFirst},
-  processors: {html}
+/** @param {string} src */
+export const classesOver = src => {
+  const isShared = sheet => {
+    const path = relative(src, sheet);
+    return path.startsWith('styles/') || path === 'index.css';
+  };
+
+  const classesOf = sheets => {
+    /** @type {Set<string>} */
+    const own = new Set();
+    /** @type {Set<string>} */
+    const shared = new Set();
+    /** @type {Map<string, Set<string>>} */
+    const bySheet = new Map();
+    for (const sheet of sheets) {
+      const names = new Set(selectorsOf(sheet).flatMap(classesIn));
+      bySheet.set(sheet, names);
+      names.forEach(name => (isShared(sheet) ? shared : own).add(name));
+    }
+    return {own, shared, bySheet};
+  };
+
+  const stampedFolders = (triesLeft = 3) => {
+    const directories = folders(src);
+    const stamp = stampOf(directories);
+    const settled = triesLeft === 0 || folders(src).join('\n') === directories.join('\n');
+    return settled ? {directories, stamp} : stampedFolders(triesLeft - 1);
+  };
+
+  const stampOfBoth = (directories, sheets) => `${stampOf(directories)}\n${stampOf(sheets)}`;
+
+  let lastRead = {directories: [], sheets: [], stamp: '', classes: classesOf([])};
+
+  // WebStorm's ESLint service keeps one process across branch switches.
+  const sheetClasses = () => {
+    const {directories: watched, sheets: read, stamp: stamped} = lastRead;
+    if (has(watched) && stampOfBoth(watched, read) === stamped) return lastRead.classes;
+    const {directories, stamp} = stampedFolders();
+    const sheets = sheetsIn(directories);
+    lastRead = {directories, sheets, stamp: `${stamp}\n${stampOf(sheets)}`, classes: classesOf(sheets)};
+    return lastRead.classes;
+  };
+
+  /** @param {string} directory */
+  const framedBesides = directory => entriesOf(directory).map(({name}) => name)
+    .filter(name => /\.tsx?$/.test(name))
+    .flatMap(name => [...textOf(join(directory, name)).matchAll(/import\s+\w+\s+from\s+'([^']+\.css)\?frame'/g)])
+    .map(([, specifier]) => specifier.startsWith('@components/') ? join(src, 'components', specifier.slice('@components/'.length)) : join(directory, specifier));
+
+  /**
+   * @param {string} directory
+   * @returns {string[]}
+   */
+  const homesOf = directory =>
+    directory === src || not(directory.startsWith(src)) ? [src] : [directory, ...homesOf(dirname(directory))];
+
+  /** @param {string} file */
+  const nearbyOf = file => {
+    const {shared, bySheet} = sheetClasses();
+    const page = file.includes('.html/') ? file.slice(0, file.indexOf('.html/') + '.html'.length) : file;
+    const directory = dirname(page);
+    const near = new Set(shared);
+    for (const [sheet, names] of bySheet) {
+      const home = dirname(sheet);
+      if (directory === home || directory.startsWith(home + '/')) names.forEach(name => near.add(name));
+    }
+    homesOf(directory).flatMap(framedBesides)
+      .forEach(sheet => maybe(bySheet.get(sheet)).orElse(new Set()).forEach(name => near.add(name)));
+    return near;
+  };
+
+  const classDefined = {
+    meta: {type: 'problem', messages: {
+      undefined: '"{{name}}" is read by no sheet beside this file, above it, or in src/styles; a class an element wears is one a sheet near it reads',
+      unopened: 'no class begins "{{prefix}}"; a class an element wears is one a sheet reads'
+    }},
+    create: context => {
+      const near = nearbyOf(context.filename);
+      return classPositions(node => wornClasses(node, (at, names, prefixes = []) => {
+        names.filter(name => not(near.has(name))).forEach(name => context.report({node: at, messageId: 'undefined', data: {name}}));
+        prefixes.filter(prefix => not(opens(near, prefix))).forEach(prefix => context.report({node: at, messageId: 'unopened', data: {prefix}}));
+      }));
+    }
+  };
+
+  const ownClassFirst = {
+    meta: {type: 'problem', messages: {
+      behind: '"{{name}}" is this element\'s own class and comes first, before the shared words it wears'
+    }},
+    create: context => {
+      const {own} = sheetClasses();
+      return classPositions(node => {
+        const names = firstWorn(node);
+        const mine = names.find(name => own.has(name));
+        if (typeof mine === 'string' && not(own.has(names[0]))) context.report({node, messageId: 'behind', data: {name: mine}});
+      });
+    }
+  };
+
+  return {
+    rules: {'class-defined': classDefined, 'own-class-first': ownClassFirst},
+    processors: {html}
+  };
 };
+
+export const classes = classesOver(join(root, 'src'));
