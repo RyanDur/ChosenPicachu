@@ -42,3 +42,19 @@ tester.run('parameterized-for-drift', tests.rules['parameterized-for-drift'], {
     {name: 'should refuse each behind a modifier', code: "test.concurrent.each([1])('x', () => {});", errors: [{messageId: 'drift'}]}
   ]
 });
+
+tester.run('devices-are-projects', tests.rules['devices-are-projects'], {
+  valid: [
+    {name: 'should accept a journey that turns script off', code: 'test.use({javaScriptEnabled: false});'},
+    {name: 'should accept a journey that blocks service workers', code: "test.use({serviceWorkers: 'block'});"},
+    {name: 'should accept a journey given a worker of its own', code: "test.use({workerOfItsOwn: 'the measured folds'});"},
+    {name: 'should accept use on something that runs no test', code: 'tool.use(iPhone);'}
+  ],
+  invalid: [
+    {name: 'should refuse a journey pinned to a device', code: 'test.use(iPhone);', errors: [{messageId: 'pinned'}]},
+    {name: 'should refuse a device taken from a loop', code: 'for (const {device} of readers) { test.describe(\'x\', () => { test.use(device); }); }', errors: [{messageId: 'pinned'}]},
+    {name: 'should refuse a viewport set for a journey', code: 'test.use({viewport: {width: 390, height: 844}});', errors: [{messageId: 'pinned'}]},
+    {name: 'should refuse touch set for a journey', code: 'test.use({hasTouch: true});', errors: [{messageId: 'pinned'}]},
+    {name: 'should refuse a device spread into a journey\'s options', code: 'test.use({...iPhone, javaScriptEnabled: false});', errors: [{messageId: 'pinned'}]}
+  ]
+});
