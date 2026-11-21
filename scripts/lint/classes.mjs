@@ -26,7 +26,7 @@ const folders = directory => [directory, ...entriesOf(directory)
   .filter(entry => entry.isDirectory()).flatMap(entry => folders(join(directory, entry.name)))];
 
 const sheetsIn = directories => directories.flatMap(directory => entriesOf(directory)
-  .filter(entry => entry.isFile() && entry.name.endsWith('.css')).map(entry => join(directory, entry.name)));
+  .filter(entry => not(entry.isDirectory()) && entry.name.endsWith('.css')).map(entry => join(directory, entry.name)));
 
 const textOf = file => unlessGone(() => readFileSync(file, 'utf8'), '');
 
@@ -144,8 +144,8 @@ export const classesOver = src => {
   const stampedFolders = (triesLeft = 3) => {
     const directories = folders(src);
     const stamp = stampOf(directories);
-    const settled = triesLeft === 0 || folders(src).join('\n') === directories.join('\n');
-    return settled ? {directories, stamp} : stampedFolders(triesLeft - 1);
+    if (folders(src).join('\n') === directories.join('\n')) return {directories, stamp};
+    return triesLeft === 0 ? {directories, stamp: 'unsettled'} : stampedFolders(triesLeft - 1);
   };
 
   const stampOfBoth = (directories, sheets) => `${stampOf(directories)}\n${stampOf(sheets)}`;
