@@ -127,7 +127,7 @@ const tagsAreDevices = {
     type: 'problem',
     messages: {
       unknown: 'a journey\'s tag names a device in e2e/__test_support/devices.json; any other tag matches no project, ' +
-        'and the journey runs at the default size',
+        'so the journey runs on no device it names',
       unread: 'a journey\'s tag is a literal string, so the lint can check it names a device'
     }
   },
