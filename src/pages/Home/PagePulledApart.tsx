@@ -60,6 +60,8 @@ const regionNamedAt: Record<SheetRegion, Spot> = {
   '.table': {u: 63.1, v: 53.2}
 };
 
+const nameStartOf = ({x}: Point): number => x + sparkRadius * 3.4;
+
 const nameLineOf = ({y}: Point): number => y + sparkRadius * 0.6;
 
 const languages = [
@@ -74,7 +76,7 @@ const RegionName: Lettering = ({x, y, children}) =>
   <text className="drawn-caption monospaced ink-filled paper-haloed thin-haloed" x={x} y={y}>{children}</text>;
 
 const Call: Lettering = ({x, y, children}) =>
-  <text className="drawn-small-caption monospaced ink-filled paper-haloed" x={x} y={y} dy="1.5em" textAnchor="middle">
+  <text className="drawn-small-caption monospaced ink-filled paper-haloed" x={x} y={y} dy="1.5em">
     {children}
   </text>;
 
@@ -109,7 +111,7 @@ export const PagePulledApart: FC = () => {
           <Moving cx={center.x} cy={center.y} rx={sparkRadius} ry={sparkRadius * ellipseRatio}
             markerEnd={`url(#${turnHead})`}/>
           <circle className="markup-attribute-filled" cx={center.x} cy={center.y} r={sparkRadius}/>
-          <EventName x={center.x + sparkRadius * 3.4} y={nameLineOf(center)}>{word}</EventName>
+          <EventName x={nameStartOf(center)} y={nameLineOf(center)}>{word}</EventName>
         </Fragment>;
       })}
       {thePage.events.map(({word, spark}) => {
@@ -124,7 +126,7 @@ export const PagePulledApart: FC = () => {
       })}
       {thePage.events.map(({word, call, spark}) => {
         const center = projected(spark, elevations.behavior);
-        return <Call key={word} x={center.x} y={nameLineOf(center)}>{call}</Call>;
+        return <Call key={word} x={nameStartOf(center)} y={nameLineOf(center)}>{call}</Call>;
       })}
       {languages.map(({word, elevation}) => {
         const {x, y} = projected({u: 0, v: thePage.plate.down / 2}, elevation);
