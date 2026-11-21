@@ -32,6 +32,32 @@ import {friendsList} from '../FriendsList/__test_support';
 import {usersPage, usersTable} from '../__test_support';
 import {openings} from '../openings';
 
+const aServerStillUnreachableAfterTheWait = async () => {
+  heldClock.hold();
+  onTestFinished(() => {
+    vi.useRealTimers();
+  });
+  const container = workersContainer();
+  setupUsersResponse([aUser()]);
+  render(<TestApp at={Paths.users} environment={lentToThePage(container)}/>);
+  await usersPage.waitsOut(10_000);
+  await usersPage.says('the users server could not be reached');
+  return container;
+};
+
+const aCloneTypedIntoWhileAnotherAddIsHeld = async () => {
+  const kai = aUser();
+  const aiko = aUser({work: 'home'});
+  setupUsersResponse([kai]);
+  const adds = userAddsHeld([kai, aiko]);
+  render(<TestApp at={Paths.users}/>);
+  await userForm.addWhoWorksFromHome(aiko);
+  await usersTable.clone(profile.fullName(kai));
+  await userForm.showing(kai);
+  await userForm.typeInto('First Name', ' typed');
+  return {kai, aiko, adds};
+};
+
 describe('the users page', () => {
   test('a users backend that cannot be reached says so', async () => {
     usersUnreachable();
@@ -54,15 +80,7 @@ describe('the users page', () => {
   });
 
   test('a users server that takes control after the wait takes down the could-not-be-reached banner', async () => {
-    heldClock.hold();
-    onTestFinished(() => {
-      vi.useRealTimers();
-    });
-    const container = workersContainer();
-    setupUsersResponse([aUser()]);
-    render(<TestApp at={Paths.users} environment={lentToThePage(container)}/>);
-    await usersPage.waitsOut(10_000);
-    await usersPage.says('the users server could not be reached');
+    const container = await aServerStillUnreachableAfterTheWait();
 
     container.takeControl();
     await usersTable.roster();
@@ -71,15 +89,7 @@ describe('the users page', () => {
   });
 
   test('a reader who leaves while the server is unreachable finds no such banner on coming back to it in control', async () => {
-    heldClock.hold();
-    onTestFinished(() => {
-      vi.useRealTimers();
-    });
-    const container = workersContainer();
-    setupUsersResponse([aUser()]);
-    render(<TestApp at={Paths.users} environment={lentToThePage(container)}/>);
-    await usersPage.waitsOut(10_000);
-    await usersPage.says('the users server could not be reached');
+    const container = await aServerStillUnreachableAfterTheWait();
     await site.followRail('Practice');
     container.takeControl();
 
@@ -334,15 +344,7 @@ describe('the users page', () => {
     });
 
     it('a clone under way survives another user\'s confirmed add', async () => {
-      const kai = aUser();
-      const aiko = aUser({work: 'home'});
-      setupUsersResponse([kai]);
-      const adds = userAddsHeld([kai, aiko]);
-      render(<TestApp at={Paths.users}/>);
-      await userForm.addWhoWorksFromHome(aiko);
-      await usersTable.clone(profile.fullName(kai));
-      await userForm.showing(kai);
-      await userForm.typeInto('First Name', ' typed');
+      const {kai, aiko, adds} = await aCloneTypedIntoWhileAnotherAddIsHeld();
 
       adds.answer();
 
@@ -351,15 +353,7 @@ describe('the users page', () => {
     });
 
     it('a clone added while another add is in flight keeps what the reader typed', async () => {
-      const kai = aUser();
-      const aiko = aUser({work: 'home'});
-      setupUsersResponse([kai]);
-      const adds = userAddsHeld([kai, aiko]);
-      render(<TestApp at={Paths.users}/>);
-      await userForm.addWhoWorksFromHome(aiko);
-      await usersTable.clone(profile.fullName(kai));
-      await userForm.showing(kai);
-      await userForm.typeInto('First Name', ' typed');
+      const {kai, aiko, adds} = await aCloneTypedIntoWhileAnotherAddIsHeld();
       await userForm.add();
 
       adds.answer();
