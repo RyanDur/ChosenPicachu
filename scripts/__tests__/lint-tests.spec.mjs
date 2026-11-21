@@ -66,6 +66,7 @@ tester.run('tags-are-devices', tests.rules['tags-are-devices'], {
     {name: 'should accept a journey with no options', code: "test('x', () => {});"},
     {name: 'should accept a tag on something that runs no test', code: "label('x', {tag: '@iphone'});"},
     {name: 'should accept a lone @ before a space in a title', code: "test('meet @ noon', () => {});"},
+    {name: 'should accept a tag option given to a fixture, which declares no test', code: "test.extend({tag: 'reader'});"},
     {name: 'should accept an @word in a step\'s title, which Playwright reads no tag from', code: "test.step('saves the @2x image', () => {});"}
   ],
   invalid: [
