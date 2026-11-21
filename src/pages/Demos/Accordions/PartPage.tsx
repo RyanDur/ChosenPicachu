@@ -29,13 +29,13 @@ const knownFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
 const platformFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
 const slidingFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
 
-type PartWriting = {
+type PartContents = {
   readonly introduction: ReactNode;
   readonly exhibitAndRuns: ReactNode;
   readonly offersTheFoldDials: boolean;
 };
 
-const partWritings: Record<AccordionPart, PartWriting> = {
+const partContents: Record<AccordionPart, PartContents> = {
   'a-box-remembers-the-fold': {
     introduction: <RemembersTheFoldIntroduction/>,
     exhibitAndRuns: <RemembersTheFold folds={knownFolds}/>,
@@ -66,7 +66,7 @@ const partWritings: Record<AccordionPart, PartWriting> = {
 export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   const {name, ordinal} = accordionParts.told(part);
   const place = `${demoTab.names[DemoTopics.accordions]} · part ${ordinal} of ${accordionParts.inTheBook}`;
-  const {introduction, exhibitAndRuns, offersTheFoldDials} = partWritings[part];
+  const {introduction, exhibitAndRuns, offersTheFoldDials} = partContents[part];
   return <PartSection heading={name} place={place} introduction={introduction}
     panel={<PartsAndDials offersTheFoldDials={offersTheFoldDials}/>} foot={<PartFoot part={part}/>}>
     {exhibitAndRuns}
