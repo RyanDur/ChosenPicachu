@@ -64,7 +64,8 @@ tester.run('tags-are-devices', tests.rules['tags-are-devices'], {
     {name: 'should accept a journey tagged with a device', code: "test('x', {tag: '@iPhone'}, () => {});"},
     {name: 'should accept a describe tagged with devices', code: "test.describe('x', {tag: ['@desktop', '@phoneSideways']}, () => {});"},
     {name: 'should accept a journey with no options', code: "test('x', () => {});"},
-    {name: 'should accept a tag on something that runs no test', code: "label('x', {tag: '@iphone'});"}
+    {name: 'should accept a tag on something that runs no test', code: "label('x', {tag: '@iphone'});"},
+    {name: 'should accept an @word in a step\'s title, which Playwright reads no tag from', code: "test.step('saves the @2x image', () => {});"}
   ],
   invalid: [
     {name: 'should refuse a misspelled device', code: "test('x', {tag: '@iphone'}, () => {});", errors: [{messageId: 'unknown'}]},

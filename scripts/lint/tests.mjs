@@ -132,6 +132,24 @@ const isLiteralWords = tag => is(tag) && tag.type === 'Literal' && typeof tag.va
 /** Playwright reads every word of a title that begins with @ as a tag. */
 const titleTag = /@\S+/;
 
+const declarers = new Set(['describe', 'only', 'skip', 'fixme', 'fail', 'serial', 'parallel']);
+
+/**
+ * @param {any} callee
+ * @returns {string[]}
+ */
+const modifiersOf = callee => callee.type === 'MemberExpression'
+  ? [...modifiersOf(callee.object), spelled(callee.property)]
+  : [];
+
+/**
+ * Playwright reads tags from the titles of tests and groups, never from a step's.
+ * @param {any} call
+ * @returns {boolean}
+ */
+const declaresATest = call => callsPlaywrightsTest(call)
+  && modifiersOf(call.callee).every(modifier => declarers.has(modifier));
+
 /** @type {import('eslint').Rule.RuleModule} */
 const tagsAreDevices = {
   meta: {
@@ -145,7 +163,7 @@ const tagsAreDevices = {
   },
   create: context => ({
     'CallExpression > Literal.arguments:first-child': title => {
-      if (callsPlaywrightsTest(title.parent) && isLiteralWords(title) && titleTag.test(title.value)) {
+      if (declaresATest(title.parent) && isLiteralWords(title) && titleTag.test(title.value)) {
         context.report({node: title, messageId: 'titled'});
       }
     },
