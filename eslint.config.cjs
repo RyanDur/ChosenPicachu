@@ -243,6 +243,11 @@ module.exports = [
     rules: {'tests/no-double-of-ours': 'error', 'tests/parameterized-for-drift': 'error'}
   },
   {
+    files: ['e2e/**/*.e2e.ts'],
+    plugins: {tests},
+    rules: {'tests/devices-are-projects': 'error'}
+  },
+  {
     files: ['src/**/*.tsx'],
     plugins: {elements},
     rules: {'elements/fieldset-opens-with-its-legend': 'error', 'elements/no-footer-in-a-dialog': 'error'}

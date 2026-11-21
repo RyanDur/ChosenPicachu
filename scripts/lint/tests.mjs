@@ -72,4 +72,37 @@ const parameterizedForDrift = {
   })
 };
 
-export const tests = {rules: {'no-double-of-ours': noDoubleOfOurs, 'parameterized-for-drift': parameterizedForDrift}};
+const deviceOptions = new Set(['viewport', 'screen', 'hasTouch', 'isMobile', 'deviceScaleFactor', 'userAgent']);
+
+/**
+ * @param {any} options
+ * @returns {boolean}
+ */
+const namesNoDevice = options => options?.type === 'ObjectExpression'
+  && options.properties.every(/** @param {any} option */ option =>
+    option.type === 'Property' && not(deviceOptions.has(spelled(option.key))));
+
+/** @type {import('eslint').Rule.RuleModule} */
+const devicesAreProjects = {
+  meta: {
+    type: 'problem',
+    messages: {
+      pinned: 'a journey names its devices by tag, and a project runs it on each; test.use never sets a device'
+    }
+  },
+  create: context => ({
+    'CallExpression[callee.type="MemberExpression"][callee.property.name="use"]': node => {
+      const root = rootOf(node.callee.object);
+      if (root.type !== 'Identifier' || root.name !== 'test') return;
+      if (not(namesNoDevice(node.arguments[0]))) context.report({node, messageId: 'pinned'});
+    }
+  })
+};
+
+export const tests = {
+  rules: {
+    'no-double-of-ours': noDoubleOfOurs,
+    'parameterized-for-drift': parameterizedForDrift,
+    'devices-are-projects': devicesAreProjects
+  }
+};
