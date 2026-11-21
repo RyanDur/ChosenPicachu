@@ -126,7 +126,7 @@ test('Enter in the note field sends, and the dialog says where the note is on Gi
 
 test('Enter in the reach field sends, and the dialog says where the note is on GitHub', ({page}) => enterSendsOntoSent(page, 'reach'));
 
-test('on a desk, the rail keeps the sent note’s link once Close shuts the dialog', async ({page}) => {
+const aNoteGitHubHas = async (page: Page) => {
   await github(page);
   const feedback = feedbackOn(page);
   await page.goto('demos/tables/');
@@ -134,6 +134,11 @@ test('on a desk, the rail keeps the sent note’s link once Close shuts the dial
   await feedback.words.pressSequentially('The sort menu hides behind the header.');
   await feedback.send.click();
   await expect(feedback.status).toContainText('Sent.');
+  return feedback;
+};
+
+test('on a desk, the rail keeps the sent note’s link once Close shuts the dialog', async ({page}) => {
+  const feedback = await aNoteGitHubHas(page);
 
   await feedback.close.click();
 
@@ -288,13 +293,7 @@ test('a note GitHub refuses stays in the open dialog, and it says so', async ({p
 });
 
 test('a second note GitHub refuses leaves no link to the first, and Cancel still reads Cancel', async ({page}) => {
-  await github(page);
-  const feedback = feedbackOn(page);
-  await page.goto('demos/tables/');
-  await feedback.open.click();
-  await feedback.words.pressSequentially('The sort menu hides behind the header.');
-  await feedback.send.click();
-  await expect(feedback.status).toContainText('Sent.');
+  const feedback = await aNoteGitHubHas(page);
   await github(page, {refuse: 'Bad credentials'});
   await feedback.words.pressSequentially('It also flickers.');
 
