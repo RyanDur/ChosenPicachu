@@ -46,7 +46,9 @@ const turnHeadWidth = 5;
 
 const ellipsisInside = (tag: string): Spot => {
   const row = thePage.markupLines.findIndex(written => written.trimStart().startsWith(`<${tag}`));
-  return thePage.letterAt(row, thePage.markupLines[row].indexOf('…'));
+  const column = thePage.markupLines[row].indexOf('…');
+  if (column < 0) throw new Error(`The slab's <${tag}> line has no ellipsis for its wire to land on`);
+  return thePage.letterAt(row, column);
 };
 
 const landings: Record<EventWord, Spot> = {toggle: ellipsisInside('nav'), click: ellipsisInside('table')};
