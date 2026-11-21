@@ -123,7 +123,27 @@ describe('the stub stage answers a page address as GitHub Pages does', () => {
 });
 
 describe('the stub stage', () => {
-  test('survives a feed client that sends a frame it cannot read', async () => {
+  test('should still answer candles after a request for an absolute address', async () => {
+    const {stage, port} = await stageUp();
+
+    await answerTo(port, 'GET http://a:99999/ HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n');
+    const answer = await answerTo(port, get('/trade-history/products/BTC-USD/candles?granularity=60'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+  });
+
+  test('should still answer candles after a request for them at a host-relative address with a bad port', async () => {
+    const {stage, port} = await stageUp();
+
+    await answerTo(port, 'GET //a:99999/candles?granularity=60 HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n');
+    const answer = await answerTo(port, get('/trade-history/products/BTC-USD/candles?granularity=60'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+  });
+
+  test('should keep running after a feed client sends a frame it cannot read', async () => {
     const {stage, port, life} = await stageUp();
     try {
       const client = await feedClient(port);
@@ -172,6 +192,56 @@ describe('the stub stage answers the gallery’s museums from recordings', () =>
 
     expect(answer).toMatch(/^HTTP\/1\.1 200/);
     expect(answer).toMatch(/\r\ncontent-type: application\/json/i);
+  });
+});
+
+const rowsOf = answer => JSON.parse(answer.slice(answer.indexOf('[['), answer.lastIndexOf(']]') + 2));
+
+describe('the stub stage answers the charts’ candle history from recordings', () => {
+  test('should answer an hour of candles from its recording, though it asks with a start and end', async () => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port,
+      get('/trade-history/products/BTC-USD/candles?granularity=60&start=2026-11-20T07%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+    const [first, second] = rowsOf(answer);
+    expect(first[0] - second[0]).toBe(60);
+  });
+
+  test('should answer a day of candles with hour candles', async () => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port,
+      get('/trade-history/products/BTC-USD/candles?granularity=3600&start=2026-11-19T08%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+    const [first, second] = rowsOf(answer);
+    expect(first[0] - second[0]).toBe(3600);
+  });
+
+  test('should answer a week of candles with six-hour candles, not the hour’s minutes', async () => {
+    const {stage, port} = await stageUp();
+
+    const answer = await answerTo(port,
+      get('/trade-history/products/BTC-USD/candles?granularity=21600&start=2026-11-13T08%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 200/);
+    const [first, second] = rowsOf(answer);
+    expect(first[0] - second[0]).toBe(21600);
+  });
+
+  test('should refuse candles of a length it has no recording for', async () => {
+    const {stage, port} = await stageUp({STAGE_SITE: siteWithAUsersPage()});
+
+    const answer = await answerTo(port,
+      get('/trade-history/products/BTC-USD/candles?granularity=900&start=2026-11-20T07%3A00%3A00.000Z&end=2026-11-20T08%3A00%3A00.000Z'));
+    stage.kill();
+
+    expect(answer).toMatch(/^HTTP\/1\.1 404/);
   });
 });
 

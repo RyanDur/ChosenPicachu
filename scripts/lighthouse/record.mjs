@@ -3,6 +3,7 @@ import {mkdirSync, writeFileSync} from 'node:fs';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {empty, maybe, not} from '@ryandur/sand';
+import {recordedAddress} from './recorded-address.mjs';
 
 const site = 'https://ryandur.github.io/ChosenPicachu/';
 const fixtures = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
@@ -27,16 +28,20 @@ page.on('response', async response => {
   const url = response.url();
   const prefix = Object.keys(localized).find(domain => url.startsWith(domain));
   if (empty(prefix)) return;
-  const key = url.replace(prefix, localized[prefix]);
+  const key = recordedAddress(url.replace(prefix, localized[prefix]));
   rest.set(key, {
     contentType: maybe(response.headers()['content-type']).orElse('application/json'),
     body: await response.text()
   });
 });
 
-page.on('websocket', socket => socket.on('framereceived', frame => {
-  if (frames.length < frameCap) frames.push(frame.payload.toString());
-}));
+let framing = false;
+page.on('websocket', socket => {
+  if (not(framing)) return;
+  socket.on('framereceived', frame => {
+    if (frames.length < frameCap) frames.push(frame.payload.toString());
+  });
+});
 
 console.log('recording the gallery…');
 await page.goto(`${site}gallery/?tab=vam`);
@@ -48,7 +53,24 @@ await page.goto(`${site}gallery/O9138?tab=vam`);
 await page.waitForSelector('figure.art-work img', {timeout: 30_000});
 await page.waitForTimeout(2000);
 
+console.log('recording the candles before the feed, so the replayed trades come after them…');
+const candlesOf = granularity => page.waitForResponse(answer => {
+  const asked = new URL(answer.url());
+  return asked.pathname.endsWith('/candles') && asked.searchParams.get('granularity') === String(granularity) && answer.ok();
+}, {timeout: 30_000}).then(answer => answer.finished())
+  .catch(error => console.warn(`no candles of ${granularity}s recorded, so the stage will refuse them: ${error.message}`));
+const hour = candlesOf(60);
+await page.goto(`${site}demos/charts/candles/`);
+await hour;
+for (const [period, granularity] of [['day', 3600], ['week', 21600]]) {
+  const answered = candlesOf(granularity);
+  await page.getByRole('button', {name: /^candle period/}).click();
+  await page.getByRole('button', {name: period, exact: true}).click();
+  await answered;
+}
+
 console.log('recording the feed…');
+framing = true;
 await page.goto(`${site}demos/tables/`);
 await page.waitForSelector('table th', {timeout: 30_000});
 await page.waitForTimeout(6000);
