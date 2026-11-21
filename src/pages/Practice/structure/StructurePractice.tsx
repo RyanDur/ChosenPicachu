@@ -65,7 +65,8 @@ export const StructurePractice: FC = () =>
       once, I name each, so a screen reader can tell them apart.
       The <a className="signpost" href={landmarkRegions}>Authoring Practices</a> put it plainly: <a className="signpost" href={landmarkRegions}>“If a specific landmark role is used more than once on a page,
         provide each instance of that landmark with a unique label.”</a> A section takes its name from its heading or,
-      where it has none, from a label. If there is nothing to name it by, it is not a section. The landmark elements,
+      where it has none, from a label. A section with no name is no landmark, so a screen reader passes over it; on
+      this site such a section only carries a part’s look or layout. The landmark elements,
       header, main, footer and nav, come from the standard the browser makers began writing themselves in
       the <MomentLink to="browsersTakePen">2004 moment</MomentLink>.</p>
     <LandmarkMap/>
