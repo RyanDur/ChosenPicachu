@@ -1,4 +1,5 @@
 import {is, not} from '@ryandur/sand';
+import devices from '../../e2e/__test_support/devices.json' with {type: 'json'};
 
 const runners = new Set(['test', 'it', 'describe']);
 
@@ -100,10 +101,45 @@ const devicesAreProjects = {
   })
 };
 
+const deviceTags = new Set(Object.keys(devices).map(device => `@${device}`));
+
+/**
+ * @param {any} options
+ * @returns {any[]}
+ */
+const tagsIn = options => {
+  const tag = options.properties.find(/** @param {any} option */ option => spelled(option.key) === 'tag')?.value;
+  if (not(is(tag))) return [];
+  return tag.type === 'ArrayExpression' ? tag.elements : [tag];
+};
+
+/** @type {import('eslint').Rule.RuleModule} */
+const tagsAreDevices = {
+  meta: {
+    type: 'problem',
+    messages: {
+      unknown: 'a journey\'s tag names a device in e2e/__test_support/devices.json; any other tag matches no project, ' +
+        'and the journey runs at the default size',
+      unread: 'a journey\'s tag is a literal string, so the lint can check it names a device'
+    }
+  },
+  create: context => ({
+    'CallExpression > ObjectExpression.arguments': options => {
+      const root = rootOf(options.parent.callee);
+      if (root.type !== 'Identifier' || root.name !== 'test') return;
+      tagsIn(options).forEach(tag => {
+        if (tag?.type !== 'Literal' || typeof tag.value !== 'string') context.report({node: tag ?? options, messageId: 'unread'});
+        else if (not(deviceTags.has(tag.value))) context.report({node: tag, messageId: 'unknown'});
+      });
+    }
+  })
+};
+
 export const tests = {
   rules: {
     'no-double-of-ours': noDoubleOfOurs,
     'parameterized-for-drift': parameterizedForDrift,
-    'devices-are-projects': devicesAreProjects
+    'devices-are-projects': devicesAreProjects,
+    'tags-are-devices': tagsAreDevices
   }
 };

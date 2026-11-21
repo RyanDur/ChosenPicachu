@@ -58,3 +58,18 @@ tester.run('devices-are-projects', tests.rules['devices-are-projects'], {
     {name: 'should refuse a device spread into a journey\'s options', code: 'test.use({...iPhone, javaScriptEnabled: false});', errors: [{messageId: 'pinned'}]}
   ]
 });
+
+tester.run('tags-are-devices', tests.rules['tags-are-devices'], {
+  valid: [
+    {name: 'should accept a journey tagged with a device', code: "test('x', {tag: '@iPhone'}, () => {});"},
+    {name: 'should accept a describe tagged with devices', code: "test.describe('x', {tag: ['@desktop', '@phoneSideways']}, () => {});"},
+    {name: 'should accept a journey with no options', code: "test('x', () => {});"},
+    {name: 'should accept a tag on something that runs no test', code: "label('x', {tag: '@iphone'});"}
+  ],
+  invalid: [
+    {name: 'should refuse a misspelled device', code: "test('x', {tag: '@iphone'}, () => {});", errors: [{messageId: 'unknown'}]},
+    {name: 'should refuse an unknown device among known ones', code: "test.describe('x', {tag: ['@desktop', '@tablet']}, () => {});", errors: [{messageId: 'unknown'}]},
+    {name: 'should refuse a tag held in a variable', code: "test('x', {tag: onAPhone}, () => {});", errors: [{messageId: 'unread'}]},
+    {name: 'should refuse a tag built in a template', code: "test('x', {tag: [`@${reader}`]}, () => {});", errors: [{messageId: 'unread'}]}
+  ]
+});
