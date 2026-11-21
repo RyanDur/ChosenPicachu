@@ -1,12 +1,27 @@
 import {empty, has, is, maybe, not} from '@ryandur/sand';
-import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
+import {readFileSync, readdirSync, statSync} from 'node:fs';
 import {dirname, join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = join(root, 'src');
 
-const entriesOf = directory => existsSync(directory) ? readdirSync(directory, {withFileTypes: true}) : [];
+/**
+ * @template T
+ * @param {() => T} read
+ * @param {T} gone
+ * @returns {T}
+ */
+const unlessGone = (read, gone) => {
+  try {
+    return read();
+  } catch (error) {
+    if (error.code === 'ENOENT' || error.code === 'ENOTDIR') return gone;
+    throw error;
+  }
+};
+
+const entriesOf = directory => unlessGone(() => readdirSync(directory, {withFileTypes: true}), []);
 
 const folders = directory => [directory, ...entriesOf(directory)
   .filter(entry => entry.isDirectory()).flatMap(entry => folders(join(directory, entry.name)))];
@@ -14,7 +29,7 @@ const folders = directory => [directory, ...entriesOf(directory)
 const sheetsIn = directories => directories.flatMap(directory => entriesOf(directory)
   .filter(entry => entry.isFile() && entry.name.endsWith('.css')).map(entry => join(directory, entry.name)));
 
-const textOf = sheet => existsSync(sheet) ? readFileSync(sheet, 'utf8') : '';
+const textOf = file => unlessGone(() => readFileSync(file, 'utf8'), '');
 
 const selectorsOf = sheet => [...textOf(sheet).replace(/\/\*[^]*?\*\//g, '').matchAll(/([^{};]+)\{/g)]
   .map(([, selector]) => selector.trim())
@@ -43,24 +58,30 @@ const classesOf = sheets => {
   return {own, shared, bySheet};
 };
 
-const stampOf = paths => paths.map(path => `${path} ${maybe(statSync(path, {throwIfNoEntry: false})).map(({mtimeMs}) => mtimeMs).orElse(0)}`).join('\n');
+const stampOf = paths => paths.map(path => `${path} ${maybe(statSync(path, {throwIfNoEntry: false}))
+  .map(({mtimeMs, ctimeMs, size, ino}) => [mtimeMs, ctimeMs, size, ino].join(' ')).orElse('gone')}`).join('\n');
+
+const stampedFolders = () => {
+  const directories = folders(src);
+  const stamp = stampOf(directories);
+  return folders(src).join('\n') === directories.join('\n') ? {directories, stamp} : stampedFolders();
+};
 
 let lastRead = {watched: [], stamp: '', classes: classesOf([])};
 
 // WebStorm's ESLint service keeps one process across branch switches.
 const sheetClasses = () => {
   if (has(lastRead.watched) && stampOf(lastRead.watched) === lastRead.stamp) return lastRead.classes;
-  const directories = folders(src);
-  const directoriesStamp = stampOf(directories);
+  const {directories, stamp} = stampedFolders();
   const sheets = sheetsIn(directories);
-  lastRead = {watched: [...directories, ...sheets], stamp: `${directoriesStamp}\n${stampOf(sheets)}`, classes: classesOf(sheets)};
+  lastRead = {watched: [...directories, ...sheets], stamp: `${stamp}\n${stampOf(sheets)}`, classes: classesOf(sheets)};
   return lastRead.classes;
 };
 
 /** @param {string} directory */
-const framedBesides = directory => readdirSync(directory)
+const framedBesides = directory => entriesOf(directory).map(({name}) => name)
   .filter(name => /\.tsx?$/.test(name))
-  .flatMap(name => [...readFileSync(join(directory, name), 'utf8').matchAll(/import\s+\w+\s+from\s+'([^']+\.css)\?frame'/g)])
+  .flatMap(name => [...textOf(join(directory, name)).matchAll(/import\s+\w+\s+from\s+'([^']+\.css)\?frame'/g)])
   .map(([, specifier]) => specifier.startsWith('@components/') ? join(src, 'components', specifier.slice('@components/'.length)) : join(directory, specifier));
 
 /**
