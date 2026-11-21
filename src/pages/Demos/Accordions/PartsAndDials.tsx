@@ -8,14 +8,14 @@ import {PartsIndex} from './PartsIndex';
 
 type Props = {
   readonly titled?: boolean;
-  readonly dialed: boolean;
+  readonly offersTheFoldDials: boolean;
 };
 
-export const PartsAndDials: FC<Props> = ({titled = false, dialed}) =>
+export const PartsAndDials: FC<Props> = ({titled = false, offersTheFoldDials}) =>
   <TabSidecar label={titled ? 'parts and dials' : undefined}>
     <AccordionsSize/>
     <PartsIndex titled={titled}/>
-    {dialed && <DialGroup>
+    {offersTheFoldDials && <DialGroup>
       <FoldTypeDial/>
       <FoldMotionDial/>
     </DialGroup>}

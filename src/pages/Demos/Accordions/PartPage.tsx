@@ -32,43 +32,43 @@ const slidingFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
 type PartWriting = {
   readonly introduction: ReactNode;
   readonly exhibitAndRuns: ReactNode;
-  readonly dialed: boolean;
+  readonly offersTheFoldDials: boolean;
 };
 
 const partWritings: Record<AccordionPart, PartWriting> = {
   'a-box-remembers-the-fold': {
     introduction: <RemembersTheFoldIntroduction/>,
     exhibitAndRuns: <RemembersTheFold folds={knownFolds}/>,
-    dialed: true
+    offersTheFoldDials: true
   },
   'the-max-height-guess': {
     introduction: <MaxHeightGuessIntroduction/>,
     exhibitAndRuns: <MaxHeightGuess/>,
-    dialed: false
+    offersTheFoldDials: false
   },
   'the-measured-height': {
     introduction: <MeasuredHeightIntroduction/>,
     exhibitAndRuns: <MeasuredHeight folds={measuredFolds}/>,
-    dialed: true
+    offersTheFoldDials: true
   },
   'what-the-platform-gives-now': {
     introduction: <PlatformGivesNowIntroduction/>,
     exhibitAndRuns: <PlatformGivesNow folds={platformFolds}/>,
-    dialed: true
+    offersTheFoldDials: true
   },
   'how-a-sliding-fold-moves': {
     introduction: <SlidingFoldMovesIntroduction/>,
     exhibitAndRuns: <SlidingFoldMoves folds={slidingFolds}/>,
-    dialed: true
+    offersTheFoldDials: true
   }
 };
 
 export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   const {name, ordinal} = accordionParts.told(part);
   const place = `${demoTab.names[DemoTopics.accordions]} · part ${ordinal} of ${accordionParts.inTheBook}`;
-  const {introduction, exhibitAndRuns, dialed} = partWritings[part];
+  const {introduction, exhibitAndRuns, offersTheFoldDials} = partWritings[part];
   return <PartSection heading={name} place={place} introduction={introduction}
-    panel={<PartsAndDials dialed={dialed}/>} foot={<PartFoot part={part}/>}>
+    panel={<PartsAndDials offersTheFoldDials={offersTheFoldDials}/>} foot={<PartFoot part={part}/>}>
     {exhibitAndRuns}
   </PartSection>;
 };
