@@ -6,12 +6,17 @@ import {fileURLToPath} from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const src = join(root, 'src');
 
-const folders = directory => [directory, ...readdirSync(directory, {withFileTypes: true})
+const entriesOf = directory => existsSync(directory) ? readdirSync(directory, {withFileTypes: true}) : [];
+
+const folders = directory => [directory, ...entriesOf(directory)
   .filter(entry => entry.isDirectory()).flatMap(entry => folders(join(directory, entry.name)))];
 
-const sheetsIn = directories => directories.flatMap(directory => readdirSync(directory).filter(name => name.endsWith('.css')).map(name => join(directory, name)));
+const sheetsIn = directories => directories.flatMap(directory => entriesOf(directory)
+  .filter(entry => entry.isFile() && entry.name.endsWith('.css')).map(entry => join(directory, entry.name)));
 
-const selectorsOf = sheet => [...readFileSync(sheet, 'utf8').replace(/\/\*[^]*?\*\//g, '').matchAll(/([^{};]+)\{/g)]
+const textOf = sheet => existsSync(sheet) ? readFileSync(sheet, 'utf8') : '';
+
+const selectorsOf = sheet => [...textOf(sheet).replace(/\/\*[^]*?\*\//g, '').matchAll(/([^{};]+)\{/g)]
   .map(([, selector]) => selector.trim())
   .filter(selector => not(selector.startsWith('@')))
   .map(selector => selector.replace(/"[^"]*"|'[^']*'/g, ''));
@@ -30,7 +35,7 @@ const classesOf = sheets => {
   const shared = new Set();
   /** @type {Map<string, Set<string>>} */
   const bySheet = new Map();
-  for (const sheet of sheets.filter(existsSync)) {
+  for (const sheet of sheets) {
     const names = new Set(selectorsOf(sheet).flatMap(classesIn));
     bySheet.set(sheet, names);
     names.forEach(name => (isShared(sheet) ? shared : own).add(name));
@@ -42,9 +47,7 @@ const stampOf = paths => paths.map(path => `${path} ${maybe(statSync(path, {thro
 
 let lastRead = {watched: [], stamp: '', classes: classesOf([])};
 
-// WebStorm's ESLint service keeps one process across branch switches,
-// so the sheets are read again when a sheet or a folder changes. The folders are
-// stamped before they are listed, so a sheet added in between changes the next stamp.
+// WebStorm's ESLint service keeps one process across branch switches.
 const sheetClasses = () => {
   if (has(lastRead.watched) && stampOf(lastRead.watched) === lastRead.stamp) return lastRead.classes;
   const directories = folders(src);
