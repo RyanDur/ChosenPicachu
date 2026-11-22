@@ -67,9 +67,7 @@ export const demoPage = {
   entriesLinking: (name: RegExp): HTMLElement[] => screen.getAllByRole('listitem')
     .filter(entry => is(within(entry).queryByRole('link', {name}))),
   wholePage: (): HTMLElement => screen.getByRole('main'),
-  introduction: (): HTMLElement => maybe(introductionBeforeTheTabs()).either(introduction => introduction, () => {
-    throw new Error('No paragraph stands before the demos tabs');
-  }),
+  hasAnOpeningBeforeItsTabs: (): boolean => is(introductionBeforeTheTabs()),
   linksToTabsIn,
   linksToPageIn,
   linksToPage: (address: string): string[][] => toPage(linksOffTheRail(), address),

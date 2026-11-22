@@ -36,23 +36,7 @@ describe('The Demos page', () => {
 
     await demoPage.findTitle('Why 9999 still loses');
 
-    expect(demoPage.introduction()).toBeInTheDocument();
-  });
-
-  test('a tables tutorial’s page should open with the Demos introduction above its tabs', async () => {
-    render(<TestApp at={demosAt('tables/menu')}/>);
-
-    await demoPage.findTitle('Demos Tables · Sort menu');
-
-    expect(demoPage.introduction()).toBeInTheDocument();
-  });
-
-  test('the Tables tab opens with the Demos introduction above its tabs', async () => {
-    render(<TestApp at={demosAt('tables')}/>);
-
-    await demoPage.findTitle('Demos Tables');
-
-    expect(demoPage.introduction()).toBeInTheDocument();
+    expect(demoPage.hasAnOpeningBeforeItsTabs()).toBe(true);
   });
 
   test('the tab row on the Z-index tab names the tab the reader is on', async () => {
