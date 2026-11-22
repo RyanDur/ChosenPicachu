@@ -1,4 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
+import {not} from '@ryandur/sand';
 import {type Box, boxOf} from './box';
 import {pillSwitch} from './pills';
 import {siteFrame} from './site';
@@ -42,6 +43,24 @@ export const positionExhibit = (page: Page) => {
       }
     },
     position: (position: Position): Locator => positionPills.pill(position),
+    tabsToTheLittlePage: async (): Promise<void> => {
+      await siteFrame(page).hydrated();
+      await positionPills.pill('static').focus();
+      const reached = (): Promise<boolean> => littlePage.evaluate(view => view === document.activeElement);
+      for (let presses = 0; presses < 12 && not(await reached()); presses += 1) {
+        await page.keyboard.press('Tab');
+      }
+    },
+    ringReachesPastTheWindow: (): Promise<boolean> => littlePage.evaluate(view => {
+      const ring = getComputedStyle(view);
+      if (ring.outlineStyle === 'none') return true;
+      const reach = parseFloat(ring.outlineWidth) + parseFloat(ring.outlineOffset);
+      const box = view.getBoundingClientRect();
+      const clip = view.parentElement?.getBoundingClientRect() ?? box;
+      return box.left - reach < clip.left || box.top - reach < clip.top ||
+        box.right + reach > clip.right || box.bottom + reach > clip.bottom;
+    }),
+    littlePage,
     choosesParent: (position: ParentPosition): Promise<void> => pillSwitch(page, 'And its parent is').choose(position),
     spotOf,
     placeOf: async (name: string): Promise<Place> =>

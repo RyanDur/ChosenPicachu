@@ -154,8 +154,9 @@ export const WhereSecondGoes: FC = () => {
         <section className="little-view transformed">
           {position === 'fixed' && <MeasuredFrom/>}
           {position === 'sticky' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
-          <section className={classNames('little-page', absolute && not(measuredFromTheParent) && 'alarm-ringed')}
-            aria-label="The little page" tabIndex={0}>
+          <section className={classNames('little-page focus-ringed',
+            absolute && not(measuredFromTheParent) && 'alarm-ringed')}
+          aria-label="The little page" tabIndex={0}>
             {absolute && not(measuredFromTheParent) && <MeasuredFrom/>}
             <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
             <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
