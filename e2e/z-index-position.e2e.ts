@@ -49,6 +49,16 @@ test('a fixed Second stays where it is in the little window when the little page
   await expect.poll(() => exhibit.spotOf('Second')).toEqual(before);
 });
 
+test('a fixed Second’s HTML holds the transformed little view its CSS names', async ({page}) => {
+  const exhibit = positionExhibit(page);
+  await page.goto(address);
+
+  await exhibit.choosesPosition('fixed');
+
+  await expect(exhibit.css).toContainText('.little-view.transformed {');
+  await expect(exhibit.html).toContainText('<section class="little-view transformed">');
+});
+
 test('a sticky Second holds at the top of the little window while its parent scrolls under it', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);

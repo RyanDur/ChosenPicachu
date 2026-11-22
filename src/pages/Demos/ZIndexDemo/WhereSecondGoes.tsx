@@ -17,15 +17,23 @@ const parentChoices: Choice<Parent>[] = [
 const Fillers: FC<{words: string; count: number}> = ({words, count}) => <>{Array.from({length: count}, (_, at) =>
   <p className="little-box muted-dashed-outline rounded-corners caption" key={at}>{words}</p>)}</>;
 
-const markupShown = (position: Position, parentPositioned: boolean): Line[] => [
-  lines.plain('<p>the top of the page</p>'),
-  lines.plain(parentPositioned ? '<section class="parent positioned">' : '<section class="parent">'),
-  lines.plain('  <p>First</p>'),
-  lines.plain(`  <p class="second ${position}">Second</p>`),
-  lines.plain('  <p>Third</p>'),
-  lines.plain('  <p>more inside the parent</p>'),
-  lines.plain('</section>')
+const pageMarkup = (position: Position, parentPositioned: boolean): string[] => [
+  '<p>the top of the page</p>',
+  parentPositioned ? '<section class="parent positioned">' : '<section class="parent">',
+  '  <p>First</p>',
+  `  <p class="second ${position}">Second</p>`,
+  '  <p>Third</p>',
+  '  <p>more inside the parent</p>',
+  '</section>'
 ];
+
+const insideTheTransformedView = (markup: string[]): string[] =>
+  ['<section class="little-view transformed">', ...markup.map(line => `  ${line}`), '</section>'];
+
+const markupShown = (position: Position, parentPositioned: boolean): Line[] => {
+  const markup = pageMarkup(position, parentPositioned);
+  return (position === 'fixed' ? insideTheTransformedView(markup) : markup).map(lines.plain);
+};
 
 const rulesShown = (position: Position, parentPositioned: boolean): Line[] => lines.fromTheExhibit([
   ...carve.unit(sheet, `.second.${position} {`),

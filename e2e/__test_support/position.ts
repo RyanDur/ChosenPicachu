@@ -42,6 +42,7 @@ export const positionExhibit = (page: Page) => {
     scrollsTheLittlePageToItsEnd: (): Promise<void> =>
       littlePage.evaluate(view => view.scrollTo({top: view.scrollHeight, behavior: 'instant'})),
     css: exhibit.getByRole('figure').filter({hasText: /^CSS/}),
+    html: exhibit.getByRole('figure').filter({hasText: /^HTML/}),
     verdict: exhibit.getByRole('status', {name: 'where Second went'}),
     measuredFrom: exhibit.getByRole('status', {name: 'what Second is measured from'})
   };
