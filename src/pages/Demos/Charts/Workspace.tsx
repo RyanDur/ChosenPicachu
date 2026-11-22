@@ -76,7 +76,7 @@ export const Workspace: FC<Props> = ({product}) => {
             </Menu>
           </>}
     </header>
-    <ol className="chart-list" aria-label="charts">{seats.map(({kind}, at) => {
+    <ol className="chart-list reorderable" aria-label="charts">{seats.map(({kind}, at) => {
       const dismissal = plural && <Dismissal onRemoved={pressed => removed(at, pressed)}/>;
       return <li key={kind}
         className={dress(at)}

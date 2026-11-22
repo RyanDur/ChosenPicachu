@@ -19,7 +19,7 @@ export const LazyKeepAnimatedList: FC<Props> = ({list}) => {
       onDragOver={event => event.preventDefault()}
       onDrop={event => event.preventDefault()}
       onDragLeave={() => dispatch(dragSortChange.left())}
-      className="sortable-list lazy-paced card rounded-corners lifted padded contained">{
+      className="sortable-list reorderable lazy-paced card rounded-corners lifted padded contained">{
         sort.order.map((item, index) => {
           const slideStart = slideStarts.underway(sort.slideStarts, item);
           return <KeepItem key={item} item={item}

@@ -4,5 +4,5 @@ import {BodyEvents, tableContexts} from './tableContexts';
 
 export const Body: FC<ComponentProps<'tbody'> & BodyEvents> = ({onRowMoved, className, children, ...tbody}) =>
   <tableContexts.Body.Provider value={{onRowMoved}}>
-    <tbody {...tbody} className={classNames('body', className)}>{children}</tbody>
+    <tbody {...tbody} className={classNames('body', 'reorderable', className)}>{children}</tbody>
   </tableContexts.Body.Provider>;

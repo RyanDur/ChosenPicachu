@@ -1,4 +1,5 @@
 .center { margin-inline: auto; }
+.reorderable { overflow-anchor: none; }
 .path { display: flex; align-items: center; justify-content: center; }
 
 .off-screen {
