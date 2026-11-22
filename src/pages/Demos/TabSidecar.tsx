@@ -10,7 +10,7 @@ export const TabSidecar: FC<Props> = ({label, className, children}) => {
   const besideAPart = useContext(BesideAPart);
   const {parts} = useControls();
   const folded = besideAPart && parts === 'hidden';
-  return <aside aria-label={label} className={classNames('tab-sidecar field', folded && 'folded', className)}>
+  return <aside aria-label={label} className={classNames('tab-sidecar', folded && 'folded field', className)}>
     {children}
   </aside>;
 };
