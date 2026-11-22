@@ -3,6 +3,7 @@ export {oldBanner} from './oldBanner';
 export {siteBanners} from './banners';
 export {wearsChooser} from './chooser';
 export {stackingPile} from './pile';
+export {positionExhibit} from './position';
 export {exhibit} from './steps';
 export {zIndexTab} from './tab';
 export {oldWayMenu} from './oldWayMenu';
