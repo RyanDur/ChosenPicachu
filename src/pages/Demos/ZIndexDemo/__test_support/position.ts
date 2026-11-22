@@ -6,11 +6,17 @@ type ParentPillWords = 'position: relative' | 'not positioned';
 
 const pillsOf = (name: string): HTMLElement => screen.getByRole('group', {name});
 
+const codeIn = (sample: HTMLElement): string => within(sample).getByRole('code').textContent ?? '';
+
 export const positionExhibit = {
   choose: async (position: Position): Promise<void> =>
     userEvent.click(within(pillsOf('Second’s position is')).getByRole('radio', {name: position})),
   chooseParent: async (parentPillWords: ParentPillWords): Promise<void> =>
     userEvent.click(within(pillsOf('And its parent is')).getByRole('radio', {name: parentPillWords})),
+  samples: (): {html: string; css: string} => {
+    const [html, css] = within(screen.getByRole('figure', {name: /^Where Second goes\./})).getAllByRole('figure');
+    return {html: codeIn(html), css: codeIn(css)};
+  },
   measuredFrom: (): HTMLElement => screen.getByRole('status', {name: 'what Second is measured from'}),
   whereSecondWent: (): HTMLElement => screen.getByRole('status', {name: 'where Second went'}),
   parentPills: (): HTMLElement => pillsOf('And its parent is'),

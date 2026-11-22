@@ -26,7 +26,7 @@ test('a keyboard reaches the little page and scrolls it', async ({page}) => {
   await expect.poll(async () => (await exhibit.spotOf('First')).y).toBeLessThan(first.y);
 });
 
-test('Second given relative moves 16px down and 24px right, its old place stays open, and the page says where it went', async ({page}) => {
+test('Second given relative moves 16px down and 24px right, and its old place stays open', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
   const second = await exhibit.spotOf('Second');
@@ -36,7 +36,6 @@ test('Second given relative moves 16px down and 24px right, its old place stays 
 
   await expect.poll(() => exhibit.spotOf('Second')).toEqual({x: second.x + 24, y: second.y + 16});
   expect(await exhibit.spotOf('Third')).toEqual(third);
-  await expect(exhibit.css).toContainText('position: relative;');
 });
 
 test('a relative Second leaves its dashed outline exactly where it stood', async ({page}) => {
@@ -49,7 +48,7 @@ test('a relative Second leaves its dashed outline exactly where it stood', async
   await expect.poll(() => exhibit.oldPlaceOf('Second')).toEqual([stood]);
 });
 
-test('an absolute Second whose parent has no position is measured from the little page’s corner, and the part says so', async ({page}) => {
+test('an absolute Second whose parent has no position is measured from the little page’s corner', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
   await exhibit.chooses('absolute');
@@ -57,7 +56,6 @@ test('an absolute Second whose parent has no position is measured from the littl
   await exhibit.choosesParent('not positioned');
 
   await expect.poll(() => exhibit.spotOf('Second')).toEqual({x: 24, y: 16});
-  await expect(exhibit.measuredFrom).toContainText('the little page’s corner');
 });
 
 test('an absolute Second whose parent is positioned sits 16px down and 24px in from the parent’s corner', async ({page}) => {
@@ -90,16 +88,6 @@ test('a fixed Second stays where it is in the little window when the little page
 
   await expect.poll(() => exhibit.spotOf('First')).toEqual({x: first.x, y: first.y - 120});
   await expect.poll(() => exhibit.spotOf('Second')).toEqual(before);
-});
-
-test('a fixed Second’s HTML holds the transformed little view its CSS names', async ({page}) => {
-  const exhibit = positionExhibit(page);
-  await page.goto(address);
-
-  await exhibit.chooses('fixed');
-
-  await expect(exhibit.css).toContainText('.little-view.transformed {');
-  await expect(exhibit.html).toContainText('<section class="little-view transformed">');
 });
 
 test('a sticky Second holds at the top of the little window while its parent scrolls under it', async ({page}) => {

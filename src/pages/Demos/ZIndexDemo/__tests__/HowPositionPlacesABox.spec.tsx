@@ -75,6 +75,27 @@ describe('how position places a box, on its own page', () => {
     expect(positionExhibit.queryParentPills()).not.toBeInTheDocument();
   });
 
+  test('should show a relative Second’s own rule in the CSS', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await positionExhibit.choose('relative');
+
+    expect(positionExhibit.samples().css).toContain('position: relative;');
+  });
+
+  test('should show a fixed Second inside the transformed little view its CSS names', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await positionExhibit.choose('fixed');
+
+    expect(positionExhibit.samples()).toEqual({
+      html: expect.stringContaining('<section class="little-view transformed">'),
+      css: expect.stringContaining('.little-view.transformed {')
+    });
+  });
+
   test('should say a static Second is measured from nowhere', async () => {
     render(<TestApp at={demosAt(howPosition)}/>);
     await explanation.part(title);
