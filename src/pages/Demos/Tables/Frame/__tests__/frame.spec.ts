@@ -63,7 +63,7 @@ describe('the frame table', () => {
     vanillaFrame.stand();
 
     expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('0');
+    expect(vanillaFrame.cell('this minute', 'trades')).toHaveTextContent('0');
   });
 
   it('a sort with no values still announces its direction', async () => {
@@ -72,7 +72,7 @@ describe('the frame table', () => {
     await vanillaFrame.choose('trades', 'descending');
 
     expect(vanillaFrame.lookbackNames()).toEqual(['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session']);
-    expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('0');
+    expect(vanillaFrame.cell('this minute', 'trades')).toHaveTextContent('0');
     expect(vanillaFrame.header('trades')).toHaveAttribute('aria-sort', 'descending');
   });
 
@@ -113,8 +113,8 @@ describe('the frame table', () => {
 
     broadcast(feed, [tradeFrame(100), tradeFrame(101, 1700000000000 - 120000)]);
 
-    await waitFor(() => expect(vanillaFrame.figure('session', 'trades')).toHaveTextContent('2'));
-    expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('1');
+    await waitFor(() => expect(vanillaFrame.cell('session', 'trades')).toHaveTextContent('2'));
+    expect(vanillaFrame.cell('this minute', 'trades')).toHaveTextContent('1');
   });
 
   it('a number a trade moves is marked', async () => {
@@ -122,7 +122,7 @@ describe('the frame table', () => {
     vanillaFrame.stand({feed});
     await feedIsSubscribed(feed);
     broadcast(feed, [tradeFrame(100)]);
-    await waitFor(() => expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('1'));
+    await waitFor(() => expect(vanillaFrame.cell('this minute', 'trades')).toHaveTextContent('1'));
 
     broadcast(feed, [tradeFrame(101, 1700000001000)]);
 
@@ -134,7 +134,7 @@ describe('the frame table', () => {
     vanillaFrame.stand({feed});
     await feedIsSubscribed(feed);
     broadcast(feed, [tradeFrame(100, 1700000000000, '0.01', 'bought')]);
-    await waitFor(() => expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('1'));
+    await waitFor(() => expect(vanillaFrame.cell('this minute', 'trades')).toHaveTextContent('1'));
     broadcast(feed, [tradeFrame(101, 1700000001000, '0.01', 'sold')]);
     await waitFor(() => expect(vanillaFrame.markOn('this minute', 'sells')).toBe('up'));
 
