@@ -23,10 +23,6 @@
       }
 
       .marker {
-        --marker-x: 0;
-        --marker-y: 0;
-
-        translate: var(--marker-x) var(--marker-y);
         transition: translate 300ms ease-out;
       }
     }

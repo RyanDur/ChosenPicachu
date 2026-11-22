@@ -23,8 +23,6 @@ declare module 'csstype' {
     '--swing'?: `${number}deg`;
     '--term-anchor'?: string;
     '--measured-height'?: `${number}px`;
-    '--marker-x'?: `${number}px`;
-    '--marker-y'?: `${number}px`;
     '--shape-x'?: `${number}px`;
     '--shape-foot'?: `${number}px`;
     '--shape-width'?: number;
