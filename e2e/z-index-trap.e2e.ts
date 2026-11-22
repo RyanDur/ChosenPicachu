@@ -4,7 +4,7 @@ import {hydration, trappedMenu} from './__test_support';
 
 test.describe('the trapped menu', {tag: ['@iPhone', '@desktop']}, () => {
   test('the menu opens under card two, with its first choice in the gap above it and its last below it', async ({page}) => {
-    await page.goto('demos/z-index/why-9999-still-loses/');
+    await page.goto('demos/z-index/why-the-popover-wins/');
     const menu = trappedMenu(page);
 
     await menu.open();
@@ -15,7 +15,7 @@ test.describe('the trapped menu', {tag: ['@iPhone', '@desktop']}, () => {
   });
 
   test('freeing card one opens the menu over card two, and trapping it again drops the menu back under', async ({page}) => {
-    await page.goto('demos/z-index/why-9999-still-loses/');
+    await page.goto('demos/z-index/why-the-popover-wins/');
     const menu = trappedMenu(page);
 
     await menu.contextChoice.click();
@@ -32,7 +32,7 @@ test.describe('the trapped menu', {tag: ['@iPhone', '@desktop']}, () => {
 });
 
 test('going back past the box takes back the sentence, which no longer matches the cards', async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = trappedMenu(page);
   await menu.contextChoice.click();
   await menu.open();
@@ -46,7 +46,7 @@ test('going back past the box takes back the sentence, which no longer matches t
 });
 
 test('a choice in the gap takes a click, and the menu names it', async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = trappedMenu(page);
   await menu.open();
 
@@ -56,7 +56,7 @@ test('a choice in the gap takes a click, and the menu names it', async ({page}) 
 });
 
 test('the keyboard moves through the trapped menu, to a choice under card two', async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = trappedMenu(page);
 
   await menu.openByKeyboard();
@@ -67,7 +67,7 @@ test('the keyboard moves through the trapped menu, to a choice under card two', 
 });
 
 test('pressing Sort by again closes its menu', async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = trappedMenu(page);
   await menu.open();
   await expect(page.getByRole('menu')).toBeVisible();
@@ -79,7 +79,7 @@ test('pressing Sort by again closes its menu', async ({page}) => {
 });
 
 test('Shift+Tab from a choice closes the menu, wherever focus lands', async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = trappedMenu(page);
   await menu.openByKeyboard();
   await expect(menu.choice('name')).toBeFocused();
@@ -91,7 +91,7 @@ test('Shift+Tab from a choice closes the menu, wherever focus lands', async ({pa
 });
 
 test('a press outside the open menu closes it', async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = trappedMenu(page);
   await menu.open();
   await expect(page.getByRole('menu')).toBeVisible();
@@ -102,7 +102,7 @@ test('a press outside the open menu closes it', async ({page}) => {
 });
 
 test('given the page before its script runs, the old-way Sort by is disabled; once the script runs, the first Enter opens its menu', async ({page}) => {
-  const address = 'demos/z-index/why-9999-still-loses/';
+  const address = 'demos/z-index/why-the-popover-wins/';
   await hydration(page).holdBack(address);
   await page.goto(address);
   const menu = trappedMenu(page);

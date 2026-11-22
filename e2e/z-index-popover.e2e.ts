@@ -14,7 +14,7 @@ const theTopLayerMenuIsOverEverything = async (page: Page): Promise<void> => {
 };
 
 const opensOverEverythingWithCardOne = async (page: Page, state: 'contained' | 'free'): Promise<void> => {
-  await page.goto(`demos/z-index/why-9999-still-loses/?card-one=${state}`);
+  await page.goto(`demos/z-index/why-the-popover-wins/?card-one=${state}`);
   const menu = topLayerMenu(page);
 
   await menu.open();
@@ -31,7 +31,7 @@ test.describe('the menu in the top layer', {tag: ['@iPhone', '@desktop']}, () =>
 });
 
 test('the menu in the top layer, pressed at the bottom edge of the view, opens over everything around it, and the exhibit says so', {tag: '@iPhone'}, async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = topLayerMenu(page);
 
   await menu.openFromTheBottomEdge();
@@ -40,7 +40,7 @@ test('the menu in the top layer, pressed at the bottom edge of the view, opens o
 });
 
 test('Escape from a choice closes the menu in the top layer and gives focus back to its button', async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = topLayerMenu(page);
   await menu.sortBy.focus();
   await page.keyboard.press('Enter');
@@ -54,7 +54,7 @@ test('Escape from a choice closes the menu in the top layer and gives focus back
 });
 
 test('Tab from Sort by reaches Sort by, in the top layer', async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = topLayerMenu(page);
   await trappedMenu(page).focusSortBy();
 
@@ -64,7 +64,7 @@ test('Tab from Sort by reaches Sort by, in the top layer', async ({page}) => {
 });
 
 test('a click outside closes the menu in the top layer', async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = topLayerMenu(page);
   await menu.open();
   await expect(menu.menu).toBeVisible();
@@ -75,7 +75,7 @@ test('a click outside closes the menu in the top layer', async ({page}) => {
 });
 
 test('a choice closes the menu in the top layer, and its button names the choice', async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = topLayerMenu(page);
   await menu.open();
 
@@ -86,7 +86,7 @@ test('a choice closes the menu in the top layer, and its button names the choice
 });
 
 test('reopened, the menu in the top layer marks the choice it was given', async ({page}) => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = topLayerMenu(page);
   await menu.open();
   await menu.choice('date').click();

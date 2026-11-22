@@ -6,7 +6,7 @@ import {theTrap} from '@pages/Demos/ZIndexDemo/__test_support';
 
 describe('the menu built the new way', () => {
   test('should sit in card one, beside Sort by', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     const trap = await theTrap.find();
 
     const cardOne = theTrap.cardOne(trap);

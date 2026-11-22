@@ -1,11 +1,10 @@
 import {FC} from 'react';
-import {DemoLink} from '@pages/Demos/DemoLink';
 import {carve, lines, Mdn, Snippet} from '../Recipe';
 import {ContextChooser} from './ContextChooser';
+import {PartLink} from './PartLink';
 import zIndexCss from './ZIndexDemo.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
 import tabsCss from '@navigation/Tabs/Tabs.css?sample';
-import {zIndexParts} from './part-pages';
 import '../Runs.css';
 
 export const WhatElseFormsAStackingContext: FC = () => <>
@@ -57,9 +56,8 @@ export const WhatElseFormsAStackingContext: FC = () => <>
         1</code></Mdn> forms a
         context on a positioned element. It forms one on a grid item too, which card one is here, and on a flex item,
         a box laid out by a parent whose display is
-        flex. <DemoLink to={zIndexParts.addressOf('why-9999-still-loses')}>The menu part’s card</DemoLink> had
-        position: relative as well, and either is enough. Card two, at 1 and later in the code, is painted over
-        card one.</p>
+        flex. Card B in <PartLink part="why-9999-still-loses"/> had position: relative as well, and either is
+        enough. Card two, at 1 and later in the code, is painted over card one.</p>
       <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(zIndexCss, '.forms-context {'))}/>
     </li>
     <li className="run">

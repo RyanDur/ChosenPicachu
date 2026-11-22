@@ -1,0 +1,66 @@
+.context-inside {
+    display: grid;
+    gap: var(--base-x-2);
+
+    .nesting-stage {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
+        gap: var(--base-x-3);
+        align-items: start;
+    }
+
+    .nesting-code {
+        display: grid;
+        gap: var(--base-x-1_5);
+    }
+
+    .nesting-drawing {
+        position: relative;
+        isolation: isolate;
+        display: grid;
+        gap: var(--base-x-1_5);
+        padding: var(--base-x-1_5);
+
+        &.isolating {
+            .a {
+                isolation: isolate;
+            }
+        }
+
+        .b {
+            position: relative;
+            z-index: 1;
+        }
+
+        .list {
+            position: absolute;
+            z-index: 9999;
+        }
+
+        .nested-card {
+            box-sizing: border-box;
+            margin: 0;
+            padding: var(--base) var(--base-x-2);
+            text-align: end;
+        }
+
+        .shorter {
+            block-size: var(--base-x-9);
+        }
+
+        .taller {
+            block-size: var(--base-x-12);
+        }
+
+        .listed {
+            box-sizing: border-box;
+            inset-block-start: var(--base-x-5);
+            inset-inline-start: var(--base-x-2);
+            inline-size: 50%;
+            block-size: var(--base-x-14);
+            margin: 0;
+            padding: var(--base) var(--base-x-2);
+            text-align: start;
+        }
+    }
+}

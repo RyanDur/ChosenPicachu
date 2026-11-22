@@ -120,7 +120,7 @@ describe('the part on what else forms a stacking context', () => {
   });
 
   test('should leave the trap’s checkbox checked when the address names a wear', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses', '?wears=opacity')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins', '?wears=opacity')}/>);
 
     expect(theTrap.cardOneHasZIndexBox(await theTrap.find())).toBeChecked();
   });
