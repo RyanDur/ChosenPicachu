@@ -19,7 +19,7 @@ type Seating = {readonly seat: Seat; readonly told: Maybe<Omission>};
 const byTheHour = (kind: ChartKind, told: Maybe<Omission>): Seating => ({seat: {kind, period: Period.hour}, told});
 
 const seatedBy = (kind: ChartKind, name: string): Seating => {
-  if (not(is(name))) return byTheHour(kind, nothing());
+  if (not(name)) return byTheHour(kind, nothing());
   if (not(chartKinds.hasPeriods(kind))) return byTheHour(kind, some<Omission>({why: 'no periods', kind}));
   return periodNamed(name).either(
     (period): Seating => ({seat: {kind, period}, told: nothing()}),
@@ -29,7 +29,7 @@ const seatedBy = (kind: ChartKind, name: string): Seating => {
 
 const seatingOf = (entry: string): Maybe<Seating> => {
   const [kind, period = ''] = entry.split(':');
-  return chartKinds.is(kind) ? some(seatedBy(kind, period)) : nothing();
+  return chartKinds.is(kind) ? some(seatedBy(kind, period.trim())) : nothing();
 };
 
 const entryOf = ({kind, period}: Seat): string => period === Period.hour ? kind : `${kind}:${period}`;
@@ -38,19 +38,21 @@ const written = (seats: readonly Seat[]): string => seats.map(entryOf).join(',')
 
 type Reading = {readonly seats: readonly Seat[]; readonly omitted: readonly Omission[]};
 
-const toldAs = (omission: Omission): string => {
-  switch (omission.why) {
+const sameOmission = (one: Omission, other: Omission): boolean => {
+  switch (one.why) {
     case 'unknown':
-      return `unknown ${omission.entry}`;
+      return other.why === 'unknown' && other.entry === one.entry;
     case 'unknown period':
-      return `unknown period ${omission.kind} ${omission.period}`;
-    default:
-      return `${omission.why} ${omission.kind}`;
+      return other.why === 'unknown period' && other.kind === one.kind && other.period === one.period;
+    case 'repeat':
+      return other.why === 'repeat' && other.kind === one.kind;
+    case 'no periods':
+      return other.why === 'no periods' && other.kind === one.kind;
   }
 };
 
 const toldOnce = (omitted: readonly Omission[], omission: Omission): readonly Omission[] =>
-  omitted.some(other => toldAs(other) === toldAs(omission)) ? omitted : [...omitted, omission];
+  omitted.some(other => sameOmission(other, omission)) ? omitted : [...omitted, omission];
 
 const reading = (charts: string): Reading =>
   charts.split(',').map(entry => entry.trim()).filter(entry => is(entry))

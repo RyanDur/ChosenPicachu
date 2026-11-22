@@ -142,4 +142,19 @@ describe('the desk', () => {
   test('a chart with no periods, named with no period, is not told', () => {
     expect(desk.leftOut('pie,pressure:')).toEqual([]);
   });
+
+  test('a period with a space beside its colon is dealt as that period', () => {
+    expect(desk.dealt('candles: day')).toEqual([{kind: 'candles', period: Period.day}]);
+  });
+
+  test('a period with a space beside its colon is not told as left out', () => {
+    expect(desk.leftOut('candles: day')).toEqual([]);
+  });
+
+  test('a name the desk does not know is told even when it reads like a period another chart was given', () => {
+    expect(desk.leftOut('candles:decade,period candles decade')).toEqual([
+      {why: 'unknown period', kind: 'candles', period: 'decade'},
+      {why: 'unknown', entry: 'period candles decade'}
+    ]);
+  });
 });
