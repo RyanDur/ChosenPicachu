@@ -73,7 +73,7 @@ describe('page error boundaries', () => {
     );
 
     expect(await site.roomSays('This room is closed.')).toBeVisible();
-    expect(site.pageTitle()).toHaveTextContent('Demos Tables');
+    expect(site.pageTitle()).toHaveAccessibleName('Demos Tables');
   });
 
   test('keeps the site nav beside a closed room', async () => {
