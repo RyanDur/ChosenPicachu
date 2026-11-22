@@ -34,15 +34,15 @@ export const positionExhibit = (page: Page) => {
     return {x: Math.round(namedCorner.x - pageCorner.x), y: Math.round(namedCorner.y - pageCorner.y)};
   };
   return {
-    choosesPosition: (position: Position): Promise<void> => positionPills.choose(position),
-    stepsThroughPositionsByKeyboard: async (steps: number): Promise<void> => {
+    chooses: (position: Position): Promise<void> => positionPills.choose(position),
+    stepsByKeyboard: async (steps: number): Promise<void> => {
       await siteFrame(page).hydrated();
       await positionPills.pill('static').focus();
       for (let step = 0; step < steps; step += 1) {
         await page.keyboard.press('ArrowRight');
       }
     },
-    position: (position: Position): Locator => positionPills.pill(position),
+    pill: (position: Position): Locator => positionPills.pill(position),
     tabsToTheLittlePage: async (): Promise<void> => {
       await siteFrame(page).hydrated();
       await positionPills.pill('static').focus();

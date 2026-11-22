@@ -8,10 +8,10 @@ test('a keyboard steps Second through all five positions, and the chosen one is 
   const exhibit = positionExhibit(page);
   await page.goto(address);
 
-  await exhibit.stepsThroughPositionsByKeyboard(4);
+  await exhibit.stepsByKeyboard(4);
 
-  await expect(exhibit.position('sticky')).toBeChecked();
-  await expect(exhibit.position('static')).not.toBeChecked();
+  await expect(exhibit.pill('sticky')).toBeChecked();
+  await expect(exhibit.pill('static')).not.toBeChecked();
 });
 
 test('a keyboard reaches the little page to scroll it', async ({page}) => {
@@ -29,7 +29,7 @@ test('Second given relative moves 16px down and 24px right, its old place stays 
   const second = await exhibit.spotOf('Second');
   const third = await exhibit.spotOf('Third');
 
-  await exhibit.choosesPosition('relative');
+  await exhibit.chooses('relative');
 
   await expect.poll(() => exhibit.spotOf('Second')).toEqual({x: second.x + 24, y: second.y + 16});
   expect(await exhibit.spotOf('Third')).toEqual(third);
@@ -42,7 +42,7 @@ test('a relative Second leaves its dashed outline exactly where it stood', async
   await page.goto(address);
   const stood = await exhibit.placeOf('Second');
 
-  await exhibit.choosesPosition('relative');
+  await exhibit.chooses('relative');
 
   await expect.poll(() => exhibit.oldPlaceOf('Second')).toEqual([stood]);
 });
@@ -50,7 +50,7 @@ test('a relative Second leaves its dashed outline exactly where it stood', async
 test('an absolute Second whose parent has no position is measured from the little page’s corner, and the part says so', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
-  await exhibit.choosesPosition('absolute');
+  await exhibit.chooses('absolute');
 
   await exhibit.choosesParent('not positioned');
 
@@ -62,7 +62,7 @@ test('an absolute Second whose parent is positioned sits 16px down and 24px in f
   const exhibit = positionExhibit(page);
   await page.goto(address);
 
-  await exhibit.choosesPosition('absolute');
+  await exhibit.chooses('absolute');
 
   await expect.poll(() => exhibit.placedFromItsHolder('Second')).toEqual({x: 24, y: 16, measuredFromFirstsHolder: true});
 });
@@ -72,7 +72,7 @@ test('an absolute Second leaves the flow, and Third moves up into its place', as
   await page.goto(address);
   const second = await exhibit.spotOf('Second');
 
-  await exhibit.choosesPosition('absolute');
+  await exhibit.chooses('absolute');
 
   await expect.poll(() => exhibit.spotOf('Third')).toEqual(second);
 });
@@ -80,7 +80,7 @@ test('an absolute Second leaves the flow, and Third moves up into its place', as
 test('a fixed Second stays where it is in the little window when the little page scrolls', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
-  await exhibit.choosesPosition('fixed');
+  await exhibit.chooses('fixed');
   const before = await exhibit.spotOf('Second');
 
   await exhibit.scrollsTheLittlePageTo(120);
@@ -92,7 +92,7 @@ test('a fixed Second’s HTML holds the transformed little view its CSS names', 
   const exhibit = positionExhibit(page);
   await page.goto(address);
 
-  await exhibit.choosesPosition('fixed');
+  await exhibit.chooses('fixed');
 
   await expect(exhibit.css).toContainText('.little-view.transformed {');
   await expect(exhibit.html).toContainText('<section class="little-view transformed">');
@@ -101,7 +101,7 @@ test('a fixed Second’s HTML holds the transformed little view its CSS names', 
 test('a sticky Second holds at the top of the little window while its parent scrolls under it', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
-  await exhibit.choosesPosition('sticky');
+  await exhibit.chooses('sticky');
 
   await exhibit.scrollsTheLittlePageTo(200);
 
@@ -111,7 +111,7 @@ test('a sticky Second holds at the top of the little window while its parent scr
 test('a sticky Second leaves the top of the little window when its parent does', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
-  await exhibit.choosesPosition('sticky');
+  await exhibit.chooses('sticky');
 
   await exhibit.scrollsTheLittlePageToItsEnd();
 

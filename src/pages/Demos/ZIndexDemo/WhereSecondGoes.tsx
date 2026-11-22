@@ -77,19 +77,19 @@ const withNoPositionedParent: Pick<Told, 'story' | 'verdict' | 'measuredFrom'> =
 };
 
 type WhatEachPositionTells = {
-  positions: readonly Position[];
+  inOrder: readonly Position[];
   told: (position: Position, parentPositioned: boolean) => Told;
 };
 
 const whatEachPositionTells: WhatEachPositionTells = {
-  positions,
+  inOrder: positions,
   told: (position, parentPositioned) =>
     position === 'absolute' && not(parentPositioned) ? {...told[position], ...withNoPositionedParent} : told[position]
 };
 
 type ParentPosition = 'positioned' | 'not-positioned';
 
-const positionChoices: Choice<Position>[] = whatEachPositionTells.positions
+const positionChoices: Choice<Position>[] = whatEachPositionTells.inOrder
   .map(position => ({words: position, value: position}));
 const parentPositionChoices: Choice<ParentPosition>[] = [
   {words: 'position: relative', value: 'positioned'},
