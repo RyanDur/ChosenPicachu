@@ -1,4 +1,4 @@
-import {screen, within} from '@testing-library/react';
+import {act, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {computeAccessibleName} from 'dom-accessibility-api';
 import {not} from '@ryandur/sand';
@@ -58,6 +58,17 @@ export const tablesTab = () => ({
     const parts = await screen.findByRole('navigation', {name: 'Parts'}, untilTheTablesTabRenders);
     const [entry] = within(parts).getAllByRole('listitem').filter(item => within(item).queryByRole('link', {name}));
     return within(entry).getByRole('time');
+  },
+  partsFold: (name: 'Hide parts' | 'Show parts', expanded?: boolean): Promise<HTMLElement> =>
+    screen.findByRole('button', {name, expanded}, untilTheTablesTabRenders),
+  partsFoldShown: (): HTMLElement | null => screen.queryByRole('button', {name: /^(Hide|Show) parts$/}),
+  enterOnHideParts: async (): Promise<void> => {
+    const hide = await screen.findByRole('button', {name: 'Hide parts'}, untilTheTablesTabRenders);
+    await waitFor(() => {
+      if (hide.hasAttribute('disabled')) throw new Error('Hide parts waits for the script');
+    });
+    act(() => hide.focus());
+    await userEvent.keyboard('{Enter}');
   },
   titles: (name: string, level?: number): HTMLElement[] => screen.queryAllByRole('heading', {name, level}),
   page: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}, untilTheTablesTabRenders),

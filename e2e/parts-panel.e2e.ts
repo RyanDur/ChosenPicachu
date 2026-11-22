@@ -51,27 +51,4 @@ test.describe('a reader on a desk or a phone', {tag: ['@desktop', '@iPhone']}, (
     await expect(showParts(page)).toBeVisible();
     await expect(parts(page)).toBeHidden();
   });
-
-  test('pressing Enter on Hide parts lands on Show parts, which says the list is collapsed', async ({page}) => {
-    await onTheSketch(page);
-    await hideParts(page).focus();
-
-    await page.keyboard.press('Enter');
-
-    await expect(page.getByRole('button', {name: 'Show parts', expanded: false})).toBeFocused();
-  });
-});
-
-test('a reader on a part’s page with nothing folded finds Hide parts said as expanded', {tag: '@desktop'}, async ({page}) => {
-  await onTheSketch(page);
-
-  await expect(page.getByRole('button', {name: 'Hide parts', expanded: true})).toBeVisible();
-});
-
-test('a reader on the tab’s opening page finds no Hide parts', {tag: '@desktop'}, async ({page}) => {
-  await page.goto('demos/tables/');
-  await siteFrame(page).hydrated();
-
-  await expect(parts(page)).toBeVisible();
-  await expect(hideParts(page)).toHaveCount(0);
 });
