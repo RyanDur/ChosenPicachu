@@ -12,6 +12,11 @@
   margin: 0 0 var(--base-x-2);
 
   .add-chart {
+    display: grid;
+    place-items: center;
+    width: var(--base-x-6);
+    height: var(--base-x-6);
+    padding: 0;
     margin-inline-start: auto;
   }
 
@@ -42,14 +47,6 @@
     }
   }
 }
-.add-chart.button.secondary {
-  display: grid;
-  place-items: center;
-  width: var(--base-x-6);
-  height: var(--base-x-6);
-  padding: 0;
-}
-
 #add-chart {
   position-area: block-start;
   position-try-fallbacks: flip-block;
