@@ -88,43 +88,44 @@
         height: calc(100% + 2 * var(--hairline));
         pointer-events: none;
     }
-}
 
-.little-view.transformed {
-    transform: translate(0);
-}
 
-.parent.positioned {
-    position: relative;
-}
+    .little-view.transformed {
+        transform: translate(0);
+    }
 
-.second.static {
-    position: static;
-    top: 16px;
-    left: 24px;
-}
+    .parent.positioned {
+        position: relative;
+    }
 
-.second.relative {
-    position: relative;
-    top: 16px;
-    left: 24px;
-}
+    .second.static {
+        position: static;
+        top: 16px;
+        left: 24px;
+    }
 
-.second.absolute {
-    position: absolute;
-    top: 16px;
-    left: 24px;
-    width: 50%;
-}
+    .second.relative {
+        position: relative;
+        top: 16px;
+        left: 24px;
+    }
 
-.second.fixed {
-    position: fixed;
-    top: 16px;
-    left: 24px;
-    width: 50%;
-}
+    .second.absolute {
+        position: absolute;
+        top: 16px;
+        left: 24px;
+        width: 50%;
+    }
 
-.second.sticky {
-    position: sticky;
-    top: 0;
+    .second.fixed {
+        position: fixed;
+        top: 16px;
+        left: 24px;
+        width: 50%;
+    }
+
+    .second.sticky {
+        position: sticky;
+        top: 0;
+    }
 }
