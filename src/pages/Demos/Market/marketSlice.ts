@@ -32,7 +32,7 @@ const tradesReducer = (trades: TradesState, action: MarketAction): TradesState =
       tradesBeforeTheNewest: trades.trades,
       trades: [...trades.trades, action.trade].slice(-liveTrades.cap)
     };
-    case 'historyArrived': return {...trades, history: action.trades};
+    case 'historyArrived': return {...trades, history: action.trades, tradesBeforeTheNewest: trades.trades};
     default: return trades;
   }
 };
