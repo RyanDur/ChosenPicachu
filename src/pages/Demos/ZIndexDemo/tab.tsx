@@ -2,7 +2,8 @@ import {FC, useEffect} from 'react';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {useControls} from '../Controls';
 import {ZIndexIntroduction} from './Introduction';
-import {NaturalZIndex} from './NaturalZIndex';
+import {ThePile} from './ThePile';
+import {WhatTheTabGives} from './WhatTheTabGives';
 import {PartPage} from './PartPage';
 import {useShownPart} from './useShownPart';
 import {PartsAndMinutes} from './PartsAndMinutes';
@@ -23,7 +24,8 @@ export const Room: FC = () => {
     part => <PartPage part={part}/>,
     () => <>
       <ZIndexIntroduction/>
-      <NaturalZIndex className="card rounded-corners lifted padded"/>
+      <ThePile/>
+      <WhatTheTabGives/>
       <PartsAndMinutes titled/>
     </>);
 };

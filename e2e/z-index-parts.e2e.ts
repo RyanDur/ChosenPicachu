@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {bannerTrap, contextChooser, partFoot, siteFrame, stackingPile, topLayerMenu, trappedMenu, zIndexTab} from './__test_support';
+import {bannerTrap, contextChooser, partFoot, pileSteps, siteFrame, stackingPile, topLayerMenu, trappedMenu, zIndexTab} from './__test_support';
 
 const whyThirdIsOnTop = 'Why Third is on top';
 const howPositionPlacesABox = 'How position places a box';
@@ -24,7 +24,8 @@ test('a reader follows why Third is on top from the z-index tab to its page and 
 
 test('a card raised on the z-index tab is still raised on the page for why Third is on top', async ({page}) => {
   await page.goto('demos/z-index/');
-  await stackingPile(page).raise('Second');
+  await pileSteps(page).stepsTo('Z-index');
+  await pileSteps(page).givesAZIndexTo('Second');
   await expect(page).toHaveURL(/\?raised=second$/);
 
   await zIndexTab(page).partLink(whyThirdIsOnTop).click();
