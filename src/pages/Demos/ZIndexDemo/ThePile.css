@@ -1,0 +1,50 @@
+.the-pile {
+    display: grid;
+    gap: var(--base-x-2);
+
+    .pile-stage {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
+        gap: var(--base-x-3);
+        align-items: start;
+    }
+
+    .pile-code {
+        display: grid;
+        gap: var(--base-x-1_5);
+    }
+
+    .pile-drawing {
+        position: relative;
+        isolation: isolate;
+        block-size: calc(var(--base-x-11) * 2);
+
+        .card {
+            position: absolute;
+        }
+
+        .raised {
+            z-index: 1;
+        }
+
+        .piled {
+            box-sizing: border-box;
+            width: 44%;
+            height: var(--base-x-11);
+            margin: 0;
+            padding: var(--base-x-2) var(--base-x-2_5);
+            left: 0;
+            top: 0;
+
+            &:nth-child(2) {
+                left: 10%;
+                top: calc(var(--base-x-9) / 2);
+            }
+
+            &:nth-child(3) {
+                left: 20%;
+                top: var(--base-x-9);
+            }
+        }
+    }
+}

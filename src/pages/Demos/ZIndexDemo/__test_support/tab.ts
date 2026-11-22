@@ -11,8 +11,10 @@ const linkToTheBannerStory = (part: HTMLElement): HTMLElement =>
 const sizeLine = /^Seven parts, about \d+ minutes\.$/;
 
 export const zIndexTab = {
-  opening: (): Promise<HTMLElement> => screen.findByText(/^Where two boxes on a page overlap/),
-  pile: (): Promise<HTMLElement> => screen.findByRole('figure', {name: /^The pile\./}),
+  opening: (): Promise<HTMLElement> => screen.findByText(/^A z-index moves a box/),
+  pile: (): Promise<HTMLElement> => screen.findByRole('figure', {name: 'The pile'}),
+  findStep: async (name: string): Promise<HTMLElement> =>
+    within(await screen.findByRole('group', {name: 'Step'})).getByRole('radio', {name}),
   size: (): Promise<HTMLElement> => screen.findByText(sizeLine),
   sizeIn: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByText(sizeLine),
   findFeatureStories: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'Let’s build this feature'}),

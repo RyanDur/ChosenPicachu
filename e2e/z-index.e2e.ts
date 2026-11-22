@@ -1,30 +1,50 @@
 import {Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {type Card, hydration, siteFrame, stackingPile, whichCardIsOnTop} from './__test_support';
+import {type Card, hydration, pileSteps, siteFrame, stackingPile, whichCardIsOnTop} from './__test_support';
 
-test('the pile opens with Third on top, then Second, then First, in the order the code lists them', async ({page}) => {
+const partOne = 'demos/z-index/why-third-is-on-top/';
+
+test('the tab’s pile overlaps with Third on top, and says it is on top because it comes last in the code', async ({page}) => {
+  const pile = pileSteps(page);
   await page.goto('demos/z-index/');
 
-  await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Third', 'Second', 'First']);
+  await expect.poll(pile.cardsFromTheTop).toEqual(['Third', 'Second', 'First']);
+  await expect(pile.verdict).toHaveText('Third is on top. It comes last in the code.');
+  await expect(pile.html).toBeVisible();
+  await expect(pile.css).toContainText('position: absolute;');
 });
 
-const raisedLandsOnTop = async (page: Page, raising: () => Promise<void>, fromTheTop: Card[]): Promise<void> => {
+const givenAZIndexLandsOnTop = async (page: Page, giving: () => Promise<void>, fromTheTop: Card[]): Promise<void> => {
+  const pile = pileSteps(page);
   await page.goto('demos/z-index/');
-  await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(['Third', 'Second', 'First']);
+  await pile.stepsTo('Z-index');
 
-  await raising();
+  await giving();
 
-  await expect.poll(() => stackingPile(page).cardsFromTheTop()).toEqual(fromTheTop);
+  await expect.poll(pile.cardsFromTheTop).toEqual(fromTheTop);
+  await expect(pile.verdict).toHaveText(`${fromTheTop[0]} is on top. Its z-index outranks the order in the code.`);
+  await expect(pile.css).toContainText('z-index: 1;');
 };
 
-test('First raised by a pointer lands on top, and the others keep their order under it', ({page}) =>
-  raisedLandsOnTop(page, () => stackingPile(page).raise('First'), ['First', 'Third', 'Second']));
+test('First given a z-index by a pointer comes to the top of the tab’s pile, with the rule that did it', ({page}) =>
+  givenAZIndexLandsOnTop(page, () => pileSteps(page).givesAZIndexTo('First'), ['First', 'Third', 'Second']));
 
-test('Second raised by the keyboard lands on top, and the others keep their order under it', ({page}) =>
-  raisedLandsOnTop(page, () => stackingPile(page).raiseByKeyboard('Second'), ['Second', 'Third', 'First']));
+test('Second given a z-index by the keyboard comes to the top of the tab’s pile, with the rule that did it', ({page}) =>
+  givenAZIndexLandsOnTop(page, () => pileSteps(page).givesAZIndexByKeyboardTo('Second'), ['Second', 'Third', 'First']));
 
-test('First raised while the pile is spread covers no other card, so the raise changes nothing the reader sees', async ({page}) => {
-  await page.goto('demos/z-index/');
+test('taking First’s z-index away puts Third back on top of the tab’s pile', async ({page}) => {
+  const pile = pileSteps(page);
+  await page.goto('demos/z-index/?raised=first');
+  await expect.poll(pile.cardsFromTheTop).toEqual(['First', 'Third', 'Second']);
+
+  await pile.givesAZIndexTo('None');
+
+  await expect.poll(pile.cardsFromTheTop).toEqual(['Third', 'Second', 'First']);
+  await expect(pile.css).not.toContainText('z-index');
+});
+
+test('First raised while part one’s pile is spread covers no other card, so the raise changes nothing the reader sees', async ({page}) => {
+  await page.goto(partOne);
   const pile = stackingPile(page);
   await pile.expand();
 
@@ -34,8 +54,8 @@ test('First raised while the pile is spread covers no other card, so the raise c
   await expect.poll(pile.cardsFromTheTopAtEachCard).toEqual([['First'], ['Second'], ['Third']]);
 });
 
-test('Second raised while the pile is spread comes down on top when it is collapsed', async ({page}) => {
-  await page.goto('demos/z-index/');
+test('Second raised while part one’s pile is spread comes down on top when it is collapsed', async ({page}) => {
+  await page.goto(partOne);
   const pile = stackingPile(page);
   await pile.expand();
 
@@ -57,10 +77,9 @@ test('the reader asks for the answer to which card is on top from the keyboard, 
   await expect.poll(asking.readInOrder).toEqual(['question', 'answer', 'drawing']);
 });
 
-test('given the z-index tab before its script runs, the pile’s Expand is disabled; once the script runs, the first press expands the pile', async ({page}) => {
-  const address = 'demos/z-index/';
-  await hydration(page).holdBack(address);
-  await page.goto(address);
+test('given part one before its script runs, the pile’s Expand is disabled; once the script runs, the first press expands the pile', async ({page}) => {
+  await hydration(page).holdBack(partOne);
+  await page.goto(partOne);
   const pile = stackingPile(page);
 
   await expect(pile.expander).toBeDisabled();

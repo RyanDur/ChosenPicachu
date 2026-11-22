@@ -40,9 +40,21 @@ test.describe('a finger that lands just off a pill\'s middle', {tag: ['@iPhone',
   });
 
   test('every card raised pill on the z-index demo is chosen by a finger that lands just off its middle', async ({page}) => {
-    await page.goto('demos/z-index/');
+    await page.goto('demos/z-index/why-third-is-on-top/');
 
     expect(await pillsAFingerCannotChoose(page, 'card raised')).toEqual([]);
+  });
+
+  test('every step pill on the z-index tab’s pile is chosen by a finger that lands just off its middle', async ({page}) => {
+    await page.goto('demos/z-index/');
+
+    expect(await pillsAFingerCannotChoose(page, 'Step')).toEqual([]);
+  });
+
+  test('every give a z-index to pill on the z-index tab’s pile is chosen by a finger that lands just off its middle', async ({page}) => {
+    await page.goto('demos/z-index/?raised=first');
+
+    expect(await pillsAFingerCannotChoose(page, 'Give a z-index to')).toEqual([]);
   });
 
   test('every side pill on the z-index demo is chosen by a finger that lands just off its middle', async ({page}) => {

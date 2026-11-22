@@ -3,9 +3,11 @@ import {TestApp} from '@__test_support/TestApp';
 import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {stackingPile} from '@pages/Demos/ZIndexDemo/__test_support';
 
-describe('the stacking pile', () => {
+const partOne = 'z-index/why-third-is-on-top';
+
+describe('part one’s stacking pile', () => {
   test('should open with no card raised', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(partOne)}/>);
 
     const raised = await stackingPile.findCardRaised();
 
@@ -13,7 +15,7 @@ describe('the stacking pile', () => {
   });
 
   test('should check the card chosen, and write it into the address', async () => {
-    render(<TestApp at={demosAt('z-index')}/>);
+    render(<TestApp at={demosAt(partOne)}/>);
     const raised = await stackingPile.findCardRaised();
 
     await stackingPile.raise(raised, 'Second');
@@ -23,7 +25,7 @@ describe('the stacking pile', () => {
   });
 
   test('should open with the card the address names raised', async () => {
-    render(<TestApp at={demosAt('z-index', '?raised=third')}/>);
+    render(<TestApp at={demosAt(partOne, '?raised=third')}/>);
 
     const raised = await stackingPile.findCardRaised();
 

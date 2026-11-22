@@ -23,7 +23,7 @@ export {dialRow, pillSwitch, pillsAFingerCannotChoose} from './pills';
 export {sortableList} from './lists';
 export {heightOnceSettled} from './motion';
 export {accordions, type Build, type Part} from './accordions';
-export {stackingPile, type Card} from './stacking';
+export {pileSteps, stackingPile, type Card, type Step} from './stacking';
 export {positionExhibit} from './position';
 export {zIndexTab} from './z-index';
 export {partFoot} from './part-foot';
