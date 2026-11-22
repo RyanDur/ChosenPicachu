@@ -33,8 +33,9 @@ export const askFor = ({before, after, pull, reviewers}) => [
   'AGENTS.md or a rubric), "concern" or "note"; and "rubric", the file whose rule it answers to, or "correctness".',
   'Answer with every finding in the structured output, an empty list when there are none.',
   ...empty(pull) ? [] : [
-    'Post an inline comment for a violation or a concern only. A note goes in the structured output and the summary,',
-    'never on a line, because every conversation on a line holds the merge until it is resolved.'
+    'Post an inline comment for a violation or a concern only, and begin it with that severity, "Violation:" or',
+    '"Concern:", in place of any label the skill would give it. A note goes in the structured output and the',
+    'summary, never on a line, because every conversation on a line holds the merge until it is resolved.'
   ],
   ...empty(pull) ? [] : [
     'earlier-findings.json holds the conversations earlier reviews of this pull request started, each with its',
@@ -42,7 +43,8 @@ export const askFor = ({before, after, pull, reviewers}) => [
     'by the code at the head. Leave it out of the structured output when the code no longer has the problem, or when',
     'that code is unchanged and its conversation holds the reviewer\'s "Agreed." to an argument that the code is',
     'right as it stands, or a ruling by the repository\'s people, a reply that says "Resolved by ruling.", whatever',
-    'follows either.',
+    'follows either, or when the finding is a concern and its conversation holds a reply that says "Carried to my',
+    'next pull request.".',
     'Otherwise keep it in, resolved or not.'
   ]
 ].join(' ');
