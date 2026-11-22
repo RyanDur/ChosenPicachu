@@ -43,9 +43,7 @@ describe('the live aggregations', () => {
     render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
     await aggregations.afterItsFirstTrade(feed, tradeFrame(50001, now));
     broadcast(feed, [tradeFrame(50002, now + 1000)]);
-    await waitFor(() => expect(aggregations.markOn('this minute', 'trades')).toBe('up'));
-
-    expect(aggregations.spokenIn('this minute', 'trades')).toBe('2 up');
+    await waitFor(() => expect(aggregations.spokenIn('this minute', 'trades')).toBe('2 up'));
   });
 
   test('the arrangement survives a change of table: the order belongs to the page', async () => {

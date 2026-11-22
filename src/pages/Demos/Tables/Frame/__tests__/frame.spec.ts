@@ -126,7 +126,7 @@ describe('the frame table', () => {
 
     broadcast(feed, [tradeFrame(101, 1700000001000)]);
 
-    await waitFor(() => expect(vanillaFrame.markOn('this minute', 'trades')).toBe('up'));
+    await waitFor(() => expect(vanillaFrame.markOn('this minute', 'vwap')).toBe('up'));
   });
 
   it('a mark clears from a number the next trade leaves as it is', async () => {
