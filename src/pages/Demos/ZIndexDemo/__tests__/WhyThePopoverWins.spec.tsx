@@ -67,7 +67,7 @@ describe('why the popover wins, on the tab', () => {
     render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
     await demoTabs.arrivedOn('Z-index');
 
-    const introduction = demoPage.says(/^Part 4, .*explains what the later tabs build on/);
+    const introduction = demoPage.says(/^Part 5, .*explains what the later tabs build on/);
 
     expect(explanation.linkNamed(introduction, title)).toHaveAttribute('href', demosAt(popoverWins, '?raised=second'));
   });
