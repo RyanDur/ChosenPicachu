@@ -24,12 +24,12 @@ test('a tab on a page reached with a dial carries the dial along once the script
   await expect(page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Accordions'})).toHaveAttribute('href', /world=vanilla/);
 });
 
-test('a reader on a part’s page reads what the charts tab adds, and follows it', async ({page}) => {
+test('a reader on a part’s page reads the charts tab’s point, and follows it', async ({page}) => {
   await page.goto('demos/z-index/why-9999-still-loses/');
   await siteFrame(page).hydrated();
   const charts = page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Charts', exact: true});
 
-  await expect(charts).toHaveAccessibleDescription('adds trades that keep arriving, checked where they enter');
+  await expect(charts).toHaveAccessibleDescription('a chart is arithmetic over data the page already holds');
   await charts.click();
 
   await expect(page).toHaveURL(/demos\/charts\/$/);

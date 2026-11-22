@@ -6,7 +6,7 @@ import {demosNav} from './demos-nav';
 
 export const demoTabs = {
   names: async (): Promise<string[]> => within(await demosNav.bar()).getAllByRole('link').map(tab => tab.textContent),
-  whatEachAdds: async (): Promise<[string, string][]> => within(await demosNav.bar()).getAllByRole('link')
+  points: async (): Promise<[string, string][]> => within(await demosNav.bar()).getAllByRole('link')
     .map(tab => [tab.textContent, computeAccessibleDescription(tab)]),
   current: async (): Promise<string[]> =>
     within(await demosNav.bar()).getAllByRole('link', {current: 'page'}).map(tab => tab.textContent),
