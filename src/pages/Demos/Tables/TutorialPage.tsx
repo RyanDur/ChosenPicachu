@@ -1,10 +1,12 @@
 import {FC} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
+import {PartOpening} from '@pages/Demos/PartOpening';
+import {PartPanel} from '@pages/Demos/PartPanel';
+import {PartDemo} from '@pages/Demos/PartDemo';
 import {PartFoot} from '@pages/Demos/PartFoot';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {Aggregations} from './Aggregations';
 import {Tutorial, tableTutorials} from './tutorial-pages';
-import {useShownTutorial} from './useShownTutorial';
 import {DragSortTutorial} from './DragSort';
 import {MenuRecipe, ResizeRecipe} from './Recipe';
 import {DemoLink} from '@pages/Demos/DemoLink';
@@ -26,20 +28,16 @@ const introductions: Record<Tutorial, string> = {
   resize: 'The fifth story, built all the way through.'
 };
 
-const TutorialFoot: FC<{tutorial: Tutorial}> = ({tutorial}) => {
+export const TutorialPage: FC<{readonly tutorial: Tutorial}> = ({tutorial}) => {
   const {previous, next} = usePartsBeside(tutorial);
-  return <PartFoot previous={previous} next={next}/>;
-};
-
-export const TutorialPage: FC = () => {
   const startingAt = tableParts.told(tableTutorials.startingPart);
   const to = tableParts.addressOf(tableTutorials.startingPart);
-  return useShownTutorial().either(tutorial => {
-    const TutorialRecipe = recipes[tutorial];
-    const place = `${demoTab.names[DemoTopics.tables]} · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`;
-    return <PartSection heading={tableTutorials.nameOf(tutorial)} place={place}
-      says={introductions[tutorial]}
-      panel={<PartsAndDials/>} foot={<TutorialFoot tutorial={tutorial}/>} wears="tutorial-page">
+  const TutorialRecipe = recipes[tutorial];
+  const place = `${demoTab.names[DemoTopics.tables]} · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`;
+  return <PartSection heading={tableTutorials.nameOf(tutorial)}>
+    <PartOpening place={place}><p className="paragraph">{introductions[tutorial]}</p></PartOpening>
+    <PartPanel><PartsAndDials/></PartPanel>
+    <PartDemo wears="tutorial-page">
       <Aggregations/>
       <p className="paragraph">
         This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
@@ -48,6 +46,7 @@ export const TutorialPage: FC = () => {
         those are new to you, read that part first.
       </p>
       <TutorialRecipe/>
-    </PartSection>;
-  }, () => null);
+    </PartDemo>
+    <PartFoot previous={previous} next={next}/>
+  </PartSection>;
 };

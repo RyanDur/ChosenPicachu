@@ -1,5 +1,8 @@
 import {FC} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
+import {PartOpening} from '@pages/Demos/PartOpening';
+import {PartPanel} from '@pages/Demos/PartPanel';
+import {PartDemo} from '@pages/Demos/PartDemo';
 import {PartFoot} from '@pages/Demos/PartFoot';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {Aggregations} from './Aggregations';
@@ -32,10 +35,13 @@ export const PartPage: FC<{readonly part: TablePart}> = ({part}) => {
   const Part = parts[part];
   const {previous, next} = usePartsBeside(part);
   const place = `${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`;
-  return <PartSection heading={name} place={place}
-    says={introductions[part]}
-    panel={<PartsAndDials/>} foot={<PartFoot previous={previous} next={next}/>} wears="tutorial-page tutorials">
-    <Aggregations/>
-    <Part/>
+  return <PartSection heading={name}>
+    <PartOpening place={place}><p className="paragraph">{introductions[part]}</p></PartOpening>
+    <PartPanel><PartsAndDials/></PartPanel>
+    <PartDemo wears="tutorial-page tutorials">
+      <Aggregations/>
+      <Part/>
+    </PartDemo>
+    <PartFoot previous={previous} next={next}/>
   </PartSection>;
 };
