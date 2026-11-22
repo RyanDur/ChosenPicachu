@@ -95,11 +95,8 @@ describe('a code sample', () => {
       ...lines.fromTheExhibit(carve.between(store, 'export const store', 'export const store'))
     ]}/>);
 
-    expect(codeSample.captionInOrder()).toEqual([
-      'Demos/store.ts on GitHub',
-      expect.stringMatching(/^Taken from the exhibit on this page\./),
-      'components/store.ts on GitHub'
-    ]);
+    expect(codeSample.source()).toMatch(
+      /^Demos\/store\.ts on GitHub\s*Taken from the exhibit on this page\..*components\/store\.ts on GitHub$/);
   });
 
   test('should say the rest of the site uses none of them when a sample takes from two of the exhibit’s files', () => {
