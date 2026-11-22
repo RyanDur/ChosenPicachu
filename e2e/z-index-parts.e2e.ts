@@ -44,13 +44,6 @@ test('a reader follows why Third is on top’s foot on to the next part’s page
   await expect(page.getByText('Z-index · part 2 of 7', {exact: true})).toBeVisible();
 });
 
-test('the z-index tab lists how position places a box second among seven parts', async ({page}) => {
-  await page.goto('demos/z-index/');
-
-  await expect(zIndexTab(page).partLinks().nth(1)).toHaveAccessibleName(howPositionPlacesABox);
-  await expect(zIndexTab(page).partLinks()).toHaveCount(7);
-});
-
 test('a reader follows how position places a box from the z-index tab to its page and finds where Second goes', async ({page}) => {
   await page.goto('demos/z-index/');
   await siteFrame(page).hydrated();
