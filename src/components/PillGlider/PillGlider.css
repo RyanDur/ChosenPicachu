@@ -51,6 +51,8 @@
     &:has(.pill:nth-of-type(5) :checked)::before { translate: none; grid-column: 5 / span 1; }
 
     .pill {
+      transition-delay: 0s;
+
       @media (width < 430px) {
         padding: 0 var(--base-x-0_5);
       }
