@@ -47,7 +47,7 @@ describe('how position places a box, on its own page', () => {
     await positionExhibit.choose('absolute');
 
     expect(explanation.linkNamed(part, 'positioned'))
-      .toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second&second=absolute'));
+      .toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second&second-position=absolute'));
   });
 
   test('should link flow, where a static Second is placed in it, to the page for why Third is on top with the raised card carried', async () => {
@@ -77,7 +77,7 @@ describe('how position places a box, on its own page', () => {
   });
 
   test('should open with the positions a shared address names already chosen', async () => {
-    render(<TestApp at={demosAt(howPosition, '?second=absolute&parent=not-positioned')}/>);
+    render(<TestApp at={demosAt(howPosition, '?second-position=absolute&parent-position=not-positioned')}/>);
 
     await explanation.part(title);
 
@@ -86,7 +86,7 @@ describe('how position places a box, on its own page', () => {
   });
 
   test('should open with Second static when the address names a position there is not', async () => {
-    render(<TestApp at={demosAt(howPosition, '?second=sideways')}/>);
+    render(<TestApp at={demosAt(howPosition, '?second-position=sideways')}/>);
 
     await explanation.part(title);
 
