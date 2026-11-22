@@ -51,6 +51,7 @@ const WorkspaceStory: FC = () =>
           <Snippet label="TS" lines={[
             ...carve.unit(kindsSource, 'const is ='), lines.blank,
             ...carve.unit(deskSource, 'const reading ='), lines.blank,
+            ...carve.unit(deskSource, 'const seatingOf ='), lines.blank,
             ...carve.unit(deskSource, 'const seatedBy ='), lines.blank,
             ...carve.unit(deskSource, 'const dealt ='), lines.blank,
             ...carve.unit(deskSource, 'const leftOut ='), lines.blank,
