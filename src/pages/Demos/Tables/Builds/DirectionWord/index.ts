@@ -1,0 +1,1 @@
+export {DirectionWord} from './DirectionWord';

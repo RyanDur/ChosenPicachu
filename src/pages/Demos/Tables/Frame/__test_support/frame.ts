@@ -1,5 +1,6 @@
 import {has} from '@ryandur/sand';
 import {screen, within} from '@testing-library/react';
+import {computeAccessibleName} from 'dom-accessibility-api';
 import userEvent from '@testing-library/user-event';
 import {environment} from '@transport';
 import {Feed} from '@pages/Demos/__test_support/feed';
@@ -23,6 +24,10 @@ const numberedGrip = (rowNumber: number): HTMLElement => screen.getByRole('butto
 const grip = (lookback: string): HTMLElement => within(row(lookback)).getByRole('button', {name: /move row/});
 const figure = (lookback: string, column: string): HTMLElement =>
   within(row(lookback)).getAllByRole('cell')[columnOrder().indexOf(column) - 1];
+export const withoutDirection = (text: string): string => text.replace(/ (up|down)$/, '');
+const numberIn = (cell: HTMLElement): string => withoutDirection(cell.textContent);
+const heardDirectionIn = (cell: HTMLElement): string =>
+  / (up|down)$/.exec(computeAccessibleName(cell))?.[1] ?? 'none';
 const columnOrder = (): string[] => screen.getAllByRole('columnheader').map(column => column.getAttribute('aria-label') ?? '');
 const menuItem = (column: string, words: string): HTMLElement =>
   within(screen.getByLabelText(`sort ${column} by`)).getByRole('button', {name: words, hidden: true});
@@ -61,7 +66,8 @@ export const vanillaFrame = {
   row,
   grip,
   figure,
-  markOn: (lookback: string, column: string): string => figure(lookback, column).dataset.moved ?? 'none',
+  markOn: (lookback: string, column: string): string => heardDirectionIn(figure(lookback, column)),
+  numberIn: (lookback: string, column: string): string => numberIn(figure(lookback, column)),
   columnOrder,
   lookbackNames: (): string[] => screen.getAllByRole('rowheader').map(rowHeader => rowHeader.textContent.trim()),
   moveReport: (): HTMLElement => screen.getByRole('status', {name: 'move report'}),
