@@ -8,7 +8,7 @@ const findExpand = (): Promise<HTMLElement> => screen.findByRole('button', {name
 const linkToTheBannerStory = (part: HTMLElement): HTMLElement =>
   explanation.linkInProse(part, 'Let’s build this feature');
 
-const sizeLine = /^Six parts, about \d+ minutes\.$/;
+const sizeLine = /^Seven parts, about \d+ minutes\.$/;
 
 export const zIndexTab = {
   opening: (): Promise<HTMLElement> => screen.findByText(/^Where two boxes on a page overlap/),

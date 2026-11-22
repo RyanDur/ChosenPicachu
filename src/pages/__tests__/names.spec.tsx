@@ -104,6 +104,13 @@ describe('each page is named where a search shows it', () => {
     expect(described()).toBe(names['z-index']['why-third-is-on-top'].description);
   });
 
+  test('should give the page for how position places a box its own title and description', async () => {
+    render(<TestApp at={demosAt('z-index/how-position-places-a-box')}/>);
+
+    await waitFor(() => expect(document.title).toBe(names['z-index']['how-position-places-a-box'].title));
+    expect(described()).toBe(names['z-index']['how-position-places-a-box'].description);
+  });
+
   test('should give the page for why 9999 still loses its own title and description', async () => {
     render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
 

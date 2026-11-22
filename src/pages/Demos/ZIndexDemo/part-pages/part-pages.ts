@@ -8,6 +8,7 @@ type Part = {title: string; minutes: number};
 
 const book = {
   'why-third-is-on-top': {title: 'Why Third is on top', minutes: 2},
+  'how-position-places-a-box': {title: 'How position places a box', minutes: 3},
   'why-9999-still-loses': {title: 'Why 9999 still loses', minutes: 2},
   'what-else-forms-a-stacking-context': {title: 'What else forms a stacking context', minutes: 3},
   'why-the-popover-wins': {title: 'Why the popover wins', minutes: 4},

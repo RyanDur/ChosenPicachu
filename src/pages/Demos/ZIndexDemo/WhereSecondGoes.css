@@ -1,0 +1,127 @@
+.where-second-goes {
+    display: grid;
+    gap: var(--base-x-2);
+
+    .where-we-meet-it {
+        display: grid;
+        gap: var(--base-x-0_5);
+    }
+
+    .position-stage {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
+        gap: var(--base-x-1_5);
+    }
+
+    .little-window {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        min-inline-size: 0;
+        min-block-size: var(--base-x-32_5);
+        overflow: hidden;
+    }
+
+    .little-bar {
+        padding: var(--base) var(--base-x-2);
+    }
+
+    .little-view {
+        position: relative;
+        min-block-size: 0;
+        overflow: hidden;
+    }
+
+    .little-page {
+        position: absolute;
+        inset: 0;
+        overflow: auto;
+        padding: 0 var(--base-x-1_5) var(--base-x-1_5);
+        display: flex;
+        flex-direction: column;
+        gap: var(--base-x-1_25);
+    }
+
+    .page-top {
+        margin-block-start: var(--base-x-1_5);
+    }
+
+    .little-parent {
+        display: flex;
+        flex-direction: column;
+        gap: var(--base-x-1_25);
+        padding: var(--base-x-1_25);
+    }
+
+    .little-box {
+        box-sizing: border-box;
+        padding: var(--base-x-1_25) var(--base-x-1_75);
+    }
+
+    .measured-from {
+        position: absolute;
+        top: var(--hairline-x-4);
+        left: var(--hairline-x-4);
+        width: var(--base-x-1_5);
+        height: var(--base-x-1_5);
+        z-index: 4;
+        pointer-events: none;
+    }
+
+    .sticking-edge {
+        position: absolute;
+        top: 0;
+        inset-inline: 0;
+        height: var(--hairline-x-4);
+        z-index: 4;
+        pointer-events: none;
+    }
+
+    .old-place {
+        position: absolute;
+        top: -16px;
+        left: -24px;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+}
+
+.little-view.transformed {
+    transform: translate(0);
+}
+
+.parent.positioned {
+    position: relative;
+}
+
+.second.static {
+    position: static;
+    top: 16px;
+    left: 24px;
+}
+
+.second.relative {
+    position: relative;
+    top: 16px;
+    left: 24px;
+}
+
+.second.absolute {
+    position: absolute;
+    top: 16px;
+    left: 24px;
+    width: 50%;
+}
+
+.second.fixed {
+    position: fixed;
+    top: 16px;
+    left: 24px;
+    width: 50%;
+}
+
+.second.sticky {
+    position: sticky;
+    top: 0;
+}
