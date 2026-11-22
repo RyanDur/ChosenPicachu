@@ -2,7 +2,8 @@ import {useSearchParamsObject} from '@navigation/search-params';
 import {Motion, Origin} from '@components/DragSortableTable';
 import {Placement, unplaced} from '@banners';
 import {
-  Address, CardOne, FoldMotion, FoldType, Pace, PartsList, RaisedCard, readerSettings, Track, World, Worn
+  Address, CardOne, FoldMotion, FoldType, Pace, ParentPosition, PartsList, Position, RaisedCard, readerSettings,
+  Track, World, Worn
 } from '../ReaderSettings';
 
 export type {Motion, Origin};
@@ -18,6 +19,8 @@ export type Settings = Placement & {
   cardOne: CardOne;
   wears: Worn;
   parts: PartsList;
+  second: Position;
+  parent: ParentPosition;
 };
 
 export type Controls = Settings & {change: (next: Partial<Settings>) => void};
@@ -34,6 +37,8 @@ const defaults: Address = {
   'card-one': 'contained',
   wears: 'nothing',
   parts: 'shown',
+  second: 'static',
+  parent: 'positioned',
   ...unplaced
 };
 

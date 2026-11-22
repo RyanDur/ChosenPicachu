@@ -26,6 +26,13 @@ export const positionExhibit = (page: Page) => {
   const exhibit = page.getByRole('figure', {name: /^Where Second goes\./});
   const littlePage = exhibit.getByRole('region', {name: 'The little page'});
   const positionPills = pillSwitch(page, 'Second’s position is');
+  const parentPills = pillSwitch(page, 'And its parent is');
+  const whereSecondWent = exhibit.getByRole('status', {name: 'where Second went'});
+  const shownOnceChosen = async (choose: () => Promise<void>): Promise<void> => {
+    const before = await whereSecondWent.textContent() ?? '';
+    await choose();
+    await whereSecondWent.filter({hasNotText: before}).waitFor();
+  };
   const spotOf = async (name: string): Promise<Spot> => {
     const [namedCorner, pageCorner] = await Promise.all([
       cornerOf(littlePage.getByText(name, {exact: true})),
@@ -34,7 +41,7 @@ export const positionExhibit = (page: Page) => {
     return {x: Math.round(namedCorner.x - pageCorner.x), y: Math.round(namedCorner.y - pageCorner.y)};
   };
   return {
-    chooses: (position: Position): Promise<void> => positionPills.choose(position),
+    chooses: (position: Position): Promise<void> => shownOnceChosen(() => positionPills.choose(position)),
     stepsByKeyboard: async (steps: number): Promise<void> => {
       await siteFrame(page).hydrated();
       await positionPills.pill('static').focus();
@@ -52,7 +59,8 @@ export const positionExhibit = (page: Page) => {
       }
     },
     littlePage,
-    choosesParent: (position: ParentPosition): Promise<void> => pillSwitch(page, 'And its parent is').choose(position),
+    choosesParent: (position: ParentPosition): Promise<void> => shownOnceChosen(() => parentPills.choose(position)),
+    parentPill: (position: ParentPosition): Locator => parentPills.pill(position),
     spotOf,
     placeOf: async (name: string): Promise<Place> =>
       placeIn(await boxOf(littlePage), await boxOf(littlePage.getByText(name, {exact: true}))),

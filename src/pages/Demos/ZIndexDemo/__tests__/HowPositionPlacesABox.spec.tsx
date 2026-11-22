@@ -40,13 +40,14 @@ describe('how position places a box, on its own page', () => {
     expect(explanation.linkNamed(part, 'stacking context')).toHaveAttribute('href', `${Paths.demos}z-index/`);
   });
 
-  test('should link positioned, with Second absolute, to the page for why Third is on top with the raised card carried', async () => {
+  test('should link positioned, with Second absolute, to the page for why Third is on top with the raised card and Second’s position carried', async () => {
     render(<TestApp at={demosAt(howPosition, '?raised=second')}/>);
     const part = await explanation.part(title);
 
     await positionExhibit.choose('absolute');
 
-    expect(explanation.linkNamed(part, 'positioned')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
+    expect(explanation.linkNamed(part, 'positioned'))
+      .toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second&second=absolute'));
   });
 
   test('should link flow, where a static Second is placed in it, to the page for why Third is on top with the raised card carried', async () => {
@@ -73,6 +74,23 @@ describe('how position places a box, on its own page', () => {
     await positionExhibit.choose('fixed');
 
     expect(positionExhibit.queryParentPills()).not.toBeInTheDocument();
+  });
+
+  test('should open with the positions a shared address names already chosen', async () => {
+    render(<TestApp at={demosAt(howPosition, '?second=absolute&parent=not-positioned')}/>);
+
+    await explanation.part(title);
+
+    expect(positionExhibit.position('absolute')).toBeChecked();
+    expect(positionExhibit.parentPosition('not positioned')).toBeChecked();
+  });
+
+  test('should open with Second static when the address names a position there is not', async () => {
+    render(<TestApp at={demosAt(howPosition, '?second=sideways')}/>);
+
+    await explanation.part(title);
+
+    expect(positionExhibit.position('static')).toBeChecked();
   });
 
   test('should show a relative Second’s own rule in the CSS', async () => {
