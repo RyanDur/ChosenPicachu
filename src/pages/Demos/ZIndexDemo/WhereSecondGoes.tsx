@@ -1,9 +1,10 @@
-import {FC, PropsWithChildren, ReactNode, useState} from 'react';
+import {FC, PropsWithChildren, ReactNode} from 'react';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {classNames} from '@components';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {carve, Line, lines, Snippet} from '../Recipe';
+import {useControls} from '../Controls';
 import whereSecondGoesCss from './WhereSecondGoes.css?sample';
 import {PartTermLink} from './PartTermLink';
 import {MeasuredFrom, ParentPosition, Position, secondPosition} from './second-position';
@@ -130,19 +131,18 @@ const rulesShown = (position: Position, from: MeasuredFrom): Line[] => lines.fro
 const MeasuringDot: FC = () => <span className="measured-from alarm-dot" aria-hidden="true"/>;
 
 export const WhereSecondGoes: FC = () => {
-  const [position, choosePosition] = useState<Position>('static');
-  const [parentPosition, chooseParentPosition] = useState<ParentPosition>('positioned');
-  const from = secondPosition.measuredFrom(position, parentPosition);
+  const {second: position, parent, change} = useControls();
+  const from = secondPosition.measuredFrom(position, parent);
   const shown = told[from];
 
   return <figure className="where-second-goes">
     <p className="caption uppercase" aria-hidden="true">Second’s position is</p>
     <PillGlider label="Second’s position is" name="second-position" choices={positionChoices} chosen={position}
-      onChosen={choosePosition}/>
+      onChosen={next => change({second: next})}/>
     {position === 'absolute' && <>
       <p className="caption uppercase" aria-hidden="true">And its parent is</p>
       <PillGlider label="And its parent is" name="parent-position" choices={parentPositionChoices}
-        chosen={parentPosition} onChosen={chooseParentPosition}/>
+        chosen={parent} onChosen={next => change({parent: next})}/>
     </>}
     <p className="paragraph">{shown.story}</p>
     <dl className="where-we-meet-it">

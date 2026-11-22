@@ -1,8 +1,8 @@
-const all = ['static', 'relative', 'absolute', 'fixed', 'sticky'] as const;
+import {inOrder, ParentPosition, Position} from '../ReaderSettings';
 
-export type Position = typeof all[number];
+const all = inOrder.positions;
 
-export type ParentPosition = 'positioned' | 'not-positioned';
+export type {ParentPosition, Position};
 
 export type MeasuredFrom = 'nowhere' | 'own-place' | 'parent' | 'little-page' | 'view' | 'scroll-edge';
 

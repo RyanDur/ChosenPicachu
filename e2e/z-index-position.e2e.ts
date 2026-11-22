@@ -26,6 +26,19 @@ test('a keyboard reaches the little page and scrolls it', async ({page}) => {
   await expect.poll(async () => (await exhibit.spotOf('First')).y).toBeLessThan(first.y);
 });
 
+test('a reader’s chosen positions are still chosen after a reload, and Second is still where they put it', async ({page}) => {
+  const exhibit = positionExhibit(page);
+  await page.goto(address);
+  await exhibit.chooses('absolute');
+  await exhibit.choosesParent('not positioned');
+
+  await page.reload();
+
+  await expect(exhibit.pill('absolute')).toBeChecked();
+  await expect(exhibit.parentPill('not positioned')).toBeChecked();
+  await expect.poll(() => exhibit.spotOf('Second')).toEqual({x: 24, y: 16});
+});
+
 test('Second given relative moves 16px down and 24px right, and its old place stays open', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
