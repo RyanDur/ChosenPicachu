@@ -67,4 +67,59 @@ describe('how position places a box, on its own page', () => {
 
     expect(positionExhibit.queryParentPills()).not.toBeInTheDocument();
   });
+
+  test('should say a static Second is measured from nowhere', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await positionExhibit.choose('static');
+
+    expect(positionExhibit.measuredFrom()).toHaveTextContent('Measured from: nowhere');
+  });
+
+  test('should say a relative Second is measured from its own place in the flow', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await positionExhibit.choose('relative');
+
+    expect(positionExhibit.measuredFrom()).toHaveTextContent('Measured from: the box’s own place in the flow');
+  });
+
+  test('should say an absolute Second with a positioned parent is measured from the parent’s corner', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await positionExhibit.choose('absolute');
+
+    expect(positionExhibit.measuredFrom()).toHaveTextContent('Measured from: the parent’s corner');
+  });
+
+  test('should say an absolute Second with no positioned parent is measured from the little page’s corner', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+    await positionExhibit.choose('absolute');
+
+    await positionExhibit.chooseParent('not positioned');
+
+    expect(positionExhibit.measuredFrom()).toHaveTextContent('Measured from: the little page’s corner');
+  });
+
+  test('should say a fixed Second is measured from the view’s corner', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await positionExhibit.choose('fixed');
+
+    expect(positionExhibit.measuredFrom()).toHaveTextContent('Measured from: the view’s corner');
+  });
+
+  test('should say a sticky Second is measured from the top edge of the box that scrolls', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await positionExhibit.choose('sticky');
+
+    expect(positionExhibit.measuredFrom()).toHaveTextContent('Measured from: the top edge of the box that scrolls');
+  });
 });
