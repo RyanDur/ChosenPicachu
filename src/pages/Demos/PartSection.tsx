@@ -1,5 +1,5 @@
 import {FC, PropsWithChildren, ReactNode, useId} from 'react';
-import {maybe} from '@ryandur/sand';
+import {is, maybe} from '@ryandur/sand';
 import {classNames} from '@components';
 import {BesideAPart} from './beside-a-part';
 import './PartPage.css';
@@ -7,11 +7,13 @@ import './PartPage.css';
 type Opening = {
   readonly place: string;
   readonly introduction?: ReactNode;
+  readonly says?: string;
 };
 
 type BodyFirst = {
   readonly place?: never;
   readonly introduction?: never;
+  readonly says?: never;
 };
 
 type PartSectionProps = {
@@ -22,7 +24,7 @@ type PartSectionProps = {
 } & (Opening | BodyFirst);
 
 export const PartSection: FC<PropsWithChildren<PartSectionProps>> = (
-  {heading, place, introduction, panel, foot, wears, children}
+  {heading, place, introduction, says, panel, foot, wears, children}
 ) => {
   const headed = `part${useId()}`;
   const placed = maybe(place);
@@ -34,6 +36,7 @@ export const PartSection: FC<PropsWithChildren<PartSectionProps>> = (
         <h2 id={headed} className="title">{heading}</h2>
       </hgroup>
       {introduction}
+      {is(says) && <p className="paragraph">{says}</p>}
     </header>, () => <h2 id={headed} className="off-screen">{heading}</h2>)}
     <BesideAPart value>{panel}</BesideAPart>
     <section className={classNames('part-body', wears)}>{children}</section>

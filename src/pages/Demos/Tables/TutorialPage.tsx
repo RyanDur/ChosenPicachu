@@ -20,6 +20,12 @@ const recipes: Record<Tutorial, FC> = {
   resize: ResizeRecipe
 };
 
+const introductions: Record<Tutorial, string> = {
+  sort: 'The third story, built all the way through.',
+  menu: 'The fourth story, built all the way through.',
+  resize: 'The fifth story, built all the way through.'
+};
+
 const TutorialFoot: FC<{tutorial: Tutorial}> = ({tutorial}) => {
   const {previous, next} = usePartsBeside(tutorial);
   return <PartFoot previous={previous} next={next}/>;
@@ -32,6 +38,7 @@ export const TutorialPage: FC = () => {
     const TutorialRecipe = recipes[tutorial];
     const place = `${demoTab.names[DemoTopics.tables]} · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`;
     return <PartSection heading={tableTutorials.nameOf(tutorial)} place={place}
+      says={introductions[tutorial]}
       panel={<PartsAndDials/>} foot={<TutorialFoot tutorial={tutorial}/>} wears="tutorial-page">
       <Aggregations/>
       <p className="paragraph">
