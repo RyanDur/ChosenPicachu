@@ -33,6 +33,7 @@
     "how-a-sliding-fold-moves": {"title": "How a sliding fold moves · Accordions · Chosen Picachu", "description": "A fold slides by transition, which turns around when the reader presses again, and stops sliding when the reader asks for less motion."}
   },
   "z-index": {
+    "how-position-places-a-box": {"title": "How position places a box · Z-index · Chosen Picachu", "description": "Static, relative, absolute, fixed and sticky: where each one puts a box, what it is measured from, and which of them form a stacking context."},
     "lets-build-this-feature": {"title": "Let’s build this feature · Z-index · Chosen Picachu", "description": "Build the site’s banner from a user’s story: an alert written last on the page, outside the tab’s content, so no card is drawn over it."},
     "what-else-forms-a-stacking-context": {"title": "What else forms a stacking context · Z-index · Chosen Picachu", "description": "Opacity, a transform, isolation, and position: fixed or sticky each form a stacking context on their own; an outline, a border, or position: relative or absolute without a z-index does not."},
     "why-9999-still-loses": {"title": "Why 9999 still loses · Z-index · Chosen Picachu", "description": "A list with z-index: 9999 opens under a card with z-index: 1, because a z-index counts only inside its stacking context."},

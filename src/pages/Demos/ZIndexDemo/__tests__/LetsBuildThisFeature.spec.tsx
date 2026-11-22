@@ -11,7 +11,7 @@ describe('let’s build this feature, on its own page', () => {
   test('should say its place in the z-index book', async () => {
     render(<TestApp at={demosAt(buildThisFeature)}/>);
 
-    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 6 of 6');
+    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 7 of 7');
   });
 
   test('should link part one, the first part it assumes, to its page with the raised card carried', async () => {
@@ -45,11 +45,11 @@ describe('let’s build this feature, on its own page', () => {
     expect(await zIndexTab.findBannerControls()).toBeInTheDocument();
   });
 
-  test('should lead back to part five’s page, with the raised card carried', async () => {
+  test('should lead back to part six’s page, with the raised card carried', async () => {
     render(<TestApp at={demosAt(buildThisFeature, '?raised=second')}/>);
 
     expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
-      ['Previous: 5. Why a fixed banner still loses', demosAt('z-index/why-a-fixed-banner-still-loses', '?raised=second')]
+      ['Previous: 6. Why a fixed banner still loses', demosAt('z-index/why-a-fixed-banner-still-loses', '?raised=second')]
     ]);
   });
 

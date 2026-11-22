@@ -22,7 +22,7 @@ describe('why Third is on top, on its own page', () => {
   test('should say its place in the z-index book', async () => {
     render(<TestApp at={demosAt(thirdOnTop)}/>);
 
-    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 1 of 6');
+    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 1 of 7');
   });
 
   test('should raise the card the address names in its pile', async () => {
@@ -37,7 +37,7 @@ describe('why Third is on top, on its own page', () => {
     render(<TestApp at={demosAt(thirdOnTop, '?raised=second')}/>);
 
     expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
-      ['Next: 2. Why 9999 still loses', demosAt('z-index/why-9999-still-loses', '?raised=second')]
+      ['Next: 2. How position places a box', demosAt('z-index/how-position-places-a-box', '?raised=second')]
     ]);
   });
 
@@ -98,14 +98,14 @@ describe('why Third is on top, on its own page', () => {
 });
 
 describe('a z-index part’s page', () => {
-  test('holds the six parts beside the part, as the tab does', async () => {
+  test('holds the seven parts beside the part, as the tab does', async () => {
     render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
 
     const index = await partsIndex.find();
 
-    expect(partsIndex.titlesIn(index)).toEqual(['Why Third is on top', 'Why 9999 still loses',
-      'What else forms a stacking context', 'Why the popover wins', 'Why a fixed banner still loses',
-      'Let’s build this feature']);
+    expect(partsIndex.titlesIn(index)).toEqual(['Why Third is on top', 'How position places a box',
+      'Why 9999 still loses', 'What else forms a stacking context', 'Why the popover wins',
+      'Why a fixed banner still loses', 'Let’s build this feature']);
   });
 
   test('marks the part the reader is on as the current page', async () => {
@@ -121,7 +121,7 @@ describe('a z-index part’s page', () => {
 
     const part = explanation.partIn(await explanation.part('Z-index'), 'Why 9999 still loses');
 
-    expect(await zIndexTab.sizeIn(part)).toHaveTextContent(/about 24 minutes/);
+    expect(await zIndexTab.sizeIn(part)).toHaveTextContent(/about 27 minutes/);
   });
 
   test('leads from the panel to every part, with the reader’s choices carried', async () => {
@@ -131,6 +131,7 @@ describe('a z-index part’s page', () => {
 
     expect(partsIndex.addressesIn(index)).toEqual([
       demosAt('z-index/why-third-is-on-top', '?raised=second'),
+      demosAt('z-index/how-position-places-a-box', '?raised=second'),
       demosAt('z-index/why-9999-still-loses', '?raised=second'),
       demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'),
       demosAt('z-index/why-the-popover-wins', '?raised=second'),
@@ -172,6 +173,6 @@ describe('the z-index tab’s panel', () => {
   test('says how long the parts take together', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    expect(await demoPage.panel('parts and minutes')).toHaveTextContent(/about 24 minutes/);
+    expect(await demoPage.panel('parts and minutes')).toHaveTextContent(/about 27 minutes/);
   });
 });

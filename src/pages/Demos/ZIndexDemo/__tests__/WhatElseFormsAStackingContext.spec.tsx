@@ -11,7 +11,7 @@ describe('what else forms a stacking context, on its own page', () => {
   test('should say its place in the z-index book', async () => {
     render(<TestApp at={demosAt(whatElseForms)}/>);
 
-    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 3 of 6');
+    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 4 of 7');
   });
 
   test('should link part one, which it builds on, to its page with the wear carried', async () => {
@@ -39,12 +39,12 @@ describe('what else forms a stacking context, on its own page', () => {
     expect(explanation.linkNamed(part, 'The menu part’s card')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?wears=opacity'));
   });
 
-  test('should lead back to part two’s page and on to part four’s page, by number and title, with the wear carried', async () => {
+  test('should lead back to part three’s page and on to part five’s page, by number and title, with the wear carried', async () => {
     render(<TestApp at={demosAt(whatElseForms, '?wears=opacity')}/>);
 
     expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
-      ['Previous: 2. Why 9999 still loses', demosAt('z-index/why-9999-still-loses', '?wears=opacity')],
-      ['Next: 4. Why the popover wins', demosAt('z-index/why-the-popover-wins', '?wears=opacity')]
+      ['Previous: 3. Why 9999 still loses', demosAt('z-index/why-9999-still-loses', '?wears=opacity')],
+      ['Next: 5. Why the popover wins', demosAt('z-index/why-the-popover-wins', '?wears=opacity')]
     ]);
   });
 

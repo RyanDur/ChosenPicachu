@@ -4,12 +4,14 @@ import {demoTab, DemoTopics} from '@pages/Demos';
 import {ZIndexPart, zIndexParts} from './part-pages';
 import {PartFoot} from './PartFoot';
 import {WhyThirdIsOnTop} from './WhyThirdIsOnTop';
+import {WhereSecondGoes} from './WhereSecondGoes';
 import {Why9999StillLoses} from './Why9999StillLoses';
 import {WhatElseFormsAStackingContext} from './WhatElseFormsAStackingContext';
 import {WhyThePopoverWins} from './WhyThePopoverWins';
 import {WhyAFixedBannerStillLoses} from './WhyAFixedBannerStillLoses';
 import {LetsBuildThisFeature} from './LetsBuildThisFeature';
 import {WhyThirdIsOnTopIntroduction} from './WhyThirdIsOnTopIntroduction';
+import {HowPositionPlacesABoxIntroduction} from './HowPositionPlacesABoxIntroduction';
 import {Why9999StillLosesIntroduction} from './Why9999StillLosesIntroduction';
 import {WhatElseFormsAStackingContextIntroduction} from './WhatElseFormsAStackingContextIntroduction';
 import {WhyThePopoverWinsIntroduction} from './WhyThePopoverWinsIntroduction';
@@ -26,6 +28,10 @@ const partWritings: Record<ZIndexPart, PartWriting> = {
   'why-third-is-on-top': {
     introduction: <WhyThirdIsOnTopIntroduction/>,
     exhibitAndRuns: <WhyThirdIsOnTop/>
+  },
+  'how-position-places-a-box': {
+    introduction: <HowPositionPlacesABoxIntroduction/>,
+    exhibitAndRuns: <WhereSecondGoes/>
   },
   'why-9999-still-loses': {
     introduction: <Why9999StillLosesIntroduction/>,

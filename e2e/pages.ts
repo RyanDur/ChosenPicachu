@@ -26,6 +26,7 @@ export const pages: readonly SitePage[] = [
   {name: 'how a sliding fold moves', path: 'demos/accordions/how-a-sliding-fold-moves/', ready: 'main', budgeted: true},
   {name: 'z-index', path: 'demos/z-index/', ready: 'main', budgeted: true},
   {name: 'why Third is on top', path: 'demos/z-index/why-third-is-on-top/', ready: 'main', budgeted: true},
+  {name: 'how position places a box', path: 'demos/z-index/how-position-places-a-box/', ready: 'main', budgeted: true},
   {name: 'why 9999 still loses', path: 'demos/z-index/why-9999-still-loses/', ready: 'main', budgeted: true},
   {name: 'what else forms a stacking context', path: 'demos/z-index/what-else-forms-a-stacking-context/', ready: 'main', budgeted: true},
   {name: 'why the popover wins', path: 'demos/z-index/why-the-popover-wins/', ready: 'main', budgeted: true},

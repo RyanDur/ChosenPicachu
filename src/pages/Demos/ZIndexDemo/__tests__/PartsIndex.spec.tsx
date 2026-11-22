@@ -6,11 +6,12 @@ import {demosAt, partsIndex} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
-const titles = ['Why Third is on top', 'Why 9999 still loses', 'What else forms a stacking context',
-  'Why the popover wins', 'Why a fixed banner still loses', 'Let’s build this feature'];
+const titles = ['Why Third is on top', 'How position places a box', 'Why 9999 still loses',
+  'What else forms a stacking context', 'Why the popover wins', 'Why a fixed banner still loses',
+  'Let’s build this feature'];
 
 describe('the z-index parts index', () => {
-  test('should list the six parts in order, why Third is on top first', async () => {
+  test('should list the seven parts in order, why Third is on top first', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
     const index = await partsIndex.find();
