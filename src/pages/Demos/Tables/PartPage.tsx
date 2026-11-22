@@ -39,7 +39,7 @@ export const PartPage: FC<{readonly part: TablePart}> = ({part}) => {
   return <ThePart value={{heading: name, headingId: `${part}-heading`, place, previous, next}}><PartSection>
     <PartOpening><p className="paragraph">{introductions[part]}</p></PartOpening>
     <PartPanel><PartsAndDials/></PartPanel>
-    <PartDemo wears="tutorial-page tutorials">
+    <PartDemo className="tutorial-page tutorials">
       <Aggregations/>
       <Part/>
     </PartDemo>

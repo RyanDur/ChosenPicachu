@@ -77,7 +77,7 @@ export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
     <PartSection>
       <PartOpening>{partWritings[part].introduction}</PartOpening>
       <PartPanel><PartsAndMinutes/></PartPanel>
-      <PartDemo wears={partWears[part]}>{partWritings[part].exhibitAndRuns}</PartDemo>
+      <PartDemo className={partWears[part]}>{partWritings[part].exhibitAndRuns}</PartDemo>
       <PartFoot/>
     </PartSection>
   </ThePart>;
