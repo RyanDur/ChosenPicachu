@@ -68,14 +68,16 @@ export const Snippet: FC<Props> = ({label, lines}) => {
   return <figure className="sample">
     <pre className="snippet code-paper-filled code-ink listing rounded-corners monospaced">
       <span className="lang caption uppercase comment-ink" aria-hidden="true">{label}</span>
-      <code>{lines.map(({dim = false}, at) => {
+      <code>{lines.map(({dim = false, marked = false}, at) => {
         const {indent} = indented[at];
-        return <span className={classNames('line', dim && inkOf.comment)} key={at}>
+        const Holder = marked ? 'mark' : 'span';
+        return <Holder className={classNames('line', dim && inkOf.comment, marked && 'code-marked-filled inverse-ink')}
+          key={at}>
           {has(indent) && <span className="indent">{indent}</span>}
-          {inked[at].map(({text: piece, kind}, part) =>
+          {marked ? indented[at].code : inked[at].map(({text: piece, kind}, part) =>
             kind === 'plain' ? piece : <span className={inkOf[kind]} key={part}>{piece}</span>)}
           {'\n'}
-        </span>;
+        </Holder>;
       })}</code>
     </pre>
     <figcaption className="sources caption ink">

@@ -56,6 +56,12 @@ describe('a code sample', () => {
     ]);
   });
 
+  test('should mark the lines it is asked to mark, and only those', () => {
+    render(<Snippet label="CSS" lines={[lines.plain('.b {'), lines.plain('}'), ...lines.marked([lines.plain('.a {'), lines.plain('}')])]}/>);
+
+    expect(codeSample.marked()).toEqual(['.a {\n', '}\n']);
+  });
+
   test('should link to no file when it was written for the page and not taken from the code', () => {
     render(<Snippet label="CSS" lines={[lines.plain('.fold {'), lines.aside('/* written here */'), lines.plain('}')]}/>);
 

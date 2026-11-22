@@ -26,6 +26,7 @@
   --code-number: rgb(121, 168, 204);
   --code-ink: rgb(169, 183, 198);
   --code-attribute: rgb(187, 181, 226);
+  --code-marked: rgb(from var(--white) r g b / 0.14);
 
   --plan-mint: rgb(207, 232, 214);
   --plan-sand: rgb(239, 227, 200);
