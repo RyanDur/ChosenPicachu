@@ -54,10 +54,10 @@ describe('what the platform gives now, on its own page', () => {
     ]);
   });
 
-  test('should title its page with the tab and the part', async () => {
+  test('should title its page with its tab', async () => {
     render(<TestApp at={demosAt(platformWay)}/>);
 
-    expect(await demoTabs.title(`Demos Accordions · ${title}`)).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Accordions')).toBeInTheDocument();
   });
 
   test('should show, with inclusive chosen, the inclusive details build under the platform', async () => {

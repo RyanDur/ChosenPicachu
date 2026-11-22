@@ -48,10 +48,10 @@ describe('what else forms a stacking context, on its own page', () => {
     ]);
   });
 
-  test('should title the page with the tab and the part', async () => {
+  test('should title the page with its tab', async () => {
     render(<TestApp at={demosAt(whatElseForms)}/>);
 
-    expect(await demoTabs.title('Demos Z-index · What else forms a stacking context')).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Z-index')).toBeInTheDocument();
   });
 
   test('should keep Z-index as the current tab', async () => {

@@ -3,13 +3,19 @@ import {useNamingThePage} from '@page-name';
 
 export type Listing = {readonly title: string; readonly description: string};
 
-export const Header: FC<PropsWithChildren<{title: string; listed: Listing}>> = ({title, listed, children}) => {
-  useNamingThePage(title);
+type Props = {
+  pageName: string;
+  heading?: string;
+  listed: Listing;
+};
+
+export const Header: FC<PropsWithChildren<Props>> = ({pageName, heading, listed, children}) => {
+  useNamingThePage(pageName);
   return <>
     <title>{listed.title}</title>
     <meta name="description" content={listed.description}/>
     <header id="app-header" className="app-header field backdrop-below">
-      <h1 className="app-title page-title bold ellipsis">{title}</h1>
+      <h1 className="app-title page-title bold ellipsis">{heading ?? pageName}</h1>
       {children}
     </header>
   </>;

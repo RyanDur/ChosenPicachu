@@ -39,6 +39,12 @@ describe('The Demos page', () => {
     expect(demoPage.hasAnOpeningBeforeItsTabs()).toBe(true);
   });
 
+  test('a part’s page should keep the part’s own title as a heading under the page’s', async () => {
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    expect(await demoPage.findTitle('Why 9999 still loses')).toBeInTheDocument();
+  });
+
   test('the tab row on the Z-index tab names the tab the reader is on', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 

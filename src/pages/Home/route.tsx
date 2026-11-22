@@ -3,7 +3,7 @@ import {Header, Main, PageError} from '@page';
 import names from '@navigation/names.json';
 import {HomePage} from './HomePage';
 
-const header = <Header title="The three languages" listed={names.home}/>;
+const header = <Header pageName="The three languages" listed={names.home}/>;
 
 export const ErrorBoundary: FC = () => <>{header}<Main><PageError/></Main></>;
 

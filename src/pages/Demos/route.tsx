@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, ReactElement} from 'react';
 import {Outlet, useLocation} from 'react-router';
 import {Maybe} from '@ryandur/sand';
 import {Header, Listing, Main, PageError} from '@page';
@@ -13,45 +13,56 @@ import {accordionParts} from './Accordions/part-pages';
 import {zIndexParts} from './ZIndexDemo/part-pages';
 import {chartKinds} from './Charts';
 
-type ShownDemo = {topic: DemoTopics; title: string; listed: Listing};
+type Demo = {topic: DemoTopics; pageName: string; listed: Listing};
 
-const shownDemoAt = (pathname: string): Maybe<ShownDemo> => tableTutorials.at(pathname)
-  .map((tutorial): ShownDemo => ({
+const headingOf = (topic: DemoTopics): string => `Demos ${demoTab.names[topic]}`;
+
+const demoAt = (pathname: string): Maybe<Demo> => tableTutorials.at(pathname)
+  .map((tutorial): Demo => ({
     topic: DemoTopics.tables,
-    title: `Demos ${demoTab.names[DemoTopics.tables]} · ${tableTutorials.nameOf(tutorial)}`,
+    pageName: `${headingOf(DemoTopics.tables)} · ${tableTutorials.nameOf(tutorial)}`,
     listed: names.tables[tutorial]
   }))
-  .or(() => tableParts.shownAt(pathname).map((part): ShownDemo => ({
+  .or(() => tableParts.shownAt(pathname).map((part): Demo => ({
     topic: DemoTopics.tables,
-    title: `Demos ${demoTab.names[DemoTopics.tables]} · ${tableParts.told(part).name}`,
+    pageName: `${headingOf(DemoTopics.tables)} · ${tableParts.told(part).name}`,
     listed: names.tableParts[part]
   })))
-  .or(() => accordionParts.shownAt(pathname).map((part): ShownDemo => ({
+  .or(() => accordionParts.shownAt(pathname).map((part): Demo => ({
     topic: DemoTopics.accordions,
-    title: `Demos ${demoTab.names[DemoTopics.accordions]} · ${accordionParts.told(part).name}`,
+    pageName: `${headingOf(DemoTopics.accordions)} · ${accordionParts.told(part).name}`,
     listed: names.accordions[part]
   })))
-  .or(() => zIndexParts.shownAt(pathname).map((part): ShownDemo => ({
+  .or(() => zIndexParts.shownAt(pathname).map((part): Demo => ({
     topic: DemoTopics.zIndex,
-    title: `Demos ${demoTab.names[DemoTopics.zIndex]} · ${zIndexParts.told(part).name}`,
+    pageName: `${headingOf(DemoTopics.zIndex)} · ${zIndexParts.told(part).name}`,
     listed: names['z-index'][part]
   })))
-  .or(() => chartKinds.shownAt(pathname).map((kind): ShownDemo => ({
+  .or(() => chartKinds.shownAt(pathname).map((kind): Demo => ({
     topic: DemoTopics.charts,
-    title: `Demos ${demoTab.names[DemoTopics.charts]} · ${chartKinds.names[kind]}`,
+    pageName: `${headingOf(DemoTopics.charts)} · ${chartKinds.names[kind]}`,
     listed: names.charts[kind]
   })))
   .or(() => demoTab.addressedAt(pathname)
-    .map((topic): ShownDemo => ({topic, title: `Demos ${demoTab.names[topic]}`, listed: names.demos[topic]})));
+    .map((topic): Demo => ({topic, pageName: headingOf(topic), listed: names.demos[topic]})));
 
-const useShownDemo = (): Maybe<ShownDemo> => shownDemoAt(useLocation().pathname);
+type AddressedDemo = {
+  whenShown: (show: (demo: Demo) => ReactElement) => ReactElement | null;
+  shownOr: (show: (demo: Demo) => ReactElement, notShown: () => ReactElement) => ReactElement;
+};
 
-const DemoHeader: FC = () => useShownDemo().either(
-  ({title, listed}) => <Header title={title} listed={listed}/>,
-  () => null);
+const addressed = (demo: Maybe<Demo>): AddressedDemo => ({
+  whenShown: show => demo.map(show).orNull(),
+  shownOr: (show, notShown) => demo.either(show, notShown)
+});
+
+const useAddressedDemo = (): AddressedDemo => addressed(demoAt(useLocation().pathname));
+
+const DemoHeader: FC = () => useAddressedDemo().whenShown(({topic, pageName, listed}) =>
+  <Header pageName={pageName} heading={headingOf(topic)} listed={listed}/>);
 
 export const ErrorBoundary: FC = () => <><DemoHeader/><Main><PageError/></Main></>;
 
-export const Room: FC = () => useShownDemo().either(
+export const Room: FC = () => useAddressedDemo().shownOr(
   ({topic}) => <><DemoHeader/><Main><Trading><DemosPage topic={topic}><Outlet/></DemosPage></Trading></Main></>,
   () => <NoSuchRoom/>);

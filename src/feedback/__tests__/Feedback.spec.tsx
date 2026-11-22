@@ -226,6 +226,15 @@ describe('Feedback about the page', () => {
     expect(await feedback.says('About: Demos Tables')).toBeInTheDocument();
   });
 
+  test('should name a part’s page in the About line by the part, not only its tab', async () => {
+    githubFindingNoThread();
+    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+
+    await feedback.open();
+
+    expect(await feedback.says('About: Demos Z-index · Why 9999 still loses')).toBeInTheDocument();
+  });
+
   test('should find the thread a demos tab already has, kept under the tab\'s own address', async () => {
     githubHoldingAThread('Feedback: Demos Tables (/demos/tables/)');
     render(<TestApp at={demosAt('tables')}/>);

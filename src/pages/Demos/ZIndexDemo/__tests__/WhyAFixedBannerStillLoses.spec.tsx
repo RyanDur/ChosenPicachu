@@ -60,10 +60,10 @@ describe('why a fixed banner still loses, on its own page', () => {
     ]);
   });
 
-  test('should title the page with the tab and the part', async () => {
+  test('should title the page with its tab', async () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
 
-    expect(await demoTabs.title('Demos Z-index · Why a fixed banner still loses')).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Z-index')).toBeInTheDocument();
   });
 
   test('should keep Z-index as the current tab', async () => {

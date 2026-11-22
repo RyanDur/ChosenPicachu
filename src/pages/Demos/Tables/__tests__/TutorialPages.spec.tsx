@@ -135,10 +135,10 @@ describe('the table tutorials, each on its own page', () => {
     expect(await site.roomSays('There is no room at this address.')).toBeVisible();
   });
 
-  test('should title a tutorial’s page with the tab and the tutorial', async () => {
+  test('should title a tutorial’s page with its tab', async () => {
     render(<TestApp at={demosAt('tables/menu')}/>);
 
-    expect(await demoTabs.title('Demos Tables · Sort menu')).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Tables')).toBeInTheDocument();
   });
 
   test('should keep Tables as the current tab on a tutorial’s page', async () => {

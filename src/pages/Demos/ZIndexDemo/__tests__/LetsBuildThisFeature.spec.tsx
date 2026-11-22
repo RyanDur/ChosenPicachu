@@ -53,10 +53,10 @@ describe('let’s build this feature, on its own page', () => {
     ]);
   });
 
-  test('should title the page with the tab and the part', async () => {
+  test('should title the page with its tab', async () => {
     render(<TestApp at={demosAt(buildThisFeature)}/>);
 
-    expect(await demoTabs.title('Demos Z-index · Let’s build this feature')).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Z-index')).toBeInTheDocument();
   });
 
   test('should keep Z-index as the current tab', async () => {

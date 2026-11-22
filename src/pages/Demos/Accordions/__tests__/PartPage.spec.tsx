@@ -132,10 +132,10 @@ describe('the measured height, on its own page', () => {
       ]);
   });
 
-  test('should title the measured height’s page with the tab and the part', async () => {
+  test('should title the measured height’s page with its tab', async () => {
     render(<TestApp at={demosAt(measuredHeight)}/>);
 
-    expect(await demoTabs.title('Demos Accordions · The measured height')).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Accordions')).toBeInTheDocument();
   });
 
   test('should keep Accordions as the current tab on the measured height’s page', async () => {
