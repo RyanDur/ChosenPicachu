@@ -32,6 +32,12 @@
   --tab-bar-reach: var(--base-x-15_5);
 }
 
+@media (pointer: coarse) {
+  :root:has(.demo-tabs) {
+    --tab-bar-reach: var(--base-x-18);
+  }
+}
+
 @media (600px < width <= 760px) and (height > 600px) {
   .tabs.demo-tabs {
     position: static;
