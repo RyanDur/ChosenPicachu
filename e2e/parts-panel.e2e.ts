@@ -10,7 +10,7 @@ test.describe('a reader on a desk or a phone', {tag: ['@desktop', '@iPhone']}, (
     await panel.hideTheParts();
 
     await expect(panel.parts).toBeHidden();
-    await expect(panel.tabSize).toBeVisible();
+    await expect(panel.partsAndMinutes).toBeVisible();
     await expect(panel.showParts).toBeVisible();
   });
 

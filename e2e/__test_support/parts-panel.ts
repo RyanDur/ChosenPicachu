@@ -12,6 +12,6 @@ export const partsPanel = (page: Page) => ({
     page.getByRole('navigation', {name: 'the tables parts'}).getByRole('link', {name: /^Next: /}).click(),
   parts: page.getByRole('navigation', {name: 'Parts', exact: true}),
   showParts: page.getByRole('button', {name: 'Show parts'}),
-  tabSize: page.getByText(/^Eight parts, about \d+ minutes\.$/),
+  partsAndMinutes: page.getByText(/^Eight parts, about \d+ minutes\.$/),
   partTitled: (title: string): Locator => page.getByRole('heading', {level: 2, name: title, exact: true})
 });
