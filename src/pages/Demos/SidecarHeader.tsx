@@ -16,7 +16,7 @@ const PartsFold: FC = () => {
     onClick={() => change({parts: shown ? 'hidden' : 'shown'})}>{shown ? 'Hide parts' : 'Show parts'}</button>;
 };
 
-export const SidecarHead: FC<PropsWithChildren> = ({children}) => {
+export const SidecarHeader: FC<PropsWithChildren> = ({children}) => {
   const besideAPart = useContext(BesideAPart);
-  return <header className="sidecar-head">{children}{besideAPart && <PartsFold/>}</header>;
+  return <header className="sidecar-header">{children}{besideAPart && <PartsFold/>}</header>;
 };

@@ -6,7 +6,7 @@
   align-content: start;
 }
 
-.sidecar-head {
+.sidecar-header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -18,7 +18,7 @@
   padding-inline: var(--base);
 }
 
-.tab-sidecar.folded > :not(.sidecar-head) {
+.tab-sidecar.folded > :not(.sidecar-header) {
   display: none;
 }
 
@@ -61,7 +61,7 @@
     z-index: 1;
     padding-block: var(--base-x-2) var(--base);
 
-    > .sidecar-head {
+    > .sidecar-header {
       min-block-size: var(--base-x-4);
     }
   }

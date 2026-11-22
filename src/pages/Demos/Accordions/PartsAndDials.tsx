@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {DialGroup} from '../Controls';
-import {SidecarHead} from '../SidecarHead';
+import {SidecarHeader} from '../SidecarHeader';
 import {TabSidecar} from '../TabSidecar';
 import {AccordionsSize} from './AccordionsSize';
 import {FoldMotionDial} from './FoldMotionDial';
@@ -14,7 +14,7 @@ type Props = {
 
 export const PartsAndDials: FC<Props> = ({titled = false, offersTheFoldDials}) =>
   <TabSidecar label={titled ? 'parts and dials' : undefined}>
-    <SidecarHead><AccordionsSize/></SidecarHead>
+    <SidecarHeader><AccordionsSize/></SidecarHeader>
     <PartsIndex titled={titled}/>
     {offersTheFoldDials && <DialGroup>
       <FoldTypeDial/>
