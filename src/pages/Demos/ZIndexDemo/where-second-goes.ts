@@ -43,9 +43,9 @@ const told: Record<Position, Told> = {
 };
 
 const withNoPositionedParent: Pick<Told, 'story' | 'verdict' | 'measuredFrom'> = {
-  story: 'The parent has no position now. No ancestor of Second is positioned, so the browser measures top and left from the corner of the whole page. Expect this whenever nothing above an absolute box is positioned.',
+  story: 'The parent has no position now. Nothing in the HTML above Second is positioned, so the browser measures top and left from the page itself, which here is the little page. Expect this whenever nothing above an absolute box is positioned.',
   verdict: 'Second sits 16px down and 24px in from the page’s corner, over the top of the page and outside its parent. It still scrolls with the page.',
-  measuredFrom: 'the page’s corner, at the red dot. No ancestor is positioned, so the browser goes past the parent to the page.'
+  measuredFrom: 'the little page’s corner, at the red dot. Nothing above Second is positioned, so the browser goes past the parent to the page.'
 };
 
 type WhereSecondGoes = {
