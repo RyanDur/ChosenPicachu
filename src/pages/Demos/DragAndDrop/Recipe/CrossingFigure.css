@@ -1,9 +1,4 @@
 .crossing {
   --drawn-width: 480px;
   --widest-drawing: var(--base-x-60);
-
-  .item {
-    stroke-width: var(--hairline);
-    vector-effect: non-scaling-stroke;
-  }
 }

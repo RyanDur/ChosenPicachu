@@ -1,12 +1,4 @@
 .where-a-rule-lives {
-  .folder-box,
-  .group-box,
-  .file-box,
-  .wears-line {
-    stroke-width: var(--hairline);
-    vector-effect: non-scaling-stroke;
-  }
-
   .sheet-box {
     stroke-width: var(--hairline-x-2);
     vector-effect: non-scaling-stroke;

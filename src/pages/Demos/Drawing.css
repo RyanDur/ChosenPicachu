@@ -2,23 +2,6 @@
   --drawn-width: 320px;
   --widest-drawing: var(--base-x-60);
 
-  .piece {
-    stroke-width: var(--hairline);
-    vector-effect: non-scaling-stroke;
-  }
-
-  .native {
-    stroke-width: var(--hairline);
-    vector-effect: non-scaling-stroke;
-  }
-
-  .unseen,
-  .clipped {
-    stroke-width: var(--hairline);
-    vector-effect: non-scaling-stroke;
-    stroke-dasharray: 4 3;
-  }
-
   .topmost {
     stroke-width: var(--hairline-x-2);
     vector-effect: non-scaling-stroke;
