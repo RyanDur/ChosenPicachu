@@ -78,7 +78,7 @@ const wordsFor: Record<MeasuredFrom, Words> = {
       measures <code className="monospaced">top</code> and <code className="monospaced">left</code> from the window,
       not the page. When the page scrolls, the box stays where it is. The little window’s view, the area under its bar,
       has a {transformLink}, the property that moves, turns or scales a box, so fixed is measured from it and not
-      from the browser’s window. Like absolute, it gets a width.</>,
+      from the browser’s window. Out of the flow, it no longer stretches across its parent, so we give it a width.</>,
     whereWeMeetIt: 'A banner, a chat button, a header pinned to the window.',
     verdict: 'Second leaves the flow and stays put in the window while the page scrolls under it.',
     measuredFromWords: 'the view’s corner, at the red dot.',
