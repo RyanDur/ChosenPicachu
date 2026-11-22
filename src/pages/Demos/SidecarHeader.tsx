@@ -10,6 +10,7 @@ const PartsFold: FC = () => {
   const {parts, change} = useControls();
   const shown = parts === 'shown';
   const hydrated = useHydrated();
+  // Safari's plain Tab skips a button with no tabindex written, as the Tables part on focus teaches.
   return <button type="button" tabIndex={0}
     className="parts-fold caption attentive field hairline-outline reachable smoked-while-disabled"
     disabled={not(hydrated)}
