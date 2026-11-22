@@ -14,13 +14,16 @@ test('a keyboard steps Second through all five positions, and the chosen one is 
   await expect(exhibit.pill('static')).not.toBeChecked();
 });
 
-test('a keyboard reaches the little page to scroll it', async ({page}) => {
+test('a keyboard reaches the little page and scrolls it', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
-
   await exhibit.tabsToTheLittlePage();
-
   await expect(exhibit.littlePage).toBeFocused();
+  const first = await exhibit.spotOf('First');
+
+  await page.keyboard.press('PageDown');
+
+  await expect.poll(async () => (await exhibit.spotOf('First')).y).toBeLessThan(first.y);
 });
 
 test('Second given relative moves 16px down and 24px right, its old place stays open, and the page says where it went', async ({page}) => {
