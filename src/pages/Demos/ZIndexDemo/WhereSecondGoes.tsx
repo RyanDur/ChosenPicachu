@@ -7,7 +7,8 @@ import {carve, Line, lines, Snippet} from '../Recipe';
 import {useControls} from '../Controls';
 import whereSecondGoesCss from './WhereSecondGoes.css?sample';
 import {PartTermLink} from './PartTermLink';
-import {MeasuredFrom, ParentPosition, Position, secondPosition} from './second-position';
+import {ParentPosition, Position} from '../ReaderSettings';
+import {MeasuredFrom, secondPosition} from './second-position';
 import './WhereSecondGoes.css';
 
 type Told = {
