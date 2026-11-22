@@ -54,4 +54,11 @@
 
     gap: var(--base-x-2);
   }
+
+  .tab-sidecar.folded {
+    position: sticky;
+    inset-block-start: calc(var(--under-the-tab-bar) - var(--base-x-2));
+    z-index: 1;
+    padding-block: var(--base-x-2) var(--base);
+  }
 }

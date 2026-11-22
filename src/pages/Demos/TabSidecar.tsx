@@ -19,7 +19,7 @@ export const TabSidecar: FC<Props> = ({label, size, className, children}) => {
   const folds = useContext(PanelFolds);
   const {parts} = useControls();
   const folded = folds && parts === 'hidden';
-  return <aside aria-label={label} className={classNames('tab-sidecar', folded && 'folded', className)}>
+  return <aside aria-label={label} className={classNames('tab-sidecar field', folded && 'folded', className)}>
     {(is(size) || folds) && <header className="sidecar-head">{size}{folds && <PartsFold/>}</header>}
     {children}
   </aside>;
