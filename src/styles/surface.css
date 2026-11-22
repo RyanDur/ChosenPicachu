@@ -323,8 +323,13 @@
   }
 
   @media (forced-colors: active) {
+    .body .cell {
+      height: calc(2lh + 2 * var(--base-x-1_25));
+    }
+
     [data-moved] > .off-screen {
       position: static;
+      display: block;
     }
   }
 }
