@@ -108,6 +108,15 @@ describe('a code sample', () => {
     expect(codeSample.source()).toContain('The rest of the site doesn’t use them.');
   });
 
+  test('should not call a file the exhibit’s alone when the sample also takes it plainly', () => {
+    render(<Snippet label="TS" lines={[
+      ...lines.fromTheExhibit(carve.between(store, 'export const store', 'export const store')),
+      ...carve.between(store, 'export const more', 'export const more')
+    ]}/>);
+
+    expect(codeSample.source()).not.toContain('Taken from the exhibit');
+  });
+
   test('should name what a lowercase folder sits inside, since it is a module of that component', () => {
     const survey = aSample('export const survey = 1;\n', 'src/components/DragSortableTable/model/survey.ts');
     render(<Snippet label="TS" lines={carve.between(survey, 'export const survey', 'export const survey')}/>);
