@@ -68,6 +68,12 @@ test.describe('a finger that lands just off a pill\'s middle', {tag: ['@iPhone',
 
     expect(await pillsAFingerCannotChoose(page, 'stack')).toEqual([]);
   });
+
+  test('every position pill on how position places a box is chosen by a finger that lands just off its middle', async ({page}) => {
+    await page.goto('demos/z-index/how-position-places-a-box/');
+
+    expect(await pillsAFingerCannotChoose(page, 'Second’s position is')).toEqual([]);
+  });
 });
 
 test('the pill chosen is checked, and the pill left behind is not', {tag: ['@iPhone', '@desktop']}, async ({page}) => {
