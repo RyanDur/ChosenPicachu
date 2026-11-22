@@ -49,10 +49,15 @@ const atAfterRemoval = (at: number, standing: number): Maybe<number> =>
 
 type Reading = {readonly seen: readonly ChartKind[]; readonly left: readonly LeftOut[]};
 
+const sameTelling = (one: LeftOut, other: LeftOut): boolean => one.why === 'unknown'
+  ? other.why === 'unknown' && other.entry === one.entry
+  : other.why === 'repeat' && other.kind === one.kind;
+
 const leftOut = (charts: string): readonly LeftOut[] =>
   charts.split(',').filter(entry => is(entry.trim())).reduce<Reading>(({seen, left}, entry) => seatOf(entry).either(
     ({kind}) => seen.includes(kind) ? {seen, left: [...left, {why: 'repeat', kind}]} : {seen: [...seen, kind], left},
     () => ({seen, left: [...left, {why: 'unknown', entry}]})
-  ), {seen: [], left: []}).left;
+  ), {seen: [], left: []}).left
+    .filter((told, at, all) => all.findIndex(other => sameTelling(told, other)) === at);
 
 export const desk = {dealt, added, without, seated, periodChosen, absent, atAfterRemoval, leftOut};

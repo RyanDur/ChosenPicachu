@@ -63,6 +63,14 @@ describe('the desk', () => {
     expect(desk.leftOut('pie, ,candles')).toEqual([]);
   });
 
+  test('a chart named again and again is told as left out once', () => {
+    expect(desk.leftOut('pie,pie,pie')).toEqual([{why: 'repeat', kind: 'pie'}]);
+  });
+
+  test('a name the desk does not know, given again, is told as left out once', () => {
+    expect(desk.leftOut('bogus,bogus')).toEqual([{why: 'unknown', entry: 'bogus'}]);
+  });
+
   test('what was left out is told in the order the address gives it', () => {
     expect(desk.leftOut('pie,pie,bogus')).toEqual([{why: 'repeat', kind: 'pie'}, {why: 'unknown', entry: 'bogus'}]);
   });
