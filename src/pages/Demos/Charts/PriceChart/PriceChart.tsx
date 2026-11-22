@@ -74,7 +74,7 @@ export const PriceChart: FC<PropsWithChildren<Props>> = ({id: given, children}) 
             x2={CHART_WIDTH} y2={points[0].y}/>}
           <polyline className="trend side-line line-shadowed" points={trendPoints} fill="none" vectorEffect="non-scaling-stroke"/>
           {notEmpty(points) && <circle className="marker side-dot" r={3}
-            style={{'--marker-x': `${points[points.length - 1].x}px`, '--marker-y': `${points[points.length - 1].y}px`}}/>}
+            style={{translate: `${points[points.length - 1].x}px ${points[points.length - 1].y}px`}}/>}
         </svg>
       </Axes>
       <p className="headline monospaced">{view.map(({first, last}) => <>
