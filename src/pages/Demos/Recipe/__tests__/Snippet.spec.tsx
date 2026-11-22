@@ -115,6 +115,7 @@ describe('a code sample', () => {
       ...carve.between(store, 'export const more', 'export const more')
     ]}/>);
 
+    expect(codeSample.fileNames()).toEqual(['Demos/store.ts on GitHub']);
     expect(codeSample.source()).not.toContain('Taken from the exhibit');
   });
 
