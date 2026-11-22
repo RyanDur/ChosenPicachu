@@ -1,5 +1,4 @@
 import {FC, PropsWithChildren, ReactNode, useState} from 'react';
-import {not} from '@ryandur/sand';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {classNames} from '@components';
 import {DemoTopics} from '@pages/Demos';
@@ -7,11 +6,8 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {carve, Line, lines, Snippet} from '../Recipe';
 import sheet from './WhereSecondGoes.css?sample';
 import {PartTermLink} from './PartTermLink';
+import {MeasuredFrom, ParentPosition, Position, secondPosition} from './second-position';
 import './WhereSecondGoes.css';
-
-const positions = ['static', 'relative', 'absolute', 'fixed', 'sticky'] as const;
-
-type Position = typeof positions[number];
 
 type Told = {
   story: ReactNode;
@@ -78,16 +74,13 @@ const withNoPositionedParent: Pick<Told, 'story' | 'verdict' | 'measuredFrom'> =
 
 type WhatEachPositionTells = {
   inOrder: readonly Position[];
-  told: (position: Position, parentPositioned: boolean) => Told;
+  told: (position: Position, from: MeasuredFrom) => Told;
 };
 
 const whatEachPositionTells: WhatEachPositionTells = {
-  inOrder: positions,
-  told: (position, parentPositioned) =>
-    position === 'absolute' && not(parentPositioned) ? {...told[position], ...withNoPositionedParent} : told[position]
+  inOrder: secondPosition.all,
+  told: (position, from) => from === 'little-page' ? {...told[position], ...withNoPositionedParent} : told[position]
 };
-
-type ParentPosition = 'positioned' | 'not-positioned';
 
 const positionChoices: Choice<Position>[] = whatEachPositionTells.inOrder
   .map(position => ({words: position, value: position}));
@@ -105,9 +98,9 @@ const FilledParent: FC<PropsWithChildren> = ({children}) =>
 const FilledPage: FC<PropsWithChildren> = ({children}) =>
   <>{Array.from({length: 4}, (_, at) => <FilledBox key={at}>{children}</FilledBox>)}</>;
 
-const pageMarkup = (position: Position, measuredFromTheParent: boolean): string[] => [
+const pageMarkup = (position: Position, from: MeasuredFrom): string[] => [
   '<p>the top of the page</p>',
-  measuredFromTheParent ? '<section class="parent positioned">' : '<section class="parent">',
+  from === 'parent' ? '<section class="parent positioned">' : '<section class="parent">',
   '  <p>First</p>',
   `  <p class="second ${position}">Second</p>`,
   '  <p>Third</p>',
@@ -118,31 +111,30 @@ const pageMarkup = (position: Position, measuredFromTheParent: boolean): string[
 const insideTheTransformedView = (markup: string[]): string[] =>
   ['<section class="little-view transformed">', ...markup.map(line => `  ${line}`), '</section>'];
 
-const markupShown = (position: Position, measuredFromTheParent: boolean): Line[] => {
-  const markup = pageMarkup(position, measuredFromTheParent);
-  return (position === 'fixed' ? insideTheTransformedView(markup) : markup).map(lines.plain);
+const markupShown = (position: Position, from: MeasuredFrom): Line[] => {
+  const markup = pageMarkup(position, from);
+  return (from === 'view' ? insideTheTransformedView(markup) : markup).map(lines.plain);
 };
 
-const rulesShown = (position: Position, measuredFromTheParent: boolean): Line[] => lines.fromTheExhibit([
+const rulesShown = (position: Position, from: MeasuredFrom): Line[] => lines.fromTheExhibit([
   ...carve.unit(sheet, `.second.${position} {`),
-  ...measuredFromTheParent ? [lines.blank, ...carve.unit(sheet, '.parent.positioned {')] : [],
-  ...position === 'fixed' ? [lines.blank, ...carve.unit(sheet, '.little-view.transformed {')] : []
+  ...from === 'parent' ? [lines.blank, ...carve.unit(sheet, '.parent.positioned {')] : [],
+  ...from === 'view' ? [lines.blank, ...carve.unit(sheet, '.little-view.transformed {')] : []
 ]);
 
-const MeasuredFrom: FC = () => <span className="measured-from alarm-dot" aria-hidden="true"/>;
+const MeasuringDot: FC = () => <span className="measured-from alarm-dot" aria-hidden="true"/>;
 
 export const WhereSecondGoes: FC = () => {
   const [position, choosePosition] = useState<Position>('static');
   const [parentPosition, chooseParentPosition] = useState<ParentPosition>('positioned');
-  const absolute = position === 'absolute';
-  const measuredFromTheParent = absolute && parentPosition === 'positioned';
-  const shown = whatEachPositionTells.told(position, parentPosition === 'positioned');
+  const from = secondPosition.measuredFrom(position, parentPosition);
+  const shown = whatEachPositionTells.told(position, from);
 
   return <figure className="where-second-goes">
     <p className="caption uppercase" aria-hidden="true">Second’s position is</p>
     <PillGlider label="Second’s position is" name="second-position" choices={positionChoices} chosen={position}
       onChosen={choosePosition}/>
-    {absolute && <>
+    {position === 'absolute' && <>
       <p className="caption uppercase" aria-hidden="true">And its parent is</p>
       <PillGlider label="And its parent is" name="parent-position" choices={parentPositionChoices}
         chosen={parentPosition} onChosen={chooseParentPosition}/>
@@ -152,25 +144,25 @@ export const WhereSecondGoes: FC = () => {
       <dt className="caption uppercase">Where we meet it</dt>
       <dd className="paragraph">{shown.whereWeMeetIt}</dd>
     </dl>
-    <Snippet label="HTML" lines={markupShown(position, measuredFromTheParent)}/>
-    <Snippet label="CSS" lines={rulesShown(position, measuredFromTheParent)}/>
+    <Snippet label="HTML" lines={markupShown(position, from)}/>
+    <Snippet label="CSS" lines={rulesShown(position, from)}/>
     <section className="little-window card hairline-outline rounded-corners">
       <p className="little-bar caption uppercase trim">The window</p>
       <section className="little-view transformed">
-        {position === 'fixed' && <MeasuredFrom/>}
-        {position === 'sticky' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
+        {from === 'view' && <MeasuringDot/>}
+        {from === 'scroll-edge' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
         <section className={classNames('little-page focus-ringed',
-          absolute && not(measuredFromTheParent) && 'alarm-ringed')}
+          from === 'little-page' && 'alarm-ringed')}
         aria-label="The little page" tabIndex={0}>
-          {absolute && not(measuredFromTheParent) && <MeasuredFrom/>}
+          {from === 'little-page' && <MeasuringDot/>}
           <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
           <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
-            measuredFromTheParent && 'positioned alarm-ringed')}>
-            {measuredFromTheParent && <MeasuredFrom/>}
+            from === 'parent' && 'positioned alarm-ringed')}>
+            {from === 'parent' && <MeasuringDot/>}
             <p className="little-box plan-blue hairline-outline rounded-corners">First</p>
             <p className={classNames('second little-box plan-mint hairline-outline rounded-corners', position)}>
               Second
-              {position === 'relative' &&
+              {from === 'own-place' &&
                 <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
             </p>
             <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
