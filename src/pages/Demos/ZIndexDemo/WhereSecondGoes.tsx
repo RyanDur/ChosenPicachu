@@ -39,7 +39,7 @@ const wordsFor: Record<MeasuredFrom, Words> = {
       className="monospaced">top</code> and <code className="monospaced">left</code>.</>,
     whereWeMeetIt: 'Every box, until we say otherwise.',
     verdict: 'Second sits between First and Third. The 16px and 24px do nothing.',
-    measuredFromWords: 'nowhere. The browser ignores top and left.',
+    measuredFromWords: 'nowhere.',
     stackingContext: formsNone
   },
   'own-place': {
@@ -66,11 +66,11 @@ const wordsFor: Record<MeasuredFrom, Words> = {
     story: <>The parent has no position now. Nothing above Second in the HTML shown here is {positionedLink}, so the
       browser measures <code className="monospaced">top</code> and <code className="monospaced">left</code> from the
       corner of the page itself. The little page stands in for it here. Expect this whenever no ancestor of an
-      absolute box is positioned, and none has a {transformLink}, a <code className="monospaced">filter</code> or
-      the like.</>,
+      absolute box is positioned and none has a {transformLink}, the property that moves, turns or scales a box, or
+      a <code className="monospaced">filter</code>, the property that blurs or tints one.</>,
     whereWeMeetIt: whereWeMeetAnAbsoluteBox,
     verdict: 'Second sits 16px down and 24px in from the page’s corner, over the top of the page and outside its parent. It still scrolls with the page.',
-    measuredFromWords: 'the little page’s corner, at the red dot. It stands in for the page’s corner: nothing above Second is positioned, so the browser goes past the parent to the page.',
+    measuredFromWords: 'the little page’s corner, at the red dot.',
     stackingContext: formsNoneUnlessAZIndex
   },
   view: {
@@ -78,7 +78,7 @@ const wordsFor: Record<MeasuredFrom, Words> = {
       measures <code className="monospaced">top</code> and <code className="monospaced">left</code> from the window,
       not the page. When the page scrolls, the box stays where it is. The little window’s view, the area under its bar,
       has a {transformLink}, the property that moves, turns or scales a box, so fixed is measured from it and not
-      from the browser’s window. Out of the flow, it no longer stretches across its parent, so we give it a width.</>,
+      from the browser’s window. Like absolute, it gets a width.</>,
     whereWeMeetIt: 'A banner, a chat button, a header pinned to the window.',
     verdict: 'Second leaves the flow and stays put in the window while the page scrolls under it.',
     measuredFromWords: 'the view’s corner, at the red dot.',
