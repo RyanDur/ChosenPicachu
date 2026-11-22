@@ -6,3 +6,4 @@ export {demoTabPager} from './tab-pager';
 export {demoPage} from './page';
 export {pageFoot} from './foot';
 export {partsIndex} from './parts-index';
+export {partsFold} from './parts-fold';
