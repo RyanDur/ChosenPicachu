@@ -18,9 +18,9 @@ const parentChoices: Choice<Parent>[] = [
 const Fillers: FC<{words: string; count: number}> = ({words, count}) => <>{Array.from({length: count}, (_, at) =>
   <p className="little-box muted-dashed-outline rounded-corners caption" key={at}>{words}</p>)}</>;
 
-const pageMarkup = (position: Position, parentPositioned: boolean): string[] => [
+const pageMarkup = (position: Position, measuredFromTheParent: boolean): string[] => [
   '<p>the top of the page</p>',
-  parentPositioned ? '<section class="parent positioned">' : '<section class="parent">',
+  measuredFromTheParent ? '<section class="parent positioned">' : '<section class="parent">',
   '  <p>First</p>',
   `  <p class="second ${position}">Second</p>`,
   '  <p>Third</p>',
@@ -31,14 +31,14 @@ const pageMarkup = (position: Position, parentPositioned: boolean): string[] => 
 const insideTheTransformedView = (markup: string[]): string[] =>
   ['<section class="little-view transformed">', ...markup.map(line => `  ${line}`), '</section>'];
 
-const markupShown = (position: Position, parentPositioned: boolean): Line[] => {
-  const markup = pageMarkup(position, parentPositioned);
+const markupShown = (position: Position, measuredFromTheParent: boolean): Line[] => {
+  const markup = pageMarkup(position, measuredFromTheParent);
   return (position === 'fixed' ? insideTheTransformedView(markup) : markup).map(lines.plain);
 };
 
-const rulesShown = (position: Position, parentPositioned: boolean): Line[] => lines.fromTheExhibit([
+const rulesShown = (position: Position, measuredFromTheParent: boolean): Line[] => lines.fromTheExhibit([
   ...carve.unit(sheet, `.second.${position} {`),
-  ...position === 'absolute' && parentPositioned ? [lines.blank, ...carve.unit(sheet, '.parent.positioned {')] : [],
+  ...measuredFromTheParent ? [lines.blank, ...carve.unit(sheet, '.parent.positioned {')] : [],
   ...position === 'fixed' ? [lines.blank, ...carve.unit(sheet, '.little-view.transformed {')] : []
 ]);
 
@@ -48,7 +48,7 @@ export const WhereSecondGoes: FC = () => {
   const [position, choosePosition] = useState<Position>('static');
   const [parent, chooseParent] = useState<Parent>('positioned');
   const absolute = position === 'absolute';
-  const parentPositioned = absolute && parent === 'positioned';
+  const measuredFromTheParent = absolute && parent === 'positioned';
   const told = whereSecondGoes.told(position, parent === 'positioned');
 
   return <figure className="where-second-goes">
@@ -66,20 +66,20 @@ export const WhereSecondGoes: FC = () => {
       <dd className="paragraph">{told.where}</dd>
     </dl>
     <section className="position-stage">
-      <Snippet label="HTML" lines={markupShown(position, parentPositioned)}/>
-      <Snippet label="CSS" lines={rulesShown(position, parentPositioned)}/>
+      <Snippet label="HTML" lines={markupShown(position, measuredFromTheParent)}/>
+      <Snippet label="CSS" lines={rulesShown(position, measuredFromTheParent)}/>
       <section className="little-window card hairline-outline rounded-corners">
         <p className="little-bar caption uppercase trim">The window</p>
         <section className="little-view transformed">
           {position === 'fixed' && <MeasuredFrom/>}
           {position === 'sticky' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
-          <section className={classNames('little-page', absolute && not(parentPositioned) && 'alarm-ringed')}
+          <section className={classNames('little-page', absolute && not(measuredFromTheParent) && 'alarm-ringed')}
             aria-label="The little page" tabIndex={0}>
-            {absolute && not(parentPositioned) && <MeasuredFrom/>}
+            {absolute && not(measuredFromTheParent) && <MeasuredFrom/>}
             <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
             <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
-              parentPositioned && 'positioned alarm-ringed')}>
-              {parentPositioned && <MeasuredFrom/>}
+              measuredFromTheParent && 'positioned alarm-ringed')}>
+              {measuredFromTheParent && <MeasuredFrom/>}
               <p className="little-box plan-blue hairline-outline rounded-corners">First</p>
               <p className={classNames('second little-box plan-mint hairline-outline rounded-corners', position)}>
                 Second
