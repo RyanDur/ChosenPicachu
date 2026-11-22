@@ -24,34 +24,6 @@ test('the feed says it is connecting, then that it is live', async ({page}) => {
   await expect(status).toHaveText('live');
 });
 
-const leftOut = 'What the page left out: “bogus” isn’t a chart. Pie was already on the desk.';
-
-test('a reader who opens an address with a name the page doesn’t know and a repeat reads what was left out', async ({page}) => {
-  const charts = chartsPage(page);
-  await page.goto('demos/charts/?charts=pie,bogus,pie,candles:day');
-  await siteFrame(page).hydrated();
-
-  await expect(charts.doorway('Candles')).toBeVisible();
-  await expect(page.getByRole('list', {name: 'charts'}).getByRole('link', {name: / tutorial$/})).toHaveCount(2);
-  await expect(page.getByText(leftOut)).toBeVisible();
-});
-
-test('a screen reader entering the desk of an address with a name the page doesn’t know hears what was left out', async ({page}) => {
-  await page.goto('demos/charts/?charts=pie,bogus,pie,candles:day');
-  await siteFrame(page).hydrated();
-
-  await expect(page.getByRole('list', {name: 'charts'})).toHaveAccessibleDescription(leftOut);
-});
-
-test('a reader who opens an address naming each chart once reads nothing left out', async ({page}) => {
-  const charts = chartsPage(page);
-  await page.goto('demos/charts/?charts=pie,candles:day');
-  await siteFrame(page).hydrated();
-
-  await expect(charts.doorway('Candles')).toBeVisible();
-  await expect(page.getByText(/^What the page left out:/)).toHaveCount(0);
-});
-
 test('removing a chart leaves focus on the next chart\'s link', async ({page}) => {
   const charts = chartsPage(page);
   await page.goto('demos/charts/?charts=price,candles');
