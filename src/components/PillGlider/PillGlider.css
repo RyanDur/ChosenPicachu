@@ -44,7 +44,7 @@
     }
   }
 
-  &:has(.pill:nth-of-type(5)) {
+  &:has(.pill:nth-of-type(5)):not(:has(.pill:nth-of-type(6))) {
     &:has(.pill:nth-of-type(2) :checked)::before { translate: none; grid-column: 2 / span 1; }
     &:has(.pill:nth-of-type(3) :checked)::before { translate: none; grid-column: 3 / span 1; }
     &:has(.pill:nth-of-type(4) :checked)::before { translate: none; grid-column: 4 / span 1; }
