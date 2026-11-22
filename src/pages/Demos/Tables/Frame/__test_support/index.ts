@@ -1,2 +1,2 @@
-export {vanillaFrame, withoutDirection} from './frame';
+export {vanillaFrame} from './frame';
 export {tableShape} from './tableShape';
