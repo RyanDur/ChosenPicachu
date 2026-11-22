@@ -78,11 +78,11 @@
 
     .old-place {
         position: absolute;
-        top: -16px;
-        left: -24px;
+        top: calc(-16px - var(--hairline));
+        left: calc(-24px - var(--hairline));
         box-sizing: border-box;
-        width: 100%;
-        height: 100%;
+        width: calc(100% + 2 * var(--hairline));
+        height: calc(100% + 2 * var(--hairline));
         pointer-events: none;
     }
 }
