@@ -8,6 +8,11 @@ import {explanation} from '@pages/Demos/Recipe/__test_support';
 const howPosition = 'z-index/how-position-places-a-box';
 const title = 'How position places a box';
 
+const choosePosition = async (position: string): Promise<void> =>
+  userEvent.click(within(screen.getByRole('group', {name: 'Second’s position is'})).getByRole('radio', {name: position}));
+
+const parentPills = (): HTMLElement | null => screen.queryByRole('group', {name: 'And its parent is'});
+
 describe('how position places a box, on its own page', () => {
   test('should link why Third is on top, which it builds on, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(howPosition, '?raised=second')}/>);
@@ -29,8 +34,27 @@ describe('how position places a box, on its own page', () => {
     render(<TestApp at={demosAt(howPosition, '?raised=second')}/>);
     const part = await explanation.part(title);
 
-    await userEvent.click(within(screen.getByRole('group', {name: 'Second’s position is'})).getByRole('radio', {name: 'absolute'}));
+    await choosePosition('absolute');
 
     expect(explanation.linkNamed(part, 'positioned')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
+  });
+
+  test('should offer the parent’s position while Second is absolute', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await choosePosition('absolute');
+
+    expect(parentPills()).toBeInTheDocument();
+  });
+
+  test('should take the parent’s position away once Second is no longer absolute', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+    await choosePosition('absolute');
+
+    await choosePosition('fixed');
+
+    expect(parentPills()).not.toBeInTheDocument();
   });
 });
