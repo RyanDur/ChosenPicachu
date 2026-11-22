@@ -1,6 +1,6 @@
 import {maybe, not} from '@ryandur/sand';
 import {grip} from '@components/DragSortableTable/model';
-import {cells, Moved} from '@pages/Demos/Market';
+import {cells, Measure, Moved} from '@pages/Demos/Market';
 import {MountedTable} from './table-state';
 import {orders} from './orders';
 import {keepingFocus} from './focus';
@@ -27,7 +27,7 @@ const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' |
     maybe(lanes.get(row.lookback.display)).map(lane =>
       frameColumns.sortable(table).forEach(measure => {
         const cell = lane.cells[order.indexOf(measure)];
-        const shown: {display: string; moved?: Moved} = cells.isMeasure(measure) ? row[measure] : {display: ''};
+        const shown: Measure = cells.isMeasure(measure) ? row[measure] : {display: ''};
         if (cell.textContent !== shown.display) {
           cell.textContent = shown.display;
         }
