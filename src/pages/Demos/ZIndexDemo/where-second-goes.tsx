@@ -1,4 +1,5 @@
 import {ReactNode} from 'react';
+import {not} from '@ryandur/sand';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PartTermLink} from './PartTermLink';
@@ -72,5 +73,5 @@ type WhereSecondGoes = {
 export const whereSecondGoes: WhereSecondGoes = {
   positions,
   told: (position, parentPositioned) =>
-    position === 'absolute' && !parentPositioned ? {...told[position], ...withNoPositionedParent} : told[position]
+    position === 'absolute' && not(parentPositioned) ? {...told[position], ...withNoPositionedParent} : told[position]
 };

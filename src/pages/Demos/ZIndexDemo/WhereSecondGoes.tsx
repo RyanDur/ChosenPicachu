@@ -1,4 +1,5 @@
 import {FC, useState} from 'react';
+import {not} from '@ryandur/sand';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {classNames} from '@components';
 import {carve, Line, lines, Snippet} from '../Recipe';
@@ -72,9 +73,9 @@ export const WhereSecondGoes: FC = () => {
         <section className="little-view transformed">
           {position === 'fixed' && <MeasuredFrom/>}
           {position === 'sticky' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
-          <section className={classNames('little-page', absolute && !parentPositioned && 'alarm-ringed')}
+          <section className={classNames('little-page', absolute && not(parentPositioned) && 'alarm-ringed')}
             aria-label="The little page" tabIndex={0}>
-            {absolute && !parentPositioned && <MeasuredFrom/>}
+            {absolute && not(parentPositioned) && <MeasuredFrom/>}
             <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
             <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
               parentPositioned && 'positioned alarm-ringed')}>
