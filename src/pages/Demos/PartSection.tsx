@@ -30,7 +30,7 @@ export const PartSection: FC<PropsWithChildren<PartSectionProps>> = (
   return <section aria-labelledby={headed} className={classNames('part-page', bodyFirst && 'body-first')}>
     {placed.either(shown => <header className="part-opening">
       <hgroup>
-        <p className="caption">{shown}</p>
+        <p className="caption uppercase">{shown}</p>
         <h2 id={headed} className="title">{heading}</h2>
       </hgroup>
       {introduction}
