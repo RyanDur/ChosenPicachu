@@ -458,7 +458,8 @@
   .alarm-dot { box-shadow: none; }
 
   .alarm-ringed {
-    border: var(--hairline-x-3) solid var(--highlight);
+    outline: var(--hairline-x-3) solid var(--highlight);
+    outline-offset: calc(var(--hairline-x-3) * -1);
   }
 
   .alarm-dashed-outline {
