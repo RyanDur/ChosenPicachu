@@ -1,5 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
-import {boxOf} from './box';
+import {type Box, boxOf} from './box';
 import {pillSwitch} from './pills';
 import {siteFrame} from './site';
 
@@ -7,11 +7,19 @@ export type Position = 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
 export type ParentPosition = 'position: relative' | 'not positioned';
 export type Spot = {x: number; y: number};
 export type Placed = Spot & {measuredFromFirstsHolder: boolean};
+export type Place = Spot & {width: number; height: number};
 
 const cornerOf = async (box: Locator): Promise<Spot> => {
   const {x, y} = await boxOf(box);
   return {x, y};
 };
+
+const placeIn = (holder: Box, box: Box): Place => ({
+  x: Math.round(box.x - holder.x),
+  y: Math.round(box.y - holder.y),
+  width: Math.round(box.width),
+  height: Math.round(box.height)
+});
 
 export const positionExhibit = (page: Page) => {
   const exhibit = page.getByRole('figure', {name: /^Where Second goes\./});
@@ -36,6 +44,16 @@ export const positionExhibit = (page: Page) => {
     position: (position: Position): Locator => positionPills.pill(position),
     choosesParent: (position: ParentPosition): Promise<void> => pillSwitch(page, 'And its parent is').choose(position),
     spotOf,
+    placeOf: async (name: string): Promise<Place> =>
+      placeIn(await boxOf(littlePage), await boxOf(littlePage.getByText(name, {exact: true}))),
+    oldPlaceOf: async (name: string): Promise<Place[]> => {
+      const holder = await boxOf(littlePage);
+      const marks = await littlePage.getByText(name, {exact: true}).evaluate(box => [...box.children].map(mark => {
+        const {x, y, width, height} = mark.getBoundingClientRect();
+        return {x, y, width, height};
+      }));
+      return marks.map(mark => placeIn(holder, mark));
+    },
     placedFromItsHolder: (name: string): Promise<Placed> => littlePage.getByText(name, {exact: true}).evaluate(box => {
       const holder = box instanceof HTMLElement ? box.offsetParent : null;
       return {

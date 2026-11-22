@@ -27,6 +27,16 @@ test('Second given relative moves 16px down and 24px right, its old place stays 
   await expect(exhibit.css).toContainText('position: relative;');
 });
 
+test('a relative Second leaves its dashed outline exactly where it stood', async ({page}) => {
+  const exhibit = positionExhibit(page);
+  await page.goto(address);
+  const stood = await exhibit.placeOf('Second');
+
+  await exhibit.choosesPosition('relative');
+
+  await expect.poll(() => exhibit.oldPlaceOf('Second')).toEqual([stood]);
+});
+
 test('an absolute Second whose parent has no position is measured from the little page’s corner, and the part says so', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
