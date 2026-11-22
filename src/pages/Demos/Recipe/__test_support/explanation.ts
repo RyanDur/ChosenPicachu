@@ -85,8 +85,9 @@ export const explanation = {
   saying: (part: HTMLElement, words: string | RegExp): HTMLElement => within(part).getByText(words),
   opener: openerOf,
   sourcesBeside: (part: HTMLElement, words: RegExp): string[] => sourcesIn(runTelling(part, words)),
-  sampleCaptionsBeside: (part: HTMLElement, words: RegExp): string[] =>
-    sampleFiguresIn(runTelling(part, words)).map(figure => computeAccessibleName(figure)),
+  sampleFilesBeside: (part: HTMLElement, words: RegExp): string[][] =>
+    sampleFiguresIn(runTelling(part, words)).map(figure =>
+      within(figure).queryAllByRole('link').map(link => link.textContent ?? '')),
   linksBeside: (part: HTMLElement, words: RegExp): (string | null)[][] => within(runTelling(part, words)).getAllByRole('link')
     .map(link => [link.textContent, link.getAttribute('href')]),
   runTelling,
