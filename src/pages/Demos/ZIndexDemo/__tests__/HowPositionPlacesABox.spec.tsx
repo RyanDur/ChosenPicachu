@@ -44,7 +44,7 @@ describe('how position places a box, on its own page', () => {
     render(<TestApp at={demosAt(howPosition, '?raised=second')}/>);
     const part = await explanation.part(title);
 
-    await positionExhibit.choosePosition('absolute');
+    await positionExhibit.choose('absolute');
 
     expect(explanation.linkNamed(part, 'positioned')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
@@ -53,7 +53,7 @@ describe('how position places a box, on its own page', () => {
     render(<TestApp at={demosAt(howPosition)}/>);
     await explanation.part(title);
 
-    await positionExhibit.choosePosition('absolute');
+    await positionExhibit.choose('absolute');
 
     expect(positionExhibit.queryParentPills()).toBeInTheDocument();
   });
@@ -61,9 +61,9 @@ describe('how position places a box, on its own page', () => {
   test('should take the parent’s position away once Second is no longer absolute', async () => {
     render(<TestApp at={demosAt(howPosition)}/>);
     await explanation.part(title);
-    await positionExhibit.choosePosition('absolute');
+    await positionExhibit.choose('absolute');
 
-    await positionExhibit.choosePosition('fixed');
+    await positionExhibit.choose('fixed');
 
     expect(positionExhibit.queryParentPills()).not.toBeInTheDocument();
   });
