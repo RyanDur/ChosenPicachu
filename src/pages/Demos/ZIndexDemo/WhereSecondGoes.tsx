@@ -134,18 +134,18 @@ const rulesShown = (position: Position, measuredFrom: MeasuredFrom): Line[] => l
 const MeasuringDot: FC = () => <span className="measured-from alarm-dot" aria-hidden="true"/>;
 
 export const WhereSecondGoes: FC = () => {
-  const {second: position, parent, change} = useControls();
+  const {secondPosition: position, parentPosition: parent, change} = useControls();
   const measuredFrom = secondPosition.measuredFrom(position, parent);
   const words = wordsFor[measuredFrom];
 
   return <figure className="where-second-goes">
     <p className="caption uppercase" aria-hidden="true">Second’s position is</p>
     <PillGlider label="Second’s position is" name="second-position" choices={positionChoices} chosen={position}
-      onChosen={next => change({second: next})}/>
+      onChosen={next => change({secondPosition: next})}/>
     {position === 'absolute' && <>
       <p className="caption uppercase" aria-hidden="true">And its parent is</p>
       <PillGlider label="And its parent is" name="parent-position" choices={parentPositionChoices}
-        chosen={parent} onChosen={next => change({parent: next})}/>
+        chosen={parent} onChosen={next => change({parentPosition: next})}/>
     </>}
     <p className="paragraph">{words.story}</p>
     <dl className="where-we-meet-it">

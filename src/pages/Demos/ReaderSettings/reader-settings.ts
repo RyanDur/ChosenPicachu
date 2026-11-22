@@ -27,8 +27,8 @@ export type Address = Placement & {
   style: FoldMotion;
   'card-one': CardOne;
   parts: PartsList;
-  second: Position;
-  parent: ParentPosition;
+  'second-position': Position;
+  'parent-position': ParentPosition;
 };
 
 const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
@@ -47,8 +47,8 @@ const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
   'card-one': schema.literalUnion('contained', 'free'),
   wears: schema.literalUnion(...inOrder.worn),
   parts: schema.literalUnion('shown', 'hidden'),
-  second: schema.literalUnion(...inOrder.positions),
-  parent: schema.literalUnion(...inOrder.parentPositions)
+  'second-position': schema.literalUnion(...inOrder.positions),
+  'parent-position': schema.literalUnion(...inOrder.parentPositions)
 };
 
 const deskParam = 'charts';
