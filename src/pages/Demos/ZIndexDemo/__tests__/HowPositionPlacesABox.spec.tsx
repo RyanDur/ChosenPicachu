@@ -2,8 +2,9 @@ import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {Paths} from '@navigation';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt} from '@pages/Demos/__test_support';
+import {demosAt, pageFoot} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const howPosition = 'z-index/how-position-places-a-box';
 const title = 'How position places a box';
@@ -14,6 +15,21 @@ const choosePosition = async (position: string): Promise<void> =>
 const parentPills = (): HTMLElement | null => screen.queryByRole('group', {name: 'And its parent is'});
 
 describe('how position places a box, on its own page', () => {
+  test('should say its place in the z-index book', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+
+    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 2 of 7');
+  });
+
+  test('should lead back to part one’s page and on to part three’s page, by number and title, with the raised card carried', async () => {
+    render(<TestApp at={demosAt(howPosition, '?raised=second')}/>);
+
+    expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
+      ['Previous: 1. Why Third is on top', demosAt('z-index/why-third-is-on-top', '?raised=second')],
+      ['Next: 3. Why 9999 still loses', demosAt('z-index/why-9999-still-loses', '?raised=second')]
+    ]);
+  });
+
   test('should link why Third is on top, which it builds on, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(howPosition, '?raised=second')}/>);
 
