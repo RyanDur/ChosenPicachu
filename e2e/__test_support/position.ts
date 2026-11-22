@@ -19,11 +19,11 @@ export const positionExhibit = (page: Page) => {
   const littlePage = exhibit.getByRole('region', {name: 'The little page'});
   const positionPills = pillSwitch(page, 'Second’s position is');
   const spotOf = async (name: string): Promise<Spot> => {
-    const [box, window] = await Promise.all([
+    const [namedCorner, pageCorner] = await Promise.all([
       cornerOf(littlePage.getByText(name, {exact: true})),
       cornerOf(littlePage)
     ]);
-    return {x: Math.round(box.x - window.x), y: Math.round(box.y - window.y)};
+    return {x: Math.round(namedCorner.x - pageCorner.x), y: Math.round(namedCorner.y - pageCorner.y)};
   };
   return {
     choosesPosition: (position: Position): Promise<void> => positionPills.choose(position),
