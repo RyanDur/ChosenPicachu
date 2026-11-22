@@ -58,11 +58,12 @@ export const positionExhibit = (page: Page) => {
       placeIn(await boxOf(littlePage), await boxOf(littlePage.getByText(name, {exact: true}))),
     oldPlaceOf: async (name: string): Promise<Place[]> => {
       const holder = await boxOf(littlePage);
-      const marks = await littlePage.getByText(name, {exact: true}).evaluate(box => [...box.children].map(mark => {
-        const {x, y, width, height} = mark.getBoundingClientRect();
-        return {x, y, width, height};
-      }));
-      return marks.map(mark => placeIn(holder, mark));
+      const outlines = await littlePage.getByText(name, {exact: true})
+        .evaluate(box => [...box.children].map(outline => {
+          const {x, y, width, height} = outline.getBoundingClientRect();
+          return {x, y, width, height};
+        }));
+      return outlines.map(outline => placeIn(holder, outline));
     },
     placedFromItsHolder: (name: string): Promise<Placed> => littlePage.getByText(name, {exact: true}).evaluate(box => {
       const holder = box instanceof HTMLElement ? box.offsetParent : null;
