@@ -9,6 +9,8 @@ import {livingStories} from '../living-stories';
 import exchangeSource from '@pages/Demos/Market/exchange.ts?sample';
 import marketSliceSource from '@pages/Demos/Market/marketSlice.ts?sample';
 import tradeTotalsSource from '@pages/Demos/Market/trade-totals.ts?sample';
+import cellsSource from '@pages/Demos/Market/cells.ts?sample';
+import marketReadsSource from '@pages/Demos/Market/marketReads.ts?sample';
 import buildSource from '../Frame/builds/Eager.ts?sample';
 import frameRows from '../Frame/table/rows.ts?sample';
 import hydrateSource from '@pages/Demos/Market/recent-trades.ts?sample';
@@ -39,7 +41,9 @@ const foldCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
       ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), lines.blank,
-      ...carve.unit(tradeTotalsSource, 'const aggregate = ')
+      ...carve.unit(tradeTotalsSource, 'const aggregate = '), lines.blank,
+      ...carve.unit(cellsSource, 'const marked = '), lines.blank,
+      ...carve.unit(marketReadsSource, 'const markedRows = ')
     ]}/>
   </Codes>,
   vanilla: <Codes>
