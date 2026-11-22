@@ -9,7 +9,8 @@ import './WhereSecondGoes.css';
 
 type Parent = 'positioned' | 'not-positioned';
 
-const positionChoices: Choice<Position>[] = whereSecondGoes.positions.map(value => ({words: value, value}));
+const positionChoices: Choice<Position>[] = whereSecondGoes.positions
+  .map(position => ({words: position, value: position}));
 const parentChoices: Choice<Parent>[] = [
   {words: 'position: relative', value: 'positioned'},
   {words: 'not positioned', value: 'not-positioned'}
