@@ -27,7 +27,7 @@ test('Second given relative moves 16px down and 24px right, its old place stays 
   await expect(exhibit.css).toContainText('position: relative;');
 });
 
-test('an absolute Second whose parent has no position is measured from the page’s corner, and the part says so', async ({page}) => {
+test('an absolute Second whose parent has no position is measured from the little page’s corner, and the part says so', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
   await exhibit.choosesPosition('absolute');
@@ -35,7 +35,7 @@ test('an absolute Second whose parent has no position is measured from the page�
   await exhibit.choosesParent('not positioned');
 
   await expect.poll(() => exhibit.spotOf('Second')).toEqual({x: 24, y: 16});
-  await expect(exhibit.measuredFrom).toContainText('the page’s corner');
+  await expect(exhibit.measuredFrom).toContainText('the little page’s corner');
 });
 
 test('a fixed Second stays where it is in the little window when the little page scrolls', async ({page}) => {
