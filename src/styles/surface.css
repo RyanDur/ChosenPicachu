@@ -307,7 +307,7 @@
 
 .card-banded { background: linear-gradient(var(--card-clear), var(--card), var(--card-clear)); }
 
-.moved-tinted {
+.fancy-table {
   [data-moved='up'] {
     background: var(--mint-shade-tint);
     box-shadow:

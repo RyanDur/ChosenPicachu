@@ -1,5 +1,4 @@
 import {FC} from 'react';
-import {classNames} from '@components';
 import {Body, BodyEvents, Cell, Column, DraggableColumn, DragSortable, HeaderEvents, Headers, Motion, Origin, ResizeHandle, Row, RowHeader, SortMenu, useDragSortable} from '@components/DragSortableTable';
 import {Measured, Measures, cells} from '../../../Market';
 import {TableColumn, tableReports, tableReads} from '@components/DragSortableTable/model';
@@ -17,7 +16,7 @@ export const EagerTable: FC<Props> = ({
 }) => {
   const sortable = useDragSortable(columns, cells.seated(rows), {origin, motion});
   return <DragSortable value={sortable}>
-    <table id="live-aggregations" className={classNames(sortable.className, 'moved-tinted')}>
+    <table id="live-aggregations" className={sortable.className}>
       <caption className="off-screen">{caption}</caption>
       <thead>
         <Headers onColumnMoved={onColumnMoved} onSorted={onSorted}>
