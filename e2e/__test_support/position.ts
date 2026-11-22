@@ -46,7 +46,7 @@ export const positionExhibit = (page: Page) => {
     tabsToTheLittlePage: async (): Promise<void> => {
       await siteFrame(page).hydrated();
       await positionPills.pill('static').focus();
-      const reached = (): Promise<boolean> => littlePage.evaluate(view => view === document.activeElement);
+      const reached = (): Promise<boolean> => littlePage.evaluate(littlePage => littlePage === document.activeElement);
       for (let presses = 0; presses < 12 && not(await reached()); presses += 1) {
         await page.keyboard.press('Tab');
       }
@@ -73,9 +73,9 @@ export const positionExhibit = (page: Page) => {
       };
     }),
     scrollsTheLittlePageTo: (top: number): Promise<void> =>
-      littlePage.evaluate((view, to) => view.scrollTo({top: to, behavior: 'instant'}), top),
+      littlePage.evaluate((littlePage, to) => littlePage.scrollTo({top: to, behavior: 'instant'}), top),
     scrollsTheLittlePageToItsEnd: (): Promise<void> =>
-      littlePage.evaluate(view => view.scrollTo({top: view.scrollHeight, behavior: 'instant'})),
+      littlePage.evaluate(littlePage => littlePage.scrollTo({top: littlePage.scrollHeight, behavior: 'instant'})),
     css: exhibit.getByRole('figure').filter({hasText: /^CSS/}),
     html: exhibit.getByRole('figure').filter({hasText: /^HTML/}),
     verdict: exhibit.getByRole('status', {name: 'where Second went'}),
