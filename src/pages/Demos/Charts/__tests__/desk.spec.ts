@@ -63,12 +63,32 @@ describe('the desk', () => {
     expect(desk.leftOut('pie, ,candles')).toEqual([]);
   });
 
+  test('a chart named with a space beside its comma is dealt', () => {
+    expect(desk.dealt('pie, candles').map(({kind}) => kind)).toEqual(['pie', 'candles']);
+  });
+
+  test('a chart named with a space beside its comma is not told as left out', () => {
+    expect(desk.leftOut('pie, candles')).toEqual([]);
+  });
+
+  test('a name the desk does not know is told without the spaces around it', () => {
+    expect(desk.leftOut('pie, bogus ')).toEqual([{why: 'unknown', entry: 'bogus'}]);
+  });
+
+  test('an address naming no chart it knows is told the price line stands in', () => {
+    expect(desk.leftOut('bogus')).toEqual([{why: 'unknown', entry: 'bogus'}, {why: 'none seated'}]);
+  });
+
+  test('an address naming no chart at all tells nothing', () => {
+    expect(desk.leftOut(',')).toEqual([]);
+  });
+
   test('a chart named again and again is told as left out once', () => {
     expect(desk.leftOut('pie,pie,pie')).toEqual([{why: 'repeat', kind: 'pie'}]);
   });
 
   test('a name the desk does not know, given again, is told as left out once', () => {
-    expect(desk.leftOut('bogus,bogus')).toEqual([{why: 'unknown', entry: 'bogus'}]);
+    expect(desk.leftOut('bogus,pie,bogus')).toEqual([{why: 'unknown', entry: 'bogus'}]);
   });
 
   test('what was left out is told in the order the address gives it', () => {

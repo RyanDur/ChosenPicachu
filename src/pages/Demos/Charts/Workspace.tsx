@@ -1,5 +1,5 @@
 import {Entry, Item, Menu} from '@components/Menu';
-import {FC, useId, useState} from 'react';
+import {FC, useState} from 'react';
 import {Link} from 'react-router';
 import {maybe, Maybe, has, not} from '@ryandur/sand';
 import {chartKinds} from './chart-kinds';
@@ -31,9 +31,7 @@ type Props = {
 
 export const Workspace: FC<Props> = ({product}) => {
   const status = useMarketRead(marketReads.feedStatus);
-  const {seats, leftOut, absentKinds, add, remove, reorder} = useDesk();
-  const toldLeftOut = useId();
-  const tellsLeftOut = has(leftOut);
+  const {seats, absentKinds, add, remove, reorder} = useDesk();
   const [report, setReport] = useState('');
   const hydrated = useHydrated();
   const nameAt = (at: number): string => chartKinds.names[seats[at].kind];
@@ -78,30 +76,29 @@ export const Workspace: FC<Props> = ({product}) => {
             </Menu>
           </>}
     </header>
-    {tellsLeftOut && <LeftOutLine id={toldLeftOut}/>}
-    <ol className="chart-list" aria-label="charts" aria-describedby={tellsLeftOut ? toldLeftOut : undefined}>
-      {seats.map(({kind}, at) => {
-        const dismissal = plural && <Dismissal onRemoved={pressed => removed(at, pressed)}/>;
-        return <li key={kind}
-          className={dress(at)}
-          onAnimationEnd={settled}
-          draggable={isArmed(at)}
-          onDragStart={lift(at)}
-          onDragOver={travel}
-          onDrop={event => event.preventDefault()}
-          onDragEnd={release}>
-          <Link className="doorway focal" to={chartKinds.address(kind)} onKeyDown={keys(at)}>
-            <span className="off-screen">{`${chartKinds.names[kind]} tutorial`}</span>
-          </Link>
-          {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
-          {chartKinds.match(kind, {
-            price: () => <PriceChart id={`chart-${kind}`}>{dismissal}</PriceChart>,
-            candles: () => <Candles id={`chart-${kind}`}>{dismissal}</Candles>,
-            pressure: () => <Pressure>{dismissal}</Pressure>,
-            pie: () => <Pie>{dismissal}</Pie>
-          }).orNull()}
-        </li>;
-      })}
+    <ol className="chart-list" aria-label="charts">{seats.map(({kind}, at) => {
+      const dismissal = plural && <Dismissal onRemoved={pressed => removed(at, pressed)}/>;
+      return <li key={kind}
+        className={dress(at)}
+        onAnimationEnd={settled}
+        draggable={isArmed(at)}
+        onDragStart={lift(at)}
+        onDragOver={travel}
+        onDrop={event => event.preventDefault()}
+        onDragEnd={release}>
+        <Link className="doorway focal" to={chartKinds.address(kind)} onKeyDown={keys(at)}>
+          <span className="off-screen">{`${chartKinds.names[kind]} tutorial`}</span>
+        </Link>
+        {plural && <Grip onPressed={() => arm(at)} onReleased={disarm}/>}
+        {chartKinds.match(kind, {
+          price: () => <PriceChart id={`chart-${kind}`}>{dismissal}</PriceChart>,
+          candles: () => <Candles id={`chart-${kind}`}>{dismissal}</Candles>,
+          pressure: () => <Pressure>{dismissal}</Pressure>,
+          pie: () => <Pie>{dismissal}</Pie>
+        }).orNull()}
+      </li>;
+    })}
     </ol>
+    <LeftOutLine/>
   </>;
 };
