@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
 import {broadcast, Feed} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support/subscription';
-import {vanillaFrame, withoutDirection} from '../Frame/__test_support';
+import {moved} from './moved';
 import {untilTheTablesTabRenders} from './controls';
 
 const card = (): HTMLElement => screen.getByRole('region', {name: 'live aggregations'});
@@ -14,7 +14,12 @@ const arrived = (): Promise<HTMLElement> => screen.findByRole('region', {name: '
 const rowOf = (lookback: string): HTMLElement => within(card()).getByRole('row', {name: new RegExp(`^${lookback}`)});
 
 const numbersIn = (lookback: string): string[] =>
-  sortableTable.texts(rowOf(lookback)).map(text => withoutDirection(text ?? ''));
+  sortableTable.texts(rowOf(lookback)).map(text => moved.numberIn(text ?? ''));
+
+const cellOf = (lookback: string, measure: string): HTMLElement => {
+  const measures = within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label'));
+  return within(rowOf(lookback)).getAllByRole('cell')[measures.indexOf(measure) - 1];
+};
 
 const afterItsFirstTrade = async (feed: Feed, trade: string): Promise<void> => {
   await feedIsSubscribed(feed);
@@ -37,10 +42,10 @@ export const aggregations = {
   findRow: (lookback: string): Promise<HTMLElement> => within(card()).findByRole('row', {name: new RegExp(`^${lookback}`)}),
   counted: async (trades: number): Promise<HTMLElement[]> => within(card()).findAllByText(String(trades)),
   columns: (): (string | null)[] => within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label')),
-  markOn: vanillaFrame.markOn,
+  markOn: (lookback: string, measure: string): string => moved.heardIn(cellOf(lookback, measure)),
   numbersIn,
   spokenIn: (lookback: string, measure: string): string =>
-    computeAccessibleName(vanillaFrame.figure(lookback, measure)),
+    computeAccessibleName(cellOf(lookback, measure)),
   lookbacks: (): (string | null)[] => within(card()).getAllByRole('rowheader').map(header => header.textContent),
   moveWindowByKey: async (row: number, key: string): Promise<void> => {
     within(card()).getByRole('button', {name: `move row ${row}`}).focus();
