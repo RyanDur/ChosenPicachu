@@ -24,12 +24,15 @@ const socketPlans: Record<World, string> = {
 const foldSays: Record<World, ReactNode> = {
   react: <Says>Every render folds the same trades into totals per lookback, a stretch of time measured back from the
     newest trade: counts, volume, vwap, the change since the lookback opened. The fold runs over the same capped trades
-    each time, so the lookbacks always match the trades the page holds.</Says>,
+    each time, so the lookbacks always match the trades the page holds. Each number is also compared with what it
+    was before the newest trade and marked up or down; a number that trade left alone carries no mark.</Says>,
   vanilla: <Says>Every arrival refolds the same trades into totals per lookback, a stretch of time measured back from
     the newest trade. It is the same <code className="monospaced">tradeTotals</code> module the React world runs.
     What React did for you ends here: there is no render to catch the change, so the page refolds the
-    trades and calls <code className="monospaced">reconcile</code>, which writes only the cells whose text changed and
-    reseats the rows when the sort ranks them anew. The arrangement is the page’s, and that is the store story.</Says>
+    trades and calls <code className="monospaced">reconcile</code>, which rewrites a cell only when its text or its mark
+    changes, and reseats the rows when the sort ranks them anew. A mark says which way the newest trade moved a number;
+    the next trade clears it from a number it leaves as it is.
+    The arrangement is the page’s, and that is the store story.</Says>
 };
 
 const foldCodes: Record<World, ReactNode> = {
@@ -43,6 +46,7 @@ const foldCodes: Record<World, ReactNode> = {
     <Snippet label="TS" lines={[
       ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), lines.blank,
       ...carve.unit(buildSource, 'const reconciled = '), lines.blank,
+      ...carve.unit(frameRows, 'const marked = '), lines.blank,
       ...carve.unit(frameRows, 'const writeCells = ')
     ]}/>
   </Codes>
@@ -97,8 +101,9 @@ const FlowStory: FC = () => {
         <Reveal>
           <Says>The handshake subscribes to the product.
             Every <Mdn path="Web/API/WebSocket/message_event">message</Mdn> decodes into a trade, appended under a cap
-            so a long session never grows without bound. A <Mdn path="Web/API/WebSocket/close_event">close</Mdn> marks
-            the feed failed.</Says>
+            so a long session never grows without bound. The reducer also keeps the list from before the newest trade,
+            so the rows can mark what that trade moved; when history arrives, the two lists match and every mark clears.
+            A <Mdn path="Web/API/WebSocket/close_event">close</Mdn> marks the feed failed.</Says>
           <Codes>
             <Snippet label="TS" lines={[
               ...carve.unit(exchangeSource, 'const stream = streaming('), lines.blank,
