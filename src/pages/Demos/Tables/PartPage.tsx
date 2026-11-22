@@ -19,12 +19,21 @@ const parts: Record<TablePart, FC> = {
   'the-live-table-and-the-store': FlowTableRecipe
 };
 
+const introductions: Record<TablePart, string> = {
+  'the-need-and-its-clues': 'Before a design and before a story, someone tells us what gets in their way.',
+  'the-sketch': 'The needs from part 1, drawn as a sketch.',
+  'the-slices': 'A story says what a person will be able to do, and why they want it.',
+  'the-still-table': 'The first story, built all the way through.',
+  'the-live-table-and-the-store': 'The second story, built all the way through.'
+};
+
 export const PartPage: FC<{readonly part: TablePart}> = ({part}) => {
   const {name, ordinal} = tableParts.told(part);
   const Part = parts[part];
   const {previous, next} = usePartsBeside(part);
   const place = `${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`;
   return <PartSection heading={name} place={place}
+    says={introductions[part]}
     panel={<PartsAndDials/>} foot={<PartFoot previous={previous} next={next}/>} wears="tutorial-page tutorials">
     <Aggregations/>
     <Part/>
