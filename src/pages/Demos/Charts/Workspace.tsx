@@ -78,7 +78,7 @@ export const Workspace: FC<Props> = ({product}) => {
             </Menu>
           </>}
     </header>
-    {tellsLeftOut && <LeftOutLine id={toldLeftOut} leftOut={leftOut}/>}
+    {tellsLeftOut && <LeftOutLine id={toldLeftOut}/>}
     <ol className="chart-list" aria-label="charts" aria-describedby={tellsLeftOut ? toldLeftOut : undefined}>
       {seats.map(({kind}, at) => {
         const dismissal = plural && <Dismissal onRemoved={pressed => removed(at, pressed)}/>;
