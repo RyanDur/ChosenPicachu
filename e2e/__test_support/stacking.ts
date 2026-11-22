@@ -4,7 +4,7 @@ import {pillSwitch} from './pills';
 import {siteFrame} from './site';
 
 export type Card = 'First' | 'Second' | 'Third';
-export type Step = 'Overlap' | 'Z-index';
+export type Step = '1 · Overlap' | '2 · Z-index';
 
 const order: ('None' | Card)[] = ['None', 'First', 'Second', 'Third'];
 
@@ -26,6 +26,7 @@ export const pileSteps = (page: Page) => {
   return {
     cardsFromTheTop: (): Promise<string[]> => cardsFromTheTopWhereAllMeet(exhibit.getByRole('region', {name: 'the pile'})),
     stepsTo: (step: Step): Promise<void> => pillSwitch(page, 'Step').choose(step),
+    step: (step: Step): Locator => pillSwitch(page, 'Step').pill(step),
     givesAZIndexTo: (card: 'None' | Card): Promise<void> => pillSwitch(page, 'Give a z-index to').choose(card),
     givesAZIndexByKeyboardTo: async (card: Card): Promise<void> => {
       await pillSwitch(page, 'Give a z-index to').pill('None').focus();

@@ -23,7 +23,9 @@ export type Settings = Placement & {
   chosenParentPosition: ParentPosition;
 };
 
-export type Controls = Settings & {change: (next: Partial<Settings>) => void};
+export type AddressEntry = Record<string, string>;
+
+export type Controls = Settings & {change: (next: Partial<Settings>, alongWith?: AddressEntry) => void};
 
 const defaults: Address = {
   pace: 'eager',
@@ -55,8 +57,8 @@ export const useControls = (): Controls => {
     chosenParentPosition,
     change: ({
       foldType, foldMotion, cardOne: nextCardOne, chosenPosition: nextSecond, chosenParentPosition: nextParent, ...next
-    }) => found.updateSearchParams({
-      ...next, type: foldType, style: foldMotion, 'card-one': nextCardOne,
+    }, alongWith = {}) => found.updateSearchParams({
+      ...alongWith, ...next, type: foldType, style: foldMotion, 'card-one': nextCardOne,
       'second-position': nextSecond, 'parent-position': nextParent
     })
   };

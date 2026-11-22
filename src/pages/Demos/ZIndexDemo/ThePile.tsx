@@ -1,7 +1,7 @@
-import {FC, useId, useState} from 'react';
+import {FC, useId} from 'react';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {classNames} from '@components';
-import {carve, Line, lines, Snippet} from '../Recipe';
+import {carve, ExhibitSteps, Line, lines, Snippet, useExhibitStep} from '../Recipe';
 import {useControls} from '../Controls';
 import {inOrder, RaisedCard} from '../ReaderSettings';
 import sheet from './ThePile.css?sample';
@@ -34,8 +34,7 @@ const verdictOn = (raised: RaisedCard): string => raised === 'none'
 
 export const ThePile: FC = () => {
   const {raised: chosen, change} = useControls();
-  const [picked, chooseStep] = useState<Step>();
-  const step = picked ?? (chosen === 'none' ? 'overlap' : 'z-index');
+  const {step, choose: chooseStep, entryFor} = useExhibitStep('pile', steps, chosen === 'none' ? 'overlap' : 'z-index');
   const raised = step === 'z-index' ? chosen : 'none';
   const title = useId();
 
@@ -43,7 +42,7 @@ export const ThePile: FC = () => {
     <p className="caption uppercase" aria-hidden="true">Exhibit</p>
     <h2 className="sub-title" id={title}>The pile</h2>
     <p className="caption uppercase" aria-hidden="true">Step</p>
-    <PillGlider label="Step" name="pile-step" choices={steps} chosen={step} onChosen={chooseStep}/>
+    <ExhibitSteps label="Step" at="pile" steps={steps} chosen={step} onChosen={chooseStep}/>
     <p className="paragraph">{stories[step]}</p>
     <section className="pile-stage">
       <section className="pile-code">
@@ -63,10 +62,7 @@ export const ThePile: FC = () => {
     {step === 'z-index' && <>
       <p className="caption uppercase" aria-hidden="true">Give a z-index to</p>
       <PillGlider label="Give a z-index to" name="pile-raised" choices={cardsToRaise} chosen={chosen}
-        onChosen={next => {
-          chooseStep('z-index');
-          change({raised: next});
-        }}/>
+        onChosen={next => change({raised: next}, entryFor('z-index'))}/>
     </>}
     <figcaption className="caption"><strong className="bold">Three cards.</strong> Two steps: an overlap, then a
       z-index.</figcaption>

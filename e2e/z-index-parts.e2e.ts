@@ -24,9 +24,9 @@ test('a reader follows why Third is on top from the z-index tab to its page and 
 
 test('a card raised on the z-index tab is still raised on the page for why Third is on top', async ({page}) => {
   await page.goto('demos/z-index/');
-  await pileSteps(page).stepsTo('Z-index');
+  await pileSteps(page).stepsTo('2 · Z-index');
   await pileSteps(page).givesAZIndexTo('Second');
-  await expect(page).toHaveURL(/\?raised=second$/);
+  await expect(page).toHaveURL(/[?&]raised=second$/);
 
   await zIndexTab(page).partLink(whyThirdIsOnTop).click();
 

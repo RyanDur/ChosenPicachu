@@ -17,7 +17,7 @@ test('the tab’s pile overlaps with Third on top, and says it is on top because
 const givenAZIndexLandsOnTop = async (page: Page, giving: () => Promise<void>, fromTheTop: Card[]): Promise<void> => {
   const pile = pileSteps(page);
   await page.goto('demos/z-index/');
-  await pile.stepsTo('Z-index');
+  await pile.stepsTo('2 · Z-index');
 
   await giving();
 
@@ -28,6 +28,26 @@ const givenAZIndexLandsOnTop = async (page: Page, giving: () => Promise<void>, f
 
 test('First given a z-index by a pointer comes to the top of the tab’s pile, with the rule that did it', ({page}) =>
   givenAZIndexLandsOnTop(page, () => pileSteps(page).givesAZIndexTo('First'), ['First', 'Third', 'Second']));
+
+test('a copied address opens the tab’s pile on the step it names', async ({page}) => {
+  const pile = pileSteps(page);
+
+  await page.goto('demos/z-index/?pile=z-index');
+
+  await expect(pile.step('2 · Z-index')).toBeChecked();
+  await expect(pile.verdict).toHaveText('Third is on top. It comes last in the code.');
+});
+
+test('Back steps the tab’s pile back to the step before', async ({page}) => {
+  const pile = pileSteps(page);
+  await page.goto('demos/z-index/');
+  await pile.stepsTo('2 · Z-index');
+  await expect(pile.step('2 · Z-index')).toBeChecked();
+
+  await page.goBack();
+
+  await expect(pile.step('1 · Overlap')).toBeChecked();
+});
 
 test('Second given a z-index by the keyboard comes to the top of the tab’s pile, with the rule that did it', ({page}) =>
   givenAZIndexLandsOnTop(page, () => pileSteps(page).givesAZIndexByKeyboardTo('Second'), ['Second', 'Third', 'First']));
