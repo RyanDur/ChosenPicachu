@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
-import {DemoTopics} from '@pages/Demos';
+import {demoTab, DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {Behind, Beside, Onward, PartFoot} from '@pages/Demos/PartFoot';
@@ -59,9 +59,12 @@ const theLastChart: Onward = {kind: 'last-part-unsaid'};
 export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const {reference, quote, chart: Chart} = features[kind];
   const name = chartKinds.names[kind];
+  const place = `${demoTab.names[DemoTopics.charts]} · part ${chartKinds.ordinalOf(kind)} of ${chartKinds.all.length}`;
   const behind = chartKinds.previous(kind).map((beside): Behind => besideKind(beside)).orElse(thePreviousTab);
   const onward = chartKinds.next(kind).map((beside): Onward => besideKind(beside)).orElse(theLastChart);
-  return <PartSection heading={`${name} tutorial`} panel={<PartsAndMinutes/>} wears="tutorials"
+  return <PartSection heading={`${name} tutorial`} place={place}
+    says={chartKinds.told[kind].says}
+    panel={<PartsAndMinutes/>} wears="tutorials"
     foot={<PartFoot previous={behind} next={onward}/>}>
     <Chart/>
     <h3 className="title">let’s build this feature</h3>
