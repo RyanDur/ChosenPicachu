@@ -49,8 +49,10 @@ const from = (aggregate: LookbackTotals): Measures => ({
 });
 
 const directionOf = (was: Measure, now: Measure): Maybe<Moved> =>
-  maybe(was.value).mBind(old => maybe(now.value).mBind(value =>
-    value === old ? nothing() : some<Moved>(value > old ? 'up' : 'down')));
+  was.display === now.display
+    ? nothing()
+    : maybe(was.value).mBind(numberBefore => maybe(now.value).mBind(numberNow =>
+      numberNow === numberBefore ? nothing() : some<Moved>(numberNow > numberBefore ? 'up' : 'down')));
 
 const marked = (was: Measure, now: Measure): Measure =>
   directionOf(was, now).map(direction => ({...now, moved: direction})).orElse(now);
