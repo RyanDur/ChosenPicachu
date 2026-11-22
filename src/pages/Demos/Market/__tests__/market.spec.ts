@@ -25,6 +25,16 @@ describe('the market store', () => {
     expect(marketReads.rows(store.state)[0]?.trades?.display).toBe('1');
   });
 
+  it('history arriving after trades have streamed clears the marks the newest trade left', () => {
+    const store = marketStore();
+    store.dispatch(marketActions.tradeArrived(trade(2, 100)));
+    store.dispatch(marketActions.tradeArrived(trade(3, 101)));
+
+    store.dispatch(marketActions.historyArrived([trade(1, 90)]));
+
+    expect(marketReads.rows(store.state)[0]?.trades?.moved).toBeUndefined();
+  });
+
   it('past the newest 1500 trades the oldest fall off the front', () => {
     const store = marketStore();
 
