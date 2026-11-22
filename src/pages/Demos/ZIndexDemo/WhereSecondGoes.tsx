@@ -63,9 +63,9 @@ const told: Record<MeasuredFrom, Told> = {
   'little-page': {
     story: <>The parent has no position now. Nothing above Second in the HTML shown here is {positionedLink}, so the
       browser measures <code className="monospaced">top</code> and <code className="monospaced">left</code> from the
-      corner of the page itself. The little page stands in for it here. Expect
-      this whenever nothing above an absolute box is positioned or has a {transformLink}, the property that moves,
-      turns or scales a box.</>,
+      corner of the page itself. The little page stands in for it here. Expect this whenever nothing above an
+      absolute box is its containing block: no ancestor is positioned, and none has a {transformLink},
+      a <code className="monospaced">filter</code> or the like.</>,
     whereWeMeetIt: whereWeMeetAnAbsoluteBox,
     verdict: 'Second sits 16px down and 24px in from the page’s corner, over the top of the page and outside its parent. It still scrolls with the page.',
     measuredFromWords: 'the little page’s corner, at the red dot. It stands in for the page’s corner: nothing above Second is positioned, so the browser goes past the parent to the page.',
