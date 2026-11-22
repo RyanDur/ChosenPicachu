@@ -62,7 +62,7 @@
     padding-block: var(--base-x-2) var(--base);
 
     > .sidecar-header {
-      min-block-size: var(--base-x-4);
+      min-block-size: var(--folded-header-reach);
     }
   }
 
@@ -71,7 +71,13 @@
   }
 
   :root:has(.tab-sidecar.folded > .sidecar-header) {
+    --folded-header-reach: var(--base-x-4);
+
     scroll-padding-block-start:
-      calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--base-x-4) + var(--base) + var(--base-x-2));
+      calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--folded-header-reach) + var(--base) + var(--base-x-2));
+
+    @media (pointer: coarse) {
+      --folded-header-reach: var(--finger-reach);
+    }
   }
 }
