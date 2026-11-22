@@ -6,6 +6,6 @@ import {PageError} from './PageError';
 
 export const ClosedRoom: FC = () =>
   <>
-    <Header title="Closed room" listed={names.closedRoom}/>
+    <Header pageName="Closed room" listed={names.closedRoom}/>
     <CenteredMain><PageError/></CenteredMain>
   </>;

@@ -3,7 +3,7 @@ import {CenteredMain, Header, PageError} from '@page';
 import {UsersPage} from './UsersPage';
 import names from '@navigation/names.json';
 
-const header = <Header title="Users" listed={names.users}/>;
+const header = <Header pageName="Users" listed={names.users}/>;
 
 export const ErrorBoundary: FC = () => <>{header}<CenteredMain><PageError/></CenteredMain></>;
 

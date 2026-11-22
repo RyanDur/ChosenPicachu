@@ -78,10 +78,10 @@ describe('why Third is on top, on its own page', () => {
       .toHaveAttribute('href', `${demosAt('accordions', '?raised=second')}#fold-choices-heading`);
   });
 
-  test('should title the page with the tab and the part', async () => {
+  test('should title the page with its tab', async () => {
     render(<TestApp at={demosAt(thirdOnTop)}/>);
 
-    expect(await demoTabs.title('Demos Z-index · Why Third is on top')).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Z-index')).toBeInTheDocument();
   });
 
   test('should keep Z-index as the current tab', async () => {

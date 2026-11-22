@@ -41,10 +41,10 @@ describe('why the popover wins, on its own page', () => {
     ]);
   });
 
-  test('should title the page with the tab and the part', async () => {
+  test('should title the page with its tab', async () => {
     render(<TestApp at={demosAt(popoverWins)}/>);
 
-    expect(await demoTabs.title('Demos Z-index · Why the popover wins')).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Z-index')).toBeInTheDocument();
   });
 
   test('should keep Z-index as the current tab', async () => {

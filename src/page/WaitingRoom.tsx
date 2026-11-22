@@ -5,7 +5,7 @@ import {CenteredMain} from './CenteredMain';
 
 export const WaitingRoom: FC = () =>
   <>
-    <Header title="Chosen Picachu" listed={names.home}/>
+    <Header pageName="Chosen Picachu" listed={names.home}/>
     <CenteredMain>
       <noscript>
         <p className="paragraph prose">The script draws this page, and it is off. The pages the rail lists are here

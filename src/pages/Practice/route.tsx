@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, ReactElement} from 'react';
 import {useParams} from 'react-router';
 import {Maybe} from '@ryandur/sand';
 import {Header, Listing, Main, PageError} from '@page';
@@ -14,14 +14,24 @@ const listings: Record<Concern, Listing> = {
   'Behavior': names.practice.behavior
 };
 
-const useConcern = (): Maybe<Concern> => practiceAddress.concernFromSegment(useParams().concern);
+type AddressedConcern = {
+  whenShown: (show: (concern: Concern) => ReactElement) => ReactElement | null;
+  shownOr: (show: (concern: Concern) => ReactElement, notShown: () => ReactElement) => ReactElement;
+};
 
-const ConcernHeader: FC = () => useConcern().either(
-  concern => <Header title={`Practice ${concern}`} listed={listings[concern]}/>,
-  () => null);
+const addressed = (concern: Maybe<Concern>): AddressedConcern => ({
+  whenShown: show => concern.map(show).orNull(),
+  shownOr: (show, notShown) => concern.either(show, notShown)
+});
+
+const useAddressedConcern = (): AddressedConcern =>
+  addressed(practiceAddress.concernFromSegment(useParams().concern));
+
+const ConcernHeader: FC = () => useAddressedConcern().whenShown(concern =>
+  <Header pageName={`Practice ${concern}`} listed={listings[concern]}/>);
 
 export const ErrorBoundary: FC = () => <><ConcernHeader/><Main><PageError/></Main></>;
 
-export const Room: FC = () => useConcern().either(
+export const Room: FC = () => useAddressedConcern().shownOr(
   concern => <><ConcernHeader/><Main><PracticePage concern={concern}/></Main></>,
   () => <NoSuchRoom/>);

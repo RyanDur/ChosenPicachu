@@ -14,10 +14,10 @@ describe('a chart’s page', () => {
     expect(await demoTabs.currentButNotThePage()).toEqual(['Charts']);
   });
 
-  test('should title the page with the tab and the chart', async () => {
+  test('should title the page with its tab', async () => {
     render(<TestApp at={chartPageAt('candles')}/>);
 
-    expect(await demoTabs.title('Demos Charts · Candles')).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Charts')).toBeInTheDocument();
   });
 
   test('should mark the chart the reader is on as the current page', async () => {

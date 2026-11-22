@@ -59,10 +59,10 @@ describe('a box remembers the fold, on its own page', () => {
     ]);
   });
 
-  test('should title its page with the tab and the part', async () => {
+  test('should title its page with its tab', async () => {
     render(<TestApp at={demosAt(remembers)}/>);
 
-    expect(await demoTabs.title(`Demos Accordions · ${title}`)).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Accordions')).toBeInTheDocument();
   });
 
   test('should keep Accordions as the current tab', async () => {

@@ -50,9 +50,9 @@ describe('the max-height guess, on its own page', () => {
     ]);
   });
 
-  test('should title its page with the tab and the part', async () => {
+  test('should title its page with its tab', async () => {
     render(<TestApp at={demosAt(guess)}/>);
 
-    expect(await demoTabs.title(`Demos Accordions · ${title}`)).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Accordions')).toBeInTheDocument();
   });
 });

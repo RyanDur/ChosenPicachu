@@ -92,10 +92,10 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().tableShown('the clues')).not.toBeInTheDocument();
   });
 
-  test('should title the need’s page with the tab and the part', async () => {
+  test('should title the need’s page with its tab', async () => {
     render(<TestApp at={theNeedsPage}/>);
 
-    expect(await demoTabs.title(`Demos Tables · ${theNeed}`)).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Tables')).toBeInTheDocument();
   });
 
   test('should keep Tables as the current tab on the need’s page', async () => {
@@ -195,10 +195,10 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(await tablesTab().minutesOf(theSketch)).toHaveTextContent(/^1 min$/);
   });
 
-  test('should title the sketch’s page with the tab and the part', async () => {
+  test('should title the sketch’s page with its tab', async () => {
     render(<TestApp at={theSketchsPage}/>);
 
-    expect(await demoTabs.title(`Demos Tables · ${theSketch}`)).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Tables')).toBeInTheDocument();
   });
 
   test('following the slices from the tables tab opens their page', async () => {
@@ -299,10 +299,10 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(await tablesTab().minutesOf(theSlices)).toHaveTextContent(/^2 min$/);
   });
 
-  test('should title the slices’ page with the tab and the part', async () => {
+  test('should title the slices’ page with its tab', async () => {
     render(<TestApp at={theSlicesPage}/>);
 
-    expect(await demoTabs.title(`Demos Tables · ${theSlices}`)).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Tables')).toBeInTheDocument();
   });
 
   test('following the still table from the tables tab opens its page with its story open', async () => {
@@ -399,10 +399,10 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(tablesTab().titleShown(theStillStory)).not.toBeInTheDocument();
   });
 
-  test('should title the still table’s page with the tab and the part', async () => {
+  test('should title the still table’s page with its tab', async () => {
     render(<TestApp at={theStillTablesPage}/>);
 
-    expect(await demoTabs.title(`Demos Tables · ${theStillTable}`)).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Tables')).toBeInTheDocument();
   });
 
   test('following the live table from the tables tab opens its page with both its stories open', async () => {
@@ -515,10 +515,10 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(await tablesTab().minutesOf(theLiveTable)).toHaveTextContent(/^12 min$/);
   });
 
-  test('should title the live table’s page with the tab and the part', async () => {
+  test('should title the live table’s page with its tab', async () => {
     render(<TestApp at={theLiveTablesPage}/>);
 
-    expect(await demoTabs.title(`Demos Tables · ${theLiveTable}`)).toBeInTheDocument();
+    expect(await demoTabs.title('Demos Tables')).toBeInTheDocument();
   });
 });
 

@@ -20,7 +20,7 @@ const PieceHeader = () => {
   const {title, listed} = easel.reply === 'answered'
     ? {title: easel.answer.title, listed: listingOf(easel.answer)}
     : {title: 'A piece', listed: names.gallery};
-  return <Header title={title} listed={listed}>
+  return <Header pageName={title} listed={listed}>
     <Search className="header-settings"/>
   </Header>;
 };
