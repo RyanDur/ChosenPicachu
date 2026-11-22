@@ -32,7 +32,7 @@ test('a reader who opens an address with a name the page doesn’t know and a re
   await siteFrame(page).hydrated();
 
   await expect(charts.doorway('Candles')).toBeVisible();
-  await expect(page.getByRole('list', {name: 'charts'}).getByRole('listitem')).toHaveCount(2);
+  await expect(page.getByRole('list', {name: 'charts'}).getByRole('link', {name: / tutorial$/})).toHaveCount(2);
   await expect(page.getByText(leftOut)).toBeVisible();
 });
 
