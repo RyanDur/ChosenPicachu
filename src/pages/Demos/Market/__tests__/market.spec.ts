@@ -45,6 +45,16 @@ describe('the market store', () => {
     expect(marketReads.liveTrades(store.state)[0].id).toBe(2);
   });
 
+  it('a trade arriving past the newest 1500 still marks the count it adds to as up', () => {
+    const store = marketStore();
+    Array.from({length: 1500}, (_, at) => trade(at + 1, 100))
+      .forEach(arrived => store.dispatch(marketActions.tradeArrived(arrived)));
+
+    store.dispatch(marketActions.tradeArrived(trade(1501, 100)));
+
+    expect(marketReads.rows(store.state)[0]?.trades?.moved).toBe('up');
+  });
+
   it('an hour nothing has asked for is unasked', () => {
     const store = marketStore();
 

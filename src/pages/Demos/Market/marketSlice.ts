@@ -27,11 +27,10 @@ const tradesReducer = (trades: TradesState, action: MarketAction): TradesState =
   switch (action.type) {
     case 'feedOpened': return {...trades, status: 'streaming'};
     case 'feedFailed': return {...trades, status: 'failed'};
-    case 'tradeArrived': return {
-      ...trades,
-      tradesBeforeTheNewest: trades.trades,
-      trades: [...trades.trades, action.trade].slice(-liveTrades.cap)
-    };
+    case 'tradeArrived': {
+      const kept = [...trades.trades, action.trade].slice(-liveTrades.cap);
+      return {...trades, tradesBeforeTheNewest: kept.slice(0, -1), trades: kept};
+    }
     case 'historyArrived': return {...trades, history: action.trades, tradesBeforeTheNewest: trades.trades};
     default: return trades;
   }
