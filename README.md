@@ -58,7 +58,7 @@ STAGE_PORT=4520 npx playwright test e2e/accordions.e2e.ts e2e/accordions-measure
 
 ## Checks
 
-Every pull request runs
-the typecheck, the unit tests, the production build and the journeys
-before it can merge, and nothing reaches main any other way.
+Every pull request runs the linters, the typecheck, the unit tests, the production build, the journeys,
+Lighthouse and the review before it can merge, and nothing reaches main any other way. There is no git hook, so run
+the linters before a push: `npm run lint`, `npm run lint:css` and `npm run lint:style`.
 CI audits the deployed site (smoke, axe, Lighthouse).
