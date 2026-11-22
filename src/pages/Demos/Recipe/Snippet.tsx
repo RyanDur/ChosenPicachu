@@ -18,7 +18,12 @@ const sourcesOf = (lines: readonly Line[]): Source[] =>
     const known = sources.find(source => source.path === path);
     return known
       ? sources.map(source => source === known
-        ? {...known, first: Math.min(known.first, line), last: Math.max(known.last, line)}
+        ? {
+          ...known,
+          first: Math.min(known.first, line),
+          last: Math.max(known.last, line),
+          fromTheExhibit: known.fromTheExhibit && kind === 'exhibit'
+        }
         : source)
       : [...sources, {path, url, owner, first: line, last: line, fromTheExhibit: kind === 'exhibit'}];
   }).orElse(sources), []);
