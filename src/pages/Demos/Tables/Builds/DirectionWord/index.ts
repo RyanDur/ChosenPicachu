@@ -1,1 +1,0 @@
-export {DirectionWord} from './DirectionWord';
