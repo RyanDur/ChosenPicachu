@@ -255,7 +255,10 @@ describe('the links to other tabs', () => {
 
     const tab = await demoTabs.arrivedOn('Z-index');
 
-    expect(demoPage.linksToTabsIn(tab)).toContainEqual(['dials', `${Paths.demos}accordions/`]);
+    expect(demoPage.linksToTabsIn(tab)).toEqual([
+      ['dials', `${Paths.demos}accordions/`],
+      ['Next tab: Drag sort', `${Paths.demos}drag-and-drop/`]
+    ]);
   });
 
   test('should link custom property, where the banner’s steps gloss it, to the accordions part that defines it', async () => {
