@@ -1,4 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
+import {partFoot} from './part-foot';
 
 export const zIndexTab = (page: Page) => {
   const partsNavigation = page.getByRole('navigation', {name: 'Parts', exact: true});
@@ -8,7 +9,7 @@ export const zIndexTab = (page: Page) => {
     partLink: (name: string): Locator => partsNavigation.getByRole('link', {name, exact: true}),
     partTitle: (name: string): Locator => page.getByRole('heading', {level: 2, name, exact: true}),
     followsTheFoot: (name: string): Promise<void> =>
-      page.getByRole('navigation', {name: 'Parts, in order'}).getByRole('link', {name, exact: true}).click(),
+      partFoot(page).link(name).click(),
     linkToTheBannerStory: (): Locator => page.getByRole('region', {name: 'Why a fixed banner still loses'})
       .getByRole('paragraph')
       .getByRole('link', {name: 'Let’s build this feature', exact: true}),

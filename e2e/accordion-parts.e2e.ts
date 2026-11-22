@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {accordions, pillSwitch, siteFrame} from './__test_support';
+import {accordions, partFoot, pillSwitch, siteFrame} from './__test_support';
 
 test('a reader follows a box remembers the fold from the accordions tab to its page, with the known-height fold at its top', async ({page}) => {
   await page.goto('demos/accordions/');
@@ -49,8 +49,7 @@ test('a reader follows the measured height’s foot on to what the platform give
   await page.goto('demos/accordions/the-measured-height/?type=exclusive&style=drawer');
   await siteFrame(page).hydrated();
 
-  await page.getByRole('navigation', {name: 'Parts, in order'})
-    .getByRole('link', {name: 'Next: 5. What the platform gives now'}).click();
+  await partFoot(page).link('Next: 5. What the platform gives now').click();
 
   await expect(page).toHaveURL(/demos\/accordions\/what-the-platform-gives-now\/\?type=exclusive&style=drawer$/);
   await expect(page.getByRole('heading', {name: 'Exclusive accordion using details elements', exact: true})).toBeVisible();
@@ -60,8 +59,7 @@ test('a reader follows what the platform gives now’s foot on to how a sliding 
   await page.goto('demos/accordions/what-the-platform-gives-now/?type=exclusive&style=drawer');
   await siteFrame(page).hydrated();
 
-  await page.getByRole('navigation', {name: 'Parts, in order'})
-    .getByRole('link', {name: 'Next: 6. How a sliding fold moves'}).click();
+  await partFoot(page).link('Next: 6. How a sliding fold moves').click();
 
   await expect(page).toHaveURL(/demos\/accordions\/how-a-sliding-fold-moves\/\?type=exclusive&style=drawer$/);
   await expect(accordions.tab(page).partTitle('How a sliding fold moves')).toBeVisible();
@@ -102,11 +100,11 @@ test('a reader who chooses Exclusive and Static on a box remembers the fold keep
   await pillSwitch(page, 'fold type').choose('Exclusive');
   await pillSwitch(page, 'fold motion').choose('Static');
   await expect(page).toHaveURL(/\?type=exclusive&style=static$/);
-  const foot = page.getByRole('navigation', {name: 'Parts, in order'});
+  const foot = partFoot(page);
 
-  await foot.getByRole('link', {name: 'Next: 3. The max-height guess'}).click();
+  await foot.link('Next: 3. The max-height guess').click();
   await expect(accordions.tab(page).partTitle('The max-height guess')).toBeVisible();
-  await foot.getByRole('link', {name: 'Next: 4. The measured height'}).click();
+  await foot.link('Next: 4. The measured height').click();
 
   await expect(page).toHaveURL(/demos\/accordions\/the-measured-height\/\?type=exclusive&style=static$/);
   await expect.poll(pillSwitch(page, 'fold type').chosen).toBe('Exclusive');
