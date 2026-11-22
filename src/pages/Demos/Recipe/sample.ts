@@ -20,5 +20,6 @@ export type Origin = {
 export type Line = {
   text: string;
   dim?: boolean;
+  marked?: boolean;
   from?: Origin;
 };

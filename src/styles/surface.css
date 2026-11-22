@@ -135,7 +135,11 @@
 
 .code-paper-filled { background: var(--code-paper); }
 
+.code-marked-filled { background: var(--code-marked); }
+
 .code-ink { color: var(--code-ink); }
+
+.inverse-ink { color: var(--ink-inverse); }
 
 .keyword-ink { color: var(--code-keyword); }
 
