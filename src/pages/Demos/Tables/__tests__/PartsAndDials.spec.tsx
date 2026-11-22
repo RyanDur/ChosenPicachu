@@ -79,7 +79,7 @@ describe('the tables panel', () => {
   test('should offer beside a part to hide the parts, said as expanded', async () => {
     render(<TestApp at={demosAt(theSlices)}/>);
 
-    expect(await partsFold.button('Hide parts', true)).toBeInTheDocument();
+    expect(await partsFold.offersHideParts()).toBeInTheDocument();
   });
 
   test('should say Hide parts controls the panel that holds the parts', async () => {
@@ -95,7 +95,7 @@ describe('the tables panel', () => {
 
     await partsFold.enterOnHideParts();
 
-    expect(await partsFold.button('Show parts', false)).toHaveFocus();
+    expect(await partsFold.offersShowParts()).toHaveFocus();
   });
 
   test('should offer no way to hide the parts on the tab’s opening page', async () => {

@@ -11,7 +11,7 @@ export type FoldMotion = 'reveal' | 'drawer' | 'static';
 export type RaisedCard = typeof inOrder.raisedCards[number];
 export type CardOne = 'contained' | 'free';
 export type Worn = typeof inOrder.worn[number];
-export type PartsShown = 'shown' | 'hidden';
+export type PartsList = 'shown' | 'hidden';
 
 export type Address = Placement & {
   pace: Pace;
@@ -24,7 +24,7 @@ export type Address = Placement & {
   type: FoldType;
   style: FoldMotion;
   'card-one': CardOne;
-  parts: PartsShown;
+  parts: PartsList;
 };
 
 const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {

@@ -16,10 +16,10 @@ const tabTo = async (target: HTMLElement): Promise<void> => {
 };
 
 export const partsFold = {
-  button: (name: 'Hide parts' | 'Show parts', expanded?: boolean): Promise<HTMLElement> =>
-    screen.findByRole('button', {name, expanded}),
+  offersHideParts: (): Promise<HTMLElement> => screen.findByRole('button', {name: 'Hide parts', expanded: true}),
+  offersShowParts: (): Promise<HTMLElement> => screen.findByRole('button', {name: 'Show parts', expanded: false}),
   panelControlled: async (): Promise<HTMLElement | null> =>
-    maybe((await hideParts()).getAttribute('aria-controls')).map(id => document.getElementById(id)).orNull(),
+    maybe((await hideParts()).getAttribute('aria-controls')).mBind(id => maybe(document.getElementById(id))).orNull(),
   offered: (): HTMLElement | null => screen.queryByRole('button', {name: /^(Hide|Show) parts$/}),
   enterOnHideParts: async (): Promise<void> => {
     const hide = await hideParts();
