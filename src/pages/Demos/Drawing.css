@@ -24,12 +24,7 @@
     vector-effect: non-scaling-stroke;
   }
 
-  .unseen-ring {
-    stroke-dasharray: 4 3;
-  }
-
   .edge {
     vector-effect: non-scaling-stroke;
-    stroke-dasharray: 4 3;
   }
 }
