@@ -32,7 +32,7 @@ describe('a row of totals marked against the row before the newest trade', () =>
     expect(now.sells.moved).toBeUndefined();
   });
 
-  test('should leave unmarked a measure that has no number yet', () => {
+  test('should leave unmarked a number that had none before the trade', () => {
     const now = cells.markedAgainst(thisMinute({change: {display: '—'}}), thisMinute({change: counted(3)}));
 
     expect(now.change.moved).toBeUndefined();
