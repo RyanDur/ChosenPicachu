@@ -1,54 +1,46 @@
-import {expect, type Page} from '@playwright/test';
+import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {siteFrame} from './__test_support';
-
-const parts = (page: Page) => page.getByRole('navigation', {name: 'Parts', exact: true});
-const hideParts = (page: Page) => page.getByRole('button', {name: 'Hide parts'});
-const showParts = (page: Page) => page.getByRole('button', {name: 'Show parts'});
-const tablesSize = (page: Page) => page.getByText(/^Eight parts, about \d+ minutes\.$/);
-const next = (page: Page) => page.getByRole('navigation', {name: 'the tables parts'}).getByRole('link', {name: /^Next: /});
-const partTitled = (page: Page, title: string) => page.getByRole('heading', {level: 2, name: title, exact: true});
-
-const onTheSketch = async (page: Page): Promise<void> => {
-  await page.goto('demos/tables/the-sketch/');
-  await siteFrame(page).hydrated();
-};
+import {partsPanel} from './__test_support/parts-panel';
 
 test.describe('a reader on a desk or a phone', {tag: ['@desktop', '@iPhone']}, () => {
-  test('folds the parts list away, and the tab’s size and Show parts are left above the part', async ({page}) => {
-    await onTheSketch(page);
+  test('folds the parts list away, and the tab’s size and Show parts stay', async ({page}) => {
+    const panel = partsPanel(page);
+    await panel.openTheSketch();
 
-    await hideParts(page).click();
+    await panel.hideTheParts();
 
-    await expect(parts(page)).toBeHidden();
-    await expect(tablesSize(page)).toBeVisible();
-    await expect(showParts(page)).toBeVisible();
+    await expect(panel.parts).toBeHidden();
+    await expect(panel.tabSize).toBeVisible();
+    await expect(panel.showParts).toBeVisible();
   });
 
   test('brings the parts list back with the part it is on marked', async ({page}) => {
-    await onTheSketch(page);
-    await hideParts(page).click();
+    const panel = partsPanel(page);
+    await panel.openTheSketch();
+    await panel.hideTheParts();
 
-    await showParts(page).click();
+    await panel.showTheParts();
 
-    await expect(parts(page).getByRole('link', {name: 'Sketch a design from the need'}))
+    await expect(panel.parts).toBeVisible();
+    await expect(panel.parts.getByRole('link', {name: 'Sketch a design from the need'}))
       .toHaveAttribute('aria-current', 'page');
   });
 
   test('finds the parts list still folded on the next part and again after Back', async ({page}) => {
-    await onTheSketch(page);
-    await hideParts(page).click();
+    const panel = partsPanel(page);
+    await panel.openTheSketch();
+    await panel.hideTheParts();
 
-    await next(page).click();
+    await panel.goToTheNextPart();
 
-    await expect(partTitled(page, 'Slice the design into stories')).toBeVisible();
-    await expect(showParts(page)).toBeVisible();
-    await expect(parts(page)).toBeHidden();
+    await expect(panel.partTitled('Slice the design into stories')).toBeVisible();
+    await expect(panel.showParts).toBeVisible();
+    await expect(panel.parts).toBeHidden();
 
     await page.goBack();
 
-    await expect(partTitled(page, 'Sketch a design from the need')).toBeVisible();
-    await expect(showParts(page)).toBeVisible();
-    await expect(parts(page)).toBeHidden();
+    await expect(panel.partTitled('Sketch a design from the need')).toBeVisible();
+    await expect(panel.showParts).toBeVisible();
+    await expect(panel.parts).toBeHidden();
   });
 });
