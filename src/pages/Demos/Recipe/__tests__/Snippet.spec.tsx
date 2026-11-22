@@ -80,10 +80,10 @@ describe('a code sample', () => {
     expect(codeSample.fileLink('Demos/store.ts on GitHub')).toHaveAttribute('href', `${store.url}#L1-L2`);
   });
 
-  test('should link the exhibit’s file and the site’s, in the order they first appear, when a sample holds both', () => {
+  test('should list the exhibit’s files before the site’s when a sample holds both', () => {
     render(<Snippet label="TS" lines={[
-      ...lines.fromTheExhibit(carve.between(store, 'export const store', 'export const store')),
-      ...carve.between(shared, 'export type Store', 'export type Store')
+      ...carve.between(shared, 'export type Store', 'export type Store'),
+      ...lines.fromTheExhibit(carve.between(store, 'export const store', 'export const store'))
     ]}/>);
 
     expect(codeSample.fileNames()).toEqual(['Demos/store.ts on GitHub', 'components/store.ts on GitHub']);
