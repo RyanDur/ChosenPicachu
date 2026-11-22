@@ -791,6 +791,35 @@
           }
         },
         {
+          "matchingUrlPattern": "/ChosenPicachu/demos/z\\-index/how\\-position\\-places\\-a\\-box/$",
+          "assertions": {
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 1
+              }
+            ],
+            "resource-summary:document:size": [
+              "error",
+              {
+                "maxNumericValue": 5120
+              }
+            ],
+            "resource-summary:stylesheet:size": [
+              "error",
+              {
+                "maxNumericValue": 21504
+              }
+            ],
+            "resource-summary:script:size": [
+              "error",
+              {
+                "maxNumericValue": 184320
+              }
+            ]
+          }
+        },
+        {
           "matchingUrlPattern": "/ChosenPicachu/demos/z\\-index/why\\-9999\\-still\\-loses/$",
           "assertions": {
             "categories:accessibility": [
