@@ -82,9 +82,11 @@ test('a fixed Second stays where it is in the little window when the little page
   await page.goto(address);
   await exhibit.chooses('fixed');
   const before = await exhibit.spotOf('Second');
+  const first = await exhibit.spotOf('First');
 
   await exhibit.scrollsTheLittlePageTo(120);
 
+  await expect.poll(() => exhibit.spotOf('First')).toEqual({x: first.x, y: first.y - 120});
   await expect.poll(() => exhibit.spotOf('Second')).toEqual(before);
 });
 
