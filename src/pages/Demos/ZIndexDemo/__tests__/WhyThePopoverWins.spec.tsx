@@ -14,7 +14,7 @@ describe('why the popover wins, on its own page', () => {
     expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 5 of 7');
   });
 
-  test('should link part two, which it builds on, to its page with the raised card carried', async () => {
+  test('should link why 9999 still loses, which it builds on, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(popoverWins, '?raised=second')}/>);
 
     const part = await explanation.part(title);

@@ -14,7 +14,7 @@ describe('why 9999 still loses, on its own page', () => {
     expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 3 of 7');
   });
 
-  test('should link part one, which it builds on, to its page with the raised card carried', async () => {
+  test('should link why Third is on top, which it builds on, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(stillLoses, '?raised=second')}/>);
 
     const part = await explanation.part(title);

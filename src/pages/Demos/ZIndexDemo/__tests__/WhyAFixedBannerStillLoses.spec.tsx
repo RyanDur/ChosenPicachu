@@ -14,7 +14,7 @@ describe('why a fixed banner still loses, on its own page', () => {
     expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 6 of 7');
   });
 
-  test('should link part two, which it builds on, to its page with the raised card carried', async () => {
+  test('should link why 9999 still loses, which it builds on, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
     const opener = explanation.opener(await explanation.part(title));
@@ -22,7 +22,7 @@ describe('why a fixed banner still loses, on its own page', () => {
     expect(explanation.linkNamed(opener, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
   });
 
-  test('should link part three, which it builds on, to its page with the raised card carried', async () => {
+  test('should link what else forms a stacking context, which it builds on, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
     const opener = explanation.opener(await explanation.part(title));
