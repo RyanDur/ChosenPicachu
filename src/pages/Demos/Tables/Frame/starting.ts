@@ -7,4 +7,4 @@ export type Dressing = {
 };
 
 export const startingTable = ({origin, motion}: Dressing): string =>
-  tableHtml.replace('class="fancy-table sortable apportioned moved-tinted hide animated"', `class="fancy-table sortable apportioned moved-tinted ${origin} ${motion}"`);
+  tableHtml.replace('class="fancy-table sortable apportioned hide animated"', `class="fancy-table sortable apportioned ${origin} ${motion}"`);
