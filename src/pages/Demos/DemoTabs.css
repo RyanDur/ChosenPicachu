@@ -45,6 +45,7 @@
     }
 
     .demo-tab {
+      flex: none;
       min-block-size: var(--base-x-12);
     }
 
