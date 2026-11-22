@@ -1,10 +1,13 @@
 import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {computeAccessibleDescription} from 'dom-accessibility-api';
 import {assumedLinksIn} from './page';
 import {demosNav} from './demos-nav';
 
 export const demoTabs = {
   names: async (): Promise<string[]> => within(await demosNav.bar()).getAllByRole('link').map(tab => tab.textContent),
+  whatEachAdds: async (): Promise<[string, string][]> => within(await demosNav.bar()).getAllByRole('link')
+    .map(tab => [tab.textContent, computeAccessibleDescription(tab)]),
   current: async (): Promise<string[]> =>
     within(await demosNav.bar()).getAllByRole('link', {current: 'page'}).map(tab => tab.textContent),
   currentButNotThePage: async (): Promise<string[]> =>

@@ -1,0 +1,88 @@
+.demo-tabs {
+  position: sticky;
+  top: var(--frame-reach, 0);
+  z-index: 1;
+  width: 100%;
+  overflow-x: auto;
+
+  .tab-list {
+    display: flex;
+    gap: var(--base);
+    counter-reset: demo-tab;
+  }
+
+  .demo-tab {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    min-block-size: var(--tab-bar-reach);
+    padding: var(--base-x-1_5) var(--base);
+    display: flex;
+    flex-direction: column;
+    gap: var(--base-x-0_5);
+    counter-increment: demo-tab;
+
+    &::before {
+      content: counter(demo-tab) / '';
+    }
+
+    &:has(> [aria-current="page"], > [aria-current="true"]) {
+      scroll-initial-target: nearest;
+    }
+
+    .demo-tab-name::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
+  }
+}
+
+.demo-tabs ~ * {
+  isolation: isolate;
+}
+
+:root:has(.demo-tabs) {
+  --tab-bar-reach: var(--base-x-15_5);
+
+  scroll-padding-block-start: calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--base-x-2));
+}
+
+@media (600px < width <= 760px) and (height > 600px) {
+  .demo-tabs {
+    position: static;
+
+    .tab-list {
+      flex-direction: column;
+    }
+
+    .demo-tab {
+      min-block-size: var(--base-x-12);
+    }
+
+    .demo-tab:has(> [aria-current="page"], > [aria-current="true"]) {
+      margin-block-end: var(--base);
+      min-block-size: calc(var(--base-x-12) - var(--base));
+    }
+
+    .demo-tab-name[aria-current]::before {
+      content: '';
+      display: inline-block;
+      inline-size: var(--base);
+      block-size: var(--base);
+      margin-inline-end: var(--base);
+      vertical-align: middle;
+    }
+  }
+
+  :root:has(.demo-tabs) {
+    scroll-padding-block-start: calc(var(--frame-reach, 0px) + var(--base-x-2));
+  }
+}
+
+@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
+  :root:has(.demo-tabs) {
+    --tab-bar-reach: var(--base-x-5_5);
+    scroll-padding-block-start: var(--base-x-2);
+  }
+}

@@ -31,6 +31,18 @@ describe('The Demos page', () => {
     expect(await demoTabs.names()).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
   });
 
+  test('should say beside each tab’s name what that tab adds', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    expect(await demoTabs.whatEachAdds()).toEqual([
+      ['Accordions', 'one fold, from HTML alone up to script'],
+      ['Z-index', 'adds a component, its state, an event and the top layer'],
+      ['Drag sort', 'adds the browser’s own drag and a key for every move'],
+      ['Charts', 'adds trades that keep arriving, checked where they enter'],
+      ['Tables', 'builds one feature from those parts']
+    ]);
+  });
+
   test('a part’s page should open with the Demos opening above its tabs', async () => {
     render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
 

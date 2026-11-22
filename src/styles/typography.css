@@ -48,6 +48,10 @@
   line-height: 1.8;
 }
 
+.body-size { font-size: var(--base-x-2); }
+
+.balanced { text-wrap: balance; }
+
 /* registered, so every engine computes the column to pixels before dividing */
 @property --drawing-column {
   syntax: '<length>';
