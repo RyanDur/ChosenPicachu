@@ -52,7 +52,6 @@
     }
 
     .little-box {
-        box-sizing: border-box;
         padding: var(--base-x-1_25) var(--base-x-1_75);
     }
 
@@ -79,7 +78,6 @@
         position: absolute;
         top: calc(-16px - var(--hairline));
         left: calc(-24px - var(--hairline));
-        box-sizing: border-box;
         width: calc(100% + 2 * var(--hairline));
         height: calc(100% + 2 * var(--hairline));
         pointer-events: none;
