@@ -70,12 +70,12 @@ const withNoPositionedParent: Pick<Told, 'story' | 'verdict' | 'measuredFrom'> =
   measuredFrom: 'the little page’s corner, at the red dot. It stands in for the page’s corner: nothing above Second is positioned, so the browser goes past the parent to the page.'
 };
 
-type WhereSecondGoes = {
+type WhatEachPositionTells = {
   positions: readonly Position[];
   told: (position: Position, parentPositioned: boolean) => Told;
 };
 
-const whereSecondGoes: WhereSecondGoes = {
+const whereSecondGoes: WhatEachPositionTells = {
   positions,
   told: (position, parentPositioned) =>
     position === 'absolute' && not(parentPositioned) ? {...told[position], ...withNoPositionedParent} : told[position]
@@ -124,7 +124,7 @@ export const WhereSecondGoes: FC = () => {
   const [parent, chooseParent] = useState<Parent>('positioned');
   const absolute = position === 'absolute';
   const measuredFromTheParent = absolute && parent === 'positioned';
-  const told = whereSecondGoes.told(position, parent === 'positioned');
+  const shown = whereSecondGoes.told(position, parent === 'positioned');
 
   return <figure className="where-second-goes">
     <p className="caption uppercase" aria-hidden="true">Second’s position is</p>
@@ -135,10 +135,10 @@ export const WhereSecondGoes: FC = () => {
       <PillGlider label="And its parent is" name="parent-position" choices={parentChoices} chosen={parent}
         onChosen={chooseParent}/>
     </>}
-    <p className="paragraph">{told.story}</p>
+    <p className="paragraph">{shown.story}</p>
     <dl className="where-we-meet-it">
       <dt className="caption uppercase">Where we meet it</dt>
-      <dd className="paragraph">{told.where}</dd>
+      <dd className="paragraph">{shown.where}</dd>
     </dl>
     <section className="position-stage">
       <Snippet label="HTML" lines={markupShown(position, measuredFromTheParent)}/>
@@ -169,10 +169,10 @@ export const WhereSecondGoes: FC = () => {
         </section>
       </section>
     </section>
-    <output aria-label="where Second went" className="paragraph">{told.verdict}</output>
+    <output aria-label="where Second went" className="paragraph">{shown.verdict}</output>
     <output aria-label="what Second is measured from" className="paragraph">
-      {`Measured from: ${told.measuredFrom}`}</output>
-    <p className="paragraph">{told.context} Scroll the little page to see fixed and sticky at work.</p>
+      {`Measured from: ${shown.measuredFrom}`}</output>
+    <p className="paragraph">{shown.context} Scroll the little page to see fixed and sticky at work.</p>
     <figcaption className="caption"><strong className="bold">Where Second goes.</strong> Give Second each position in
       turn and see where it goes, and what First and Third do.</figcaption>
   </figure>;
