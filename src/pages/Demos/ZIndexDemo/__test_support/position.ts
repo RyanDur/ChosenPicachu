@@ -11,11 +11,11 @@ const codeIn = (sample: HTMLElement): string => within(sample).getByRole('code')
 export const positionExhibit = {
   choose: async (position: Position): Promise<void> =>
     userEvent.click(within(pillsOf('Second’s position is')).getByRole('radio', {name: position})),
-  position: (position: Position): HTMLElement =>
+  pill: (position: Position): HTMLElement =>
     within(pillsOf('Second’s position is')).getByRole('radio', {name: position}),
   chooseParent: async (parentPillWords: ParentPillWords): Promise<void> =>
     userEvent.click(within(pillsOf('And its parent is')).getByRole('radio', {name: parentPillWords})),
-  parentPosition: (parentPillWords: ParentPillWords): HTMLElement =>
+  parentPill: (parentPillWords: ParentPillWords): HTMLElement =>
     within(pillsOf('And its parent is')).getByRole('radio', {name: parentPillWords}),
   samples: (): {html: string; css: string} => {
     const [html, css] = within(screen.getByRole('figure', {name: /^Where Second goes\./})).getAllByRole('figure');
