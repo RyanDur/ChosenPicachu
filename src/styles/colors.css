@@ -40,6 +40,8 @@
   --mint-dim: color-mix(in srgb, var(--mint) 75%, var(--black));
   --international-orange-engineering-shade: color-mix(in srgb, var(--international-orange-engineering) 70%, var(--black));
   --faded-mint: rgb(from var(--mint) r g b / 0.5);
+  --mint-shade-tint: rgb(from var(--mint-shade) r g b / 0.55);
+  --international-orange-engineering-tint: rgb(from var(--international-orange-engineering) r g b / 0.22);
   --faded-international-orange-engineering: rgb(from var(--international-orange-engineering) r g b / 0.4);
   --paper-veil: rgb(from var(--paper) r g b / 0.7);
   --veil-opacity: 0.5;

@@ -307,6 +307,11 @@
 
 .card-banded { background: linear-gradient(var(--card-clear), var(--card), var(--card-clear)); }
 
+.moved-tinted {
+  [data-moved='up'] { background: var(--mint-shade-tint); }
+  [data-moved='down'] { background: var(--international-orange-engineering-tint); }
+}
+
 .alarm-starred::after {
   content: '*';
   color: var(--alarm-ink);
