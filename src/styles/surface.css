@@ -452,8 +452,11 @@
   .alarm-dot { box-shadow: none; }
 
   .alarm-ringed {
-    outline: var(--hairline-x-3) solid var(--highlight);
-    outline-offset: calc(var(--hairline-x-3) * -1);
+    border: var(--hairline-x-3) solid var(--highlight);
+  }
+
+  .alarm-ringed.focus-ringed:focus-visible {
+    outline-offset: calc((var(--hairline-x-3) * 2 + var(--hairline-x-2)) * -1);
   }
 }
 
