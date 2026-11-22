@@ -81,7 +81,7 @@ export const Snippet: FC<Props> = ({label, lines}) => {
     <figcaption className="sources caption ink">
       {exhibitFiles.map(source => <FileLink href={linesOnGitHub(source)} key={source.path}>
         {nameOf(source.path, source.owner)} on GitHub</FileLink>)}
-      {has(exhibitFiles) && 'Taken from the exhibit on this page.'}
+      {has(exhibitFiles) && <p>Taken from the exhibit on this page.</p>}
       {sharedFiles.map(source => <FileLink href={linesOnGitHub(source)} key={source.path}>
         {nameOf(source.path, source.owner)} on GitHub</FileLink>)}
       {not(has(sources)) && 'Written for this page, not taken from the site’s code.'}
