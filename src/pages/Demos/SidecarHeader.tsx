@@ -3,6 +3,7 @@ import {not} from '@ryandur/sand';
 import {useHydrated} from '@components';
 import {useControls} from './Controls';
 import {BesideAPart} from './beside-a-part';
+import {panelBesideAPart} from './panel-beside-a-part';
 import './TabSidecar.css';
 
 const PartsFold: FC = () => {
@@ -13,6 +14,7 @@ const PartsFold: FC = () => {
     className="parts-fold caption attentive field hairline-outline reachable smoked-while-disabled"
     disabled={not(hydrated)}
     aria-expanded={shown}
+    aria-controls={panelBesideAPart}
     onClick={() => change({parts: shown ? 'hidden' : 'shown'})}>{shown ? 'Hide parts' : 'Show parts'}</button>;
 };
 
