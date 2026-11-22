@@ -1,3 +1,4 @@
+import {maybe} from '@ryandur/sand';
 import {screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -18,6 +19,8 @@ const tabTo = async (target: HTMLElement): Promise<void> => {
 export const partsFold = {
   button: (name: 'Hide parts' | 'Show parts', expanded?: boolean): Promise<HTMLElement> =>
     screen.findByRole('button', {name, expanded}, untilThePartRenders),
+  panelControlled: async (): Promise<HTMLElement | null> =>
+    maybe((await hideParts()).getAttribute('aria-controls')).map(id => document.getElementById(id)).orNull(),
   offered: (): HTMLElement | null => screen.queryByRole('button', {name: /^(Hide|Show) parts$/}),
   enterOnHideParts: async (): Promise<void> => {
     const hide = await hideParts();

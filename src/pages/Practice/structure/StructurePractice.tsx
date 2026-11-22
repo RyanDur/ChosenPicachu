@@ -219,7 +219,8 @@ export const StructurePractice: FC = () =>
       its own. <code className="monospaced">aria-current</code> marks the one of several that is current: the rail’s page, a tab,
       a menu’s chosen item. <code className="monospaced">aria-expanded</code> says that a button has opened something the platform does not
       know is open: the old-way
-      menu’s, and the Expand button on the pile of cards in the z-index part <PartLink part="why-third-is-on-top"/>. <code
+      menu’s, the Expand button on the pile of cards in the z-index part <PartLink part="why-third-is-on-top"/>, and Hide
+      parts beside a part. <code
       className="monospaced">aria-hidden</code> hides what a screen reader should not read as prose. An image’s <code className="monospaced">alt</code> is its text for a screen reader. I hide each drawing whole, since its
       caption says what it shows: a drawing in the page’s markup by <code className="monospaced">aria-hidden</code>,
       and a drawing served as an image, like the landmark map, by an empty <code className="monospaced">alt</code>. I

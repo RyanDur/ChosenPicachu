@@ -82,6 +82,14 @@ describe('the tables panel', () => {
     expect(await partsFold.button('Hide parts', true)).toBeInTheDocument();
   });
 
+  test('should say Hide parts controls the panel that holds the parts', async () => {
+    render(<TestApp at={demosAt(theSlices)}/>);
+
+    const folded = await partsFold.panelControlled();
+
+    expect(folded).toContainElement(await partsIndex.find());
+  });
+
   test('should leave focus on Show parts, said as collapsed, after Enter on Hide parts', async () => {
     render(<TestApp at={demosAt(theSlices)}/>);
 
