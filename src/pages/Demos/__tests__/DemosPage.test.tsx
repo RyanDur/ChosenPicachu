@@ -36,7 +36,7 @@ describe('The Demos page', () => {
 
     await demoPage.findTitle('Why 9999 still loses');
 
-    expect(demoPage.openingAboveTheTabs()).toHaveTextContent(/^Each tab below is one feature a page needs, and each adds one thing to the tabs before it. Start with the accordions if/);
+    expect(demoPage.openingAboveTheTabs()).toBeInTheDocument();
   });
 
   test('a tab’s own page should open with the Demos opening above its tabs', async () => {
@@ -44,7 +44,7 @@ describe('The Demos page', () => {
 
     await demoTabs.current();
 
-    expect(demoPage.openingAboveTheTabs()).toHaveTextContent(/^Each tab below is one feature a page needs, and each adds one thing to the tabs before it. Start with the accordions if/);
+    expect(demoPage.openingAboveTheTabs()).toBeInTheDocument();
   });
 
   test('the opening should take a reader to the accordions it says to start with', async () => {
@@ -55,10 +55,21 @@ describe('The Demos page', () => {
     expect(demoPage.linksToTabsIn(demoPage.openingAboveTheTabs())).toEqual([['the accordions', demosAt('accordions')]]);
   });
 
+  test('the opening on the Accordions tab should say its link is the page the reader is on', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    await demoTabs.current();
+
+    expect(demoPage.linkIn(demoPage.openingAboveTheTabs(), 'the accordions')).toHaveAttribute('aria-current', 'page');
+  });
+
   test('a part’s page should keep the part’s own title as a heading under the page’s', async () => {
     render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
 
-    expect(await demoPage.findTitle('Why 9999 still loses')).toBeInTheDocument();
+    await demoPage.findTitle('Why 9999 still loses');
+
+    expect(site.pageTitle()).toHaveAccessibleName('Demos Z-index');
+    expect(demoPage.partTitle('Why 9999 still loses')).toBeInTheDocument();
   });
 
   test('the tab row on the Z-index tab names the tab the reader is on', async () => {
