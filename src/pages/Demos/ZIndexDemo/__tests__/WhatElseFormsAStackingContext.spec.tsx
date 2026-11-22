@@ -31,12 +31,12 @@ describe('what else forms a stacking context, on its own page', () => {
     expect(explanation.linkNamed(opener, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?wears=opacity'));
   });
 
-  test('should link the menu part’s card to the page for why 9999 still loses, with the wear carried', async () => {
+  test('should link why 9999 still loses, where card B was positioned too, to its page with the wear carried', async () => {
     render(<TestApp at={demosAt(whatElseForms, '?wears=opacity')}/>);
 
     const part = await explanation.part(title);
 
-    expect(explanation.linkNamed(part, 'The menu part’s card')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?wears=opacity'));
+    expect(explanation.linkNamed(explanation.saying(part, /Card B in/), 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?wears=opacity'));
   });
 
   test('should lead back to part three’s page and on to part five’s page, by number and title, with the wear carried', async () => {

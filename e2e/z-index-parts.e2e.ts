@@ -1,6 +1,9 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {bannerTrap, contextChooser, partFoot, pileSteps, siteFrame, stackingPile, topLayerMenu, trappedMenu, zIndexTab} from './__test_support';
+import {
+  bannerTrap, contextChooser, nestingExhibit, partFoot, pileSteps, siteFrame, stackingPile, topLayerMenu, trappedMenu,
+  zIndexTab
+} from './__test_support';
 
 const whyThirdIsOnTop = 'Why Third is on top';
 const howPositionPlacesABox = 'How position places a box';
@@ -65,7 +68,7 @@ test('a reader follows how position places a box’s foot on to the next part’
   await expect(zIndexTab(page).partTitle(whyNineNineNineStillLoses)).toBeVisible();
 });
 
-test('a reader follows why 9999 still loses from the z-index tab to its page and finds its menus', async ({page}) => {
+test('a reader follows why 9999 still loses from the z-index tab to its page and finds a context inside a context', async ({page}) => {
   await page.goto('demos/z-index/');
   await siteFrame(page).hydrated();
 
@@ -74,7 +77,7 @@ test('a reader follows why 9999 still loses from the z-index tab to its page and
   await expect(page).toHaveURL(/demos\/z-index\/why-9999-still-loses\/$/);
   await expect(zIndexTab(page).partTitle(whyNineNineNineStillLoses)).toBeVisible();
   await expect(page.getByText('Z-index · part 3 of 7', {exact: true})).toBeVisible();
-  await expect(trappedMenu(page).sortBy).toBeVisible();
+  await expect(nestingExhibit(page).verdict).toHaveText('One context: the page.');
 });
 
 test('a reader follows what else forms a stacking context from the z-index tab to its page, with the wear in the address kept on the chooser', async ({page}) => {

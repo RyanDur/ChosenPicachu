@@ -2,7 +2,6 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {demosAt} from '@pages/Demos/__test_support';
-import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {exhibit, oldWayMenu, theTrap, wayLabeled} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const under = 'The list opened under card two. Its 9999 counts only inside card one.';
@@ -10,7 +9,7 @@ const over = 'The list opened over card two. Card one has no z-index now, so the
 
 describe('the menu built the old way', () => {
   test('should open from a press, with its first choice in focus', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     const sortBy = await oldWayMenu.findButton();
     expect(sortBy).toHaveAttribute('aria-expanded', 'false');
 
@@ -22,7 +21,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should move through its choices by arrow, Home and End, and wrap at either end', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     await oldWayMenu.focusButton();
 
     await oldWayMenu.openWithEnter();
@@ -39,7 +38,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should take the choice pressed, close, and give focus back to its button', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     await oldWayMenu.focusButton();
 
     await oldWayMenu.openWithEnter();
@@ -51,7 +50,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should mark the choice taken as current when it opens again', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     await oldWayMenu.open();
     await oldWayMenu.choose('date');
 
@@ -61,7 +60,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should close on Escape, and give focus back to its button', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     await oldWayMenu.open();
 
     await oldWayMenu.close();
@@ -71,7 +70,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should open from ArrowDown on its button, with its first choice in focus', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     await oldWayMenu.focusButton();
 
     await oldWayMenu.openWithArrowDown();
@@ -80,7 +79,7 @@ describe('the menu built the old way', () => {
   });
 
   test('should close when focus leaves it', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     await oldWayMenu.open();
 
     await oldWayMenu.tabAway();
@@ -91,14 +90,14 @@ describe('the menu built the old way', () => {
 
 describe('the card that traps the menu', () => {
   test('should give its steps before any control', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     const trap = await theTrap.find();
 
     expect(exhibit.controlsBeforeTheSteps(trap, theTrap.controls(trap))).toEqual([]);
   });
 
   test('should show Sort by on both buttons, under the way each is built, and name each by its words then its way', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     const trap = await theTrap.find();
 
     const oldWay = theTrap.controlIn(trap, 'Sort by, the old way');
@@ -112,7 +111,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should name a button by the choice it shows, then its way', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     await oldWayMenu.open();
 
     await oldWayMenu.choose('date');
@@ -121,13 +120,13 @@ describe('the card that traps the menu', () => {
   });
 
   test('should say nothing before the first press', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
 
     expect(await oldWayMenu.findWhereItOpened()).toBeEmptyDOMElement();
   });
 
   test('should take back what it said when the box changes, since the next press answers', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     await oldWayMenu.open();
     await oldWayMenu.close();
 
@@ -137,7 +136,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should say the list opened under card two when card one has its z-index', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
 
     await oldWayMenu.open();
 
@@ -145,7 +144,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should say where the list opened when ArrowDown opens it', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     await oldWayMenu.focusButton();
 
     await oldWayMenu.openWithArrowDown();
@@ -154,7 +153,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should say the list opened over card two once the box is unchecked, and write it into the address', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins')}/>);
     await theTrap.toggleCardOne();
 
     await oldWayMenu.open();
@@ -164,7 +163,7 @@ describe('the card that traps the menu', () => {
   });
 
   test('should say the list opened under card two again once the box is checked again', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses', '?card-one=free')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins', '?card-one=free')}/>);
     await oldWayMenu.open();
     await oldWayMenu.close();
 
@@ -175,37 +174,8 @@ describe('the card that traps the menu', () => {
   });
 
   test('should open freed when the address says so', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses', '?card-one=free')}/>);
+    render(<TestApp at={demosAt('z-index/why-the-popover-wins', '?card-one=free')}/>);
 
     expect(theTrap.cardOneHasZIndexBox(await theTrap.find())).not.toBeChecked();
-  });
-});
-
-describe('why 9999 still loses', () => {
-  test('should link What else forms a stacking context to its page', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
-
-    const part = await explanation.part('Why 9999 still loses');
-
-    expect(explanation.linkInProse(part, 'What else forms a stacking context'))
-      .toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context'));
-  });
-});
-
-describe('the terms part one defines, met again in why 9999 still loses', () => {
-  test('should link positioned, at its first use, to part one’s page with the raised card carried', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses', '?raised=second')}/>);
-
-    const stillLoses = await explanation.part('Why 9999 still loses');
-
-    expect(explanation.linkNamed(stillLoses, 'positioned')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
-  });
-
-  test('should link auto, at its first use, to part one’s page with the raised card carried', async () => {
-    render(<TestApp at={demosAt('z-index/why-9999-still-loses', '?raised=second')}/>);
-
-    const stillLoses = await explanation.part('Why 9999 still loses');
-
-    expect(explanation.linkNamed(stillLoses, 'auto')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 });

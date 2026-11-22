@@ -31,7 +31,7 @@ const opensAndClosesTheExplainer = async (page: Page): Promise<void> => {
 };
 
 const choosesInTheTrappedMenu = async (page: Page): Promise<void> => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = trappedMenu(page);
 
   await fingerTap(page, menu.sortBy);
@@ -42,7 +42,7 @@ const choosesInTheTrappedMenu = async (page: Page): Promise<void> => {
 };
 
 const choosesInTheTopLayerMenu = async (page: Page): Promise<void> => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = topLayerMenu(page);
   await menu.sortBy.evaluate(button => button.scrollIntoView({block: 'center'}));
 
@@ -68,7 +68,7 @@ const raisesAndDismissesTheBanners = async (page: Page): Promise<void> => {
 };
 
 const changesTheTrap = async (page: Page): Promise<void> => {
-  await page.goto('demos/z-index/why-9999-still-loses/');
+  await page.goto('demos/z-index/why-the-popover-wins/');
   const menu = trappedMenu(page);
 
   await fingerTap(page, menu.contextWords);

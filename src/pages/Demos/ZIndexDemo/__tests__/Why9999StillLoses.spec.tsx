@@ -1,11 +1,12 @@
-import {render} from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const stillLoses = 'z-index/why-9999-still-loses';
 const title = 'Why 9999 still loses';
+const exhibitName = 'A context inside a context';
 
 describe('why 9999 still loses, on its own page', () => {
   test('should say its place in the z-index book', async () => {
@@ -22,21 +23,22 @@ describe('why 9999 still loses, on its own page', () => {
     expect(explanation.linkNamed(explanation.opener(part), 'Why Third is on top')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 
-  test('should link Why the popover wins, where its opener glosses the top layer, to its page with the raised card carried', async () => {
+  test('should link how position places a box, which it builds on, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(stillLoses, '?raised=second')}/>);
 
     const part = await explanation.part(title);
-    const opener = explanation.opener(part);
 
-    expect(explanation.linkNamed(opener, 'Why the popover wins')).toHaveAttribute('href', demosAt('z-index/why-the-popover-wins', '?raised=second'));
+    expect(explanation.linkNamed(explanation.opener(part), 'How position places a box')).toHaveAttribute('href', demosAt('z-index/how-position-places-a-box', '?raised=second'));
   });
 
-  test('should name the top layer in its steps without a link, so pressing the words never leaves the exhibit', async () => {
+  test('should show no menu, and leave the top layer to a later part', async () => {
     render(<TestApp at={demosAt(stillLoses)}/>);
 
-    const trap = await theTrap.find();
+    const part = await explanation.part(title);
+    const told = [explanation.opener(part), explanation.drawingNamed(part, exhibitName)];
 
-    expect(explanation.queryLinkNamed(trap, 'top layer')).not.toBeInTheDocument();
+    expect(within(part).queryByRole('button', {name: /Sort by/})).not.toBeInTheDocument();
+    expect(told.filter(telling => /top layer/.test(telling.textContent ?? ''))).toEqual([]);
   });
 
   test('should lead back to part two’s page and on to part four’s page, by number and title, with the raised card carried', async () => {
@@ -70,10 +72,10 @@ describe('why 9999 still loses, on the tab', () => {
     expect(explanation.linkNamed(listing, title)).toHaveAttribute('href', demosAt(stillLoses, '?raised=second'));
   });
 
-  test('should leave its menus to its page', async () => {
+  test('should leave its exhibit to its page', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
     await demoTabs.arrivedOn('Z-index');
 
-    expect(theTrap.query()).not.toBeInTheDocument();
+    expect(screen.queryByRole('figure', {name: exhibitName})).not.toBeInTheDocument();
   });
 });
