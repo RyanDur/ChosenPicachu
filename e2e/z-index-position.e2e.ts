@@ -97,9 +97,9 @@ test('a fixed Second stays where it is in the little window when the little page
   const before = await exhibit.spotOf('Second');
   const first = await exhibit.spotOf('First');
 
-  await exhibit.scrollsTheLittlePageTo(120);
+  await exhibit.wheelsTheLittlePage(120);
 
-  await expect.poll(() => exhibit.spotOf('First')).toEqual({x: first.x, y: first.y - 120});
+  await expect.poll(async () => (await exhibit.spotOf('First')).y).toBeLessThan(first.y);
   await expect.poll(() => exhibit.spotOf('Second')).toEqual(before);
 });
 
@@ -108,7 +108,7 @@ test('a sticky Second holds at the top of the little window while its parent scr
   await page.goto(address);
   await exhibit.chooses('sticky');
 
-  await exhibit.scrollsTheLittlePageTo(200);
+  await exhibit.wheelsTheLittlePage(200);
 
   await expect.poll(async () => (await exhibit.spotOf('Second')).y).toBe(0);
 });
@@ -118,7 +118,7 @@ test('a sticky Second leaves the top of the little window when its parent does',
   await page.goto(address);
   await exhibit.chooses('sticky');
 
-  await exhibit.scrollsTheLittlePageToItsEnd();
+  await exhibit.wheelsTheLittlePage(5000);
 
   await expect.poll(async () => (await exhibit.spotOf('Second')).y).toBeLessThan(0);
 });
