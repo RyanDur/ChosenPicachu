@@ -1,8 +1,10 @@
-import {has, Maybe, maybe, nothing, some, not} from '@ryandur/sand';
+import {has, is, Maybe, maybe, nothing, some, not} from '@ryandur/sand';
 import {ChartKind, chartKinds} from './chart-kinds';
 import {Period} from '../Market';
 
 export type Seat = {readonly kind: ChartKind; readonly period: Period};
+
+export type LeftOut = {readonly why: 'unknown'; readonly entry: string} | {readonly why: 'repeat'; readonly kind: ChartKind};
 
 const periodNamed = (name?: string): Maybe<Period> => maybe(Object.values(Period).find(offered => offered === name));
 
@@ -45,4 +47,12 @@ const absent = (seats: readonly Seat[]): readonly ChartKind[] =>
 const atAfterRemoval = (at: number, standing: number): Maybe<number> =>
   maybe([at + 1, at - 1].find(next => next >= 0 && next < standing));
 
-export const desk = {dealt, added, without, seated, periodChosen, absent, atAfterRemoval};
+type Reading = {readonly seen: readonly ChartKind[]; readonly left: readonly LeftOut[]};
+
+const leftOut = (charts: string): readonly LeftOut[] =>
+  charts.split(',').filter(entry => is(entry)).reduce<Reading>(({seen, left}, entry) => seatOf(entry).either(
+    ({kind}) => seen.includes(kind) ? {seen, left: [...left, {why: 'repeat', kind}]} : {seen: [...seen, kind], left},
+    () => ({seen, left: [...left, {why: 'unknown', entry}]})
+  ), {seen: [], left: []}).left;
+
+export const desk = {dealt, added, without, seated, periodChosen, absent, atAfterRemoval, leftOut};

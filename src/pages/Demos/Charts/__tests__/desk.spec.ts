@@ -46,4 +46,24 @@ describe('the desk', () => {
   test('the menu offers only what is absent', () => {
     expect(desk.absent(desk.dealt('price,pie'))).toEqual(['candles', 'pressure']);
   });
+
+  test('a name the desk does not know is left out as it was typed', () => {
+    expect(desk.leftOut('pie,bogus:day')).toEqual([{why: 'unknown', entry: 'bogus:day'}]);
+  });
+
+  test('a chart named again is left out by its kind', () => {
+    expect(desk.leftOut('pie,pie:week')).toEqual([{why: 'repeat', kind: 'pie'}]);
+  });
+
+  test('an empty entry is not told as left out', () => {
+    expect(desk.leftOut('pie,,candles')).toEqual([]);
+  });
+
+  test('what was left out is told in the order the address gives it', () => {
+    expect(desk.leftOut('pie,pie,bogus')).toEqual([{why: 'repeat', kind: 'pie'}, {why: 'unknown', entry: 'bogus'}]);
+  });
+
+  test('an address naming each chart once leaves nothing out', () => {
+    expect(desk.leftOut('pie,candles:day')).toEqual([]);
+  });
 });

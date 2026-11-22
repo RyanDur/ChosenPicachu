@@ -11,6 +11,7 @@ export const useDesk = () => {
   const seats = desk.dealt(charts);
   return {
     seats,
+    leftOut: desk.leftOut(charts),
     absentKinds: desk.absent(seats),
     periodOf: (kind: ChartKind): Period =>
       maybe(seats.find(seat => seat.kind === kind)).map(({period}) => period).orElse(Period.hour),
