@@ -17,8 +17,7 @@ test('a reader follows the need and its clues’ foot on to the sketch’s page 
   await page.goto('demos/tables/the-need-and-its-clues/?world=vanilla');
   await siteFrame(page).hydrated();
 
-  await page.getByRole('navigation', {name: 'Parts, in order'})
-    .getByRole('link', {name: 'Next: 2. Sketch a design from the need'}).click();
+  await partFoot(page).link('Next: 2. Sketch a design from the need').click();
 
   await expect(page).toHaveURL(/demos\/tables\/the-sketch\/\?world=vanilla$/);
   await expect(pillSwitch(page, 'world').pill('Vanilla')).toBeChecked();

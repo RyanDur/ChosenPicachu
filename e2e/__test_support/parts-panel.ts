@@ -1,4 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
+import {partFoot} from './part-foot';
 import {siteFrame} from './site';
 
 export const partsPanel = (page: Page) => ({
@@ -9,7 +10,7 @@ export const partsPanel = (page: Page) => ({
   hideTheParts: (): Promise<void> => page.getByRole('button', {name: 'Hide parts'}).click(),
   showTheParts: (): Promise<void> => page.getByRole('button', {name: 'Show parts'}).click(),
   goToTheNextPart: (): Promise<void> =>
-    page.getByRole('navigation', {name: 'Parts, in order'}).getByRole('link', {name: /^Next: /}).click(),
+    partFoot(page).links().filter({hasText: /^Next: /}).click(),
   parts: page.getByRole('navigation', {name: 'Parts', exact: true}),
   showParts: page.getByRole('button', {name: 'Show parts'}),
   partsAndMinutes: page.getByText(/^Eight parts, about \d+ minutes\.$/),
