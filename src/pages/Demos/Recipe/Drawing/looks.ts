@@ -11,7 +11,7 @@ const looksOf: Record<Kind, string> = {
   clipped: 'hollow drawn drawn-line dashed-drawn',
   clip: 'clip hollow drawn',
   ring: 'ring approach-filled ring-drawn',
-  'unseen-ring': 'unseen-ring approach-filled ring-drawn',
+  'unseen-ring': 'unseen-ring approach-filled ring-drawn dashed-drawn',
   topmost: 'topmost paper-filled drawn'
 };
 
