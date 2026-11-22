@@ -1,16 +1,15 @@
 .where-second-goes {
     display: grid;
-    gap: var(--base-x-2);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
+    gap: var(--base-x-2) var(--base-x-1_5);
+
+    > :not(.sample, .little-window) {
+        grid-column: 1 / -1;
+    }
 
     .where-we-meet-it {
         display: grid;
         gap: var(--base-x-0_5);
-    }
-
-    .position-stage {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
-        gap: var(--base-x-1_5);
     }
 
     .little-window {

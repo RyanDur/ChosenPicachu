@@ -146,33 +146,31 @@ export const WhereSecondGoes: FC = () => {
       <dt className="caption uppercase">Where we meet it</dt>
       <dd className="paragraph">{shown.whereWeMeetIt}</dd>
     </dl>
-    <section className="position-stage">
-      <Snippet label="HTML" lines={markupShown(position, measuredFromTheParent)}/>
-      <Snippet label="CSS" lines={rulesShown(position, measuredFromTheParent)}/>
-      <section className="little-window card hairline-outline rounded-corners">
-        <p className="little-bar caption uppercase trim">The window</p>
-        <section className="little-view transformed">
-          {position === 'fixed' && <MeasuredFrom/>}
-          {position === 'sticky' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
-          <section className={classNames('little-page focus-ringed',
-            absolute && not(measuredFromTheParent) && 'alarm-ringed')}
-          aria-label="The little page" tabIndex={0}>
-            {absolute && not(measuredFromTheParent) && <MeasuredFrom/>}
-            <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
-            <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
-              measuredFromTheParent && 'positioned alarm-ringed')}>
-              {measuredFromTheParent && <MeasuredFrom/>}
-              <p className="little-box plan-blue hairline-outline rounded-corners">First</p>
-              <p className={classNames('second little-box plan-mint hairline-outline rounded-corners', position)}>
-                Second
-                {position === 'relative' &&
-                  <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
-              </p>
-              <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
-              <Fillers words="more inside the parent" count={6}/>
-            </section>
-            <Fillers words="more of the page" count={4}/>
+    <Snippet label="HTML" lines={markupShown(position, measuredFromTheParent)}/>
+    <Snippet label="CSS" lines={rulesShown(position, measuredFromTheParent)}/>
+    <section className="little-window card hairline-outline rounded-corners">
+      <p className="little-bar caption uppercase trim">The window</p>
+      <section className="little-view transformed">
+        {position === 'fixed' && <MeasuredFrom/>}
+        {position === 'sticky' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
+        <section className={classNames('little-page focus-ringed',
+          absolute && not(measuredFromTheParent) && 'alarm-ringed')}
+        aria-label="The little page" tabIndex={0}>
+          {absolute && not(measuredFromTheParent) && <MeasuredFrom/>}
+          <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
+          <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
+            measuredFromTheParent && 'positioned alarm-ringed')}>
+            {measuredFromTheParent && <MeasuredFrom/>}
+            <p className="little-box plan-blue hairline-outline rounded-corners">First</p>
+            <p className={classNames('second little-box plan-mint hairline-outline rounded-corners', position)}>
+              Second
+              {position === 'relative' &&
+                <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
+            </p>
+            <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
+            <Fillers words="more inside the parent" count={6}/>
           </section>
+          <Fillers words="more of the page" count={4}/>
         </section>
       </section>
     </section>
