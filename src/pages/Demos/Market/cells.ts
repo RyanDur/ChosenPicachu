@@ -3,7 +3,7 @@ import {Labeled, Seated} from '@components/DragSortableTable/model';
 import {money} from './money';
 import {Lookback, LookbackTotals, Traded} from './trade-totals';
 
-const moved = (traded?: Traded): Measure =>
+const priceChange = (traded?: Traded): Measure =>
   has(traded) ? {display: money.deltaLabel(traded.opened, traded.closed), value: traded.closed - traded.opened} : {display: '—'};
 
 const averaged = (traded?: Traded): Measure =>
@@ -45,7 +45,7 @@ const from = (aggregate: LookbackTotals): Measures => ({
   sells: {display: String(aggregate.sells), value: aggregate.sells},
   volume: {display: aggregate.volume.toFixed(2), value: aggregate.volume},
   vwap: averaged(aggregate.traded),
-  change: moved(aggregate.traded)
+  change: priceChange(aggregate.traded)
 });
 
 const directionOf = (was: Measure, now: Measure): Maybe<Moved> =>
