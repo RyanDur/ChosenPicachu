@@ -42,10 +42,10 @@ const told: Record<Position, Told> = {
     context: formsNoneUnlessAZIndex
   },
   fixed: {
-    story: 'position: fixed takes the box out of the flow and measures top and left from the window, not the page. When the page scrolls, the box stays where it is. The little window here has a transform, so fixed is measured from it and not from the browser’s window.',
+    story: 'position: fixed takes the box out of the flow and measures top and left from the window, not the page. When the page scrolls, the box stays where it is. The little window’s view, the area under its bar, has a transform, so fixed is measured from it and not from the browser’s window.',
     where: 'A banner, a chat button, a header pinned to the window.',
     verdict: 'Second leaves the flow and stays put in the window while the page scrolls under it.',
-    measuredFrom: 'the window’s corner, at the red dot.',
+    measuredFrom: 'the view’s corner, at the red dot.',
     context: formsOneByItself
   },
   sticky: {
