@@ -4,7 +4,9 @@ import {Period} from '../Market';
 
 export type Seat = {readonly kind: ChartKind; readonly period: Period};
 
-export type LeftOut = {readonly why: 'unknown'; readonly entry: string} | {readonly why: 'repeat'; readonly kind: ChartKind};
+type Omission = {readonly why: 'unknown'; readonly entry: string} | {readonly why: 'repeat'; readonly kind: ChartKind};
+
+export type LeftOut = Omission | {readonly why: 'none seated'};
 
 const periodNamed = (name?: string): Maybe<Period> => maybe(Object.values(Period).find(offered => offered === name));
 
@@ -17,10 +19,31 @@ const entryOf = ({kind, period}: Seat): string => period === Period.hour ? kind 
 
 const written = (seats: readonly Seat[]): string => seats.map(entryOf).join(',');
 
+type Reading = {readonly seats: readonly Seat[]; readonly omitted: readonly Omission[]};
+
+const toldAs = (omission: Omission): string =>
+  omission.why === 'unknown' ? `“${omission.entry}”` : omission.kind;
+
+const toldOnce = (omitted: readonly Omission[], omission: Omission): readonly Omission[] =>
+  omitted.some(other => toldAs(other) === toldAs(omission)) ? omitted : [...omitted, omission];
+
+const reading = (charts: string): Reading =>
+  charts.split(',').map(entry => entry.trim()).filter(entry => is(entry))
+    .reduce<Reading>(({seats, omitted}, entry) => seatOf(entry).either(
+      seat => seats.some(({kind}) => kind === seat.kind)
+        ? {seats, omitted: toldOnce(omitted, {why: 'repeat', kind: seat.kind})}
+        : {seats: [...seats, seat], omitted},
+      () => ({seats, omitted: toldOnce(omitted, {why: 'unknown', entry})})
+    ), {seats: [], omitted: []});
+
 const dealt = (charts: string): readonly Seat[] => {
-  const seats = charts.split(',').flatMap(entry => seatOf(entry).either(seat => [seat], () => []))
-    .filter((seat, at, all) => all.findIndex(other => other.kind === seat.kind) === at);
+  const {seats} = reading(charts);
   return has(seats) ? seats : [{kind: 'price', period: Period.hour}];
+};
+
+const leftOut = (charts: string): readonly LeftOut[] => {
+  const {seats, omitted} = reading(charts);
+  return has(omitted) && not(has(seats)) ? [...omitted, {why: 'none seated'}] : omitted;
 };
 
 const added = (kind: ChartKind, seats: readonly Seat[]): string =>
@@ -46,18 +69,5 @@ const absent = (seats: readonly Seat[]): readonly ChartKind[] =>
 
 const atAfterRemoval = (at: number, standing: number): Maybe<number> =>
   maybe([at + 1, at - 1].find(next => next >= 0 && next < standing));
-
-type Reading = {readonly seen: readonly ChartKind[]; readonly left: readonly LeftOut[]};
-
-const sameTelling = (one: LeftOut, other: LeftOut): boolean => one.why === 'unknown'
-  ? other.why === 'unknown' && other.entry === one.entry
-  : other.why === 'repeat' && other.kind === one.kind;
-
-const leftOut = (charts: string): readonly LeftOut[] =>
-  charts.split(',').filter(entry => is(entry.trim())).reduce<Reading>(({seen, left}, entry) => seatOf(entry).either(
-    ({kind}) => seen.includes(kind) ? {seen, left: [...left, {why: 'repeat', kind}]} : {seen: [...seen, kind], left},
-    () => ({seen, left: [...left, {why: 'unknown', entry}]})
-  ), {seen: [], left: []}).left
-    .filter((told, at, all) => all.findIndex(other => sameTelling(told, other)) === at);
 
 export const desk = {dealt, added, without, seated, periodChosen, absent, atAfterRemoval, leftOut};
