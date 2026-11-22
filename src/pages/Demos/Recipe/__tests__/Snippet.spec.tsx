@@ -89,7 +89,7 @@ describe('a code sample', () => {
     expect(codeSample.fileNames()).toEqual(['Demos/store.ts on GitHub', 'components/store.ts on GitHub']);
   });
 
-  test('should say what the exhibit’s files are under them, before it names the site’s files', () => {
+  test('should say the exhibit’s files are the exhibit’s before it names the site’s files', () => {
     render(<Snippet label="TS" lines={[
       ...carve.between(shared, 'export type Store', 'export type Store'),
       ...lines.fromTheExhibit(carve.between(store, 'export const store', 'export const store'))
