@@ -18,13 +18,13 @@
   padding-inline: var(--base);
 }
 
-.tab-sidecar.folded > :not(.sidecar-header) {
+.tab-sidecar.folded:has(> .sidecar-header) > :not(.sidecar-header) {
   display: none;
 }
 
 @media (width > 900px) and (height > 600px) {
   .about:has(> .tab-sidecar),
-  .part-page:has(> .tab-sidecar:not(.folded)) {
+  .part-page:has(> .tab-sidecar):not(:has(> .tab-sidecar.folded > .sidecar-header)) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 38ch;
     grid-template-rows: auto 1fr;
@@ -36,15 +36,15 @@
     }
   }
 
-  .part-page:has(> .tab-sidecar:not(.folded)) {
+  .part-page:has(> .tab-sidecar):not(:has(> .tab-sidecar.folded > .sidecar-header)) {
     grid-template-rows: auto 1fr auto;
   }
 
-  .part-page.body-first:has(> .tab-sidecar:not(.folded)) {
+  .part-page.body-first:has(> .tab-sidecar):not(:has(> .tab-sidecar.folded > .sidecar-header)) {
     grid-template-rows: 1fr auto;
   }
 
-  .tab-sidecar:not(.folded) {
+  .tab-sidecar:not(.folded:has(> .sidecar-header)) {
     position: sticky;
     inset-block-start: var(--under-the-tab-bar);
     grid-row: 1 / -1;
@@ -55,7 +55,7 @@
     gap: var(--base-x-2);
   }
 
-  .tab-sidecar.folded {
+  .tab-sidecar.folded:has(> .sidecar-header) {
     position: sticky;
     inset-block-start: calc(var(--under-the-tab-bar) - var(--base-x-2));
     z-index: 1;
@@ -66,11 +66,11 @@
     }
   }
 
-  .part-page:has(> .tab-sidecar.folded) > .part-body {
+  .part-page:has(> .tab-sidecar.folded > .sidecar-header) > .part-body {
     isolation: isolate;
   }
 
-  :root:has(.tab-sidecar.folded) {
+  :root:has(.tab-sidecar.folded > .sidecar-header) {
     scroll-padding-block-start:
       calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--base-x-4) + var(--base) + var(--base-x-2));
   }
