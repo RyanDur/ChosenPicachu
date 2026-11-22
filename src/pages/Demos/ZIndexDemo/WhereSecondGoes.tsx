@@ -101,9 +101,11 @@ const parentPositionChoices: Choice<ParentPosition>[] = [
   {words: 'not positioned', value: 'not-positioned'}
 ];
 
-const FillerBoxes: FC<PropsWithChildren<{count: number}>> = ({count, children}) =>
-  <>{Array.from({length: count}, (_, at) =>
-    <p key={at} className="little-box muted-dashed-outline rounded-corners caption">{children}</p>)}</>;
+const FillerBox: FC<PropsWithChildren> = ({children}) =>
+  <p className="little-box muted-dashed-outline rounded-corners caption">{children}</p>;
+
+const sixBoxes = Array.from({length: 6}, (_, at) => at);
+const fourBoxes = Array.from({length: 4}, (_, at) => at);
 
 const pageMarkup = (position: Position, measuredFrom: MeasuredFrom): string[] => [
   '<p>the top of the page</p>',
@@ -170,9 +172,9 @@ export const WhereSecondGoes: FC = () => {
                 <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
             </p>
             <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
-            <FillerBoxes count={6}>more inside the parent</FillerBoxes>
+            {sixBoxes.map(box => <FillerBox key={box}>more inside the parent</FillerBox>)}
           </section>
-          <FillerBoxes count={4}>more of the page</FillerBoxes>
+          {fourBoxes.map(box => <FillerBox key={box}>more of the page</FillerBox>)}
         </section>
         {measuredFrom === 'little-page' && <span className="page-ring alarm-ringed" aria-hidden="true"/>}
       </section>
