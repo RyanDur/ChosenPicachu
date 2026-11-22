@@ -10,6 +10,8 @@ type Spot = {x: number; y: number};
 type Placed = Spot & {measuredFromFirstsHolder: boolean};
 type Place = Spot & {width: number; height: number};
 
+const exactly = (text: string): RegExp => new RegExp(`^${text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
+
 const cornerOf = async (box: Locator): Promise<Spot> => {
   const {x, y} = await boxOf(box);
   return {x, y};
@@ -28,10 +30,11 @@ export const positionExhibit = (page: Page) => {
   const positionPills = pillSwitch(page, 'Second’s position is');
   const parentPills = pillSwitch(page, 'And its parent is');
   const whereSecondWent = exhibit.getByRole('status', {name: 'where Second went'});
-  const shownOnceChosen = async (choose: () => Promise<void>): Promise<void> => {
+  const shownOnceChosen = async (pill: Locator, choose: () => Promise<void>): Promise<void> => {
+    if (await pill.isChecked()) return;
     const before = await whereSecondWent.textContent() ?? '';
     await choose();
-    await whereSecondWent.filter({hasNotText: before}).waitFor();
+    await whereSecondWent.filter({hasNotText: exactly(before)}).waitFor();
   };
   const spotOf = async (name: string): Promise<Spot> => {
     const [namedCorner, pageCorner] = await Promise.all([
@@ -41,7 +44,8 @@ export const positionExhibit = (page: Page) => {
     return {x: Math.round(namedCorner.x - pageCorner.x), y: Math.round(namedCorner.y - pageCorner.y)};
   };
   return {
-    chooses: (position: Position): Promise<void> => shownOnceChosen(() => positionPills.choose(position)),
+    chooses: (position: Position): Promise<void> =>
+      shownOnceChosen(positionPills.pill(position), () => positionPills.choose(position)),
     stepsByKeyboard: async (steps: number): Promise<void> => {
       await siteFrame(page).hydrated();
       await positionPills.pill('static').focus();
@@ -59,7 +63,8 @@ export const positionExhibit = (page: Page) => {
       }
     },
     littlePage,
-    choosesParent: (position: ParentPosition): Promise<void> => shownOnceChosen(() => parentPills.choose(position)),
+    choosesParent: (position: ParentPosition): Promise<void> =>
+      shownOnceChosen(parentPills.pill(position), () => parentPills.choose(position)),
     parentPill: (position: ParentPosition): Locator => parentPills.pill(position),
     spotOf,
     placeOf: async (name: string): Promise<Place> =>
