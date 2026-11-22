@@ -10,7 +10,7 @@ const PartsFold: FC = () => {
   const shown = parts === 'shown';
   const hydrated = useHydrated();
   return <button type="button" tabIndex={0}
-    className="parts-fold rounded-corners ringed unfilled caption reachable attentive smoked-while-disabled"
+    className="parts-fold caption attentive field hairline-outline reachable smoked-while-disabled"
     disabled={not(hydrated)}
     aria-expanded={shown}
     onClick={() => change({parts: shown ? 'hidden' : 'shown'})}>{shown ? 'Hide parts' : 'Show parts'}</button>;
