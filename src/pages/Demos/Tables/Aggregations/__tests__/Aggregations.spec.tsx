@@ -39,6 +39,47 @@ describe('the live aggregations', () => {
       ['session', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
+  test('should mark a number a trade raises as up', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
+    await feedIsSubscribed(feed);
+    await aggregations.arrived();
+    broadcast(feed, [tradeFrame(50001, now)]);
+    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))[1]).toBe('1'));
+
+    broadcast(feed, [tradeFrame(50002, now + 1000)]);
+
+    await waitFor(() => expect(aggregations.markOn('this minute', 'trades')).toBe('up'));
+  });
+
+  test('should mark a number a trade lowers as down', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
+    await feedIsSubscribed(feed);
+    await aggregations.arrived();
+    broadcast(feed, [tradeFrame(50005, now)]);
+    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))[1]).toBe('1'));
+
+    broadcast(feed, [tradeFrame(50001, now + 1000)]);
+
+    await waitFor(() => expect(aggregations.markOn('this minute', 'vwap')).toBe('down'));
+  });
+
+  test('should clear the mark from a number the next trade leaves as it is', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
+    await feedIsSubscribed(feed);
+    await aggregations.arrived();
+    broadcast(feed, [tradeFrame(50001, now, '0.01', 'bought')]);
+    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))[1]).toBe('1'));
+    broadcast(feed, [tradeFrame(50002, now + 1000, '0.01', 'sold')]);
+    await waitFor(() => expect(aggregations.markOn('this minute', 'sells')).toBe('up'));
+
+    broadcast(feed, [tradeFrame(50003, now + 2000, '0.01', 'bought')]);
+
+    await waitFor(() => expect(aggregations.markOn('this minute', 'sells')).toBe('none'));
+  });
+
   test('the arrangement survives a change of table: the order belongs to the page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading><TableControls/></TestApp>);

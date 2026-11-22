@@ -54,12 +54,12 @@ export const LazyTable: FC<Props> = ({caption, origin, motion, columns, rows, on
           const lookback = row.lookback.key;
           return <Row key={lookback}>
             <RowHeader column="lookback" row={lookback} label={row.lookback.display}/>
-            <Cell column="trades" row={lookback}>{row.trades.display}</Cell>
-            <Cell column="buys" row={lookback}>{row.buys.display}</Cell>
-            <Cell column="sells" row={lookback}>{row.sells.display}</Cell>
-            <Cell column="volume" row={lookback}>{row.volume.display}</Cell>
-            <Cell column="vwap" row={lookback}>{row.vwap.display}</Cell>
-            <Cell column="change" row={lookback}>{row.change.display}</Cell>
+            <Cell column="trades" row={lookback} data-moved={row.trades.moved}>{row.trades.display}</Cell>
+            <Cell column="buys" row={lookback} data-moved={row.buys.moved}>{row.buys.display}</Cell>
+            <Cell column="sells" row={lookback} data-moved={row.sells.moved}>{row.sells.display}</Cell>
+            <Cell column="volume" row={lookback} data-moved={row.volume.moved}>{row.volume.display}</Cell>
+            <Cell column="vwap" row={lookback} data-moved={row.vwap.moved}>{row.vwap.display}</Cell>
+            <Cell column="change" row={lookback} data-moved={row.change.moved}>{row.change.display}</Cell>
           </Row>;
         })}
       </Body>

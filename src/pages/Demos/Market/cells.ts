@@ -1,4 +1,4 @@
-import {has} from '@ryandur/sand';
+import {has, Maybe, maybe} from '@ryandur/sand';
 import {Labeled, Seated} from '@components/DragSortableTable/model';
 import {money} from './money';
 import {Lookback, LookbackTotals, Traded} from './trade-totals';
@@ -12,7 +12,10 @@ const averaged = (traded?: Traded): Measure =>
 export type Measure = {
   display: string;
   value?: number;
+  moved?: Moved;
 };
+
+export type Moved = 'up' | 'down';
 
 const measureNames = ['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'] as const;
 
@@ -45,11 +48,28 @@ const from = (aggregate: LookbackTotals): Measures => ({
   change: moved(aggregate.traded)
 });
 
+const directionOf = (was: Measure, now: Measure): Maybe<Moved> =>
+  maybe(was.value).mBind(old => maybe(now.value).map((value): Moved => value > old ? 'up' : 'down'));
+
+const marked = (was: Measure, now: Measure): Measure =>
+  now.display === was.display ? now : directionOf(was, now).map(direction => ({...now, moved: direction})).orElse(now);
+
+const markedAgainst = (was: Measures, now: Measures): Measures => ({
+  lookback: now.lookback,
+  trades: marked(was.trades, now.trades),
+  buys: marked(was.buys, now.buys),
+  sells: marked(was.sells, now.sells),
+  volume: marked(was.volume, now.volume),
+  vwap: marked(was.vwap, now.vwap),
+  change: marked(was.change, now.change)
+});
+
 type Cells = {
   measures: readonly {name: MeasureName; data: Measured}[];
   isMeasure: (name: string) => name is MeasureName;
   seated: (rows: readonly Measures[]) => readonly Seated[];
   from: (aggregate: LookbackTotals) => Measures;
+  markedAgainst: (was: Measures, now: Measures) => Measures;
 };
 
-export const cells: Cells = {measures, isMeasure, seated, from};
+export const cells: Cells = {measures, isMeasure, seated, from, markedAgainst};

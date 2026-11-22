@@ -9,8 +9,13 @@ import {recentTrades} from './recent-trades';
 import {arrangedView} from './arrangedView';
 import {MarketState, TradesState} from './marketSlice';
 
-const folded = ({history, trades}: TradesState): Measures[] =>
-  tradeTotals.perLookback(recentTrades.hydrated(history, trades)).map(cells.from);
+const folded = (history: readonly Trade[], streamed: readonly Trade[]): Measures[] =>
+  tradeTotals.perLookback(recentTrades.hydrated(history, streamed)).map(cells.from);
+
+const markedRows = ({history, trades, tradesBeforeTheNewest}: TradesState): Measures[] => {
+  const was = folded(history, tradesBeforeTheNewest);
+  return folded(history, trades).map((now, at) => cells.markedAgainst(was[at], now));
+};
 
 type MarketReads = {
   columns: (state: MarketState) => readonly TableColumn<Measured>[];
@@ -22,7 +27,7 @@ type MarketReads = {
 
 export const marketReads: MarketReads = {
   columns: ({arrangement}) => arrangedView.columnsOf(arrangement),
-  rows: ({arrangement, trades}) => arrangedView.rowsOf(arrangement, folded(trades)),
+  rows: ({arrangement, trades}) => arrangedView.rowsOf(arrangement, markedRows(trades)),
   liveTrades: ({trades}) => trades.trades,
   feedStatus: ({trades}) => trades.status,
   periodHistoryOf: period => ({candles}) => candles[period]
