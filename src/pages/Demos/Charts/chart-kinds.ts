@@ -15,6 +15,10 @@ const names: Record<ChartKind, string> = {
 
 const all: readonly ChartKind[] = ['price', 'candles', 'pressure', 'pie'];
 
+const periodic: readonly PeriodChartKind[] = ['price', 'candles'];
+
+const hasPeriods = (kind: ChartKind): kind is PeriodChartKind => periodic.some(candidate => candidate === kind);
+
 type Told = {
   says: string;
   minutes: number;
@@ -48,4 +52,6 @@ const address = (kind: ChartKind): string => `${generatePath(Paths.chartTutorial
 
 const shownAt = (pathname: string): Maybe<ChartKind> => maybe(all.find(kind => pathname === address(kind)));
 
-export const chartKinds = {all, is, match, names, told, minutes, address, shownAt, previous, next, numbered};
+export const chartKinds = {
+  all, is, hasPeriods, match, names, told, minutes, address, shownAt, previous, next, numbered
+};

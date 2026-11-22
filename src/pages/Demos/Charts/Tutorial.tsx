@@ -39,7 +39,8 @@ const WorkspaceStory: FC = () =>
             the page says what it left out and why. A new chart goes to the front of the list,
             so it appears at the top, next to the + that added it. The + opens a menu of the charts not yet on the
             page.</Says>
-          <Says>A name may carry its period after a colon, candles:day; the hour is the default and is left off.</Says>
+          <Says>A name may carry its period after a colon, candles:day; the hour is the default and is left off. For a
+            period the chart doesn’t have, the chart shows the hour and the line below the charts says so.</Says>
           <Says>That menu is built from Menu, Entry and Item. Each is a component, a function that writes a piece of the
             page, as taught in the z-index part <PartLink part="why-the-popover-wins"/>.</Says>
           <Says><ClassGloss/> Item gives its button the shared classes that set its look, and the page passes Menu
