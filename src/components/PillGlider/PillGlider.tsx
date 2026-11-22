@@ -1,4 +1,4 @@
-import {useHydrated} from '@components';
+import {classNames, useHydrated} from '@components';
 import {not} from '@ryandur/sand';
 import './PillGlider.css';
 
@@ -13,11 +13,14 @@ type Props<T extends string> = {
   choices: readonly Choice<T>[];
   chosen: T;
   onChosen: (value: T) => void;
+  // the two rows ask a size container (container-type: inline-size) around the pill; without one, wraps does nothing
+  wraps?: boolean;
 };
 
-export const PillGlider = <T extends string>({label, name, choices, chosen, onChosen}: Props<T>) => {
+export const PillGlider = <T extends string>({label, name, choices, chosen, onChosen, wraps = false}: Props<T>) => {
   const hydrated = useHydrated();
-  return <fieldset className="pill-glider rounded-corners ringed hover-veiled choice-filled-before">
+  return <fieldset className={classNames('pill-glider rounded-corners ringed hover-veiled choice-filled-before',
+    wraps && 'wraps')}>
     <legend className="off-screen">{label}</legend>
     {choices.map(({words, value}) =>
       <label className="pill rounded-corners reachable unfilled focus-haloed hover-inverse-ink choice-inverse-ink"
