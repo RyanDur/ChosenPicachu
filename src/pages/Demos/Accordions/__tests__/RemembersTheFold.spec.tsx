@@ -9,7 +9,8 @@ import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
 const remembers = 'accordions/a-box-remembers-the-fold';
 const title = 'A box remembers the fold, and a rule reads it';
 const knownHeightWorks = 'How the known height works';
-const fromTheExhibit = 'Taken from the exhibit on this page. The rest of the site doesn’t use it.';
+const exhibitCaption = (file: string): string =>
+  `${file} on GitHubTaken from the exhibit on this page. The rest of the site doesn’t use it.`;
 
 describe('a box remembers the fold, on its own page', () => {
   test('should say its place in the accordions book', async () => {
@@ -197,30 +198,30 @@ describe('how the known height works', () => {
     expect(depth).toBeVisible();
   });
 
-  test('should show the bar’s own rule as taken from the exhibit, and its shared look apart from it, linked to the site’s drawing style sheet on GitHub', async () => {
+  test('should show the bar’s own rule as taken from the exhibit and linked to its file, and its shared look apart from it, linked to the site’s drawing style sheet on GitHub', async () => {
     render(<TestApp at={demosAt(remembers)}/>);
 
     const folded = recipeFolds.story(await explanation.part(title), knownHeightWorks);
 
     expect(explanation.sampleCaptionsBeside(folded, /The bar looks like the site’s diagrams/)).toEqual([
-      fromTheExhibit,
+      exhibitCaption('Accordions/Accordions.css'),
       'styles/drawing.css on GitHub'
     ]);
   });
 
-  test('should show, with inclusive chosen, the build’s source beside the fold’s run as taken from the exhibit, with no link', async () => {
+  test('should show, with inclusive chosen, the build’s source beside the fold’s run as taken from the exhibit and linked to its file', async () => {
     render(<TestApp at={demosAt(remembers, '?type=inclusive')}/>);
 
     const folded = recipeFolds.story(await explanation.part(title), knownHeightWorks);
 
-    expect(explanation.sampleCaptionsBeside(folded, threeParts)).toEqual([fromTheExhibit]);
+    expect(explanation.sampleCaptionsBeside(folded, threeParts)).toEqual([exhibitCaption('Accordions/InclusiveAccordion.tsx')]);
   });
 
-  test('should show, with exclusive chosen, the build’s source beside the fold’s run as taken from the exhibit, with no link', async () => {
+  test('should show, with exclusive chosen, the build’s source beside the fold’s run as taken from the exhibit and linked to its file', async () => {
     render(<TestApp at={demosAt(remembers, '?type=exclusive')}/>);
 
     const folded = recipeFolds.story(await explanation.part(title), knownHeightWorks);
 
-    expect(explanation.sampleCaptionsBeside(folded, threeParts)).toEqual([fromTheExhibit]);
+    expect(explanation.sampleCaptionsBeside(folded, threeParts)).toEqual([exhibitCaption('Accordions/ExclusiveAccordion.tsx')]);
   });
 });

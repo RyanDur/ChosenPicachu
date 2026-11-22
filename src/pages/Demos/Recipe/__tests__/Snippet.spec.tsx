@@ -67,20 +67,25 @@ describe('a code sample', () => {
     expect(codeSample.source()).toBe('Written for this page, not taken from the site’s code.');
   });
 
-  test('should say a sample carved from the page’s exhibit was taken from it, linking to no file', () => {
+  test('should say a sample carved from the page’s exhibit was taken from it', () => {
     render(<Snippet label="TS" lines={lines.fromTheExhibit(carve.between(store, 'export const store', 'export const more'))}/>);
 
-    expect(codeSample.source()).toBe('Taken from the exhibit on this page. The rest of the site doesn’t use it.');
+    expect(codeSample.source()).toContain('Taken from the exhibit on this page. The rest of the site doesn’t use it.');
   });
 
-  test('should link the site’s file and say the exhibit’s lines were taken from the exhibit, when a sample holds both', () => {
+  test('should link the file a sample carved from the page’s exhibit was taken from', () => {
+    render(<Snippet label="TS" lines={lines.fromTheExhibit(carve.between(store, 'export const store', 'export const more'))}/>);
+
+    expect(codeSample.fileLink('Demos/store.ts on GitHub')).toHaveAttribute('href', `${store.url}#L1-L2`);
+  });
+
+  test('should link the exhibit’s file and the site’s, in the order they first appear, when a sample holds both', () => {
     render(<Snippet label="TS" lines={[
       ...lines.fromTheExhibit(carve.between(store, 'export const store', 'export const store')),
       ...carve.between(shared, 'export type Store', 'export type Store')
     ]}/>);
 
-    expect(codeSample.fileNames()).toEqual(['components/store.ts on GitHub']);
-    expect(codeSample.source()).toContain('Taken from the exhibit on this page. The rest of the site doesn’t use it.');
+    expect(codeSample.fileNames()).toEqual(['Demos/store.ts on GitHub', 'components/store.ts on GitHub']);
   });
 
   test('should name what a lowercase folder sits inside, since it is a module of that component', () => {
