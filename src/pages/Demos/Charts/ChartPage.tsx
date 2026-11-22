@@ -58,14 +58,14 @@ const besideKind = (kind: ChartKind): Beside =>
   ({kind: 'part', title: chartKinds.numbered(kind), address: chartKinds.address(kind)});
 
 const thePreviousTab: Behind = {kind: 'tab', topic: DemoTopics.dragAndDrop};
-const theLastChart: Onward = {kind: 'last-part-unsaid'};
+const theNextTab: Onward = {kind: 'tab', topic: DemoTopics.tables};
 
 export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const {reference, quote, chart: Chart} = features[kind];
   const name = chartKinds.names[kind];
   const place = `${demoTab.names[DemoTopics.charts]} · part ${chartKinds.ordinalOf(kind)} of ${chartKinds.all.length}`;
   const behind = chartKinds.previous(kind).map((beside): Behind => besideKind(beside)).orElse(thePreviousTab);
-  const onward = chartKinds.next(kind).map((beside): Onward => besideKind(beside)).orElse(theLastChart);
+  const onward = chartKinds.next(kind).map((beside): Onward => besideKind(beside)).orElse(theNextTab);
   const part = {heading: `${name} tutorial`, headingId: `${kind}-heading`, place, previous: behind, next: onward};
   return <ThePart value={part}><PartSection>
     <PartOpening><p className="paragraph">{chartKinds.told[kind].says}</p></PartOpening>

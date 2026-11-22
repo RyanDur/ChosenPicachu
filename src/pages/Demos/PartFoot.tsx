@@ -8,7 +8,7 @@ import './PartFoot.css';
 
 export type Beside = {kind: 'part'; title: string; address: string} | {kind: 'tab'; topic: DemoTopics};
 export type Behind = Beside | {kind: 'first-part'};
-export type Onward = Beside | {kind: 'last-part-said'} | {kind: 'last-part-unsaid'};
+export type Onward = Beside | {kind: 'last-part-said'};
 
 const PreviousSide: FC = () => {
   const behind = useThePart().previous;
@@ -37,8 +37,6 @@ const NextSide: FC = () => {
       </Link>;
     case 'last-part-said':
       return <p className="onward">This is the last part.</p>;
-    case 'last-part-unsaid':
-      return null;
   }
 };
 
