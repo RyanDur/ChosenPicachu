@@ -16,7 +16,7 @@ export const DemosPage: FC<PropsWithChildren> = ({children}) => {
       new to you. Otherwise start at the first tab that adds something you don’t know, or go to the tab whose bug you
       came with.
     </p>
-    <DemoTabs topic={topic}/>
+    <DemoTabs/>
     <section id="about" aria-label={demoTab.names[topic]} className="about">
       {children}
     </section>
