@@ -2,29 +2,13 @@
   --drawn-width: 320px;
   --widest-drawing: var(--base-x-60);
 
-  .topmost {
-    stroke-width: var(--hairline-x-2);
-    vector-effect: non-scaling-stroke;
-  }
-
-  .clip {
-    stroke-width: var(--hairline-x-2);
-    vector-effect: non-scaling-stroke;
-  }
-
+  .topmost,
+  .clip,
   .arrow,
-  .chevron {
-    stroke-width: var(--hairline-x-2);
-    vector-effect: non-scaling-stroke;
-  }
-
+  .chevron,
   .ring,
   .unseen-ring {
     stroke-width: var(--hairline-x-2);
-    vector-effect: non-scaling-stroke;
-  }
-
-  .edge {
     vector-effect: non-scaling-stroke;
   }
 }
