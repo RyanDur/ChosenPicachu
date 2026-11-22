@@ -33,6 +33,10 @@ export const positionExhibit = (page: Page) => {
     await choose();
     await whereSecondWent.filter({hasNotText: exactly(before)}).waitFor();
   };
+  const wheelsTheLittlePage = async (pixels: number): Promise<void> => {
+    await littlePage.hover();
+    await page.mouse.wheel(0, pixels);
+  };
   const spotOf = async (name: string): Promise<Spot> => {
     const [namedCorner, pageCorner] = await Promise.all([
       cornerOf(littlePage.getByText(name, {exact: true})),
@@ -81,9 +85,6 @@ export const positionExhibit = (page: Page) => {
         measuredFromFirstsHolder: [...holder?.children ?? []].some(child => child.textContent === 'First')
       };
     }),
-    scrollsTheLittlePageTo: (top: number): Promise<void> =>
-      littlePage.evaluate((littlePage, to) => littlePage.scrollTo({top: to, behavior: 'instant'}), top),
-    scrollsTheLittlePageToItsEnd: (): Promise<void> =>
-      littlePage.evaluate(littlePage => littlePage.scrollTo({top: littlePage.scrollHeight, behavior: 'instant'}))
+    wheelsTheLittlePage
   };
 };
