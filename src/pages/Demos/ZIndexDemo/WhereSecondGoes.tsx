@@ -81,7 +81,7 @@ type WhatEachPositionTells = {
   told: (position: Position, parentPositioned: boolean) => Told;
 };
 
-const whereSecondGoes: WhatEachPositionTells = {
+const whatEachPositionTells: WhatEachPositionTells = {
   positions,
   told: (position, parentPositioned) =>
     position === 'absolute' && not(parentPositioned) ? {...told[position], ...withNoPositionedParent} : told[position]
@@ -89,7 +89,7 @@ const whereSecondGoes: WhatEachPositionTells = {
 
 type ParentPosition = 'positioned' | 'not-positioned';
 
-const positionChoices: Choice<Position>[] = whereSecondGoes.positions
+const positionChoices: Choice<Position>[] = whatEachPositionTells.positions
   .map(position => ({words: position, value: position}));
 const parentPositionChoices: Choice<ParentPosition>[] = [
   {words: 'position: relative', value: 'positioned'},
@@ -130,7 +130,7 @@ export const WhereSecondGoes: FC = () => {
   const [parentPosition, chooseParentPosition] = useState<ParentPosition>('positioned');
   const absolute = position === 'absolute';
   const measuredFromTheParent = absolute && parentPosition === 'positioned';
-  const shown = whereSecondGoes.told(position, parentPosition === 'positioned');
+  const shown = whatEachPositionTells.told(position, parentPosition === 'positioned');
 
   return <figure className="where-second-goes">
     <p className="caption uppercase" aria-hidden="true">Second’s position is</p>
