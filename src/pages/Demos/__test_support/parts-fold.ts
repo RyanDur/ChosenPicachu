@@ -7,9 +7,9 @@ const stopsBeforeGivingUp = 100;
 const hideParts = (): Promise<HTMLElement> =>
   screen.findByRole('button', {name: 'Hide parts'});
 
-const tabTo = async (target: HTMLElement): Promise<void> => {
+const tabTo = async (button: HTMLElement): Promise<void> => {
   for (let stop = 0; stop < stopsBeforeGivingUp; stop += 1) {
-    if (document.activeElement === target) return;
+    if (document.activeElement === button) return;
     await userEvent.tab();
   }
   throw new Error('Tab never reached Hide parts');
