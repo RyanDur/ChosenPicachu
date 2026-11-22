@@ -52,6 +52,19 @@ describe('what the review is asked', () => {
     expect(onThePull).toContain('args "high --comment 412 --max-findings all"');
   });
 
+  test('should have a pull request\'s line comments begin with their severity', () => {
+    const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
+
+    expect(onThePull).toContain('begin it with that severity, "Violation:" or "Concern:"');
+  });
+
+  test('should leave a carried concern out of a pull request\'s next review', () => {
+    const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
+
+    expect(onThePull).toContain('the finding is a concern, no violation stands in that review');
+    expect(onThePull).toContain('"Carried to my next pull request."');
+  });
+
   test('should hand a pull request\'s review the conversations earlier reviews started', () => {
     const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
 
