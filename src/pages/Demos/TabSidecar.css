@@ -60,9 +60,18 @@
     inset-block-start: calc(var(--under-the-tab-bar) - var(--base-x-2));
     z-index: 1;
     padding-block: var(--base-x-2) var(--base);
+
+    > .sidecar-head {
+      min-block-size: var(--base-x-4);
+    }
   }
 
   .part-page:has(> .tab-sidecar.folded) > .part-body {
     isolation: isolate;
+  }
+
+  :root:has(.tab-sidecar.folded) {
+    scroll-padding-block-start:
+      calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--base-x-4) + var(--base) + var(--base-x-2));
   }
 }
