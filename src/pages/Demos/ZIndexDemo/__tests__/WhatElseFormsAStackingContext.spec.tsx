@@ -14,7 +14,7 @@ describe('what else forms a stacking context, on its own page', () => {
     expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 4 of 7');
   });
 
-  test('should link part one, which it builds on, to its page with the wear carried', async () => {
+  test('should link why Third is on top, which it builds on, to its page with the wear carried', async () => {
     render(<TestApp at={demosAt(whatElseForms, '?wears=opacity')}/>);
 
     const part = await explanation.part(title);
@@ -22,7 +22,7 @@ describe('what else forms a stacking context, on its own page', () => {
     expect(explanation.linkNamed(explanation.opener(part), 'Why Third is on top')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?wears=opacity'));
   });
 
-  test('should link part two, which it builds on, to its page with the wear carried', async () => {
+  test('should link why 9999 still loses, which it builds on, to its page with the wear carried', async () => {
     render(<TestApp at={demosAt(whatElseForms, '?wears=opacity')}/>);
 
     const part = await explanation.part(title);
@@ -31,7 +31,7 @@ describe('what else forms a stacking context, on its own page', () => {
     expect(explanation.linkNamed(opener, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?wears=opacity'));
   });
 
-  test('should link the menu part’s card to part two’s page, with the wear carried', async () => {
+  test('should link the menu part’s card to the page for why 9999 still loses, with the wear carried', async () => {
     render(<TestApp at={demosAt(whatElseForms, '?wears=opacity')}/>);
 
     const part = await explanation.part(title);
