@@ -29,8 +29,8 @@ const formsOneByItself = <>It forms a {stackingContextLink} by itself.</>;
 
 const told: Record<Position, Told> = {
   static: {
-    story: <>Every box starts as <code className="monospaced">position: static</code>. The browser places it in the flow,
-      as a block or inline, and ignores <code className="monospaced">top</code> and <code
+    story: <>Every box starts as <code className="monospaced">position: static</code>. The browser places it in the
+      flow, as a block or inline, and ignores <code className="monospaced">top</code> and <code
       className="monospaced">left</code>.</>,
     whereWeMeetIt: 'Every box, until we say otherwise.',
     verdict: 'Second sits between First and Third. The 16px and 24px do nothing.',
