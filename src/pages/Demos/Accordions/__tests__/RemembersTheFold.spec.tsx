@@ -9,6 +9,7 @@ import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
 const remembers = 'accordions/a-box-remembers-the-fold';
 const title = 'A box remembers the fold, and a rule reads it';
 const knownHeightWorks = 'How the known height works';
+
 describe('a box remembers the fold, on its own page', () => {
   test('should say its place in the accordions book', async () => {
     render(<TestApp at={demosAt(remembers)}/>);
