@@ -7,6 +7,7 @@ import names from '@navigation/names.json';
 import {DemoTopics} from './demo-topics';
 import {demoTab} from './demo-tab';
 import {DemosPage} from './DemosPage';
+import {ShownTopic} from './shown-topic';
 import {Trading} from './Market/Trading';
 import {tableParts, tableTutorials} from './Tables';
 import {accordionParts} from './Accordions/part-pages';
@@ -64,5 +65,7 @@ const DemoHeader: FC = () => useAddressedDemo().whenShown(({topic, pageName, lis
 export const ErrorBoundary: FC = () => <><DemoHeader/><Main><PageError/></Main></>;
 
 export const Room: FC = () => useAddressedDemo().shownOr(
-  ({topic}) => <><DemoHeader/><Main><Trading><DemosPage topic={topic}><Outlet/></DemosPage></Trading></Main></>,
+  ({topic}) => <><DemoHeader/><Main><Trading>
+    <ShownTopic value={topic}><DemosPage><Outlet/></DemosPage></ShownTopic>
+  </Trading></Main></>,
   () => <NoSuchRoom/>);

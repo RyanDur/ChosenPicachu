@@ -5,9 +5,11 @@ import {DemoTopics} from './demo-topics';
 import {demoTab} from './demo-tab';
 import {DemoTabs} from './DemoTabs';
 import {TabLink} from './TabLink';
+import {useShownTopic} from './useShownTopic';
 
-export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, children}) =>
-  <>
+export const DemosPage: FC<PropsWithChildren> = ({children}) => {
+  const topic = useShownTopic();
+  return <>
     <p className="demos-opening paragraph">
       Each tab below is one feature a page needs, and each adds one thing to the tabs before it.
       Start with <TabLink to={DemoTopics.accordions}>the accordions</TabLink> if HTML, CSS and JavaScript are
@@ -19,3 +21,4 @@ export const DemosPage: FC<PropsWithChildren<{topic: DemoTopics}>> = ({topic, ch
       {children}
     </section>
   </>;
+};
