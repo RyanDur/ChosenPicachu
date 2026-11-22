@@ -3,9 +3,4 @@
     stroke-width: var(--hairline-x-2);
     vector-effect: non-scaling-stroke;
   }
-
-  .secondary-box {
-    stroke-width: var(--hairline);
-    vector-effect: non-scaling-stroke;
-  }
 }

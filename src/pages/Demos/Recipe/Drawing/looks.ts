@@ -5,16 +5,16 @@ type Looks = {
 };
 
 const looksOf: Record<Kind, string> = {
-  piece: 'paper-filled drawn',
-  native: 'faded-mint-filled drawn',
-  unseen: 'hollow drawn',
-  clipped: 'hollow drawn',
-  clip: 'hollow drawn',
-  ring: 'approach-filled ring-drawn',
-  'unseen-ring': 'approach-filled ring-drawn',
-  topmost: 'paper-filled drawn'
+  piece: 'paper-filled drawn drawn-line',
+  native: 'faded-mint-filled drawn drawn-line',
+  unseen: 'hollow drawn drawn-line dashed-drawn',
+  clipped: 'hollow drawn drawn-line dashed-drawn',
+  clip: 'clip hollow drawn',
+  ring: 'ring approach-filled ring-drawn',
+  'unseen-ring': 'unseen-ring approach-filled ring-drawn',
+  topmost: 'topmost paper-filled drawn'
 };
 
 export const looks: Looks = {
-  worn: kind => `${kind} ${looksOf[kind]}`
+  worn: kind => looksOf[kind]
 };

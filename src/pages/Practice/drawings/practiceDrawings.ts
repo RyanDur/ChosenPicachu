@@ -55,9 +55,9 @@ const sizeAround = (boxes: Box[]): Size => ({
 
 const whereARuleLives = ((): Drawing<'wide' | 'stacked'> => {
   const inset = 6;
-  const folder = 'folder-box hollow drawn';
-  const group = 'group-box hollow drawn';
-  const file = 'file-box hollow drawn';
+  const folder = 'hollow drawn drawn-line';
+  const group = 'hollow drawn drawn-line';
+  const file = 'hollow drawn drawn-line';
   const sheet = 'sheet-box hollow drawn';
 
   const tokens = ['reset', 'colors', 'spacing'] as const;
@@ -124,7 +124,7 @@ const whereARuleLives = ((): Drawing<'wide' | 'stacked'> => {
 
   const frame = (boxes: Box[], {from, to}: Wears, siteStyle: string): string => framed('where-a-rule-lives', sizeAround(boxes), siteStyle,
     boxes.map(drawnBox).join('') +
-    `<line class="wears-line drawn dashed-drawn" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}"/>` +
+    `<line class="drawn drawn-line dashed-drawn" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}"/>` +
     caption('wears', {x: (from.x + to.x) / 2 + inset, y: (from.y + to.y) / 2}));
 
   return {
@@ -137,7 +137,7 @@ const whereARuleLives = ((): Drawing<'wide' | 'stacked'> => {
 const landmarkMap = ((): Drawing<'wide' | 'stacked' | 'phone'> => {
   const inset = 9;
   const landmark = 'landmark-box hollow drawn';
-  const secondary = 'secondary-box hollow drawn';
+  const secondary = 'hollow drawn drawn-line';
   const lastOnThePage = 'landmark-box paper-filled drawn dashed-drawn';
 
   const wide: Box[] = [

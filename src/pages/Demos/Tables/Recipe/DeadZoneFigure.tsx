@@ -8,10 +8,10 @@ export const DeadZoneFigure: FC = () =>
     neighbor’s width, or more when the neighbor is much the wider. Past it, the two switch. Coming back the other way,
     the dead zone is at the other edge.
   </>}>
-    <rect className="seat paper-filled drawn" x="10" y="20" width="110" height="70"/>
-    <rect className="seat paper-filled drawn" x="120" y="20" width="160" height="70"/>
-    <rect className="seat paper-filled drawn" x="280" y="20" width="90" height="70"/>
-    <rect className="seat paper-filled drawn" x="370" y="20" width="100" height="70"/>
+    <rect className="paper-filled drawn drawn-line" x="10" y="20" width="110" height="70"/>
+    <rect className="paper-filled drawn drawn-line" x="120" y="20" width="160" height="70"/>
+    <rect className="paper-filled drawn drawn-line" x="280" y="20" width="90" height="70"/>
+    <rect className="paper-filled drawn drawn-line" x="370" y="20" width="100" height="70"/>
     <rect className="faded-leather-filled" x="120" y="20" width="40" height="70"/>
     <rect className="faded-mint-filled" x="160" y="20" width="120" height="70"/>
     <text className="drawn-caption" x="65" y="60" textAnchor="middle">carried</text>
