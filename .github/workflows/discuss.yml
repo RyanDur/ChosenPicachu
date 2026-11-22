@@ -18,7 +18,7 @@ jobs:
       || (github.event.pull_request.state == 'open' && github.event.comment.in_reply_to_id
           && github.event.comment.user.type != 'Bot'
           && !contains(github.event.comment.body, 'Resolved by ruling.')
-          && !contains(github.event.comment.body, 'Carried to my next pull request.')
+          && !endsWith(github.event.comment.body, 'Carried to my next pull request.')
           && contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association))
     runs-on: ubuntu-26.04
     permissions:

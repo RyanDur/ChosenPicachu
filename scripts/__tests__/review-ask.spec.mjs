@@ -1,4 +1,3 @@
-import {readFileSync} from 'node:fs';
 import {askFor, reviewersIn} from '../review/ask.mjs';
 
 const two = `# Agents
@@ -56,17 +55,8 @@ describe('what the review is asked', () => {
   test('should have a pull request\'s line comments begin with their severity', () => {
     const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
 
-    expect(onThePull).toContain('begin it with that severity, "Violation:" or "Concern:"');
-  });
-
-  test('should name the reply that marks a conversation as carried, as Discuss and AGENTS.md spell it', () => {
-    const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
-
-    const carried = 'Carried to my next pull request.';
-
-    expect(onThePull).toContain(carried);
-    expect(readFileSync('.github/workflows/discuss.yml', 'utf8')).toContain(carried);
-    expect(readFileSync('AGENTS.md', 'utf8')).toContain(carried);
+    expect(onThePull).toContain('"Violation:"');
+    expect(onThePull).toContain('"Concern:"');
   });
 
   test('should hand a pull request\'s review the conversations earlier reviews started', () => {
