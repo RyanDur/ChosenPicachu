@@ -2,8 +2,6 @@ import {inOrder, ParentPosition, Position} from '../ReaderSettings';
 
 const all = inOrder.positions;
 
-export type {ParentPosition, Position};
-
 export type MeasuredFrom = 'nowhere' | 'own-place' | 'parent' | 'little-page' | 'view' | 'scroll-edge';
 
 const measuredFrom = (position: Position, parentPosition: ParentPosition): MeasuredFrom => {
