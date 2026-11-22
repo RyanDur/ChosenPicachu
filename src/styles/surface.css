@@ -458,6 +458,11 @@
   .alarm-ringed.focus-ringed:focus-visible {
     outline-offset: calc((var(--hairline-x-3) * 2 + var(--hairline-x-2)) * -1);
   }
+
+  .alarm-dashed-outline {
+    forced-color-adjust: none;
+    border-color: var(--highlight);
+  }
 }
 
 .handle-raised:has(.handle:enabled:hover) { box-shadow: var(--raised); }
