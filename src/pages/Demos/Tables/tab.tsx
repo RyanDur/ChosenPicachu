@@ -20,6 +20,6 @@ const TabContents: FC = () => <>
 export const Room: FC = () => {
   const part = useShownPart();
   return useShownTutorial().either(
-    tutorial => <TutorialPage tutorial={tutorial}/>,
+    () => <TutorialPage/>,
     () => part.either(shown => <PartPage part={shown}/>, () => <TabContents/>));
 };
