@@ -117,6 +117,32 @@ describe('the frame table', () => {
     expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('1');
   });
 
+  it('a number a trade moves is marked', async () => {
+    const feed = await listeningFeed();
+    vanillaFrame.stand({feed});
+    await feedIsSubscribed(feed);
+    broadcast(feed, [tradeFrame(100)]);
+    await waitFor(() => expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('1'));
+
+    broadcast(feed, [tradeFrame(101, 1700000001000)]);
+
+    await waitFor(() => expect(vanillaFrame.markOn('this minute', 'trades')).toBe('up'));
+  });
+
+  it('a mark clears from a number the next trade leaves as it is', async () => {
+    const feed = await listeningFeed();
+    vanillaFrame.stand({feed});
+    await feedIsSubscribed(feed);
+    broadcast(feed, [tradeFrame(100, 1700000000000, '0.01', 'bought')]);
+    await waitFor(() => expect(vanillaFrame.figure('this minute', 'trades')).toHaveTextContent('1'));
+    broadcast(feed, [tradeFrame(101, 1700000001000, '0.01', 'sold')]);
+    await waitFor(() => expect(vanillaFrame.markOn('this minute', 'sells')).toBe('up'));
+
+    broadcast(feed, [tradeFrame(102, 1700000002000, '0.01', 'bought')]);
+
+    await waitFor(() => expect(vanillaFrame.markOn('this minute', 'sells')).toBe('none'));
+  });
+
   it('the keyboard walks a column', async () => {
     vanillaFrame.stand();
 
