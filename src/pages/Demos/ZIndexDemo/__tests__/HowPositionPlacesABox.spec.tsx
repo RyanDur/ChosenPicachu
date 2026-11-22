@@ -1,18 +1,12 @@
-import {render, screen, within} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {render} from '@testing-library/react';
 import {Paths} from '@navigation';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt, pageFoot} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {positionExhibit, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const howPosition = 'z-index/how-position-places-a-box';
 const title = 'How position places a box';
-
-const choosePosition = async (position: string): Promise<void> =>
-  userEvent.click(within(screen.getByRole('group', {name: 'Second’s position is'})).getByRole('radio', {name: position}));
-
-const parentPills = (): HTMLElement | null => screen.queryByRole('group', {name: 'And its parent is'});
 
 describe('how position places a box, on its own page', () => {
   test('should say its place in the z-index book', async () => {
@@ -50,7 +44,7 @@ describe('how position places a box, on its own page', () => {
     render(<TestApp at={demosAt(howPosition, '?raised=second')}/>);
     const part = await explanation.part(title);
 
-    await choosePosition('absolute');
+    await positionExhibit.choosePosition('absolute');
 
     expect(explanation.linkNamed(part, 'positioned')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
@@ -59,18 +53,18 @@ describe('how position places a box, on its own page', () => {
     render(<TestApp at={demosAt(howPosition)}/>);
     await explanation.part(title);
 
-    await choosePosition('absolute');
+    await positionExhibit.choosePosition('absolute');
 
-    expect(parentPills()).toBeInTheDocument();
+    expect(positionExhibit.queryParentPills()).toBeInTheDocument();
   });
 
   test('should take the parent’s position away once Second is no longer absolute', async () => {
     render(<TestApp at={demosAt(howPosition)}/>);
     await explanation.part(title);
-    await choosePosition('absolute');
+    await positionExhibit.choosePosition('absolute');
 
-    await choosePosition('fixed');
+    await positionExhibit.choosePosition('fixed');
 
-    expect(parentPills()).not.toBeInTheDocument();
+    expect(positionExhibit.queryParentPills()).not.toBeInTheDocument();
   });
 });
