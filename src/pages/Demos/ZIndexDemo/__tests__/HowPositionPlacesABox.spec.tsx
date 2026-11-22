@@ -49,6 +49,13 @@ describe('how position places a box, on its own page', () => {
     expect(explanation.linkNamed(part, 'positioned')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 
+  test('should link flow, where a static Second is placed in it, to the page for why Third is on top with the raised card carried', async () => {
+    render(<TestApp at={demosAt(howPosition, '?raised=second')}/>);
+    const part = await explanation.part(title);
+
+    expect(explanation.linkNamed(part, 'flow')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
+  });
+
   test('should offer the parent’s position while Second is absolute', async () => {
     render(<TestApp at={demosAt(howPosition)}/>);
     await explanation.part(title);
@@ -123,4 +130,5 @@ describe('how position places a box, on its own page', () => {
 
     expect(positionExhibit.measuredFrom()).toHaveTextContent('Measured from: the top edge of the box that scrolls');
   });
+
 });

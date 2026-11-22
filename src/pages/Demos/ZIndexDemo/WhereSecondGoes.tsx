@@ -19,6 +19,7 @@ type Told = {
 
 const stackingContextLink = <TabLink to={DemoTopics.zIndex}>stacking context</TabLink>;
 const positionedLink = <PartTermLink part="why-third-is-on-top">positioned</PartTermLink>;
+const flowLink = <PartTermLink part="why-third-is-on-top">flow</PartTermLink>;
 const transformLink =
   <PartTermLink part="what-else-forms-a-stacking-context"><code className="monospaced">transform</code></PartTermLink>;
 
@@ -32,8 +33,8 @@ const whereWeMeetAnAbsoluteBox = 'A badge on a corner, a menu under its button, 
 const told: Record<MeasuredFrom, Told> = {
   nowhere: {
     story: <>Every box starts as <code className="monospaced">position: static</code>. The browser places it in the
-      flow, as a block or inline, and ignores <code className="monospaced">top</code> and <code
-      className="monospaced">left</code>.</>,
+      page’s {flowLink}, the run of boxes that make room for each other, and ignores <code
+      className="monospaced">top</code> and <code className="monospaced">left</code>.</>,
     whereWeMeetIt: 'Every box, until we say otherwise.',
     verdict: 'Second sits between First and Third. The 16px and 24px do nothing.',
     measuredFromWords: 'nowhere. The browser ignores top and left.',
