@@ -1,10 +1,4 @@
 .demo-tabs {
-  position: sticky;
-  top: var(--frame-reach, 0);
-  z-index: 1;
-  width: 100%;
-  overflow-x: auto;
-
   .tab-list {
     display: flex;
     gap: var(--base);
@@ -38,18 +32,12 @@
   }
 }
 
-.demo-tabs ~ * {
-  isolation: isolate;
-}
-
 :root:has(.demo-tabs) {
   --tab-bar-reach: var(--base-x-15_5);
-
-  scroll-padding-block-start: calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--base-x-2));
 }
 
 @media (600px < width <= 760px) and (height > 600px) {
-  .demo-tabs {
+  .tabs.demo-tabs {
     position: static;
 
     .tab-list {
@@ -75,7 +63,7 @@
     }
   }
 
-  :root:has(.demo-tabs) {
+  :root:has(.tabs.demo-tabs) {
     scroll-padding-block-start: calc(var(--frame-reach, 0px) + var(--base-x-2));
   }
 }
@@ -83,6 +71,5 @@
 @media (width <= 600px), (width <= 1100px) and (height <= 600px) {
   :root:has(.demo-tabs) {
     --tab-bar-reach: var(--base-x-5_5);
-    scroll-padding-block-start: var(--base-x-2);
   }
 }
