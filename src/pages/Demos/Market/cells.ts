@@ -1,4 +1,4 @@
-import {has, Maybe, maybe} from '@ryandur/sand';
+import {has, Maybe, maybe, nothing, some} from '@ryandur/sand';
 import {Labeled, Seated} from '@components/DragSortableTable/model';
 import {money} from './money';
 import {Lookback, LookbackTotals, Traded} from './trade-totals';
@@ -49,10 +49,11 @@ const from = (aggregate: LookbackTotals): Measures => ({
 });
 
 const directionOf = (was: Measure, now: Measure): Maybe<Moved> =>
-  maybe(was.value).mBind(old => maybe(now.value).map((value): Moved => value > old ? 'up' : 'down'));
+  maybe(was.value).mBind(old => maybe(now.value).mBind(value =>
+    value === old ? nothing() : some<Moved>(value > old ? 'up' : 'down')));
 
 const marked = (was: Measure, now: Measure): Measure =>
-  now.display === was.display ? now : directionOf(was, now).map(direction => ({...now, moved: direction})).orElse(now);
+  directionOf(was, now).map(direction => ({...now, moved: direction})).orElse(now);
 
 const markedAgainst = (was: Measures, now: Measures): Measures => ({
   lookback: now.lookback,
