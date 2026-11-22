@@ -60,6 +60,8 @@ export const vanillaFrame = {
   grip,
   figure: (lookback: string, column: string): HTMLElement =>
     within(row(lookback)).getAllByRole('cell')[columnOrder().indexOf(column) - 1],
+  markOn: (lookback: string, column: string): string =>
+    within(row(lookback)).getAllByRole('cell')[columnOrder().indexOf(column) - 1].dataset.moved ?? 'none',
   columnOrder,
   lookbackNames: (): string[] => screen.getAllByRole('rowheader').map(rowHeader => rowHeader.textContent.trim()),
   moveReport: (): HTMLElement => screen.getByRole('status', {name: 'move report'}),

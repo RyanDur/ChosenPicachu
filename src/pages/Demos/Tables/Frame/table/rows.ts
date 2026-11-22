@@ -1,6 +1,6 @@
 import {maybe, not} from '@ryandur/sand';
 import {grip} from '@components/DragSortableTable/model';
-import {cells} from '@pages/Demos/Market';
+import {cells, Moved} from '@pages/Demos/Market';
 import {MountedTable} from './table-state';
 import {orders} from './orders';
 import {keepingFocus} from './focus';
@@ -12,16 +12,26 @@ const named = (lane: HTMLTableRowElement): string =>
 const lanes = (body: HTMLTableSectionElement): ReadonlyMap<string, HTMLTableRowElement> =>
   new Map([...body.rows].map(lane => [named(lane), lane]));
 
+const marked = (cell: HTMLTableCellElement, moved?: Moved): void =>
+  maybe(moved).either(
+    direction => {
+      if (cell.dataset.moved !== direction) {
+        cell.dataset.moved = direction;
+      }
+    },
+    () => cell.removeAttribute('data-moved'));
+
 const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' | 'rows'>): void => {
   const order = frameColumns.shown(table);
   rows().forEach(row =>
     maybe(lanes.get(row.lookback.display)).map(lane =>
       frameColumns.sortable(table).forEach(measure => {
-        const text = cells.isMeasure(measure) ? row[measure].display : '';
         const cell = lane.cells[order.indexOf(measure)];
-        if (cell.textContent !== text) {
-          cell.textContent = text;
+        const shown: {display: string; moved?: Moved} = cells.isMeasure(measure) ? row[measure] : {display: ''};
+        if (cell.textContent !== shown.display) {
+          cell.textContent = shown.display;
         }
+        marked(cell, shown.moved);
       })));
 };
 
