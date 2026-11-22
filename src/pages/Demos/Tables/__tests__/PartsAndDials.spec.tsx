@@ -76,6 +76,28 @@ describe('the tables panel', () => {
     expect(partsIndex.addressesIn(await partsIndex.find())).toEqual(everyPart('?world=vanilla'));
   });
 
+  test('should offer beside a part to hide the parts, said as expanded', async () => {
+    render(<TestApp at={demosAt(theSlices)}/>);
+
+    expect(await tablesTab().partsFold('Hide parts', true)).toBeInTheDocument();
+  });
+
+  test('should leave focus on Show parts, said as collapsed, after Enter on Hide parts', async () => {
+    render(<TestApp at={demosAt(theSlices)}/>);
+
+    await tablesTab().enterOnHideParts();
+
+    expect(await tablesTab().partsFold('Show parts', false)).toHaveFocus();
+  });
+
+  test('should offer no way to hide the parts on the tab’s opening page', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    await partsIndex.find();
+
+    expect(tablesTab().partsFoldShown()).not.toBeInTheDocument();
+  });
+
   test('should list the parts once beside a tutorial', async () => {
     render(<TestApp at={demosAt(sortMenu)}/>);
 
