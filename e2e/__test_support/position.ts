@@ -1,5 +1,5 @@
 import type {Locator, Page} from '@playwright/test';
-import {maybe} from '@ryandur/sand';
+import {boxOf} from './box';
 import {pillSwitch} from './pills';
 import {siteFrame} from './site';
 
@@ -8,10 +8,8 @@ export type ParentPosition = 'position: relative' | 'not positioned';
 export type Spot = {x: number; y: number};
 export type Placed = Spot & {measuredFromFirstsHolder: boolean};
 
-const unmeasured = {x: Number.NaN, y: Number.NaN, width: 0, height: 0};
-
 const cornerOf = async (box: Locator): Promise<Spot> => {
-  const {x, y} = maybe(await box.boundingBox()).orElse(unmeasured);
+  const {x, y} = await boxOf(box);
   return {x, y};
 };
 
