@@ -1,5 +1,6 @@
 import {FC, ReactNode} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
+import {ThePart} from '@pages/Demos/the-part';
 import {PartOpening} from '@pages/Demos/PartOpening';
 import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
@@ -72,10 +73,12 @@ export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
   const onward = zIndexParts.nextOf(part).map((beside): Onward => besidePart(beside)).orElse(theNextTab);
   const {name, ordinal} = zIndexParts.told(part);
   const place = `${demoTab.names[DemoTopics.zIndex]} · part ${ordinal} of ${zIndexParts.inTheBook}`;
-  return <PartSection heading={name}>
-    <PartOpening place={place}>{partWritings[part].introduction}</PartOpening>
-    <PartPanel><PartsAndMinutes/></PartPanel>
-    <PartDemo wears={partWears[part]}>{partWritings[part].exhibitAndRuns}</PartDemo>
-    <PartFoot previous={behind} next={onward}/>
-  </PartSection>;
+  return <ThePart value={{heading: name, headingId: `${part}-heading`, place, previous: behind, next: onward}}>
+    <PartSection>
+      <PartOpening>{partWritings[part].introduction}</PartOpening>
+      <PartPanel><PartsAndMinutes/></PartPanel>
+      <PartDemo wears={partWears[part]}>{partWritings[part].exhibitAndRuns}</PartDemo>
+      <PartFoot/>
+    </PartSection>
+  </ThePart>;
 };

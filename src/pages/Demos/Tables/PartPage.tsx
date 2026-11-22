@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
+import {ThePart} from '@pages/Demos/the-part';
 import {PartOpening} from '@pages/Demos/PartOpening';
 import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
@@ -35,13 +36,13 @@ export const PartPage: FC<{readonly part: TablePart}> = ({part}) => {
   const Part = parts[part];
   const {previous, next} = usePartsBeside(part);
   const place = `${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`;
-  return <PartSection heading={name}>
-    <PartOpening place={place}><p className="paragraph">{introductions[part]}</p></PartOpening>
+  return <ThePart value={{heading: name, headingId: `${part}-heading`, place, previous, next}}><PartSection>
+    <PartOpening><p className="paragraph">{introductions[part]}</p></PartOpening>
     <PartPanel><PartsAndDials/></PartPanel>
     <PartDemo wears="tutorial-page tutorials">
       <Aggregations/>
       <Part/>
     </PartDemo>
-    <PartFoot previous={previous} next={next}/>
-  </PartSection>;
+    <PartFoot/>
+  </PartSection></ThePart>;
 };
