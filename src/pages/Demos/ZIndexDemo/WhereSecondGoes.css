@@ -65,6 +65,12 @@
         pointer-events: none;
     }
 
+    .page-ring {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+
     .sticking-edge {
         position: absolute;
         top: 0;

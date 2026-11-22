@@ -156,9 +156,7 @@ export const WhereSecondGoes: FC = () => {
       <section className="little-view transformed">
         {from === 'view' && <MeasuringDot/>}
         {from === 'scroll-edge' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
-        <section className={classNames('little-page focus-ringed',
-          from === 'little-page' && 'alarm-ringed')}
-        aria-label="The little page" tabIndex={0}>
+        <section className="little-page focus-ringed" aria-label="The little page" tabIndex={0}>
           {from === 'little-page' && <MeasuringDot/>}
           <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
           <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
@@ -175,6 +173,7 @@ export const WhereSecondGoes: FC = () => {
           </section>
           <FillerBoxes count={4}>more of the page</FillerBoxes>
         </section>
+        {from === 'little-page' && <span className="page-ring alarm-ringed" aria-hidden="true"/>}
       </section>
     </section>
     <output aria-label="where Second went" className="paragraph">{shown.verdict}</output>
