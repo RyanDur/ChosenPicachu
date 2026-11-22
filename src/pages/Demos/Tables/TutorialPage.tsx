@@ -39,7 +39,7 @@ export const TutorialPage: FC<{readonly tutorial: Tutorial}> = ({tutorial}) => {
   return <ThePart value={part}><PartSection>
     <PartOpening><p className="paragraph">{introductions[tutorial]}</p></PartOpening>
     <PartPanel><PartsAndDials/></PartPanel>
-    <PartDemo wears="tutorial-page">
+    <PartDemo className="tutorial-page">
       <Aggregations/>
       <p className="paragraph">
         This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,

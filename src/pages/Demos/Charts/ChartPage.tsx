@@ -70,7 +70,7 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   return <ThePart value={part}><PartSection>
     <PartOpening><p className="paragraph">{chartKinds.told[kind].says}</p></PartOpening>
     <PartPanel><PartsAndMinutes/></PartPanel>
-    <PartDemo wears="tutorials">
+    <PartDemo className="tutorials">
       <Chart/>
       <h3 className="title">let’s build this feature</h3>
       <p className="overview paragraph">
