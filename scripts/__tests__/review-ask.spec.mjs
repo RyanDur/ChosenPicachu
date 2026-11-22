@@ -1,3 +1,4 @@
+import {readFileSync} from 'node:fs';
 import {askFor, reviewersIn} from '../review/ask.mjs';
 
 const two = `# Agents
@@ -58,11 +59,14 @@ describe('what the review is asked', () => {
     expect(onThePull).toContain('begin it with that severity, "Violation:" or "Concern:"');
   });
 
-  test('should leave a carried concern out of a pull request\'s next review', () => {
+  test('should name the reply that marks a conversation as carried, as Discuss and AGENTS.md spell it', () => {
     const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
 
-    expect(onThePull).toContain('the finding is a concern and its conversation holds a reply');
-    expect(onThePull).toContain('"Carried to my next pull request."');
+    const carried = 'Carried to my next pull request.';
+
+    expect(onThePull).toContain(carried);
+    expect(readFileSync('.github/workflows/discuss.yml', 'utf8')).toContain(carried);
+    expect(readFileSync('AGENTS.md', 'utf8')).toContain(carried);
   });
 
   test('should hand a pull request\'s review the conversations earlier reviews started', () => {
