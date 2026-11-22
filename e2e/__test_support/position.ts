@@ -9,6 +9,8 @@ type ParentPosition = 'position: relative' | 'not positioned';
 type Spot = {x: number; y: number};
 type Placed = Spot & {measuredFromFirstsHolder: boolean};
 
+const aNotch = 100;
+
 const cornerOf = async (box: Locator): Promise<Spot> => {
   const {x, y} = await boxOf(box);
   return {x, y};
@@ -30,7 +32,7 @@ export const positionExhibit = (page: Page) => {
   };
   const wheelsTheLittlePage = async (pixels: number): Promise<void> => {
     await littlePage.hover();
-    await page.mouse.wheel(0, pixels);
+    for (let left = pixels; left > 0; left -= aNotch) await page.mouse.wheel(0, Math.min(aNotch, left));
   };
   const spotOf = async (name: string): Promise<Spot> => {
     const [namedCorner, pageCorner] = await Promise.all([
