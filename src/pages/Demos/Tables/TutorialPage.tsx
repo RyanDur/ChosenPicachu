@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
+import {ThePart} from '@pages/Demos/the-part';
 import {PartOpening} from '@pages/Demos/PartOpening';
 import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
@@ -34,8 +35,9 @@ export const TutorialPage: FC<{readonly tutorial: Tutorial}> = ({tutorial}) => {
   const to = tableParts.addressOf(tableTutorials.startingPart);
   const TutorialRecipe = recipes[tutorial];
   const place = `${demoTab.names[DemoTopics.tables]} · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`;
-  return <PartSection heading={tableTutorials.nameOf(tutorial)}>
-    <PartOpening place={place}><p className="paragraph">{introductions[tutorial]}</p></PartOpening>
+  const part = {heading: tableTutorials.nameOf(tutorial), headingId: `${tutorial}-heading`, place, previous, next};
+  return <ThePart value={part}><PartSection>
+    <PartOpening><p className="paragraph">{introductions[tutorial]}</p></PartOpening>
     <PartPanel><PartsAndDials/></PartPanel>
     <PartDemo wears="tutorial-page">
       <Aggregations/>
@@ -47,6 +49,6 @@ export const TutorialPage: FC<{readonly tutorial: Tutorial}> = ({tutorial}) => {
       </p>
       <TutorialRecipe/>
     </PartDemo>
-    <PartFoot previous={previous} next={next}/>
-  </PartSection>;
+    <PartFoot/>
+  </PartSection></ThePart>;
 };

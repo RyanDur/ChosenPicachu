@@ -3,13 +3,15 @@ import {Link} from 'react-router';
 import {DemoTopics} from './demo-topics';
 import {demoTab} from './demo-tab';
 import {useCarriedAddress} from './useCarriedAddress';
+import {useThePart} from './useThePart';
 import './PartFoot.css';
 
 export type Beside = {kind: 'part'; title: string; address: string} | {kind: 'tab'; topic: DemoTopics};
 export type Behind = Beside | {kind: 'first-part'};
 export type Onward = Beside | {kind: 'last-part-said'} | {kind: 'last-part-unsaid'};
 
-const PreviousSide: FC<{behind: Behind}> = ({behind}) => {
+const PreviousSide: FC = () => {
+  const behind = useThePart().previous;
   const carried = useCarriedAddress();
   switch (behind.kind) {
     case 'part':
@@ -23,7 +25,8 @@ const PreviousSide: FC<{behind: Behind}> = ({behind}) => {
   }
 };
 
-const NextSide: FC<{onward: Onward}> = ({onward}) => {
+const NextSide: FC = () => {
+  const onward = useThePart().next;
   const carried = useCarriedAddress();
   switch (onward.kind) {
     case 'part':
@@ -39,8 +42,8 @@ const NextSide: FC<{onward: Onward}> = ({onward}) => {
   }
 };
 
-export const PartFoot: FC<{previous: Behind; next: Onward}> = ({previous, next}) =>
+export const PartFoot: FC = () =>
   <nav className="part-foot silver-rule-above" aria-label="Parts, in order">
-    <PreviousSide behind={previous}/>
-    <NextSide onward={next}/>
+    <PreviousSide/>
+    <NextSide/>
   </nav>;

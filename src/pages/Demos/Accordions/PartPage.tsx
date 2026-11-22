@@ -1,5 +1,6 @@
 import {FC, ReactNode} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
+import {ThePart} from '@pages/Demos/the-part';
 import {PartOpening} from '@pages/Demos/PartOpening';
 import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
@@ -81,10 +82,12 @@ export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   const onward = accordionParts.nextOf(part).map((beside): Onward => besidePart(beside)).orElse(theLastPart);
   const place = `${demoTab.names[DemoTopics.accordions]} · part ${ordinal} of ${accordionParts.inTheBook}`;
   const {introduction, exhibitAndRuns, offersTheFoldDials} = partContents[part];
-  return <PartSection heading={name}>
-    <PartOpening place={place}>{introduction}</PartOpening>
-    <PartPanel><PartsAndDials offersTheFoldDials={offersTheFoldDials}/></PartPanel>
-    <PartDemo>{exhibitAndRuns}</PartDemo>
-    <PartFoot previous={behind} next={onward}/>
-  </PartSection>;
+  return <ThePart value={{heading: name, headingId: `${part}-heading`, place, previous: behind, next: onward}}>
+    <PartSection>
+      <PartOpening>{introduction}</PartOpening>
+      <PartPanel><PartsAndDials offersTheFoldDials={offersTheFoldDials}/></PartPanel>
+      <PartDemo>{exhibitAndRuns}</PartDemo>
+      <PartFoot/>
+    </PartSection>
+  </ThePart>;
 };

@@ -1,12 +1,12 @@
-import {FC, PropsWithChildren, useContext} from 'react';
-import {PartHeading} from './part-heading';
+import {FC, PropsWithChildren} from 'react';
+import {useThePart} from './useThePart';
 
-export const PartOpening: FC<PropsWithChildren<{readonly place: string}>> = ({place, children}) => {
-  const {id, heading} = useContext(PartHeading);
+export const PartOpening: FC<PropsWithChildren> = ({children}) => {
+  const {headingId, heading, place} = useThePart();
   return <header className="part-opening">
     <hgroup>
       <p className="caption uppercase">{place}</p>
-      <h2 id={id} className="title">{heading}</h2>
+      <h2 id={headingId} className="title">{heading}</h2>
     </hgroup>
     {children}
   </header>;

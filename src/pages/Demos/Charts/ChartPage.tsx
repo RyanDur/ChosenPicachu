@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
+import {ThePart} from '@pages/Demos/the-part';
 import {PartOpening} from '@pages/Demos/PartOpening';
 import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
@@ -65,8 +66,9 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const place = `${demoTab.names[DemoTopics.charts]} · part ${chartKinds.ordinalOf(kind)} of ${chartKinds.all.length}`;
   const behind = chartKinds.previous(kind).map((beside): Behind => besideKind(beside)).orElse(thePreviousTab);
   const onward = chartKinds.next(kind).map((beside): Onward => besideKind(beside)).orElse(theLastChart);
-  return <PartSection heading={`${name} tutorial`}>
-    <PartOpening place={place}><p className="paragraph">{chartKinds.told[kind].says}</p></PartOpening>
+  const part = {heading: `${name} tutorial`, headingId: `${kind}-heading`, place, previous: behind, next: onward};
+  return <ThePart value={part}><PartSection>
+    <PartOpening><p className="paragraph">{chartKinds.told[kind].says}</p></PartOpening>
     <PartPanel><PartsAndMinutes/></PartPanel>
     <PartDemo wears="tutorials">
       <Chart/>
@@ -99,6 +101,6 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
         </StoryDepth.Provider>
       </section>
     </PartDemo>
-    <PartFoot previous={behind} next={onward}/>
-  </PartSection>;
+    <PartFoot/>
+  </PartSection></ThePart>;
 };
