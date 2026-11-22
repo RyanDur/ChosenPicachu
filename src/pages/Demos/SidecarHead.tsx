@@ -2,7 +2,7 @@ import {FC, PropsWithChildren, useContext} from 'react';
 import {not} from '@ryandur/sand';
 import {useHydrated} from '@components';
 import {useControls} from './Controls';
-import {PanelFolds} from './panel-folds';
+import {BesideAPart} from './beside-a-part';
 import './TabSidecar.css';
 
 const PartsFold: FC = () => {
@@ -17,6 +17,6 @@ const PartsFold: FC = () => {
 };
 
 export const SidecarHead: FC<PropsWithChildren> = ({children}) => {
-  const folds = useContext(PanelFolds);
-  return <header className="sidecar-head">{children}{folds && <PartsFold/>}</header>;
+  const besideAPart = useContext(BesideAPart);
+  return <header className="sidecar-head">{children}{besideAPart && <PartsFold/>}</header>;
 };

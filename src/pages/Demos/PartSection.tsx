@@ -1,7 +1,7 @@
 import {FC, PropsWithChildren, ReactElement, ReactNode, useId} from 'react';
 import {maybe} from '@ryandur/sand';
 import {classNames} from '@components';
-import {PanelFolds} from './panel-folds';
+import {BesideAPart} from './beside-a-part';
 import './PartPage.css';
 
 type Opening = {
@@ -35,7 +35,7 @@ export const PartSection: FC<PropsWithChildren<PartSectionProps>> = (
       </hgroup>
       {introduction}
     </header>, () => <h2 id={headed} className="off-screen">{heading}</h2>)}
-    <PanelFolds value>{panel}</PanelFolds>
+    <BesideAPart value>{panel}</BesideAPart>
     <section className={classNames('part-body', wears)}>{children}</section>
     {foot}
   </section>;
