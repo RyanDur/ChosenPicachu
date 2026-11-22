@@ -11,7 +11,7 @@ import {ParentPosition, Position} from '../ReaderSettings';
 import {MeasuredFrom, secondPosition} from './second-position';
 import './WhereSecondGoes.css';
 
-type Told = {
+type Words = {
   story: ReactNode;
   whereWeMeetIt: string;
   verdict: string;
@@ -32,7 +32,7 @@ const formsOneByItself = <>It forms a {stackingContextLink} by itself.</>;
 
 const whereWeMeetAnAbsoluteBox = 'A badge on a corner, a menu under its button, a close button in a dialog’s corner.';
 
-const told: Record<MeasuredFrom, Told> = {
+const wordsFor: Record<MeasuredFrom, Words> = {
   nowhere: {
     story: <>Every box starts as <code className="monospaced">position: static</code>. The browser places it in the
       page’s {flowLink}, the run of boxes that make room for each other, and ignores <code
@@ -105,9 +105,9 @@ const FillerBoxes: FC<PropsWithChildren<{count: number}>> = ({count, children}) 
   <>{Array.from({length: count}, (_, at) =>
     <p key={at} className="little-box muted-dashed-outline rounded-corners caption">{children}</p>)}</>;
 
-const pageMarkup = (position: Position, from: MeasuredFrom): string[] => [
+const pageMarkup = (position: Position, measuredFrom: MeasuredFrom): string[] => [
   '<p>the top of the page</p>',
-  from === 'parent' ? '<section class="parent positioned">' : '<section class="parent">',
+  measuredFrom === 'parent' ? '<section class="parent positioned">' : '<section class="parent">',
   '  <p>First</p>',
   `  <p class="second ${position}">Second</p>`,
   '  <p>Third</p>',
@@ -118,23 +118,23 @@ const pageMarkup = (position: Position, from: MeasuredFrom): string[] => [
 const insideTheTransformedView = (markup: string[]): string[] =>
   ['<section class="little-view transformed">', ...markup.map(line => `  ${line}`), '</section>'];
 
-const markupShown = (position: Position, from: MeasuredFrom): Line[] => {
-  const markup = pageMarkup(position, from);
-  return (from === 'view' ? insideTheTransformedView(markup) : markup).map(lines.plain);
+const markupShown = (position: Position, measuredFrom: MeasuredFrom): Line[] => {
+  const markup = pageMarkup(position, measuredFrom);
+  return (measuredFrom === 'view' ? insideTheTransformedView(markup) : markup).map(lines.plain);
 };
 
-const rulesShown = (position: Position, from: MeasuredFrom): Line[] => lines.fromTheExhibit([
+const rulesShown = (position: Position, measuredFrom: MeasuredFrom): Line[] => lines.fromTheExhibit([
   ...carve.unit(whereSecondGoesCss, `.second.${position} {`),
-  ...from === 'parent' ? [lines.blank, ...carve.unit(whereSecondGoesCss, '.parent.positioned {')] : [],
-  ...from === 'view' ? [lines.blank, ...carve.unit(whereSecondGoesCss, '.little-view.transformed {')] : []
+  ...measuredFrom === 'parent' ? [lines.blank, ...carve.unit(whereSecondGoesCss, '.parent.positioned {')] : [],
+  ...measuredFrom === 'view' ? [lines.blank, ...carve.unit(whereSecondGoesCss, '.little-view.transformed {')] : []
 ]);
 
 const MeasuringDot: FC = () => <span className="measured-from alarm-dot" aria-hidden="true"/>;
 
 export const WhereSecondGoes: FC = () => {
   const {second: position, parent, change} = useControls();
-  const from = secondPosition.measuredFrom(position, parent);
-  const shown = told[from];
+  const measuredFrom = secondPosition.measuredFrom(position, parent);
+  const words = wordsFor[measuredFrom];
 
   return <figure className="where-second-goes">
     <p className="caption uppercase" aria-hidden="true">Second’s position is</p>
@@ -145,28 +145,28 @@ export const WhereSecondGoes: FC = () => {
       <PillGlider label="And its parent is" name="parent-position" choices={parentPositionChoices}
         chosen={parent} onChosen={next => change({parent: next})}/>
     </>}
-    <p className="paragraph">{shown.story}</p>
+    <p className="paragraph">{words.story}</p>
     <dl className="where-we-meet-it">
       <dt className="caption uppercase">Where we meet it</dt>
-      <dd className="paragraph">{shown.whereWeMeetIt}</dd>
+      <dd className="paragraph">{words.whereWeMeetIt}</dd>
     </dl>
-    <Snippet label="HTML" lines={markupShown(position, from)}/>
-    <Snippet label="CSS" lines={rulesShown(position, from)}/>
+    <Snippet label="HTML" lines={markupShown(position, measuredFrom)}/>
+    <Snippet label="CSS" lines={rulesShown(position, measuredFrom)}/>
     <section className="little-window card hairline-outline rounded-corners">
       <p className="little-bar caption uppercase trim">The window</p>
       <section className="little-view transformed">
-        {from === 'view' && <MeasuringDot/>}
-        {from === 'scroll-edge' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
+        {measuredFrom === 'view' && <MeasuringDot/>}
+        {measuredFrom === 'scroll-edge' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
         <section className="little-page focus-ringed" aria-label="The little page" tabIndex={0}>
-          {from === 'little-page' && <MeasuringDot/>}
+          {measuredFrom === 'little-page' && <MeasuringDot/>}
           <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
           <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
-            from === 'parent' && 'positioned alarm-ringed')}>
-            {from === 'parent' && <MeasuringDot/>}
+            measuredFrom === 'parent' && 'positioned alarm-ringed')}>
+            {measuredFrom === 'parent' && <MeasuringDot/>}
             <p className="little-box plan-blue hairline-outline rounded-corners">First</p>
             <p className={classNames('second little-box plan-mint hairline-outline rounded-corners', position)}>
               Second
-              {from === 'own-place' &&
+              {measuredFrom === 'own-place' &&
                 <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
             </p>
             <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
@@ -174,13 +174,13 @@ export const WhereSecondGoes: FC = () => {
           </section>
           <FillerBoxes count={4}>more of the page</FillerBoxes>
         </section>
-        {from === 'little-page' && <span className="page-ring alarm-ringed" aria-hidden="true"/>}
+        {measuredFrom === 'little-page' && <span className="page-ring alarm-ringed" aria-hidden="true"/>}
       </section>
     </section>
-    <output aria-label="where Second went" className="paragraph">{shown.verdict}</output>
+    <output aria-label="where Second went" className="paragraph">{words.verdict}</output>
     <output aria-label="what Second is measured from" className="paragraph">
-      {`Measured from: ${shown.measuredFromWords}`}</output>
-    <p className="paragraph">{shown.stackingContext} Scroll the little page to see fixed and sticky at work.</p>
+      {`Measured from: ${words.measuredFromWords}`}</output>
+    <p className="paragraph">{words.stackingContext} Scroll the little page to see fixed and sticky at work.</p>
     <figcaption className="caption"><strong className="bold">Where Second goes.</strong> Give Second each position in
       turn and see where it goes, and what First and Third do.</figcaption>
   </figure>;
