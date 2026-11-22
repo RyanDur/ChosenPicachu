@@ -55,7 +55,7 @@ describe('how position places a box, on its own page', () => {
 
     await positionExhibit.choose('absolute');
 
-    expect(positionExhibit.queryParentPills()).toBeInTheDocument();
+    expect(positionExhibit.parentPills()).toBeInTheDocument();
   });
 
   test('should take the parent’s position away once Second is no longer absolute', async () => {
