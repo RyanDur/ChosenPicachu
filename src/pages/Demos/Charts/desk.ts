@@ -28,7 +28,8 @@ const seatedBy = (kind: ChartKind, name: string): Seating => {
 };
 
 const seatingOf = (entry: string): Maybe<Seating> => {
-  const [kind, period = ''] = entry.split(':');
+  const [named, period = ''] = entry.split(':');
+  const kind = named.trim();
   return chartKinds.is(kind) ? some(seatedBy(kind, period.trim())) : nothing();
 };
 
