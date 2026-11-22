@@ -11,16 +11,16 @@ type Props = {
   lines: readonly Line[];
 };
 
-type Source = {path: string; url: string; owner?: string; first: number; last: number};
+type Source = {path: string; url: string; owner?: string; first: number; last: number; fromTheExhibit: boolean};
 
 const sourcesOf = (lines: readonly Line[]): Source[] =>
-  lines.reduce<Source[]>((sources, {from}) => maybe(from).map(({file: {path, url, owner}, line}) => {
+  lines.reduce<Source[]>((sources, {from}) => maybe(from).map(({file: {path, url, owner}, line, kind}) => {
     const known = sources.find(source => source.path === path);
     return known
       ? sources.map(source => source === known
         ? {...known, first: Math.min(known.first, line), last: Math.max(known.last, line)}
         : source)
-      : [...sources, {path, url, owner, first: line, last: line}];
+      : [...sources, {path, url, owner, first: line, last: line, fromTheExhibit: kind === 'exhibit'}];
   }).orElse(sources), []);
 
 const roots = ['src', 'lib'];
@@ -49,11 +49,17 @@ const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
   call: 'call-ink'
 };
 
-const takenFromTheExhibit = (lines: readonly Line[]): boolean => lines.some(({from}) => from?.kind === 'exhibit');
+const FileLink: FC<{source: Source}> = ({source: {path, url, owner, first, last}}) =>
+  <a className="signpost reachable" href={`${url}#L${first}-L${last}`} target="_blank" rel="noreferrer">
+    {nameOf(path, owner)} on GitHub</a>;
+
+const takenFromTheExhibit = (files: readonly Source[]): string =>
+  `Taken from the exhibit on this page. The rest of the site doesn’t use ${files.length > 1 ? 'them' : 'it'}.`;
 
 export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
-  const fromTheExhibit = takenFromTheExhibit(lines);
+  const exhibitFiles = sources.filter(({fromTheExhibit}) => fromTheExhibit);
+  const sharedFiles = sources.filter(({fromTheExhibit}) => not(fromTheExhibit));
   const indented = lines.map(({text}) => splitIndent(text));
   const inked = excerpts.tokensOf(label, lines.map((line, at) => ({...line, text: indented[at].code})));
   return <figure className="sample">
@@ -70,11 +76,10 @@ export const Snippet: FC<Props> = ({label, lines}) => {
       })}</code>
     </pre>
     <figcaption className="sources caption ink">
-      {sources.map(({path, url, owner, first, last}) =>
-        <a className="signpost reachable" href={`${url}#L${first}-L${last}`} target="_blank" rel="noreferrer"
-          key={path}>{nameOf(path, owner)} on GitHub</a>)}
-      {fromTheExhibit && 'Taken from the exhibit on this page. The rest of the site doesn’t use it.'}
-      {not(has(sources)) && not(fromTheExhibit) && 'Written for this page, not taken from the site’s code.'}
+      {exhibitFiles.map(source => <FileLink source={source} key={source.path}/>)}
+      {has(exhibitFiles) && takenFromTheExhibit(exhibitFiles)}
+      {sharedFiles.map(source => <FileLink source={source} key={source.path}/>)}
+      {not(has(sources)) && 'Written for this page, not taken from the site’s code.'}
     </figcaption>
   </figure>;
 };

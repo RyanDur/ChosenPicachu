@@ -7,6 +7,7 @@ import {CodeFile} from '../sample';
 
 const store = aSample('export const store = 1;\nexport const more = 2;\n', 'src/pages/Demos/store.ts');
 const shared = aSample('export type Store = {};\n', 'src/components/store.ts');
+const panel = aSample('export const panel = 3;\n', 'src/pages/Demos/panel.ts');
 
 describe('a code sample', () => {
   test('should name the file it was taken from, and link to it on GitHub', () => {
@@ -86,6 +87,28 @@ describe('a code sample', () => {
     ]}/>);
 
     expect(codeSample.fileNames()).toEqual(['Demos/store.ts on GitHub', 'components/store.ts on GitHub']);
+  });
+
+  test('should say what the exhibit’s files are under them, before it names the site’s files', () => {
+    render(<Snippet label="TS" lines={[
+      ...carve.between(shared, 'export type Store', 'export type Store'),
+      ...lines.fromTheExhibit(carve.between(store, 'export const store', 'export const store'))
+    ]}/>);
+
+    expect(codeSample.captionInOrder()).toEqual([
+      'Demos/store.ts on GitHub',
+      expect.stringMatching(/^Taken from the exhibit on this page\./),
+      'components/store.ts on GitHub'
+    ]);
+  });
+
+  test('should say the rest of the site uses none of them when a sample takes from two of the exhibit’s files', () => {
+    render(<Snippet label="TS" lines={[
+      ...lines.fromTheExhibit(carve.between(store, 'export const store', 'export const store')),
+      ...lines.fromTheExhibit(carve.between(panel, 'export const panel', 'export const panel'))
+    ]}/>);
+
+    expect(codeSample.source()).toContain('The rest of the site doesn’t use them.');
   });
 
   test('should name what a lowercase folder sits inside, since it is a module of that component', () => {
