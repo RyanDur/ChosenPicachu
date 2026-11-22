@@ -66,7 +66,7 @@ describe('the top layer', () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');
 
-    expect(await zIndexTab.findStep('Overlap')).toBeChecked();
+    expect(await zIndexTab.findStep('1 · Overlap')).toBeChecked();
   });
 
   test('the button on part one’s pile spreads the cards and offers to collapse them', async () => {
