@@ -15,6 +15,7 @@ import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {format} from 'date-fns';
 import {tradeHistoryRefuses} from '@__test_support/server';
 import {blurFocusOnMoves} from '@__test_support/focus';
+import {outOfReadingOrder} from '@__test_support/reading-order';
 
 describe('a list of charts', () => {
   test('the trader starts with one chart', async () => {
@@ -25,6 +26,57 @@ describe('a list of charts', () => {
 
     expect(await chartsDesk.findChart('live trades')).toBeVisible();
     expect(chartsDesk.missingChart('candles')).not.toBeInTheDocument();
+  });
+
+  test('an address with a name the page doesn’t know and a repeat seats each chart it knows once', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('charts', '?charts=pie,bogus,pie,candles:day')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect((await chartsDesk.findDoorways()).map(doorway => doorway.textContent))
+      .toEqual(['Pie tutorial', 'Candles tutorial']);
+  });
+
+  test('an address with a name the page doesn’t know and a repeat says what the page left out', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('charts', '?charts=pie,bogus,pie,candles:day')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await chartsDesk.findLeftOut())
+      .toHaveTextContent(/^What the page left out: “bogus” isn’t a chart\. Pie was already on the desk\.$/);
+  });
+
+  test('what the page left out is read after the charts', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('charts', '?charts=pie,bogus')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    const told = await chartsDesk.findLeftOut();
+    expect(outOfReadingOrder([await chartsDesk.findChartList(), told])).toEqual([]);
+  });
+
+  test('an address naming no chart the page knows says the price line stands in', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('charts', '?charts=bogus')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await chartsDesk.findLeftOut()).toHaveTextContent(
+      /^What the page left out: “bogus” isn’t a chart\. No chart was left, so the page shows the price line\.$/
+    );
+  });
+
+  test('an address naming each chart once says nothing was left out', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('charts', '?charts=pie,candles:day')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+    await chartsDesk.findDoorways();
+
+    expect(chartsDesk.leftOutShown()).not.toBeInTheDocument();
   });
 
   test('the trader can add a chart, and it goes to the front of the list', async () => {

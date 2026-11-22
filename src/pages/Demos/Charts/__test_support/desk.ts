@@ -110,6 +110,14 @@ export const chartsDesk = {
   size: (): Promise<HTMLElement> => screen.findByText(sizeLine),
   sizeIn: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByText(sizeLine),
   findChartList: (): Promise<HTMLElement> => screen.findByRole('list', {name: 'charts'}),
+  findDoorways: async (): Promise<HTMLElement[]> =>
+    within(await screen.findByRole('list', {name: 'charts'})).findAllByRole('link', {name: / tutorial$/}),
+  findLeftOut: async (): Promise<HTMLElement> => {
+    const line = (await screen.findByText('What the page left out:')).parentElement;
+    if (line) return line;
+    throw new Error('what the page left out sits in no line');
+  },
+  leftOutShown: (): HTMLElement | null => screen.queryByText('What the page left out:'),
   regionsNamed: (name: RegExp): HTMLElement[] => screen.queryAllByRole('region', {name}),
   page: (name: string): HTMLElement => screen.getByRole('region', {name}),
   findPage: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}),
