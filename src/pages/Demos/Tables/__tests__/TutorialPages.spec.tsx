@@ -87,7 +87,7 @@ describe('the table tutorials, each on its own page', () => {
     ]);
   });
 
-  test('the last tutorial’s page leads back and nowhere on, as the last part of every book does', async () => {
+  test('the last tutorial’s page leads back and nowhere on, since tables is the last tab', async () => {
     render(<TestApp at={demosAt('tables/resize', '?world=vanilla')}/>);
 
     expect(await pageFoot.leadsOn()).toEqual([
