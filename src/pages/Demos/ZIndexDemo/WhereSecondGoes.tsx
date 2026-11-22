@@ -96,12 +96,14 @@ const parentPositionChoices: Choice<ParentPosition>[] = [
   {words: 'not positioned', value: 'not-positioned'}
 ];
 
-const filled = (count: number, words: ReactNode): ReactNode[] => Array.from({length: count}, (_, at) =>
-  <p className="little-box muted-dashed-outline rounded-corners caption" key={at}>{words}</p>);
+const FilledBox: FC<PropsWithChildren> = ({children}) =>
+  <p className="little-box muted-dashed-outline rounded-corners caption">{children}</p>;
 
-const FilledParent: FC<PropsWithChildren> = ({children}) => <>{filled(6, children)}</>;
+const FilledParent: FC<PropsWithChildren> = ({children}) =>
+  <>{Array.from({length: 6}, (_, at) => <FilledBox key={at}>{children}</FilledBox>)}</>;
 
-const FilledPage: FC<PropsWithChildren> = ({children}) => <>{filled(4, children)}</>;
+const FilledPage: FC<PropsWithChildren> = ({children}) =>
+  <>{Array.from({length: 4}, (_, at) => <FilledBox key={at}>{children}</FilledBox>)}</>;
 
 const pageMarkup = (position: Position, measuredFromTheParent: boolean): string[] => [
   '<p>the top of the page</p>',
