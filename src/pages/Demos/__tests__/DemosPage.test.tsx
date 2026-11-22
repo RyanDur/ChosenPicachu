@@ -31,20 +31,20 @@ describe('The Demos page', () => {
     expect(await demoTabs.names()).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
   });
 
-  test('a part’s page opens on the part, with no Demos introduction before it', async () => {
+  test('a part’s page should open with the Demos introduction above its tabs', async () => {
     render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
 
     await demoPage.findTitle('Why 9999 still loses');
 
-    expect(demoPage.introductionIfAny()).not.toBeInTheDocument();
+    expect(demoPage.introduction()).toBeInTheDocument();
   });
 
-  test('a tables tutorial’s page opens on the tutorial, with no Demos introduction before it', async () => {
+  test('a tables tutorial’s page should open with the Demos introduction above its tabs', async () => {
     render(<TestApp at={demosAt('tables/menu')}/>);
 
     await demoPage.findTitle('Demos Tables · Sort menu');
 
-    expect(demoPage.introductionIfAny()).not.toBeInTheDocument();
+    expect(demoPage.introduction()).toBeInTheDocument();
   });
 
   test('the Tables tab opens with the Demos introduction above its tabs', async () => {
