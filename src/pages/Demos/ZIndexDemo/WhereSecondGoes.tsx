@@ -1,4 +1,4 @@
-import {FC, ReactNode, useState} from 'react';
+import {FC, PropsWithChildren, ReactNode, useState} from 'react';
 import {not} from '@ryandur/sand';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {classNames} from '@components';
@@ -96,8 +96,12 @@ const parentPositionChoices: Choice<ParentPosition>[] = [
   {words: 'not positioned', value: 'not-positioned'}
 ];
 
-const Fillers: FC<{words: string; count: number}> = ({words, count}) => <>{Array.from({length: count}, (_, at) =>
-  <p className="little-box muted-dashed-outline rounded-corners caption" key={at}>{words}</p>)}</>;
+const filled = (count: number, words: ReactNode): ReactNode[] => Array.from({length: count}, (_, at) =>
+  <p className="little-box muted-dashed-outline rounded-corners caption" key={at}>{words}</p>);
+
+const FilledParent: FC<PropsWithChildren> = ({children}) => <>{filled(6, children)}</>;
+
+const FilledPage: FC<PropsWithChildren> = ({children}) => <>{filled(4, children)}</>;
 
 const pageMarkup = (position: Position, measuredFromTheParent: boolean): string[] => [
   '<p>the top of the page</p>',
@@ -168,9 +172,9 @@ export const WhereSecondGoes: FC = () => {
                 <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
             </p>
             <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
-            <Fillers words="more inside the parent" count={6}/>
+            <FilledParent>more inside the parent</FilledParent>
           </section>
-          <Fillers words="more of the page" count={4}/>
+          <FilledPage>more of the page</FilledPage>
         </section>
       </section>
     </section>
