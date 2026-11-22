@@ -214,6 +214,16 @@ describe('how the known height works', () => {
     expect(explanation.sampleFilesBeside(folded, threeParts)).toEqual([['Accordions/InclusiveAccordion.tsx on GitHub']]);
   });
 
+  test('should link the foot shadow’s rule to the site’s surface style sheet, after the exhibit’s own file', async () => {
+    render(<TestApp at={demosAt(remembers)}/>);
+
+    const folded = recipeFolds.story(await explanation.part(title), knownHeightWorks);
+
+    expect(explanation.sampleCaptionsBeside(folded, /That class paints a shadow at the section’s foot/)).toEqual([
+      expect.stringMatching(/^Accordions\/Accordions\.css on GitHub\s*Taken from the exhibit on this page\..*styles\/surface\.css on GitHub$/)
+    ]);
+  });
+
   test('should show, with exclusive chosen, the build’s source beside the fold’s run linked to its file', async () => {
     render(<TestApp at={demosAt(remembers, '?type=exclusive')}/>);
 
