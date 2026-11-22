@@ -131,4 +131,59 @@ describe('how position places a box, on its own page', () => {
     expect(positionExhibit.measuredFrom()).toHaveTextContent('Measured from: the top edge of the box that scrolls');
   });
 
+  test('should say a static Second sits between First and Third', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+    await positionExhibit.choose('relative');
+
+    await positionExhibit.choose('static');
+
+    expect(positionExhibit.whereSecondWent()).toHaveTextContent('Second sits between First and Third. The 16px and 24px do nothing.');
+  });
+
+  test('should say a relative Second moves and leaves its old place open', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await positionExhibit.choose('relative');
+
+    expect(positionExhibit.whereSecondWent()).toHaveTextContent('Second moves 16px down and 24px right. Its old place stays open, and Third does not move.');
+  });
+
+  test('should say an absolute Second with a positioned parent leaves the flow for the parent’s corner', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await positionExhibit.choose('absolute');
+
+    expect(positionExhibit.whereSecondWent()).toHaveTextContent('Second leaves the flow, and Third moves up into its place. Second sits 16px down and 24px in from the parent’s corner, drawn over First. It scrolls with the page.');
+  });
+
+  test('should say an absolute Second with no positioned parent goes to the page’s corner', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+    await positionExhibit.choose('absolute');
+
+    await positionExhibit.chooseParent('not positioned');
+
+    expect(positionExhibit.whereSecondWent()).toHaveTextContent('Second sits 16px down and 24px in from the page’s corner, over the top of the page and outside its parent. It still scrolls with the page.');
+  });
+
+  test('should say a fixed Second stays put in the window', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await positionExhibit.choose('fixed');
+
+    expect(positionExhibit.whereSecondWent()).toHaveTextContent('Second leaves the flow and stays put in the window while the page scrolls under it.');
+  });
+
+  test('should say a sticky Second stays at the top until its parent leaves', async () => {
+    render(<TestApp at={demosAt(howPosition)}/>);
+    await explanation.part(title);
+
+    await positionExhibit.choose('sticky');
+
+    expect(positionExhibit.whereSecondWent()).toHaveTextContent('Second scrolls with the page, then stays at the top while the rest of its parent scrolls under it. It leaves when its parent does.');
+  });
 });

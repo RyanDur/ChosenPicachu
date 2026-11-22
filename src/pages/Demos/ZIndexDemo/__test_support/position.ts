@@ -12,6 +12,7 @@ export const positionExhibit = {
   chooseParent: async (parentPillWords: ParentPillWords): Promise<void> =>
     userEvent.click(within(pillsOf('And its parent is')).getByRole('radio', {name: parentPillWords})),
   measuredFrom: (): HTMLElement => screen.getByRole('status', {name: 'what Second is measured from'}),
+  whereSecondWent: (): HTMLElement => screen.getByRole('status', {name: 'where Second went'}),
   parentPills: (): HTMLElement => pillsOf('And its parent is'),
   queryParentPills: (): HTMLElement | null => screen.queryByRole('group', {name: 'And its parent is'})
 };
