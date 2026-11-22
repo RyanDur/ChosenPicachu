@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {accordions, chartsPage, siteFrame} from './__test_support';
+import {accordions, boxOf, chartsPage, siteFrame} from './__test_support';
 
 test('the accordion labels survive a visit to the streaming charts', async ({page}) => {
   await chartsPage(page).scriptedMarket([50000, 50001]);
@@ -47,5 +47,22 @@ test.describe('a reader on a phone', {tag: '@iPhone'}, () => {
     await expect(current).toHaveAttribute('aria-current', 'page');
     await expect(row.getByRole('link', {name: 'Previous tab, Z-index'})).toBeVisible();
     await expect(row.getByRole('link', {name: 'Next tab, Charts'})).toBeVisible();
+  });
+});
+
+test.describe('a reader on an upright tablet', {tag: ['@iPadUpright', '@iPad11Upright']}, () => {
+  test('a shared link to a step shows the step below the tab row, not under it', async ({page}) => {
+    await page.goto('demos/z-index/lets-build-this-feature/#step-slide-in');
+    await siteFrame(page).hydrated();
+    const step = page.getByRole('group', {name: 'The user can have multiple banners'}).getByRole('listitem')
+      .filter({has: page.getByRole('heading', {name: 'Slide in from off screen'})}).first();
+    await expect(step).toBeFocused();
+    const row = page.getByRole('navigation', {name: 'demos'});
+    const gapBelowTheRow = async (): Promise<number> => {
+      const [rowBox, stepBox] = await Promise.all([boxOf(row), boxOf(step)]);
+      return stepBox.y - (rowBox.y + rowBox.height);
+    };
+
+    await expect.poll(gapBelowTheRow).toBeGreaterThanOrEqual(0);
   });
 });
