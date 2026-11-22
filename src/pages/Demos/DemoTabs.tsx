@@ -9,12 +9,12 @@ import './DemoTabs.css';
 const DemoTab: FC<{topic: DemoTopics; current: DemoTopics}> = ({topic, current}) => {
   const carried = useCarriedAddress();
   const {pathname} = useLocation();
-  const adds = useId();
+  const point = useId();
   return <li className="demo-tab caption field attentive backdrop-underlined">
-    <Link to={carried(demoTab.address(topic))} preventScrollReset aria-describedby={adds}
+    <Link to={carried(demoTab.address(topic))} preventScrollReset aria-describedby={point}
       aria-current={topic === current ? demoTab.currentAt(pathname, topic) : undefined}
       className="demo-tab-name body-size bold ink void-dot-before reachable">{demoTab.names[topic]}</Link>
-    <span id={adds} className="balanced">{demoTab.adds[topic]}</span>
+    <span id={point} className="balanced">{demoTab.points[topic]}</span>
   </li>;
 };
 

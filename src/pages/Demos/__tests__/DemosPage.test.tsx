@@ -31,15 +31,15 @@ describe('The Demos page', () => {
     expect(await demoTabs.names()).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
   });
 
-  test('should say beside each tab’s name what that tab adds', async () => {
+  test('should say beside each tab’s name the point that tab makes', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    expect(await demoTabs.whatEachAdds()).toEqual([
-      ['Accordions', 'one fold, from HTML alone up to script'],
-      ['Z-index', 'adds a component, its state, an event and the top layer'],
-      ['Drag sort', 'adds the browser’s own drag and a key for every move'],
-      ['Charts', 'adds trades that keep arriving, checked where they enter'],
-      ['Tables', 'builds one feature from those parts']
+    expect(await demoTabs.points()).toEqual([
+      ['Accordions', 'HTML first, then CSS, and script only when needed'],
+      ['Z-index', 'a bigger number isn’t the fix; the stacking context decides'],
+      ['Drag sort', 'the browser’s own drag, and script for what it lacks'],
+      ['Charts', 'a chart is arithmetic over data the page already holds'],
+      ['Tables', 'the arrangement is the state, and the data never moves']
     ]);
   });
 

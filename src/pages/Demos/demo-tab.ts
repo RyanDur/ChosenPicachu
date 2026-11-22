@@ -19,12 +19,12 @@ const names: Record<DemoTopics, string> = {
   [DemoTopics.tables]: 'Tables'
 };
 
-const adds: Record<DemoTopics, string> = {
-  [DemoTopics.accordions]: 'one fold, from HTML alone up to script',
-  [DemoTopics.zIndex]: 'adds a component, its state, an event and the top layer',
-  [DemoTopics.dragAndDrop]: 'adds the browser’s own drag and a key for every move',
-  [DemoTopics.charts]: 'adds trades that keep arriving, checked where they enter',
-  [DemoTopics.tables]: 'builds one feature from those parts'
+const points: Record<DemoTopics, string> = {
+  [DemoTopics.accordions]: 'HTML first, then CSS, and script only when needed',
+  [DemoTopics.zIndex]: 'a bigger number isn’t the fix; the stacking context decides',
+  [DemoTopics.dragAndDrop]: 'the browser’s own drag, and script for what it lacks',
+  [DemoTopics.charts]: 'a chart is arithmetic over data the page already holds',
+  [DemoTopics.tables]: 'the arrangement is the state, and the data never moves'
 };
 
 const formerTabs: ReadonlyMap<string, DemoTopics> = new Map([['dragAndDrop', DemoTopics.dragAndDrop]]);
@@ -40,8 +40,8 @@ type DemoTab = {
   addressedAt: (pathname: string) => Maybe<DemoTopics>;
   currentAt: (pathname: string, topic: DemoTopics) => 'page' | 'true';
   names: Record<DemoTopics, string>;
-  adds: Record<DemoTopics, string>;
+  points: Record<DemoTopics, string>;
   topicOf: (tab?: string) => DemoTopics;
 };
 
-export const demoTab: DemoTab = {address, addressedAt, currentAt, names, adds, topicOf};
+export const demoTab: DemoTab = {address, addressedAt, currentAt, names, points, topicOf};
