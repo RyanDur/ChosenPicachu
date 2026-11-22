@@ -4,4 +4,6 @@ import {ChartsSize} from './ChartsSize';
 import {PartsIndex} from './PartsIndex';
 
 export const PartsAndMinutes: FC<{readonly titled?: boolean}> = ({titled = false}) =>
-  <TabSidecar label={titled ? 'parts and minutes' : undefined}><ChartsSize/><PartsIndex titled={titled}/></TabSidecar>;
+  <TabSidecar label={titled ? 'parts and minutes' : undefined} size={<ChartsSize/>}>
+    <PartsIndex titled={titled}/>
+  </TabSidecar>;

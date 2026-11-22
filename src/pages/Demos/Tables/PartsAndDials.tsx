@@ -5,8 +5,7 @@ import {TablesSize} from './TablesSize';
 import {WorldGlider, WorldNote} from './World';
 
 export const PartsAndDials: FC<{readonly label?: string}> = ({label}) =>
-  <TabSidecar label={label}>
-    <TablesSize/>
+  <TabSidecar label={label} size={<TablesSize/>}>
     <PartsIndex/>
     <WorldGlider/>
     <WorldNote/>
