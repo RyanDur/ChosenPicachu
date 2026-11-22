@@ -22,7 +22,7 @@ const header = (name: string): HTMLElement => screen.getByRole('columnheader', {
 const row = (lookback: string): HTMLElement => screen.getByRole('row', {name: new RegExp(lookback)});
 const numberedGrip = (rowNumber: number): HTMLElement => screen.getByRole('button', {name: `move row ${rowNumber}`});
 const grip = (lookback: string): HTMLElement => within(row(lookback)).getByRole('button', {name: /move row/});
-const figure = (lookback: string, column: string): HTMLElement =>
+const cell = (lookback: string, column: string): HTMLElement =>
   within(row(lookback)).getAllByRole('cell')[columnOrder().indexOf(column) - 1];
 const columnOrder = (): string[] => screen.getAllByRole('columnheader').map(column => column.getAttribute('aria-label') ?? '');
 const menuItem = (column: string, words: string): HTMLElement =>
@@ -61,9 +61,9 @@ export const vanillaFrame = {
   header,
   row,
   grip,
-  figure,
-  markOn: (lookback: string, column: string): string => moved.heardIn(figure(lookback, column)),
-  numberIn: (lookback: string, column: string): string => moved.numberIn(figure(lookback, column).textContent),
+  cell,
+  markOn: (lookback: string, column: string): string => moved.heardIn(cell(lookback, column)),
+  numberIn: (lookback: string, column: string): string => moved.numberIn(cell(lookback, column).textContent),
   columnOrder,
   lookbackNames: (): string[] => screen.getAllByRole('rowheader').map(rowHeader => rowHeader.textContent.trim()),
   moveReport: (): HTMLElement => screen.getByRole('status', {name: 'move report'}),
