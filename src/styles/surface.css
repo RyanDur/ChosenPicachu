@@ -458,7 +458,6 @@
   }
 
   .alarm-dashed-outline {
-    forced-color-adjust: none;
     border-color: var(--highlight);
   }
 }
