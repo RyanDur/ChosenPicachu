@@ -61,4 +61,8 @@
     z-index: 1;
     padding-block: var(--base-x-2) var(--base);
   }
+
+  .part-page:has(> .tab-sidecar.folded) > .part-body {
+    isolation: isolate;
+  }
 }
