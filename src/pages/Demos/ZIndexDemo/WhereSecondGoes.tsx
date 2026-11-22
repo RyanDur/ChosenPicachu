@@ -4,7 +4,7 @@ import {classNames} from '@components';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {carve, Line, lines, Snippet} from '../Recipe';
-import sheet from './WhereSecondGoes.css?sample';
+import whereSecondGoesCss from './WhereSecondGoes.css?sample';
 import {PartTermLink} from './PartTermLink';
 import {MeasuredFrom, ParentPosition, Position, secondPosition} from './second-position';
 import './WhereSecondGoes.css';
@@ -121,9 +121,9 @@ const markupShown = (position: Position, from: MeasuredFrom): Line[] => {
 };
 
 const rulesShown = (position: Position, from: MeasuredFrom): Line[] => lines.fromTheExhibit([
-  ...carve.unit(sheet, `.second.${position} {`),
-  ...from === 'parent' ? [lines.blank, ...carve.unit(sheet, '.parent.positioned {')] : [],
-  ...from === 'view' ? [lines.blank, ...carve.unit(sheet, '.little-view.transformed {')] : []
+  ...carve.unit(whereSecondGoesCss, `.second.${position} {`),
+  ...from === 'parent' ? [lines.blank, ...carve.unit(whereSecondGoesCss, '.parent.positioned {')] : [],
+  ...from === 'view' ? [lines.blank, ...carve.unit(whereSecondGoesCss, '.little-view.transformed {')] : []
 ]);
 
 const MeasuringDot: FC = () => <span className="measured-from alarm-dot" aria-hidden="true"/>;
