@@ -61,7 +61,7 @@ describe('what the review is asked', () => {
   test('should leave a carried concern out of a pull request\'s next review', () => {
     const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
 
-    expect(onThePull).toContain('the finding is a concern, no violation stands in that review');
+    expect(onThePull).toContain('the finding is a concern and its conversation holds a reply');
     expect(onThePull).toContain('"Carried to my next pull request."');
   });
 

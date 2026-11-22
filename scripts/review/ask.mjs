@@ -43,8 +43,8 @@ export const askFor = ({before, after, pull, reviewers}) => [
     'by the code at the head. Leave it out of the structured output when the code no longer has the problem, or when',
     'that code is unchanged and its conversation holds the reviewer\'s "Agreed." to an argument that the code is',
     'right as it stands, or a ruling by the repository\'s people, a reply that says "Resolved by ruling.", whatever',
-    'follows either, or when the finding is a concern, no violation stands in that review, and its conversation',
-    'holds a reply that says "Carried to my next pull request.".',
+    'follows either, or when the finding is a concern and its conversation holds a reply that says "Carried to my',
+    'next pull request.".',
     'Otherwise keep it in, resolved or not.'
   ]
 ].join(' ');
