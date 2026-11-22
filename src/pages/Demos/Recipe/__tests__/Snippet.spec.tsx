@@ -71,7 +71,7 @@ describe('a code sample', () => {
   test('should say a sample carved from the page’s exhibit was taken from it', () => {
     render(<Snippet label="TS" lines={lines.fromTheExhibit(carve.between(store, 'export const store', 'export const more'))}/>);
 
-    expect(codeSample.source()).toContain('Taken from the exhibit on this page. The rest of the site doesn’t use it.');
+    expect(codeSample.source()).toMatch(/^Demos\/store\.ts on GitHub\s*Taken from the exhibit on this page\.$/);
   });
 
   test('should link the file a sample carved from the page’s exhibit was taken from', () => {
@@ -99,13 +99,14 @@ describe('a code sample', () => {
       /^Demos\/store\.ts on GitHub\s*Taken from the exhibit on this page\..*components\/store\.ts on GitHub$/);
   });
 
-  test('should say the rest of the site uses none of them when a sample takes from two of the exhibit’s files', () => {
+  test('should say once, after both, that a sample taking from two of the exhibit’s files was taken from the exhibit', () => {
     render(<Snippet label="TS" lines={[
       ...lines.fromTheExhibit(carve.between(store, 'export const store', 'export const store')),
       ...lines.fromTheExhibit(carve.between(panel, 'export const panel', 'export const panel'))
     ]}/>);
 
-    expect(codeSample.source()).toContain('The rest of the site doesn’t use them.');
+    expect(codeSample.source())
+      .toMatch(/^Demos\/store\.ts on GitHub\s*Demos\/panel\.ts on GitHub\s*Taken from the exhibit on this page\.$/);
   });
 
   test('should not call a file the exhibit’s alone when the sample also takes it plainly', () => {
