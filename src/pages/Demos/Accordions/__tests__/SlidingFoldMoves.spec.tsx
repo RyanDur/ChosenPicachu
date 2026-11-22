@@ -75,11 +75,12 @@ describe('how a sliding fold moves, on its own page', () => {
     expect(explanation.sourcesBeside(part, /has a reduced-motion block with three rules/)).toEqual(['styles/reset.css on GitHub']);
   });
 
-  test('should lead back to part five’s page, by number and title, with the fold choices carried, and on to no part after the last', async () => {
+  test('should lead back to part five’s page, by number and title, and on to the z-index tab, with the fold choices carried', async () => {
     render(<TestApp at={demosAt(slidingFold, build)}/>);
 
     expect(await pageFoot.leadsOn()).toEqual([
-      ['Previous: 5. What the platform gives now', demosAt('accordions/what-the-platform-gives-now', build)]
+      ['Previous: 5. What the platform gives now', demosAt('accordions/what-the-platform-gives-now', build)],
+      ['Next tab: Z-index', demosAt('z-index', build)]
     ]);
   });
 

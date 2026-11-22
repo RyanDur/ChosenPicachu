@@ -864,13 +864,14 @@ describe('a chart page’s foot', () => {
     ]);
   });
 
-  test('should lead only back from the last chart', async () => {
+  test('should lead back from the last chart and on to the tables tab', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
     await chartsDesk.findTitle('Pie tutorial', 2);
 
     expect(await pageFoot.leadsOn()).toEqual([
-      ['Previous: 3. Pressure', chartPageAt('pressure')]
+      ['Previous: 3. Pressure', chartPageAt('pressure')],
+      ['Next tab: Tables', demosAt('tables')]
     ]);
   });
 });
@@ -1062,7 +1063,8 @@ describe('the links to other tabs', () => {
 
     expect(demoPage.linksToTabsIn(page)).toEqual([
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['accordions tab', `${Paths.demos}accordions/`]
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['Next tab: Tables', `${Paths.demos}tables/`]
     ]);
   });
 

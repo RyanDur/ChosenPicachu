@@ -10,5 +10,5 @@ export type Part = {
 };
 
 export const ThePart = createContext<Part>({
-  heading: '', headingId: '', place: '', previous: {kind: 'first-part'}, next: {kind: 'last-part-unsaid'}
+  heading: '', headingId: '', place: '', previous: {kind: 'first-part'}, next: {kind: 'last-part-said'}
 });

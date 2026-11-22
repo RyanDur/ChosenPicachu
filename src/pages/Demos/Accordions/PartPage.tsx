@@ -69,7 +69,7 @@ const partContents: Record<AccordionPart, PartContents> = {
 };
 
 const theFirstPart: Behind = {kind: 'first-part'};
-const theLastPart: Onward = {kind: 'last-part-unsaid'};
+const theNextTab: Onward = {kind: 'tab', topic: DemoTopics.zIndex};
 
 export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   const carried = useCarriedAddress();
@@ -79,7 +79,7 @@ export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   };
   const {name, ordinal} = accordionParts.told(part);
   const behind = accordionParts.previousOf(part).map((beside): Behind => besidePart(beside)).orElse(theFirstPart);
-  const onward = accordionParts.nextOf(part).map((beside): Onward => besidePart(beside)).orElse(theLastPart);
+  const onward = accordionParts.nextOf(part).map((beside): Onward => besidePart(beside)).orElse(theNextTab);
   const place = `${demoTab.names[DemoTopics.accordions]} · part ${ordinal} of ${accordionParts.inTheBook}`;
   const {introduction, exhibitAndRuns, offersTheFoldDials} = partContents[part];
   return <ThePart value={{heading: name, headingId: `${part}-heading`, place, previous: behind, next: onward}}>
