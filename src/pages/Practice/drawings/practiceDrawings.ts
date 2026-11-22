@@ -55,7 +55,7 @@ const sizeAround = (boxes: Box[]): Size => ({
 
 const whereARuleLives = ((): Drawing<'wide' | 'stacked'> => {
   const inset = 6;
-  const outlined = 'hollow drawn drawn-line';
+  const hollowLine = 'hollow drawn drawn-line';
   const sheet = 'sheet-box hollow drawn';
 
   const tokens = ['reset', 'colors', 'spacing'] as const;
@@ -74,13 +74,13 @@ const whereARuleLives = ((): Drawing<'wide' | 'stacked'> => {
     row(label, placed, labels.indexOf(label));
 
   const tree = (x: number, y: number): {boxes: Box[]; surface: Box} => {
-    const words: Column = {x: x + 18, y: y + 138, width: 174, look: outlined};
+    const words: Column = {x: x + 18, y: y + 138, width: 174, look: hollowLine};
     return {
       boxes: [
-        {label: 'src/styles', look: outlined, x, y, width: 210, height: 288},
-        {label: 'the reset and the tokens', look: outlined, x: x + 9, y: y + 24, width: 192, height: 90},
-        ...column(tokens, {x: x + 18, y: y + 42, width: 174, look: outlined}),
-        {label: 'the vocabulary, by concern', look: outlined, x: x + 9, y: y + 120, width: 192, height: 162},
+        {label: 'src/styles', look: hollowLine, x, y, width: 210, height: 288},
+        {label: 'the reset and the tokens', look: hollowLine, x: x + 9, y: y + 24, width: 192, height: 90},
+        ...column(tokens, {x: x + 18, y: y + 42, width: 174, look: hollowLine}),
+        {label: 'the vocabulary, by concern', look: hollowLine, x: x + 9, y: y + 120, width: 192, height: 162},
         ...column(vocabulary, words)
       ],
       surface: rowOf(vocabulary, 'surface', words)
@@ -88,13 +88,13 @@ const whereARuleLives = ((): Drawing<'wide' | 'stacked'> => {
   };
 
   const component = (x: number, y: number, besideEachOther: boolean): {boxes: Box[]; sortMenu: Box} => {
-    const files: Column = {x: x + 12, y: y + 24, width: 126, look: outlined};
+    const files: Column = {x: x + 12, y: y + 24, width: 126, look: hollowLine};
     const sheets: Column = besideEachOther
       ? {x: x + 150, y: y + 24, width: 126, look: sheet}
       : {x: x + 12, y: y + 138, width: 126, look: sheet};
     return {
       boxes: [
-        {label: 'DragSortableTable', look: outlined, x, y, width: besideEachOther ? 288 : 222, height: besideEachOther ? 138 : 288},
+        {label: 'DragSortableTable', look: hollowLine, x, y, width: besideEachOther ? 288 : 222, height: besideEachOther ? 138 : 288},
         ...column(parts, files),
         ...column(ownSheets, sheets)
       ],
