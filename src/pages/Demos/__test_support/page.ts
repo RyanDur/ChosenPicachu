@@ -16,7 +16,7 @@ const toTabs = (links: HTMLElement[]): string[][] => links
   .map(link => [link.textContent, hrefOf(link)])
   .filter(([, address]) => tabAddresses.includes(address));
 
-const introductionBeforeTheTabs = (): HTMLElement | undefined => {
+const openingIfAny = (): HTMLElement | undefined => {
   const tabs = screen.getByRole('navigation', {name: 'demos'});
   return within(screen.getByRole('main')).queryAllByRole('paragraph')
     .find(paragraph => tabs.compareDocumentPosition(paragraph) === Node.DOCUMENT_POSITION_PRECEDING);
@@ -67,7 +67,9 @@ export const demoPage = {
   entriesLinking: (name: RegExp): HTMLElement[] => screen.getAllByRole('listitem')
     .filter(entry => is(within(entry).queryByRole('link', {name}))),
   wholePage: (): HTMLElement => screen.getByRole('main'),
-  hasAnOpeningBeforeItsTabs: (): boolean => is(introductionBeforeTheTabs()),
+  openingAboveTheTabs: (): HTMLElement => maybe(openingIfAny()).either(opening => opening, () => {
+    throw new Error('No paragraph stands above the demos tabs');
+  }),
   linksToTabsIn,
   linksToPageIn,
   linksToPage: (address: string): string[][] => toPage(linksOffTheRail(), address),
