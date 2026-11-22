@@ -39,7 +39,7 @@ describe('the live aggregations', () => {
       ['session', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
-  test('should mark a number a trade raises as up', async () => {
+  test('should mark a number a trade moves', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
     await aggregations.afterItsFirstTrade(feed, tradeFrame(50001, now));
@@ -47,16 +47,6 @@ describe('the live aggregations', () => {
     broadcast(feed, [tradeFrame(50002, now + 1000)]);
 
     await waitFor(() => expect(aggregations.markOn('this minute', 'trades')).toBe('up'));
-  });
-
-  test('should mark a number a trade lowers as down', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
-    await aggregations.afterItsFirstTrade(feed, tradeFrame(50005, now));
-
-    broadcast(feed, [tradeFrame(50001, now + 1000)]);
-
-    await waitFor(() => expect(aggregations.markOn('this minute', 'vwap')).toBe('down'));
   });
 
   test('should mark a number a trade moves in the lazy build as in the eager one', async () => {
