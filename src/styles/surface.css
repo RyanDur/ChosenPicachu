@@ -442,6 +442,19 @@
     color: var(--highlight-ink);
     outline-color: var(--canvas-ink);
   }
+
+  .alarm-dot,
+  .alarm-backed {
+    forced-color-adjust: none;
+    background: var(--highlight);
+  }
+
+  .alarm-dot { box-shadow: none; }
+
+  .alarm-ringed {
+    outline: var(--hairline-x-3) solid var(--highlight);
+    outline-offset: calc(var(--hairline-x-3) * -1);
+  }
 }
 
 .handle-raised:has(.handle:enabled:hover) { box-shadow: var(--raised); }
