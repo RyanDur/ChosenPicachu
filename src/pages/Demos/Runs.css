@@ -19,6 +19,10 @@
   > * + * {
     margin-block-start: var(--base-x-2);
   }
+
+  .paragraph {
+    text-wrap: pretty;
+  }
 }
 
 @container (width >= 92ch) {

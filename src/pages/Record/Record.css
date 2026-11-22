@@ -33,6 +33,10 @@
     > :where(:not(.story-plate)) + * {
       margin-block-start: var(--base-x-1_5);
     }
+
+    .paragraph {
+      text-wrap: pretty;
+    }
   }
 
   .story-plate {

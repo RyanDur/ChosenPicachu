@@ -2,6 +2,10 @@
 .practice-trade,
 .practice {
   padding: var(--base-x-5) var(--page-inset);
+
+  .paragraph {
+    text-wrap: pretty;
+  }
 }
 
 .practice-opening,
