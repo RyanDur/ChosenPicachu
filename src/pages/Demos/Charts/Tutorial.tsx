@@ -34,8 +34,9 @@ const WorkspaceStory: FC = () =>
         <Words>
           <Want>The layout is the trader’s, so it has to come back after a reload and travel in a link.</Want>
           <Says>The address’s query string, the part after the question mark, carries a value named charts: a list
-            of chart names with commas between them. A name the page doesn’t know is skipped, a name given twice
-            counts once, and with no list the page shows one price chart. A new chart goes to the front of the list,
+            of chart names with commas between them. Spaces around a name are ignored. A name the page doesn’t know is
+            skipped, a name given twice counts once, and with no list the page shows one price chart. Below the charts,
+            the page says what it left out and why. A new chart goes to the front of the list,
             so it appears at the top, next to the + that added it. The + opens a menu of the charts not yet on the
             page.</Says>
           <Says>A name may carry its period after a colon, candles:day; the hour is the default and is left off.</Says>
@@ -47,7 +48,9 @@ const WorkspaceStory: FC = () =>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(kindsSource, 'const is ='), lines.blank,
+            ...carve.unit(deskSource, 'const reading ='), lines.blank,
             ...carve.unit(deskSource, 'const dealt ='), lines.blank,
+            ...carve.unit(deskSource, 'const leftOut ='), lines.blank,
             ...carve.unit(deskSource, 'const added =')
           ]}/>
           <Snippet label="HTML" lines={[
