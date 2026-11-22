@@ -58,8 +58,8 @@ const FileLink: FC<{source: Source}> = ({source: {path, url, owner, first, last}
   <a className="signpost reachable" href={`${url}#L${first}-L${last}`} target="_blank" rel="noreferrer">
     {nameOf(path, owner)} on GitHub</a>;
 
-const takenFromTheExhibit = (files: readonly Source[]): string =>
-  `Taken from the exhibit on this page. The rest of the site doesn’t use ${files.length > 1 ? 'them' : 'it'}.`;
+const exhibitFilesSentence = (count: number): string =>
+  `Taken from the exhibit on this page. The rest of the site doesn’t use ${count > 1 ? 'them' : 'it'}.`;
 
 export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
@@ -82,7 +82,7 @@ export const Snippet: FC<Props> = ({label, lines}) => {
     </pre>
     <figcaption className="sources caption ink">
       {exhibitFiles.map(source => <FileLink source={source} key={source.path}/>)}
-      {has(exhibitFiles) && takenFromTheExhibit(exhibitFiles)}
+      {has(exhibitFiles) && exhibitFilesSentence(exhibitFiles.length)}
       {sharedFiles.map(source => <FileLink source={source} key={source.path}/>)}
       {not(has(sources)) && 'Written for this page, not taken from the site’s code.'}
     </figcaption>
