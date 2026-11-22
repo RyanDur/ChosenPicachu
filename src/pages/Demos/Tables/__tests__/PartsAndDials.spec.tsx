@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {demoPage, demosAt, partsIndex} from '@pages/Demos/__test_support';
+import {demoPage, demosAt, partsFold, partsIndex} from '@pages/Demos/__test_support';
 import {aggregations, tablesTab} from '@pages/Demos/Tables/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
 import {titleAbove} from '@__test_support/title-above';
@@ -79,15 +79,15 @@ describe('the tables panel', () => {
   test('should offer beside a part to hide the parts, said as expanded', async () => {
     render(<TestApp at={demosAt(theSlices)}/>);
 
-    expect(await tablesTab().partsFold('Hide parts', true)).toBeInTheDocument();
+    expect(await partsFold.button('Hide parts', true)).toBeInTheDocument();
   });
 
   test('should leave focus on Show parts, said as collapsed, after Enter on Hide parts', async () => {
     render(<TestApp at={demosAt(theSlices)}/>);
 
-    await tablesTab().enterOnHideParts();
+    await partsFold.enterOnHideParts();
 
-    expect(await tablesTab().partsFold('Show parts', false)).toHaveFocus();
+    expect(await partsFold.button('Show parts', false)).toHaveFocus();
   });
 
   test('should offer no way to hide the parts on the tab’s opening page', async () => {
@@ -95,7 +95,7 @@ describe('the tables panel', () => {
 
     await partsIndex.find();
 
-    expect(tablesTab().partsFoldShown()).not.toBeInTheDocument();
+    expect(partsFold.offered()).not.toBeInTheDocument();
   });
 
   test('should list the parts once beside a tutorial', async () => {
