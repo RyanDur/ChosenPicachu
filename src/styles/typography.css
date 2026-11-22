@@ -2,6 +2,7 @@
   --text-small-caption: var(--base-x-0_875);
   --text-caption: var(--base-x-1_5);
   --text-body: var(--base-x-1_75);
+  --text-large-body: var(--base-x-2);
   --text-title: var(--base-x-2_25);
   --text-headline: var(--base-x-3);
 }
@@ -48,7 +49,7 @@
   line-height: 1.8;
 }
 
-.body-size { font-size: var(--base-x-2); }
+.large-body { font-size: var(--text-large-body); }
 
 .balanced { text-wrap: balance; }
 
