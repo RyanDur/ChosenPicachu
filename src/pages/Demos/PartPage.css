@@ -1,6 +1,6 @@
 .part-page,
 .part-opening,
-.part-body {
+.part-demo {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--base-x-3);

@@ -40,10 +40,6 @@
     grid-template-rows: auto 1fr auto;
   }
 
-  .part-page.body-first:has(> .tab-sidecar):not(:has(> .tab-sidecar.folded > .sidecar-header)) {
-    grid-template-rows: 1fr auto;
-  }
-
   .tab-sidecar:not(.folded:has(> .sidecar-header)) {
     position: sticky;
     inset-block-start: var(--under-the-tab-bar);
@@ -66,7 +62,7 @@
     }
   }
 
-  .part-page:has(> .tab-sidecar.folded > .sidecar-header) > .part-body {
+  .part-page:has(> .tab-sidecar.folded > .sidecar-header) > .part-demo {
     isolation: isolate;
   }
 
