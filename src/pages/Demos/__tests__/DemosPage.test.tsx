@@ -31,12 +31,28 @@ describe('The Demos page', () => {
     expect(await demoTabs.names()).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
   });
 
-  test('a part’s page should open with the Demos introduction above its tabs', async () => {
+  test('a part’s page should open with the Demos opening above its tabs', async () => {
     render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
 
     await demoPage.findTitle('Why 9999 still loses');
 
-    expect(demoPage.hasAnOpeningBeforeItsTabs()).toBe(true);
+    expect(demoPage.openingAboveTheTabs()).toHaveTextContent(/^Each tab below is one feature a page needs, and each adds one thing to the tabs before it. Start with the accordions if/);
+  });
+
+  test('a tab’s own page should open with the Demos opening above its tabs', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    await demoTabs.current();
+
+    expect(demoPage.openingAboveTheTabs()).toHaveTextContent(/^Each tab below is one feature a page needs, and each adds one thing to the tabs before it. Start with the accordions if/);
+  });
+
+  test('the opening should take a reader to the accordions it says to start with', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    await demoTabs.current();
+
+    expect(demoPage.linksToTabsIn(demoPage.openingAboveTheTabs())).toEqual([['the accordions', demosAt('accordions')]]);
   });
 
   test('a part’s page should keep the part’s own title as a heading under the page’s', async () => {
