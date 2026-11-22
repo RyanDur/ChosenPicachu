@@ -4,6 +4,7 @@ import {DemoTopics} from './demo-topics';
 import {demoTab} from './demo-tab';
 import {TabPager} from './TabPager';
 import {useCarriedAddress} from './useCarriedAddress';
+import '@navigation/Tabs/Tabs.css';
 import './DemoTabs.css';
 
 const DemoTab: FC<{topic: DemoTopics; current: DemoTopics}> = ({topic, current}) => {
