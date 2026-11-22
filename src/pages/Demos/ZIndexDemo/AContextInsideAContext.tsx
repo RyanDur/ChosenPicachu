@@ -31,13 +31,13 @@ const told: Record<Step, Told> = {
     rules: rulesShown(ruleFor('.b {'))
   },
   'a-context-inside': {
-    story: 'Contexts nest, the way elements do. Card A now has isolation: isolate, which makes a box a stacking context of its own and changes nothing else about it. The browser orders the boxes inside card A only against each other, then stacks card A as one box in the page.',
+    story: 'Contexts nest, the way elements do. Card A now forms a context of its own. The browser ranks the boxes inside card A only against each other, then stacks card A as one box in the page.',
     verdict: 'Two contexts: the page, and card A inside it.',
     markup: cardsBeside,
     rules: rulesShown(ruleFor('.b {'), lines.marked(ruleFor('.a {')))
   },
   'the-list-inside': {
-    story: 'We write a list inside card A and give it a z-index of 9999. The browser compares that 9999 only against what else is in card A. Then it stacks card A as one box against card B, and there card B’s 1 is the larger number.',
+    story: 'We write a list inside card A and give it a z-index of 9999. The browser ranks that 9999 only against what else is in card A. Then it stacks card A as one box against card B, and there card B’s 1 is the larger number.',
     verdict: 'The list opens under card B.',
     markup: [
       lines.plain('<section class="card a">'),
