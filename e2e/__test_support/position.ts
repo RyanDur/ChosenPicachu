@@ -6,6 +6,7 @@ import {siteFrame} from './site';
 export type Position = 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
 export type ParentPosition = 'position: relative' | 'not positioned';
 export type Spot = {x: number; y: number};
+export type Placed = Spot & {measuredFromFirstsHolder: boolean};
 
 const unmeasured = {x: Number.NaN, y: Number.NaN, width: 0, height: 0};
 
@@ -37,6 +38,14 @@ export const positionExhibit = (page: Page) => {
     position: (position: Position): Locator => positionPills.pill(position),
     choosesParent: (position: ParentPosition): Promise<void> => pillSwitch(page, 'And its parent is').choose(position),
     spotOf,
+    placedFromItsHolder: (name: string): Promise<Placed> => littlePage.getByText(name, {exact: true}).evaluate(box => {
+      const holder = box instanceof HTMLElement ? box.offsetParent : null;
+      return {
+        x: box instanceof HTMLElement ? box.offsetLeft : Number.NaN,
+        y: box instanceof HTMLElement ? box.offsetTop : Number.NaN,
+        measuredFromFirstsHolder: [...holder?.children ?? []].some(child => child.textContent === 'First')
+      };
+    }),
     scrollsTheLittlePageTo: (top: number): Promise<void> =>
       littlePage.evaluate((view, to) => view.scrollTo({top: to, behavior: 'instant'}), top),
     scrollsTheLittlePageToItsEnd: (): Promise<void> =>

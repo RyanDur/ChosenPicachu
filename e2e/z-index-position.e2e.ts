@@ -38,6 +38,25 @@ test('an absolute Second whose parent has no position is measured from the littl
   await expect(exhibit.measuredFrom).toContainText('the little page’s corner');
 });
 
+test('an absolute Second whose parent is positioned sits 16px down and 24px in from the parent’s corner', async ({page}) => {
+  const exhibit = positionExhibit(page);
+  await page.goto(address);
+
+  await exhibit.choosesPosition('absolute');
+
+  await expect.poll(() => exhibit.placedFromItsHolder('Second')).toEqual({x: 24, y: 16, measuredFromFirstsHolder: true});
+});
+
+test('an absolute Second leaves the flow, and Third moves up into its place', async ({page}) => {
+  const exhibit = positionExhibit(page);
+  await page.goto(address);
+  const second = await exhibit.spotOf('Second');
+
+  await exhibit.choosesPosition('absolute');
+
+  await expect.poll(() => exhibit.spotOf('Third')).toEqual(second);
+});
+
 test('a fixed Second stays where it is in the little window when the little page scrolls', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
