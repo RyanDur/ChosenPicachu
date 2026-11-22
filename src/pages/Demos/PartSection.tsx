@@ -1,11 +1,11 @@
-import {FC, PropsWithChildren, ReactElement, ReactNode, useId} from 'react';
+import {FC, PropsWithChildren, ReactNode, useId} from 'react';
 import {maybe} from '@ryandur/sand';
 import {classNames} from '@components';
 import {BesideAPart} from './beside-a-part';
 import './PartPage.css';
 
 type Opening = {
-  readonly place: string | ReactElement;
+  readonly place: string;
   readonly introduction?: ReactNode;
 };
 
