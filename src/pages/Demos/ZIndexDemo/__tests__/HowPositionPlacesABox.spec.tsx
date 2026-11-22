@@ -81,8 +81,8 @@ describe('how position places a box, on its own page', () => {
 
     await explanation.part(title);
 
-    expect(positionExhibit.position('absolute')).toBeChecked();
-    expect(positionExhibit.parentPosition('not positioned')).toBeChecked();
+    expect(positionExhibit.pill('absolute')).toBeChecked();
+    expect(positionExhibit.parentPill('not positioned')).toBeChecked();
   });
 
   test('should open with Second static when the address names a position there is not', async () => {
@@ -90,7 +90,7 @@ describe('how position places a box, on its own page', () => {
 
     await explanation.part(title);
 
-    expect(positionExhibit.position('static')).toBeChecked();
+    expect(positionExhibit.pill('static')).toBeChecked();
   });
 
   test('should show a relative Second’s own rule in the CSS', async () => {
