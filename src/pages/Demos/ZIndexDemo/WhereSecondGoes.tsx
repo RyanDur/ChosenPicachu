@@ -85,8 +85,9 @@ export const WhereSecondGoes: FC = () => {
         </section>
       </section>
     </section>
-    <p className="paragraph">{told.verdict}</p>
-    <p className="paragraph">{`Measured from: ${told.measuredFrom}`}</p>
+    <output aria-label="where Second went" className="paragraph">{told.verdict}</output>
+    <output aria-label="what Second is measured from" className="paragraph">
+      {`Measured from: ${told.measuredFrom}`}</output>
     <p className="paragraph">{`${told.context} Scroll the little page to see fixed and sticky at work.`}</p>
     <figcaption className="caption"><strong className="bold">Where Second goes.</strong> Give Second each position in
       turn and see where it goes, and what First and Third do.</figcaption>
