@@ -159,6 +159,14 @@ describe('the desk', () => {
     expect(desk.leftOut('candles :day')).toEqual([]);
   });
 
+  test('a period with a second colon in it is told whole, as it was typed', () => {
+    expect(desk.leftOut('candles:day:week')).toEqual([{why: 'unknown period', kind: 'candles', period: 'day:week'}]);
+  });
+
+  test('a chart with a second colon in its period is still dealt, by the hour', () => {
+    expect(desk.dealt('candles:day:week')).toEqual([{kind: 'candles', period: Period.hour}]);
+  });
+
   test('a name the desk does not know is told even when it reads like a period another chart was given', () => {
     expect(desk.leftOut('candles:decade,period candles decade')).toEqual([
       {why: 'unknown period', kind: 'candles', period: 'decade'},
