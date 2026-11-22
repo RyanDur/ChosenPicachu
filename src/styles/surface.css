@@ -397,6 +397,8 @@
 
 .veiled-rule-below { border-block-end: var(--hairline) solid var(--charcoal-veil); }
 
+.silver-rule-above { border-block-start: var(--hairline) solid var(--silver); }
+
 .hover-veiled::after {
   border-radius: inherit;
   background: var(--charcoal-veil);

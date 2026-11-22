@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {chartsPage, siteFrame} from './__test_support';
+import {chartsPage, partFoot, siteFrame} from './__test_support';
 
 test('a desk reader follows Pressure from the panel beside the Candles page to the Pressure page', {tag: '@desktop'}, async ({page}) => {
   await page.goto('demos/charts/candles/');
@@ -20,4 +20,13 @@ test('a desk reader goes from the Candles page to the Tables tab by its tab', {t
 
   await expect(page).toHaveURL(/demos\/tables\/$/);
   await expect(page.getByRole('heading', {name: 'Demos Tables', level: 1})).toBeVisible();
+});
+
+test('a reader on the first chart’s page follows its foot back to the drag sort tab', async ({page}) => {
+  await page.goto('demos/charts/price/');
+  await siteFrame(page).hydrated();
+
+  await partFoot(page).link('Previous tab: Drag sort').click();
+
+  await expect(page).toHaveURL(/demos\/drag-and-drop\/$/);
 });

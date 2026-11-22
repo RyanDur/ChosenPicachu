@@ -1,8 +1,9 @@
 import {FC, ReactNode} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
+import {Behind, Beside, Onward, PartFoot} from '@pages/Demos/PartFoot';
+import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {demoTab, DemoTopics} from '@pages/Demos';
-import {AccordionPart, accordionParts} from './part-pages';
-import {PartFoot} from './PartFoot';
+import {AccordionPart, accordionParts, BookPart} from './part-pages';
 import {seeded} from '@components/fibs';
 import {MaxHeightGuess} from './MaxHeightGuess';
 import {MeasuredHeight} from './MeasuredHeight';
@@ -63,12 +64,23 @@ const partContents: Record<AccordionPart, PartContents> = {
   }
 };
 
+const theFirstPart: Behind = {kind: 'first-part'};
+const theLastPart: Onward = {kind: 'last-part-unsaid'};
+
 export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
+  const carried = useCarriedAddress();
+  const besidePart = (beside: BookPart): Beside => {
+    const {to, heading} = accordionParts.whereIs(beside);
+    return {kind: 'part', title: accordionParts.numbered(beside), address: carried(to, heading)};
+  };
   const {name, ordinal} = accordionParts.told(part);
+  const behind = accordionParts.previousOf(part).map((beside): Behind => besidePart(beside)).orElse(theFirstPart);
+  const onward = accordionParts.nextOf(part).map((beside): Onward => besidePart(beside)).orElse(theLastPart);
   const place = `${demoTab.names[DemoTopics.accordions]} · part ${ordinal} of ${accordionParts.inTheBook}`;
   const {introduction, exhibitAndRuns, offersTheFoldDials} = partContents[part];
   return <PartSection heading={name} place={place} introduction={introduction}
-    panel={<PartsAndDials offersTheFoldDials={offersTheFoldDials}/>} foot={<PartFoot part={part}/>}>
+    panel={<PartsAndDials offersTheFoldDials={offersTheFoldDials}/>}
+    foot={<PartFoot previous={behind} next={onward}/>}>
     {exhibitAndRuns}
   </PartSection>;
 };

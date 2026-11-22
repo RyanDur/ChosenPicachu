@@ -189,7 +189,7 @@ test.describe('a reader with script turned off', () => {
 test('a reader follows part one from the tab\'s list of parts to its section under "Before you start"', async ({page}) => {
   await page.goto('demos/accordions/');
 
-  await page.getByRole('navigation', {name: 'Parts'}).getByRole('link', {name: 'An accordion in HTML alone'}).click();
+  await page.getByRole('navigation', {name: 'Parts', exact: true}).getByRole('link', {name: 'An accordion in HTML alone'}).click();
 
   await expect(page).toHaveURL(/#html-alone-heading$/);
 });
@@ -198,7 +198,7 @@ test('a reader sets the fold type beside the demo to inclusive, follows part fou
   await page.goto('demos/accordions/');
 
   await pillSwitch(page, 'fold type').choose('Inclusive');
-  await page.getByRole('navigation', {name: 'Parts'}).getByRole('link', {name: 'The measured height'}).click();
+  await page.getByRole('navigation', {name: 'Parts', exact: true}).getByRole('link', {name: 'The measured height'}).click();
 
   await expect(accordions.tab(page).partTitle('The measured height')).toBeVisible();
   await expect.poll(pillSwitch(page, 'fold type').chosen).toBe('Inclusive');

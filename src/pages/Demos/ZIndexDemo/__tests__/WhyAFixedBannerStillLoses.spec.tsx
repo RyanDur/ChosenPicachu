@@ -54,7 +54,7 @@ describe('why a fixed banner still loses, on its own page', () => {
   test('should lead back to part five’s page and on to part seven’s page, by number and title, with the raised card carried', async () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
-    expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 5. Why the popover wins', demosAt('z-index/why-the-popover-wins', '?raised=second')],
       ['Next: 7. Let’s build this feature', demosAt('z-index/lets-build-this-feature', '?raised=second')]
     ]);

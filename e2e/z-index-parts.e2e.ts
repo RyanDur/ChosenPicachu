@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {bannerTrap, contextChooser, siteFrame, stackingPile, topLayerMenu, trappedMenu, zIndexTab} from './__test_support';
+import {bannerTrap, contextChooser, partFoot, siteFrame, stackingPile, topLayerMenu, trappedMenu, zIndexTab} from './__test_support';
 
 const whyThirdIsOnTop = 'Why Third is on top';
 const howPositionPlacesABox = 'How position places a box';
@@ -159,4 +159,13 @@ test('a reader follows why a fixed banner still loses’s foot on to the last pa
 
   await expect(page).toHaveURL(/demos\/z-index\/lets-build-this-feature\/\?wears=opacity$/);
   await expect(zIndexTab(page).partTitle(letsBuildThisFeature)).toBeVisible();
+});
+
+test('a reader at the end of the z-index tab follows its foot on to the drag sort tab, with the wear kept in the address', async ({page}) => {
+  await page.goto('demos/z-index/lets-build-this-feature/?wears=opacity');
+  await siteFrame(page).hydrated();
+
+  await partFoot(page).link('Next tab: Drag sort').click();
+
+  await expect(page).toHaveURL(/demos\/drag-and-drop\/\?wears=opacity$/);
 });

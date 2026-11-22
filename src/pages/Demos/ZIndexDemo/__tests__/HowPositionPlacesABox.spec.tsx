@@ -18,7 +18,7 @@ describe('how position places a box, on its own page', () => {
   test('should lead back to part one’s page and on to part three’s page, by number and title, with the raised card carried', async () => {
     render(<TestApp at={demosAt(howPosition, '?raised=second')}/>);
 
-    expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 1. Why Third is on top', demosAt('z-index/why-third-is-on-top', '?raised=second')],
       ['Next: 3. Why 9999 still loses', demosAt('z-index/why-9999-still-loses', '?raised=second')]
     ]);

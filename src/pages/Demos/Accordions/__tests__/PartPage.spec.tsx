@@ -78,7 +78,7 @@ describe('the measured height, on its own page', () => {
   test('should lead back to part three’s page and on to part five’s, by number and title, with the fold choices carried', async () => {
     render(<TestApp at={demosAt(measuredHeight, '?type=inclusive&style=drawer')}/>);
 
-    expect(await pageFoot.leadsOn('the accordions parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 3. The max-height guess', demosAt('accordions/the-max-height-guess', '?type=inclusive&style=drawer')],
       ['Next: 5. What the platform gives now', demosAt('accordions/what-the-platform-gives-now', '?type=inclusive&style=drawer')]
     ]);

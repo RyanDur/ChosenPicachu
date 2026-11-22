@@ -26,6 +26,7 @@ export {accordions, type Build, type Part} from './accordions';
 export {stackingPile, type Card} from './stacking';
 export {positionExhibit} from './position';
 export {zIndexTab} from './z-index';
+export {partFoot} from './part-foot';
 export {bannerTrap, contextChooser, topLayerMenu, trappedMenu, wearsReportedWrong, type SortChoice, type Worn} from './trap';
 export {pressTab, tabsTo} from './keyboard';
 export {seedRandom} from './random';

@@ -44,7 +44,7 @@ describe('the max-height guess, on its own page', () => {
   test('should lead back to part two’s page and on to part four’s, by number and title, with the fold choices carried', async () => {
     render(<TestApp at={demosAt(guess, build)}/>);
 
-    expect(await pageFoot.leadsOn('the accordions parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 2. A box remembers the fold, and a rule reads it', demosAt('accordions/a-box-remembers-the-fold', build)],
       ['Next: 4. The measured height', demosAt('accordions/the-measured-height', build)]
     ]);

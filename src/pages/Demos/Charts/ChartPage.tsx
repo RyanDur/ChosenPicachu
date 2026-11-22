@@ -3,7 +3,7 @@ import {PartSection} from '@pages/Demos/PartSection';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PartLink} from '@pages/Demos/ZIndexDemo';
-import {PageFoot} from '@pages/Demos/PageFoot';
+import {Behind, Beside, Onward, PartFoot} from '@pages/Demos/PartFoot';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {Pressure} from './Pressure';
@@ -50,14 +50,19 @@ const features: Record<ChartKind, Feature> = {
   }
 };
 
-const neighbor = (kind: ChartKind) => ({title: chartKinds.numbered(kind), address: chartKinds.address(kind)});
+const besideKind = (kind: ChartKind): Beside =>
+  ({kind: 'part', title: chartKinds.numbered(kind), address: chartKinds.address(kind)});
+
+const thePreviousTab: Behind = {kind: 'tab', topic: DemoTopics.dragAndDrop};
+const theLastChart: Onward = {kind: 'last-part-unsaid'};
 
 export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const {reference, quote, chart: Chart} = features[kind];
   const name = chartKinds.names[kind];
+  const behind = chartKinds.previous(kind).map((beside): Behind => besideKind(beside)).orElse(thePreviousTab);
+  const onward = chartKinds.next(kind).map((beside): Onward => besideKind(beside)).orElse(theLastChart);
   return <PartSection heading={`${name} tutorial`} panel={<PartsAndMinutes/>} wears="tutorials"
-    foot={<PageFoot label="the chart pages" previous={chartKinds.previous(kind).map(neighbor)}
-      next={chartKinds.next(kind).map(neighbor)}/>}>
+    foot={<PartFoot previous={behind} next={onward}/>}>
     <Chart/>
     <h3 className="title">let’s build this feature</h3>
     <p className="overview paragraph">

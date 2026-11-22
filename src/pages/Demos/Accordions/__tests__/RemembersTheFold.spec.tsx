@@ -53,7 +53,7 @@ describe('a box remembers the fold, on its own page', () => {
   test('should lead back to part one on the tab and on to part three’s page, by number and title, with the fold choices carried', async () => {
     render(<TestApp at={demosAt(remembers, '?type=inclusive&style=drawer')}/>);
 
-    expect(await pageFoot.leadsOn('the accordions parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 1. An accordion in HTML alone', `${demosAt('accordions', '?type=inclusive&style=drawer')}#html-alone-heading`],
       ['Next: 3. The max-height guess', demosAt('accordions/the-max-height-guess', '?type=inclusive&style=drawer')]
     ]);

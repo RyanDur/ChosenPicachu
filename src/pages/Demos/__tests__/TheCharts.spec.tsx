@@ -847,18 +847,19 @@ describe('a chart page’s foot', () => {
     render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
     await chartsDesk.findTitle('Candles tutorial', 2);
 
-    expect(await pageFoot.leadsOn('the chart pages')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 1. Price line', chartPageAt('price')],
       ['Next: 3. Pressure', chartPageAt('pressure')]
     ]);
   });
 
-  test('should lead only onward from the first chart', async () => {
+  test('should lead back to the drag sort tab and on to the next chart from the first chart', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await chartsDesk.findTitle('Price line tutorial', 2);
 
-    expect(await pageFoot.leadsOn('the chart pages')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
+      ['Previous tab: Drag sort', demosAt('drag-and-drop')],
       ['Next: 2. Candles', chartPageAt('candles')]
     ]);
   });
@@ -868,7 +869,7 @@ describe('a chart page’s foot', () => {
     render(<TestApp at={chartPageAt('pie')} feed={feed}/>);
     await chartsDesk.findTitle('Pie tutorial', 2);
 
-    expect(await pageFoot.leadsOn('the chart pages')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 3. Pressure', chartPageAt('pressure')]
     ]);
   });
@@ -967,7 +968,8 @@ describe('the links to other tabs', () => {
 
     expect(demoPage.linksToTabsIn(page)).toEqual([
       ['accordions tab', `${Paths.demos}accordions/`],
-      ['accordions tab', `${Paths.demos}accordions/`]
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['Previous tab: Drag sort', `${Paths.demos}drag-and-drop/`]
     ]);
   });
 
