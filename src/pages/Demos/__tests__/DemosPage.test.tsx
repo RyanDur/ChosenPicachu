@@ -25,7 +25,7 @@ describe('The Demos page', () => {
     expect(await demoTabs.current()).toEqual(['Tables']);
   });
 
-  test('should run its tabs in the order the opening names them, simple to expert', async () => {
+  test('should run its tabs from Accordions to Tables, each adding to the ones before', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     expect(await demoTabs.names()).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
