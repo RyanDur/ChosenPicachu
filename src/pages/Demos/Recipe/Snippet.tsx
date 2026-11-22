@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, PropsWithChildren} from 'react';
 import {has, maybe, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {Kind, Label} from './highlight';
@@ -54,9 +54,10 @@ const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
   call: 'call-ink'
 };
 
-const FileLink: FC<{source: Source}> = ({source: {path, url, owner, first, last}}) =>
-  <a className="signpost reachable" href={`${url}#L${first}-L${last}`} target="_blank" rel="noreferrer">
-    {nameOf(path, owner)} on GitHub</a>;
+const FileLink: FC<PropsWithChildren<{href: string}>> = ({href, children}) =>
+  <a className="signpost reachable" href={href} target="_blank" rel="noreferrer">{children}</a>;
+
+const linesOnGitHub = ({url, first, last}: Source): string => `${url}#L${first}-L${last}`;
 
 const exhibitFilesSentence = (count: number): string =>
   `Taken from the exhibit on this page. The rest of the site doesn’t use ${count > 1 ? 'them' : 'it'}.`;
@@ -81,9 +82,11 @@ export const Snippet: FC<Props> = ({label, lines}) => {
       })}</code>
     </pre>
     <figcaption className="sources caption ink">
-      {exhibitFiles.map(source => <FileLink source={source} key={source.path}/>)}
+      {exhibitFiles.map(source => <FileLink href={linesOnGitHub(source)} key={source.path}>
+        {nameOf(source.path, source.owner)} on GitHub</FileLink>)}
       {has(exhibitFiles) && exhibitFilesSentence(exhibitFiles.length)}
-      {sharedFiles.map(source => <FileLink source={source} key={source.path}/>)}
+      {sharedFiles.map(source => <FileLink href={linesOnGitHub(source)} key={source.path}>
+        {nameOf(source.path, source.owner)} on GitHub</FileLink>)}
       {not(has(sources)) && 'Written for this page, not taken from the site’s code.'}
     </figcaption>
   </figure>;
