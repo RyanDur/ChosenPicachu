@@ -220,7 +220,7 @@ describe('how the known height works', () => {
     const folded = recipeFolds.story(await explanation.part(title), knownHeightWorks);
 
     expect(explanation.sampleCaptionsBeside(folded, /That class paints a shadow at the section’s foot/)).toEqual([
-      expect.stringMatching(/^Accordions\/Accordions\.css on GitHub\s*Taken from the exhibit on this page\..*styles\/surface\.css on GitHub$/)
+      expect.stringMatching(/^Accordions\/Accordions\.css on GitHub\s+Taken from the exhibit on this page\.\s+styles\/surface\.css on GitHub$/)
     ]);
   });
 
