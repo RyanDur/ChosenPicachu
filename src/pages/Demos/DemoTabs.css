@@ -20,10 +20,6 @@
       content: counter(demo-tab) / '';
     }
 
-    &:has(> [aria-current="page"], > [aria-current="true"]) {
-      scroll-initial-target: nearest;
-    }
-
     .demo-tab-name::after {
       content: '';
       position: absolute;
