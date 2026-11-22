@@ -1,22 +1,41 @@
-import {screen, within} from '@testing-library/react';
+import {screen, waitFor, within} from '@testing-library/react';
 import {computeAccessibleName} from 'dom-accessibility-api';
 import userEvent from '@testing-library/user-event';
+import {sortableTable} from '@components/DragSortableTable/__test_support';
+import {broadcast, Feed} from '@pages/Demos/__test_support/feed';
+import {feedIsSubscribed} from '@pages/Demos/__test_support/subscription';
 import {untilTheTablesTabRenders} from './controls';
 
 const card = (): HTMLElement => screen.getByRole('region', {name: 'live aggregations'});
 
+const arrived = (): Promise<HTMLElement> => screen.findByRole('region', {name: 'live aggregations'}, untilTheTablesTabRenders);
+
+const rowOf = (lookback: string): HTMLElement => within(card()).getByRole('row', {name: new RegExp(`^${lookback}`)});
+
+const afterItsFirstTrade = async (feed: Feed, trade: string): Promise<void> => {
+  await feedIsSubscribed(feed);
+  await arrived();
+  broadcast(feed, [trade]);
+  await waitFor(() => {
+    if (sortableTable.texts(rowOf('this minute'))[1] !== '1') {
+      throw new Error('the first trade has not reached this minute');
+    }
+  });
+};
+
 const cellOf = (lookback: string, measure: string): HTMLElement => {
   const measures = within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label'));
-  const row = within(card()).getByRole('row', {name: new RegExp(`^${lookback}`)});
+  const row = rowOf(lookback);
   return within(row).getAllByRole('cell')[measures.indexOf(measure) - 1];
 };
 
 export const aggregations = {
-  arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'live aggregations'}, untilTheTablesTabRenders),
+  arrived,
+  afterItsFirstTrade,
   card,
   header: (measure: string): HTMLElement => within(card()).getByRole('columnheader', {name: new RegExp(`^${measure}`)}),
   rows: (): HTMLElement[] => within(card()).getAllByRole('row'),
-  row: (lookback: string): HTMLElement => within(card()).getByRole('row', {name: new RegExp(`^${lookback}`)}),
+  row: rowOf,
   findRow: (lookback: string): Promise<HTMLElement> => within(card()).findByRole('row', {name: new RegExp(`^${lookback}`)}),
   counted: async (trades: number): Promise<HTMLElement[]> => within(card()).findAllByText(String(trades)),
   columns: (): (string | null)[] => within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label')),
