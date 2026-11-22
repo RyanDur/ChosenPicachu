@@ -27,8 +27,10 @@ const formsNoneUnlessAZIndex = <>It forms no {stackingContextLink}, unless we al
   a <code className="monospaced">z-index</code>.</>;
 const formsOneByItself = <>It forms a {stackingContextLink} by itself.</>;
 
-const told: Record<Position, Told> = {
-  static: {
+const whereWeMeetAnAbsoluteBox = 'A badge on a corner, a menu under its button, a close button in a dialog’s corner.';
+
+const told: Record<MeasuredFrom, Told> = {
+  nowhere: {
     story: <>Every box starts as <code className="monospaced">position: static</code>. The browser places it in the
       flow, as a block or inline, and ignores <code className="monospaced">top</code> and <code
       className="monospaced">left</code>.</>,
@@ -37,7 +39,7 @@ const told: Record<Position, Told> = {
     measuredFromWords: 'nowhere. The browser ignores top and left.',
     stackingContext: formsNone
   },
-  relative: {
+  'own-place': {
     story: <><code className="monospaced">position: relative</code> moves the box from the place the flow gave it,
       by <code className="monospaced">top</code> and <code className="monospaced">left</code>. The flow keeps that place
       open, so the boxes around it do not move.</>,
@@ -46,18 +48,29 @@ const told: Record<Position, Told> = {
     measuredFromWords: 'the box’s own place in the flow, shown as the dashed red outline.',
     stackingContext: formsNoneUnlessAZIndex
   },
-  absolute: {
+  parent: {
     story: <><code className="monospaced">position: absolute</code> takes the box out of the flow, so the boxes after
       it close the gap. The browser measures <code className="monospaced">top</code> and <code
       className="monospaced">left</code> from the nearest {positionedLink} ancestor, an ancestor being any element
       the box sits inside. Here that is the parent, because we gave it <code className="monospaced">position:
         relative</code>.</>,
-    whereWeMeetIt: 'A badge on a corner, a menu under its button, a close button in a dialog’s corner.',
+    whereWeMeetIt: whereWeMeetAnAbsoluteBox,
     verdict: 'Second leaves the flow, and Third moves up into its place. Second sits 16px down and 24px in from the parent’s corner, drawn over First. It scrolls with the page.',
     measuredFromWords: 'the parent’s corner, at the red dot. The parent is outlined in red because it is positioned.',
     stackingContext: formsNoneUnlessAZIndex
   },
-  fixed: {
+  'little-page': {
+    story: <>The parent has no position now. Nothing above Second in the HTML shown here is {positionedLink}, so the
+      browser measures <code className="monospaced">top</code> and <code className="monospaced">left</code> from the
+      corner of the page itself. The little page stands in for it here. Expect
+      this whenever nothing above an absolute box is positioned or has a {transformLink}, the property that moves,
+      turns or scales a box.</>,
+    whereWeMeetIt: whereWeMeetAnAbsoluteBox,
+    verdict: 'Second sits 16px down and 24px in from the page’s corner, over the top of the page and outside its parent. It still scrolls with the page.',
+    measuredFromWords: 'the little page’s corner, at the red dot. It stands in for the page’s corner: nothing above Second is positioned, so the browser goes past the parent to the page.',
+    stackingContext: formsNoneUnlessAZIndex
+  },
+  view: {
     story: <><code className="monospaced">position: fixed</code> takes the box out of the flow and
       measures <code className="monospaced">top</code> and <code className="monospaced">left</code> from the window,
       not the page. When the page scrolls, the box stays where it is. The little window’s view, the area under its bar,
@@ -68,7 +81,7 @@ const told: Record<Position, Told> = {
     measuredFromWords: 'the view’s corner, at the red dot.',
     stackingContext: formsOneByItself
   },
-  sticky: {
+  'scroll-edge': {
     story: <><code className="monospaced">position: sticky</code> leaves the box in the flow until scrolling would
       carry it past the edge we name, here <code className="monospaced">top: 0</code>. Then it stays at that edge.</>,
     whereWeMeetIt: 'A table’s header row, or a heading that stays while its section scrolls.',
@@ -78,27 +91,7 @@ const told: Record<Position, Told> = {
   }
 };
 
-const withNoPositionedParent: Pick<Told, 'story' | 'verdict' | 'measuredFromWords'> = {
-  story: <>The parent has no position now. Nothing above Second in the HTML shown here is {positionedLink}, so the
-    browser measures <code className="monospaced">top</code> and <code className="monospaced">left</code> from the
-    corner of the page itself. The little page stands in for it here. Expect
-    this whenever nothing above an absolute box is positioned or has a {transformLink}, the property that moves, turns
-    or scales a box.</>,
-  verdict: 'Second sits 16px down and 24px in from the page’s corner, over the top of the page and outside its parent. It still scrolls with the page.',
-  measuredFromWords: 'the little page’s corner, at the red dot. It stands in for the page’s corner: nothing above Second is positioned, so the browser goes past the parent to the page.'
-};
-
-type WhatEachPositionTells = {
-  inOrder: readonly Position[];
-  told: (position: Position, from: MeasuredFrom) => Told;
-};
-
-const whatEachPositionTells: WhatEachPositionTells = {
-  inOrder: secondPosition.all,
-  told: (position, from) => from === 'little-page' ? {...told[position], ...withNoPositionedParent} : told[position]
-};
-
-const positionChoices: Choice<Position>[] = whatEachPositionTells.inOrder
+const positionChoices: Choice<Position>[] = secondPosition.all
   .map(position => ({words: position, value: position}));
 const parentPositionChoices: Choice<ParentPosition>[] = [
   {words: 'position: relative', value: 'positioned'},
@@ -144,7 +137,7 @@ export const WhereSecondGoes: FC = () => {
   const [position, choosePosition] = useState<Position>('static');
   const [parentPosition, chooseParentPosition] = useState<ParentPosition>('positioned');
   const from = secondPosition.measuredFrom(position, parentPosition);
-  const shown = whatEachPositionTells.told(position, from);
+  const shown = told[from];
 
   return <figure className="where-second-goes">
     <p className="caption uppercase" aria-hidden="true">Second’s position is</p>
