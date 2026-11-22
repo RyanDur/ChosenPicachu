@@ -4,6 +4,12 @@ import {untilTheTablesTabRenders} from './controls';
 
 const card = (): HTMLElement => screen.getByRole('region', {name: 'live aggregations'});
 
+const cellOf = (lookback: string, measure: string): HTMLElement => {
+  const measures = within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label'));
+  const row = within(card()).getByRole('row', {name: new RegExp(`^${lookback}`)});
+  return within(row).getAllByRole('cell')[measures.indexOf(measure) - 1];
+};
+
 export const aggregations = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'live aggregations'}, untilTheTablesTabRenders),
   card,
@@ -13,6 +19,7 @@ export const aggregations = {
   findRow: (lookback: string): Promise<HTMLElement> => within(card()).findByRole('row', {name: new RegExp(`^${lookback}`)}),
   counted: async (trades: number): Promise<HTMLElement[]> => within(card()).findAllByText(String(trades)),
   columns: (): (string | null)[] => within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label')),
+  markOn: (lookback: string, measure: string): string => cellOf(lookback, measure).dataset.moved ?? 'none',
   lookbacks: (): (string | null)[] => within(card()).getAllByRole('rowheader').map(header => header.textContent),
   moveWindowByKey: async (row: number, key: string): Promise<void> => {
     within(card()).getByRole('button', {name: `move row ${row}`}).focus();
