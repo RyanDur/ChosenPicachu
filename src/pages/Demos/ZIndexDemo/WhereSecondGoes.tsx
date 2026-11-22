@@ -14,8 +14,8 @@ const parentChoices: Choice<Parent>[] = [
   {words: 'not positioned', value: 'not-positioned'}
 ];
 
-const fillers = (words: string, count: number) => Array.from({length: count}, (_, at) =>
-  <p className="little-box muted-dashed-outline rounded-corners caption" key={at}>{words}</p>);
+const Fillers: FC<{words: string; count: number}> = ({words, count}) => <>{Array.from({length: count}, (_, at) =>
+  <p className="little-box muted-dashed-outline rounded-corners caption" key={at}>{words}</p>)}</>;
 
 const markupShown = (position: Position, parentPositioned: boolean): Line[] => [
   lines.plain('<p>the top of the page</p>'),
@@ -78,9 +78,9 @@ export const WhereSecondGoes: FC = () => {
                   <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
               </p>
               <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
-              {fillers('more inside the parent', 6)}
+              <Fillers words="more inside the parent" count={6}/>
             </section>
-            {fillers('more of the page', 4)}
+            <Fillers words="more of the page" count={4}/>
           </section>
         </section>
       </section>
