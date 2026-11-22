@@ -1,8 +1,9 @@
 import {FC, ReactNode} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
+import {Behind, Beside, Onward, PartFoot} from '@pages/Demos/PartFoot';
+import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {ZIndexPart, zIndexParts} from './part-pages';
-import {PartFoot} from './PartFoot';
 import {WhyThirdIsOnTop} from './WhyThirdIsOnTop';
 import {WhereSecondGoes} from './WhereSecondGoes';
 import {Why9999StillLoses} from './Why9999StillLoses';
@@ -57,11 +58,20 @@ const partWritings: Record<ZIndexPart, PartWriting> = {
 
 const partWears: Partial<Record<ZIndexPart, string>> = {'lets-build-this-feature': 'tutorials'};
 
+const theFirstPart: Behind = {kind: 'first-part'};
+const theNextTab: Onward = {kind: 'tab', topic: DemoTopics.dragAndDrop};
+
 export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
+  const carried = useCarriedAddress();
+  const besidePart = (beside: ZIndexPart): Beside =>
+    ({kind: 'part', title: zIndexParts.numbered(beside), address: carried(zIndexParts.addressOf(beside))});
+  const behind = zIndexParts.previousOf(part).map((beside): Behind => besidePart(beside)).orElse(theFirstPart);
+  const onward = zIndexParts.nextOf(part).map((beside): Onward => besidePart(beside)).orElse(theNextTab);
   const {name, ordinal} = zIndexParts.told(part);
   const place = `${demoTab.names[DemoTopics.zIndex]} · part ${ordinal} of ${zIndexParts.inTheBook}`;
   return <PartSection heading={name} place={place} introduction={partWritings[part].introduction}
-    panel={<PartsAndMinutes/>} foot={<PartFoot part={part}/>} wears={partWears[part]}>
+    panel={<PartsAndMinutes/>} foot={<PartFoot previous={behind} next={onward}/>}
+    wears={partWears[part]}>
     {partWritings[part].exhibitAndRuns}
   </PartSection>;
 };

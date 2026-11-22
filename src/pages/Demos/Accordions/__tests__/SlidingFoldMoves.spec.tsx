@@ -78,7 +78,7 @@ describe('how a sliding fold moves, on its own page', () => {
   test('should lead back to part five’s page, by number and title, with the fold choices carried, and on to no part after the last', async () => {
     render(<TestApp at={demosAt(slidingFold, build)}/>);
 
-    expect(await pageFoot.leadsOn('the accordions parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 5. What the platform gives now', demosAt('accordions/what-the-platform-gives-now', build)]
     ]);
   });

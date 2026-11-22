@@ -72,7 +72,7 @@ describe('the table tutorials, each on its own page', () => {
   test('the first tutorial’s page leads back to the live table’s page and on to the next tutorial, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/sort', '?world=vanilla')}/>);
 
-    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 5. Make the table live', demosAt('tables/the-live-table-and-the-store', '?world=vanilla')],
       ['Next: 7. Sort menu', demosAt('tables/menu', '?world=vanilla')]
     ]);
@@ -81,7 +81,7 @@ describe('the table tutorials, each on its own page', () => {
   test('a tutorial’s page leads back to the tutorial before it and on to the one after it', async () => {
     render(<TestApp at={demosAt('tables/menu', '?world=vanilla')}/>);
 
-    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 6. Drag sort', demosAt('tables/sort', '?world=vanilla')],
       ['Next: 8. Drag resize', demosAt('tables/resize', '?world=vanilla')]
     ]);
@@ -90,7 +90,7 @@ describe('the table tutorials, each on its own page', () => {
   test('the last tutorial’s page leads back and nowhere on, as the last part of every book does', async () => {
     render(<TestApp at={demosAt('tables/resize', '?world=vanilla')}/>);
 
-    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 7. Sort menu', demosAt('tables/menu', '?world=vanilla')]
     ]);
   });

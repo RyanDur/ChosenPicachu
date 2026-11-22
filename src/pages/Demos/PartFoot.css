@@ -1,9 +1,10 @@
-.page-foot {
+.part-foot {
   justify-self: stretch;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--base-x-2);
+  padding-block-start: var(--base-x-2);
 
   .onward {
     margin-inline-start: auto;

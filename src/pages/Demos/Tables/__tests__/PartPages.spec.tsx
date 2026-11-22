@@ -79,7 +79,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the need’s page leads on to the sketch’s page, by number and title, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla')}/>);
 
-    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Next: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')]
     ]);
   });
@@ -169,7 +169,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the sketch’s page leads back to the need’s page and on to the slices’ page, by number and title, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-sketch', '?world=vanilla')}/>);
 
-    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 1. Start with the need, and let it pick the element', demosAt('tables/the-need-and-its-clues', '?world=vanilla')],
       ['Next: 3. Slice the design into stories', demosAt('tables/the-slices', '?world=vanilla')]
     ]);
@@ -279,7 +279,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the slices’ page leads back to the sketch’s page and on to the still table’s page, by number and title, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-slices', '?world=vanilla')}/>);
 
-    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')],
       ['Next: 4. Build the still table', demosAt('tables/the-still-table', '?world=vanilla')]
     ]);
@@ -385,7 +385,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the still table’s page leads back to the slices’ page and on to the live table’s page, by number and title, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-still-table', '?world=vanilla')}/>);
 
-    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 3. Slice the design into stories', demosAt('tables/the-slices', '?world=vanilla')],
       ['Next: 5. Make the table live', demosAt('tables/the-live-table-and-the-store', '?world=vanilla')]
     ]);
@@ -495,7 +495,7 @@ describe('the tables tab’s parts, each on its own page', () => {
   test('the live table’s page leads back to the still table’s page and on to the first tutorial, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-live-table-and-the-store', '?world=vanilla')}/>);
 
-    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 4. Build the still table', demosAt('tables/the-still-table', '?world=vanilla')],
       ['Next: 6. Drag sort', demosAt('tables/sort', '?world=vanilla')]
     ]);
@@ -631,7 +631,7 @@ describe('a part page reached by a link saved with a story or a tutorial in its 
     const saved = demosAt('tables/the-need-and-its-clues', '?world=vanilla&living=still');
     render(<TestApp at={saved}/>);
 
-    await pageFoot.leadsOn('the tables parts');
+    await pageFoot.leadsOn();
 
     expect(appAddress.shown()).toBe(saved);
   });
@@ -640,7 +640,7 @@ describe('a part page reached by a link saved with a story or a tutorial in its 
     const saved = demosAt('tables/the-need-and-its-clues', '?world=vanilla&tut=menu');
     render(<TestApp at={saved}/>);
 
-    await pageFoot.leadsOn('the tables parts');
+    await pageFoot.leadsOn();
 
     expect(appAddress.shown()).toBe(saved);
   });
@@ -648,7 +648,7 @@ describe('a part page reached by a link saved with a story or a tutorial in its 
   test('should lead on without the story the address names', async () => {
     render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla&living=still')}/>);
 
-    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Next: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')]
     ]);
   });
@@ -656,7 +656,7 @@ describe('a part page reached by a link saved with a story or a tutorial in its 
   test('should lead on with the dials alone, leaving another tab’s story behind', async () => {
     render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla&graph=price')}/>);
 
-    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Next: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')]
     ]);
   });
@@ -664,7 +664,7 @@ describe('a part page reached by a link saved with a story or a tutorial in its 
   test('should lead on without the tutorial the address names', async () => {
     render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla&tut=menu')}/>);
 
-    expect(await pageFoot.leadsOn('the tables parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Next: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')]
     ]);
   });

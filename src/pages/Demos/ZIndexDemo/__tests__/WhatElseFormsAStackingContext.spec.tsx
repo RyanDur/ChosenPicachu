@@ -42,7 +42,7 @@ describe('what else forms a stacking context, on its own page', () => {
   test('should lead back to part three’s page and on to part five’s page, by number and title, with the wear carried', async () => {
     render(<TestApp at={demosAt(whatElseForms, '?wears=opacity')}/>);
 
-    expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 3. Why 9999 still loses', demosAt('z-index/why-9999-still-loses', '?wears=opacity')],
       ['Next: 5. Why the popover wins', demosAt('z-index/why-the-popover-wins', '?wears=opacity')]
     ]);

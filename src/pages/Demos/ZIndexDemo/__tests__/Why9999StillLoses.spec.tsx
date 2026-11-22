@@ -42,7 +42,7 @@ describe('why 9999 still loses, on its own page', () => {
   test('should lead back to part two’s page and on to part four’s page, by number and title, with the raised card carried', async () => {
     render(<TestApp at={demosAt(stillLoses, '?raised=second')}/>);
 
-    expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
+    expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 2. How position places a box', demosAt('z-index/how-position-places-a-box', '?raised=second')],
       ['Next: 4. What else forms a stacking context', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second')]
     ]);

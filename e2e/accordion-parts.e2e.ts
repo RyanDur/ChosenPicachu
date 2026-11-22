@@ -49,7 +49,7 @@ test('a reader follows the measured height’s foot on to what the platform give
   await page.goto('demos/accordions/the-measured-height/?type=exclusive&style=drawer');
   await siteFrame(page).hydrated();
 
-  await page.getByRole('navigation', {name: 'the accordions parts'})
+  await page.getByRole('navigation', {name: 'Parts, in order'})
     .getByRole('link', {name: 'Next: 5. What the platform gives now'}).click();
 
   await expect(page).toHaveURL(/demos\/accordions\/what-the-platform-gives-now\/\?type=exclusive&style=drawer$/);
@@ -60,7 +60,7 @@ test('a reader follows what the platform gives now’s foot on to how a sliding 
   await page.goto('demos/accordions/what-the-platform-gives-now/?type=exclusive&style=drawer');
   await siteFrame(page).hydrated();
 
-  await page.getByRole('navigation', {name: 'the accordions parts'})
+  await page.getByRole('navigation', {name: 'Parts, in order'})
     .getByRole('link', {name: 'Next: 6. How a sliding fold moves'}).click();
 
   await expect(page).toHaveURL(/demos\/accordions\/how-a-sliding-fold-moves\/\?type=exclusive&style=drawer$/);
@@ -102,7 +102,7 @@ test('a reader who chooses Exclusive and Static on a box remembers the fold keep
   await pillSwitch(page, 'fold type').choose('Exclusive');
   await pillSwitch(page, 'fold motion').choose('Static');
   await expect(page).toHaveURL(/\?type=exclusive&style=static$/);
-  const foot = page.getByRole('navigation', {name: 'the accordions parts'});
+  const foot = page.getByRole('navigation', {name: 'Parts, in order'});
 
   await foot.getByRole('link', {name: 'Next: 3. The max-height guess'}).click();
   await expect(accordions.tab(page).partTitle('The max-height guess')).toBeVisible();

@@ -45,11 +45,12 @@ describe('let’s build this feature, on its own page', () => {
     expect(await zIndexTab.findBannerControls()).toBeInTheDocument();
   });
 
-  test('should lead back to part six’s page, with the raised card carried', async () => {
+  test('should lead back to why a fixed banner still loses and on to the drag sort tab, with the raised card carried', async () => {
     render(<TestApp at={demosAt(buildThisFeature, '?raised=second')}/>);
 
-    expect(await pageFoot.leadsOn('the z-index parts')).toEqual([
-      ['Previous: 6. Why a fixed banner still loses', demosAt('z-index/why-a-fixed-banner-still-loses', '?raised=second')]
+    expect(await pageFoot.leadsOn()).toEqual([
+      ['Previous: 6. Why a fixed banner still loses', demosAt('z-index/why-a-fixed-banner-still-loses', '?raised=second')],
+      ['Next tab: Drag sort', demosAt('drag-and-drop', '?raised=second')]
     ]);
   });
 
