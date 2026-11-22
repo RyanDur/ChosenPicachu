@@ -12,8 +12,7 @@ type Props = {
 };
 
 export const PartsAndDials: FC<Props> = ({titled = false, offersTheFoldDials}) =>
-  <TabSidecar label={titled ? 'parts and dials' : undefined}>
-    <AccordionsSize/>
+  <TabSidecar label={titled ? 'parts and dials' : undefined} size={<AccordionsSize/>}>
     <PartsIndex titled={titled}/>
     {offersTheFoldDials && <DialGroup>
       <FoldTypeDial/>

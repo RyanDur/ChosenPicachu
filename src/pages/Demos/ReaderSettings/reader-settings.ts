@@ -11,6 +11,7 @@ export type FoldMotion = 'reveal' | 'drawer' | 'static';
 export type RaisedCard = typeof inOrder.raisedCards[number];
 export type CardOne = 'contained' | 'free';
 export type Worn = typeof inOrder.worn[number];
+export type PartsShown = 'shown' | 'hidden';
 
 export type Address = Placement & {
   pace: Pace;
@@ -23,6 +24,7 @@ export type Address = Placement & {
   type: FoldType;
   style: FoldMotion;
   'card-one': CardOne;
+  parts: PartsShown;
 };
 
 const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
@@ -39,7 +41,8 @@ const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
   stack: schema.literalUnion('down', 'up', 'left', 'right'),
   raised: schema.literalUnion(...inOrder.raisedCards),
   'card-one': schema.literalUnion('contained', 'free'),
-  wears: schema.literalUnion(...inOrder.worn)
+  wears: schema.literalUnion(...inOrder.worn),
+  parts: schema.literalUnion('shown', 'hidden')
 };
 
 const deskParam = 'charts';
