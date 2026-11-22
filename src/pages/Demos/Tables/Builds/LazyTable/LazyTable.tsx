@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {Body, BodyEvents, Cell, Column, DragSortable, HeaderEvents, Headers, Motion, Origin, ResizeHandle, Row, SortMenu, useDragSortable} from '@components/DragSortableTable';
 import {Measured, Measures, cells} from '../../../Market';
+import {DirectionWord} from '../DirectionWord';
 import {TableColumn, tableReports, tableReads} from '@components/DragSortableTable/model';
 import {DraggableColumn} from './DraggableColumn';
 import {RowHeader} from './RowHeader';
@@ -54,12 +55,12 @@ export const LazyTable: FC<Props> = ({caption, origin, motion, columns, rows, on
           const lookback = row.lookback.key;
           return <Row key={lookback}>
             <RowHeader column="lookback" row={lookback} label={row.lookback.display}/>
-            <Cell column="trades" row={lookback} data-moved={row.trades.moved}>{row.trades.display}</Cell>
-            <Cell column="buys" row={lookback} data-moved={row.buys.moved}>{row.buys.display}</Cell>
-            <Cell column="sells" row={lookback} data-moved={row.sells.moved}>{row.sells.display}</Cell>
-            <Cell column="volume" row={lookback} data-moved={row.volume.moved}>{row.volume.display}</Cell>
-            <Cell column="vwap" row={lookback} data-moved={row.vwap.moved}>{row.vwap.display}</Cell>
-            <Cell column="change" row={lookback} data-moved={row.change.moved}>{row.change.display}</Cell>
+            <Cell column="trades" row={lookback} data-moved={row.trades.moved}>{row.trades.display}<DirectionWord>{row.trades.moved}</DirectionWord></Cell>
+            <Cell column="buys" row={lookback} data-moved={row.buys.moved}>{row.buys.display}<DirectionWord>{row.buys.moved}</DirectionWord></Cell>
+            <Cell column="sells" row={lookback} data-moved={row.sells.moved}>{row.sells.display}<DirectionWord>{row.sells.moved}</DirectionWord></Cell>
+            <Cell column="volume" row={lookback} data-moved={row.volume.moved}>{row.volume.display}<DirectionWord>{row.volume.moved}</DirectionWord></Cell>
+            <Cell column="vwap" row={lookback} data-moved={row.vwap.moved}>{row.vwap.display}<DirectionWord>{row.vwap.moved}</DirectionWord></Cell>
+            <Cell column="change" row={lookback} data-moved={row.change.moved}>{row.change.display}<DirectionWord>{row.change.moved}</DirectionWord></Cell>
           </Row>;
         })}
       </Body>

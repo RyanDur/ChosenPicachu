@@ -12,14 +12,27 @@ const named = (lane: HTMLTableRowElement): string =>
 const lanes = (body: HTMLTableSectionElement): ReadonlyMap<string, HTMLTableRowElement> =>
   new Map([...body.rows].map(lane => [named(lane), lane]));
 
-const marked = (cell: HTMLTableCellElement, moved?: Moved): void =>
+const directionWord = (cell: HTMLTableCellElement, direction: Moved): HTMLSpanElement => {
+  const word = cell.ownerDocument.createElement('span');
+  word.className = 'off-screen';
+  word.textContent = direction;
+  return word;
+};
+
+const writeCell = (cell: HTMLTableCellElement, {display, moved}: Measure): void => {
+  if (cell.firstChild?.textContent === display && cell.dataset.moved === moved) {
+    return;
+  }
   maybe(moved).either(
     direction => {
-      if (cell.dataset.moved !== direction) {
-        cell.dataset.moved = direction;
-      }
+      cell.replaceChildren(display, ' ', directionWord(cell, direction));
+      cell.dataset.moved = direction;
     },
-    () => cell.removeAttribute('data-moved'));
+    () => {
+      cell.replaceChildren(display);
+      cell.removeAttribute('data-moved');
+    });
+};
 
 const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' | 'rows'>): void => {
   const order = frameColumns.shown(table);
@@ -28,10 +41,7 @@ const writeCells = ({table, lanes, rows}: Pick<MountedTable, 'table' | 'lanes' |
       frameColumns.sortable(table).forEach(measure => {
         const cell = lane.cells[order.indexOf(measure)];
         const shown: Measure = cells.isMeasure(measure) ? row[measure] : {display: ''};
-        if (cell.textContent !== shown.display) {
-          cell.textContent = shown.display;
-        }
-        marked(cell, shown.moved);
+        writeCell(cell, shown);
       })));
 };
 

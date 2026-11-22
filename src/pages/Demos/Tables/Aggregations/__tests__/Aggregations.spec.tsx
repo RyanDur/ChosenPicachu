@@ -1,6 +1,5 @@
 import {render, waitFor} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
-import {sortableTable} from '@components/DragSortableTable/__test_support';
 import {feedIsSubscribed} from '@pages/Demos/__test_support';
 import {broadcast, listeningFeed, tradeFrame} from '@pages/Demos/__test_support/feed';
 import {Trading} from '@pages/Demos/Market/Trading';
@@ -27,36 +26,26 @@ describe('the live aggregations', () => {
 
     broadcast(feed, fourTrades);
 
-    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))).toEqual(
+    await waitFor(() => expect(aggregations.numbersIn('this minute')).toEqual(
       ['this minute', '1', '1', '0', '0.01', '$50,004.00', '+$0.00']));
-    expect(sortableTable.texts(aggregations.row('last 5 minutes'))).toEqual(
+    expect(aggregations.numbersIn('last 5 minutes')).toEqual(
       ['last 5 minutes', '2', '2', '0', '0.06', '$50,003.17', '+$1.00']);
-    expect(sortableTable.texts(aggregations.row('last 15 minutes'))).toEqual(
+    expect(aggregations.numbersIn('last 15 minutes')).toEqual(
       ['last 15 minutes', '3', '2', '1', '0.31', '$50,002.23', '+$2.00']);
-    expect(sortableTable.texts(aggregations.row('this hour'))).toEqual(
+    expect(aggregations.numbersIn('this hour')).toEqual(
       ['this hour', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
-    expect(sortableTable.texts(aggregations.row('session'))).toEqual(
+    expect(aggregations.numbersIn('session')).toEqual(
       ['session', '4', '3', '1', '0.41', '$50,001.93', '+$3.00']);
   });
 
-  test('should mark a number a trade moves', async () => {
-    const feed = await listeningFeed();
-    render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
-    await aggregations.afterItsFirstTrade(feed, tradeFrame(50001, now));
-
-    broadcast(feed, [tradeFrame(50002, now + 1000)]);
-
-    await waitFor(() => expect(aggregations.markOn('this minute', 'trades')).toBe('up'));
-  });
-
-  test('should tell a screen reader only the number in a cell a trade moved', async () => {
+  test('should tell a screen reader the number in a cell and which way a trade moved it', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
     await aggregations.afterItsFirstTrade(feed, tradeFrame(50001, now));
     broadcast(feed, [tradeFrame(50002, now + 1000)]);
     await waitFor(() => expect(aggregations.markOn('this minute', 'trades')).toBe('up'));
 
-    expect(aggregations.spokenIn('this minute', 'trades')).toBe('2');
+    expect(aggregations.spokenIn('this minute', 'trades')).toBe('2 up');
   });
 
   test('the arrangement survives a change of table: the order belongs to the page', async () => {

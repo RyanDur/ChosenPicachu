@@ -321,6 +321,12 @@
       inset 0 calc(-1 * var(--hairline-x-2)) 0 var(--international-orange-engineering-tint),
       inset 0 calc(-1 * (var(--hairline-x-2) + var(--hairline-x-3))) 0 var(--ink-muted);
   }
+
+  @media (forced-colors: active) {
+    [data-moved] > .off-screen {
+      position: static;
+    }
+  }
 }
 
 .alarm-starred::after {

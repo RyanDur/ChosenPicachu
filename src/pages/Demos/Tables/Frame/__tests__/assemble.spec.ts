@@ -12,7 +12,7 @@ describe('the frame assembly', () => {
     const names = frameAssembly.sheets.map(({name}) => name);
     expect(new Set(names).size).toBe(names.length);
     const everything = frameAssembly.sheets.map(({css}) => css).join('\n');
-    expect(everything.match(/\.off-screen\s*\{/g)).toHaveLength(1);
+    expect(everything.match(/^\.off-screen\s*\{/gm)).toHaveLength(1);
   });
 
   it('the frame\'s sheets carry the prefixes the site\'s browsers need, as the site\'s own do', () => {

@@ -195,7 +195,7 @@ describe('the frame table', () => {
 
     broadcast(feed, [tradeFrame(100, 1700000000000, '0.01', 'sold')]);
 
-    await waitFor(() => expect(['buys', 'trades', 'sells'].map(column => vanillaFrame.figure('session', column).textContent)).toEqual(['0', '1', '1']));
+    await waitFor(() => expect(['buys', 'trades', 'sells'].map(column => vanillaFrame.numberIn('session', column))).toEqual(['0', '1', '1']));
   });
 
   it('the keyboard walks a row, and its label follows', async () => {
