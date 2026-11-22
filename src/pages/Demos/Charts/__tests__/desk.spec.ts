@@ -59,6 +59,10 @@ describe('the desk', () => {
     expect(desk.leftOut('pie,,candles')).toEqual([]);
   });
 
+  test('an entry of only spaces is not told as left out', () => {
+    expect(desk.leftOut('pie, ,candles')).toEqual([]);
+  });
+
   test('what was left out is told in the order the address gives it', () => {
     expect(desk.leftOut('pie,pie,bogus')).toEqual([{why: 'repeat', kind: 'pie'}, {why: 'unknown', entry: 'bogus'}]);
   });

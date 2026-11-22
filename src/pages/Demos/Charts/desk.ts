@@ -50,7 +50,7 @@ const atAfterRemoval = (at: number, standing: number): Maybe<number> =>
 type Reading = {readonly seen: readonly ChartKind[]; readonly left: readonly LeftOut[]};
 
 const leftOut = (charts: string): readonly LeftOut[] =>
-  charts.split(',').filter(entry => is(entry)).reduce<Reading>(({seen, left}, entry) => seatOf(entry).either(
+  charts.split(',').filter(entry => is(entry.trim())).reduce<Reading>(({seen, left}, entry) => seatOf(entry).either(
     ({kind}) => seen.includes(kind) ? {seen, left: [...left, {why: 'repeat', kind}]} : {seen: [...seen, kind], left},
     () => ({seen, left: [...left, {why: 'unknown', entry}]})
   ), {seen: [], left: []}).left;
