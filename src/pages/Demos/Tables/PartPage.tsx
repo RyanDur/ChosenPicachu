@@ -34,7 +34,7 @@ const introductions: Record<TablePart, string> = {
 export const PartPage: FC<{readonly part: TablePart}> = ({part}) => {
   const {name, ordinal} = tableParts.told(part);
   const Part = parts[part];
-  const {previous, next} = usePartsBeside(part);
+  const {previous, next} = usePartsBeside()(part);
   const place = `${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`;
   return <ThePart value={{heading: name, headingId: `${part}-heading`, place, previous, next}}><PartSection>
     <PartOpening><p className="paragraph">{introductions[part]}</p></PartOpening>

@@ -13,6 +13,7 @@ import {MenuRecipe, ResizeRecipe} from './Recipe';
 import {DemoLink} from '@pages/Demos/DemoLink';
 import {tableParts} from './part-pages';
 import {tablesBook} from './tables-book';
+import {useShownTutorial} from './useShownTutorial';
 import {PartsAndDials} from './PartsAndDials';
 import {usePartsBeside} from './usePartsBeside';
 import './TutorialPage.css';
@@ -29,26 +30,28 @@ const introductions: Record<Tutorial, string> = {
   resize: 'The fifth story, built all the way through.'
 };
 
-export const TutorialPage: FC<{readonly tutorial: Tutorial}> = ({tutorial}) => {
-  const {previous, next} = usePartsBeside(tutorial);
+export const TutorialPage: FC = () => {
+  const partsBeside = usePartsBeside();
   const startingAt = tableParts.told(tableTutorials.startingPart);
   const to = tableParts.addressOf(tableTutorials.startingPart);
-  const TutorialRecipe = recipes[tutorial];
-  const place = `${demoTab.names[DemoTopics.tables]} · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`;
-  const part = {heading: tableTutorials.nameOf(tutorial), headingId: `${tutorial}-heading`, place, previous, next};
-  return <ThePart value={part}><PartSection>
-    <PartOpening><p className="paragraph">{introductions[tutorial]}</p></PartOpening>
-    <PartPanel><PartsAndDials/></PartPanel>
-    <PartDemo className="tutorial-page">
-      <Aggregations/>
-      <p className="paragraph">
-        This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
-        “<DemoLink to={to}>{startingAt.name}</DemoLink>”, ends,
-        with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
-        those are new to you, read that part first.
-      </p>
-      <TutorialRecipe/>
-    </PartDemo>
-    <PartFoot/>
-  </PartSection></ThePart>;
+  return useShownTutorial().either(tutorial => {
+    const TutorialRecipe = recipes[tutorial];
+    const place = `${demoTab.names[DemoTopics.tables]} · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`;
+    const part = {heading: tableTutorials.nameOf(tutorial), headingId: `${tutorial}-heading`, place, ...partsBeside(tutorial)};
+    return <ThePart value={part}><PartSection>
+      <PartOpening><p className="paragraph">{introductions[tutorial]}</p></PartOpening>
+      <PartPanel><PartsAndDials/></PartPanel>
+      <PartDemo className="tutorial-page">
+        <Aggregations/>
+        <p className="paragraph">
+          This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
+          “<DemoLink to={to}>{startingAt.name}</DemoLink>”, ends,
+          with the page’s store, the table’s own store and the actions each one takes through its dispatch. If
+          those are new to you, read that part first.
+        </p>
+        <TutorialRecipe/>
+      </PartDemo>
+      <PartFoot/>
+    </PartSection></ThePart>;
+  }, () => null);
 };
