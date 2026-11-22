@@ -2,11 +2,10 @@ import {maybe} from '@ryandur/sand';
 import {screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-const untilThePartRenders = {timeout: 5000};
 const stopsBeforeGivingUp = 100;
 
 const hideParts = (): Promise<HTMLElement> =>
-  screen.findByRole('button', {name: 'Hide parts'}, untilThePartRenders);
+  screen.findByRole('button', {name: 'Hide parts'});
 
 const tabTo = async (target: HTMLElement): Promise<void> => {
   for (let stop = 0; stop < stopsBeforeGivingUp; stop += 1) {
@@ -18,7 +17,7 @@ const tabTo = async (target: HTMLElement): Promise<void> => {
 
 export const partsFold = {
   button: (name: 'Hide parts' | 'Show parts', expanded?: boolean): Promise<HTMLElement> =>
-    screen.findByRole('button', {name, expanded}, untilThePartRenders),
+    screen.findByRole('button', {name, expanded}),
   panelControlled: async (): Promise<HTMLElement | null> =>
     maybe((await hideParts()).getAttribute('aria-controls')).map(id => document.getElementById(id)).orNull(),
   offered: (): HTMLElement | null => screen.queryByRole('button', {name: /^(Hide|Show) parts$/}),
