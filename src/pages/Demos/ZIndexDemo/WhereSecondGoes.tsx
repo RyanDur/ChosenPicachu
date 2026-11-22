@@ -24,21 +24,22 @@ const transformLink =
 
 const formsNone = <>It forms no {stackingContextLink}.</>;
 const formsNoneUnlessAZIndex = <>It forms no {stackingContextLink}, unless we also give it
-  a z-index.</>;
+  a <code className="monospaced">z-index</code>.</>;
 const formsOneByItself = <>It forms a {stackingContextLink} by itself.</>;
 
 const told: Record<Position, Told> = {
   static: {
-    story: <>Every box starts as position: static. The browser places it in the flow,
-      as a block or inline, and ignores top and left.</>,
+    story: <>Every box starts as <code className="monospaced">position: static</code>. The browser places it in the flow,
+      as a block or inline, and ignores <code className="monospaced">top</code> and <code
+      className="monospaced">left</code>.</>,
     whereWeMeetIt: 'Every box, until we say otherwise.',
     verdict: 'Second sits between First and Third. The 16px and 24px do nothing.',
     measuredFromWords: 'nowhere. The browser ignores top and left.',
     stackingContext: formsNone
   },
   relative: {
-    story: <>position: relative moves the box from the place the flow gave it,
-      by top and left. The flow keeps that place
+    story: <><code className="monospaced">position: relative</code> moves the box from the place the flow gave it,
+      by <code className="monospaced">top</code> and <code className="monospaced">left</code>. The flow keeps that place
       open, so the boxes around it do not move.</>,
     whereWeMeetIt: 'A small nudge, or a parent we want a badge or a menu placed against.',
     verdict: 'Second moves 16px down and 24px right. Its old place stays open, and Third does not move.',
@@ -46,18 +47,19 @@ const told: Record<Position, Told> = {
     stackingContext: formsNoneUnlessAZIndex
   },
   absolute: {
-    story: <>position: absolute takes the box out of the flow, so the boxes after
-      it close the gap. The browser measures top and left from the nearest {positionedLink} ancestor, an ancestor
-      being any element the box sits inside. Here that is the parent, because we gave it position:
-      relative.</>,
+    story: <><code className="monospaced">position: absolute</code> takes the box out of the flow, so the boxes after
+      it close the gap. The browser measures <code className="monospaced">top</code> and <code
+      className="monospaced">left</code> from the nearest {positionedLink} ancestor, an ancestor being any element
+      the box sits inside. Here that is the parent, because we gave it <code className="monospaced">position:
+        relative</code>.</>,
     whereWeMeetIt: 'A badge on a corner, a menu under its button, a close button in a dialog’s corner.',
     verdict: 'Second leaves the flow, and Third moves up into its place. Second sits 16px down and 24px in from the parent’s corner, drawn over First. It scrolls with the page.',
     measuredFromWords: 'the parent’s corner, at the red dot. The parent is outlined in red because it is positioned.',
     stackingContext: formsNoneUnlessAZIndex
   },
   fixed: {
-    story: <>position: fixed takes the box out of the flow and
-      measures top and left from the window,
+    story: <><code className="monospaced">position: fixed</code> takes the box out of the flow and
+      measures <code className="monospaced">top</code> and <code className="monospaced">left</code> from the window,
       not the page. When the page scrolls, the box stays where it is. The little window’s view, the area under its bar,
       has a {transformLink}, the property that moves, turns or scales a box, so fixed is measured from it and not
       from the browser’s window.</>,
@@ -67,8 +69,8 @@ const told: Record<Position, Told> = {
     stackingContext: formsOneByItself
   },
   sticky: {
-    story: <>position: sticky leaves the box in the flow until scrolling would
-      carry it past the edge we name, here top: 0. Then it stays at that edge.</>,
+    story: <><code className="monospaced">position: sticky</code> leaves the box in the flow until scrolling would
+      carry it past the edge we name, here <code className="monospaced">top: 0</code>. Then it stays at that edge.</>,
     whereWeMeetIt: 'A table’s header row, or a heading that stays while its section scrolls.',
     verdict: 'Second scrolls with the page, then stays at the top while the rest of its parent scrolls under it. It leaves when its parent does.',
     measuredFromWords: 'the top edge of the box that scrolls, shown as the red line.',
@@ -78,7 +80,7 @@ const told: Record<Position, Told> = {
 
 const withNoPositionedParent: Pick<Told, 'story' | 'verdict' | 'measuredFromWords'> = {
   story: <>The parent has no position now. Nothing above Second in the HTML shown here is {positionedLink}, so the
-    browser measures top and left from the
+    browser measures <code className="monospaced">top</code> and <code className="monospaced">left</code> from the
     corner of the page itself. The little page stands in for it here. Expect
     this whenever nothing above an absolute box is positioned or has a {transformLink}, the property that moves, turns
     or scales a box.</>,
