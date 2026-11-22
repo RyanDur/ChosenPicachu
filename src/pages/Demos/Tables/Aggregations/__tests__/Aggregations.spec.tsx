@@ -42,10 +42,7 @@ describe('the live aggregations', () => {
   test('should mark a number a trade raises as up', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
-    await feedIsSubscribed(feed);
-    await aggregations.arrived();
-    broadcast(feed, [tradeFrame(50001, now)]);
-    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))[1]).toBe('1'));
+    await aggregations.afterItsFirstTrade(feed, tradeFrame(50001, now));
 
     broadcast(feed, [tradeFrame(50002, now + 1000)]);
 
@@ -55,10 +52,7 @@ describe('the live aggregations', () => {
   test('should mark a number a trade lowers as down', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
-    await feedIsSubscribed(feed);
-    await aggregations.arrived();
-    broadcast(feed, [tradeFrame(50005, now)]);
-    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))[1]).toBe('1'));
+    await aggregations.afterItsFirstTrade(feed, tradeFrame(50005, now));
 
     broadcast(feed, [tradeFrame(50001, now + 1000)]);
 
@@ -68,10 +62,7 @@ describe('the live aggregations', () => {
   test('should mark a number a trade moves in the lazy build as in the eager one', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/?pace=lazy" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
-    await feedIsSubscribed(feed);
-    await aggregations.arrived();
-    broadcast(feed, [tradeFrame(50001, now)]);
-    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))[1]).toBe('1'));
+    await aggregations.afterItsFirstTrade(feed, tradeFrame(50001, now));
 
     broadcast(feed, [tradeFrame(50002, now + 1000)]);
 
@@ -81,10 +72,7 @@ describe('the live aggregations', () => {
   test('should tell a screen reader only the number in a cell a trade moved', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
-    await feedIsSubscribed(feed);
-    await aggregations.arrived();
-    broadcast(feed, [tradeFrame(50001, now)]);
-    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))[1]).toBe('1'));
+    await aggregations.afterItsFirstTrade(feed, tradeFrame(50001, now));
     broadcast(feed, [tradeFrame(50002, now + 1000)]);
     await waitFor(() => expect(aggregations.markOn('this minute', 'trades')).toBe('up'));
 
@@ -94,10 +82,7 @@ describe('the live aggregations', () => {
   test('should clear the mark from a number the next trade leaves as it is', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
-    await feedIsSubscribed(feed);
-    await aggregations.arrived();
-    broadcast(feed, [tradeFrame(50001, now, '0.01', 'bought')]);
-    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))[1]).toBe('1'));
+    await aggregations.afterItsFirstTrade(feed, tradeFrame(50001, now, '0.01', 'bought'));
     broadcast(feed, [tradeFrame(50002, now + 1000, '0.01', 'sold')]);
     await waitFor(() => expect(aggregations.markOn('this minute', 'sells')).toBe('up'));
 
