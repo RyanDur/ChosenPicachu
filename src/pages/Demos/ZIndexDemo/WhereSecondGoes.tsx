@@ -54,7 +54,7 @@ const told: Record<MeasuredFrom, Told> = {
       it close the gap. The browser measures <code className="monospaced">top</code> and <code
       className="monospaced">left</code> from the nearest {positionedLink} ancestor, an ancestor being any element
       the box sits inside. Here that is the parent, because we gave it <code className="monospaced">position:
-        relative</code>.</>,
+        relative</code>. Out of the flow, it no longer stretches across its parent, so we give it a width.</>,
     whereWeMeetIt: whereWeMeetAnAbsoluteBox,
     verdict: 'Second leaves the flow, and Third moves up into its place. Second sits 16px down and 24px in from the parent’s corner, drawn over First. It scrolls with the page.',
     measuredFromWords: 'the parent’s corner, at the red dot. The parent is outlined in red because it is positioned.',
@@ -76,7 +76,7 @@ const told: Record<MeasuredFrom, Told> = {
       measures <code className="monospaced">top</code> and <code className="monospaced">left</code> from the window,
       not the page. When the page scrolls, the box stays where it is. The little window’s view, the area under its bar,
       has a {transformLink}, the property that moves, turns or scales a box, so fixed is measured from it and not
-      from the browser’s window.</>,
+      from the browser’s window. Out of the flow, it no longer stretches across its parent, so we give it a width.</>,
     whereWeMeetIt: 'A banner, a chat button, a header pinned to the window.',
     verdict: 'Second leaves the flow and stays put in the window while the page scrolls under it.',
     measuredFromWords: 'the view’s corner, at the red dot.',
