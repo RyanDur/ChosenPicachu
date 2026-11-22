@@ -71,6 +71,7 @@ describe('how position places a box, on its own page', () => {
   test('should say a static Second is measured from nowhere', async () => {
     render(<TestApp at={demosAt(howPosition)}/>);
     await explanation.part(title);
+    await positionExhibit.choose('relative');
 
     await positionExhibit.choose('static');
 
