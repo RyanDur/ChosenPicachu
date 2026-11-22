@@ -51,15 +51,6 @@ export const positionExhibit = (page: Page) => {
         await page.keyboard.press('Tab');
       }
     },
-    ringReachesPastTheWindow: (): Promise<boolean> => littlePage.evaluate(view => {
-      const ring = getComputedStyle(view);
-      if (ring.outlineStyle === 'none') return true;
-      const reach = parseFloat(ring.outlineWidth) + parseFloat(ring.outlineOffset);
-      const box = view.getBoundingClientRect();
-      const clip = view.parentElement?.getBoundingClientRect() ?? box;
-      return box.left - reach < clip.left || box.top - reach < clip.top ||
-        box.right + reach > clip.right || box.bottom + reach > clip.bottom;
-    }),
     littlePage,
     choosesParent: (position: ParentPosition): Promise<void> => pillSwitch(page, 'And its parent is').choose(position),
     spotOf,
