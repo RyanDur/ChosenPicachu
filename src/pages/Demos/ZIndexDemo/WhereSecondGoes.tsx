@@ -98,14 +98,9 @@ const parentPositionChoices: Choice<ParentPosition>[] = [
   {words: 'not positioned', value: 'not-positioned'}
 ];
 
-const FilledBox: FC<PropsWithChildren> = ({children}) =>
-  <p className="little-box muted-dashed-outline rounded-corners caption">{children}</p>;
-
-const FilledParent: FC<PropsWithChildren> = ({children}) =>
-  <>{Array.from({length: 6}, (_, at) => <FilledBox key={at}>{children}</FilledBox>)}</>;
-
-const FilledPage: FC<PropsWithChildren> = ({children}) =>
-  <>{Array.from({length: 4}, (_, at) => <FilledBox key={at}>{children}</FilledBox>)}</>;
+const FillerBoxes: FC<PropsWithChildren<{count: number}>> = ({count, children}) =>
+  <>{Array.from({length: count}, (_, at) =>
+    <p key={at} className="little-box muted-dashed-outline rounded-corners caption">{children}</p>)}</>;
 
 const pageMarkup = (position: Position, from: MeasuredFrom): string[] => [
   '<p>the top of the page</p>',
@@ -175,9 +170,9 @@ export const WhereSecondGoes: FC = () => {
                 <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
             </p>
             <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
-            <FilledParent>more inside the parent</FilledParent>
+            <FillerBoxes count={6}>more inside the parent</FillerBoxes>
           </section>
-          <FilledPage>more of the page</FilledPage>
+          <FillerBoxes count={4}>more of the page</FillerBoxes>
         </section>
       </section>
     </section>
