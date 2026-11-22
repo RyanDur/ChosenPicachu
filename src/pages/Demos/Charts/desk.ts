@@ -28,9 +28,9 @@ const seatedBy = (kind: ChartKind, name: string): Seating => {
 };
 
 const seatingOf = (entry: string): Maybe<Seating> => {
-  const [named, period = ''] = entry.split(':');
+  const [named, ...afterTheColon] = entry.split(':');
   const kind = named.trim();
-  return chartKinds.is(kind) ? some(seatedBy(kind, period.trim())) : nothing();
+  return chartKinds.is(kind) ? some(seatedBy(kind, afterTheColon.join(':').trim())) : nothing();
 };
 
 const entryOf = ({kind, period}: Seat): string => period === Period.hour ? kind : `${kind}:${period}`;
