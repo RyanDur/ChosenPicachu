@@ -70,7 +70,6 @@ export const demoPage = {
   introduction: (): HTMLElement => maybe(introductionBeforeTheTabs()).either(introduction => introduction, () => {
     throw new Error('No paragraph stands before the demos tabs');
   }),
-  introductionIfAny: (): HTMLElement | null => introductionBeforeTheTabs() ?? null,
   linksToTabsIn,
   linksToPageIn,
   linksToPage: (address: string): string[][] => toPage(linksOffTheRail(), address),
