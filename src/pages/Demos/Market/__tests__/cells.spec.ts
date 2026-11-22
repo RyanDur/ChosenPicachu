@@ -40,6 +40,14 @@ describe('a row of totals marked against the row before the newest trade', () =>
     expect(now.change.moved).toBeUndefined();
   });
 
+  test('should leave unmarked a number whose words held though its value moved', () => {
+    const now = cells.markedAgainst(
+      thisMinute({volume: {display: '12.34', value: 12.341}}),
+      thisMinute({volume: {display: '12.34', value: 12.3411}}));
+
+    expect(now.volume.moved).toBeUndefined();
+  });
+
   test('should leave unmarked a number that had none before the trade', () => {
     const now = cells.markedAgainst(thisMinute({change: {display: '—'}}), thisMinute({change: counted(3)}));
 
