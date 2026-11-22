@@ -2,7 +2,9 @@ import type {Locator, Page} from '@playwright/test';
 import {maybe} from '@ryandur/sand';
 import {pillSwitch} from './pills';
 
-export type NestingStep = 'One context' | 'Two contexts' | 'List inside' | 'List outside';
+export type NestingStep = '1 · One context' | '2 · A context inside' | '3 · The list inside' | '4 · The list outside';
+
+const nestingSteps: NestingStep[] = ['1 · One context', '2 · A context inside', '3 · The list inside', '4 · The list outside'];
 
 const unmeasured = {x: Number.NaN, y: Number.NaN, width: 0, height: 0};
 
@@ -13,8 +15,22 @@ export const nestingExhibit = (page: Page) => {
   const drawing = exhibit.getByRole('region', {name: 'What the browser draws'});
   const list = drawing.getByRole('list');
   const cardB = drawing.getByText('Card B · z-index: 1', {exact: true});
+  const steps = pillSwitch(page, 'Step');
+  const css = exhibit.getByRole('figure').filter({hasText: /^CSS/});
   return {
-    stepsTo: (step: NestingStep): Promise<void> => pillSwitch(page, 'Step').choose(step),
+    stepsTo: (step: NestingStep): Promise<void> => steps.choose(step),
+    step: (step: NestingStep): Locator => steps.pill(step),
+    stepsCutShort: async (): Promise<NestingStep[]> => {
+      await exhibit.scrollIntoViewIfNeeded();
+      const around = await boxOf(exhibit);
+      const cut = await Promise.all(nestingSteps.map(async step => {
+        const label = steps.wordsOf(step);
+        const words = await boxOf(label);
+        const spills = await label.evaluate(shown => shown.scrollWidth > shown.clientWidth);
+        return spills || words.x < around.x || words.x + words.width > around.x + around.width;
+      }));
+      return nestingSteps.filter((_, at) => cut[at]);
+    },
     onTopWhereTheListMeetsCardB: async (): Promise<string> => {
       await drawing.scrollIntoViewIfNeeded();
       const [listBox, cardBox] = await Promise.all([boxOf(list), boxOf(cardB)]);
@@ -26,7 +42,8 @@ export const nestingExhibit = (page: Page) => {
         return listed?.contains(hit) ? 'the list' : card?.contains(hit) ? 'card B' : 'neither';
       }, [theList, theCard, x, y] as const);
     },
-    css: exhibit.getByRole('figure').filter({hasText: /^CSS/}),
+    css,
+    markedRules: async (): Promise<string[]> => [...(await css.ariaSnapshot()).matchAll(/- mark: "([^"]+)"/g)].map(([, line]) => line),
     saying: (words: string): Locator => exhibit.getByText(words, {exact: false}),
     verdict: exhibit.getByRole('status', {name: 'what the browser drew'})
   };

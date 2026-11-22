@@ -2,6 +2,8 @@
     display: grid;
     gap: var(--base-x-2);
 
+    .nesting-steps { container-type: inline-size; }
+
     .nesting-stage {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));

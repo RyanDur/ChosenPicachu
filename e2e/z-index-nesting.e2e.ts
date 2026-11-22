@@ -4,35 +4,63 @@ import {nestingExhibit} from './__test_support';
 
 const address = 'demos/z-index/why-9999-still-loses/';
 
-test('stepping to two contexts shows the one rule that makes card A a context, and says what changed', async ({page}) => {
+test('stepping to a context inside marks the one rule that makes card A a context, and says what changed', async ({page}) => {
   const exhibit = nestingExhibit(page);
   await page.goto(address);
   await expect(exhibit.verdict).toHaveText('One context: the page.');
 
-  await exhibit.stepsTo('Two contexts');
+  await exhibit.stepsTo('2 · A context inside');
 
-  await expect(exhibit.css).toContainText('isolation: isolate;');
+  await expect.poll(exhibit.markedRules).toEqual(['.a {', 'isolation: isolate;', '}']);
   await expect(exhibit.verdict).toHaveText('Two contexts: the page, and card A inside it.');
 });
 
-test('the list written inside card A, at z-index 9999, opens under the card beside it', async ({page}) => {
+test('the list written inside card A, at z-index 9999, opens under card B', async ({page}) => {
   const exhibit = nestingExhibit(page);
   await page.goto(address);
 
-  await exhibit.stepsTo('List inside');
+  await exhibit.stepsTo('3 · The list inside');
 
   await expect.poll(exhibit.onTopWhereTheListMeetsCardB).toBe('card B');
   await expect(exhibit.verdict).toHaveText('The list opens under card B.');
 });
 
-test('the same list written outside, with the same 9999, opens over the card, and the page says the number did not change', async ({page}) => {
+test('the same list written outside, with the same 9999, opens over card B, and the page says the number did not change', async ({page}) => {
   const exhibit = nestingExhibit(page);
   await page.goto(address);
-  await exhibit.stepsTo('List inside');
+  await exhibit.stepsTo('3 · The list inside');
 
-  await exhibit.stepsTo('List outside');
+  await exhibit.stepsTo('4 · The list outside');
 
   await expect.poll(exhibit.onTopWhereTheListMeetsCardB).toBe('the list');
   await expect(exhibit.css).toContainText('z-index: 9999;');
-  await expect(exhibit.saying('The number did not change.')).toBeVisible();
+  await expect(exhibit.saying('The number did not change. Where we wrote the list did.')).toBeVisible();
+});
+
+test('a copied address opens the exhibit on the step it names', async ({page}) => {
+  const exhibit = nestingExhibit(page);
+
+  await page.goto(`${address}?nesting=the-list-outside`);
+
+  await expect(exhibit.step('4 · The list outside')).toBeChecked();
+  await expect(exhibit.verdict).toHaveText('The list opens over card B.');
+});
+
+test('Back steps the exhibit back to the step before', async ({page}) => {
+  const exhibit = nestingExhibit(page);
+  await page.goto(address);
+  await exhibit.stepsTo('2 · A context inside');
+  await expect(exhibit.step('2 · A context inside')).toBeChecked();
+
+  await page.goBack();
+
+  await expect(exhibit.step('1 · One context')).toBeChecked();
+});
+
+test.describe('a reader on a phone, a tablet held sideways or a desktop', {tag: ['@iPhone', '@phoneSideways', '@iPadSideways', '@desktop']}, () => {
+  test('every step’s label reads whole inside the exhibit', async ({page}) => {
+    await page.goto(address);
+
+    expect(await nestingExhibit(page).stepsCutShort()).toEqual([]);
+  });
 });
