@@ -151,6 +151,14 @@ describe('the desk', () => {
     expect(desk.leftOut('candles: day')).toEqual([]);
   });
 
+  test('a chart named with a space before its colon is dealt with its period', () => {
+    expect(desk.dealt('candles :day')).toEqual([{kind: 'candles', period: Period.day}]);
+  });
+
+  test('a chart named with a space before its colon is not told as left out', () => {
+    expect(desk.leftOut('candles :day')).toEqual([]);
+  });
+
   test('a name the desk does not know is told even when it reads like a period another chart was given', () => {
     expect(desk.leftOut('candles:decade,period candles decade')).toEqual([
       {why: 'unknown period', kind: 'candles', period: 'decade'},
