@@ -98,4 +98,48 @@ describe('the desk', () => {
   test('an address naming each chart once leaves nothing out', () => {
     expect(desk.leftOut('pie,candles:day')).toEqual([]);
   });
+
+  test('a period the page does not have is told as it was typed', () => {
+    expect(desk.leftOut('candles:decade')).toEqual([{why: 'unknown period', kind: 'candles', period: 'decade'}]);
+  });
+
+  test('a chart with a period the page does not have is still dealt, by the hour', () => {
+    expect(desk.dealt('candles:decade')).toEqual([{kind: 'candles', period: Period.hour}]);
+  });
+
+  test('a period given in another case is told as it was typed', () => {
+    expect(desk.leftOut('candles:Day')).toEqual([{why: 'unknown period', kind: 'candles', period: 'Day'}]);
+  });
+
+  test('a colon with no period after it is not told', () => {
+    expect(desk.leftOut('candles:')).toEqual([]);
+  });
+
+  test('a period the page does not have, given on two charts, is told for each', () => {
+    expect(desk.leftOut('candles:decade,price:decade')).toEqual([
+      {why: 'unknown period', kind: 'candles', period: 'decade'},
+      {why: 'unknown period', kind: 'price', period: 'decade'}
+    ]);
+  });
+
+  test('a chart given again with its unknown period is told as a repeat', () => {
+    expect(desk.leftOut('candles:decade,candles:decade'))
+      .toEqual([{why: 'unknown period', kind: 'candles', period: 'decade'}, {why: 'repeat', kind: 'candles'}]);
+  });
+
+  test('a period given to a chart that has none is told', () => {
+    expect(desk.leftOut('pie:day')).toEqual([{why: 'no periods', kind: 'pie'}]);
+  });
+
+  test('a chart that has no periods is still dealt when given one', () => {
+    expect(desk.dealt('pressure:day')).toEqual([{kind: 'pressure', period: Period.hour}]);
+  });
+
+  test('a chart with no periods is told so once, however many periods it is given', () => {
+    expect(desk.leftOut('pie:day,pie:week')).toEqual([{why: 'no periods', kind: 'pie'}, {why: 'repeat', kind: 'pie'}]);
+  });
+
+  test('a chart with no periods, named with no period, is not told', () => {
+    expect(desk.leftOut('pie,pressure:')).toEqual([]);
+  });
 });

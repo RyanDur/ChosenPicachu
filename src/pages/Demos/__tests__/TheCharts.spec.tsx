@@ -69,6 +69,25 @@ describe('a list of charts', () => {
     );
   });
 
+  test('an address with a period the chart doesn’t have says the chart shows the hour', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('charts', '?charts=candles:decade')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await chartsDesk.findLeftOut())
+      .toHaveTextContent(/^What the page left out: Candles has no “decade” period, so it shows the hour\.$/);
+  });
+
+  test('an address giving a period to a chart that has none says it has no periods', async () => {
+    const feed = await listeningFeed();
+
+    render(<TestApp at={demosAt('charts', '?charts=pie:day')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(await chartsDesk.findLeftOut()).toHaveTextContent(/^What the page left out: Pie has no periods\.$/);
+  });
+
   test('an address naming each chart once says nothing was left out', async () => {
     const feed = await listeningFeed();
 

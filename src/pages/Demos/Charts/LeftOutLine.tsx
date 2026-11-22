@@ -10,6 +10,10 @@ const sentenceOf = (omission: LeftOut): string => {
       return `“${omission.entry}” isn’t a chart.`;
     case 'repeat':
       return `${chartKinds.names[omission.kind]} was already on the desk.`;
+    case 'unknown period':
+      return `${chartKinds.names[omission.kind]} has no “${omission.period}” period, so it shows the hour.`;
+    case 'no periods':
+      return `${chartKinds.names[omission.kind]} has no periods.`;
     case 'none seated':
       return 'No chart was left, so the page shows the price line.';
   }
