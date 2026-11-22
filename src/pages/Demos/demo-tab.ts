@@ -29,11 +29,10 @@ const topicOf = (tab = ''): DemoTopics =>
 
 type DemoTab = {
   address: (topic: DemoTopics) => string;
-  isAddressOf: (pathname: string, topic: DemoTopics) => boolean;
   addressedAt: (pathname: string) => Maybe<DemoTopics>;
   currentAt: (pathname: string, topic: DemoTopics) => 'page' | 'true';
   names: Record<DemoTopics, string>;
   topicOf: (tab?: string) => DemoTopics;
 };
 
-export const demoTab: DemoTab = {address, isAddressOf, addressedAt, currentAt, names, topicOf};
+export const demoTab: DemoTab = {address, addressedAt, currentAt, names, topicOf};
