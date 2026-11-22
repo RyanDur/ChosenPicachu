@@ -1,4 +1,5 @@
 import {screen, within} from '@testing-library/react';
+import {computeAccessibleName} from 'dom-accessibility-api';
 import userEvent from '@testing-library/user-event';
 import {untilTheTablesTabRenders} from './controls';
 
@@ -20,6 +21,7 @@ export const aggregations = {
   counted: async (trades: number): Promise<HTMLElement[]> => within(card()).findAllByText(String(trades)),
   columns: (): (string | null)[] => within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label')),
   markOn: (lookback: string, measure: string): string => cellOf(lookback, measure).dataset.moved ?? 'none',
+  spokenIn: (lookback: string, measure: string): string => computeAccessibleName(cellOf(lookback, measure)),
   lookbacks: (): (string | null)[] => within(card()).getAllByRole('rowheader').map(header => header.textContent),
   moveWindowByKey: async (row: number, key: string): Promise<void> => {
     within(card()).getByRole('button', {name: `move row ${row}`}).focus();

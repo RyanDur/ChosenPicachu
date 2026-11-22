@@ -65,6 +65,32 @@ describe('the live aggregations', () => {
     await waitFor(() => expect(aggregations.markOn('this minute', 'vwap')).toBe('down'));
   });
 
+  test('should mark a number a trade moves in the lazy build as in the eager one', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at="/?pace=lazy" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
+    await feedIsSubscribed(feed);
+    await aggregations.arrived();
+    broadcast(feed, [tradeFrame(50001, now)]);
+    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))[1]).toBe('1'));
+
+    broadcast(feed, [tradeFrame(50002, now + 1000)]);
+
+    await waitFor(() => expect(aggregations.markOn('this minute', 'trades')).toBe('up'));
+  });
+
+  test('should tell a screen reader only the number in a cell a trade moved', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
+    await feedIsSubscribed(feed);
+    await aggregations.arrived();
+    broadcast(feed, [tradeFrame(50001, now)]);
+    await waitFor(() => expect(sortableTable.texts(aggregations.row('this minute'))[1]).toBe('1'));
+    broadcast(feed, [tradeFrame(50002, now + 1000)]);
+    await waitFor(() => expect(aggregations.markOn('this minute', 'trades')).toBe('up'));
+
+    expect(aggregations.spokenIn('this minute', 'trades')).toBe('2');
+  });
+
   test('should clear the mark from a number the next trade leaves as it is', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
