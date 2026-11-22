@@ -7,6 +7,9 @@ import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
 import {site} from '@pages/__test_support';
 
+const exhibitCaption = (file: string): string =>
+  `${file} on GitHubTaken from the exhibit on this page. The rest of the site doesn’t use it.`;
+
 const measuredHeight = 'accordions/the-measured-height';
 
 describe('the measured height, on its own page', () => {
@@ -84,20 +87,20 @@ describe('the measured height, on its own page', () => {
     ]);
   });
 
-  test('should show the React build’s samples beside the run that tells the two layout effects as taken from the exhibit, with no link', async () => {
+  test('should show the React build’s samples beside the run that tells the two layout effects as taken from the exhibit and linked to its file', async () => {
     render(<TestApp at={demosAt(measuredHeight)}/>);
 
     const measured = await explanation.part('The measured height');
 
-    expect(explanation.sampleCaptionsBeside(measured, /The script makes the moves in two layout effects/)).toEqual(['Taken from the exhibit on this page. The rest of the site doesn’t use it.']);
+    expect(explanation.sampleCaptionsBeside(measured, /The script makes the moves in two layout effects/)).toEqual([exhibitCaption('Accordions/MeasuredPanel.tsx')]);
   });
 
-  test('should show the React build’s sample beside the run that turns a fold around as taken from the exhibit, with no link', async () => {
+  test('should show the React build’s sample beside the run that turns a fold around as taken from the exhibit and linked to its file', async () => {
     render(<TestApp at={demosAt(measuredHeight)}/>);
 
     const measured = await explanation.part('The measured height');
 
-    expect(explanation.sampleCaptionsBeside(measured, /turns around from where it is/)).toEqual(['Taken from the exhibit on this page. The rest of the site doesn’t use it.']);
+    expect(explanation.sampleCaptionsBeside(measured, /turns around from where it is/)).toEqual([exhibitCaption('Accordions/MeasuredPanel.tsx')]);
   });
 
   test('should show, with exclusive chosen, what the closed fold "How this page builds it" holds once its bar is pressed', async () => {

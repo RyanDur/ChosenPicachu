@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {has, not} from '@ryandur/sand';
+import {has, maybe, not} from '@ryandur/sand';
 import {classNames} from '@components';
 import {Kind, Label} from './highlight';
 import {excerpts} from './excerpts';
@@ -14,18 +14,14 @@ type Props = {
 type Source = {path: string; url: string; owner?: string; first: number; last: number};
 
 const sourcesOf = (lines: readonly Line[]): Source[] =>
-  lines.reduce<Source[]>((sources, {from}) => {
-    if (from?.kind === 'linked') {
-      const {file: {path, url, owner}, line} = from;
-      const known = sources.find(source => source.path === path);
-      return known
-        ? sources.map(source => source === known
-          ? {...known, first: Math.min(known.first, line), last: Math.max(known.last, line)}
-          : source)
-        : [...sources, {path, url, owner, first: line, last: line}];
-    }
-    return sources;
-  }, []);
+  lines.reduce<Source[]>((sources, {from}) => maybe(from).map(({file: {path, url, owner}, line}) => {
+    const known = sources.find(source => source.path === path);
+    return known
+      ? sources.map(source => source === known
+        ? {...known, first: Math.min(known.first, line), last: Math.max(known.last, line)}
+        : source)
+      : [...sources, {path, url, owner, first: line, last: line}];
+  }).orElse(sources), []);
 
 const roots = ['src', 'lib'];
 
