@@ -59,9 +59,6 @@ const FileLink: FC<PropsWithChildren<{href: string}>> = ({href, children}) =>
 
 const linesOnGitHub = ({url, first, last}: Source): string => `${url}#L${first}-L${last}`;
 
-const exhibitFilesSentence = (count: number): string =>
-  `Taken from the exhibit on this page. The rest of the site doesn’t use ${count > 1 ? 'them' : 'it'}.`;
-
 export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
   const exhibitFiles = sources.filter(({fromTheExhibit}) => fromTheExhibit);
@@ -84,7 +81,7 @@ export const Snippet: FC<Props> = ({label, lines}) => {
     <figcaption className="sources caption ink">
       {exhibitFiles.map(source => <FileLink href={linesOnGitHub(source)} key={source.path}>
         {nameOf(source.path, source.owner)} on GitHub</FileLink>)}
-      {has(exhibitFiles) && exhibitFilesSentence(exhibitFiles.length)}
+      {has(exhibitFiles) && 'Taken from the exhibit on this page.'}
       {sharedFiles.map(source => <FileLink href={linesOnGitHub(source)} key={source.path}>
         {nameOf(source.path, source.owner)} on GitHub</FileLink>)}
       {not(has(sources)) && 'Written for this page, not taken from the site’s code.'}
