@@ -14,6 +14,16 @@ test('a keyboard steps Second through all five positions, and the chosen one is 
   await expect(exhibit.position('static')).not.toBeChecked();
 });
 
+test('a keyboard reaches the little page and sees its whole focus ring inside the little window', async ({page}) => {
+  const exhibit = positionExhibit(page);
+  await page.goto(address);
+
+  await exhibit.tabsToTheLittlePage();
+
+  await expect(exhibit.littlePage).toBeFocused();
+  expect(await exhibit.ringReachesPastTheWindow()).toBe(false);
+});
+
 test('Second given relative moves 16px down and 24px right, its old place stays open, and the page says where it went', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
