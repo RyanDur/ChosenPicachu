@@ -3,11 +3,11 @@ import {type Box, boxOf} from './box';
 import {pillSwitch} from './pills';
 import {siteFrame} from './site';
 
-export type Position = 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
-export type ParentPosition = 'position: relative' | 'not positioned';
-export type Spot = {x: number; y: number};
-export type Placed = Spot & {measuredFromFirstsHolder: boolean};
-export type Place = Spot & {width: number; height: number};
+type Position = 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
+type ParentPosition = 'position: relative' | 'not positioned';
+type Spot = {x: number; y: number};
+type Placed = Spot & {measuredFromFirstsHolder: boolean};
+type Place = Spot & {width: number; height: number};
 
 const cornerOf = async (box: Locator): Promise<Spot> => {
   const {x, y} = await boxOf(box);

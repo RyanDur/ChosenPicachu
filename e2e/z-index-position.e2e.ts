@@ -14,7 +14,7 @@ test('a keyboard steps Second through all five positions, and the chosen one is 
   await expect(exhibit.position('static')).not.toBeChecked();
 });
 
-test('Second given relative moves 16px down and 24px right, its old place stays open, and the CSS shows the rule', async ({page}) => {
+test('Second given relative moves 16px down and 24px right, its old place stays open, and the page says where it went', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
   const second = await exhibit.spotOf('Second');
@@ -25,6 +25,7 @@ test('Second given relative moves 16px down and 24px right, its old place stays 
   await expect.poll(() => exhibit.spotOf('Second')).toEqual({x: second.x + 24, y: second.y + 16});
   expect(await exhibit.spotOf('Third')).toEqual(third);
   await expect(exhibit.css).toContainText('position: relative;');
+  await expect(exhibit.verdict).toHaveText('Second moves 16px down and 24px right. Its old place stays open, and Third does not move.');
 });
 
 test('a relative Second leaves its dashed outline exactly where it stood', async ({page}) => {

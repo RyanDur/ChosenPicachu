@@ -24,7 +24,7 @@ export {sortableList} from './lists';
 export {heightOnceSettled} from './motion';
 export {accordions, type Build, type Part} from './accordions';
 export {stackingPile, type Card} from './stacking';
-export {positionExhibit, type ParentPosition, type Position, type Spot} from './position';
+export {positionExhibit} from './position';
 export {zIndexTab} from './z-index';
 export {bannerTrap, contextChooser, topLayerMenu, trappedMenu, wearsReportedWrong, type SortChoice, type Worn} from './trap';
 export {pressTab, tabsTo} from './keyboard';
