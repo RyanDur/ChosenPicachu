@@ -54,7 +54,7 @@ test('Second given relative moves 16px down and 24px right, and its old place st
 test('a relative Second leaves its dashed outline exactly where it stood', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
-  const stood = await exhibit.placeOf('Second');
+  const stood = await exhibit.spotOf('Second');
 
   await exhibit.chooses('relative');
 

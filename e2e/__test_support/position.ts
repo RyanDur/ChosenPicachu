@@ -8,21 +8,18 @@ type Position = 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
 type ParentPosition = 'position: relative' | 'not positioned';
 type Spot = {x: number; y: number};
 type Placed = Spot & {measuredFromFirstsHolder: boolean};
-type Place = Spot & {width: number; height: number};
-
-const exactly = (text: string): RegExp => new RegExp(`^${text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
 
 const cornerOf = async (box: Locator): Promise<Spot> => {
   const {x, y} = await boxOf(box);
   return {x, y};
 };
 
-const placeIn = (holder: Box, box: Box): Place => ({
+const cornerIn = (holder: Box, box: Spot): Spot => ({
   x: Math.round(box.x - holder.x),
-  y: Math.round(box.y - holder.y),
-  width: Math.round(box.width),
-  height: Math.round(box.height)
+  y: Math.round(box.y - holder.y)
 });
+
+const exactly = (text: string): RegExp => new RegExp(`^${text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
 
 export const positionExhibit = (page: Page) => {
   const exhibit = page.getByRole('figure', {name: /^Where Second goes\./});
@@ -67,16 +64,14 @@ export const positionExhibit = (page: Page) => {
       shownOnceChosen(parentPills.pill(position), () => parentPills.choose(position)),
     parentPill: (position: ParentPosition): Locator => parentPills.pill(position),
     spotOf,
-    placeOf: async (name: string): Promise<Place> =>
-      placeIn(await boxOf(littlePage), await boxOf(littlePage.getByText(name, {exact: true}))),
-    oldPlaceOf: async (name: string): Promise<Place[]> => {
+    oldPlaceOf: async (name: string): Promise<Spot[]> => {
       const holder = await boxOf(littlePage);
       const outlines = await littlePage.getByText(name, {exact: true})
         .evaluate(box => [...box.children].map(outline => {
-          const {x, y, width, height} = outline.getBoundingClientRect();
-          return {x, y, width, height};
+          const {x, y} = outline.getBoundingClientRect();
+          return {x, y};
         }));
-      return outlines.map(outline => placeIn(holder, outline));
+      return outlines.map(outline => cornerIn(holder, outline));
     },
     placedFromItsHolder: (name: string): Promise<Placed> => littlePage.getByText(name, {exact: true}).evaluate(box => {
       const holder = box instanceof HTMLElement ? box.offsetParent : null;
