@@ -4,11 +4,13 @@ import {maybe} from '@ryandur/sand';
 import {DemoTopics} from './demo-topics';
 import {demoTab} from './demo-tab';
 import {useCarriedAddress} from './useCarriedAddress';
+import {useShownTopic} from './useShownTopic';
 import './TabPager.css';
 
 const course = Object.values(DemoTopics);
 
-export const TabPager: FC<{readonly topic: DemoTopics}> = ({topic}) => {
+export const TabPager: FC = () => {
+  const topic = useShownTopic();
   const carried = useCarriedAddress();
   const ariaCurrent = demoTab.currentAt(useLocation().pathname, topic);
   const place = course.indexOf(topic);
