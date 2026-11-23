@@ -19,10 +19,9 @@ export const WhyThePopoverWins: FC = () => <>
     </li>
     <li className="run">
       <p className="paragraph">The top layer is not inside any stacking context, not even the page’s own, the one
-        every other sits inside, so no z-index
-        on the page is ever compared with it. Card one’s z-index of 1 still forms a layer around the old list, but the
-        new list, though it is written inside the card, is painted in the top layer. The browser draws the top layer
-        last, so the new menu is drawn over both cards.</p>
+        every other sits inside, so no z-index on the page is ever compared with it. Card one’s z-index of 1 still
+        forms a stacking context around the old list, but the new list, though it is written inside the card, is painted
+        in the top layer. The browser draws the top layer last, so the new menu is drawn over both cards.</p>
       <AboveThePage/>
     </li>
     <li className="run">
