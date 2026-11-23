@@ -12,8 +12,8 @@ import {MarketState, TradesState} from './marketSlice';
 const folded = (history: readonly Trade[], streamed: readonly Trade[]): Measures[] =>
   tradeTotals.perLookback(recentTrades.hydrated(history, streamed)).map(cells.from);
 
-const markedRows = ({history, trades, tradesBeforeTheNewest}: TradesState): Measures[] => {
-  const was = folded(history, tradesBeforeTheNewest);
+const markedRows = ({history, trades, tradesLastShown}: TradesState): Measures[] => {
+  const was = folded(history, tradesLastShown);
   return folded(history, trades).map((now, at) => cells.markedAgainst(was[at], now));
 };
 
