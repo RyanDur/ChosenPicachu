@@ -7,9 +7,6 @@ export const ExclusiveToggleAccordion: FC<AccordionProps> = ({
   className,
   folds
 }) => <article className={classNames('exclusive-toggle-accordion', className)}>
-  <header>
-    <h3 className="sub-title bold">Exclusive accordion using details elements</h3>
-  </header>
   <ul className="new-accordion">
     {folds.map(({heading, story}) =>
       <li key={heading}>

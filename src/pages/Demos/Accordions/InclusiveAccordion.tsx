@@ -8,10 +8,6 @@ export const InclusiveAccordion: FC<AccordionProps> = ({
   className,
   folds
 }) => <article className={classNames('inclusive-accordion', className)}>
-  <hgroup>
-    <h3 className="sub-title bold">Accordion using checkboxes and a known height</h3>
-    <p>No script: HTML and CSS alone.</p>
-  </hgroup>
   <fieldset>
     <legend className="off-screen">folds</legend>
     <ul className="accordion">

@@ -1,13 +1,17 @@
 import {FC} from 'react';
-import {classNames} from '@components';
 import {useControls} from '../Controls';
+import {Exhibit, ExhibitFoot} from '../Exhibit';
 import {FoldType} from '../ReaderSettings';
 import {Fold} from './accordion-props';
-import {looks} from './looks';
 import {platformBuilds} from './platform-builds';
 
 export const PlatformExhibit: FC<{folds: Record<FoldType, Fold[]>}> = ({folds}) => {
   const {foldType, foldMotion} = useControls();
   const {Accordion: Platform} = platformBuilds[foldType];
-  return <Platform className={classNames(looks.exhibit, foldMotion)} folds={folds[foldType]}/>;
+  return <Exhibit name={foldType === 'inclusive'
+    ? 'Inclusive accordion using details elements'
+    : 'Exclusive accordion using details elements'}>
+    <Platform className={foldMotion} folds={folds[foldType]}/>
+    <ExhibitFoot lead="No script:">details elements, with HTML and CSS alone.</ExhibitFoot>
+  </Exhibit>;
 };

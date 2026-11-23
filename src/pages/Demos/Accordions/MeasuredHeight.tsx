@@ -1,7 +1,7 @@
 import {FC} from 'react';
-import {classNames} from '@components';
 import {PartLink as ZIndexPartLink} from '@pages/Demos/ZIndexDemo';
 import {useControls} from '../Controls';
+import {Exhibit, ExhibitFoot} from '../Exhibit';
 import {FoldType} from '../ReaderSettings';
 import {carve, Line, lines, Sample, Snippet} from '../Recipe';
 import {dealtFolds} from './dealt-folds';
@@ -32,17 +32,19 @@ const measuredBuilds: Record<FoldType, Build> = {
 
 export const MeasuredHeight: FC = () => {
   const {foldType, foldMotion} = useControls();
-  const exhibitMoving = classNames(looks.exhibit, foldMotion);
   const input = foldInput.of(foldType);
   const {Accordion: Measured, sample} = measuredBuilds[foldType];
   return <>
-    <figure className={looks.exhibit}>
-      <PlainFold/>
-      <figcaption className="caption">This fold is a separate page, placed inside this one, so the choices the address
-        carries do not reach it. It is one fold, and its text is uncovered from the top down. Press the bar. With
+    <Exhibit name="A fold measured by plain script">
+      <p className="paragraph field">It is one fold, and its text is uncovered from the top down. Press the bar. With
         motion allowed, a script measures the text, and the style sheet slides the panel to that height. A second
-        press slides it shut. With less motion asked for, it opens at once.</figcaption>
-    </figure>
+        press slides it shut. With less motion asked for, it opens at once.</p>
+      <figure>
+        <PlainFold/>
+      </figure>
+      <ExhibitFoot lead="A fold measured by plain script.">It is a separate page, placed inside this one, so the
+        choices the address carries do not reach it.</ExhibitFoot>
+    </Exhibit>
     <ol className={looks.runs}>
       <li className="run">
         <p className="paragraph">Most of us turned next to script. A transition can move a height to a number,
@@ -89,7 +91,12 @@ export const MeasuredHeight: FC = () => {
             state are as they come. What changes is the shape. The plain script listens for the press; the React
             build redraws the panel from its state, so the measuring runs in two steps React takes before the
             browser paints: the first pins where the motion starts, and the second sets where it ends.</p>
-          <Measured className={exhibitMoving} folds={dealtFolds.measured[foldType]}/>
+          <Exhibit name={foldType === 'inclusive'
+            ? 'Accordion using checkboxes and a measured height'
+            : 'Accordion using a radio group and a measured height'}>
+            <Measured className={foldMotion} folds={dealtFolds.measured[foldType]}/>
+            <ExhibitFoot lead="Script:">A few lines measure each fold’s height.</ExhibitFoot>
+          </Exhibit>
           <ol className="runs">
             {foldType === 'exclusive' && <li className="run">
               <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes

@@ -32,12 +32,12 @@ describe('the accordions tab', () => {
     expect(names.filter((name, at) => names.indexOf(name) !== at)).toEqual([]);
   });
 
-  test('should title before you start, and nothing above it for the parts', async () => {
+  test('should title the exhibit, then before you start', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
 
-    expect(explanation.partTitles(tab)).toEqual(['Before you start']);
+    expect(explanation.partTitles(tab)).toEqual(['Three folds in HTML alone', 'Before you start']);
   });
 
   test('should title the fold choices after part 1, before you start', async () => {
@@ -175,7 +175,7 @@ describe('the parts index', () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const partsIndex = await accordionsTab.partsIndex();
-    const accordion = await accordionsTab.exhibit();
+    const accordion = await accordionsTab.htmlAlone();
     const beforeYouStart = await explanation.part('Before you start');
 
     expect(outOfReadingOrder([partsIndex, accordion, beforeYouStart])).toEqual([]);
@@ -303,7 +303,7 @@ describe('the accordion in HTML alone', () => {
   test('should hold three folds above the parts index, basalt, cinder and meadow, in that order', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const exhibit = await accordionsTab.exhibit();
+    const exhibit = await accordionsTab.htmlAlone();
 
     expect(explanation.foldLabelsIn(exhibit)).toEqual(['basalt', 'cinder', 'meadow']);
   });

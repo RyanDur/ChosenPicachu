@@ -20,10 +20,6 @@ export const InclusiveMeasuredAccordion: FC<AccordionProps> = ({
   const [open, dispatch] = useReducer(openFolds.together, []);
   return <OpenFolds.Provider value={open}>
     <article className={classNames('inclusive-accordion', className)}>
-      <hgroup>
-        <h3 className="sub-title bold">Accordion using checkboxes and a measured height</h3>
-        <p>A few lines of script measure each fold’s height.</p>
-      </hgroup>
       <fieldset>
         <legend className="off-screen">folds</legend>
         <ul className="accordion">

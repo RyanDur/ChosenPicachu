@@ -31,7 +31,7 @@ test('a reader follows the measured height from the accordions tab to its page, 
 
   await expect(page).toHaveURL(/demos\/accordions\/the-measured-height\/$/);
   await expect(accordions.tab(page).partTitle('The measured height')).toBeVisible();
-  await expect(page.getByTitle('A fold measured by plain script')).toBeVisible();
+  await expect(page.getByTitle('The fold’s own page')).toBeVisible();
 });
 
 test('the measured height’s page builds its fold with the fold type chosen on the tab', async ({page}) => {
