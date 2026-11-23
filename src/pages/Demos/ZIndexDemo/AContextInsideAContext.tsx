@@ -63,6 +63,7 @@ const TheList: FC = () => <ul className="list listed card hairline-edged rounded
 export const AContextInsideAContext: FC = () => {
   const {step, numberedSteps, choose: chooseStep} = useExhibitStep('nesting', steps, 'one-context');
   const title = useId();
+  const drawingName = useId();
   const isolating = step !== 'one-context';
   const {story, verdict, markup, rules} = told[step];
 
@@ -79,9 +80,9 @@ export const AContextInsideAContext: FC = () => {
       <Snippet label="CSS" lines={rules}/>
     </section>
     <section className="nesting-code">
-      <p className="caption uppercase" aria-hidden="true">What the browser draws</p>
+      <p className="caption uppercase" id={drawingName}>What the browser draws</p>
       <section className={classNames('nesting-drawing muted-dashed-outline rounded-corners', isolating && 'isolating')}
-        aria-label="What the browser draws">
+        aria-labelledby={drawingName}>
         <section className={classNames('a nested-card shorter card rounded-corners plan-blue',
           isolating ? 'ink-dashed-outline' : 'hairline-edged')}>
           {isolating ? 'Card A · a context of its own' : 'Card A'}
