@@ -18,5 +18,7 @@ export const wearsChooser = {
   closeTheList: async (): Promise<void> => {
     await userEvent.keyboard('{Escape}');
   },
-  formed: (chooser: HTMLElement): HTMLElement => within(chooser).getByRole('status', {name: 'what card one formed'})
+  formed: (chooser: HTMLElement): HTMLElement => within(chooser).getByRole('status', {name: 'what card one formed'}),
+  controls: (chooser: HTMLElement): HTMLElement[] =>
+    [...within(chooser).getAllByRole('radio'), ...within(chooser).getAllByRole('button')]
 };
