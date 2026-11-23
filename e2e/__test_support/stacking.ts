@@ -29,6 +29,7 @@ export const pileSteps = (page: Page) => {
     step: (step: Step): Locator => pillSwitch(page, 'Step').pill(step),
     givesAZIndexTo: (card: 'None' | Card): Promise<void> => pillSwitch(page, 'Give a z-index to').choose(card),
     givesAZIndexByKeyboardTo: async (card: Card): Promise<void> => {
+      await siteFrame(page).hydrated();
       await pillSwitch(page, 'Give a z-index to').pill('None').focus();
       for (let step = 0; step < order.indexOf(card); step += 1) {
         await page.keyboard.press('ArrowRight');
@@ -62,13 +63,6 @@ export const stackingPile = (page: Page) => {
     raise: async (card: Card): Promise<void> => {
       await siteFrame(page).hydrated();
       await raisedGroup.getByText(card, {exact: true}).click();
-    },
-    raiseByKeyboard: async (card: Card): Promise<void> => {
-      await siteFrame(page).hydrated();
-      await raisedGroup.getByRole('radio', {name: 'None'}).focus();
-      for (let step = 0; step < order.indexOf(card); step += 1) {
-        await page.keyboard.press('ArrowRight');
-      }
     },
     expand: async (): Promise<void> => {
       await siteFrame(page).hydrated();
