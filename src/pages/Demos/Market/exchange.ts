@@ -38,8 +38,7 @@ type FrameBatch = {
   readonly drop: () => void;
 };
 
-// A socket can deliver several trades between two paints; the store takes them as one batch per frame,
-// so what it marked is what the reader last saw.
+// A socket can deliver several trades between two paints.
 const batchedPerFrame = (dispatch: Dispatch): FrameBatch => {
   let held: readonly Trade[] = [];
   let frame = 0;
