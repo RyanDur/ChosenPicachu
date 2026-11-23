@@ -11,13 +11,13 @@ type ExhibitStep<T extends string> = {
 };
 
 export const useExhibitStep = <T extends string>(
-  at: string, steps: readonly Choice<T>[], unnamed: T
+  addressKey: string, steps: readonly Choice<T>[], unnamed: T
 ): ExhibitStep<T> => {
-  const {[at]: named, updateSearchParams} = useSearchParamsObject({[at]: schema.string});
+  const {[addressKey]: named, updateSearchParams} = useSearchParamsObject({[addressKey]: schema.string});
   return {
     step: maybe(steps.find(({value}) => value === named)).map(({value}) => value).orElse(unnamed),
     numberedSteps: steps.map(({words, value}, place) => ({words: `${place + 1} · ${words}`, value})),
-    choose: step => updateSearchParams({[at]: step}),
-    entryFor: step => ({[at]: step})
+    choose: step => updateSearchParams({[addressKey]: step}),
+    entryFor: step => ({[addressKey]: step})
   };
 };
