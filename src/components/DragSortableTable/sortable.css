@@ -20,7 +20,7 @@
     cursor: grab;
   }
 
-  &:not(:disabled):active {
+  &:not(:disabled):is(.carried, .carried *) {
     cursor: grabbing;
   }
 }
