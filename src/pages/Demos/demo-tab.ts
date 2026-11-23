@@ -29,9 +29,9 @@ const points: Record<DemoTopics, string> = {
   [DemoTopics.tables]: 'the arrangement is the state, and the data never moves'
 };
 
-const previousTab = (topic: DemoTopics): Maybe<DemoTopics> => maybe(course[course.indexOf(topic) - 1]);
+const previous = (topic: DemoTopics): Maybe<DemoTopics> => maybe(course[course.indexOf(topic) - 1]);
 
-const nextTab = (topic: DemoTopics): Maybe<DemoTopics> => maybe(course[course.indexOf(topic) + 1]);
+const next = (topic: DemoTopics): Maybe<DemoTopics> => maybe(course[course.indexOf(topic) + 1]);
 
 const formerTabs: ReadonlyMap<string, DemoTopics> = new Map([['dragAndDrop', DemoTopics.dragAndDrop]]);
 
@@ -43,8 +43,8 @@ const topicOf = (tab = ''): DemoTopics =>
 
 type DemoTab = {
   address: (topic: DemoTopics) => string;
-  nextTab: (topic: DemoTopics) => Maybe<DemoTopics>;
-  previousTab: (topic: DemoTopics) => Maybe<DemoTopics>;
+  next: (topic: DemoTopics) => Maybe<DemoTopics>;
+  previous: (topic: DemoTopics) => Maybe<DemoTopics>;
   addressedAt: (pathname: string) => Maybe<DemoTopics>;
   currentAt: (pathname: string, topic: DemoTopics) => 'page' | 'true';
   names: Record<DemoTopics, string>;
@@ -52,4 +52,4 @@ type DemoTab = {
   topicOf: (tab?: string) => DemoTopics;
 };
 
-export const demoTab: DemoTab = {address, addressedAt, currentAt, names, nextTab, points, previousTab, topicOf};
+export const demoTab: DemoTab = {address, addressedAt, currentAt, names, next, points, previous, topicOf};

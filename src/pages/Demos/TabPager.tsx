@@ -9,8 +9,8 @@ export const TabPager: FC = () => {
   const topic = useShownTopic();
   const carried = useCarriedAddress();
   const ariaCurrent = demoTab.currentAt(useLocation().pathname, topic);
-  const previous = demoTab.previousTab(topic);
-  const next = demoTab.nextTab(topic);
+  const previous = demoTab.previous(topic);
+  const next = demoTab.next(topic);
   const currentSlot = next.either(() => previous.either(() => 'current', () => 'previous'), () => 'next');
 
   return <>
