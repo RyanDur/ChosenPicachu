@@ -1,5 +1,5 @@
-import {PartsGroup} from '../parts-listed';
-import {BookPart, accordionParts} from './part-pages';
+import {PartsGroup} from '../../parts-listed';
+import {BookPart, accordionParts} from '../part-pages';
 
 const entryOf = (heading: BookPart) => {
   const {to, heading: fragment, title, minutes, says} = accordionParts.listed(heading);

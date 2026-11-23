@@ -1,6 +1,6 @@
-import {PartsGroup} from '../parts-listed';
-import {tableParts} from './part-pages';
-import {tableTutorials} from './tutorial-pages';
+import {PartsGroup} from '../../parts-listed';
+import {tableParts} from '../part-pages';
+import {tableTutorials} from '../tutorial-pages';
 
 export const tablesListed: readonly PartsGroup[] = [
   {
