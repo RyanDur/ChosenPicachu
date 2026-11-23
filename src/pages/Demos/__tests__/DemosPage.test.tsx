@@ -96,7 +96,7 @@ describe('The Demos page', () => {
   test('the tab row on the Z-index tab offers Accordions as the tab before it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    expect(await demoTabPager.previous()).toHaveAccessibleName('Previous tab, Accordions');
+    expect(await demoTabPager.previous()).toHaveAccessibleName('Previous tab: Accordions');
   });
 
   test('the tab row on the Z-index tab leads back to the Accordions tab', async () => {
@@ -108,7 +108,7 @@ describe('The Demos page', () => {
   test('the tab row on the Z-index tab offers Drag sort as the tab after it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    expect(await demoTabPager.next()).toHaveAccessibleName('Next tab, Drag sort');
+    expect(await demoTabPager.next()).toHaveAccessibleName('Next tab: Drag sort');
   });
 
   test('the tab row on the Z-index tab leads on to the Drag sort tab', async () => {
@@ -122,7 +122,7 @@ describe('The Demos page', () => {
 
     await demoTabPager.goNextByKeyboard();
 
-    await waitFor(async () => expect(await demoTabPager.next()).toHaveAccessibleName('Next tab, Charts'));
+    await waitFor(async () => expect(await demoTabPager.next()).toHaveAccessibleName('Next tab: Charts'));
     expect(await demoTabPager.next()).toHaveFocus();
   });
 
