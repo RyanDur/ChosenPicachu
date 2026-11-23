@@ -72,9 +72,13 @@ tester.run('no-forwarded-props', components.rules['no-forwarded-props'], {
     {name: 'should accept a label handed on as an aria attribute', code: 'const Framed = ({linkName}) => <Link aria-label={linkName}/>;'},
     {name: 'should accept a handler handed to the component that fires it', code: 'const UserMenu = ({onRemoved}) => <Item onClick={onRemoved}/>;'},
     {name: 'should accept a prop given to an element', code: 'const Field = ({shown}) => <output value={shown}/>;'},
-    {name: 'should accept a function that is not a component', code: 'const rowOf = ({groups}) => <Row groups={groups}/>;'},
+    {name: 'should leave a lower-case function that returns JSX to rendered-as-jsx', code: 'const rowOf = ({groups}) => <Row groups={groups}/>;'},
     {name: 'should accept a value given to the context that will hold it', code: 'const Frame = ({pageUnknown, children}) => <PageUnknown.Provider value={pageUnknown}>{children}</PageUnknown.Provider>;'},
     {name: 'should accept a value given to a provider component', code: 'const SiteProviders = ({environment, children}) => <EnvironmentProvider environment={environment}>{children}</EnvironmentProvider>;'},
+    {name: 'should accept a value handed to the control inside', code: 'const Dial = ({value}) => <Pill value={value}/>;'},
+    {name: 'should accept open handed to the fold inside', code: 'const Story = ({open}) => <Fold open={open}/>;'},
+    {name: 'should accept the rest of the attributes spread onto an element', code: 'const Field = ({label, ...rest}) => <label>{label}<input {...rest}/></label>;'},
+    {name: 'should accept the rest of a control\'s attributes spread onto the control inside', code: 'const ItemLink = ({className, ...link}) => <Link {...link} className={className}/>;'},
     {name: 'should accept an element spreading its own attributes', code: 'const Pill = props => <input {...props}/>;'}
   ],
   invalid: [
@@ -102,6 +106,22 @@ tester.run('no-forwarded-props', components.rules['no-forwarded-props'], {
       name: 'should refuse a component that spreads all its props onto another',
       code: 'const Story = told => <StoryShell {...told}/>;',
       errors: [{messageId: 'spread', data: {name: 'told'}}]
+    },
+    {
+      name: 'should refuse a member of the props received only to be given on',
+      code: 'const Story = props => <StoryShell groups={props.groups}/>;',
+      errors: [{messageId: 'forwarded', data: {name: 'groups'}}]
+    },
+    {
+      name: 'should refuse a prop given on from a memoized component',
+      code: 'const Shell = memo(({can}) => <Story can={can}/>);',
+      errors: [{messageId: 'forwarded', data: {name: 'can'}}]
+    },
+    {
+      name: 'should refuse a prop given on through a cast',
+      code: 'const Shell = ({can}) => <Story can={can as string}/>;',
+      filename: 'Shell.tsx',
+      errors: [{messageId: 'forwarded', data: {name: 'can'}}]
     }
   ]
 });
