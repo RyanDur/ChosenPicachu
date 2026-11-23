@@ -56,12 +56,13 @@
 }
 
 :root:has(.tabs) {
-  scroll-padding-block-start: calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--base-x-2));
+  scroll-padding-block-start: calc(var(--frame-reach, 0px) + var(--tab-bar-stuck-reach) + var(--base-x-2));
 }
 
 @media (width <= 600px), (width <= 1100px) and (height <= 600px) {
   :root {
     --tab-bar-reach: var(--base-x-5_5);
+    --tab-bar-stuck-reach: 0px;
   }
 
   :root:has(.tabs) {
