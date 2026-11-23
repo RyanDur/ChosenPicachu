@@ -2,7 +2,8 @@ import {FC} from 'react';
 import {not} from '@ryandur/sand';
 import {useHydrated} from '@components';
 import {Align, Entrance, Side, Stack} from '@banners';
-import {DialGroup, DialRow} from '../Controls';
+import {PillGlider} from '@components/PillGlider';
+import {DialGroup, DialRow, Reading} from '../Controls';
 import './BannerControls.css';
 
 type Copy = {
@@ -56,51 +57,59 @@ export const BannerControls: FC<BannerControlsProps> = ({
   return <section aria-labelledby="banner-controls-heading" className="controls">
     <h3 id="banner-controls-heading" className="off-screen">banner controls</h3>
     <DialGroup>
-      <DialRow label="side"
-        name="banner-side"
-        choices={[
-          {words: 'Top', value: 'top'},
-          {words: 'Middle', value: 'middle'},
-          {words: 'Bottom', value: 'bottom'}
-        ]}
-        chosen={side}
-        onChosen={onSideChosen}
-        reading={copy.side[side]}/>
-      <DialRow label="align"
-        name="banner-align"
-        choices={[
-          {words: 'Left', value: 'left'},
-          {words: 'Center', value: 'center'},
-          {words: 'Right', value: 'right'}
-        ]}
-        chosen={align}
-        onChosen={onAlignChosen}
-        reading={copy.align[align]}/>
-      <DialRow label="entrance"
-        name="banner-entrance"
-        choices={[
-          {words: 'Above', value: 'above'},
-          {words: 'Below', value: 'below'},
-          {words: 'Left', value: 'left'},
-          {words: 'Right', value: 'right'}
-        ]}
-        chosen={enter}
-        onChosen={onEnterChosen}
-        reading={<>
+      <DialRow label="side">
+        <PillGlider label="side"
+          name="banner-side"
+          choices={[
+            {words: 'Top', value: 'top'},
+            {words: 'Middle', value: 'middle'},
+            {words: 'Bottom', value: 'bottom'}
+          ]}
+          chosen={side}
+          onChosen={onSideChosen}/>
+        <Reading>{copy.side[side]}</Reading>
+      </DialRow>
+      <DialRow label="align">
+        <PillGlider label="align"
+          name="banner-align"
+          choices={[
+            {words: 'Left', value: 'left'},
+            {words: 'Center', value: 'center'},
+            {words: 'Right', value: 'right'}
+          ]}
+          chosen={align}
+          onChosen={onAlignChosen}/>
+        <Reading>{copy.align[align]}</Reading>
+      </DialRow>
+      <DialRow label="entrance">
+        <PillGlider label="entrance"
+          name="banner-entrance"
+          choices={[
+            {words: 'Above', value: 'above'},
+            {words: 'Below', value: 'below'},
+            {words: 'Left', value: 'left'},
+            {words: 'Right', value: 'right'}
+          ]}
+          chosen={enter}
+          onChosen={onEnterChosen}/>
+        <Reading>
           <span className="when-motion-allowed">{copy.enter[enter]}</span> <span className="when-less-motion">If your system asks for less motion, a new banner appears in place,
             whichever entrance you choose.</span>
-        </>}/>
-      <DialRow label="stack"
-        name="banner-stack"
-        choices={[
-          {words: 'Down', value: 'down'},
-          {words: 'Up', value: 'up'},
-          {words: 'Left', value: 'left'},
-          {words: 'Right', value: 'right'}
-        ]}
-        chosen={stack}
-        onChosen={onStackChosen}
-        reading={copy.stack[stack]}/>
+        </Reading>
+      </DialRow>
+      <DialRow label="stack">
+        <PillGlider label="stack"
+          name="banner-stack"
+          choices={[
+            {words: 'Down', value: 'down'},
+            {words: 'Up', value: 'up'},
+            {words: 'Left', value: 'left'},
+            {words: 'Right', value: 'right'}
+          ]}
+          chosen={stack}
+          onChosen={onStackChosen}/>
+        <Reading>{copy.stack[stack]}</Reading>
+      </DialRow>
     </DialGroup>
     <p className="caption">
       <code className="monospaced">{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>

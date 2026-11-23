@@ -5,6 +5,7 @@ export {ControlDials} from './ControlDials';
 export {useControls} from './useControls';
 export {DialGroup} from './DialGroup';
 export {DialRow} from './DialRow';
+export {Reading} from './Reading';
 export {PaceDial} from './PaceDial';
 export {TrackDial} from './TrackDial';
 export {OriginDial} from './OriginDial';

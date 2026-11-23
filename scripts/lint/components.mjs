@@ -115,6 +115,26 @@ const declaredAs = declared => {
   return has(holder) && holder.type === 'Identifier' ? holder.name : '';
 };
 
+/**
+ * @param {any} read a read of the rest, spread as an attribute
+ * @returns {any} the JSX element it is spread onto
+ */
+const elementSpreadOnto = read => wrapped(read).parent.parent.parent;
+
+const branchTypes = new Set(['ConditionalExpression', 'LogicalExpression', ...wrapperTypes]);
+
+/**
+ * @param {any} element a JSX element
+ * @param {any} declared a function
+ * @returns {boolean} whether the function returns that element as its root, in any branch
+ */
+const returnedBy = (element, declared) => {
+  const {parent} = element;
+  if (parent === declared && declared.body === element) return true;
+  if (parent.type === 'ReturnStatement') return true;
+  return branchTypes.has(parent.type) && returnedBy(parent, declared);
+};
+
 /** @type {import('eslint').Rule.RuleModule} */
 const noForwardedProps = {
   meta: {
@@ -122,7 +142,8 @@ const noForwardedProps = {
     schema: [],
     messages: {
       forwarded: '{{name}} is received only to be given to another component; that component reads it from the address or from its context\'s hook',
-      spread: '{{name}} is spread onto another component; each component reads what it needs from the address or from its context\'s hook'
+      spread: '{{name}} is spread onto another component; each component reads what it needs from the address or from its context\'s hook',
+      rest: 'the rest of the props, {{name}}, is spread onto a component inside; only a control that wraps one control spreads the rest onto the control it returns'
     }
   },
   create(context) {
@@ -186,6 +207,10 @@ const noForwardedProps = {
         if (props.type !== 'ObjectPattern') return;
         const {parent} = definition;
         const property = parent.type === 'AssignmentPattern' ? parent.parent : parent;
+        if (property.type === 'RestElement' && property.parent === props
+          && reads.some(each => spreadOntoAComponent(each) && not(returnedBy(elementSpreadOnto(each), declared)))) {
+          return refuse(definition, 'rest', definition.name);
+        }
         if (property.type === 'Property' && property.parent === props && reads.every(givenToAComponent)) {
           refuse(definition, 'forwarded', source.getText(property.key));
         }

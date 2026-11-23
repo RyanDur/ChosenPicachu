@@ -1,5 +1,6 @@
 import {FC} from 'react';
-import {DialRow, useControls} from '../Controls';
+import {PillGlider} from '@components/PillGlider';
+import {DialRow, Reading, useControls} from '../Controls';
 import {FoldType} from '../ReaderSettings';
 
 const foldTypes = [{words: 'Inclusive', value: 'inclusive'}, {words: 'Exclusive', value: 'exclusive'}] as const;
@@ -11,10 +12,12 @@ const readings: Record<FoldType, string> = {
 
 export const FoldTypeDial: FC = () => {
   const {foldType, change} = useControls();
-  return <DialRow label="fold type"
-    name="fold-type"
-    choices={foldTypes}
-    chosen={foldType}
-    onChosen={next => change({foldType: next})}
-    reading={readings[foldType]}/>;
+  return <DialRow label="fold type">
+    <PillGlider label="fold type"
+      name="fold-type"
+      choices={foldTypes}
+      chosen={foldType}
+      onChosen={next => change({foldType: next})}/>
+    <Reading>{readings[foldType]}</Reading>
+  </DialRow>;
 };

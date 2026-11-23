@@ -1,19 +1,8 @@
-import {ReactNode} from 'react';
-import {Choice, PillGlider} from '@components/PillGlider';
+import {FC, PropsWithChildren} from 'react';
 import './DialRow.css';
 
-type Props<T extends string> = {
-  label: string;
-  name: string;
-  choices: readonly Choice<T>[];
-  chosen: T;
-  onChosen: (value: T) => void;
-  reading: ReactNode;
-};
-
-export const DialRow = <T extends string>({label, reading, ...pills}: Props<T>) =>
+export const DialRow: FC<PropsWithChildren<{label: string}>> = ({label, children}) =>
   <li className="dial-row veiled-rule-below">
     <span className="axis caption uppercase" aria-hidden>{label}</span>
-    <PillGlider label={label} {...pills}/>
-    <output className="reading paragraph">{reading}</output>
+    {children}
   </li>;
