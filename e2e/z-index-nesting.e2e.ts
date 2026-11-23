@@ -11,7 +11,7 @@ test('stepping to a context inside marks the one rule that makes card A a contex
 
   await exhibit.stepsTo('2 · A context inside');
 
-  await expect.poll(exhibit.markedRules).toEqual(['.a {', 'isolation: isolate;', '}']);
+  await expect.poll(exhibit.markedRules).toEqual(['.card-a {', 'isolation: isolate;', '}']);
   await expect(exhibit.verdict).toHaveText('Two contexts: the page, and card A inside it.');
 });
 

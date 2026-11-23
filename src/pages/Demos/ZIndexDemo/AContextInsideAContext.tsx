@@ -21,38 +21,41 @@ const ruleFor = (anchor: string): Line[] => carve.unit(sheet, anchor);
 const rulesShown = (...rules: Line[][]): Line[] =>
   lines.fromTheExhibit(rules.flatMap((rule, at) => at === 0 ? rule : [lines.blank, ...rule]));
 
-const cardsBeside = [lines.plain('<section class="card a">Card A</section>'), lines.plain('<section class="card b">Card B</section>')];
+const cardsBeside = [
+  lines.plain('<section class="card card-a">Card A</section>'),
+  lines.plain('<section class="card card-b">Card B</section>')
+];
 
 const told: Record<Step, Told> = {
   'one-context': {
     story: 'A stacking context is a group of boxes the browser orders together, as it did with the pile. Here the page is one context, and it holds two cards.',
     verdict: 'One context: the page.',
     markup: cardsBeside,
-    rules: rulesShown(ruleFor('.b {'))
+    rules: rulesShown(ruleFor('.card-b {'))
   },
   'a-context-inside': {
     story: 'Contexts nest, the way elements do. Card A now forms a context of its own. The browser ranks the boxes inside card A only against each other, then stacks card A as one box in the page.',
     verdict: 'Two contexts: the page, and card A inside it.',
     markup: cardsBeside,
-    rules: rulesShown(ruleFor('.b {'), lines.marked(ruleFor('.a {')))
+    rules: rulesShown(ruleFor('.card-b {'), lines.marked(ruleFor('.card-a {')))
   },
   'the-list-inside': {
     story: 'We write a list inside card A and give it a z-index of 9999. The browser ranks that 9999 only against what else is in card A. Then it stacks card A as one box against card B, and there card B’s 1 is the larger number.',
     verdict: 'The list opens under card B.',
     markup: [
-      lines.plain('<section class="card a">'),
+      lines.plain('<section class="card card-a">'),
       lines.plain('  Card A'),
       ...lines.marked([lines.plain('  <ul class="list">…</ul>')]),
       lines.plain('</section>'),
-      lines.plain('<section class="card b">Card B</section>')
+      lines.plain('<section class="card card-b">Card B</section>')
     ],
-    rules: rulesShown(ruleFor('.b {'), ruleFor('.a {'), lines.marked(ruleFor('.list {')))
+    rules: rulesShown(ruleFor('.card-b {'), ruleFor('.card-a {'), lines.marked(ruleFor('.list {')))
   },
   'the-list-outside': {
     story: 'Now we write the list at the page’s level, beside the cards. The browser compares its 9999 with card B’s 1, and the list wins. The number did not change. Where we wrote the list did.',
     verdict: 'The list opens over card B.',
     markup: [...cardsBeside, ...lines.marked([lines.plain('<ul class="list">…</ul>')])],
-    rules: rulesShown(ruleFor('.b {'), ruleFor('.a {'), ruleFor('.list {'))
+    rules: rulesShown(ruleFor('.card-b {'), ruleFor('.card-a {'), ruleFor('.list {'))
   }
 };
 
@@ -83,12 +86,12 @@ export const AContextInsideAContext: FC = () => {
       <p className="caption uppercase" id={drawingName}>What the browser draws</p>
       <section className={classNames('nesting-drawing muted-dashed-outline rounded-corners', isolating && 'isolating')}
         aria-labelledby={drawingName}>
-        <section className={classNames('a nested-card shorter card rounded-corners plan-blue',
+        <section className={classNames('card-a nested-card shorter card rounded-corners plan-blue',
           isolating ? 'ink-dashed-outline' : 'hairline-edged')}>
           {isolating ? 'Card A · a context of its own' : 'Card A'}
           {step === 'the-list-inside' && <TheList/>}
         </section>
-        <section className="b nested-card taller card hairline-edged rounded-corners plan-rose">
+        <section className="card-b nested-card taller card hairline-edged rounded-corners plan-rose">
           Card B · z-index: 1
         </section>
         {step === 'the-list-outside' && <TheList/>}

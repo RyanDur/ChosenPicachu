@@ -24,12 +24,12 @@
         padding: var(--base-x-1_5);
 
         &.isolating {
-            .a {
+            .card-a {
                 isolation: isolate;
             }
         }
 
-        .b {
+        .card-b {
             position: relative;
             z-index: 1;
         }
