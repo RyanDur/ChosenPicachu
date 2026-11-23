@@ -20,7 +20,6 @@ export {Design} from './Design';
 export {Slices} from './Slices';
 export {Codes} from './Codes';
 export {Snippet} from './Snippet';
-export {ExhibitSteps} from './ExhibitSteps';
 export {useExhibitStep} from './useExhibitStep';
 export {lines} from './lines';
 export {carve} from './carve';

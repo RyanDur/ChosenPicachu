@@ -1,7 +1,7 @@
 import {FC, useId} from 'react';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {classNames} from '@components';
-import {carve, ExhibitSteps, Line, lines, Snippet, useExhibitStep} from '../Recipe';
+import {carve, Line, lines, Snippet, useExhibitStep} from '../Recipe';
 import {useControls} from '../Controls';
 import {inOrder, RaisedCard} from '../ReaderSettings';
 import sheet from './ThePile.css?sample';
@@ -34,7 +34,7 @@ const verdictOn = (raised: RaisedCard): string => raised === 'none'
 
 export const ThePile: FC = () => {
   const {raised: chosen, change} = useControls();
-  const {step, choose: chooseStep, entryFor} = useExhibitStep('pile', steps, chosen === 'none' ? 'overlap' : 'z-index');
+  const {step, numberedSteps, choose: chooseStep, entryFor} = useExhibitStep('pile', steps, chosen === 'none' ? 'overlap' : 'z-index');
   const raised = step === 'z-index' ? chosen : 'none';
   const title = useId();
 
@@ -42,7 +42,7 @@ export const ThePile: FC = () => {
     <p className="caption uppercase" aria-hidden="true">Exhibit</p>
     <h2 className="sub-title" id={title}>The pile</h2>
     <p className="caption uppercase" aria-hidden="true">Step</p>
-    <ExhibitSteps label="Step" at="pile" steps={steps} chosen={step} onChosen={chooseStep}/>
+    <PillGlider label="Step" name="pile" choices={numberedSteps} chosen={step} onChosen={chooseStep}/>
     <p className="paragraph">{stories[step]}</p>
     <section className="pile-stage">
       <section className="pile-code">
