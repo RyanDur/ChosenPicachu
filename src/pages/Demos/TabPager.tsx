@@ -1,21 +1,16 @@
 import {FC} from 'react';
 import {Link, useLocation} from 'react-router';
-import {maybe} from '@ryandur/sand';
-import {DemoTopics} from './demo-topics';
 import {demoTab} from './demo-tab';
 import {useCarriedAddress} from './useCarriedAddress';
 import {useShownTopic} from './useShownTopic';
 import './TabPager.css';
 
-const course = Object.values(DemoTopics);
-
 export const TabPager: FC = () => {
   const topic = useShownTopic();
   const carried = useCarriedAddress();
   const ariaCurrent = demoTab.currentAt(useLocation().pathname, topic);
-  const place = course.indexOf(topic);
-  const previous = maybe(course[place - 1]);
-  const next = maybe(course[place + 1]);
+  const previous = demoTab.before(topic);
+  const next = demoTab.after(topic);
   const currentSlot = next.either(() => previous.either(() => 'current', () => 'previous'), () => 'next');
 
   return <>

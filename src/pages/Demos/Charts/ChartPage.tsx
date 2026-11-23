@@ -8,6 +8,7 @@ import {demoTab, DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {Behind, Beside, Onward, PartFoot} from '@pages/Demos/PartFoot';
+import {bookEnds} from '@pages/Demos/book-ends';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {Pressure} from './Pressure';
@@ -57,8 +58,8 @@ const features: Record<ChartKind, Feature> = {
 const besideKind = (kind: ChartKind): Beside =>
   ({kind: 'part', title: chartKinds.numbered(kind), address: chartKinds.address(kind)});
 
-const thePreviousTab: Behind = {kind: 'tab', topic: DemoTopics.dragAndDrop};
-const theNextTab: Onward = {kind: 'tab', topic: DemoTopics.tables};
+const thePreviousTab: Behind = bookEnds.behind(DemoTopics.charts);
+const theNextTab: Onward = bookEnds.onward(DemoTopics.charts);
 
 export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const {reference, quote, chart: Chart} = features[kind];

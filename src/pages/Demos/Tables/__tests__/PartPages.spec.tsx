@@ -76,10 +76,11 @@ describe('the tables tab’s parts, each on its own page', () => {
     expect(await appAddress.movedOnFrom(demosAt('tables', '?world=vanilla'))).toBe(demosAt('tables/the-need-and-its-clues', '?world=vanilla'));
   });
 
-  test('the need’s page leads on to the sketch’s page, by number and title, with the build carried', async () => {
+  test('the need’s page leads back to the charts tab and on to the sketch’s page, by number and title, with the build carried', async () => {
     render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla')}/>);
 
     expect(await pageFoot.leadsOn()).toEqual([
+      ['Previous tab: Charts', demosAt('charts', '?world=vanilla')],
       ['Next: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')]
     ]);
   });
@@ -649,6 +650,7 @@ describe('a part page reached by a link saved with a story or a tutorial in its 
     render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla&living=still')}/>);
 
     expect(await pageFoot.leadsOn()).toEqual([
+      ['Previous tab: Charts', demosAt('charts', '?world=vanilla')],
       ['Next: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')]
     ]);
   });
@@ -657,6 +659,7 @@ describe('a part page reached by a link saved with a story or a tutorial in its 
     render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla&graph=price')}/>);
 
     expect(await pageFoot.leadsOn()).toEqual([
+      ['Previous tab: Charts', demosAt('charts', '?world=vanilla')],
       ['Next: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')]
     ]);
   });
@@ -665,6 +668,7 @@ describe('a part page reached by a link saved with a story or a tutorial in its 
     render(<TestApp at={demosAt('tables/the-need-and-its-clues', '?world=vanilla&tut=menu')}/>);
 
     expect(await pageFoot.leadsOn()).toEqual([
+      ['Previous tab: Charts', demosAt('charts', '?world=vanilla')],
       ['Next: 2. Sketch a design from the need', demosAt('tables/the-sketch', '?world=vanilla')]
     ]);
   });

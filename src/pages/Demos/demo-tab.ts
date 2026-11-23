@@ -2,12 +2,14 @@ import {Maybe, maybe} from '@ryandur/sand';
 import {Paths} from '@navigation';
 import {DemoTopics} from './demo-topics';
 
+const course = Object.values(DemoTopics);
+
 const address = (topic: DemoTopics): string => `${Paths.demos}${topic}/`;
 
 const isAddressOf = (pathname: string, topic: DemoTopics): boolean => pathname === address(topic);
 
 const addressedAt = (pathname: string): Maybe<DemoTopics> =>
-  maybe(Object.values(DemoTopics).find(topic => isAddressOf(pathname, topic)));
+  maybe(course.find(topic => isAddressOf(pathname, topic)));
 
 const currentAt = (pathname: string, topic: DemoTopics): 'page' | 'true' => isAddressOf(pathname, topic) ? 'page' : 'true';
 
@@ -27,16 +29,22 @@ const points: Record<DemoTopics, string> = {
   [DemoTopics.tables]: 'the arrangement is the state, and the data never moves'
 };
 
+const before = (topic: DemoTopics): Maybe<DemoTopics> => maybe(course[course.indexOf(topic) - 1]);
+
+const after = (topic: DemoTopics): Maybe<DemoTopics> => maybe(course[course.indexOf(topic) + 1]);
+
 const formerTabs: ReadonlyMap<string, DemoTopics> = new Map([['dragAndDrop', DemoTopics.dragAndDrop]]);
 
 const topicAt = (segment?: string): Maybe<DemoTopics> =>
-  maybe(Object.values(DemoTopics).find(topic => topic === segment));
+  maybe(course.find(topic => topic === segment));
 
 const topicOf = (tab = ''): DemoTopics =>
   maybe(formerTabs.get(tab)).either(former => former, () => topicAt(tab).orElse(DemoTopics.accordions));
 
 type DemoTab = {
   address: (topic: DemoTopics) => string;
+  after: (topic: DemoTopics) => Maybe<DemoTopics>;
+  before: (topic: DemoTopics) => Maybe<DemoTopics>;
   addressedAt: (pathname: string) => Maybe<DemoTopics>;
   currentAt: (pathname: string, topic: DemoTopics) => 'page' | 'true';
   names: Record<DemoTopics, string>;
@@ -44,4 +52,4 @@ type DemoTab = {
   topicOf: (tab?: string) => DemoTopics;
 };
 
-export const demoTab: DemoTab = {address, addressedAt, currentAt, names, points, topicOf};
+export const demoTab: DemoTab = {address, after, before, addressedAt, currentAt, names, points, topicOf};

@@ -33,10 +33,11 @@ describe('why Third is on top, on its own page', () => {
     expect(stackingPile.card(raised, 'Second')).toBeChecked();
   });
 
-  test('should lead on to the part after it, on its own page, by number and title, with the raised card carried', async () => {
+  test('should lead back to the accordions tab and on to the part after it, by number and title, with the raised card carried', async () => {
     render(<TestApp at={demosAt(thirdOnTop, '?raised=second')}/>);
 
     expect(await pageFoot.leadsOn()).toEqual([
+      ['Previous tab: Accordions', demosAt('accordions', '?raised=second')],
       ['Next: 2. How position places a box', demosAt('z-index/how-position-places-a-box', '?raised=second')]
     ]);
   });
@@ -47,7 +48,8 @@ describe('why Third is on top, on its own page', () => {
     const page = await demoTabs.arrivedOn('Z-index');
 
     expect(demoPage.linksToTabsIn(page)).toEqual([
-      ['accordions tab', `${Paths.demos}accordions/`]
+      ['accordions tab', `${Paths.demos}accordions/`],
+      ['Previous tab: Accordions', `${Paths.demos}accordions/`]
     ]);
   });
 
