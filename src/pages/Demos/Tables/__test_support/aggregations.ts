@@ -42,7 +42,6 @@ export const aggregations = {
   findRow: (lookback: string): Promise<HTMLElement> => within(card()).findByRole('row', {name: new RegExp(`^${lookback}`)}),
   counted: async (trades: number): Promise<HTMLElement[]> => within(card()).findAllByText(String(trades)),
   columns: (): (string | null)[] => within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label')),
-  markOn: (lookback: string, measure: string): string => moved.heardIn(cellOf(lookback, measure)),
   numbersIn,
   spokenIn: (lookback: string, measure: string): string =>
     computeAccessibleName(cellOf(lookback, measure)),
