@@ -22,7 +22,7 @@ test('a reader follows why Third is on top from the z-index tab to its page and 
   await expect(page).toHaveURL(/demos\/z-index\/why-third-is-on-top\/$/);
   await expect(zIndexTab(page).partTitle(whyThirdIsOnTop)).toBeVisible();
   await expect(page.getByText('Z-index · part 1 of 7', {exact: true})).toBeVisible();
-  await expect(page.getByRole('figure', {name: /^The pile\./})).toBeVisible();
+  await expect(page.getByRole('region', {name: 'The pile'})).toBeVisible();
 });
 
 test('a card raised on the z-index tab is still raised on the page for why Third is on top', async ({page}) => {
@@ -163,7 +163,7 @@ test('a reader follows let’s build this feature from the z-index tab to its pa
 
   await expect(page).toHaveURL(/demos\/z-index\/lets-build-this-feature\/$/);
   await expect(page.getByText('Z-index · part 7 of 7', {exact: true})).toBeVisible();
-  await expect(page.getByRole('region', {name: 'banner controls'})).toBeVisible();
+  await expect(page.getByRole('region', {name: 'The banner, at the window’s edge'})).toBeVisible();
 });
 
 test('a reader follows why a fixed banner still loses’s foot on to the last part’s page, with the wear kept in the address', async ({page}) => {

@@ -5,6 +5,7 @@ import {classNames} from '@components';
 import {SortMenu} from './SortMenu';
 import {useControls} from '../Controls';
 import {inOrder, Worn} from '../ReaderSettings';
+import {Exhibit, ExhibitFoot} from '../Exhibit';
 
 const property: Record<Worn, string> = {
   nothing: 'nothing',
@@ -41,13 +42,8 @@ export const ContextChooser: FC = () => {
   const [opened, updateOpened] = useState<Maybe<Worn>>(nothing());
   const openedAsWorn = opened.mBind(wearing => wearing === worn ? some(wearing) : nothing());
 
-  return <figure className="context-chooser card rounded-corners lifted padded">
-    <ol className="trap-steps">
-      <li className="paragraph">Choose what card one wears.</li>
-      <li className="paragraph">Press Sort by, and look where its list opens.</li>
-      <li className="paragraph">Choose another, and press Sort by again.</li>
-    </ol>
-    <fieldset className="wears">
+  return <Exhibit name="What card one wears">
+    <fieldset className="wears veiled-rule-below">
       <legend className="paragraph">What card one wears</legend>
       {inOrder.worn.map(choice =>
         <label key={choice} className="context-choice reachable">
@@ -59,17 +55,24 @@ export const ContextChooser: FC = () => {
           {choice === 'nothing' ? property[choice] : <code className="monospaced">{property[choice]}</code>}
         </label>)}
     </fieldset>
-    <ol className="old-way-cards">
-      <li className={classNames('old-way-card drawn-piece', wornAs[worn])}>
-        <p className="paragraph">Its list has z-index: 9999.</p>
-        <SortMenu onOpened={() => updateOpened(some(worn))}/>
-      </li>
-      <li className="old-way-card drawn-piece positioned forms-context">
-        <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>
-      </li>
+    <ol className="trap-steps field">
+      <li className="paragraph">Choose what card one wears.</li>
+      <li className="paragraph">Press Sort by, and look where its list opens.</li>
+      <li className="paragraph">Choose another, and press Sort by again.</li>
     </ol>
-    <output aria-label="what card one formed" className="paragraph">{openedAsWorn.map(wearing => whatItFormed[wearing]).orElse('')}</output>
-    <figcaption className="caption">What card one wears decides whether its list’s 9999 counts in the tab’s content,
-      against card two, or only inside the card.</figcaption>
-  </figure>;
+    <figure className="context-chooser field">
+      <ol className="old-way-cards">
+        <li className={classNames('old-way-card drawn-piece', wornAs[worn])}>
+          <p className="paragraph">Its list has z-index: 9999.</p>
+          <SortMenu onOpened={() => updateOpened(some(worn))}/>
+        </li>
+        <li className="old-way-card drawn-piece positioned forms-context">
+          <p className="paragraph">Card two has z-index: 1, and comes later in the code.</p>
+        </li>
+      </ol>
+      <output aria-label="what card one formed" className="paragraph">{openedAsWorn.map(wearing => whatItFormed[wearing]).orElse('')}</output>
+    </figure>
+    <ExhibitFoot lead="What card one wears.">Start with nothing, then give card one a property and see where its list
+      opens.</ExhibitFoot>
+  </Exhibit>;
 };

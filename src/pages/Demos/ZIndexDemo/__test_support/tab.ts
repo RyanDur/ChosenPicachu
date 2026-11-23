@@ -21,11 +21,10 @@ export const zIndexTab = {
   fragmentOf: (heading: string): string => `#${screen.getByRole('heading', {name: heading}).id}`,
   linkToTheBannerStory,
   followToTheBannerStory: async (part: HTMLElement): Promise<void> => userEvent.click(linkToTheBannerStory(part)),
-  findBannerControls: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'banner controls'}),
+  findBannerControls: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The banner, at the window’s edge'}),
   choose: async (controls: HTMLElement, dial: string, option: string): Promise<void> =>
     userEvent.click(within(within(controls).getByRole('group', {name: dial})).getByRole('radio', {name: option})),
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
-  firstExhibitIn: (part: HTMLElement): HTMLElement => within(part).getAllByRole('figure')[0],
   readingOf,
   findExpand,
   expandCards: async (): Promise<void> => userEvent.click(await findExpand()),

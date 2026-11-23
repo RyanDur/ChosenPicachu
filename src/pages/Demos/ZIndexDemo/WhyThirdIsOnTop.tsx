@@ -10,7 +10,7 @@ import '../Runs.css';
 import './ZIndexDemo.css';
 
 export const WhyThirdIsOnTop: FC = () => <>
-  <NaturalZIndex className="card rounded-corners lifted padded"/>
+  <NaturalZIndex/>
   <ol className="runs card rounded-corners lifted padded">
     <li className="run">
       <p className="paragraph">The pile is a list of three cards, First, Second and Third, in that order in the
