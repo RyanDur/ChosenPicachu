@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {PartTermLink} from '@pages/Demos/ZIndexDemo';
-import {classNames} from '@components';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {useControls} from '../Controls';
+import {Exhibit, ExhibitFoot} from '../Exhibit';
 import {FoldType} from '../ReaderSettings';
 import {carve, Line, lines, Mdn, Snippet} from '../Recipe';
 import {dealtFolds} from './dealt-folds';
@@ -50,7 +50,12 @@ export const RemembersTheFold: FC = () => {
   const input = foldInput.of(foldType);
   const {Accordion: KnownHeight, sample} = knownHeightBuilds[foldType];
   return <>
-    <KnownHeight className={classNames(looks.exhibit, foldMotion)} folds={dealtFolds.known[foldType]}/>
+    <Exhibit name={foldType === 'inclusive'
+      ? 'Accordion using checkboxes and a known height'
+      : 'Accordion using a radio group and a known height'}>
+      <KnownHeight className={foldMotion} folds={dealtFolds.known[foldType]}/>
+      <ExhibitFoot lead="No script:">HTML and CSS alone.</ExhibitFoot>
+    </Exhibit>
     <ol className={looks.runs}>
       <li className="run">
         <p className="paragraph">This build is a disclosure: a bar you press to show the text under it.

@@ -138,7 +138,7 @@ const pressedOnceItStartsMoving = async (fold: Locator, first: Locator, second: 
 
 const tab = (page: Page) => {
   const built = (build: Build): Locator =>
-    page.getByRole('article').filter({has: page.getByRole('heading', {name: headings[build], exact: true})}).first();
+    page.getByRole('region', {name: headings[build], exact: true}).first();
   const folds = (build: Build): Locator =>
     detailsBuilds.includes(build) ? built(build).getByRole('group') : built(build).getByRole('listitem');
   const pressesOfTheFirstPart = (build: Build): {opens: Locator; shuts: Locator} => {
@@ -151,7 +151,7 @@ const tab = (page: Page) => {
     return {...partIn[build]({page, fold, article: built(build), index}), ...readable(fold)};
   };
   const htmlAloneFold = (name: string): Part & {closeByKeyboard: () => Promise<void>} => {
-    const fold = page.getByRole('region', {name: 'Accordions'}).getByRole('figure').first().getByRole('group').filter({hasText: name});
+    const fold = page.getByRole('region', {name: 'Three folds in HTML alone', exact: true}).getByRole('group').filter({hasText: name});
     return {...detailsPart(page, fold), ...readable(fold), closeByKeyboard: () => focusAndPress(page, nameOn(fold), 'Enter')};
   };
   const partsOf = async (build: Build): Promise<Part[]> =>
@@ -193,7 +193,7 @@ const tab = (page: Page) => {
 };
 
 const rememberedFolds = (page: Page): Locator =>
-  page.getByRole('article').filter({has: page.getByRole('heading', {name: /and a known height$/})}).getByRole('radio');
+  page.getByRole('region', {name: /and a known height$/}).getByRole('radio');
 
 const rememberedFoldLabels = async (page: Page): Promise<string[]> =>
   rememberedFolds(page)
@@ -205,7 +205,7 @@ const textBelow = async (around: Locator, inside: Locator): Promise<number> => {
   return inner.y + inner.height - outer.y - outer.height;
 };
 
-const plainFoldTitle = 'A fold measured by plain script';
+const plainFoldTitle = 'The fold’s own page';
 
 const plainFold = (page: Page) => {
   const frame = page.getByTitle(plainFoldTitle);

@@ -55,7 +55,7 @@ describe('the measured height, on its own page', () => {
 
     const measured = await explanation.part('The measured height');
 
-    expect(await accordionsTab.foldMeasuredByPlainScript(measured)).toBeInTheDocument();
+    expect(await accordionsTab.foldsOwnPage(measured)).toBeInTheDocument();
   });
 
   test('the measured height’s page builds its fold with the fold type carried to it', async () => {

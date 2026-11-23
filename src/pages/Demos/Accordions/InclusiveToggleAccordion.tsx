@@ -7,9 +7,6 @@ export const InclusiveToggleAccordion: FC<AccordionProps> = ({
   className,
   folds
 }) => <article className={classNames('inclusive-toggle-accordion', className)}>
-  <header>
-    <h3 className="sub-title bold">Inclusive accordion using details elements</h3>
-  </header>
   <ul className="new-accordion">
     {folds.map(({heading, story}) =>
       <li key={heading}>

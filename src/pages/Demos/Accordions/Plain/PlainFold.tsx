@@ -27,7 +27,7 @@ export const PlainFold: FC = () => {
     return () => watcher.disconnect();
   }).orElse(() => undefined), [body]);
 
-  return <iframe className="plain-fold" title="A fold measured by plain script"
+  return <iframe className="plain-fold" title="The fold’s own page"
     style={has(height) ? {'--stage-block-size': `${height}px`} : undefined}
     onLoad={event => maybe(event.currentTarget.contentDocument).mBind(({body}) => maybe(body)).map(loaded => {
       dispatch(plainFoldChange.loaded(loaded));

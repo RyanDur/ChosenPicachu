@@ -17,10 +17,6 @@ export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
   const [open, dispatch] = useReducer(openFolds.oneAtATime, []);
   return <OpenFolds.Provider value={open}>
     <article className={classNames('exclusive-accordion', className)}>
-      <hgroup>
-        <h3 className="sub-title bold">Accordion using a radio group and a measured height</h3>
-        <p>A few lines of script measure each fold’s height.</p>
-      </hgroup>
       <fieldset>
         <legend className="off-screen">folds</legend>
         <ul className="accordion">

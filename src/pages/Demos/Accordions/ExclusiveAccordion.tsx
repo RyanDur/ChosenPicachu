@@ -8,10 +8,6 @@ export const ExclusiveAccordion: FC<AccordionProps> = ({
   className,
   folds
 }) => <article className={classNames('exclusive-accordion', className)}>
-  <hgroup>
-    <h3 className="sub-title bold">Accordion using a radio group and a known height</h3>
-    <p>No script: HTML and CSS alone.</p>
-  </hgroup>
   <fieldset>
     <legend className="off-screen">folds</legend>
     <ul className="accordion">

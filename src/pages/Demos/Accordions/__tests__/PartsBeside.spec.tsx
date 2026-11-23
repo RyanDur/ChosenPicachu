@@ -78,7 +78,7 @@ describe('the accordions parts panel', () => {
 
     const introduction = explanation.opener(await explanation.part('The measured height'));
     const index = await partsIndex.find();
-    const exhibit = await accordionsTab.exhibit();
+    const exhibit = await accordionsTab.measuredByPlainScript();
 
     expect(outOfReadingOrder([index, introduction, exhibit])).toEqual([]);
   });
@@ -86,6 +86,6 @@ describe('the accordions parts panel', () => {
   test('should leave a part’s exhibit under the part’s own title, not under the parts', async () => {
     render(<TestApp at={demosAt(maxHeightGuess)}/>);
 
-    expect(titleAbove(await accordionsTab.exhibit())).toBe('The max-height guess');
+    expect(titleAbove(await accordionsTab.firstFigure())).toBe('The max-height guess');
   });
 });

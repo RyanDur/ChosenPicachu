@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {useControls} from '../Controls';
+import {Exhibit} from '../Exhibit';
 import {FoldType} from '../ReaderSettings';
 import {carve, Mdn, Sample, Snippet} from '../Recipe';
 import inclusiveHtmlAloneSource from './InclusiveHtmlAlone.tsx?sample';
@@ -39,9 +40,11 @@ export const AccordionsExplained: FC = () => {
         before you need script. If you know how each one works, you can choose the one the job needs. By the end you
         can build an accordion in HTML alone, make it slide with CSS, keep one fold open at a time, and say which
         language each job needed and why. The accordion on this page is HTML alone.</p>
-      <figure className={`html-alone-exhibit snapping ${looks.exhibit}`}>
-        <HtmlAlone/>
-      </figure>
+      <Exhibit name="Three folds in HTML alone">
+        <figure className="snapping">
+          <HtmlAlone/>
+        </figure>
+      </Exhibit>
     </header>
     <FoldDials/>
     <section aria-labelledby="before-you-start-heading" className="before-you-start">

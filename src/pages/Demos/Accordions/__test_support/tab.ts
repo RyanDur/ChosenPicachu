@@ -32,7 +32,9 @@ export const accordionsTab = {
   },
   buildIn,
   buildsIn: (part: HTMLElement): string[] =>
-    within(part).getAllByRole('article').map(build => within(build).getByRole('heading', {level: 3}).textContent),
+    within(part).getAllByRole('region')
+      .filter(region => is(within(region).queryByRole('article')))
+      .map(exhibit => computeAccessibleName(exhibit)),
   openPart: async (name: string): Promise<void> =>
     userEvent.click(within(await partsIndex.find()).getByRole('link', {name})),
   followInIntroduction: async (part: string, name: string): Promise<void> =>
@@ -40,7 +42,9 @@ export const accordionsTab = {
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   partsIndex: partsIndex.find,
   sizeIn: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByText(/^Six parts, about \d+ minutes\.$/),
-  exhibit: async (): Promise<HTMLElement> =>
+  htmlAlone: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'Three folds in HTML alone'}),
+  measuredByPlainScript: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'A fold measured by plain script'}),
+  firstFigure: async (): Promise<HTMLElement> =>
     within(await screen.findByRole('region', {name: 'Accordions'})).getAllByRole('figure')[0],
   titlesIn: partsIndex.titlesIn,
   currentPagesIn: (index: HTMLElement): string[] =>
@@ -48,5 +52,5 @@ export const accordionsTab = {
   titlesUnder: (index: HTMLElement, label: string): string[] =>
     within(within(index).getByRole('list', {name: label})).getAllByRole('link').map(link => link.textContent),
   entryOf: partsIndex.entryOf,
-  foldMeasuredByPlainScript: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByTitle('A fold measured by plain script')
+  foldsOwnPage: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByTitle('The fold’s own page')
 };
