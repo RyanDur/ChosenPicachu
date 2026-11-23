@@ -149,6 +149,10 @@ const noForwardedProps = {
     const read = declared => {
       const [props] = declared.params;
       if (empty(props) || not(/^[A-Z]/.test(nameOf(declared)))) return;
+      /**
+       * @param {import('eslint').Scope.Variable} variable
+       * @returns {any[]}
+       */
       const reads = variable =>
         variable.references.filter(reference => reference.isRead()).map(({identifier}) => identifier);
       source.getDeclaredVariables(declared).forEach(variable => {
