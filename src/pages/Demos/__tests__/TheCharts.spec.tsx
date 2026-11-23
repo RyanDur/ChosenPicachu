@@ -842,14 +842,14 @@ describe('the charts tab’s introduction', () => {
 });
 
 describe('a chart page’s foot', () => {
-  test('should lead to the chart before it and the chart after it, by number and title', async () => {
+  test('should lead to the chart before it and the chart after it, by number and title, with the reader’s dials carried', async () => {
     const feed = await listeningFeed();
-    render(<TestApp at={chartPageAt('candles')} feed={feed}/>);
+    render(<TestApp at={chartPageAt('candles', '?wears=opacity')} feed={feed}/>);
     await chartsDesk.findTitle('Candles tutorial', 2);
 
     expect(await pageFoot.leadsOn()).toEqual([
-      ['Previous: 1. Price line', chartPageAt('price')],
-      ['Next: 3. Pressure', chartPageAt('pressure')]
+      ['Previous: 1. Price line', chartPageAt('price', '?wears=opacity')],
+      ['Next: 3. Pressure', chartPageAt('pressure', '?wears=opacity')]
     ]);
   });
 
