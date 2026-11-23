@@ -108,6 +108,14 @@ const refsWithAReason = [
   'src/pages/Demos/Controls/DialGroup.tsx'
 ];
 
+const forwardsStill = [
+  'src/pages/Demos/Accordions/PartsIndex.tsx', 'src/pages/Demos/Accordions/PlatformGivesNow.tsx',
+  'src/pages/Demos/Accordions/SlidingFoldMoves.tsx', 'src/pages/Demos/Charts/PartsIndex.tsx',
+  'src/pages/Demos/DemoTabs.tsx', 'src/pages/Demos/Recipe/Drawing/Diagram.tsx', 'src/pages/Demos/Recipe/DrawnStory.tsx',
+  'src/pages/Demos/Recipe/Story.tsx', 'src/pages/Demos/Recipe/StoryShell.tsx',
+  'src/pages/Demos/ZIndexDemo/PartsIndex.tsx'
+];
+
 const oldWayExhibits = [
   'src/pages/Demos/Accordions/ExclusiveAccordion.tsx', 'src/pages/Demos/Accordions/InclusiveAccordion.tsx'
 ];
@@ -170,6 +178,11 @@ module.exports = [
     files: ['src/**/*.tsx'],
     plugins: {components},
     rules: {'components/rendered-as-jsx': 'error'}
+  },
+  {
+    files: ['src/**/*.tsx'],
+    ignores: ['**/__tests__/**', '**/__test_support/**', ...forwardsStill],
+    rules: {'components/no-forwarded-props': 'error'}
   },
   {
     files: ['src/**/*.{ts,tsx}', 'src/**/*.html/*.htmlclasses'],

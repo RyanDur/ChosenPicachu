@@ -62,3 +62,46 @@ tester.run('rendered-as-jsx', components.rules['rendered-as-jsx'], {
     }
   ]
 });
+
+tester.run('no-forwarded-props', components.rules['no-forwarded-props'], {
+  valid: [
+    {name: 'should accept a prop the component reads itself', code: 'const Count = ({parts}) => <p>{parts.length}</p>;'},
+    {name: 'should accept a prop read here and also given to a component', code: 'const Part = ({part}) => <section><h2>{part.name}</h2><PartFoot part={part}/></section>;'},
+    {name: 'should accept a class name handed to the component inside', code: 'const Plate = ({className}) => <Card className={className}/>;'},
+    {name: 'should accept an id handed on under another prop name', code: 'const StoryCard = ({titleId}) => <Can id={titleId}/>;'},
+    {name: 'should accept a label handed on as an aria attribute', code: 'const Framed = ({linkName}) => <Link aria-label={linkName}/>;'},
+    {name: 'should accept a handler handed to the component that fires it', code: 'const UserMenu = ({onRemoved}) => <Item onClick={onRemoved}/>;'},
+    {name: 'should accept a prop given to an element', code: 'const Field = ({shown}) => <output value={shown}/>;'},
+    {name: 'should accept a function that is not a component', code: 'const rowOf = ({groups}) => <Row groups={groups}/>;'},
+    {name: 'should accept a value given to the context that will hold it', code: 'const Frame = ({pageUnknown, children}) => <PageUnknown.Provider value={pageUnknown}>{children}</PageUnknown.Provider>;'},
+    {name: 'should accept a value given to a provider component', code: 'const SiteProviders = ({environment, children}) => <EnvironmentProvider environment={environment}>{children}</EnvironmentProvider>;'},
+    {name: 'should accept an element spreading its own attributes', code: 'const Pill = props => <input {...props}/>;'}
+  ],
+  invalid: [
+    {
+      name: 'should refuse a prop received only to be given to another component',
+      code: 'const PartsBeside = ({groups, children}) => <aside><PartsList groups={groups}/>{children}</aside>;',
+      errors: [{messageId: 'forwarded', data: {name: 'groups'}}]
+    },
+    {
+      name: 'should refuse a prop given to two components and read by neither giver',
+      code: 'const DemoTabs = ({topic}) => <nav><DemoTab current={topic}/><TabPager topic={topic}/></nav>;',
+      errors: [{messageId: 'forwarded', data: {name: 'topic'}}]
+    },
+    {
+      name: 'should refuse a renamed prop received only to be given on',
+      code: 'function Exhibit({folds: given}) { return <Platform folds={given}/>; }',
+      errors: [{messageId: 'forwarded', data: {name: 'folds'}}]
+    },
+    {
+      name: 'should refuse a prop given on through a context member\'s tag',
+      code: 'const Shell = ({can}) => <Story.Card can={can}/>;',
+      errors: [{messageId: 'forwarded', data: {name: 'can'}}]
+    },
+    {
+      name: 'should refuse a component that spreads all its props onto another',
+      code: 'const Story = told => <StoryShell {...told}/>;',
+      errors: [{messageId: 'spread', data: {name: 'told'}}]
+    }
+  ]
+});
