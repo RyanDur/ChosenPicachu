@@ -1,20 +1,20 @@
 .context-inside {
     display: grid;
-    gap: var(--base-x-2);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, max(var(--base-x-30), (100% - var(--base-x-3)) / 2)), 1fr));
+    gap: var(--base-x-2) var(--base-x-3);
 
-    .nesting-steps { container-type: inline-size; }
-
-    .nesting-stage {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
-        gap: var(--base-x-3);
-        align-items: start;
+    > * {
+        grid-column: 1 / -1;
     }
 
-    .nesting-code {
+    > .nesting-code {
+        grid-column: auto;
         display: grid;
         gap: var(--base-x-1_5);
+        align-self: start;
     }
+
+    .nesting-steps { container-type: inline-size; }
 
     .nesting-drawing {
         position: relative;
