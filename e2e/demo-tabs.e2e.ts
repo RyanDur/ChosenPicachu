@@ -39,13 +39,13 @@ test.describe('a reader on a phone', {tag: '@iPhone'}, () => {
     await siteFrame(page).hydrated();
     const row = page.getByRole('navigation', {name: 'demos'});
 
-    await row.getByRole('link', {name: 'Next tab, Drag sort'}).click();
+    await row.getByRole('link', {name: 'Next tab: Drag sort'}).click();
 
     await expect(page.getByRole('region', {name: 'Drag sort', exact: true})).toBeVisible();
     const current = row.getByRole('link', {name: 'Drag sort', exact: true}).filter({visible: true});
     await expect(current).toBeVisible();
     await expect(current).toHaveAttribute('aria-current', 'page');
-    await expect(row.getByRole('link', {name: 'Previous tab, Z-index'})).toBeVisible();
-    await expect(row.getByRole('link', {name: 'Next tab, Charts'})).toBeVisible();
+    await expect(row.getByRole('link', {name: 'Previous tab: Z-index'})).toBeVisible();
+    await expect(row.getByRole('link', {name: 'Next tab: Charts'})).toBeVisible();
   });
 });

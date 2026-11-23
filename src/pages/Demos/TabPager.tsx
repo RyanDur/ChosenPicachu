@@ -16,14 +16,14 @@ export const TabPager: FC = () => {
   return <>
     {previous.map(previousTopic =>
       <Link key="previous" to={carried(demoTab.address(previousTopic))} className="tab-pager previous icon-button borderless field attentive reachable">
-        <span className="off-screen">Previous tab, {demoTab.names[previousTopic]}</span>
+        <span className="off-screen">Previous tab: {demoTab.names[previousTopic]}</span>
       </Link>).orNull()}
     <Link key={currentSlot} to={carried(demoTab.address(topic))} aria-current={ariaCurrent} className="tab-pager current path field attentive bold reachable">
       {demoTab.names[topic]}
     </Link>
     {next.map(nextTopic =>
       <Link key="next" to={carried(demoTab.address(nextTopic))} className="tab-pager next icon-button borderless field attentive reachable">
-        <span className="off-screen">Next tab, {demoTab.names[nextTopic]}</span>
+        <span className="off-screen">Next tab: {demoTab.names[nextTopic]}</span>
       </Link>).orNull()}
   </>;
 };

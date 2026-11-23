@@ -42,7 +42,7 @@ const backAndForwardReturnTheReader = async (
 
 test.describe('a phone', {tag: '@iPhone'}, () => {
   test('Back to a tutorial from another tab, and Forward again, return the reader to where they were', ({page}) =>
-    backAndForwardReturnTheReader(page, 'Previous tab, Charts', page.getByRole('heading', {name: 'Demos Charts'})));
+    backAndForwardReturnTheReader(page, 'Previous tab: Charts', page.getByRole('heading', {name: 'Demos Charts'})));
 });
 
 test.describe('a desk', {tag: '@desktop'}, () => {

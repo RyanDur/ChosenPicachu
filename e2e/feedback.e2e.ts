@@ -166,7 +166,7 @@ test.describe('a phone on a page with tabs', {tag: '@iPhone'}, () => {
   test('reaches a tab once the sent note’s dialog closes', async ({page}) => {
     await sentAndClosed(page);
 
-    const charts = page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Previous tab, Charts'});
+    const charts = page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Previous tab: Charts'});
     await charts.scrollIntoViewIfNeeded();
     await twoFramesLater(page);
 
@@ -225,7 +225,7 @@ test.describe('a phone', {tag: '@iPhone'}, () => {
     const feedback = feedbackOn(page);
     await page.goto('demos/accordions/');
     await siteFrame(page).hydrated();
-    await page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Next tab, Z-index'}).click();
+    await page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Next tab: Z-index'}).click();
     await expect(page).toHaveURL(/\/demos\/z-index\/$/);
     await feedback.open.click();
     await feedback.words.pressSequentially('The sort menu hides behind the header.');
