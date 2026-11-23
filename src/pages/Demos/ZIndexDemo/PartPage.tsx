@@ -5,6 +5,7 @@ import {PartOpening} from '@pages/Demos/PartOpening';
 import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
 import {Behind, Beside, Onward, PartFoot} from '@pages/Demos/PartFoot';
+import {bookEnds} from '@pages/Demos/book-ends';
 import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {ZIndexPart, zIndexParts} from './part-pages';
@@ -62,8 +63,8 @@ const partWritings: Record<ZIndexPart, PartWriting> = {
 
 const partWears: Partial<Record<ZIndexPart, string>> = {'lets-build-this-feature': 'tutorials'};
 
-const theFirstPart: Behind = {kind: 'first-part'};
-const theNextTab: Onward = {kind: 'tab', topic: DemoTopics.dragAndDrop};
+const theFirstPart: Behind = bookEnds.behind(DemoTopics.zIndex);
+const theNextTab: Onward = bookEnds.onward(DemoTopics.zIndex);
 
 export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
   const carried = useCarriedAddress();

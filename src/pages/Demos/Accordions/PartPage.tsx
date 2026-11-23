@@ -5,6 +5,7 @@ import {PartOpening} from '@pages/Demos/PartOpening';
 import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
 import {Behind, Beside, Onward, PartFoot} from '@pages/Demos/PartFoot';
+import {bookEnds} from '@pages/Demos/book-ends';
 import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {AccordionPart, accordionParts, BookPart} from './part-pages';
@@ -68,8 +69,8 @@ const partContents: Record<AccordionPart, PartContents> = {
   }
 };
 
-const theFirstPart: Behind = {kind: 'first-part'};
-const theNextTab: Onward = {kind: 'tab', topic: DemoTopics.zIndex};
+const theFirstPart: Behind = bookEnds.behind(DemoTopics.accordions);
+const theNextTab: Onward = bookEnds.onward(DemoTopics.accordions);
 
 export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   const carried = useCarriedAddress();
