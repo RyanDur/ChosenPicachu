@@ -4,7 +4,7 @@ import {PartLink as ZIndexPartLink} from '@pages/Demos/ZIndexDemo';
 import {useControls} from '../Controls';
 import {FoldType} from '../ReaderSettings';
 import {carve, Line, lines, Sample, Snippet} from '../Recipe';
-import {Fold} from './accordion-props';
+import {dealtFolds} from './dealt-folds';
 import {ExclusiveMeasuredAccordion} from './ExclusiveMeasuredAccordion';
 import {InclusiveMeasuredAccordion} from './InclusiveMeasuredAccordion';
 import {foldInput} from './fold-input';
@@ -30,11 +30,7 @@ const measuredBuilds: Record<FoldType, Build> = {
   exclusive: {Accordion: ExclusiveMeasuredAccordion, sample: sharedOpenFolds(exclusiveMeasuredAccordionSource)}
 };
 
-type Props = {
-  folds: Record<FoldType, Fold[]>;
-};
-
-export const MeasuredHeight: FC<Props> = ({folds}) => {
+export const MeasuredHeight: FC = () => {
   const {foldType, foldMotion} = useControls();
   const exhibitMoving = classNames(looks.exhibit, foldMotion);
   const input = foldInput.of(foldType);
@@ -93,7 +89,7 @@ export const MeasuredHeight: FC<Props> = ({folds}) => {
             state are as they come. What changes is the shape. The plain script listens for the press; the React
             build redraws the panel from its state, so the measuring runs in two steps React takes before the
             browser paints: the first pins where the motion starts, and the second sets where it ends.</p>
-          <Measured className={exhibitMoving} folds={folds[foldType]}/>
+          <Measured className={exhibitMoving} folds={dealtFolds.measured[foldType]}/>
           <ol className="runs">
             {foldType === 'exclusive' && <li className="run">
               <p className="paragraph">Opening one fold closes the others, and the short Close bar at the top closes

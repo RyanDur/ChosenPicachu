@@ -1,8 +1,7 @@
 import {FC} from 'react';
 import {useControls} from '../Controls';
-import {FoldType} from '../ReaderSettings';
 import {carve, lines, Mdn, Snippet} from '../Recipe';
-import {Fold} from './accordion-props';
+import {dealtFolds} from './dealt-folds';
 import {OneJobTwoWays, SizedToTheText, ThreeBecomeTwo} from './Diagrams';
 import {foldInput} from './fold-input';
 import {looks} from './looks';
@@ -14,16 +13,12 @@ import surfaceCss from '../../../styles/surface.css?sample';
 import '../Runs.css';
 import './PartDepth.css';
 
-type Props = {
-  folds: Record<FoldType, Fold[]>;
-};
-
-export const PlatformGivesNow: FC<Props> = ({folds}) => {
+export const PlatformGivesNow: FC = () => {
   const {foldType, foldMotion} = useControls();
   const input = foldInput.of(foldType);
   const platform = platformBuilds[foldType];
   return <>
-    <PlatformExhibit folds={folds}/>
+    <PlatformExhibit folds={dealtFolds.platform}/>
     <ol className={looks.runs}>
       <li className="run">
         <p className="paragraph">This build uses details and summary, the two elements from the HTML-alone accordion.

@@ -1,7 +1,7 @@
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
 import {FC, ReactNode} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, DrawnStory, Tell, Want, Words, lines, carve} from '../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
 import type {World} from '../../ReaderSettings';
 import {StoreStory} from './StoreRecipe';
@@ -70,7 +70,7 @@ const refolds: Record<World, string> = {
 
 const FlowStory: FC = () => {
   const {world} = useControls();
-  return <DrawnStory titleId={livingStories.titleIdOf(livingStories.ids.flow)} open
+  return <Story titleId={livingStories.titleIdOf(livingStories.ids.flow)} open
     can="The trader can watch the market live, one lookback beside another"
     soThat="the numbers stay current without a single refresh">
     <Tell>The still becomes a stream. The trader arrives mid-session, so the page starts with
@@ -137,7 +137,7 @@ const FlowStory: FC = () => {
         </Reveal>
       </Step>
     </Steps>
-  </DrawnStory>;
+  </Story>;
 };
 
 export const FlowTableRecipe: FC = () =>
