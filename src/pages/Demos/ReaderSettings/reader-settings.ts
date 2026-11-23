@@ -11,7 +11,7 @@ export type FoldMotion = 'reveal' | 'drawer' | 'static';
 export type RaisedCard = typeof inOrder.raisedCards[number];
 export type CardOne = 'contained' | 'free';
 export type Worn = typeof inOrder.worn[number];
-export type PartsList = 'shown' | 'hidden';
+export type PartsShown = 'shown' | 'hidden';
 export type Position = typeof inOrder.positions[number];
 export type ParentPosition = typeof inOrder.parentPositions[number];
 
@@ -26,7 +26,7 @@ export type Address = Placement & {
   type: FoldType;
   style: FoldMotion;
   'card-one': CardOne;
-  parts: PartsList;
+  parts: PartsShown;
   'second-position': Position;
   'parent-position': ParentPosition;
 };

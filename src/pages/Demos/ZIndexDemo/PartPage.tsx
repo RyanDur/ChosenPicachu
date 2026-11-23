@@ -2,7 +2,6 @@ import {FC, ReactNode} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
 import {ThePart} from '@pages/Demos/the-part';
 import {PartOpening} from '@pages/Demos/PartOpening';
-import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
 import {Behind, Beside, Onward, PartFoot} from '@pages/Demos/PartFoot';
 import {bookEnds} from '@pages/Demos/book-ends';
@@ -23,7 +22,6 @@ import {WhatElseFormsAStackingContextIntroduction} from './WhatElseFormsAStackin
 import {WhyThePopoverWinsIntroduction} from './WhyThePopoverWinsIntroduction';
 import {WhyAFixedBannerStillLosesIntroduction} from './WhyAFixedBannerStillLosesIntroduction';
 import {LetsBuildThisFeatureIntroduction} from './LetsBuildThisFeatureIntroduction';
-import {PartsAndMinutes} from './PartsAndMinutes';
 
 type PartWriting = {
   readonly introduction: ReactNode;
@@ -77,7 +75,6 @@ export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
   return <ThePart value={{heading: name, headingId: `${part}-heading`, place, previous: behind, next: onward}}>
     <PartSection>
       <PartOpening>{partWritings[part].introduction}</PartOpening>
-      <PartPanel><PartsAndMinutes/></PartPanel>
       <PartDemo className={partWears[part]}>{partWritings[part].exhibitAndRuns}</PartDemo>
       <PartFoot/>
     </PartSection>

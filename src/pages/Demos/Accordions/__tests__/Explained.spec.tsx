@@ -32,12 +32,12 @@ describe('the accordions tab', () => {
     expect(names.filter((name, at) => names.indexOf(name) !== at)).toEqual([]);
   });
 
-  test('should title the parts, then before you start', async () => {
+  test('should title before you start, and nothing above it for the parts', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
 
-    expect(explanation.partTitles(tab)).toEqual(['Parts', 'Before you start']);
+    expect(explanation.partTitles(tab)).toEqual(['Before you start']);
   });
 
   test('should title the fold choices after part 1, before you start', async () => {
@@ -46,15 +46,6 @@ describe('the accordions tab', () => {
     const start = await explanation.part('Before you start');
 
     expect(explanation.sectionTitles(start)).toEqual([accordionParts.titleOf('html-alone-heading'), 'The fold choices']);
-  });
-
-  test('should hold both rows beside the parts', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    const sidecar = await accordionsTab.partsAndDials();
-
-    expect(accordionsTab.choiceIn(sidecar, 'fold type')).toBeVisible();
-    expect(accordionsTab.choiceIn(sidecar, 'fold motion')).toBeVisible();
   });
 
   test('should open on the exclusive type, and write the type chosen into the address', async () => {
@@ -180,14 +171,14 @@ describe('the parts index', () => {
     expect(accordionsTab.titlesUnder(partsIndex, 'What the platform gives now')).toEqual(titles.slice(4));
   });
 
-  test('should come after the accordion in HTML alone, and ahead of the Before you start section', async () => {
+  test('should come before the accordion in HTML alone and the Before you start section', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const partsIndex = await accordionsTab.partsIndex();
     const accordion = await accordionsTab.exhibit();
     const beforeYouStart = await explanation.part('Before you start');
 
-    expect(outOfReadingOrder([accordion, partsIndex, beforeYouStart])).toEqual([]);
+    expect(outOfReadingOrder([partsIndex, accordion, beforeYouStart])).toEqual([]);
   });
 
   test('should mark no part as the current page on the tab, though the accordion in HTML alone stands on it', async () => {

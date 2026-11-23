@@ -2,7 +2,6 @@ import {FC} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
 import {ThePart} from '@pages/Demos/the-part';
 import {PartOpening} from '@pages/Demos/PartOpening';
-import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
 import {PartFoot} from '@pages/Demos/PartFoot';
 import {DemoTopics, demoTab} from '@pages/Demos';
@@ -14,7 +13,7 @@ import {DemoLink} from '@pages/Demos/DemoLink';
 import {tableParts} from './part-pages';
 import {tablesBook} from './tables-book';
 import {useShownTutorial} from './useShownTutorial';
-import {PartsAndDials} from './PartsAndDials';
+import {WorldDial} from './WorldDial';
 import {usePartsBeside} from './usePartsBeside';
 import './TutorialPage.css';
 
@@ -40,7 +39,7 @@ export const TutorialPage: FC = () => {
     const part = {heading: tableTutorials.nameOf(tutorial), headingId: `${tutorial}-heading`, place, ...partsBeside(tutorial)};
     return <ThePart value={part}><PartSection>
       <PartOpening><p className="paragraph">{introductions[tutorial]}</p></PartOpening>
-      <PartPanel><PartsAndDials/></PartPanel>
+      <WorldDial/>
       <PartDemo className="tutorial-page">
         <Aggregations/>
         <p className="paragraph">

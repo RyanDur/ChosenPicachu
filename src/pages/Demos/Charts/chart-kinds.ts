@@ -34,8 +34,6 @@ const told: Record<ChartKind, Told> = {
   pie: {says: 'One circle at the session’s end shows who owned it.', minutes: 5}
 };
 
-const minutes = all.reduce((sum, kind) => sum + told[kind].minutes, 0);
-
 const is = (kind?: string): kind is ChartKind =>
   all.some(candidate => candidate === kind);
 
@@ -55,5 +53,5 @@ const address = (kind: ChartKind): string => `${generatePath(Paths.chartTutorial
 const shownAt = (pathname: string): Maybe<ChartKind> => maybe(all.find(kind => pathname === address(kind)));
 
 export const chartKinds = {
-  all, is, hasPeriods, match, names, told, minutes, address, shownAt, previous, next, ordinalOf, numbered
+  all, is, hasPeriods, match, names, told, address, shownAt, previous, next, ordinalOf, numbered
 };

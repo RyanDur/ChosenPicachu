@@ -1,0 +1,171 @@
+.parts-panel {
+  padding-block: calc(var(--parts-head-reach) + var(--base-x-2)) var(--demo-gap, var(--base-x-3));
+}
+
+.beside-the-parts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--demo-gap, var(--base-x-3));
+}
+
+:root:has(.parts-head) {
+  --parts-inset: calc(var(--frame-reach, 0px) + var(--tab-bar-stuck-reach));
+  --parts-button-reach: var(--base-x-4);
+  --parts-head-reach: calc(var(--parts-button-reach) + var(--base-x-2) + var(--hairline-x-2));
+  --parts-fold-span: var(--base-x-12);
+
+  @media (pointer: coarse) {
+    --parts-button-reach: var(--finger-reach);
+  }
+}
+
+:is(.about, .part-page):has(> .parts-head) {
+  display: grid;
+  grid-template-rows: minmax(0, 0fr) auto auto;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+
+  &::before {
+    content: '';
+    grid-row: 1;
+    grid-column: 1 / -1;
+    block-size: calc(var(--parts-head-reach) + var(--demo-gap, var(--base-x-3)));
+  }
+
+  & > .parts-panel {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  & > .beside-the-parts {
+    grid-row: 3;
+    grid-column: 1;
+  }
+}
+
+:is(.about, .part-page):has(> .parts-head.parts-away) {
+  grid-template-rows: minmax(0, 1fr) auto auto;
+
+  & > .beside-the-parts {
+    isolation: isolate;
+  }
+}
+
+.parts-head {
+  pointer-events: none;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-row: 1 / -1;
+  grid-column: 1 / -1;
+  align-self: start;
+
+  & > * {
+    pointer-events: auto;
+    grid-row: 1;
+    grid-column: -2;
+  }
+}
+
+.parts-head.parts-away {
+  position: sticky;
+  inset-block-start: var(--parts-inset);
+}
+
+.parts-count {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--parts-head-reach);
+  padding-block: var(--base);
+  padding-inline-end: calc(var(--parts-fold-span) + var(--base));
+}
+
+.parts-fold {
+  justify-self: end;
+  align-self: center;
+  inline-size: var(--parts-fold-span);
+  min-block-size: var(--parts-button-reach);
+  padding-inline: var(--base);
+}
+
+.parts-head.parts-away ~ .parts-panel {
+  display: none;
+}
+
+:root:has(.parts-head.parts-away) {
+  scroll-padding-block-start:
+    calc(var(--frame-reach, 0px) + var(--tab-bar-stuck-reach) + var(--parts-head-reach) + var(--base-x-2));
+}
+
+@media (width > 900px) and (height > 600px) {
+  .parts-panel {
+    position: sticky;
+    inset-block-start: calc(var(--parts-inset) + var(--parts-head-reach) + var(--base-x-2));
+    max-block-size: calc(100svh - var(--parts-inset) - var(--parts-head-reach) - var(--base-x-4));
+    margin-block-start: calc(var(--parts-head-reach) + var(--base-x-2));
+    padding-block: 0;
+    overflow: hidden auto;
+    container-type: inline-size;
+    pointer-events: none;
+    display: grid;
+    grid-template-columns: minmax(0, 13fr) minmax(0, 1fr) minmax(0, 7fr);
+
+    & > * {
+      pointer-events: auto;
+      grid-column: 3;
+      inline-size: calc(100cqi * 7 / 21);
+    }
+  }
+
+  .parts-head.parts-away ~ .parts-panel {
+    display: grid;
+    visibility: hidden;
+  }
+
+
+  :is(.about, .part-page):has(> .parts-head) {
+    grid-template-rows: minmax(0, 0fr) auto;
+    grid-template-columns: minmax(0, 13fr) minmax(0, 1fr) minmax(0, 7fr);
+    align-items: start;
+
+    & > .parts-head {
+      position: sticky;
+      inset-block-start: var(--parts-inset);
+      grid-template-columns: minmax(0, 13fr) minmax(0, 1fr) minmax(0, 7fr);
+    }
+
+    & > .parts-panel {
+      grid-row: 1 / -1;
+      grid-column: 1 / -1;
+    }
+
+    & > .beside-the-parts {
+      grid-row: 2;
+    }
+  }
+
+  :is(.about, .part-page):has(> .parts-head.parts-away) {
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 13fr) minmax(0, 0fr) minmax(0, 0fr);
+
+    & > .parts-head {
+      grid-template-columns: minmax(0, 0fr) minmax(0, 0fr) minmax(0, 7fr);
+    }
+
+    & > .parts-panel {
+      grid-template-columns: minmax(0, 13fr) minmax(0, 0fr) minmax(0, 0fr);
+    }
+  }
+
+  :is(.about, .part-page):has(> .parts-head.moved-by-hand) {
+    transition: grid-template-columns 0.3s ease, grid-template-rows 0.3s ease;
+
+    & > .parts-head {
+      transition: grid-template-columns 0.3s ease;
+    }
+
+    & > .parts-panel {
+      transition: grid-template-columns 0.3s ease, visibility 0.3s;
+    }
+  }
+}

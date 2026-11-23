@@ -1,12 +1,12 @@
 import {FC, useEffect} from 'react';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {useControls} from '../Controls';
+import {PartsBeside} from '../PartsBeside';
 import {ZIndexIntroduction} from './Introduction';
 import {ThePile} from './ThePile';
 import {WhatTheTabGives} from './WhatTheTabGives';
 import {PartPage} from './PartPage';
 import {useShownPart} from './useShownPart';
-import {PartsAndMinutes} from './PartsAndMinutes';
 
 const usePlacingTheBanners = (): void => {
   const {side, align, enter, stack} = useControls();
@@ -22,10 +22,9 @@ export const Room: FC = () => {
 
   return useShownPart().either(
     part => <PartPage part={part}/>,
-    () => <>
+    () => <PartsBeside>
       <ZIndexIntroduction/>
       <ThePile/>
       <WhatTheTabGives/>
-      <PartsAndMinutes titled/>
-    </>);
+    </PartsBeside>);
 };

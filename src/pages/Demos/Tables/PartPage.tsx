@@ -2,13 +2,12 @@ import {FC} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
 import {ThePart} from '@pages/Demos/the-part';
 import {PartOpening} from '@pages/Demos/PartOpening';
-import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
 import {PartFoot} from '@pages/Demos/PartFoot';
 import {DemoTopics, demoTab} from '@pages/Demos';
 import {Aggregations} from './Aggregations';
 import {TablePart, tableParts} from './part-pages';
-import {PartsAndDials} from './PartsAndDials';
+import {WorldDial} from './WorldDial';
 import {tablesBook} from './tables-book';
 import {usePartsBeside} from './usePartsBeside';
 import {DesignAsk, FlowTableRecipe, StillTableRecipe, StoryClues, StorySlices} from './Recipe';
@@ -38,7 +37,7 @@ export const PartPage: FC<{readonly part: TablePart}> = ({part}) => {
   const place = `${demoTab.names[DemoTopics.tables]} · part ${ordinal} of ${tablesBook.inTheBook}`;
   return <ThePart value={{heading: name, headingId: `${part}-heading`, place, previous, next}}><PartSection>
     <PartOpening><p className="paragraph">{introductions[part]}</p></PartOpening>
-    <PartPanel><PartsAndDials/></PartPanel>
+    <WorldDial/>
     <PartDemo className="tutorial-page tutorials">
       <Aggregations/>
       <Part/>

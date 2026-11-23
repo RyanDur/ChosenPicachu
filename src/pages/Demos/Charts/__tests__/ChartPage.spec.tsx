@@ -62,7 +62,7 @@ describe('a chart’s page', () => {
     expect(chartsDesk.titleIn(page, 'Price line tutorial', 2)).toBeInTheDocument();
   });
 
-  test('should hold the panel after its title and before its chart', async () => {
+  test('should hold the panel before its title and its chart', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
@@ -71,7 +71,7 @@ describe('a chart’s page', () => {
     const index = await partsIndex.find();
     const chart = await chartsDesk.findTitle('live trades', 3);
 
-    expect(outOfReadingOrder([title, index, chart])).toEqual([]);
+    expect(outOfReadingOrder([index, title, chart])).toEqual([]);
   });
 
   test('should leave its chart under the chart’s own title, not under the parts', async () => {

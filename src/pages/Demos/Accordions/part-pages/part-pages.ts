@@ -42,8 +42,6 @@ type AccordionParts = {
   previousOf: (part: AccordionPart) => Maybe<BookPart>;
   nextOf: (part: AccordionPart) => Maybe<BookPart>;
   inTheBook: number;
-  inOrder: readonly BookPart[];
-  minutes: number;
 };
 
 const listings: Record<AccordionPart, Listing> = {
@@ -112,7 +110,5 @@ export const accordionParts: AccordionParts = {
   numbered: heading => `${placeOf(heading) + 1}. ${titles[heading]}`,
   previousOf: part => besidePart(part, -1),
   nextOf: part => besidePart(part, 1),
-  inTheBook: bookParts.length,
-  inOrder: bookParts,
-  minutes: Object.values(listings).reduce((sum, {minutes}) => sum + minutes, htmlAlone.minutes)
+  inTheBook: bookParts.length
 };
