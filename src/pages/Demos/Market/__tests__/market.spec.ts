@@ -10,7 +10,7 @@ describe('the market store', () => {
     const store = marketStore();
     const before = marketReads.rows(store.state).map(row => row.trades?.display);
 
-    store.dispatch(marketActions.tradeArrived(trade(1, 100)));
+    store.dispatch(marketActions.tradesArrived([trade(1, 100)]));
 
     expect(marketReads.liveTrades(store.state)).toHaveLength(1);
     expect(marketReads.rows(store.state).map(row => row.trades?.display)).not.toEqual(before);
@@ -27,8 +27,8 @@ describe('the market store', () => {
 
   it('history arriving after trades have streamed clears the marks the newest trade left', () => {
     const store = marketStore();
-    store.dispatch(marketActions.tradeArrived(trade(2, 100)));
-    store.dispatch(marketActions.tradeArrived(trade(3, 101)));
+    store.dispatch(marketActions.tradesArrived([trade(2, 100)]));
+    store.dispatch(marketActions.tradesArrived([trade(3, 101)]));
 
     store.dispatch(marketActions.historyArrived([trade(1, 90)]));
 
@@ -39,7 +39,7 @@ describe('the market store', () => {
     const store = marketStore();
 
     Array.from({length: 1501}, (_, at) => trade(at + 1, 100))
-      .forEach(arrived => store.dispatch(marketActions.tradeArrived(arrived)));
+      .forEach(arrived => store.dispatch(marketActions.tradesArrived([arrived])));
 
     expect(marketReads.liveTrades(store.state)).toHaveLength(1500);
     expect(marketReads.liveTrades(store.state)[0].id).toBe(2);
@@ -48,9 +48,9 @@ describe('the market store', () => {
   it('a trade arriving past the newest 1500 leaves unmarked the count that still reads 1500', () => {
     const store = marketStore();
     Array.from({length: 1500}, (_, at) => trade(at + 1, 100))
-      .forEach(arrived => store.dispatch(marketActions.tradeArrived(arrived)));
+      .forEach(arrived => store.dispatch(marketActions.tradesArrived([arrived])));
 
-    store.dispatch(marketActions.tradeArrived(trade(1501, 100)));
+    store.dispatch(marketActions.tradesArrived([trade(1501, 100)]));
 
     expect(marketReads.rows(store.state)[0]?.trades?.display).toBe('1500');
     expect(marketReads.rows(store.state)[0]?.trades?.moved).toBeUndefined();

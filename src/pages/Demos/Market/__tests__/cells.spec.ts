@@ -13,7 +13,7 @@ const thisMinute = (overrides: Partial<Measures>): Measures => ({
   ...overrides
 });
 
-describe('a row of totals marked against the row before the newest trade', () => {
+describe('a row of totals marked against the row last shown', () => {
   test('should mark a number that rose as up', () => {
     const now = cells.markedAgainst(thisMinute({trades: counted(1)}), thisMinute({trades: counted(2)}));
 

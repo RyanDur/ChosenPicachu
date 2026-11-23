@@ -1,7 +1,8 @@
 import {Maybe, has, maybe, streaming} from '@ryandur/sand';
 import {HTTPError} from '@transport';
-import {coinbase} from './coinbase';
+import {coinbase, Trade} from './coinbase';
 import {coinbaseHistory} from './coinbase-history';
+import {liveTrades} from './live-trades';
 import {Period} from './Period';
 import {recentTrades} from './recent-trades';
 import {MarketAction, marketActions} from './marketActions';
@@ -33,6 +34,35 @@ export type FeedTrouble =
 type Dispatch = (action: MarketAction) => void;
 type Trouble = (trouble: FeedTrouble) => void;
 
+type FrameBatch = {
+  readonly hold: (trade: Trade) => void;
+  readonly drop: () => void;
+};
+
+// A socket can deliver several trades between two paints; the store takes them as one batch per frame,
+// so what it marked is what the reader last saw.
+const batchedPerFrame = (dispatch: Dispatch): FrameBatch => {
+  let held: readonly Trade[] = [];
+  let frame = 0;
+  const deliver = (): void => {
+    const trades = held;
+    held = [];
+    frame = 0;
+    dispatch(marketActions.tradesArrived(trades));
+  };
+  return {
+    hold: trade => {
+      held = [...held, trade].slice(-liveTrades.cap);
+      frame = frame || requestAnimationFrame(deliver);
+    },
+    drop: () => {
+      cancelAnimationFrame(frame);
+      held = [];
+      frame = 0;
+    }
+  };
+};
+
 const historyOf = (base: string, product: string, dispatch: Dispatch, onTrouble: Trouble): Closer => {
   const fetching = recentTrades.load(base, product)
     .onSuccess(trades => dispatch(marketActions.historyArrived(trades)))
@@ -61,12 +91,13 @@ const candlesFor = (
   });
 
 const streamOf = (address: string, product: string, dispatch: Dispatch, onTrouble: Trouble): Closer => {
+  const arriving = batchedPerFrame(dispatch);
   const stream = streaming(address, (): FeedTrouble => ({type: 'handshakeRefused'}))
     .onOpen(socket => {
       socket.send(coinbase.subscribeTo(product));
       dispatch(marketActions.feedOpened());
     })
-    .onMessage(event => coinbase.decodeTrade(event.data).map(trade => dispatch(marketActions.tradeArrived(trade))))
+    .onMessage(event => coinbase.decodeTrade(event.data).map(arriving.hold))
     .onClose(() => {
       dispatch(marketActions.feedFailed());
       onTrouble({type: 'hungUp'});
@@ -75,7 +106,10 @@ const streamOf = (address: string, product: string, dispatch: Dispatch, onTroubl
       dispatch(marketActions.feedFailed());
       onTrouble(trouble);
     });
-  return () => stream.close();
+  return () => {
+    arriving.drop();
+    stream.close();
+  };
 };
 
 const opened = ({feed, history, product}: Configured, dispatch: Dispatch, onTrouble: Trouble): readonly Closer[] => [

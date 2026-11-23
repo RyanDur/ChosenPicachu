@@ -198,7 +198,7 @@ const ExchangeIsMiddleware: FC = () => {
     <Reveal>
       <Says>The exchange is that middleware, in both worlds, and it handles three actions.</Says>
       <Says>On feedRequested it fetches the recent history and opens the socket. From then on it dispatches what the
-        exchange did: historyArrived, feedOpened, tradeArrived, feedFailed.</Says>
+        exchange did: historyArrived, feedOpened, tradesArrived, feedFailed.</Says>
       <Says>On candlesAsked it fetches the candles for one period, and dispatches candlesArrived or
         candlesRefused.</Says>
       <Says>On feedReleased it hangs up.</Says>
