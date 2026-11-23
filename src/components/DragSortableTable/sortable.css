@@ -19,8 +19,8 @@
   &:not(:disabled) {
     cursor: grab;
   }
+}
 
-  &:not(:disabled):is(.carried, .carried *) {
-    cursor: grabbing;
-  }
+.grabbable:not(:disabled):is(.carried, .carried *) {
+  cursor: grabbing;
 }
