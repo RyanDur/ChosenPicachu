@@ -12,7 +12,7 @@ const candles = `${HISTORY}/products/BTC-USD/candles`;
 const aStoreOverAHistoryAnswering = (rows: unknown[]) => {
   server.use(http.get(candles, () => HttpResponse.json(rows)));
   const told: FeedTrouble[] = [];
-  const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, trouble => told.push(trouble)));
+  const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, window, trouble => told.push(trouble)));
   return {store, told};
 };
 const readableRow = [1700000060, 1, 3, 2, 2.5, 1];
@@ -47,13 +47,37 @@ describe('the exchange as middleware', () => {
       tradeFeed: 'ws://exchange.test',
       tradeHistory: '',
       tradeProduct: 'BTC-USD'
-    }, () => undefined));
+    }, window, () => undefined));
     expect(marketReads.feedStatus(store.state)).toBe('connecting');
 
     store.dispatch(marketActions.feedRequested());
 
     await vi.waitFor(() => expect(marketReads.feedStatus(store.state)).toBe('streaming'));
     await vi.waitFor(() => expect(marketReads.liveTrades(store.state)).toHaveLength(1));
+  });
+
+  it('should hold the trades the socket delivers until the next paint, then hand them over together', async () => {
+    server.use(coinbase.addEventListener('connection', ({client}) => {
+      client.addEventListener('message', event => {
+        if (typeof event.data === 'string' && event.data.includes('subscribe')) {
+          client.send(tradeFrame(100));
+          client.send(tradeFrame(101));
+        }
+      });
+    }));
+    const paints: FrameRequestCallback[] = [];
+    const store = marketStore(exchange({tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, {
+      requestAnimationFrame: paint => paints.push(paint),
+      cancelAnimationFrame: () => undefined
+    }, () => undefined));
+    store.dispatch(marketActions.feedRequested());
+    await vi.waitFor(() => expect(paints).toHaveLength(1));
+    await vi.waitFor(() => expect(marketReads.feedStatus(store.state)).toBe('streaming'));
+    expect(marketReads.liveTrades(store.state)).toHaveLength(0);
+
+    paints.forEach(paint => paint(0));
+
+    expect(marketReads.liveTrades(store.state).map(trade => trade.price)).toEqual([100, 101]);
   });
 
   it('hangs up when the feed is released', async () => {
@@ -63,7 +87,7 @@ describe('the exchange as middleware', () => {
       tradeFeed: 'ws://exchange.test',
       tradeHistory: '',
       tradeProduct: 'BTC-USD'
-    }, () => undefined));
+    }, window, () => undefined));
     store.dispatch(marketActions.feedRequested());
     await vi.waitFor(() => expect(marketReads.feedStatus(store.state)).toBe('streaming'));
 
@@ -77,7 +101,7 @@ describe('the exchange as middleware', () => {
       tradeFeed: 'ws://exchange.test',
       tradeHistory: '',
       tradeProduct: 'BTC-USD'
-    }, () => undefined));
+    }, window, () => undefined));
 
     store.dispatch({type: 'feedOpened'});
 
@@ -86,7 +110,7 @@ describe('the exchange as middleware', () => {
 
   it('asking for a period fetches its candles into the store', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json([[1700000000, 1, 3, 2, 2.5, 1]])));
-    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, () => undefined));
+    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, window, () => undefined));
     expect(marketReads.periodHistoryOf(Period.hour)(store.state)).toEqual({state: 'unasked'});
 
     store.dispatch(marketActions.candlesAsked(Period.hour));
@@ -107,7 +131,7 @@ describe('the exchange as middleware', () => {
       asked.push(new URL(request.url).search);
       return HttpResponse.json([]);
     }));
-    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, () => undefined));
+    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, window, () => undefined));
 
     store.dispatch(marketActions.candlesAsked(Period.hour));
 
@@ -119,7 +143,7 @@ describe('the exchange as middleware', () => {
   it('a period whose history is refused is unavailable, and the trouble is told', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json([], {status: 500})));
     const told: FeedTrouble[] = [];
-    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, trouble => told.push(trouble)));
+    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, window, trouble => told.push(trouble)));
 
     store.dispatch(marketActions.candlesAsked(Period.day));
 
@@ -174,7 +198,7 @@ describe('the exchange as middleware', () => {
 
   it('a period with no history to ask is unavailable, and no trouble is told', () => {
     const told: FeedTrouble[] = [];
-    const store = marketStore(exchange({tradeFeed: '', tradeHistory: '', tradeProduct: 'BTC-USD'}, trouble => told.push(trouble)));
+    const store = marketStore(exchange({tradeFeed: '', tradeHistory: '', tradeProduct: 'BTC-USD'}, window, trouble => told.push(trouble)));
 
     store.dispatch(marketActions.candlesAsked(Period.hour));
 
@@ -197,7 +221,7 @@ describe('the exchange as middleware', () => {
       return HttpResponse.json([], {status: 500});
     }));
     const told: FeedTrouble[] = [];
-    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, trouble => told.push(trouble)));
+    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, window, trouble => told.push(trouble)));
     store.dispatch(marketActions.candlesAsked(Period.hour));
 
     store.dispatch(marketActions.feedReleased());
@@ -220,7 +244,7 @@ describe('the exchange as middleware', () => {
       answered.push(ask);
       return HttpResponse.json([[1700000000 + ask, 1, 3, 2, 2.5, 1]]);
     }));
-    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, () => undefined));
+    const store = marketStore(exchange({tradeFeed: '', tradeHistory: HISTORY, tradeProduct: 'BTC-USD'}, window, () => undefined));
 
     store.dispatch(marketActions.candlesAsked(Period.hour));
     store.dispatch(marketActions.candlesAsked(Period.hour));

@@ -15,7 +15,7 @@ import {
 } from 'react';
 import {Outlet, Route, RouteObject, RouterProvider, createMemoryRouter, createRoutesFromElements, matchRoutes, useLocation, useNavigate} from 'react-router';
 import {arrival, ArrivalDrawn} from '@navigation/arrival';
-import {PageFocus} from '@page';
+import {PageFocus, PagePaints} from '@page';
 import {SiteProviders} from '../SiteProviders';
 import {Opener, RoomModule, roomsOpenedBy, siteHolding} from '../routes';
 import {Environment, environment} from '@transport';
@@ -96,7 +96,9 @@ export const TestApp: FC<Props> = ({at = '/', cameFrom, feed, environment: overr
         Object.getOwnPropertyDescriptors(overrides))}>
         <ArrivalDrawn.Provider value={arrived.drawn}>
           <PageFocus.Provider value={pageHasFocus}>
-            <RouterProvider router={memory} onError={report}/>
+            <PagePaints.Provider value={window}>
+              <RouterProvider router={memory} onError={report}/>
+            </PagePaints.Provider>
           </PageFocus.Provider>
         </ArrivalDrawn.Provider>
       </SiteProviders>
