@@ -1,6 +1,6 @@
 import {maybe, not} from '@ryandur/sand';
 import {grip} from '@components/DragSortableTable/model';
-import {cells, Measure, Moved} from '@pages/Demos/Market';
+import {cells, Measure, Tick} from '@pages/Demos/Market';
 import {MountedTable} from './table-state';
 import {orders} from './orders';
 import {keepingFocus} from './focus';
@@ -12,25 +12,25 @@ const named = (lane: HTMLTableRowElement): string =>
 const lanes = (body: HTMLTableSectionElement): ReadonlyMap<string, HTMLTableRowElement> =>
   new Map([...body.rows].map(lane => [named(lane), lane]));
 
-const directionWord = (cell: HTMLTableCellElement, direction: Moved): HTMLSpanElement => {
+const directionWord = (cell: HTMLTableCellElement, direction: Tick): HTMLSpanElement => {
   const word = cell.ownerDocument.createElement('span');
   word.className = 'off-screen';
   word.textContent = direction;
   return word;
 };
 
-const writeCell = (cell: HTMLTableCellElement, {display, moved}: Measure): void => {
-  if (cell.firstChild?.textContent === display && cell.dataset.moved === moved) {
+const writeCell = (cell: HTMLTableCellElement, {display, ticked}: Measure): void => {
+  if (cell.firstChild?.textContent === display && cell.dataset.ticked === ticked) {
     return;
   }
-  maybe(moved).either(
+  maybe(ticked).either(
     direction => {
       cell.replaceChildren(display, ' ', directionWord(cell, direction));
-      cell.dataset.moved = direction;
+      cell.dataset.ticked = direction;
     },
     () => {
       cell.replaceChildren(display);
-      cell.removeAttribute('data-moved');
+      cell.removeAttribute('data-ticked');
     });
 };
 

@@ -32,7 +32,7 @@ describe('the market store', () => {
 
     store.dispatch(marketActions.historyArrived([trade(1, 90)]));
 
-    expect(marketReads.rows(store.state)[0]?.trades?.moved).toBeUndefined();
+    expect(marketReads.rows(store.state)[0]?.trades?.ticked).toBeUndefined();
   });
 
   it('past the newest 1500 trades the oldest fall off the front', () => {
@@ -53,7 +53,7 @@ describe('the market store', () => {
     store.dispatch(marketActions.tradesArrived([trade(1501, 100)]));
 
     expect(marketReads.rows(store.state)[0]?.trades?.display).toBe('1500');
-    expect(marketReads.rows(store.state)[0]?.trades?.moved).toBeUndefined();
+    expect(marketReads.rows(store.state)[0]?.trades?.ticked).toBeUndefined();
   });
 
   it('an hour nothing has asked for is unasked', () => {

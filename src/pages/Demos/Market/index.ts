@@ -4,7 +4,7 @@ export {marketActions} from './marketActions';
 export {marketReads} from './marketReads';
 export {marketStore} from './marketStore';
 export {arrangedView} from './arrangedView';
-export type {Measure, Measured, Measures, Moved} from './cells';
+export type {Measure, Measured, Measures, Tick} from './cells';
 export type {Lookback} from './trade-totals';
 export {cells} from './cells';
 export type {Trade} from './coinbase';

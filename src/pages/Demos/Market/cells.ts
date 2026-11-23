@@ -12,10 +12,10 @@ const averaged = (traded?: Traded): Measure =>
 export type Measure = {
   display: string;
   value?: number;
-  moved?: Moved;
+  ticked?: Tick;
 };
 
-export type Moved = 'up' | 'down';
+export type Tick = 'up' | 'down';
 
 const measureNames = ['lookback', 'trades', 'buys', 'sells', 'volume', 'vwap', 'change'] as const;
 
@@ -48,14 +48,14 @@ const from = (aggregate: LookbackTotals): Measures => ({
   change: priceChange(aggregate.traded)
 });
 
-const directionOf = (was: Measure, now: Measure): Maybe<Moved> =>
+const directionOf = (was: Measure, now: Measure): Maybe<Tick> =>
   was.display === now.display
     ? nothing()
     : maybe(was.value).mBind(numberBefore => maybe(now.value).mBind(numberNow =>
-      numberNow === numberBefore ? nothing() : some<Moved>(numberNow > numberBefore ? 'up' : 'down')));
+      numberNow === numberBefore ? nothing() : some<Tick>(numberNow > numberBefore ? 'up' : 'down')));
 
 const marked = (was: Measure, now: Measure): Measure =>
-  directionOf(was, now).map(direction => ({...now, moved: direction})).orElse(now);
+  directionOf(was, now).map(direction => ({...now, ticked: direction})).orElse(now);
 
 const markedAgainst = (was: Measures, now: Measures): Measures => ({
   lookback: now.lookback,

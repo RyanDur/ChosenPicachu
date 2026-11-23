@@ -316,14 +316,14 @@
 .card-banded { background: linear-gradient(var(--card-clear), var(--card), var(--card-clear)); }
 
 .fancy-table {
-  [data-moved='up'] {
+  [data-ticked='up'] {
     background: var(--mint-shade-tint);
     box-shadow:
       inset 0 var(--hairline-x-2) 0 var(--mint-shade-tint),
       inset 0 calc(var(--hairline-x-2) + var(--hairline-x-3)) 0 var(--ink-muted);
   }
 
-  [data-moved='down'] {
+  [data-ticked='down'] {
     background: var(--international-orange-engineering-tint);
     box-shadow:
       inset 0 calc(-1 * var(--hairline-x-2)) 0 var(--international-orange-engineering-tint),

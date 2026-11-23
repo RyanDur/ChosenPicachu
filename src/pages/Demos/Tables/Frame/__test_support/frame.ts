@@ -7,7 +7,7 @@ import type {Motion, Origin} from '../../../Controls';
 import type {Pace} from '../../../ReaderSettings';
 import {startingTable} from '../starting';
 import {boot} from '../boot';
-import {moved} from '../../__test_support/moved';
+import {ticked} from '../../__test_support/ticked';
 
 type Stage = {
   readonly feed?: Feed;
@@ -62,8 +62,8 @@ export const vanillaFrame = {
   row,
   grip,
   cell,
-  markOn: (lookback: string, column: string): string => moved.heardIn(cell(lookback, column)),
-  numberIn: (lookback: string, column: string): string => moved.numberIn(cell(lookback, column).textContent),
+  markOn: (lookback: string, column: string): string => ticked.heardIn(cell(lookback, column)),
+  numberIn: (lookback: string, column: string): string => ticked.numberIn(cell(lookback, column).textContent),
   columnOrder,
   lookbackNames: (): string[] => screen.getAllByRole('rowheader').map(rowHeader => rowHeader.textContent.trim()),
   moveReport: (): HTMLElement => screen.getByRole('status', {name: 'move report'}),
