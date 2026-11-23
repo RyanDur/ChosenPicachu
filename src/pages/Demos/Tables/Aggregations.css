@@ -29,8 +29,10 @@
     .vwap { width: 17.5%; }
     .change { width: 15%; }
   }
+}
 
-  @media (forced-colors: active) {
+@media (forced-colors: active) {
+  .aggregations {
     .body .cell {
       height: calc(2lh + 2 * var(--base-x-1_25));
     }
