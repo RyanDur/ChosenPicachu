@@ -21,7 +21,7 @@ const countOf = (count: number): string => maybe(countWords[count]).orElse(`${co
 
 const partsOf = (count: number): string => `${countOf(count)} ${count === 1 ? 'part' : 'parts'}`;
 
-const minutesOf = (count: number): string => `${count} ${count === 1 ? 'minute' : 'minutes'}`;
+const minutesOf = (minutes: number): string => `${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`;
 
 const counted = (groups: readonly PartsGroup[]): string => {
   const entries = entriesIn(groups);

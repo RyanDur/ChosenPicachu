@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {useEnvironment} from '@environment';
-import {PartsBeside} from '../PartsBeside';
+import {PageWithParts} from '../PageWithParts';
 import {ChartsIntroduction} from './Introduction';
 import {Workspace} from './Workspace';
 import {ChartsTutorial} from './Tutorial';
@@ -12,9 +12,9 @@ export const Room: FC = () => {
 
   return useShownChart().either(
     kind => <ChartPage kind={kind}/>,
-    () => <PartsBeside>
+    () => <PageWithParts>
       <ChartsIntroduction/>
       <Workspace product={tradeProduct}/>
       <ChartsTutorial/>
-    </PartsBeside>);
+    </PageWithParts>);
 };

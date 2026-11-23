@@ -1,7 +1,7 @@
 import {FC, useEffect} from 'react';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {useControls} from '../Controls';
-import {PartsBeside} from '../PartsBeside';
+import {PageWithParts} from '../PageWithParts';
 import {ZIndexIntroduction} from './Introduction';
 import {ThePile} from './ThePile';
 import {WhatTheTabGives} from './WhatTheTabGives';
@@ -22,9 +22,9 @@ export const Room: FC = () => {
 
   return useShownPart().either(
     part => <PartPage part={part}/>,
-    () => <PartsBeside>
+    () => <PageWithParts>
       <ZIndexIntroduction/>
       <ThePile/>
       <WhatTheTabGives/>
-    </PartsBeside>);
+    </PageWithParts>);
 };
