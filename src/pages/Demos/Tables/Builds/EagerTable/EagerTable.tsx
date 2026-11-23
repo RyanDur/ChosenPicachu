@@ -56,28 +56,28 @@ export const EagerTable: FC<Props> = ({
           return <Row key={lookback}>
             <RowHeader column="lookback" row={lookback} label={row.lookback.display}/>
             <Cell column="trades" row={lookback}
-              data-moved={row.trades.moved}>
-              {row.trades.display}<DirectionWord>{row.trades.moved}</DirectionWord>
+              data-ticked={row.trades.ticked}>
+              {row.trades.display}<DirectionWord>{row.trades.ticked}</DirectionWord>
             </Cell>
             <Cell column="buys" row={lookback}
-              data-moved={row.buys.moved}>
-              {row.buys.display}<DirectionWord>{row.buys.moved}</DirectionWord>
+              data-ticked={row.buys.ticked}>
+              {row.buys.display}<DirectionWord>{row.buys.ticked}</DirectionWord>
             </Cell>
             <Cell column="sells" row={lookback}
-              data-moved={row.sells.moved}>
-              {row.sells.display}<DirectionWord>{row.sells.moved}</DirectionWord>
+              data-ticked={row.sells.ticked}>
+              {row.sells.display}<DirectionWord>{row.sells.ticked}</DirectionWord>
             </Cell>
             <Cell column="volume" row={lookback}
-              data-moved={row.volume.moved}>
-              {row.volume.display}<DirectionWord>{row.volume.moved}</DirectionWord>
+              data-ticked={row.volume.ticked}>
+              {row.volume.display}<DirectionWord>{row.volume.ticked}</DirectionWord>
             </Cell>
             <Cell column="vwap" row={lookback}
-              data-moved={row.vwap.moved}>
-              {row.vwap.display}<DirectionWord>{row.vwap.moved}</DirectionWord>
+              data-ticked={row.vwap.ticked}>
+              {row.vwap.display}<DirectionWord>{row.vwap.ticked}</DirectionWord>
             </Cell>
             <Cell column="change" row={lookback}
-              data-moved={row.change.moved}>
-              {row.change.display}<DirectionWord>{row.change.moved}</DirectionWord>
+              data-ticked={row.change.ticked}>
+              {row.change.display}<DirectionWord>{row.change.ticked}</DirectionWord>
             </Cell>
           </Row>;
         })}

@@ -17,19 +17,19 @@ describe('a row of totals marked against the row last shown', () => {
   test('should mark a number that rose as up', () => {
     const now = cells.markedAgainst(thisMinute({trades: counted(1)}), thisMinute({trades: counted(2)}));
 
-    expect(now.trades.moved).toBe('up');
+    expect(now.trades.ticked).toBe('up');
   });
 
   test('should mark a number that fell as down', () => {
     const now = cells.markedAgainst(thisMinute({vwap: counted(65005)}), thisMinute({vwap: counted(65001)}));
 
-    expect(now.vwap.moved).toBe('down');
+    expect(now.vwap.ticked).toBe('down');
   });
 
   test('should leave unmarked a number the trade did not change', () => {
     const now = cells.markedAgainst(thisMinute({sells: counted(1)}), thisMinute({sells: counted(1)}));
 
-    expect(now.sells.moved).toBeUndefined();
+    expect(now.sells.ticked).toBeUndefined();
   });
 
   test('should leave unmarked a number whose value held though its words changed', () => {
@@ -37,7 +37,7 @@ describe('a row of totals marked against the row last shown', () => {
       thisMinute({change: {display: '-$0.00', value: 0}}),
       thisMinute({change: {display: '+$0.00', value: 0}}));
 
-    expect(now.change.moved).toBeUndefined();
+    expect(now.change.ticked).toBeUndefined();
   });
 
   test('should leave unmarked a number whose words held though its value moved', () => {
@@ -45,12 +45,12 @@ describe('a row of totals marked against the row last shown', () => {
       thisMinute({volume: {display: '12.34', value: 12.341}}),
       thisMinute({volume: {display: '12.34', value: 12.3411}}));
 
-    expect(now.volume.moved).toBeUndefined();
+    expect(now.volume.ticked).toBeUndefined();
   });
 
   test('should leave unmarked a number that had none before the trade', () => {
     const now = cells.markedAgainst(thisMinute({change: {display: '—'}}), thisMinute({change: counted(3)}));
 
-    expect(now.change.moved).toBeUndefined();
+    expect(now.change.ticked).toBeUndefined();
   });
 });

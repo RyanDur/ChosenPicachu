@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import {sortableTable} from '@components/DragSortableTable/__test_support';
 import {broadcast, Feed} from '@pages/Demos/__test_support/feed';
 import {feedIsSubscribed} from '@pages/Demos/__test_support/subscription';
-import {moved} from './moved';
+import {ticked} from './ticked';
 import {untilTheTablesTabRenders} from './controls';
 
 const card = (): HTMLElement => screen.getByRole('region', {name: 'live aggregations'});
@@ -14,7 +14,7 @@ const arrived = (): Promise<HTMLElement> => screen.findByRole('region', {name: '
 const rowOf = (lookback: string): HTMLElement => within(card()).getByRole('row', {name: new RegExp(`^${lookback}`)});
 
 const numbersIn = (lookback: string): string[] =>
-  sortableTable.texts(rowOf(lookback)).map(text => moved.numberIn(text ?? ''));
+  sortableTable.texts(rowOf(lookback)).map(text => ticked.numberIn(text ?? ''));
 
 const cellOf = (lookback: string, measure: string): HTMLElement => {
   const measures = within(card()).getAllByRole('columnheader').map(header => header.getAttribute('aria-label'));
