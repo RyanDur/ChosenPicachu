@@ -3,13 +3,12 @@
   gap: var(--base-x-4);
 }
 
-.charts-heading {
-  container: charts-heading / inline-size;
+.desk-controls {
+  container: desk-controls / inline-size;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--base-x-3);
-  margin: 0 0 var(--base-x-2);
 
   .add-chart {
     display: grid;
@@ -32,8 +31,8 @@
     }
   }
 
-  @container charts-heading (width < 87rem) {
-    .headline {
+  @container desk-controls (width < 87rem) {
+    .paragraph {
       flex: 1 1 0;
     }
 

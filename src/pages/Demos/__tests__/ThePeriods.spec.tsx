@@ -30,7 +30,7 @@ const flatRows = (count: number, stepSeconds: number): number[][] =>
 const chartsWithHistory = async (stepSeconds: number): Promise<void> => {
   server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(rowsSpaced(stepSeconds))));
   render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
-  await chartsDesk.findChart('candles');
+  await chartsDesk.findChart('Candles');
 };
 
 const granularityAsked = (request: Request): number => Number(new URL(request.url).searchParams.get('granularity'));
@@ -43,11 +43,11 @@ describe('the chart periods', () => {
       return HttpResponse.json(rowsSpaced(granularityAsked(request)));
     }));
     render(<TestApp at={demosAt('charts', '?charts=price,candles:day')}/>);
-    await chartsDesk.findOnChart('candles', '5 candles · 1h each');
+    await chartsDesk.findOnChart('Candles', '5 candles · 1h each');
 
     await chartsDesk.choosePeriod('candle', 'hour');
 
-    await chartsDesk.findOnChart('candles', '5 candles · 1m each');
+    await chartsDesk.findOnChart('Candles', '5 candles · 1m each');
     const chosen = asked[asked.length - 1].searchParams;
     expect(chosen.get('granularity')).toBe('60');
     expect(chosen.get('start')).not.toBeNull();
@@ -57,11 +57,11 @@ describe('the chart periods', () => {
   test('choosing the day on the candles page draws the candles chart by the hour of each day', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, ({request}) => HttpResponse.json(rowsSpaced(granularityAsked(request)))));
     render(<TestApp at={chartPageAt('candles')}/>);
-    await chartsDesk.findOnChart('candles', '5 candles · 1m each');
+    await chartsDesk.findOnChart('Candles', '5 candles · 1m each');
 
     await chartsDesk.choosePeriod('candle', 'day');
 
-    expect(await chartsDesk.findOnChart('candles', '5 candles · 1h each')).toBeVisible();
+    expect(await chartsDesk.findOnChart('Candles', '5 candles · 1h each')).toBeVisible();
   });
 
   test('the price line measures its move from the close of its first candle, where its dotted line starts', async () => {
@@ -74,7 +74,7 @@ describe('the chart periods', () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(flatRows(70, 60))));
     render(<TestApp at={demosAt('charts', '?charts=candles')}/>);
 
-    expect(await chartsDesk.findOnChart('candles', '60 candles · 1m each')).toBeVisible();
+    expect(await chartsDesk.findOnChart('Candles', '60 candles · 1m each')).toBeVisible();
   });
 
   test('the price line draws at most 60 points when the hour’s history holds more', async () => {
@@ -88,35 +88,35 @@ describe('the chart periods', () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(flatRows(30, 3600))));
     render(<TestApp at={demosAt('charts', '?charts=candles:day')}/>);
 
-    expect(await chartsDesk.findOnChart('candles', '24 candles · 1h each')).toBeVisible();
+    expect(await chartsDesk.findOnChart('Candles', '24 candles · 1h each')).toBeVisible();
   });
 
   test('the week chart draws at most 28 candles when the history holds more', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(flatRows(35, 21600))));
     render(<TestApp at={demosAt('charts', '?charts=candles:week')}/>);
 
-    expect(await chartsDesk.findOnChart('candles', '28 candles · 6h each')).toBeVisible();
+    expect(await chartsDesk.findOnChart('Candles', '28 candles · 6h each')).toBeVisible();
   });
 
   test('a period with one candle names it in the singular', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.json(rowsSpaced(60).slice(0, 1))));
     render(<TestApp at={demosAt('charts', '?charts=candles')}/>);
 
-    expect(await chartsDesk.findOnChart('candles', '1 candle · 1m each')).toBeVisible();
+    expect(await chartsDesk.findOnChart('Candles', '1 candle · 1m each')).toBeVisible();
   });
 
   test('switching from the day to the hour draws the hour’s candles from history', async () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, ({request}) =>
       HttpResponse.json(rowsSpaced(granularityAsked(request)))));
     render(<TestApp at={demosAt('charts', '?charts=price,candles:day')}/>);
-    await chartsDesk.findOnChart('candles', '5 candles · 1h each');
+    await chartsDesk.findOnChart('Candles', '5 candles · 1h each');
 
     await chartsDesk.choosePeriod('candle', 'hour');
 
-    expect(await chartsDesk.findOnChart('candles', '5 candles · 1m each')).toBeVisible();
-    expect(chartsDesk.onChart('candles', '$50,010')).toBeVisible();
-    expect(chartsDesk.onChart('candles', '$49,970')).toBeVisible();
-    expect(chartsDesk.ticksOn('candles')).toEqual([format(HOUR_ALIGNED * 1000, 'HH:mm')]);
+    expect(await chartsDesk.findOnChart('Candles', '5 candles · 1m each')).toBeVisible();
+    expect(chartsDesk.onChart('Candles', '$50,010')).toBeVisible();
+    expect(chartsDesk.onChart('Candles', '$49,970')).toBeVisible();
+    expect(chartsDesk.ticksOn('Candles')).toEqual([format(HOUR_ALIGNED * 1000, 'HH:mm')]);
   });
 
   test('choosing the day draws the price line from history closes', async () => {
@@ -127,7 +127,7 @@ describe('the chart periods', () => {
     await waitFor(() => expect(chartsDesk.drawnPoints()).toBe(5));
     expect(chartsDesk.onPriceCard('$50,005.00')).toBeVisible();
     expect(chartsDesk.onPriceCard('5 candles · 1h each')).toBeVisible();
-    expect(chartsDesk.ticksOn('live trades'))
+    expect(chartsDesk.ticksOn('Price line'))
       .toEqual([0, 1, 2, 3, 4].map(hour => format((HOUR_ALIGNED + hour * 3600) * 1000, 'HH:mm')));
   });
 
@@ -144,10 +144,10 @@ describe('the chart periods', () => {
     server.use(http.get(`${HISTORY}/products/BTC-USD/candles`, () => HttpResponse.error()));
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
-    await chartsDesk.findChart('candles');
+    await chartsDesk.findChart('Candles');
 
     await chartsDesk.choosePeriod('candle', 'week');
-    expect(await chartsDesk.findOnChart('candles', 'history unavailable')).toBeVisible();
+    expect(await chartsDesk.findOnChart('Candles', 'history unavailable')).toBeVisible();
     expect(chartsDesk.trouble('the candle history could not be reached')).toBeInTheDocument();
   });
 
@@ -169,7 +169,7 @@ describe('the chart periods', () => {
 
   const chartsWithTheHourInHand = async (): Promise<void> => {
     render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
-    await chartsDesk.findChart('candles');
+    await chartsDesk.findChart('Candles');
     await waitFor(() => expect(chartsDesk.drawnCandles()).toBe(3));
     await waitFor(() => expect(chartsDesk.drawnPoints()).toBe(3));
   };
@@ -180,10 +180,10 @@ describe('the chart periods', () => {
 
     await chartsDesk.choosePeriod('candle', 'day');
 
-    expect(await chartsDesk.findLoadingOn('candles')).toBeVisible();
+    expect(await chartsDesk.findLoadingOn('Candles')).toBeVisible();
     releaseHistory();
     await waitFor(() => expect(chartsDesk.drawnCandles()).toBe(5));
-    expect(chartsDesk.loadingOn('candles')).not.toBeInTheDocument();
+    expect(chartsDesk.loadingOn('Candles')).not.toBeInTheDocument();
   });
 
   test('while history loads the captions say so', async () => {
@@ -193,7 +193,7 @@ describe('the chart periods', () => {
     await chartsDesk.choosePeriod('candle', 'day');
     await chartsDesk.choosePeriod('price', 'day');
 
-    expect(await chartsDesk.findOnChart('candles', 'loading history')).toBeInTheDocument();
+    expect(await chartsDesk.findOnChart('Candles', 'loading history')).toBeInTheDocument();
     expect(await chartsDesk.findOnPriceCard('loading history')).toBeInTheDocument();
     releaseHistory();
     await waitFor(() => expect(chartsDesk.drawnCandles()).toBe(5));
@@ -207,7 +207,7 @@ describe('the chart periods', () => {
     await chartsDesk.choosePeriod('price', 'day');
 
     await chartsDesk.findOnPriceCard('loading history');
-    expect(chartsDesk.foundOnChart('live trades', /^\$/)).not.toBeInTheDocument();
+    expect(chartsDesk.foundOnChart('Price line', /^\$/)).not.toBeInTheDocument();
     releaseHistory();
     await waitFor(() => expect(chartsDesk.drawnPoints()).toBe(5));
   });
@@ -216,16 +216,16 @@ describe('the chart periods', () => {
     const releaseHistory = heldHistory(Period.hour);
     render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
 
-    await chartsDesk.findOnChart('candles', 'loading history');
+    await chartsDesk.findOnChart('Candles', 'loading history');
 
-    expect(chartsDesk.foundOnChart('candles', /^\$/)).not.toBeInTheDocument();
+    expect(chartsDesk.foundOnChart('Candles', /^\$/)).not.toBeInTheDocument();
     releaseHistory();
   });
 
   test('with history in hand and no trade yet, the captions wait', async () => {
     render(<TestApp at={demosAt('charts', '?charts=price,candles')}/>);
 
-    expect(await chartsDesk.findOnChart('candles', 'waiting for the first trade')).toBeInTheDocument();
+    expect(await chartsDesk.findOnChart('Candles', 'waiting for the first trade')).toBeInTheDocument();
     expect(await chartsDesk.findOnPriceCard('waiting for the first trade')).toBeInTheDocument();
   });
 });

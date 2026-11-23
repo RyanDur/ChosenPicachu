@@ -74,7 +74,7 @@ describe('the pie', () => {
 
     broadcast(feed, [tradeFrame(65001, now, '3', 'bought')]);
 
-    await waitFor(() => expect(chartsDesk.chart('pie')).toHaveTextContent('volume by side · up to the last 1,500 trades'));
+    await waitFor(() => expect(chartsDesk.chart('Pie')).toHaveTextContent('volume by side · up to the last 1,500 trades'));
   });
 
   test('a one-sided session opens both gates fully', () => {
@@ -88,7 +88,7 @@ describe('the pie', () => {
 
     broadcast(feed, [tradeFrame(65001, now, '2', 'bought')]);
 
-    const card = chartsDesk.chart('pie');
+    const card = chartsDesk.chart('Pie');
     await waitFor(() => expect(card).toHaveTextContent('100% bought'));
     expect(card).toHaveTextContent('0% sold');
   });
@@ -98,7 +98,7 @@ describe('the pie', () => {
     render(<TestApp at="/" feed={feed}><Trading><Pie/></Trading></TestApp>);
     await feedIsSubscribed(feed);
 
-    const card = chartsDesk.chart('pie');
+    const card = chartsDesk.chart('Pie');
     expect(card).not.toHaveTextContent('%');
     expect(card).toHaveTextContent('waiting for the first trade');
   });

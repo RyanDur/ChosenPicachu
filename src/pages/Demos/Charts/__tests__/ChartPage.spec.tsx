@@ -69,7 +69,7 @@ describe('a chart’s page', () => {
 
     const title = chartsDesk.title('Price line tutorial', 2);
     const index = await partsIndex.find();
-    const chart = await chartsDesk.findTitle('live trades', 3);
+    const chart = await chartsDesk.findTitle('A line through the closing prices', 3);
 
     expect(outOfReadingOrder([index, title, chart])).toEqual([]);
   });
@@ -79,7 +79,7 @@ describe('a chart’s page', () => {
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(titleAbove(await chartsDesk.findTitle('live trades', 3))).toBe('Price line tutorial');
+    expect(titleAbove(await chartsDesk.findTitle('A line through the closing prices', 3))).toBe('Price line tutorial');
   });
 
   test('an address naming no chart should say there is no room there', async () => {

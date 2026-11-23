@@ -17,6 +17,7 @@ import {Candles} from './Candles';
 import {Pressure} from './Pressure';
 import {Pie} from './Pie';
 import {LeftOutLine} from './LeftOutLine';
+import {Exhibit, ExhibitFoot} from '../Exhibit';
 import './Workspace.css';
 
 const doorwayAt = (at: number, pressed: Element): Maybe<HTMLElement> =>
@@ -51,9 +52,9 @@ export const Workspace: FC<Props> = ({product}) => {
     });
   const plural = seats.length > 1;
 
-  return <>
-    <header className="charts-heading">
-      <h2 className="headline title bold ink">{`Bitcoin, live: every ${product} trade on Coinbase`}</h2>
+  return <Exhibit name="A desk of charts, kept in the address">
+    <header className="desk-controls veiled-rule-below">
+      <p className="paragraph bold ink">{`Bitcoin, live: every ${product} trade on Coinbase`}</p>
       <output className={classNames('status', 'muted-ink', 'tracked', feedStatus.lamp[status])} aria-label="feed">{feedStatus.words[status]}</output>
       <output className="off-screen" aria-label="desk report">{report}</output>
       {has(absentKinds) &&
@@ -79,7 +80,7 @@ export const Workspace: FC<Props> = ({product}) => {
     <ol className="chart-list reorderable" aria-label="charts">{seats.map(({kind}, at) => {
       const dismissal = plural && <Dismissal onRemoved={pressed => removed(at, pressed)}/>;
       return <li key={kind}
-        className={dress(at)}
+        className={classNames('card rounded-corners lifted', dress(at))}
         onAnimationEnd={settled}
         draggable={isArmed(at)}
         onDragStart={lift(at)}
@@ -100,5 +101,7 @@ export const Workspace: FC<Props> = ({product}) => {
     })}
     </ol>
     <LeftOutLine/>
-  </>;
+    <ExhibitFoot lead="A desk of charts, kept in the address.">Add, move and remove charts, and the address changes
+      with them.</ExhibitFoot>
+  </Exhibit>;
 };

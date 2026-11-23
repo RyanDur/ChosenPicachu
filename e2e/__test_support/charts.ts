@@ -33,7 +33,7 @@ const feedStillConnecting = async (page: Page, prices: number[]): Promise<{opens
 };
 
 export const chartsPage = (page: Page) => {
-  const priceCard = page.getByRole('region', {name: 'live trades'});
+  const priceCard = page.getByRole('region', {name: 'Price line'});
   const periodMenu = page.getByLabel('price period by');
   const seat = (region: string): Locator => page.getByRole('listitem').filter({has: page.getByRole('region', {name: region, exact: true})});
   const carryByTheGrip = async (
@@ -83,7 +83,7 @@ export const chartsPage = (page: Page) => {
     stillSliding: (): Promise<number> => page.getByRole('listitem').evaluateAll(charts => charts.flatMap(chart => chart.getAnimations()).length),
     explainer: page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first(),
     priceCard,
-    priceCardScope: async (): Promise<string> => `section[aria-labelledby="${await priceCard.getAttribute('aria-labelledby')}"]`,
+    priceCardScope: 'section[aria-label="Price line"]',
     priceDelta: priceCard.getByText(/^[+-]\$/),
     periodToggle: page.getByRole('button', {name: 'price period'}),
     period: (name: string): Locator => periodMenu.getByRole('button', {name}),

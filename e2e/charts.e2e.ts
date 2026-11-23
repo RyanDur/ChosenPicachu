@@ -48,20 +48,20 @@ const aPressOpensTheTutorial = async (page: Page, byTouch: boolean, kind: string
 };
 
 test.describe('a press in the middle of a drawing', {tag: ['@iPhone', '@desktop']}, () => {
-  test('a press in the middle of the price drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'price', 'live trades'));
+  test('a press in the middle of the price drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'price', 'Price line'));
 
-  test('a press in the middle of the candles drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'candles', 'candles'));
+  test('a press in the middle of the candles drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'candles', 'Candles'));
 
-  test('a press in the middle of the pressure drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'pressure', 'pressure'));
+  test('a press in the middle of the pressure drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'pressure', 'Pressure'));
 
-  test('a press in the middle of the pie drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'pie', 'pie'));
+  test('a press in the middle of the pie drawing opens its tutorial', ({page, hasTouch}) => aPressOpensTheTutorial(page, hasTouch, 'pie', 'Pie'));
 });
 
 test.describe('a mouse carrying a chart past its neighbor', {tag: '@desktop'}, () => {
   test('the chart swaps back only once the pointer has come a third of its height back', async ({page}) => {
     await page.goto('demos/charts/?charts=price,pie');
     const charts = chartsPage(page);
-    const carried = await charts.carryByTheGrip('live trades');
+    const carried = await charts.carryByTheGrip('Price line');
 
     const down = await carried.pointerWhenTheyTrade(1);
     await expect.poll(charts.stillSliding).toBe(0);
@@ -78,11 +78,11 @@ test('a finger pressed on a chart\'s grip and taken over by the browser leaves t
   await page.goto('demos/charts/?charts=price,candles');
   const charts = chartsPage(page);
 
-  const finger = await charts.fingerOnTheGrip('live trades');
-  await expect(charts.seat('live trades')).toHaveAttribute('draggable', 'true');
+  const finger = await charts.fingerOnTheGrip('Price line');
+  await expect(charts.seat('Price line')).toHaveAttribute('draggable', 'true');
 
   await finger.canceled();
-  await expect(charts.seat('live trades')).not.toHaveAttribute('draggable', 'true');
+  await expect(charts.seat('Price line')).not.toHaveAttribute('draggable', 'true');
 });
 
 const chartsTabWithItsScriptHeldBack = async (page: Page) => {
@@ -102,7 +102,7 @@ test('given the charts tab before its script runs, Add a chart is disabled; once
   await charts.adder.click();
   await charts.chartToAdd('Candles').click();
 
-  await expect(charts.seat('candles')).toBeVisible();
+  await expect(charts.seat('Candles')).toBeVisible();
   await expect(charts.report).toHaveText('Candles added');
 });
 
