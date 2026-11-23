@@ -5,15 +5,15 @@ import {useControls} from './Controls';
 import {PartsCount} from './PartsCount';
 import {PartsIndex} from './PartsIndex';
 import {PartsList} from './PartsList';
-import './PartsBeside.css';
+import './PageWithParts.css';
 
-export const PartsBeside: FC<PropsWithChildren> = ({children}) => {
+export const PageWithParts: FC<PropsWithChildren> = ({children}) => {
   const listId = `parts${useId()}`;
   const {parts, change} = useControls();
   const shown = parts === 'shown';
   const hydrated = useHydrated();
   const [movedByHand, moveByHand] = useState(false);
-  const fold = (): void => {
+  const showOrHide = (): void => {
     moveByHand(true);
     change({parts: shown ? 'hidden' : 'shown'});
   };
@@ -26,7 +26,7 @@ export const PartsBeside: FC<PropsWithChildren> = ({children}) => {
         disabled={not(hydrated)}
         aria-expanded={shown}
         aria-controls={listId}
-        onClick={fold}>{shown ? 'Hide parts' : 'Show parts'}</button>
+        onClick={showOrHide}>{shown ? 'Hide parts' : 'Show parts'}</button>
     </header>
     <nav aria-label="Parts" className="parts-panel">
       <PartsIndex id={listId}><PartsList/></PartsIndex>

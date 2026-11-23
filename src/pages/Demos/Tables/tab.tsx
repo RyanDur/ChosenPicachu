@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {PartsBeside} from '../PartsBeside';
+import {PageWithParts} from '../PageWithParts';
 import {TablesIntroduction} from './Introduction';
 import {WorldDial} from './WorldDial';
 import {KeptCurrentTable} from './KeptCurrentTable';
@@ -12,12 +12,12 @@ import {useShownPart} from './useShownPart';
 
 const TabContents: FC = () => <>
   <ToMovedAddress/>
-  <PartsBeside>
+  <PageWithParts>
     <TablesIntroduction/>
     <WorldDial/>
     <KeptCurrentTable/>
     <Tutorials/>
-  </PartsBeside>
+  </PageWithParts>
 </>;
 
 export const Room: FC = () => {
