@@ -34,9 +34,10 @@ describe('The Demos page', () => {
   test('should say beside each tab’s name the point that tab makes', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const unsaid = (await demoTabs.points()).filter(([name, point]) => point === '' || point === name);
+    const points = await demoTabs.points();
 
-    expect(unsaid).toEqual([]);
+    expect(points.map(([name]) => name)).toEqual(['Accordions', 'Z-index', 'Drag sort', 'Charts', 'Tables']);
+    expect(points.filter(([name, point]) => point === '' || point === name)).toEqual([]);
   });
 
   test('a part’s page should open with the Demos opening above its tabs', async () => {
