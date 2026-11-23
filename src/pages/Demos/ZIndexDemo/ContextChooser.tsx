@@ -43,6 +43,11 @@ export const ContextChooser: FC = () => {
   const openedAsWorn = opened.mBind(wearing => wearing === worn ? some(wearing) : nothing());
 
   return <Exhibit name="What card one wears">
+    <ol className="trap-steps field">
+      <li className="paragraph">Choose what card one wears.</li>
+      <li className="paragraph">Press Sort by, and look where its list opens.</li>
+      <li className="paragraph">Choose another, and press Sort by again.</li>
+    </ol>
     <fieldset className="wears veiled-rule-below">
       <legend className="paragraph">What card one wears</legend>
       {inOrder.worn.map(choice =>
@@ -55,11 +60,6 @@ export const ContextChooser: FC = () => {
           {choice === 'nothing' ? property[choice] : <code className="monospaced">{property[choice]}</code>}
         </label>)}
     </fieldset>
-    <ol className="trap-steps field">
-      <li className="paragraph">Choose what card one wears.</li>
-      <li className="paragraph">Press Sort by, and look where its list opens.</li>
-      <li className="paragraph">Choose another, and press Sort by again.</li>
-    </ol>
     <figure className="context-chooser field">
       <ol className="old-way-cards">
         <li className={classNames('old-way-card drawn-piece', wornAs[worn])}>

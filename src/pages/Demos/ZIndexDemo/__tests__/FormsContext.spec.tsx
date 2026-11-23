@@ -2,12 +2,19 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {theTrap, wearsChooser} from '@pages/Demos/ZIndexDemo/__test_support';
+import {exhibit, theTrap, wearsChooser} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const heading = 'What else forms a stacking context';
 const whatElseForms = 'z-index/what-else-forms-a-stacking-context';
 
 describe('the part on what else forms a stacking context', () => {
+  test('should give the chooser’s steps before any control', async () => {
+    render(<TestApp at={demosAt(whatElseForms)}/>);
+    const chooser = await wearsChooser.find();
+
+    expect(exhibit.controlsBeforeTheSteps(chooser, wearsChooser.controls(chooser))).toEqual([]);
+  });
+
   test('should offer, in order, the seven things card one can wear, with nothing chosen at first', async () => {
     render(<TestApp at={demosAt(whatElseForms)}/>);
 
