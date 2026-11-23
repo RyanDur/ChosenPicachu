@@ -61,15 +61,15 @@ const partWritings: Record<ZIndexPart, PartWriting> = {
 
 const partWears: Partial<Record<ZIndexPart, string>> = {'lets-build-this-feature': 'tutorials'};
 
-const theFirstPart: Behind = bookEnds.behind(DemoTopics.zIndex);
-const theNextTab: Onward = bookEnds.onward(DemoTopics.zIndex);
+const behindTheFirstPart: Behind = bookEnds.behind(DemoTopics.zIndex);
+const onwardFromTheLastPart: Onward = bookEnds.onward(DemoTopics.zIndex);
 
 export const PartPage: FC<{readonly part: ZIndexPart}> = ({part}) => {
   const carried = useCarriedAddress();
   const besidePart = (beside: ZIndexPart): Beside =>
     ({kind: 'part', title: zIndexParts.numbered(beside), address: carried(zIndexParts.addressOf(beside))});
-  const behind = zIndexParts.previousOf(part).map((beside): Behind => besidePart(beside)).orElse(theFirstPart);
-  const onward = zIndexParts.nextOf(part).map((beside): Onward => besidePart(beside)).orElse(theNextTab);
+  const behind = zIndexParts.previousOf(part).map((beside): Behind => besidePart(beside)).orElse(behindTheFirstPart);
+  const onward = zIndexParts.nextOf(part).map((beside): Onward => besidePart(beside)).orElse(onwardFromTheLastPart);
   const {name, ordinal} = zIndexParts.told(part);
   const place = `${demoTab.names[DemoTopics.zIndex]} · part ${ordinal} of ${zIndexParts.inTheBook}`;
   return <ThePart value={{heading: name, headingId: `${part}-heading`, place, previous: behind, next: onward}}>
