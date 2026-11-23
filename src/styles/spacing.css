@@ -64,6 +64,7 @@
   --menu-bar-block: calc(var(--base-x-5_5) + var(--base));
   --foot-reach: 0px;
   --tab-bar-reach: var(--base-x-10);
+  --tab-bar-stuck-reach: var(--tab-bar-reach);
 
   --page-inset: var(--base-x-3);
 

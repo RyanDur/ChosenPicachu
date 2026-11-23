@@ -39,6 +39,10 @@
 }
 
 @media (600px < width <= 760px) and (height > 600px) {
+  :root:has(.demo-tabs) {
+    --tab-bar-stuck-reach: 0px;
+  }
+
   .tabs.demo-tabs {
     position: static;
 
@@ -64,10 +68,6 @@
       margin-inline-end: var(--base);
       vertical-align: middle;
     }
-  }
-
-  :root:has(.tabs.demo-tabs) {
-    scroll-padding-block-start: calc(var(--frame-reach, 0px) + var(--base-x-2));
   }
 }
 
