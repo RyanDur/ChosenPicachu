@@ -1,9 +1,10 @@
 import {FC, useId} from 'react';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {classNames} from '@components';
-import {carve, Line, lines, Snippet, useExhibitStep} from '../Recipe';
-import {useControls} from '../Controls';
-import {inOrder, RaisedCard} from '../ReaderSettings';
+import * as schema from 'schemawax';
+import {useSearchParamsObject} from '@navigation/search-params';
+import {carve, exhibitSteps, Line, lines, Snippet} from '../Recipe';
+import {inOrder, RaisedCard, readerSettings} from '../ReaderSettings';
 import sheet from './ThePile.css?sample';
 import './ThePile.css';
 
@@ -12,7 +13,9 @@ type Card = Exclude<RaisedCard, 'none'>;
 
 const names: Record<RaisedCard, string> = {none: 'None', first: 'First', second: 'Second', third: 'Third'};
 const cards: Card[] = ['first', 'second', 'third'];
-const steps: Choice<Step>[] = [{words: 'Overlap', value: 'overlap'}, {words: 'Z-index', value: 'z-index'}];
+const steps: Choice<Step>[] = exhibitSteps.numbered([
+  {words: 'Overlap', value: 'overlap'}, {words: 'Z-index', value: 'z-index'}
+]);
 const cardsToRaise: Choice<RaisedCard>[] = inOrder.raisedCards.map(value => ({words: names[value], value}));
 
 const stories: Record<Step, string> = {
@@ -36,8 +39,12 @@ const verdicts: Record<RaisedCard, string> = {
 };
 
 export const ThePile: FC = () => {
-  const {raised: chosen, change} = useControls();
-  const {step, numberedSteps, choose: chooseStep, entryFor} = useExhibitStep('pile', steps, chosen === 'none' ? 'overlap' : 'z-index');
+  const {pile, raised: chosen, updateSearchParams, removeSearchParams} = useSearchParamsObject(
+    {pile: schema.literalUnion('overlap', 'z-index'), raised: readerSettings.decoders.raised}, {raised: 'none'});
+  const step = pile ?? (chosen === 'none' ? 'overlap' : 'z-index');
+  const chooseStep = (next: Step) => next === 'overlap'
+    ? removeSearchParams(['pile', 'raised'])
+    : updateSearchParams({pile: next});
   const raised = step === 'z-index' ? chosen : 'none';
   const title = useId();
 
@@ -45,7 +52,7 @@ export const ThePile: FC = () => {
     <p className="caption uppercase" aria-hidden="true">Exhibit</p>
     <h2 className="sub-title" id={title}>The pile</h2>
     <p className="caption uppercase" aria-hidden="true">Step</p>
-    <PillGlider label="Step" name="pile" choices={numberedSteps} chosen={step} onChosen={chooseStep}/>
+    <PillGlider label="Step" name="pile" choices={steps} chosen={step} onChosen={chooseStep}/>
     <p className="paragraph">{stories[step]}</p>
     <section className="pile-stage">
       <section className="pile-code">
@@ -65,7 +72,7 @@ export const ThePile: FC = () => {
     {step === 'z-index' && <>
       <p className="caption uppercase" aria-hidden="true">Give a z-index to</p>
       <PillGlider label="Give a z-index to" name="pile-raised" choices={cardsToRaise} chosen={chosen}
-        onChosen={next => change({raised: next}, entryFor('z-index'))}/>
+        onChosen={next => updateSearchParams({pile: 'z-index', raised: next})}/>
     </>}
     <figcaption className="caption"><strong className="bold">Three cards.</strong> Two steps: an overlap, then a
       z-index.</figcaption>

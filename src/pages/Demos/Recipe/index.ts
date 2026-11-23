@@ -21,6 +21,7 @@ export {Slices} from './Slices';
 export {Codes} from './Codes';
 export {Snippet} from './Snippet';
 export {useExhibitStep} from './useExhibitStep';
+export {exhibitSteps} from './exhibit-steps';
 export {lines} from './lines';
 export {carve} from './carve';
 export {Mdn} from './Mdn';
