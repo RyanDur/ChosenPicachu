@@ -84,4 +84,89 @@ const renderedAsJsx = {
   }
 };
 
-export const components = {rules: {'rendered-as-jsx': renderedAsJsx}};
+const elementAttributes = new Set(['className', 'id', 'name', 'label', 'disabled', 'to', 'end', 'href', 'title', 'key', 'x', 'y']);
+
+/**
+ * @param {any} name a JSX tag's name
+ * @returns {boolean}
+ */
+const namesAComponent = name => name.type === 'JSXMemberExpression' || (name.type === 'JSXIdentifier' && /^[A-Z]/.test(name.name));
+
+/**
+ * @param {any} name a JSX tag's name
+ * @returns {boolean}
+ */
+const providesAContext = name =>
+  name.type === 'JSXMemberExpression' ? name.property.name === 'Provider' : name.name.endsWith('Provider');
+
+/**
+ * @param {string} attribute
+ * @returns {boolean}
+ */
+const anElementTakesIt = attribute => elementAttributes.has(attribute) || /^(aria-|data-|on[A-Z])/.test(attribute);
+
+/** @type {import('eslint').Rule.RuleModule} */
+const noForwardedProps = {
+  meta: {
+    type: 'problem',
+    schema: [],
+    messages: {
+      forwarded: '{{name}} is received only to be given to another component; that component reads it from the address or from its context\'s hook',
+      spread: '{{name}} is spread whole onto another component; each component reads what it needs from the address or from its context\'s hook'
+    }
+  },
+  create(context) {
+    const source = context.sourceCode;
+    /**
+     * @param {any} declared
+     * @returns {string}
+     */
+    const nameOf = declared => {
+      const holder = declared.parent.type === 'VariableDeclarator' ? declared.parent.id : declared.id;
+      return has(holder) && holder.type === 'Identifier' ? holder.name : '';
+    };
+    /**
+     * @param {any} identifier
+     * @returns {boolean}
+     */
+    const givenToAComponent = identifier => {
+      const {parent: container} = identifier;
+      if (container.type !== 'JSXExpressionContainer' || container.parent.type !== 'JSXAttribute') return false;
+      const attribute = container.parent;
+      const {name: tag} = attribute.parent;
+      const given = source.getText(attribute.name);
+      return namesAComponent(tag) && not(providesAContext(tag)) && not(anElementTakesIt(given));
+    };
+    /**
+     * @param {any} identifier
+     * @returns {boolean}
+     */
+    const spreadOntoAComponent = identifier =>
+      identifier.parent.type === 'JSXSpreadAttribute' && namesAComponent(identifier.parent.parent.name);
+    /**
+     * @param {any} declared
+     */
+    const read = declared => {
+      const [props] = declared.params;
+      if (empty(props) || not(/^[A-Z]/.test(nameOf(declared)))) return;
+      const reads = variable =>
+        variable.references.filter(reference => reference.isRead()).map(({identifier}) => identifier);
+      source.getDeclaredVariables(declared).forEach(variable => {
+        const [definition] = variable.identifiers;
+        const uses = reads(variable);
+        if (empty(uses)) return;
+        if (props.type === 'Identifier' && definition === props && uses.every(spreadOntoAComponent)) {
+          context.report({node: definition, messageId: 'spread', data: {name: variable.name}});
+        }
+        const property = definition.parent.type === 'AssignmentPattern' ? definition.parent.parent : definition.parent;
+        const destructured = props.type === 'ObjectPattern' && property.type === 'Property' && property.parent === props;
+        if (destructured && uses.every(givenToAComponent)) {
+          context.report({node: definition, messageId: 'forwarded', data: {name: source.getText(property.key)}});
+        }
+      });
+    };
+    return {ArrowFunctionExpression: read, FunctionExpression: read, FunctionDeclaration: read};
+  }
+};
+
+export const components = {rules: {'rendered-as-jsx': renderedAsJsx, 'no-forwarded-props': noForwardedProps}};
