@@ -24,7 +24,6 @@ export const nestingExhibit = (page: Page) => {
     }),
     css,
     markedRules: async (): Promise<string[]> => [...(await css.ariaSnapshot()).matchAll(/- mark: "([^"]+)"/g)].map(([, line]) => line),
-    saying: (words: string): Locator => exhibit.getByText(words, {exact: false}),
     verdict: exhibit.getByRole('status', {name: 'what the browser drew'})
   };
 };

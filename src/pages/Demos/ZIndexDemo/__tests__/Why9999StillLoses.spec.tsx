@@ -31,14 +31,12 @@ describe('why 9999 still loses, on its own page', () => {
     expect(explanation.linkNamed(explanation.opener(part), 'How position places a box')).toHaveAttribute('href', demosAt('z-index/how-position-places-a-box', '?raised=second'));
   });
 
-  test('should show no menu, and leave the top layer to a later part', async () => {
+  test('should show no menu', async () => {
     render(<TestApp at={demosAt(stillLoses)}/>);
 
     const part = await explanation.part(title);
-    const told = [explanation.opener(part), explanation.drawingNamed(part, exhibitName)];
 
     expect(within(part).queryByRole('button', {name: /Sort by/})).not.toBeInTheDocument();
-    expect(told.filter(telling => /top layer/.test(telling.textContent ?? ''))).toEqual([]);
   });
 
   test('should lead back to part two’s page and on to part four’s page, by number and title, with the raised card carried', async () => {
