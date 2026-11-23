@@ -1,5 +1,5 @@
-import {PartsGroup} from '../parts-listed';
-import {chartKinds} from './chart-kinds';
+import {PartsGroup} from '../../parts-listed';
+import {chartKinds} from '../chart-kinds';
 
 export const chartsListed: readonly PartsGroup[] = [
   {
