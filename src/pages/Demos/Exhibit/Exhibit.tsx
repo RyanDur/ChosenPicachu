@@ -9,8 +9,8 @@ export const Exhibit: FC<PropsWithChildren<{name: string}>> = ({name, children})
     <hgroup className="veiled-rule-below">
       <p className="caption uppercase">Exhibit</p>
       {rank === 3
-        ? <h3 id={named} className="sub-title">{name}</h3>
-        : <h2 id={named} className="sub-title">{name}</h2>}
+        ? <h3 id={named} className="sub-title bold">{name}</h3>
+        : <h2 id={named} className="sub-title bold">{name}</h2>}
     </hgroup>
     {children}
   </section>;

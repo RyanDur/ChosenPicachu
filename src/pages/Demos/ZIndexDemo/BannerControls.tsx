@@ -7,7 +7,6 @@ import {
   AlignDial, DialGroup, DialRow, EntranceDial, Reading, SideDial, StackDial, useControls
 } from '../Controls';
 import {Exhibit, ExhibitFoot} from '../Exhibit';
-import './BannerControls.css';
 
 type Copy = {
   side: Record<Side, string>;
@@ -72,7 +71,7 @@ export const BannerControls: FC = () => {
     <p className="caption">
       <code className="monospaced">{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
     </p>
-    <button type="button" tabIndex={0} className="raise-a-banner button primary reachable"
+    <button type="button" tabIndex={0} className="button primary reachable"
       disabled={not(hydrated)} onClick={() => dispatchBanner(bannerChange.raised(nextNews()))}>
       Raise a banner
     </button>

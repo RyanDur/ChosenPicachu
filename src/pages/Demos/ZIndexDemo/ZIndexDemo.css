@@ -71,6 +71,7 @@
 
     .paragraph {
         flex-basis: 100%;
+        float: inline-start;
     }
 }
 
