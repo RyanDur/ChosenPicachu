@@ -27,8 +27,8 @@ const tradesReducer = (trades: TradesState, action: MarketAction): TradesState =
   switch (action.type) {
     case 'feedOpened': return {...trades, status: 'streaming'};
     case 'feedFailed': return {...trades, status: 'failed'};
-    case 'tradeArrived': {
-      const kept = [...trades.trades, action.trade].slice(-liveTrades.cap);
+    case 'tradesArrived': {
+      const kept = [...trades.trades, ...action.trades].slice(-liveTrades.cap);
       return {...trades, tradesBeforeTheNewest: trades.trades, trades: kept};
     }
     case 'historyArrived': return {...trades, history: action.trades, tradesBeforeTheNewest: trades.trades};

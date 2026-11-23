@@ -9,7 +9,7 @@ export type MarketAction =
   | {readonly type: 'feedReleased'}
   | {readonly type: 'feedOpened'}
   | {readonly type: 'feedFailed'}
-  | {readonly type: 'tradeArrived'; readonly trade: Trade}
+  | {readonly type: 'tradesArrived'; readonly trades: readonly Trade[]}
   | {readonly type: 'historyArrived'; readonly trades: readonly Trade[]}
   | {readonly type: 'candlesAsked'; readonly period: Period}
   | {readonly type: 'candlesArrived'; readonly period: Period; readonly candles: readonly Candle[]}
@@ -20,7 +20,7 @@ type MarketActions = {
   feedReleased: () => MarketAction;
   feedOpened: () => MarketAction;
   feedFailed: () => MarketAction;
-  tradeArrived: (trade: Trade) => MarketAction;
+  tradesArrived: (trades: readonly Trade[]) => MarketAction;
   historyArrived: (trades: readonly Trade[]) => MarketAction;
   candlesAsked: (period: Period) => MarketAction;
   candlesArrived: (period: Period, candles: readonly Candle[]) => MarketAction;
@@ -32,7 +32,7 @@ export const marketActions: MarketActions = {
   feedReleased: () => ({type: 'feedReleased'}),
   feedOpened: () => ({type: 'feedOpened'}),
   feedFailed: () => ({type: 'feedFailed'}),
-  tradeArrived: trade => ({type: 'tradeArrived', trade}),
+  tradesArrived: trades => ({type: 'tradesArrived', trades}),
   historyArrived: trades => ({type: 'historyArrived', trades}),
   candlesAsked: period => ({type: 'candlesAsked', period}),
   candlesArrived: (period, candles) => ({type: 'candlesArrived', period, candles}),

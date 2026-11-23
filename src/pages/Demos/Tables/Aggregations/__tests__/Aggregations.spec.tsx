@@ -46,6 +46,16 @@ describe('the live aggregations', () => {
     await waitFor(() => expect(aggregations.spokenIn('this minute', 'trades')).toBe('2 up'));
   });
 
+  test('should mark every number a burst of trades moved, not only the number its last trade moved', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading></TestApp>);
+    await aggregations.afterItsFirstTrade(feed, tradeFrame(50001, now));
+    broadcast(feed, [tradeFrame(50002, now + 1000, '0.01', 'bought'), tradeFrame(50003, now + 2000)]);
+    await waitFor(() => expect(aggregations.spokenIn('this minute', 'sells')).toBe('2 up'));
+
+    expect(aggregations.spokenIn('this minute', 'buys')).toBe('1 up');
+  });
+
   test('the arrangement survives a change of table: the order belongs to the page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at="/" feed={feed}><Trading><Aggregations/></Trading><TableControls/></TestApp>);

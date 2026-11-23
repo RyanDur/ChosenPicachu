@@ -27,13 +27,13 @@ const foldSays: Record<World, ReactNode> = {
   react: <Says>Every render folds the same trades into totals per lookback, a stretch of time measured back from the
     newest trade: counts, volume, vwap, the change since the lookback opened. The fold runs over the same capped trades
     each time, so the lookbacks always match the trades the page holds. Each number is also compared with what it
-    was before the newest trade and marked up or down; a number that trade left alone carries no mark.</Says>,
+    was before the newest batch and marked up or down; a number that batch left alone carries no mark.</Says>,
   vanilla: <Says>Every arrival refolds the same trades into totals per lookback, a stretch of time measured back from
     the newest trade. It is the same <code className="monospaced">tradeTotals</code> module the React world runs.
     What React did for you ends here: there is no render to catch the change, so the page refolds the
     trades and calls <code className="monospaced">reconcile</code>, which rewrites a cell only when its text or its mark
-    changes, and reseats the rows when the sort ranks them anew. A mark says which way the newest trade moved a number;
-    the next trade clears it from a number it leaves as it is.
+    changes, and reseats the rows when the sort ranks them anew. A mark says which way the newest batch moved a number;
+    the next batch clears it from a number it leaves as it is.
     The arrangement is the page’s, and that is the store story.</Says>
 };
 
@@ -111,12 +111,18 @@ const FlowStory: FC = () => {
         </Words>
         <Reveal>
           <Says>The handshake subscribes to the product.
-            Every <Mdn path="Web/API/WebSocket/message_event">message</Mdn> decodes into a trade, appended under a cap
-            so a long session never grows without bound. The reducer also keeps the list from before the newest trade,
-            so the rows can mark what that trade moved; when history arrives, the two lists match and every mark clears.
+            Every <Mdn path="Web/API/WebSocket/message_event">message</Mdn> decodes into a trade. The socket can
+            deliver several trades between two paints, so the trades wait for
+            the next <Mdn path="Web/API/Window/requestAnimationFrame">animation frame</Mdn> and reach the store as
+            one batch a frame. Each batch is appended under a cap so a long session never grows without
+            bound. The reducer also keeps the list from before the newest batch, so the rows mark everything that
+            batch moved, which is everything that changed since the reader last saw them; when history arrives, the
+            two lists match and every mark clears.
             A <Mdn path="Web/API/WebSocket/close_event">close</Mdn> marks the feed failed.</Says>
           <Codes>
             <Snippet label="TS" lines={[
+              ...carve.unit(exchangeSource, 'const batchedPerFrame'), lines.blank,
+              ...carve.unit(exchangeSource, 'const arriving = '),
               ...carve.unit(exchangeSource, 'const stream = streaming('), lines.blank,
               ...carve.unit(marketSliceSource, 'const tradesReducer')
             ]}/>
