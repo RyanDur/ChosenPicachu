@@ -9,7 +9,7 @@ const notAProperty = /^(\d|\.|-?\d|cubic-bezier|steps|linear|ease|step-|allow-di
 
 const messages = stylelint.utils.ruleMessages(name, {
   /** @param {string} property */
-  moves: property => `"${property}" moves on the main thread; motion is transform, translate, rotate, scale, opacity or filter, which the GPU composites, or a grid track opening from 0fr to 1fr`
+  moves: property => `"${property}" moves on the main thread; motion is transform, translate, rotate, scale, opacity or filter, which the GPU composites, or a grid track opening from 0fr or closing back to it`
 });
 
 /**
