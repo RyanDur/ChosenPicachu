@@ -21,6 +21,13 @@ type GrabEvent = {
   clientY: number;
   pointerId: number;
   currentTarget: EventTarget | null;
+  preventDefault: () => void;
+};
+
+const claim = (event: GrabEvent, pressed: HTMLElement): void => {
+  event.preventDefault();
+  pressed.focus({preventScroll: true});
+  pressed.setPointerCapture(event.pointerId);
 };
 
 const column = (
@@ -34,8 +41,8 @@ const column = (
     return;
   }
   const th = event.currentTarget;
-  if (th instanceof Element) {
-    th.setPointerCapture(event.pointerId);
+  if (th instanceof HTMLElement) {
+    claim(event, th);
     const box = th.getBoundingClientRect();
     maybe(th.closest('table')).map(table =>
       grabbed({
@@ -52,8 +59,8 @@ const row = (
   grabbed: (grab: Grab) => void
 ) => (event: GrabEvent): void => {
   const grip = event.currentTarget;
-  if (grip instanceof Element) {
-    grip.setPointerCapture(event.pointerId);
+  if (grip instanceof HTMLElement) {
+    claim(event, grip);
     const box = maybe(grip.closest('tr'))
       .map(row => row.getBoundingClientRect())
       .map(({x, y, width}) => ({x, y, width}))
