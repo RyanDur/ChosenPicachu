@@ -64,12 +64,20 @@ describe('The Demos page', () => {
     expect(demoPage.linksToTabsIn(demoPage.openingAboveTheTabs())).toEqual([['the accordions', demosAt('accordions')]]);
   });
 
-  test('the opening on the Accordions tab should say its link is the page the reader is on', async () => {
+  test('the opening on the Accordions tab should say the accordions in words, with no link to the page the reader is on', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     await demoTabs.current();
 
-    expect(demoPage.linkIn(demoPage.openingAboveTheTabs(), 'the accordions')).toHaveAttribute('aria-current', 'page');
+    expect(demoPage.linksNamedIn(demoPage.openingAboveTheTabs(), 'the accordions')).toEqual([]);
+  });
+
+  test('the opening on the Accordions tab should still say to start with the accordions', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    await demoTabs.current();
+
+    expect(demoPage.openingAboveTheTabs()).toHaveTextContent(/Start with the accordions if HTML/);
   });
 
   test('a part’s page should keep the part’s own title as a heading under the page’s', async () => {
