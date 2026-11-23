@@ -47,25 +47,38 @@
     }
 }
 
+.trap-steps {
+    display: grid;
+    gap: var(--base-x-0_5);
+    list-style-type: decimal;
+
+    & > * {
+        margin-inline-start: var(--base-x-2_5);
+    }
+}
+
+.context-choice {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--base);
+}
+
+.wears {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--base) var(--base-x-2_5);
+
+    .paragraph {
+        flex-basis: 100%;
+    }
+}
+
 :is(.trapped-menu, .banner-trap, .context-chooser) {
     display: grid;
 
     & > :not(:first-child, :empty) {
         margin-block-start: var(--base-x-1_25);
-    }
-
-    .trap-steps {
-        display: grid;
-        gap: var(--base-x-0_5);
-        padding-inline-start: var(--base-x-2_5);
-        list-style-type: decimal;
-    }
-
-    .context-choice {
-        flex-basis: 100%;
-        display: flex;
-        align-items: center;
-        gap: var(--base);
     }
 
     .old-way-cards {
@@ -131,16 +144,6 @@
 }
 
 .context-chooser {
-    .wears {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--base) var(--base-x-2_5);
-
-        .paragraph {
-            flex-basis: 100%;
-        }
-    }
-
     .old-way-card .button {
         anchor-name: --sort-by;
     }

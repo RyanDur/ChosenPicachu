@@ -30,7 +30,7 @@ const oldWaySortBy = (figure: Locator) => {
 };
 
 export const trappedMenu = (page: Page) => {
-  const trap = page.getByRole('figure', {name: /^The trap\./});
+  const trap = page.getByRole('region', {name: 'The trap'});
   const menu = oldWaySortBy(trap);
   const focusSortBy = async (): Promise<void> => {
     await untilPressable(menu.sortBy);
@@ -51,7 +51,7 @@ export const trappedMenu = (page: Page) => {
 };
 
 export const contextChooser = (page: Page) => {
-  const chooser = page.getByRole('figure', {name: /^What card one wears decides/});
+  const chooser = page.getByRole('region', {name: 'What card one wears'});
   return {
     ...oldWaySortBy(chooser),
     wearing: (worn: Worn) => chooser.getByRole('radio', {name: worn, exact: true}),
@@ -98,7 +98,7 @@ export const wearsReportedWrong = async (page: Page, whereTheListOpens: readonly
 };
 
 export const topLayerMenu = (page: Page) => {
-  const trap = page.getByRole('figure', {name: /^The trap\./});
+  const trap = page.getByRole('region', {name: 'The trap'});
   const sortBy = trap.getByRole('button', {name: /^Sort by(: \w+)?, in the top layer$/});
   const menu = trap.getByRole('list').filter({has: page.getByRole('button', {name: 'size', exact: true}), hasNot: page.getByRole('list')});
   const choice = (name: SortChoice) => menu.getByRole('button', {name, exact: true});
@@ -126,7 +126,7 @@ export const topLayerMenu = (page: Page) => {
 };
 
 export const bannerTrap = (page: Page) => {
-  const trap = page.getByRole('figure', {name: /^The banners\./});
+  const trap = page.getByRole('region', {name: 'The banners'});
   const raiseOld = trap.getByRole('button', {name: 'Raise a banner, the old way'});
   const cardTwo = trap.getByRole('listitem').filter({hasText: /^Card two has z-index/});
   const oldBanner = page.getByRole('alert').filter({hasText: /^An old banner\./});

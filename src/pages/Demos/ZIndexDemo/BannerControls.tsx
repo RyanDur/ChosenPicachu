@@ -6,6 +6,7 @@ import {Align, bannerChange, Entrance, Side, Stack, useBannerDispatch} from '@ba
 import {
   AlignDial, DialGroup, DialRow, EntranceDial, Reading, SideDial, StackDial, useControls
 } from '../Controls';
+import {Exhibit, ExhibitFoot} from '../Exhibit';
 import './BannerControls.css';
 
 type Copy = {
@@ -46,8 +47,7 @@ export const BannerControls: FC = () => {
   const hydrated = useHydrated();
   const {side, align, enter, stack} = useControls();
   const dispatchBanner = useBannerDispatch();
-  return <section aria-labelledby="banner-controls-heading" className="controls">
-    <h3 id="banner-controls-heading" className="off-screen">banner controls</h3>
+  return <Exhibit name="The banner, at the window’s edge">
     <DialGroup>
       <DialRow label="side">
         <SideDial name="banner-side"/>
@@ -72,9 +72,11 @@ export const BannerControls: FC = () => {
     <p className="caption">
       <code className="monospaced">{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
     </p>
-    <button type="button" tabIndex={0} className="button primary reachable after-dials"
+    <button type="button" tabIndex={0} className="raise-a-banner button primary reachable"
       disabled={not(hydrated)} onClick={() => dispatchBanner(bannerChange.raised(nextNews()))}>
       Raise a banner
     </button>
-  </section>;
+    <ExhibitFoot lead="The banner, at the window’s edge.">Four settings: which side the banner lands on, how it lines up
+      there, where it comes from, and where a new banner goes.</ExhibitFoot>
+  </Exhibit>;
 };

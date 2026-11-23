@@ -2,7 +2,7 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {Paths} from '@navigation';
 import {demoPage, demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
-import {stackingPile, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {stackingPile, theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 import {site} from '@pages/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {outOfReadingOrder} from '@__test_support/reading-order';
@@ -149,7 +149,7 @@ describe('a z-index part’s page', () => {
     const part = explanation.partIn(page, 'Why 9999 still loses');
     const introduction = explanation.opener(part);
     const index = await partsIndex.find();
-    const exhibit = zIndexTab.firstExhibitIn(part);
+    const exhibit = await theTrap.find();
 
     expect(outOfReadingOrder([index, introduction, exhibit])).toEqual([]);
   });
@@ -157,9 +157,7 @@ describe('a z-index part’s page', () => {
   test('leaves the part’s first exhibit under the part’s own title, not under the parts', async () => {
     render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
 
-    const part = explanation.partIn(await explanation.part('Z-index'), 'Why 9999 still loses');
-
-    expect(titleAbove(zIndexTab.firstExhibitIn(part))).toBe('Why 9999 still loses');
+    expect(titleAbove(await theTrap.find())).toBe('Why 9999 still loses');
   });
 
   test('lists the parts once, beside the part', async () => {

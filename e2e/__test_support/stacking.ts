@@ -42,7 +42,7 @@ export const pileSteps = (page: Page) => {
 };
 
 export const stackingPile = (page: Page) => {
-  const pile = page.getByRole('figure', {name: /^The pile\./});
+  const pile = page.getByRole('region', {name: 'The pile'});
   const raisedGroup = pile.getByRole('group', {name: 'card raised'});
   const expander = pile.getByRole('button', {name: 'Expand'});
   const cardsFromTheTopAtEachCard = (): Promise<string[][]> => pile.getByRole('list').evaluate(list => {

@@ -1,3 +1,4 @@
-.controls > .after-dials {
-  margin-block-start: calc(var(--base-x-1_5) * 2);
+.raise-a-banner {
+  justify-self: start;
+  margin: 0 var(--base-x-3) var(--base-x-2);
 }

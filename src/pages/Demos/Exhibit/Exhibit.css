@@ -1,0 +1,8 @@
+.exhibit {
+    display: grid;
+    overflow: clip;
+
+    & > :where(*) {
+        padding: var(--base-x-2) var(--base-x-3);
+    }
+}

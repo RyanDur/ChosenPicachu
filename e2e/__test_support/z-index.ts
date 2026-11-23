@@ -3,7 +3,7 @@ import {partFoot} from './part-foot';
 
 export const zIndexTab = (page: Page) => {
   const partsNavigation = page.getByRole('navigation', {name: 'Parts', exact: true});
-  const raiser = page.getByRole('region', {name: 'banner controls'})
+  const raiser = page.getByRole('region', {name: 'The banner, at the window’s edge'})
     .getByRole('button', {name: 'Raise a banner', exact: true});
   return {
     partLink: (name: string): Locator => partsNavigation.getByRole('link', {name, exact: true}),
