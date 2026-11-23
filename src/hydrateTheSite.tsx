@@ -2,7 +2,7 @@ import {FC, startTransition, useEffect} from 'react';
 import {createRoot, hydrateRoot} from 'react-dom/client';
 import {DataRouter, RouterProvider} from 'react-router';
 import {Arrival, arrival, ArrivalDrawn} from '@navigation/arrival';
-import {PageFocus, popovers} from '@page';
+import {PageFocus, PagePaints, popovers} from '@page';
 import {galleryForms} from '@pages/Gallery';
 import {Site} from './Site';
 
@@ -12,7 +12,9 @@ const RoutedSite: FC<RoutedSiteProps> = ({router, arrived}) => {
   useEffect(() => arrived.follow(router), [arrived, router]);
   return <Site><ArrivalDrawn.Provider value={arrived.drawn}>
     <PageFocus.Provider value={() => document.hasFocus()}>
-      <RouterProvider router={router} onError={error => console.error(error)}/>
+      <PagePaints.Provider value={window}>
+        <RouterProvider router={router} onError={error => console.error(error)}/>
+      </PagePaints.Provider>
     </PageFocus.Provider>
   </ArrivalDrawn.Provider></Site>;
 };

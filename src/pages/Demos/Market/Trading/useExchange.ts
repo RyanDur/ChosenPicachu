@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {bannerChange, useBannerDispatch} from '@banners';
 import {useEnvironment} from '@environment';
+import {usePagePaints} from '@page';
 import {trouble} from '@transport';
 import {exchange, FeedTrouble} from '../exchange';
 import {marketActions} from '../marketActions';
@@ -21,9 +22,10 @@ const said = (feedTrouble: FeedTrouble): string => {
 
 export const useExchange = (): MarketStore => {
   const environment = useEnvironment();
+  const paints = usePagePaints();
   const dispatchBanner = useBannerDispatch();
   const [store] = useState(() =>
-    marketStore(exchange(environment, trouble => dispatchBanner(bannerChange.raised(said(trouble))))));
+    marketStore(exchange(environment, paints, trouble => dispatchBanner(bannerChange.raised(said(trouble))))));
 
   useEffect(() => {
     store.dispatch(marketActions.feedRequested());

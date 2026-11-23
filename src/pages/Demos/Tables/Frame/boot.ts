@@ -20,7 +20,7 @@ const keyOfLookbackNamed = (rows: readonly Measures[]) => (name: string): string
   maybe(rows.find(({lookback}) => lookback.display === name)).map(({lookback}) => lookback.key).orElse(name);
 
 const fed = (table: HTMLTableElement, told: Pace): void => {
-  const page = marketStore(exchange({...unconfigured, ...window.__environment}, () => undefined));
+  const page = marketStore(exchange({...unconfigured, ...window.__environment}, window, () => undefined));
   const reconcile = builds[told](table, {
     columns: () => marketReads.columns(page.state),
     rows: () => marketReads.rows(page.state)
