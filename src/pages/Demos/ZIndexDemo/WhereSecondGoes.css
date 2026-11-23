@@ -89,7 +89,6 @@
         pointer-events: none;
     }
 
-
     .little-view.transformed {
         transform: translate(0);
     }
