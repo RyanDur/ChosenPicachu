@@ -54,8 +54,8 @@ const features: Record<ChartKind, Feature> = {
   }
 };
 
-const thePreviousTab: Behind = bookEnds.behind(DemoTopics.charts);
-const theNextTab: Onward = bookEnds.onward(DemoTopics.charts);
+const behindTheFirstPart: Behind = bookEnds.behind(DemoTopics.charts);
+const onwardFromTheLastPart: Onward = bookEnds.onward(DemoTopics.charts);
 
 export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const carried = useCarriedAddress();
@@ -64,8 +64,8 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const {reference, quote, chart: Chart} = features[kind];
   const name = chartKinds.names[kind];
   const place = `${demoTab.names[DemoTopics.charts]} · part ${chartKinds.ordinalOf(kind)} of ${chartKinds.all.length}`;
-  const behind = chartKinds.previous(kind).map((beside): Behind => besideKind(beside)).orElse(thePreviousTab);
-  const onward = chartKinds.next(kind).map((beside): Onward => besideKind(beside)).orElse(theNextTab);
+  const behind = chartKinds.previous(kind).map((beside): Behind => besideKind(beside)).orElse(behindTheFirstPart);
+  const onward = chartKinds.next(kind).map((beside): Onward => besideKind(beside)).orElse(onwardFromTheLastPart);
   const part = {heading: `${name} tutorial`, headingId: `${kind}-heading`, place, previous: behind, next: onward};
   return <ThePart value={part}><PartSection>
     <PartOpening><p className="paragraph">{chartKinds.told[kind].says}</p></PartOpening>
