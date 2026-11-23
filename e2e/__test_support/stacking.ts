@@ -24,7 +24,7 @@ const cardsFromTheTopWhereAllMeet = (drawing: Locator): Promise<string[]> => dra
 export const pileSteps = (page: Page) => {
   const exhibit = page.getByRole('figure', {name: 'The pile', exact: true});
   return {
-    cardsFromTheTop: (): Promise<string[]> => cardsFromTheTopWhereAllMeet(exhibit.getByRole('region', {name: 'the pile'})),
+    cardsFromTheTop: (): Promise<string[]> => cardsFromTheTopWhereAllMeet(exhibit.getByRole('region', {name: 'What the browser draws · one stacking context'})),
     stepsTo: (step: Step): Promise<void> => pillSwitch(page, 'Step').choose(step),
     step: (step: Step): Locator => pillSwitch(page, 'Step').pill(step),
     givesAZIndexTo: (card: 'None' | Card): Promise<void> => pillSwitch(page, 'Give a z-index to').choose(card),

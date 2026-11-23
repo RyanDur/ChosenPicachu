@@ -47,6 +47,7 @@ export const ThePile: FC = () => {
     : updateSearchParams({pile: next});
   const raised = step === 'z-index' ? chosen : 'none';
   const title = useId();
+  const drawingName = useId();
 
   return <figure className="the-pile card rounded-corners lifted padded" aria-labelledby={title}>
     <p className="caption uppercase" aria-hidden="true">Exhibit</p>
@@ -60,8 +61,8 @@ export const ThePile: FC = () => {
         <Snippet label="CSS" lines={rulesShown(raised)}/>
       </section>
       <section className="pile-code">
-        <p className="caption uppercase">What the browser draws · one stacking context</p>
-        <section className="pile-drawing" aria-label="the pile">
+        <p className="caption uppercase" id={drawingName}>What the browser draws · one stacking context</p>
+        <section className="pile-drawing" aria-labelledby={drawingName}>
           {cards.map(card => <p key={card} className={classNames(
             'card piled hairline-edged rounded-corners floating', raised === card && 'raised')}>
             {names[card]}</p>)}
