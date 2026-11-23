@@ -72,12 +72,12 @@ describe('The Demos page', () => {
     expect(demoPage.linksNamedIn(demoPage.openingAboveTheTabs(), 'the accordions')).toEqual([]);
   });
 
-  test('the opening on the Accordions tab should still say to start with the accordions', async () => {
+  test('the opening on the Accordions tab should still name the accordions', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     await demoTabs.current();
 
-    expect(demoPage.openingAboveTheTabs()).toHaveTextContent(/Start with the accordions if HTML/);
+    expect(demoPage.openingAboveTheTabs()).toHaveTextContent(/the accordions/);
   });
 
   test('a part’s page should keep the part’s own title as a heading under the page’s', async () => {
