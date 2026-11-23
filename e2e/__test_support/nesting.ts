@@ -1,7 +1,7 @@
 import type {Locator, Page} from '@playwright/test';
 import {pillSwitch} from './pills';
 
-export type NestingStep = '1 · One context' | '2 · A context inside' | '3 · The list inside' | '4 · The list outside';
+export type NestingStep = '1 · The page' | '2 · A context inside' | '3 · The list inside' | '4 · The list outside';
 
 export const nestingExhibit = (page: Page) => {
   const exhibit = page.getByRole('figure', {name: 'A context inside a context', exact: true});

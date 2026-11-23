@@ -5,10 +5,10 @@ import {carve, Line, lines, Snippet, useExhibitStep} from '../Recipe';
 import sheet from './AContextInsideAContext.css?sample';
 import './AContextInsideAContext.css';
 
-type Step = 'one-context' | 'a-context-inside' | 'the-list-inside' | 'the-list-outside';
+type Step = 'the-page' | 'a-context-inside' | 'the-list-inside' | 'the-list-outside';
 
 const steps: Choice<Step>[] = [
-  {words: 'One context', value: 'one-context'},
+  {words: 'The page', value: 'the-page'},
   {words: 'A context inside', value: 'a-context-inside'},
   {words: 'The list inside', value: 'the-list-inside'},
   {words: 'The list outside', value: 'the-list-outside'}
@@ -27,15 +27,15 @@ const cardsBeside = [
 ];
 
 const told: Record<Step, Told> = {
-  'one-context': {
-    story: 'A stacking context is a group of boxes the browser orders together, as it did with the pile. Here the page is one context, and it holds two cards.',
-    verdict: 'One context: the page.',
+  'the-page': {
+    story: 'A stacking context is a group of boxes the browser orders together, as it did with the pile. Here the page holds two cards.',
+    verdict: 'Card A forms no context yet.',
     markup: cardsBeside,
     rules: rulesShown(ruleFor('.card-b {'))
   },
   'a-context-inside': {
     story: 'Contexts nest, the way elements do. Card A now forms a context of its own. The browser ranks the boxes inside card A only against each other, then stacks card A as one box in the page.',
-    verdict: 'Two contexts: the page, and card A inside it.',
+    verdict: 'Card A is now a context inside the page.',
     markup: cardsBeside,
     rules: rulesShown(ruleFor('.card-b {'), lines.marked(ruleFor('.card-a {')))
   },
@@ -64,10 +64,10 @@ const TheList: FC = () => <ul className="list listed card hairline-edged rounded
 </ul>;
 
 export const AContextInsideAContext: FC = () => {
-  const {step, numberedSteps, choose: chooseStep} = useExhibitStep('nesting', steps, 'one-context');
+  const {step, numberedSteps, choose: chooseStep} = useExhibitStep('nesting', steps, 'the-page');
   const title = useId();
   const drawingName = useId();
-  const isolating = step !== 'one-context';
+  const isolating = step !== 'the-page';
   const {story, verdict, markup, rules} = told[step];
 
   return <figure className="context-inside card rounded-corners lifted padded" aria-labelledby={title}>
@@ -98,8 +98,8 @@ export const AContextInsideAContext: FC = () => {
       </section>
       <output aria-label="what the browser drew" className="paragraph bold">{verdict}</output>
     </section>
-    <figcaption className="caption"><strong className="bold">A context inside a context.</strong> Four steps: one
-      context, a context inside it, a list written inside, then the same list written outside. The numbers stay the
+    <figcaption className="caption"><strong className="bold">A context inside a context.</strong> Four steps: the
+      page, a context inside it, a list written inside, then the same list written outside. The numbers stay the
       same.</figcaption>
   </figure>;
 };
