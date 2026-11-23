@@ -4,18 +4,11 @@ import {LiveTradesState} from './live-trades';
 import {Period} from './Period';
 import {PeriodHistory} from './period-history';
 import {Measured, Measures, cells} from './cells';
-import {tradeTotals} from './trade-totals';
-import {recentTrades} from './recent-trades';
 import {arrangedView} from './arrangedView';
 import {MarketState, TradesState} from './marketSlice';
 
-const folded = (history: readonly Trade[], streamed: readonly Trade[]): Measures[] =>
-  tradeTotals.perLookback(recentTrades.hydrated(history, streamed)).map(cells.from);
-
-const markedRows = ({history, trades, tradesLastShown}: TradesState): Measures[] => {
-  const was = folded(history, tradesLastShown);
-  return folded(history, trades).map((now, at) => cells.markedAgainst(was[at], now));
-};
+const markedRows = ({rowsShown, rowsLastShown}: TradesState): Measures[] =>
+  rowsShown.map((now, at) => cells.markedAgainst(rowsLastShown[at], now));
 
 type MarketReads = {
   columns: (state: MarketState) => readonly TableColumn<Measured>[];

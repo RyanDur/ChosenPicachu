@@ -33,38 +33,72 @@ const lookbacks = [
   {lookback: 'session', name: 'session', milliseconds: Number.POSITIVE_INFINITY}
 ] satisfies readonly NamedLookback[];
 
-const still = (lookback: NamedLookback): LookbackTotals =>
-  ({...lookback, trades: 0, buys: 0, sells: 0, volume: 0});
+const held = 60 * MINUTE;
 
-const aggregate = (lookback: NamedLookback, trades: readonly Trade[]): LookbackTotals => {
+type Span = {
+  opened: number;
+  closed: number;
+};
+
+export type Tally = {
+  trades: number;
+  buys: number;
+  sells: number;
+  volume: number;
+  notional: number;
+  span?: Span;
+};
+
+const noTally: Tally = {trades: 0, buys: 0, sells: 0, volume: 0, notional: 0};
+
+const tallied = (trades: readonly Trade[]): Tally => {
   if (empty(trades)) {
-    return still(lookback);
+    return noTally;
   }
-  const volume = trades.reduce((total, trade) => total + trade.size, 0);
-  const notional = trades.reduce((total, trade) => total + trade.size * trade.price, 0);
   const buys = trades.filter(trade => trade.takerSide === 'buy').length;
   return {
-    ...lookback,
     trades: trades.length,
     buys,
     sells: trades.length - buys,
-    volume,
-    traded: {
-      vwap: notional / volume,
-      opened: trades[0].price,
-      closed: trades[trades.length - 1].price
-    }
+    volume: trades.reduce((total, trade) => total + trade.size, 0),
+    notional: trades.reduce((total, trade) => total + trade.size * trade.price, 0),
+    span: {opened: trades[0].price, closed: trades[trades.length - 1].price}
   };
 };
 
-const perLookback = (trades: readonly Trade[]): readonly LookbackTotals[] =>
-  lookbacks.map(lookback => aggregate(lookback, maybe(trades[trades.length - 1])
-    .map(({tradedAt: now}) => trades.filter(trade => now - trade.tradedAt < lookback.milliseconds))
-    .orElse([])));
+const joined = (earlier: Tally, later: Tally): Tally => ({
+  trades: earlier.trades + later.trades,
+  buys: earlier.buys + later.buys,
+  sells: earlier.sells + later.sells,
+  volume: earlier.volume + later.volume,
+  notional: earlier.notional + later.notional,
+  span: maybe(earlier.span).either(
+    before => ({opened: before.opened, closed: maybe(later.span).map(after => after.closed).orElse(before.closed)}),
+    () => later.span)
+});
+
+const totalsOf = (lookback: NamedLookback, {trades, buys, sells, volume, notional, span}: Tally): LookbackTotals => {
+  const counted = {...lookback, trades, buys, sells, volume};
+  return maybe(span).either(
+    ({opened, closed}) => ({...counted, traded: {vwap: notional / volume, opened, closed}}),
+    () => counted);
+};
+
+const perLookback = (trades: readonly Trade[], agedOut: Tally = noTally): readonly LookbackTotals[] =>
+  lookbacks.map(lookback => {
+    const inside = maybe(trades[trades.length - 1])
+      .map(({tradedAt: now}) => trades.filter(trade => now - trade.tradedAt < lookback.milliseconds))
+      .orElse([]);
+    return totalsOf(lookback, lookback.milliseconds > held ? joined(agedOut, tallied(inside)) : tallied(inside));
+  });
 
 type TradeTotals = {
   lookbacks: readonly NamedLookback[];
-  perLookback: (trades: readonly Trade[]) => readonly LookbackTotals[];
+  held: number;
+  noTally: Tally;
+  tallied: (trades: readonly Trade[]) => Tally;
+  joined: (earlier: Tally, later: Tally) => Tally;
+  perLookback: (trades: readonly Trade[], agedOut?: Tally) => readonly LookbackTotals[];
 };
 
-export const tradeTotals: TradeTotals = {lookbacks, perLookback};
+export const tradeTotals: TradeTotals = {lookbacks, held, noTally, tallied, joined, perLookback};
