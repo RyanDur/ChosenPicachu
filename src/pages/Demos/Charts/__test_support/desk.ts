@@ -58,7 +58,7 @@ const onChart = (name: string, told: string): HTMLElement => within(chart(name))
 const findOnChart = async (name: string, told: string): Promise<HTMLElement> =>
   within(await findChart(name)).findByText(told);
 
-const priceCard = (): HTMLElement => chart('live trades');
+const priceCard = (): HTMLElement => chart('Price line');
 
 const alert = (): HTMLElement => screen.getByRole('alert');
 
@@ -105,7 +105,8 @@ export const chartsDesk = {
   recipe: (subject: string): HTMLElement => screen.getByRole('region', {name: `build the ${subject} yourself`}),
   findRecipe: (subject: string): Promise<HTMLElement> => screen.findByRole('region', {name: `build the ${subject} yourself`}),
   findFeatureStories: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'let’s build this feature'}),
-  findChartsTab: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'Charts'}),
+  findDesk: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'A desk of charts, kept in the address'}),
+  saidIn: (holder: HTMLElement, told: string): HTMLElement => within(holder).getByText(told),
   opening: (): Promise<HTMLElement> => screen.findByText(/^A live chart draws numbers that are still arriving\./),
   size: (): Promise<HTMLElement> => screen.findByText(sizeLine),
   sizeIn: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByText(sizeLine),
@@ -121,8 +122,8 @@ export const chartsDesk = {
   regionsNamed: (name: RegExp): HTMLElement[] => screen.queryAllByRole('region', {name}),
   page: (name: string): HTMLElement => screen.getByRole('region', {name}),
   findPage: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}),
-  findPieLegend: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'pie'})).getByRole('list'),
-  pieShares: (): string[] => within(within(chart('pie')).getByRole('list')).getAllByRole('listitem').map(share => share.textContent),
+  findPieLegend: async (): Promise<HTMLElement> => within(await screen.findByRole('region', {name: 'Pie'})).getByRole('list'),
+  pieShares: (): string[] => within(within(chart('Pie')).getByRole('list')).getAllByRole('listitem').map(share => share.textContent),
   title: (name: string, level: number): HTMLElement => screen.getByRole('heading', {name, level}),
   findTitle: (name: string | RegExp, level?: number): Promise<HTMLElement> => screen.findByRole('heading', {name, level}),
   titleIn: (holder: HTMLElement, name: string | RegExp, level?: number): HTMLElement => within(holder).getByRole('heading', {name, level}),
@@ -131,11 +132,11 @@ export const chartsDesk = {
   trouble: (told: string): HTMLElement => within(alert()).getByText(told),
   findTrouble: async (told: string): Promise<HTMLElement> => within(await screen.findByRole('alert')).findByText(told),
   priceCard,
-  onPriceCard: (told: string): HTMLElement => onChart('live trades', told),
-  findOnPriceCard: (told: string): Promise<HTMLElement> => findOnChart('live trades', told),
+  onPriceCard: (told: string): HTMLElement => onChart('Price line', told),
+  findOnPriceCard: (told: string): Promise<HTMLElement> => findOnChart('Price line', told),
   priceTicks: (): HTMLElement[] => within(priceCard()).getAllByRole('time'),
-  drawnCandles: (): number => parseInt(captionOf('candles'), 10),
-  drawnPoints: (): number => parseInt(captionOf('live trades'), 10),
+  drawnCandles: (): number => parseInt(captionOf('Candles'), 10),
+  drawnPoints: (): number => parseInt(captionOf('Price line'), 10),
   explain: async (chart: string): Promise<void> =>
     userEvent.click(within(await screen.findByRole('region', {name: chart})).getByText('what am I looking at?')),
   explanationOf: (chart: string): HTMLElement => within(explainer(chart)).getByRole('paragraph')

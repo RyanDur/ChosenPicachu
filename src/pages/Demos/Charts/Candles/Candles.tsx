@@ -14,6 +14,7 @@ import '../chart-card.css';
 import './Candles.css';
 import {classNames} from '@components';
 import {sideOf} from '../sides';
+import {chartKinds} from '../chart-kinds';
 
 const CHART_WIDTH = 240;
 const CANDLE_HEIGHT = 80;
@@ -34,8 +35,7 @@ export const Candles: FC<PropsWithChildren<Props>> = ({id: given, children}) => 
     Math.max(...candles.map(candle => candle.high)),
     Math.min(...candles.map(candle => candle.low))
   );
-  return <section aria-labelledby={`${id}-heading`} className="candles chart card rounded-corners lifted padded">
-    <h3 id={`${id}-heading`} className="off-screen">candles</h3>
+  return <section aria-label={chartKinds.names.candles} className="candles chart padded">
     <header className="chart-header">
       {children}
       <PeriodMenu id={`${id}-period`} kind="candles"/>

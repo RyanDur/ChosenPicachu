@@ -16,10 +16,12 @@ import {Pie} from './Pie';
 import {ChartKind, chartKinds} from './chart-kinds';
 import {StoryDepth} from '../Recipe';
 import {ChartStories} from './ChartStories';
+import {Exhibit, ExhibitFoot} from '../Exhibit';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
 
 type Feature = {
+  exhibit: string;
   reference: string;
   quote: string;
   chart: FC;
@@ -27,6 +29,7 @@ type Feature = {
 
 const features: Record<ChartKind, Feature> = {
   price: {
+    exhibit: 'A line through the closing prices',
     reference: 'https://en.wikipedia.org/wiki/Line_chart',
     chart: PriceChart,
     quote: 'The ticker tells me now; it doesn’t tell me the way here. I want to glance up ' +
@@ -34,6 +37,7 @@ const features: Record<ChartKind, Feature> = {
       'a single digit.'
   },
   candles: {
+    exhibit: 'A candle for each bucket',
     reference: 'https://en.wikipedia.org/wiki/Candlestick_chart',
     chart: Candles,
     quote: 'The line smooths over the fight. A drift and a battle can draw the same shape, ' +
@@ -41,12 +45,14 @@ const features: Record<ChartKind, Feature> = {
       'reached, and how much conviction was underneath.'
   },
   pressure: {
+    exhibit: 'Bought above the line, sold below it',
     reference: 'https://en.wikipedia.org/wiki/Order_flow_trading',
     chart: Pressure,
     quote: 'I can see the price move; I can’t see who is pushing it. When it breaks out, I ' +
       'want to know whether buyers drove it there or the sellers just stepped away.'
   },
   pie: {
+    exhibit: 'One circle, cut with rotations',
     reference: 'https://en.wikipedia.org/wiki/Pie_chart',
     chart: Pie,
     quote: 'The bars tell me the battle, minute by minute. At the end I want the war: one ' +
@@ -61,7 +67,7 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const carried = useCarriedAddress();
   const besideKind = (beside: ChartKind): Beside =>
     ({kind: 'part', title: chartKinds.numbered(beside), address: carried(chartKinds.address(beside))});
-  const {reference, quote, chart: Chart} = features[kind];
+  const {exhibit, reference, quote, chart: Chart} = features[kind];
   const name = chartKinds.names[kind];
   const place = `${demoTab.names[DemoTopics.charts]} · part ${chartKinds.ordinalOf(kind)} of ${chartKinds.all.length}`;
   const behind = chartKinds.previous(kind).map((beside): Behind => besideKind(beside)).orElse(behindTheFirstPart);
@@ -70,7 +76,10 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   return <ThePart value={part}><PartSection>
     <PartOpening><p className="paragraph">{chartKinds.told[kind].says}</p></PartOpening>
     <PartDemo className="tutorials">
-      <Chart/>
+      <Exhibit name={exhibit}>
+        <Chart/>
+        <ExhibitFoot lead={`${exhibit}.`}>The live trades, drawn as this chart.</ExhibitFoot>
+      </Exhibit>
       <h3 className="title">let’s build this feature</h3>
       <p className="overview paragraph">
         We are going to build the <a className="signpost"

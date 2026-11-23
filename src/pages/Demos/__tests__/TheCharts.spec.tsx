@@ -24,8 +24,8 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findChart('live trades')).toBeVisible();
-    expect(chartsDesk.missingChart('candles')).not.toBeInTheDocument();
+    expect(await chartsDesk.findChart('Price line')).toBeVisible();
+    expect(chartsDesk.missingChart('Candles')).not.toBeInTheDocument();
   });
 
   test('an address with a name the page doesn’t know and a repeat seats each chart it knows once', async () => {
@@ -103,27 +103,25 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.addChart('Candles');
 
-    const candles = await chartsDesk.findChart('candles');
-    const price = chartsDesk.chart('live trades');
+    const candles = await chartsDesk.findChart('Candles');
+    const price = chartsDesk.chart('Price line');
     expect(candles.compareDocumentPosition(price)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
-  test('each chart card names itself in the heading outline', async () => {
+  test('each chart should be named for its kind', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    const candles = await chartsDesk.findChart('candles');
-    const price = chartsDesk.chart('live trades');
-    expect(chartsDesk.titleIn(candles, 'candles')).toBeInTheDocument();
-    expect(chartsDesk.titleIn(price, 'live trades')).toBeInTheDocument();
-    expect(chartsDesk.titleIn(chartsDesk.chart('pressure'), 'pressure')).toBeInTheDocument();
-    expect(chartsDesk.titleIn(chartsDesk.chart('pie'), 'pie')).toBeInTheDocument();
+    expect(await chartsDesk.findChart('Candles')).toBeInTheDocument();
+    expect(chartsDesk.chart('Price line')).toBeInTheDocument();
+    expect(chartsDesk.chart('Pressure')).toBeInTheDocument();
+    expect(chartsDesk.chart('Pie')).toBeInTheDocument();
   });
 
   test('the trader can remove a chart', async () => {
@@ -131,12 +129,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.removeFirst();
 
-    expect(chartsDesk.missingChart('live trades')).not.toBeInTheDocument();
-    expect(await chartsDesk.findChart('candles')).toBeVisible();
+    expect(chartsDesk.missingChart('Price line')).not.toBeInTheDocument();
+    expect(await chartsDesk.findChart('Candles')).toBeVisible();
     expect(chartsDesk.deskReport()).toHaveTextContent('Price line removed');
   });
 
@@ -145,7 +143,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     expect(chartsDesk.removeOnOffer()).not.toBeInTheDocument();
     expect(chartsDesk.gripOnOffer()).not.toBeInTheDocument();
@@ -157,12 +155,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.keys('Price line', 'ArrowDown');
 
-    const candles = chartsDesk.chart('candles');
-    expect(candles.compareDocumentPosition(chartsDesk.chart('live trades')))
+    const candles = chartsDesk.chart('Candles');
+    expect(candles.compareDocumentPosition(chartsDesk.chart('Price line')))
       .toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     expect(chartsDesk.doorway('Price line')).toHaveFocus();
   });
@@ -173,12 +171,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.keys('Candles', 'ArrowUp');
 
-    const candles = chartsDesk.chart('candles');
-    expect(candles.compareDocumentPosition(chartsDesk.chart('live trades')))
+    const candles = chartsDesk.chart('Candles');
+    expect(candles.compareDocumentPosition(chartsDesk.chart('Price line')))
       .toBe(Node.DOCUMENT_POSITION_FOLLOWING);
     expect(chartsDesk.doorway('Candles')).toHaveFocus();
   });
@@ -188,7 +186,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
     await chartsDesk.choosePeriod('price', 'day');
     await chartsDesk.findPeriodShown('price', 'day');
 
@@ -203,7 +201,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.keys('Price line', 'ArrowDown');
 
@@ -215,11 +213,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.keys('Price line', 'Delete');
 
-    expect(chartsDesk.missingChart('live trades')).not.toBeInTheDocument();
+    expect(chartsDesk.missingChart('Price line')).not.toBeInTheDocument();
     expect(chartsDesk.deskReport()).toHaveTextContent('Price line removed');
   });
 
@@ -228,11 +226,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.keys('Price line', 'Backspace');
 
-    expect(chartsDesk.missingChart('live trades')).not.toBeInTheDocument();
+    expect(chartsDesk.missingChart('Price line')).not.toBeInTheDocument();
     expect(chartsDesk.deskReport()).toHaveTextContent('Price line removed');
   });
 
@@ -241,7 +239,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.keys('Price line', 'Delete');
 
@@ -253,7 +251,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.removeFirst();
 
@@ -265,7 +263,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles,pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('candles');
+    await chartsDesk.findChart('Candles');
 
     await chartsDesk.keys('Candles', 'Delete');
 
@@ -277,7 +275,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('candles');
+    await chartsDesk.findChart('Candles');
 
     await chartsDesk.keys('Candles', 'Delete');
 
@@ -289,18 +287,18 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('candles');
+    await chartsDesk.findChart('Candles');
 
     await chartsDesk.keys('Candles', 'Delete');
 
-    expect(chartsDesk.chart('candles')).toBeVisible();
+    expect(chartsDesk.chart('Candles')).toBeVisible();
   });
 
   test("a finger pressed on a chart's grip readies the chart to be moved, and lifted leaves it at rest", async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
     const finger = chartsDesk.fingerOn('Price line');
 
     await finger.press();
@@ -315,7 +313,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?graph=workspace')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     expect(recipeFolds.story(chartsDesk.recipe('charts'), 'The trader can lay out the workspace')).not.toHaveAttribute('open');
   });
@@ -325,7 +323,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.open('Price line');
 
@@ -337,12 +335,12 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('candles');
+    await chartsDesk.findChart('Candles');
 
     await chartsDesk.keys('Candles', 'Enter');
 
     expect(await chartsDesk.findRecipe('candles')).toBeVisible();
-    expect(chartsDesk.chart('candles')).toBeVisible();
+    expect(chartsDesk.chart('Candles')).toBeVisible();
   });
 
   test('should open the candles story from the candles walkthrough', async () => {
@@ -374,11 +372,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.addChart('Pressure');
 
-    expect(await chartsDesk.findChart('pressure')).toBeVisible();
+    expect(await chartsDesk.findChart('Pressure')).toBeVisible();
   });
 
   test("a chart tutorial's outline steps down from its own heading to its first step", async () => {
@@ -494,7 +492,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('pressure');
+    await chartsDesk.findChart('Pressure');
 
     await chartsDesk.open('Pressure');
 
@@ -506,7 +504,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     expect(chartsDesk.titleIn(chartsDesk.page('Price line tutorial'), 'let’s build this feature', 3)).toBeVisible();
     expect(recipeFolds.story(chartsDesk.recipe('price line'), 'The trader can watch the price move, live')).toBeInTheDocument();
@@ -528,8 +526,8 @@ describe('a list of charts', () => {
     render(<TestApp at={demosAt('charts', '?charts=candles,price,price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findChart('candles')).toBeVisible();
-    expect(chartsDesk.chartsNamed('live trades')).toHaveLength(1);
+    expect(await chartsDesk.findChart('Candles')).toBeVisible();
+    expect(chartsDesk.chartsNamed('Price line')).toHaveLength(1);
   });
 
   test('the add menu offers only what the desk lacks', async () => {
@@ -537,7 +535,7 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     expect(chartsDesk.offered('Price line')).not.toBeInTheDocument();
     expect(chartsDesk.offered('Candles')).not.toBeInTheDocument();
@@ -549,11 +547,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.addChart('Pie');
 
-    await chartsDesk.findChart('pie');
+    await chartsDesk.findChart('Pie');
     expect(chartsDesk.addMenu()).not.toBeInTheDocument();
   });
 
@@ -577,11 +575,11 @@ describe('a list of charts', () => {
 
     render(<TestApp at={demosAt('charts')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     await chartsDesk.addChart('Pie');
 
-    await chartsDesk.findChart('pie');
+    await chartsDesk.findChart('Pie');
     expect(chartsDesk.deskReport()).toHaveTextContent('Pie added');
   });
 
@@ -621,7 +619,7 @@ describe('the demos page', () => {
 
       await demoTabs.open('Charts');
 
-      expect(await chartsDesk.findChart('live trades')).toBeVisible();
+      expect(await chartsDesk.findChart('Price line')).toBeVisible();
     });
 
     test('trades gathered before the user opens the charts are already waiting', async () => {
@@ -700,29 +698,20 @@ describe('the demos page', () => {
       await waitFor(() => expect(chartsDesk.drawnPoints()).toBe(5));
     });
 
-    test('the charts name what they measure', async () => {
-      const feed = await listeningFeed();
-
-      render(<TestApp at={demosAt('charts')} feed={feed}/>);
-      await feedIsSubscribed(feed);
-
-      expect(await chartsDesk.findTitle(/BTC-USD/)).toBeVisible();
-    });
-
     test('the charts explain what they show', async () => {
       const feed = await listeningFeed();
 
       render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
       await feedIsSubscribed(feed);
 
-      await chartsDesk.findChart('candles');
-      const price = chartsDesk.explanationOf('live trades');
-      const candles = chartsDesk.explanationOf('candles');
+      await chartsDesk.findChart('Candles');
+      const price = chartsDesk.explanationOf('Price line');
+      const candles = chartsDesk.explanationOf('Candles');
       expect(price).not.toBeVisible();
       expect(candles).not.toBeVisible();
 
-      await chartsDesk.explain('live trades');
-      await chartsDesk.explain('candles');
+      await chartsDesk.explain('Price line');
+      await chartsDesk.explain('Candles');
 
       expect(price).toBeVisible();
       expect(candles).toBeVisible();
@@ -804,28 +793,28 @@ describe('the demos page', () => {
 });
 
 describe('the charts’ headings', () => {
-  test('should sit each chart under the live headline on the tab', async () => {
+  test('should title the tab’s desk as an exhibit', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts', '?charts=price,candles')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findTitle('live trades', 3)).toBeInTheDocument();
-    expect(chartsDesk.title('candles', 3)).toBeInTheDocument();
+    expect(await chartsDesk.findTitle('A desk of charts, kept in the address', 2)).toBeInTheDocument();
   });
 
-  test('should sit the chart under its tutorial’s title on its own page', async () => {
+  test('should title the chart’s exhibit under its tutorial’s title on its own page', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={chartPageAt('price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findTitle('live trades', 3)).toBeInTheDocument();
+    expect(await chartsDesk.findTitle('A line through the closing prices', 3)).toBeInTheDocument();
   });
-  test('should head the live charts Bitcoin, live: every BTC-USD trade on Coinbase', async () => {
+
+  test('should say Bitcoin, live: every BTC-USD trade on Coinbase on the desk', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts', '?charts=price')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(chartsDesk.titleIn(await chartsDesk.findChartsTab(), 'Bitcoin, live: every BTC-USD trade on Coinbase', 2)).toBeInTheDocument();
+    expect(chartsDesk.saidIn(await chartsDesk.findDesk(), 'Bitcoin, live: every BTC-USD trade on Coinbase')).toBeInTheDocument();
   });
 });
 
@@ -881,7 +870,7 @@ describe('the workspace’s doorways', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     expect(chartsDesk.doorway('Price line')).toHaveAttribute('href', chartPageAt('price'));
   });
@@ -890,7 +879,7 @@ describe('the workspace’s doorways', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     expect(chartsDesk.doorway('Candles')).toHaveAttribute('href', chartPageAt('candles'));
   });
@@ -899,7 +888,7 @@ describe('the workspace’s doorways', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     expect(chartsDesk.doorway('Pressure')).toHaveAttribute('href', chartPageAt('pressure'));
   });
@@ -908,7 +897,7 @@ describe('the workspace’s doorways', () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
-    await chartsDesk.findChart('live trades');
+    await chartsDesk.findChart('Price line');
 
     expect(chartsDesk.doorway('Pie')).toHaveAttribute('href', chartPageAt('pie'));
   });

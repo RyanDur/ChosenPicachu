@@ -44,7 +44,7 @@ describe('pressure', () => {
 
     broadcast(feed, [tradeFrame(65001, now, '2', 'bought'), tradeFrame(65002, now + 60000, '1', 'sold')]);
 
-    await waitFor(() => expect(chartsDesk.chart('pressure')).toHaveTextContent('2 minutes · up to the last 1,500 trades'));
+    await waitFor(() => expect(chartsDesk.chart('Pressure')).toHaveTextContent('2 minutes · up to the last 1,500 trades'));
   });
 
   test('the card bars the sides around the midline', async () => {
@@ -54,7 +54,7 @@ describe('pressure', () => {
 
     broadcast(feed, [tradeFrame(65001, now, '2', 'bought'), tradeFrame(65002, now + 1000, '1', 'sold')]);
 
-    const card = chartsDesk.chart('pressure');
+    const card = chartsDesk.chart('Pressure');
     await waitFor(() => expect(card).toHaveTextContent('1 minute · up to the last 1,500 trades'));
     expect(card).toHaveTextContent('2 BTC');
     expect(card).toHaveTextContent('-2 BTC');
@@ -74,7 +74,7 @@ describe('pressure', () => {
     render(<TestApp at="/" feed={feed}><Trading><Pressure/></Trading></TestApp>);
     await feedIsSubscribed(feed);
 
-    const card = chartsDesk.chart('pressure');
+    const card = chartsDesk.chart('Pressure');
     expect(card).toHaveTextContent('waiting for the first trade');
   });
 
@@ -83,7 +83,7 @@ describe('pressure', () => {
     render(<TestApp at="/" feed={feed}><Trading><Pressure/></Trading></TestApp>);
     await feedIsSubscribed(feed);
 
-    expect(chartsDesk.chart('pressure')).not.toHaveTextContent('BTC');
+    expect(chartsDesk.chart('Pressure')).not.toHaveTextContent('BTC');
   });
 
   test('the hour chart marks the time every ten minutes', async () => {
@@ -95,7 +95,7 @@ describe('pressure', () => {
 
     broadcast(feed, Array.from({length: 21}, (_, step) => tradeFrame(65001 + step, onTheTen + step * minute, '1', 'bought')));
 
-    await waitFor(() => expect(chartsDesk.ticksOn('pressure'))
+    await waitFor(() => expect(chartsDesk.ticksOn('Pressure'))
       .toEqual([0, 10, 20].map(minutes => format(onTheTen + minutes * minute, 'HH:mm'))));
   });
 });

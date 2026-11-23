@@ -1,6 +1,6 @@
 import {has} from '@ryandur/sand';
 import {Explainer} from '@components/Explainer';
-import {FC, PropsWithChildren, useId} from 'react';
+import {FC, PropsWithChildren} from 'react';
 import {classNames} from '@components';
 import {liveTrades, marketReads} from '../../Market';
 import {useMarketRead} from '../../Market/Trading';
@@ -8,6 +8,7 @@ import {pieShapes} from './pie-shapes';
 import '../chart-card.css';
 import './Pie.css';
 import {sideOf} from '../sides';
+import {chartKinds} from '../chart-kinds';
 
 const SIZE = 120;
 const RADIUS = 56;
@@ -20,12 +21,10 @@ const sides = ['bought', 'sold'] as const;
 
 export const Pie: FC<PropsWithChildren> = ({children}) => {
   const trades = useMarketRead(marketReads.liveTrades);
-  const heading = `heading${useId()}`;
   const totals = pieShapes.sideTotals(trades);
   const cut = pieShapes.wedges(sides.map(side => ({side, weight: totals[side]})));
   const percents = pieShapes.wholePercents(cut);
-  return <section aria-labelledby={heading} className="pie chart card rounded-corners lifted padded">
-    <h3 id={heading} className="off-screen">pie</h3>
+  return <section aria-label={chartKinds.names.pie} className="pie chart padded">
     <header className="chart-header">
       {children}
     </header>
