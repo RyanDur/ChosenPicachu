@@ -1,17 +1,17 @@
 .the-pile {
     display: grid;
-    gap: var(--base-x-2);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, max(var(--base-x-30), (100% - var(--base-x-3)) / 2)), 1fr));
+    gap: var(--base-x-2) var(--base-x-3);
 
-    .pile-stage {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
-        gap: var(--base-x-3);
-        align-items: start;
+    > * {
+        grid-column: 1 / -1;
     }
 
-    .pile-code {
+    > .pile-code {
+        grid-column: auto;
         display: grid;
         gap: var(--base-x-1_5);
+        align-self: start;
     }
 
     .pile-drawing {

@@ -74,27 +74,25 @@ export const AContextInsideAContext: FC = () => {
       <PillGlider label="Step" name="nesting" choices={numberedSteps} chosen={step} onChosen={chooseStep} wraps/>
     </section>
     <p className="paragraph">{story}</p>
-    <section className="nesting-stage">
-      <section className="nesting-code">
-        <Snippet label="HTML" lines={markup}/>
-        <Snippet label="CSS" lines={rules}/>
-      </section>
-      <section className="nesting-code">
-        <p className="caption uppercase" aria-hidden="true">What the browser draws</p>
-        <section className={classNames('nesting-drawing muted-dashed-outline rounded-corners', isolating && 'isolating')}
-          aria-label="What the browser draws">
-          <section className={classNames('a nested-card shorter card rounded-corners plan-blue',
-            isolating ? 'ink-dashed-outline' : 'hairline-edged')}>
-            {isolating ? 'Card A · a context of its own' : 'Card A'}
-            {step === 'the-list-inside' && <TheList/>}
-          </section>
-          <section className="b nested-card taller card hairline-edged rounded-corners plan-rose">
-            Card B · z-index: 1
-          </section>
-          {step === 'the-list-outside' && <TheList/>}
+    <section className="nesting-code">
+      <Snippet label="HTML" lines={markup}/>
+      <Snippet label="CSS" lines={rules}/>
+    </section>
+    <section className="nesting-code">
+      <p className="caption uppercase" aria-hidden="true">What the browser draws</p>
+      <section className={classNames('nesting-drawing muted-dashed-outline rounded-corners', isolating && 'isolating')}
+        aria-label="What the browser draws">
+        <section className={classNames('a nested-card shorter card rounded-corners plan-blue',
+          isolating ? 'ink-dashed-outline' : 'hairline-edged')}>
+          {isolating ? 'Card A · a context of its own' : 'Card A'}
+          {step === 'the-list-inside' && <TheList/>}
         </section>
-        <output aria-label="what the browser drew" className="paragraph bold">{verdict}</output>
+        <section className="b nested-card taller card hairline-edged rounded-corners plan-rose">
+          Card B · z-index: 1
+        </section>
+        {step === 'the-list-outside' && <TheList/>}
       </section>
+      <output aria-label="what the browser drew" className="paragraph bold">{verdict}</output>
     </section>
     <figcaption className="caption"><strong className="bold">A context inside a context.</strong> Four steps: one
       context, a context inside it, a list written inside, then the same list written outside. The numbers stay the

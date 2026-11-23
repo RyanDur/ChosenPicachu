@@ -55,20 +55,18 @@ export const ThePile: FC = () => {
     <p className="caption uppercase" aria-hidden="true">Step</p>
     <PillGlider label="Step" name="pile" choices={steps} chosen={step} onChosen={chooseStep}/>
     <p className="paragraph">{stories[step]}</p>
-    <section className="pile-stage">
-      <section className="pile-code">
-        <Snippet label="HTML" lines={markupShown(raised)}/>
-        <Snippet label="CSS" lines={rulesShown(raised)}/>
+    <section className="pile-code">
+      <Snippet label="HTML" lines={markupShown(raised)}/>
+      <Snippet label="CSS" lines={rulesShown(raised)}/>
+    </section>
+    <section className="pile-code">
+      <p className="caption uppercase" id={drawingName}>What the browser draws · one stacking context</p>
+      <section className="pile-drawing" aria-labelledby={drawingName}>
+        {cards.map(card => <p key={card} className={classNames(
+          'card piled hairline-edged rounded-corners floating', raised === card && 'raised')}>
+          {names[card]}</p>)}
       </section>
-      <section className="pile-code">
-        <p className="caption uppercase" id={drawingName}>What the browser draws · one stacking context</p>
-        <section className="pile-drawing" aria-labelledby={drawingName}>
-          {cards.map(card => <p key={card} className={classNames(
-            'card piled hairline-edged rounded-corners floating', raised === card && 'raised')}>
-            {names[card]}</p>)}
-        </section>
-        <output className="paragraph bold">{verdicts[raised]}</output>
-      </section>
+      <output className="paragraph bold">{verdicts[raised]}</output>
     </section>
     {step === 'z-index' && <>
       <p className="caption uppercase" aria-hidden="true">Give a z-index to</p>
