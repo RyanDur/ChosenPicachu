@@ -2,7 +2,6 @@ import {Maybe, has, maybe, streaming} from '@ryandur/sand';
 import {HTTPError} from '@transport';
 import {coinbase, Trade} from './coinbase';
 import {coinbaseHistory} from './coinbase-history';
-import {liveTrades} from './live-trades';
 import {Period} from './Period';
 import {recentTrades} from './recent-trades';
 import {MarketAction, marketActions} from './marketActions';
@@ -52,7 +51,7 @@ const batchedPerFrame = (dispatch: Dispatch): FrameBatch => {
   };
   return {
     hold: trade => {
-      held = [...held, trade].slice(-liveTrades.cap);
+      held = [...held, trade];
       frame = frame || requestAnimationFrame(deliver);
     },
     drop: () => {

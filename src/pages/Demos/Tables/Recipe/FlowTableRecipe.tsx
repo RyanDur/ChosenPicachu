@@ -24,11 +24,11 @@ const socketPlans: Record<World, string> = {
 };
 
 const foldSays: Record<World, ReactNode> = {
-  react: <Says>Every render folds the same trades into totals per lookback, a stretch of time measured back from the
-    newest trade: counts, volume, vwap, the change since the lookback opened. The fold runs over the same capped trades
-    each time, so the lookbacks always match the trades the page holds. Each number is also compared with what it
-    was before the newest batch and marked up or down; a number that batch left alone carries no mark.</Says>,
-  vanilla: <Says>Every arrival refolds the same trades into totals per lookback, a stretch of time measured back from
+  react: <Says>Every batch folds the trades the page holds into totals per lookback, a stretch of time measured back
+    from the newest trade: counts, volume, vwap, the change since the lookback opened. The fold runs over the same hour
+    of trades each time, so the lookbacks always match the trades the page holds. Each number is also compared with
+    what it was before the newest batch and marked up or down; a number that batch left alone carries no mark.</Says>,
+  vanilla: <Says>Every batch refolds the same trades into totals per lookback, a stretch of time measured back from
     the newest trade. It is the same <code className="monospaced">tradeTotals</code> module the React world runs.
     What React did for you ends here: there is no render to catch the change, so the page refolds the
     trades and calls <code className="monospaced">reconcile</code>, which rewrites a cell only when its text or its mark
@@ -41,10 +41,11 @@ const foldCodes: Record<World, ReactNode> = {
   react: <Codes>
     <Snippet label="TS" lines={[
       ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), lines.blank,
-      ...carve.unit(tradeTotalsSource, 'const aggregate = '), lines.blank,
+      ...carve.unit(tradeTotalsSource, 'const tallied = '), lines.blank,
+      ...carve.unit(tradeTotalsSource, 'const joined = '), lines.blank,
+      ...carve.unit(tradeTotalsSource, 'const perLookback = '), lines.blank,
       ...carve.unit(cellsSource, 'const directionOf = '), lines.blank,
       ...carve.unit(cellsSource, 'const marked = '), lines.blank,
-      ...carve.unit(marketReadsSource, 'const folded = '), lines.blank,
       ...carve.unit(marketReadsSource, 'const markedRows = ')
     ]}/>
   </Codes>,
@@ -53,7 +54,6 @@ const foldCodes: Record<World, ReactNode> = {
       ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), lines.blank,
       ...carve.unit(cellsSource, 'const directionOf = '), lines.blank,
       ...carve.unit(cellsSource, 'const marked = '), lines.blank,
-      ...carve.unit(marketReadsSource, 'const folded = '), lines.blank,
       ...carve.unit(marketReadsSource, 'const markedRows = '), lines.blank,
       ...carve.unit(buildSource, 'const reconciled = '), lines.blank,
       ...carve.unit(frameRows, 'const directionWord = '), lines.blank,
@@ -106,24 +106,26 @@ const FlowStory: FC = () => {
           <Want>The table is only worth sorting if its numbers are the market’s, now:
             a <Mdn path="Web/API/WebSocket">socket</Mdn> to the exchange, subscribed to the product,
             every trade arriving as it happens.</Want>
-          <Says>{socketPlans[world]} The open questions are the cap that keeps a long session
-            from growing forever, and what to do when the socket closes.</Says>
+          <Says>{socketPlans[world]} The open questions are how long the page holds trades, so a long session
+            doesn’t grow forever, and what to do when the socket closes.</Says>
         </Words>
         <Reveal>
           <Says>The handshake subscribes to the product.
             Every <Mdn path="Web/API/WebSocket/message_event">message</Mdn> decodes into a trade. The socket can
             deliver several trades between two paints, so the trades wait for
             the next <Mdn path="Web/API/Window/requestAnimationFrame">animation frame</Mdn> and reach the store as
-            one batch a frame. Each batch is appended under a cap so a long session never grows without
-            bound. The reducer also keeps the list from before the newest batch, so the rows mark everything that
-            batch moved, which is everything that changed since the reader last saw them; when history arrives, the
-            two lists match and every mark clears.
+            one batch a frame. The reducer holds the last hour of trades, the longest lookback short of the
+            session; a trade older than that leaves the list, and its numbers join a running tally that only the
+            session row reads. Each batch folds the rows once, and the reducer keeps the rows from before it, so the
+            rows mark everything that batch moved, which is everything that changed since the reader last saw them;
+            when history arrives, the rows before and after match and every mark clears.
             A <Mdn path="Web/API/WebSocket/close_event">close</Mdn> marks the feed failed.</Says>
           <Codes>
             <Snippet label="TS" lines={[
               ...carve.unit(exchangeSource, 'const batchedPerFrame'), lines.blank,
               ...carve.unit(exchangeSource, 'const arriving = '),
               ...carve.unit(exchangeSource, 'const stream = streaming('), lines.blank,
+              ...carve.unit(marketSliceSource, 'const settled = '), lines.blank,
               ...carve.unit(marketSliceSource, 'const tradesReducer')
             ]}/>
           </Codes>
@@ -135,7 +137,9 @@ const FlowStory: FC = () => {
           <Want>Raw trades tick too fast to read. The trader reads lookbacks, each measured back from the newest trade:
             this minute, the last five, the hour, the whole session.</Want>
           <Says>The lookbacks should be derived, never accumulated: refold every trade the page holds
-            each time, so the totals cannot drift from the trades that made them.</Says>
+            each time, so the totals cannot drift from the trades that made them. The session is the one exception: it
+            has no fixed length, so holding every trade it saw would grow without bound, and it joins a tally of the
+            trades that left the hour to the fold of the trades still held.</Says>
         </Words>
         <Reveal>
           {foldSays[world]}
