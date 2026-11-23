@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {PartsBeside} from '../PartsBeside';
 import {TablesIntroduction} from './Introduction';
 import {WorldDial} from './WorldDial';
-import {Aggregations} from './Aggregations';
+import {KeptCurrentTable} from './KeptCurrentTable';
 import {Tutorials} from './Tutorials';
 import {TutorialPage} from './TutorialPage';
 import {useShownTutorial} from './useShownTutorial';
@@ -15,7 +15,7 @@ const TabContents: FC = () => <>
   <PartsBeside>
     <TablesIntroduction/>
     <WorldDial/>
-    <Aggregations/>
+    <KeptCurrentTable/>
     <Tutorials/>
   </PartsBeside>
 </>;

@@ -6,6 +6,24 @@ import {aggregations, tableControls, tablesTab} from '@pages/Demos/Tables/__test
 import {site} from '@pages/__test_support';
 
 describe('the table tutorials, each on its own page', () => {
+  test('should frame the live table on the drag sort tutorial as columns and rows that move', async () => {
+    render(<TestApp at={demosAt('tables/sort')}/>);
+
+    expect(await aggregations.framedBy('Columns and rows that move while the numbers keep arriving')).toBeInTheDocument();
+  });
+
+  test('should frame the live table on the sort menu tutorial as a table that keeps its rows in order', async () => {
+    render(<TestApp at={demosAt('tables/menu')}/>);
+
+    expect(await aggregations.framedBy('A table that keeps its rows in order')).toBeInTheDocument();
+  });
+
+  test('should frame the live table on the drag resize tutorial as a column the trader can widen', async () => {
+    render(<TestApp at={demosAt('tables/resize')}/>);
+
+    expect(await aggregations.framedBy('A column the trader can widen')).toBeInTheDocument();
+  });
+
   test('following a tutorial from the tables tab opens that tutorial’s page', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 

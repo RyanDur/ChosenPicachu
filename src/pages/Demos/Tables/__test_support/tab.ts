@@ -74,6 +74,7 @@ export const tablesTab = () => ({
   columnHeader: (name: string): HTMLElement => screen.getByRole('columnheader', {name}),
   table: (name: string): Headers => headersOf(screen.getByRole('table', {name})),
   sketchHeaders: async (part: string): Promise<Headers> => headersOf(await sketch(part)),
+  drawnSketch: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}, untilTheTablesTabRenders),
   sketchColumns: async (part: string): Promise<string[]> =>
     within(await sketch(part)).getAllByRole('columnheader').map(column => computeAccessibleName(column)),
   linksIn: async (build: string, name: string | RegExp): Promise<HTMLElement[]> =>

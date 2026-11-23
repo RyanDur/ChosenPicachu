@@ -142,9 +142,9 @@ describe('the tables parts panel', () => {
     expect(outOfReadingOrder([index, title, liveTable])).toEqual([]);
   });
 
-  test('should leave a part’s live table under the part’s own title, not under the parts', async () => {
+  test('should leave a part’s live table’s exhibit under the part’s own title, not under the parts', async () => {
     render(<TestApp at={demosAt(theSlices)}/>);
 
-    expect(titleAbove(await aggregations.arrived())).toBe('Slice the design into stories');
+    expect(titleAbove(await aggregations.findExhibitTitle())).toBe('Slice the design into stories');
   });
 });

@@ -25,7 +25,7 @@ export const Aggregations: FC = () => {
   const {world} = useControls();
   useEffect(() => prefetch.assembly(), []);
 
-  return <section aria-label="live aggregations" className="aggregations card rounded-corners lifted padded contained">
+  return <section aria-label="live aggregations" className="aggregations padded contained">
     {world === 'vanilla'
       ? <TableFrame><LiveTable/></TableFrame>
       : <LiveTable/>}

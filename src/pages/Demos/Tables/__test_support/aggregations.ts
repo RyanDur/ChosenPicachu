@@ -35,6 +35,10 @@ const afterItsFirstTrade = async (feed: Feed, trade: string): Promise<void> => {
 export const aggregations = {
   arrived,
   afterItsFirstTrade,
+  framedBy: async (exhibit: string): Promise<HTMLElement> =>
+    within(await screen.findByRole('region', {name: exhibit}, untilTheTablesTabRenders)).getByRole('region', {name: 'live aggregations'}),
+  findExhibitTitle: (): Promise<HTMLElement> =>
+    screen.findByRole('heading', {name: 'The table, kept current by a store'}, untilTheTablesTabRenders),
   card,
   header: (measure: string): HTMLElement => within(card()).getByRole('columnheader', {name: new RegExp(`^${measure}`)}),
   rows: (): HTMLElement[] => within(card()).getAllByRole('row'),
