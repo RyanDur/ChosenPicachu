@@ -62,6 +62,41 @@ for (const stage of tableWorlds.stages) {
   });
 }
 
+for (const stage of tableWorlds.stages) {
+  test(`a column pressed with the mouse keeps the focus, and the arrow keys move it next, in ${stage.name}`, async ({page}) => {
+    const trades = await tableWorlds.opened(page, stage);
+
+    await trades.pressColumn('trades');
+    await expect(trades.columnHeader('trades')).toBeFocused();
+    await page.keyboard.press('ArrowRight');
+
+    await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'trades', 'sells', 'volume', 'vwap', 'change']);
+  });
+}
+
+for (const stage of tableWorlds.stages) {
+  test(`a row's grip pressed with the mouse keeps the focus, and the arrow keys move the row next, in ${stage.name}`, async ({page}) => {
+    const trades = await tableWorlds.opened(page, stage);
+
+    await trades.pressRow(1);
+    await expect(trades.grip(1)).toBeFocused();
+    await page.keyboard.press('ArrowDown');
+
+    await expect.poll(() => trades.rowOrder()).toEqual(['last 5 minutes', 'this minute', 'last 15 minutes', 'this hour', 'session']);
+  });
+}
+
+for (const stage of tableWorlds.stages) {
+  test(`a column dragged across the table selects no text, in ${stage.name}`, async ({page}) => {
+    const trades = await tableWorlds.opened(page, stage);
+
+    await trades.dragColumnPast('trades', 'vwap');
+    await expect.poll(() => trades.columnOrder()).toEqual(['lookback', 'buys', 'sells', 'volume', 'vwap', 'trades', 'change']);
+
+    expect(await trades.selectedText()).toBe('');
+  });
+}
+
 const aFingerCarriesTheColumn = async (
   page: Page,
   browserName: string,
