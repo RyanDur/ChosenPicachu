@@ -10,7 +10,7 @@ import {MarketAction} from './marketActions';
 
 export type TradesState = LiveTradesState & {
   readonly history: readonly Trade[];
-  readonly tradesBeforeTheNewest: readonly Trade[];
+  readonly tradesLastShown: readonly Trade[];
 };
 
 export type CandlesState = Readonly<Record<Period, PeriodHistory>>;
@@ -21,7 +21,7 @@ export type MarketState = {
   readonly arrangement: Arrangement;
 };
 
-const noTrades: TradesState = {...liveTrades.opening, history: [], tradesBeforeTheNewest: []};
+const noTrades: TradesState = {...liveTrades.opening, history: [], tradesLastShown: []};
 
 const tradesReducer = (trades: TradesState, action: MarketAction): TradesState => {
   switch (action.type) {
@@ -29,9 +29,9 @@ const tradesReducer = (trades: TradesState, action: MarketAction): TradesState =
     case 'feedFailed': return {...trades, status: 'failed'};
     case 'tradesArrived': {
       const kept = [...trades.trades, ...action.trades].slice(-liveTrades.cap);
-      return {...trades, tradesBeforeTheNewest: trades.trades, trades: kept};
+      return {...trades, tradesLastShown: trades.trades, trades: kept};
     }
-    case 'historyArrived': return {...trades, history: action.trades, tradesBeforeTheNewest: trades.trades};
+    case 'historyArrived': return {...trades, history: action.trades, tradesLastShown: trades.trades};
     default: return trades;
   }
 };
