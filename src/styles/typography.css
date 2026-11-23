@@ -214,3 +214,7 @@
 .unbroken {
   white-space: nowrap;
 }
+
+.broken-anywhere {
+  word-break: break-all;
+}

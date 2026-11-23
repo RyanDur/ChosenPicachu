@@ -69,7 +69,7 @@ export const BannerControls: FC = () => {
       </DialRow>
     </DialGroup>
     <p className="caption">
-      <code className="monospaced">{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
+      <code className="monospaced broken-anywhere">{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
     </p>
     <button type="button" tabIndex={0} className="button primary reachable"
       disabled={not(hydrated)} onClick={() => dispatchBanner(bannerChange.raised(nextNews()))}>
