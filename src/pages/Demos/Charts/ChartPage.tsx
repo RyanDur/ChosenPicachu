@@ -9,6 +9,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {Behind, Beside, Onward, PartFoot} from '@pages/Demos/PartFoot';
 import {bookEnds} from '@pages/Demos/book-ends';
+import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {PriceChart} from './PriceChart';
 import {Candles} from './Candles';
 import {Pressure} from './Pressure';
@@ -55,13 +56,13 @@ const features: Record<ChartKind, Feature> = {
   }
 };
 
-const besideKind = (kind: ChartKind): Beside =>
-  ({kind: 'part', title: chartKinds.numbered(kind), address: chartKinds.address(kind)});
-
 const thePreviousTab: Behind = bookEnds.behind(DemoTopics.charts);
 const theNextTab: Onward = bookEnds.onward(DemoTopics.charts);
 
 export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
+  const carried = useCarriedAddress();
+  const besideKind = (beside: ChartKind): Beside =>
+    ({kind: 'part', title: chartKinds.numbered(beside), address: carried(chartKinds.address(beside))});
   const {reference, quote, chart: Chart} = features[kind];
   const name = chartKinds.names[kind];
   const place = `${demoTab.names[DemoTopics.charts]} · part ${chartKinds.ordinalOf(kind)} of ${chartKinds.all.length}`;
