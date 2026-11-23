@@ -106,7 +106,7 @@ describe('why a fixed banner still loses', () => {
     const part = await explanation.part('Why a fixed banner still loses');
     const run = explanation.saying(part, /It is the old menu in/);
 
-    expect(explanation.linkNamed(run, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
+    expect(explanation.linkNamed(run, 'Why the popover wins')).toHaveAttribute('href', demosAt('z-index/why-the-popover-wins', '?raised=second'));
   });
 });
 
