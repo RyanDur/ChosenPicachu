@@ -64,7 +64,7 @@
     .pill { transition: none; }
   }
 
-  &.wraps:has(.pill:nth-of-type(4)) {
+  &.wraps:has(.pill:nth-of-type(4)):not(:has(.pill:nth-of-type(5))) {
     @container (width < 630px) {
       grid-auto-flow: row;
       grid-template-columns: repeat(2, 1fr);
