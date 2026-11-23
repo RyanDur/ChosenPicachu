@@ -26,8 +26,8 @@ export const CssShare: FC = () => {
       <Want>Whatever the trader arrives with (mouse, touchscreen, keyboard), the platform’s own behavior comes first,
         and most of it is a declaration in the style sheet, not code.</Want>
       <Says>Your first pass writes no behavior: the style sheet already covers most of
-        this. <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the open hand and the closed
-        fist, <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets pointer events drag
+        this. <Mdn path="Web/CSS/cursor">cursor</Mdn> offers the open
+        hand, <Mdn path="Web/CSS/touch-action">touch-action</Mdn>: none lets pointer events drag
         on a touchscreen instead of scrolling it,
         and <Mdn path="Web/CSS/user-select">user-select</Mdn>: none keeps a fast drag from
         sweeping selections. Anything the pointer or the keyboard must find should be a

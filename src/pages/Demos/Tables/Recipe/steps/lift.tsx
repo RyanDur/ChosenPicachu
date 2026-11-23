@@ -68,7 +68,8 @@ export const LiftOnce: FC<{headerSource: Sample; buildSource: Sample}> = ({heade
           lines.aside('// one lift; each world grabs in its own way')
         ]}/>
         <Snippet label="CSS" lines={[
-          ...carve.unit(sources.sortableCss, '.grabbable {')
+          ...carve.unit(sources.sortableCss, '.grabbable {'), lines.blank,
+          ...carve.unit(sources.sortableCss, '.grabbable:not(:disabled):is(.carried')
         ]}/>
       </Codes>
     </Reveal>
