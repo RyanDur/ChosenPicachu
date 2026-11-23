@@ -51,6 +51,10 @@ const foldCodes: Record<World, ReactNode> = {
   vanilla: <Codes>
     <Snippet label="TS" lines={[
       ...carve.unit(tradeTotalsSource, 'const lookbacks = ['), lines.blank,
+      ...carve.unit(cellsSource, 'const directionOf = '), lines.blank,
+      ...carve.unit(cellsSource, 'const marked = '), lines.blank,
+      ...carve.unit(marketReadsSource, 'const folded = '), lines.blank,
+      ...carve.unit(marketReadsSource, 'const markedRows = '), lines.blank,
       ...carve.unit(buildSource, 'const reconciled = '), lines.blank,
       ...carve.unit(frameRows, 'const directionWord = '), lines.blank,
       ...carve.unit(frameRows, 'const writeCell = '), lines.blank,
