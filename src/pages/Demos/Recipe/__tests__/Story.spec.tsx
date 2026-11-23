@@ -1,7 +1,7 @@
 import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {render, waitFor} from '@testing-library/react';
-import {DrawnStory, Step, StepHeading, Steps, Stories, Story} from '@pages/Demos/Recipe';
+import {Step, StepHeading, Steps, Stories, Story} from '@pages/Demos/Recipe';
 import {recipeFolds} from '@pages/Demos/Recipe/__test_support';
 
 const card = (title: string): HTMLElement => recipeFolds.story(document.body, title);
@@ -98,9 +98,9 @@ describe('a story card', () => {
 
   test('a story its page draws open is open as it first renders', () => {
     render(<TestApp at="/"><Stories>
-      <DrawnStory titleId="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
+      <Story titleId="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
         <p>the story</p>
-      </DrawnStory>
+      </Story>
     </Stories></TestApp>);
 
     expect(card('The reader can read the story at once')).toHaveAttribute('open');
@@ -108,9 +108,9 @@ describe('a story card', () => {
 
   test('a story its page draws open closes on one press and leaves the address as it was', async () => {
     render(<TestApp at="/?world=vanilla"><Stories>
-      <DrawnStory titleId="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
+      <Story titleId="told" open can="The reader can read the story at once" soThat="nothing waits on a press">
         <p>the story</p>
-      </DrawnStory>
+      </Story>
     </Stories></TestApp>);
 
     await recipeFolds.press(document.body, 'The reader can read the story at once');

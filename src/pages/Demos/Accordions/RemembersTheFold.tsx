@@ -6,7 +6,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {useControls} from '../Controls';
 import {FoldType} from '../ReaderSettings';
 import {carve, Line, lines, Mdn, Snippet} from '../Recipe';
-import {Fold} from './accordion-props';
+import {dealtFolds} from './dealt-folds';
 import {ExclusiveAccordion} from './ExclusiveAccordion';
 import {InclusiveAccordion} from './InclusiveAccordion';
 import {FocusOnTheBar, OffScreenNotGone, OneNameOneChoice, TheKnownHeight, TheRuleMatchesTheBox, TwoBordersTurned} from './Diagrams';
@@ -45,16 +45,12 @@ const knownHeightBuilds: Record<FoldType, Build> = {
   exclusive: {Accordion: ExclusiveAccordion, sample: lines.fromTheExhibit(carve.between(exclusiveAccordionSource, '<li className="fold" key={heading}>', '</li>'))}
 };
 
-type Props = {
-  folds: Record<FoldType, Fold[]>;
-};
-
-export const RemembersTheFold: FC<Props> = ({folds}) => {
+export const RemembersTheFold: FC = () => {
   const {foldType, foldMotion} = useControls();
   const input = foldInput.of(foldType);
   const {Accordion: KnownHeight, sample} = knownHeightBuilds[foldType];
   return <>
-    <KnownHeight className={classNames(looks.exhibit, foldMotion)} folds={folds[foldType]}/>
+    <KnownHeight className={classNames(looks.exhibit, foldMotion)} folds={dealtFolds.known[foldType]}/>
     <ol className={looks.runs}>
       <li className="run">
         <p className="paragraph">This build is a disclosure: a bar you press to show the text under it.

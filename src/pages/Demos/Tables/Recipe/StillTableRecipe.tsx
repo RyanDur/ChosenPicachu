@@ -1,7 +1,7 @@
 import {ClassGloss} from '@pages/Demos/Accordions';
 import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {FC, ReactNode} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, DrawnStory, Tell, Want, Words, lines, carve} from '../../Recipe';
+import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
 import type {World} from '../../ReaderSettings';
 import {TheImplementation} from './steps';
@@ -121,7 +121,7 @@ const dealCodes: Record<World, ReactNode> = {
 
 const StillStory: FC = () => {
   const {world} = useControls();
-  return <DrawnStory titleId={livingStories.titleIdOf(livingStories.ids.still)} open
+  return <Story titleId={livingStories.titleIdOf(livingStories.ids.still)} open
     can="The trader can read the market in a table"
     soThat="the shape is right before anything moves">
     <TheImplementation react="Aggregations" vanilla="Frame/frame.main.ts"/>
@@ -158,7 +158,7 @@ const StillStory: FC = () => {
         </Reveal>
       </Step>
     </Steps>
-  </DrawnStory>;
+  </Story>;
 };
 
 export const StillTableRecipe: FC = () =>

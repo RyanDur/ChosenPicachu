@@ -8,7 +8,6 @@ import {bookEnds} from '@pages/Demos/book-ends';
 import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {AccordionPart, accordionParts, BookPart} from './part-pages';
-import {seeded} from '@components/fibs';
 import {MaxHeightGuess} from './MaxHeightGuess';
 import {MeasuredHeight} from './MeasuredHeight';
 import {PlatformGivesNow} from './PlatformGivesNow';
@@ -21,19 +20,6 @@ import {MeasuredHeightIntroduction} from './MeasuredHeightIntroduction';
 import {PlatformGivesNowIntroduction} from './PlatformGivesNowIntroduction';
 import {SlidingFoldMovesIntroduction} from './SlidingFoldMovesIntroduction';
 
-const draws = seeded('the accordion exhibits');
-const dealt = draws.wordDeck();
-
-const dealFolds = (count: number) =>
-  Array.from({length: count}, () => ({
-    heading: dealt(),
-    story: Array.from({length: draws.randNumber({min: 1, max: 6})}, () => draws.randParagraph()).join(' ')
-  }));
-const measuredFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
-const knownFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
-const platformFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
-const slidingFolds = {inclusive: dealFolds(5), exclusive: dealFolds(5)};
-
 type PartContents = {
   readonly introduction: ReactNode;
   readonly exhibitAndRuns: ReactNode;
@@ -43,7 +29,7 @@ type PartContents = {
 const partContents: Record<AccordionPart, PartContents> = {
   'a-box-remembers-the-fold': {
     introduction: <RemembersTheFoldIntroduction/>,
-    exhibitAndRuns: <RemembersTheFold folds={knownFolds}/>,
+    exhibitAndRuns: <RemembersTheFold/>,
     offersTheFoldDials: true
   },
   'the-max-height-guess': {
@@ -53,17 +39,17 @@ const partContents: Record<AccordionPart, PartContents> = {
   },
   'the-measured-height': {
     introduction: <MeasuredHeightIntroduction/>,
-    exhibitAndRuns: <MeasuredHeight folds={measuredFolds}/>,
+    exhibitAndRuns: <MeasuredHeight/>,
     offersTheFoldDials: true
   },
   'what-the-platform-gives-now': {
     introduction: <PlatformGivesNowIntroduction/>,
-    exhibitAndRuns: <PlatformGivesNow folds={platformFolds}/>,
+    exhibitAndRuns: <PlatformGivesNow/>,
     offersTheFoldDials: true
   },
   'how-a-sliding-fold-moves': {
     introduction: <SlidingFoldMovesIntroduction/>,
-    exhibitAndRuns: <SlidingFoldMoves folds={slidingFolds}/>,
+    exhibitAndRuns: <SlidingFoldMoves/>,
     offersTheFoldDials: true
   }
 };
