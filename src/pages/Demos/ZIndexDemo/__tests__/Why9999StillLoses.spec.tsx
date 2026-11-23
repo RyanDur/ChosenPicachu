@@ -31,6 +31,18 @@ describe('why 9999 still loses, on its own page', () => {
     expect(explanation.linkNamed(explanation.opener(part), 'How position places a box')).toHaveAttribute('href', demosAt('z-index/how-position-places-a-box', '?raised=second'));
   });
 
+  test('should say, on the exhibit’s first step, that card A forms no context yet', async () => {
+    render(<TestApp at={demosAt(stillLoses)}/>);
+
+    expect(await screen.findByRole('status', {name: 'what the browser drew'})).toHaveTextContent(/^Card A forms no context yet\.$/);
+  });
+
+  test('should say, on the exhibit’s second step, that card A is now a context inside the page', async () => {
+    render(<TestApp at={demosAt(stillLoses, '?nesting=a-context-inside')}/>);
+
+    expect(await screen.findByRole('status', {name: 'what the browser drew'})).toHaveTextContent(/^Card A is now a context inside the page\.$/);
+  });
+
   test('should show no menu', async () => {
     render(<TestApp at={demosAt(stillLoses)}/>);
 

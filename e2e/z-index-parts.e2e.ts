@@ -88,7 +88,7 @@ test('a reader follows why 9999 still loses from the z-index tab to its page and
   await expect(page).toHaveURL(/demos\/z-index\/why-9999-still-loses\/$/);
   await expect(zIndexTab(page).partTitle(whyNineNineNineStillLoses)).toBeVisible();
   await expect(page.getByText('Z-index · part 3 of 7', {exact: true})).toBeVisible();
-  await expect(nestingExhibit(page).verdict).toHaveText('One context: the page.');
+  await expect(nestingExhibit(page).verdict).toHaveText('Card A forms no context yet.');
 });
 
 test('a reader follows what else forms a stacking context from the z-index tab to its page, with the wear in the address kept on the chooser', async ({page}) => {
