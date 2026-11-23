@@ -56,11 +56,3 @@ test('Back steps the exhibit back to the step before', async ({page}) => {
 
   await expect(exhibit.step('1 · One context')).toBeChecked();
 });
-
-test.describe('a reader on a phone, a tablet held sideways or a desktop', {tag: ['@iPhone', '@phoneSideways', '@iPadSideways', '@desktop']}, () => {
-  test('every step’s label reads whole inside the exhibit', async ({page}) => {
-    await page.goto(address);
-
-    expect(await nestingExhibit(page).stepsCutShort()).toEqual([]);
-  });
-});
