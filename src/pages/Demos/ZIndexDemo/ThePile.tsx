@@ -28,9 +28,12 @@ const rulesShown = (raised: RaisedCard): Line[] => lines.fromTheExhibit([
   ...raised === 'none' ? [] : [lines.blank, ...carve.unit(sheet, '.raised {')]
 ]);
 
-const verdictOn = (raised: RaisedCard): string => raised === 'none'
-  ? 'Third is on top. It comes last in the code.'
-  : `${names[raised]} is on top. Its z-index outranks the order in the code.`;
+const verdicts: Record<RaisedCard, string> = {
+  none: 'Third is on top. It comes last in the code.',
+  first: 'First is on top. Its z-index outranks the order in the code.',
+  second: 'Second is on top. Its z-index outranks the order in the code.',
+  third: 'Third is on top. Its z-index and its place in the code agree.'
+};
 
 export const ThePile: FC = () => {
   const {raised: chosen, change} = useControls();
@@ -56,7 +59,7 @@ export const ThePile: FC = () => {
             'card piled hairline-edged rounded-corners floating', raised === card && 'raised')}>
             {names[card]}</p>)}
         </section>
-        <output className="paragraph bold">{verdictOn(raised)}</output>
+        <output className="paragraph bold">{verdicts[raised]}</output>
       </section>
     </section>
     {step === 'z-index' && <>

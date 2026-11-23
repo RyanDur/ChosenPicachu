@@ -29,6 +29,17 @@ const givenAZIndexLandsOnTop = async (page: Page, giving: () => Promise<void>, f
 test('First given a z-index by a pointer comes to the top of the tab’s pile, with the rule that did it', ({page}) =>
   givenAZIndexLandsOnTop(page, () => pileSteps(page).givesAZIndexTo('First'), ['First', 'Third', 'Second']));
 
+test('Third given a z-index stays on top of the tab’s pile, and the sentence says its z-index and its place in the code agree', async ({page}) => {
+  const pile = pileSteps(page);
+  await page.goto('demos/z-index/');
+  await pile.stepsTo('2 · Z-index');
+
+  await pile.givesAZIndexTo('Third');
+
+  await expect.poll(pile.cardsFromTheTop).toEqual(['Third', 'Second', 'First']);
+  await expect(pile.verdict).toHaveText('Third is on top. Its z-index and its place in the code agree.');
+});
+
 test('a copied address opens the tab’s pile on the step it names', async ({page}) => {
   const pile = pileSteps(page);
 
