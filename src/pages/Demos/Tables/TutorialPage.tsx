@@ -15,6 +15,7 @@ import {tablesBook} from './tables-book';
 import {useShownTutorial} from './useShownTutorial';
 import {WorldDial} from './WorldDial';
 import {usePartsBeside} from './usePartsBeside';
+import {Exhibit, ExhibitFoot} from '../Exhibit';
 import './TutorialPage.css';
 
 const recipes: Record<Tutorial, FC> = {
@@ -29,19 +30,43 @@ const introductions: Record<Tutorial, string> = {
   resize: 'The fifth story, built all the way through.'
 };
 
+type Shown = {
+  name: string;
+  says: string;
+};
+
+const exhibits: Record<Tutorial, Shown> = {
+  sort: {
+    name: 'Columns and rows that move while the numbers keep arriving',
+    says: 'The order of each lives in the store, and a drag is measured once.'
+  },
+  menu: {
+    name: 'A table that keeps its rows in order',
+    says: 'The ordering is one fact in the store, and reset gives the trader’s order back.'
+  },
+  resize: {
+    name: 'A column the trader can widen',
+    says: 'A width is a share of the table, and a column widens by taking from its neighbor.'
+  }
+};
+
 export const TutorialPage: FC = () => {
   const partsBeside = usePartsBeside();
   const startingAt = tableParts.told(tableTutorials.startingPart);
   const to = tableParts.addressOf(tableTutorials.startingPart);
   return useShownTutorial().either(tutorial => {
     const TutorialRecipe = recipes[tutorial];
+    const exhibit = exhibits[tutorial];
     const place = `${demoTab.names[DemoTopics.tables]} · part ${tableTutorials.ordinalOf(tutorial)} of ${tablesBook.inTheBook}`;
     const part = {heading: tableTutorials.nameOf(tutorial), headingId: `${tutorial}-heading`, place, ...partsBeside(tutorial)};
     return <ThePart value={part}><PartSection>
       <PartOpening><p className="paragraph">{introductions[tutorial]}</p></PartOpening>
       <WorldDial/>
       <PartDemo className="tutorial-page">
-        <Aggregations/>
+        <Exhibit name={exhibit.name}>
+          <Aggregations/>
+          <ExhibitFoot lead={`${exhibit.name}.`}>{exhibit.says}</ExhibitFoot>
+        </Exhibit>
         <p className="paragraph">
           This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,
           “<DemoLink to={to}>{startingAt.name}</DemoLink>”, ends,

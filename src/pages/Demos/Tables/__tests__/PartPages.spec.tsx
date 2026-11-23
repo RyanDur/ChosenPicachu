@@ -21,6 +21,27 @@ const theLiveTable = 'Make the table live';
 const theFlowStory = 'The trader can watch the market live, one lookback beside another';
 const theStoreStory = 'The page is a store, and so is the table';
 const theLiveTablesPage = demosAt('tables/the-live-table-and-the-store');
+const keptByAStore = 'The table, kept current by a store';
+
+describe('the live table’s exhibit', () => {
+  test('should frame the live table on the tables tab as the table kept current by a store', async () => {
+    render(<TestApp at={demosAt('tables')}/>);
+
+    expect(await aggregations.framedBy(keptByAStore)).toBeInTheDocument();
+  });
+
+  test('should frame the live table on a part page as the table kept current by a store', async () => {
+    render(<TestApp at={theNeedsPage}/>);
+
+    expect(await aggregations.framedBy(keptByAStore)).toBeInTheDocument();
+  });
+
+  test('should frame the sketch on its page as a sketch of periods and measures', async () => {
+    render(<TestApp at={theSketchsPage}/>);
+
+    expect(await tablesTab().drawnSketch('The sketch: periods down the side, measures across the top')).toBeInTheDocument();
+  });
+});
 
 describe('the tables tab’s parts, each on its own page', () => {
   test('following the need and its clues from the tables tab opens its page', async () => {

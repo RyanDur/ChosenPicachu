@@ -40,12 +40,12 @@ describe('the tables parts list', () => {
       .toEqual([]);
   });
 
-  test('should leave the live table under the tab’s own title, not under the parts', async () => {
+  test('should leave the live table’s exhibit under the tab’s own title, not under the parts', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
     await partsIndex.find();
 
-    expect(titleAbove(aggregations.card())).toBe('Demos Tables');
+    expect(titleAbove(await aggregations.findExhibitTitle())).toBe('Demos Tables');
   });
 
   test('should say under the sort menu what its part is about', async () => {

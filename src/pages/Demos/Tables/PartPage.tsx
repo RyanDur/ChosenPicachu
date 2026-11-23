@@ -5,7 +5,7 @@ import {PartOpening} from '@pages/Demos/PartOpening';
 import {PartDemo} from '@pages/Demos/PartDemo';
 import {PartFoot} from '@pages/Demos/PartFoot';
 import {DemoTopics, demoTab} from '@pages/Demos';
-import {Aggregations} from './Aggregations';
+import {KeptCurrentTable} from './KeptCurrentTable';
 import {TablePart, tableParts} from './part-pages';
 import {WorldDial} from './WorldDial';
 import {tablesBook} from './tables-book';
@@ -39,7 +39,7 @@ export const PartPage: FC<{readonly part: TablePart}> = ({part}) => {
     <PartOpening><p className="paragraph">{introductions[part]}</p></PartOpening>
     <WorldDial/>
     <PartDemo className="tutorial-page tutorials">
-      <Aggregations/>
+      <KeptCurrentTable/>
       <Part/>
     </PartDemo>
     <PartFoot/>
