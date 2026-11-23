@@ -11,6 +11,7 @@ const fingerDown = async (item: string): Promise<void> => {
 
 export const sortableList = {
   arrived: (): Promise<HTMLElement> => screen.findByRole('list', {name: 'sortable list'}, untilTheTabMounts),
+  heldBy: (holder: HTMLElement): HTMLElement => within(holder).getByRole('list', {name: 'sortable list'}),
   itemsIn: (list: HTMLElement): HTMLElement[] => within(list).getAllByRole('listitem'),
   seats: (): string[] =>
     within(screen.getByRole('list', {name: 'sortable list'})).getAllByRole('listitem').map(({textContent}) => textContent ?? ''),

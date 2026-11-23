@@ -7,6 +7,7 @@ type Headers = {
 };
 
 export const dragSortTab = {
+  exhibit: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'Three items to put in order'}),
   recipe: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'build the native drag sort yourself'}),
   cluesIn: (holder: HTMLElement): Headers => {
     const table = within(holder).getByRole('table', {name: 'the clues'});
