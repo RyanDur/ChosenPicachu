@@ -18,4 +18,8 @@ describe('the count line over a tab’s parts', () => {
   test('should count past twelve parts in figures', () => {
     expect(partsListed.counted([{entries: entries(13)}])).toBe('13 parts, about 26 minutes.');
   });
+
+  test('should say one minute when the parts take a minute', () => {
+    expect(partsListed.counted([{entries: [{...anEntry('part'), minutes: 1}]}])).toBe('One part, about 1 minute.');
+  });
 });
