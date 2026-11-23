@@ -9,7 +9,8 @@ import {ExclusiveHtmlAloneAccordion} from './ExclusiveHtmlAlone';
 import {looks} from './looks';
 import {accordionParts} from './part-pages';
 import {tabHeadings} from './tab-headings';
-import {PartsAndDials} from './PartsAndDials';
+import {PartsBeside} from '../PartsBeside';
+import {FoldDials} from './FoldDials';
 import '../Runs.css';
 import './Explained.css';
 
@@ -26,7 +27,7 @@ const htmlAloneBuilds: Record<FoldType, HtmlAloneBuild> = {
 export const AccordionsExplained: FC = () => {
   const {foldType} = useControls();
   const {Accordion: HtmlAlone, source: htmlAloneSource} = htmlAloneBuilds[foldType];
-  return <>
+  return <PartsBeside>
     <header className="tab-introduction accordions-opening">
       <p className="paragraph">This tab builds an accordion: a list of parts, each with a bar you press to show or hide
         the text under it. This page calls one of them a fold. A web page is written in three languages. HTML says what
@@ -42,7 +43,7 @@ export const AccordionsExplained: FC = () => {
         <HtmlAlone/>
       </figure>
     </header>
-    <PartsAndDials titled offersTheFoldDials/>
+    <FoldDials/>
     <section aria-labelledby="before-you-start-heading" className="before-you-start">
       <h2 id="before-you-start-heading" className="title bold">Before you start</h2>
       <p className="paragraph">Nothing here leans on another tab. Each part’s page shows another way to build the
@@ -93,5 +94,5 @@ export const AccordionsExplained: FC = () => {
           where the browser can, and the HTML-alone accordion turns that off, so you see what HTML alone does.</p>
       </section>
     </section>
-  </>;
+  </PartsBeside>;
 };

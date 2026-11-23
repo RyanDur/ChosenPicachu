@@ -8,7 +8,7 @@
   padding-inline-start: var(--base-x-4);
 }
 
-.parts-navigation-group {
+.parts-index-group {
   margin-block-start: var(--base);
 }
 
@@ -51,7 +51,7 @@
 }
 
 @media (width > 900px) and (height > 600px) {
-  .tab-sidecar .parts-index {
+  .parts-panel .parts-index {
     gap: 0;
 
     .parts-index-entry {

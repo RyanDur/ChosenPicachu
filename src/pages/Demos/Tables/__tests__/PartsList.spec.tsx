@@ -7,7 +7,7 @@ import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {aggregations, tablesTab} from '@pages/Demos/Tables/__test_support';
 import {tableTutorials} from '@pages/Demos/Tables/tutorial-pages';
 
-describe('the tables parts index', () => {
+describe('the tables parts list', () => {
   test('should list the five parts that build the live table, each a link to its page', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
@@ -30,12 +30,12 @@ describe('the tables parts index', () => {
     ]);
   });
 
-  test('should come after the opening and the size line, and before the dial, the live table and let’s build this feature', async () => {
+  test('should come after the size line, and before the opening, the dial, the live table and let’s build this feature', async () => {
     render(<TestApp at={demosAt('tables')}/>);
 
-    const index = await partsIndex.find();
+    const index = await partsIndex.list();
 
-    expect(outOfReadingOrder([await tablesTab().opening(), await tablesTab().size(), index,
+    expect(outOfReadingOrder([await tablesTab().size(), index, await tablesTab().opening(),
       await tablesTab().worldDial(), aggregations.card(), await demoPage.findTitle('let’s build this feature')]))
       .toEqual([]);
   });

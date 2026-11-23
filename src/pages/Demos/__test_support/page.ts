@@ -65,7 +65,6 @@ export const demoPage = {
   signpost: (name: string): HTMLElement => screen.getByRole('link', {name}),
   signpostAddresses: (name: string): string[] => screen.getAllByRole('link', {name}).map(hrefOf),
   row: (name: string | RegExp): HTMLElement => screen.getByRole('rowheader', {name}),
-  panel: (name: string): Promise<HTMLElement> => screen.findByRole('complementary', {name}),
   entriesLinking: (name: RegExp): HTMLElement[] => screen.getAllByRole('listitem')
     .filter(entry => is(within(entry).queryByRole('link', {name}))),
   wholePage: (): HTMLElement => screen.getByRole('main'),

@@ -2,7 +2,6 @@ import {FC} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
 import {ThePart} from '@pages/Demos/the-part';
 import {PartOpening} from '@pages/Demos/PartOpening';
-import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
 import {demoTab, DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
@@ -17,7 +16,6 @@ import {Pie} from './Pie';
 import {ChartKind, chartKinds} from './chart-kinds';
 import {StoryDepth} from '../Recipe';
 import {ChartStories} from './ChartStories';
-import {PartsAndMinutes} from './PartsAndMinutes';
 import '../Recipe/Recipe.css';
 import '../Tutorials.css';
 
@@ -71,7 +69,6 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
   const part = {heading: `${name} tutorial`, headingId: `${kind}-heading`, place, previous: behind, next: onward};
   return <ThePart value={part}><PartSection>
     <PartOpening><p className="paragraph">{chartKinds.told[kind].says}</p></PartOpening>
-    <PartPanel><PartsAndMinutes/></PartPanel>
     <PartDemo className="tutorials">
       <Chart/>
       <h3 className="title">let’s build this feature</h3>

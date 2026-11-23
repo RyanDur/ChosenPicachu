@@ -6,25 +6,8 @@
   align-content: start;
 }
 
-.sidecar-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--base);
-}
-
-.parts-fold {
-  padding-inline: var(--base);
-}
-
-.tab-sidecar.folded:has(> .sidecar-header) > :not(.sidecar-header) {
-  display: none;
-}
-
 @media (width > 900px) and (height > 600px) {
-  .about:has(> .tab-sidecar),
-  .part-page:has(> .tab-sidecar):not(:has(> .tab-sidecar.folded > .sidecar-header)) {
+  .about:has(> .tab-sidecar) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 38ch;
     grid-template-rows: auto 1fr;
@@ -36,11 +19,7 @@
     }
   }
 
-  .part-page:has(> .tab-sidecar):not(:has(> .tab-sidecar.folded > .sidecar-header)) {
-    grid-template-rows: auto 1fr auto;
-  }
-
-  .tab-sidecar:not(.folded:has(> .sidecar-header)) {
+  .tab-sidecar {
     position: sticky;
     inset-block-start: var(--under-the-tab-bar);
     grid-row: 1 / -1;
@@ -49,31 +28,5 @@
     overflow-y: auto;
 
     gap: var(--base-x-2);
-  }
-
-  .tab-sidecar.folded:has(> .sidecar-header) {
-    position: sticky;
-    inset-block-start: calc(var(--under-the-tab-bar) - var(--base-x-2));
-    z-index: 1;
-    padding-block: var(--base-x-2) var(--base);
-
-    > .sidecar-header {
-      min-block-size: var(--folded-header-reach);
-    }
-  }
-
-  .part-page:has(> .tab-sidecar.folded > .sidecar-header) > .part-demo {
-    isolation: isolate;
-  }
-
-  :root:has(.tab-sidecar.folded > .sidecar-header) {
-    --folded-header-reach: var(--base-x-4);
-
-    scroll-padding-block-start:
-      calc(var(--frame-reach, 0px) + var(--tab-bar-reach) + var(--folded-header-reach) + var(--base) + var(--base-x-2));
-
-    @media (pointer: coarse) {
-      --folded-header-reach: var(--finger-reach);
-    }
   }
 }

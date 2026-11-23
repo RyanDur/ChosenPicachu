@@ -2,7 +2,6 @@ import {FC, ReactNode} from 'react';
 import {PartSection} from '@pages/Demos/PartSection';
 import {ThePart} from '@pages/Demos/the-part';
 import {PartOpening} from '@pages/Demos/PartOpening';
-import {PartPanel} from '@pages/Demos/PartPanel';
 import {PartDemo} from '@pages/Demos/PartDemo';
 import {Behind, Beside, Onward, PartFoot} from '@pages/Demos/PartFoot';
 import {bookEnds} from '@pages/Demos/book-ends';
@@ -15,7 +14,7 @@ import {MeasuredHeight} from './MeasuredHeight';
 import {PlatformGivesNow} from './PlatformGivesNow';
 import {SlidingFoldMoves} from './SlidingFoldMoves';
 import {RemembersTheFold} from './RemembersTheFold';
-import {PartsAndDials} from './PartsAndDials';
+import {FoldDials} from './FoldDials';
 import {RemembersTheFoldIntroduction} from './RemembersTheFoldIntroduction';
 import {MaxHeightGuessIntroduction} from './MaxHeightGuessIntroduction';
 import {MeasuredHeightIntroduction} from './MeasuredHeightIntroduction';
@@ -86,7 +85,7 @@ export const PartPage: FC<{readonly part: AccordionPart}> = ({part}) => {
   return <ThePart value={{heading: name, headingId: `${part}-heading`, place, previous: behind, next: onward}}>
     <PartSection>
       <PartOpening>{introduction}</PartOpening>
-      <PartPanel><PartsAndDials offersTheFoldDials={offersTheFoldDials}/></PartPanel>
+      {offersTheFoldDials && <FoldDials/>}
       <PartDemo>{exhibitAndRuns}</PartDemo>
       <PartFoot/>
     </PartSection>

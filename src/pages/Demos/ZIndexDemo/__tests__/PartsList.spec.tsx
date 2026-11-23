@@ -10,7 +10,7 @@ const titles = ['Why Third is on top', 'How position places a box', 'Why 9999 st
   'What else forms a stacking context', 'Why the popover wins', 'Why a fixed banner still loses',
   'Let’s build this feature'];
 
-describe('the z-index parts index', () => {
+describe('the z-index parts list', () => {
   test('should list the seven parts in order, why Third is on top first', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
@@ -19,12 +19,12 @@ describe('the z-index parts index', () => {
     expect(partsIndex.titlesIn(index)).toEqual(titles);
   });
 
-  test('should come after the opening, the pile and the size line', async () => {
+  test('should come after the size line, and before the opening and the pile', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    const index = await partsIndex.find();
+    const index = await partsIndex.list();
 
-    expect(outOfReadingOrder([await zIndexTab.opening(), await zIndexTab.pile(), await zIndexTab.size(), index]))
+    expect(outOfReadingOrder([await zIndexTab.size(), index, await zIndexTab.opening(), await zIndexTab.pile()]))
       .toEqual([]);
   });
 

@@ -18,11 +18,11 @@ const everyPart = (choices: string) => [
 ];
 const howLong = /about 24 minutes/;
 
-describe('the accordions panel', () => {
+describe('the accordions parts panel', () => {
   test('should say on the accordions tab how long the parts take together', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    expect(await accordionsTab.partsAndDials()).toHaveTextContent(howLong);
+    expect(await demoPage.findSays('Six parts, about 24 minutes.')).toBeInTheDocument();
   });
 
   test('should say on a part’s page how long the parts take together', async () => {
@@ -57,7 +57,7 @@ describe('the accordions panel', () => {
     expect(partsIndex.addressesIn(index)).toEqual(everyPart(chosen));
   });
 
-  test('should carry the fold type a reader chooses in it on a part’s page to every part', async () => {
+  test('should carry the fold type a reader chooses on a part’s page to every part', async () => {
     render(<TestApp at={demosAt('accordions/the-measured-height')}/>);
 
     await accordionsTab.choose('fold type', 'Inclusive');
@@ -73,25 +73,19 @@ describe('the accordions panel', () => {
     expect(demoPage.entriesLinking(/An accordion in HTML alone$/)).toHaveLength(1);
   });
 
-  test('should come after a part’s introduction and before its first exhibit', async () => {
+  test('should come before a part’s introduction and its first exhibit', async () => {
     render(<TestApp at={demosAt('accordions/the-measured-height')}/>);
 
     const introduction = explanation.opener(await explanation.part('The measured height'));
     const index = await partsIndex.find();
     const exhibit = await accordionsTab.exhibit();
 
-    expect(outOfReadingOrder([introduction, index, exhibit])).toEqual([]);
+    expect(outOfReadingOrder([index, introduction, exhibit])).toEqual([]);
   });
 
   test('should leave a part’s exhibit under the part’s own title, not under the parts', async () => {
     render(<TestApp at={demosAt(maxHeightGuess)}/>);
 
     expect(titleAbove(await accordionsTab.exhibit())).toBe('The max-height guess');
-  });
-
-  test('should title its parts beside the tab’s sections on the tab', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    expect(partsIndex.titleIn(await partsIndex.find())).toBeInTheDocument();
   });
 });

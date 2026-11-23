@@ -2,7 +2,7 @@ import {useSearchParamsObject} from '@navigation/search-params';
 import {Motion, Origin} from '@components/DragSortableTable';
 import {Placement, unplaced} from '@banners';
 import {
-  Address, CardOne, FoldMotion, FoldType, Pace, ParentPosition, PartsList, Position, RaisedCard, readerSettings,
+  Address, CardOne, FoldMotion, FoldType, Pace, ParentPosition, PartsShown, Position, RaisedCard, readerSettings,
   Track, World, Worn
 } from '../ReaderSettings';
 
@@ -18,7 +18,7 @@ export type Settings = Placement & {
   raised: RaisedCard;
   cardOne: CardOne;
   wears: Worn;
-  parts: PartsList;
+  parts: PartsShown;
   chosenPosition: Position;
   chosenParentPosition: ParentPosition;
 };

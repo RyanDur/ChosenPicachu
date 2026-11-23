@@ -142,7 +142,7 @@ describe('a z-index part’s page', () => {
     ]);
   });
 
-  test('holds the panel after the part’s introduction and before its first exhibit', async () => {
+  test('holds the panel before the part’s introduction and its first exhibit', async () => {
     render(<TestApp at={demosAt('z-index/why-9999-still-loses')}/>);
 
     const page = await explanation.part('Z-index');
@@ -151,7 +151,7 @@ describe('a z-index part’s page', () => {
     const index = await partsIndex.find();
     const exhibit = zIndexTab.firstExhibitIn(part);
 
-    expect(outOfReadingOrder([introduction, index, exhibit])).toEqual([]);
+    expect(outOfReadingOrder([index, introduction, exhibit])).toEqual([]);
   });
 
   test('leaves the part’s first exhibit under the part’s own title, not under the parts', async () => {
@@ -175,6 +175,6 @@ describe('the z-index tab’s panel', () => {
   test('says how long the parts take together', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 
-    expect(await demoPage.panel('parts and minutes')).toHaveTextContent(/about 27 minutes/);
+    expect(await demoPage.findSays('Seven parts, about 27 minutes.')).toBeInTheDocument();
   });
 });

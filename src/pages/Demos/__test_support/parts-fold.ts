@@ -20,7 +20,6 @@ export const partsFold = {
   offersShowParts: (): Promise<HTMLElement> => screen.findByRole('button', {name: 'Show parts', expanded: false}),
   panelControlled: async (): Promise<HTMLElement | null> =>
     maybe((await hideParts()).getAttribute('aria-controls')).mBind(id => maybe(document.getElementById(id))).orNull(),
-  offered: (): HTMLElement | null => screen.queryByRole('button', {name: /^(Hide|Show) parts$/}),
   enterOnHideParts: async (): Promise<void> => {
     const hide = await hideParts();
     await waitFor(() => {
