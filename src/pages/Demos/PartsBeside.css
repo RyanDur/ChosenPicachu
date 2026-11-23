@@ -122,7 +122,6 @@
     visibility: hidden;
   }
 
-
   :is(.about, .part-page):has(> .parts-head) {
     grid-template-rows: minmax(0, 0fr) auto;
     grid-template-columns: minmax(0, 13fr) minmax(0, 1fr) minmax(0, 7fr);
