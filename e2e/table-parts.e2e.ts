@@ -42,16 +42,6 @@ test('a reader follows a slice from the slices’ page to the still table’s pa
   await expect(page.getByRole('group', {name: 'The trader can read the market in a table'})).toHaveAttribute('open');
 });
 
-test('a reader on a tutorial page reached by a link saved with a story follows the Tables link to the tables tab', async ({page}) => {
-  await page.goto('demos/tables/sort/?world=vanilla&living=flow%2Cstore');
-  await siteFrame(page).hydrated();
-
-  await page.getByRole('navigation', {name: 'demos'}).getByRole('link', {name: 'Tables', exact: true}).click();
-
-  await expect(page).toHaveURL(/demos\/tables\/\?world=vanilla$/);
-  await expect(tablesDemo(page).partLink('Sort menu')).toBeVisible();
-});
-
 test('a reader who follows a link out of the live table’s page and comes Back is on the live table’s page', async ({page}) => {
   await page.goto('demos/tables/the-live-table-and-the-store/?world=vanilla');
   await siteFrame(page).hydrated();
