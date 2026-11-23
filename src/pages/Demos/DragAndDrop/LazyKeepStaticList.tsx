@@ -17,7 +17,7 @@ export const LazyKeepStaticList: FC<Props> = ({list}) => {
       onDragOver={event => event.preventDefault()}
       onDrop={event => event.preventDefault()}
       onDragLeave={() => dispatch(dragSortChange.left())}
-      className="sortable-list reorderable card rounded-corners lifted padded contained">{
+      className="sortable-list reorderable padded contained">{
         sort.order.map((item, index) =>
           <KeepItem key={item} item={item}
             onDragOver={() => dispatch(dragSortChange.hovered(index))}

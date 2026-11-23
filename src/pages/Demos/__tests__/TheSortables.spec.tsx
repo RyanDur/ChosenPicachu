@@ -16,6 +16,12 @@ const nativeRecipe = async (): Promise<HTMLElement> => {
 };
 
 describe('the sortable list demo', () => {
+  test('should hold the sortable list in an exhibit named for its three items', async () => {
+    render(<TestApp at={demosAt('drag-and-drop')}/>);
+
+    expect(sortableList.heldBy(await dragSortTab.exhibit())).toBeInTheDocument();
+  });
+
   test('a finger pressed on a grip readies its item to be dragged', async () => {
     const feed = await listeningFeed();
     render(<TestApp at={demosAt('drag-and-drop')} feed={feed}/>);

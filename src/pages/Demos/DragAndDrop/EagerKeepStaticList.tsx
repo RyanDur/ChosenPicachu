@@ -17,7 +17,7 @@ export const EagerKeepStaticList: FC<Props> = ({list}) => {
     <ol aria-label="sortable list"
       onDragOver={event => event.preventDefault()}
       onDrop={event => event.preventDefault()}
-      className="sortable-list reorderable card rounded-corners lifted padded contained">{
+      className="sortable-list reorderable padded contained">{
         sort.order.map((item, index) =>
           <KeepItem key={item} item={item}
             className="item"
