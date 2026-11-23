@@ -52,11 +52,16 @@ describe('what the review is asked', () => {
     expect(onThePull).toContain('args "high --comment 412 --max-findings all"');
   });
 
-  test('should have a pull request\'s line comments begin with their severity', () => {
+  test('should ask a pull request\'s review to open each line comment with its severity', () => {
     const onThePull = askFor({before: 'abc1234', after: 'def5678', pull: '412', reviewers: reviewersIn(two)});
 
-    expect(onThePull).toContain('"Violation:"');
-    expect(onThePull).toContain('"Concern:"');
+    expect(onThePull).toContain('begin it with that severity, "Violation:" or "Concern:"');
+  });
+
+  test('should leave line comments out of the ask when there is no pull request', () => {
+    const onARange = askFor({before: 'abc1234', after: 'def5678', pull: '', reviewers: reviewersIn(two)});
+
+    expect(onARange).not.toContain('"Violation:"');
   });
 
   test('should hand a pull request\'s review the conversations earlier reviews started', () => {
