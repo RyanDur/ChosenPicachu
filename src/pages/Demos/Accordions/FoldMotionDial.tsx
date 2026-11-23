@@ -1,5 +1,6 @@
 import {FC} from 'react';
-import {DialRow, useControls} from '../Controls';
+import {PillGlider} from '@components/PillGlider';
+import {DialRow, Reading, useControls} from '../Controls';
 import {FoldMotion} from '../ReaderSettings';
 import {useShownPart} from './useShownPart';
 
@@ -35,13 +36,15 @@ const onThePartPages: Readings = {
 export const FoldMotionDial: FC = () => {
   const {foldMotion, change} = useControls();
   const {motions, lessMotion} = useShownPart().either(() => onThisPage, () => onThePartPages);
-  return <DialRow label="fold motion"
-    name="fold-motion"
-    choices={foldMotions}
-    chosen={foldMotion}
-    onChosen={next => change({foldMotion: next})}
-    reading={<>
+  return <DialRow label="fold motion">
+    <PillGlider label="fold motion"
+      name="fold-motion"
+      choices={foldMotions}
+      chosen={foldMotion}
+      onChosen={next => change({foldMotion: next})}/>
+    <Reading>
       <span className="when-motion-allowed">{motions[foldMotion]}</span> <span className="when-less-motion">
         {lessMotion}</span>
-    </>}/>;
+    </Reading>
+  </DialRow>;
 };
