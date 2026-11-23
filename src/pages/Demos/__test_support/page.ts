@@ -59,6 +59,7 @@ export const demoPage = {
   findTitle: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {name}, untilTheTabMounts),
   partTitle: (name: string): HTMLElement => screen.getByRole('heading', {name, level: 2}),
   linkIn: (holder: HTMLElement, name: string): HTMLElement => within(holder).getByRole('link', {name}),
+  linksNamedIn: (holder: HTMLElement, name: string): HTMLElement[] => within(holder).queryAllByRole('link', {name}),
   says: (told: string | RegExp): HTMLElement => screen.getByText(told),
   findSays: (told: string | RegExp): Promise<HTMLElement> => screen.findByText(told, {}, untilTheTabMounts),
   alertSaying: async (told: string): Promise<HTMLElement> => within(await screen.findByRole('alert')).findByText(told),

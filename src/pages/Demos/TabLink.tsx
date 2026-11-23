@@ -10,5 +10,5 @@ type Props = PropsWithChildren<{to: DemoTopics; heading?: string}>;
 export const TabLink: FC<Props> = ({to, heading, children}) => {
   const address = demoTab.address(to);
   const onItsPage = useLocation().pathname === address && not(heading);
-  return <DemoLink to={address} heading={heading} aria-current={onItsPage ? 'page' : undefined}>{children}</DemoLink>;
+  return onItsPage ? children : <DemoLink to={address} heading={heading}>{children}</DemoLink>;
 };
