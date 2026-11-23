@@ -21,10 +21,12 @@ const countOf = (count: number): string => maybe(countWords[count]).orElse(`${co
 
 const partsOf = (count: number): string => `${countOf(count)} ${count === 1 ? 'part' : 'parts'}`;
 
+const minutesOf = (count: number): string => `${count} ${count === 1 ? 'minute' : 'minutes'}`;
+
 const counted = (groups: readonly PartsGroup[]): string => {
   const entries = entriesIn(groups);
   const minutes = entries.reduce((sum, entry) => sum + entry.minutes, 0);
-  return `${partsOf(entries.length)}, about ${minutes} minutes.`;
+  return `${partsOf(entries.length)}, about ${minutesOf(minutes)}.`;
 };
 
 const startOf = (groups: readonly PartsGroup[], at: number): number => entriesIn(groups.slice(0, at)).length + 1;
