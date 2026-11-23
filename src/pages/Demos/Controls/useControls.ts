@@ -19,8 +19,8 @@ export type Settings = Placement & {
   cardOne: CardOne;
   wears: Worn;
   parts: PartsList;
-  secondPosition: Position;
-  parentPosition: ParentPosition;
+  chosenPosition: Position;
+  chosenParentPosition: ParentPosition;
 };
 
 export type Controls = Settings & {change: (next: Partial<Settings>) => void};
@@ -44,17 +44,17 @@ const defaults: Address = {
 
 export const useControls = (): Controls => {
   const {
-    type, style, 'card-one': cardOne, 'second-position': secondPosition, 'parent-position': parentPosition, ...found
+    type, style, 'card-one': cardOne, 'second-position': chosenPosition, 'parent-position': chosenParentPosition, ...found
   } = useSearchParamsObject(readerSettings.decoders, defaults);
   return {
     ...found,
     foldType: type,
     foldMotion: style,
     cardOne,
-    secondPosition,
-    parentPosition,
+    chosenPosition,
+    chosenParentPosition,
     change: ({
-      foldType, foldMotion, cardOne: nextCardOne, secondPosition: nextSecond, parentPosition: nextParent, ...next
+      foldType, foldMotion, cardOne: nextCardOne, chosenPosition: nextSecond, chosenParentPosition: nextParent, ...next
     }) => found.updateSearchParams({
       ...next, type: foldType, style: foldMotion, 'card-one': nextCardOne,
       'second-position': nextSecond, 'parent-position': nextParent

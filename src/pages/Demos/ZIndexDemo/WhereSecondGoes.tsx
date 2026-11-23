@@ -134,26 +134,26 @@ const rulesShown = (position: Position, measuredFrom: MeasuredFrom): Line[] => l
 const MeasuringDot: FC = () => <span className="measured-from alarm-dot" aria-hidden="true"/>;
 
 export const WhereSecondGoes: FC = () => {
-  const {secondPosition: position, parentPosition: parent, change} = useControls();
-  const measuredFrom = secondPosition.measuredFrom(position, parent);
+  const {chosenPosition, chosenParentPosition, change} = useControls();
+  const measuredFrom = secondPosition.measuredFrom(chosenPosition, chosenParentPosition);
   const words = wordsFor[measuredFrom];
 
   return <figure className="where-second-goes">
     <p className="caption uppercase" aria-hidden="true">Second’s position is</p>
-    <PillGlider label="Second’s position is" name="second-position" choices={positionChoices} chosen={position}
-      onChosen={next => change({secondPosition: next})}/>
-    {position === 'absolute' && <>
+    <PillGlider label="Second’s position is" name="second-position" choices={positionChoices} chosen={chosenPosition}
+      onChosen={next => change({chosenPosition: next})}/>
+    {chosenPosition === 'absolute' && <>
       <p className="caption uppercase" aria-hidden="true">And its parent is</p>
       <PillGlider label="And its parent is" name="parent-position" choices={parentPositionChoices}
-        chosen={parent} onChosen={next => change({parentPosition: next})}/>
+        chosen={chosenParentPosition} onChosen={next => change({chosenParentPosition: next})}/>
     </>}
     <p className="paragraph">{words.story}</p>
     <dl className="where-we-meet-it">
       <dt className="caption uppercase">Where we meet it</dt>
       <dd className="paragraph">{words.whereWeMeetIt}</dd>
     </dl>
-    <Snippet label="HTML" lines={markupShown(position, measuredFrom)}/>
-    <Snippet label="CSS" lines={rulesShown(position, measuredFrom)}/>
+    <Snippet label="HTML" lines={markupShown(chosenPosition, measuredFrom)}/>
+    <Snippet label="CSS" lines={rulesShown(chosenPosition, measuredFrom)}/>
     <section className="little-window card hairline-outline rounded-corners">
       <p className="little-bar caption uppercase trim">The window</p>
       <section className="little-view transformed">
@@ -166,7 +166,7 @@ export const WhereSecondGoes: FC = () => {
             measuredFrom === 'parent' && 'positioned alarm-ringed')}>
             {measuredFrom === 'parent' && <MeasuringDot/>}
             <p className="little-box plan-blue hairline-outline rounded-corners">First</p>
-            <p className={classNames('second little-box plan-mint hairline-outline rounded-corners', position)}>
+            <p className={classNames('second little-box plan-mint hairline-outline rounded-corners', chosenPosition)}>
               Second
               {measuredFrom === 'own-place' &&
                 <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
