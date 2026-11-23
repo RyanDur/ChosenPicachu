@@ -34,7 +34,7 @@ test('the same list written outside, with the same 9999, opens over card B, and 
 
   await expect.poll(exhibit.onTopWhereTheListMeetsCardB).toBe('the list');
   await expect(exhibit.css).toContainText('z-index: 9999;');
-  await expect(exhibit.saying('The number did not change. Where we wrote the list did.')).toBeVisible();
+  await expect(exhibit.verdict).toHaveText('The list opens over card B.');
 });
 
 test('a copied address opens the exhibit on the step it names', async ({page}) => {
