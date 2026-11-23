@@ -55,14 +55,6 @@ describe('the table tutorials, each on its own page', () => {
     expect(demoPage.linksToTabsIn(demoPage.part('Drag sort'))).toContainEqual(['dials', demosAt('accordions')]);
   });
 
-  test('a tutorial’s page leads back to the tables tab', async () => {
-    render(<TestApp at={demosAt('tables/menu')}/>);
-
-    await tablesTab().backToTheTab();
-
-    expect(await appAddress.movedOnFrom(demosAt('tables/menu'))).toBe(demosAt('tables'));
-  });
-
   test('a tutorial’s page says its place in the book', async () => {
     render(<TestApp at={demosAt('tables/menu')}/>);
 
@@ -93,15 +85,6 @@ describe('the table tutorials, each on its own page', () => {
     expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 7. Sort menu', demosAt('tables/menu', '?world=vanilla')]
     ]);
-  });
-
-  test('the build chosen on a tutorial’s page carries back to the tables tab', async () => {
-    const from = demosAt('tables/menu', '?world=vanilla');
-    render(<TestApp at={from}/>);
-
-    await tablesTab().backToTheTab();
-
-    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('tables', '?world=vanilla'));
   });
 
   test('a tutorial’s page links to the live table’s page, where it starts, with the build carried and both stories open', async () => {

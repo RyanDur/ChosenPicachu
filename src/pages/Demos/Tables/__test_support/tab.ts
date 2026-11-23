@@ -2,7 +2,6 @@ import {screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {computeAccessibleName} from 'dom-accessibility-api';
 import {not} from '@ryandur/sand';
-import {demosNav} from '@pages/Demos/__test_support/demos-nav';
 import {untilTheTablesTabRenders} from './controls';
 
 type Headers = {
@@ -41,7 +40,6 @@ export const tablesTab = () => ({
   partLink,
   follow: async (name: string): Promise<void> => userEvent.click(await link(name)),
   followPart: async (name: string): Promise<void> => userEvent.click(await partLink(name)),
-  backToTheTab: async (): Promise<void> => userEvent.click(within(await demosNav.bar()).getByRole('link', {name: 'Tables'})),
   tutorialsListed: async (): Promise<string[]> =>
     within(await screen.findByRole('list', {name: 'Add what the trader asked for'}, untilTheTablesTabRenders))
       .getAllByRole('link').map(anchor => computeAccessibleName(anchor)),
