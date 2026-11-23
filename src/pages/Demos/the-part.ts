@@ -9,6 +9,4 @@ export type Part = {
   readonly next: Onward;
 };
 
-export const ThePart = createContext<Part>({
-  heading: '', headingId: '', place: '', previous: {kind: 'first-part'}, next: {kind: 'last-part-said'}
-});
+export const ThePart = createContext<Part | undefined>(undefined);
