@@ -1,7 +1,7 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/history-writes';
 import {
-  bannerTrap, boxOf, dialRow, hydration, pillSwitch, pressTab, siteFrame, tabsTo, zIndexTab
+  bannerTrap, boxOf, dialRow, hydration, pillSwitch, pressTab, siteFrame, tabsTo, wholeOnTop, zIndexTab
 } from './__test_support';
 
 const fixedBannerPage = 'demos/z-index/why-a-fixed-banner-still-loses/';
@@ -30,13 +30,13 @@ test.describe('the fixed banners', {tag: ['@iPhone', '@desktop']}, () => {
     await expect.poll(() => banners.onTopOf(banners.siteBanner, 'middle')).toBe('the banner');
   });
 
-  test('Let’s build this feature brings the step that writes the panel at the page’s root into view, with its story heading in view', async ({page}) => {
+  test('Let’s build this feature brings the step that makes the panel a popover into view, with its story heading in view', async ({page}) => {
     await page.goto(fixedBannerPage);
     await siteFrame(page).hydrated();
 
     await zIndexTab(page).linkToTheBannerStory().click();
 
-    await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
+    await expect(page.getByText('Make the panel a popover', {exact: true})).toBeInViewport();
     await expect(page.getByText('The user sees the news over the page')).toBeInViewport();
   });
 });
@@ -46,7 +46,7 @@ test('Back from Let’s build this feature returns the reader to the link they f
   await siteFrame(page).hydrated();
   const link = zIndexTab(page).linkToTheBannerStory();
   await link.click();
-  await expect(page.getByText('Write the panel last, at the page’s root')).toBeInViewport();
+  await expect(page.getByText('Make the panel a popover', {exact: true})).toBeInViewport();
 
   await page.goBack();
   await expect(link).toBeInViewport();
@@ -64,12 +64,12 @@ test('a keyboard reader who follows Let’s build this feature reaches the story
   await expect(page).toHaveURL(/\/lets-build-this-feature\/#news-top-story$/);
   await expect(page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'The user sees the news over the page'})}).last()).toBeFocused();
 
-  await expect(page.getByText('Write the panel last, at the page’s root')).toBeVisible();
+  await expect(page.getByText('Make the panel a popover', {exact: true})).toBeVisible();
 
   await pressTab(page);
   await page.keyboard.press('Enter');
 
-  await expect(page.getByText('Write the panel last, at the page’s root')).toBeHidden();
+  await expect(page.getByText('Make the panel a popover', {exact: true})).toBeHidden();
 });
 
 test('a reader who follows Let’s build this feature with motion allowed lands on the story\'s heading, with only its place in the address', async ({page}) => {
@@ -152,6 +152,20 @@ test('a reader who dismisses the site’s only banner is left with no site banne
   await banners.siteBanner.getByRole('button', {name: /^dismiss /}).click();
 
   await expect(banners.siteNotes).toHaveCount(0);
+});
+
+test('a site banner raised while the site menu is open shows whole over the menu, and the menu stays open', {tag: '@iPhone'}, async ({page}) => {
+  await page.goto(`${fixedBannerPage}?side=bottom`);
+  await siteFrame(page).hydrated();
+  const banners = bannerTrap(page);
+  await siteFrame(page).menu.tap();
+  await expect(siteFrame(page).nav).toBeVisible();
+
+  await banners.raiseSite.press('Enter');
+
+  await expect(banners.siteBanner).toBeVisible();
+  await expect(siteFrame(page).nav).toBeVisible();
+  await expect.poll(() => wholeOnTop(banners.siteBanner)).toBe(true);
 });
 
 test('a reader who dismisses one of two site banners is left with the other', async ({page}) => {

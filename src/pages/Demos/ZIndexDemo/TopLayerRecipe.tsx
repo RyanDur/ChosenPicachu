@@ -58,17 +58,20 @@ export const TopLayerRecipe: FC = () => {
       ways <PartLink part="what-else-forms-a-stacking-context"/> shows. <code className="monospaced">position:
         fixed</code>, which pins the banner to the window, does not lift it out of that context,
       as <PartLink part="why-a-fixed-banner-still-loses"/> shows. Inside that context, the banner’s 9999 is compared
-      with nothing outside it. So I write the panel last on the page, outside the tab’s content, where its z-index is
-      compared with that content as a whole and with the frame around it, never with a card.</Tell>
+      with nothing outside it. So I make the panel a popover. The browser shows a popover in the top layer, a layer
+      it keeps above the whole page, so no z-index on the page is ever compared with it.</Tell>
     <Steps>
       <Step>
-        <StepHeading title="Write the panel last, at the page’s root"/>
+        <StepHeading title="Make the panel a popover"/>
         <Words>
-          <Want>A bigger number does not get the banner out of a stacking context. The banner has to sit in the page’s
-            own context, beside the tab’s content, not inside it.</Want>
-          <Says>The panel is a section written once, at the root of the site, after the page itself. Its role
+          <Want>A bigger number does not get the banner out of a stacking context. The banner has to sit above every
+            context on the page, in the top layer.</Want>
+          <Says>The panel is a section written once, at the root of the site. Its role
             is <Mdn path="Web/Accessibility/ARIA/Reference/Roles/alert_role">alert</Mdn>, so a screen reader
-            announces what arrives without being asked.</Says>
+            announces what arrives without being asked. <code className="monospaced">popover="manual"</code> makes it
+            a popover that stays open until we close it. Showing it closes no other popover, so a menu the reader has
+            open stays open. A plain popover closes on the next click anywhere, and a banner has to wait for its
+            reader.</Says>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
@@ -86,15 +89,17 @@ export const TopLayerRecipe: FC = () => {
           <Says>To dispatch is to hand the context an action, a record of what happened. A component raises a banner by
             dispatching one that says a message arrived. The dismiss button dispatches one that marks the banner
             leaving, and the panel lowers it once it has slid away and the gap it left has closed. The panel reads the
-            banners from the context and is written only while there is at least one, so no code shows or hides
-            it.</Says>
+            banners from the context and is written only while there is at least one. No button opens this popover,
+            so script shows it. The panel’s ref is a function React calls with the element once it is written, and it
+            shows the panel with <code className="monospaced">showPopover()</code>.</Says>
           <Says><code className="monospaced">has</code> comes from sand, a small library of helpers the site uses for
             values that may be missing. Given the list of banners, it answers whether the list holds any.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(providerSource, 'export const BannerProvider'), lines.blank,
-            ...carve.between(bannersSource, 'return has(banners)', "className={classNames('banners'")
+            ...carve.unit(bannersSource, 'const raisedOverThePage'), lines.blank,
+            ...carve.between(bannersSource, 'return has(banners)', "className={classNames('banners unfilled'")
           ]}/>
         </Codes>
       </Step>
@@ -105,7 +110,8 @@ export const TopLayerRecipe: FC = () => {
         </StepHeading>
         <Words>
           <Want>Nine places, and no arithmetic: auto margins center the panel.</Want>
-          <Says>The panel’s own rule gives it a fixed position, inset: 0, margin: auto and a size that fits its content.
+          <Says>The browser’s own rule for a popover gives it a fixed position, inset: 0, margin: auto and a size that
+            fits its content.
             inset: 0 lets the panel reach each edge of the window. It takes only the room its content needs, and the
             auto margins share the rest, which centers it in the window.</Says>
           <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
@@ -119,9 +125,14 @@ export const TopLayerRecipe: FC = () => {
         </Words>
         <Codes>
           <Snippet label="HTML"
-            lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
+            lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners unfilled'")}/>
           <Snippet label="CSS" lines={[
-            ...carve.between(bannersCss, '.banners {', 'z-index: 3;'), lines.blank,
+            lines.plain('/* the browser’s own rule */'),
+            lines.plain('[popover] {'),
+            lines.plain('  position: fixed;'),
+            lines.plain('  inset: 0;'),
+            lines.plain('  margin: auto;'),
+            lines.plain('}'), lines.blank,
             ...carve.unit(bannersCss, `.${side} {`), lines.blank,
             ...carve.unit(alignSheet[align], `.${align} {`)
           ]}/>

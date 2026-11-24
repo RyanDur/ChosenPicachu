@@ -1,4 +1,5 @@
 export {boxOf} from './box';
+export {wholeOnTop} from './whole-on-top';
 export {chartsPage} from './charts';
 export {practicePage} from './practice';
 export {recordPage} from './record';

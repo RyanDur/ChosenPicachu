@@ -118,7 +118,7 @@ describe('the banner tutorial’s first story', () => {
     const news = await recipeFolds.press(await zIndexTab.findFeatureStories(), story);
 
     expect(recipeFolds.stepTitles(news))
-      .toEqual(['Write the panel last, at the page’s root', 'Show it when there is news', 'Place the panel with two class names', 'Style each banner']);
+      .toEqual(['Make the panel a popover', 'Show it when there is news', 'Place the panel with two class names', 'Style each banner']);
   });
 
 });

@@ -70,24 +70,24 @@ describe('why a fixed banner still loses', () => {
       .toHaveAttribute('href', `${demosAt('z-index/lets-build-this-feature', '?raised=second')}#news-top-story`);
   });
 
-  test('should open the banner tutorial at the step that writes the panel at the page’s root, keeping the reader’s choices', async () => {
+  test('should open the banner tutorial at the step that makes the panel a popover, keeping the reader’s choices', async () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
     const part = await explanation.part('Why a fixed banner still loses');
 
     await zIndexTab.followToTheBannerStory(part);
 
-    await waitFor(() => expect(demoPage.says('Write the panel last, at the page’s root')).toBeVisible());
+    await waitFor(() => expect(demoPage.says('Make the panel a popover')).toBeVisible());
     expect(appAddress.search()).toHaveTextContent('raised=second');
   });
 
-  test('should link What else forms a stacking context to its page, with the raised card carried', async () => {
+  test('should link, where it tells of the site’s own banner, Why the popover wins to its page, with the raised card carried', async () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
     const part = await explanation.part('Why a fixed banner still loses');
-    const run = explanation.saying(part, /^The site’s own banner is fixed too/);
+    const run = explanation.saying(part, /^The site’s own banner sets no z-index/);
 
-    expect(explanation.linkNamed(run, 'What else forms a stacking context'))
-      .toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'));
+    expect(explanation.linkNamed(run, 'Why the popover wins'))
+      .toHaveAttribute('href', demosAt('z-index/why-the-popover-wins', '?raised=second'));
   });
 
   test('should take the keyboard to the banner’s story in Let’s build this feature', async () => {

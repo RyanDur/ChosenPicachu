@@ -6,6 +6,8 @@ import {Banner, bannerChange} from './bannerChange';
 import {has} from '@ryandur/sand';
 import './Banners.css';
 
+const raisedOverThePage = (banner: HTMLElement | null) => banner?.showPopover();
+
 export const Banners: FC = () => {
   const {banners, placement: {side, align, enter, stack}} = useBanners();
   const dispatchBanner = useBannerDispatch();
@@ -19,8 +21,8 @@ export const Banners: FC = () => {
   };
 
   return has(banners) &&
-    <section id="banners" role="alert"
-      className={classNames('banners', side, align, `from-${enter}`, `stack-${stack}`)}>
+    <section id="banners" role="alert" popover="manual" ref={raisedOverThePage}
+      className={classNames('banners unfilled', side, align, `from-${enter}`, `stack-${stack}`)}>
       <ul className="troubles">
         {banners.map(banner =>
           <li key={banner.id} onTransitionEnd={left(banner)}

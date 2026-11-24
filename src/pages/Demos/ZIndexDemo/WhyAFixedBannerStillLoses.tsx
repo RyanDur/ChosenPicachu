@@ -6,7 +6,6 @@ import {BannerTrap} from './BannerTrap';
 import {topLayerStoryTitleId} from './top-layer-story-title-id';
 import zIndexCss from './ZIndexDemo.css?sample';
 import bannersSource from '@banners/Banners.tsx?sample';
-import bannersCss from '@banners/Banners.css?sample';
 import {PartLink} from './PartLink';
 import {WhichCardIsOnTop} from './WhichCardIsOnTop';
 import {zIndexParts} from './part-pages';
@@ -31,22 +30,18 @@ export const WhyAFixedBannerStillLoses: FC = () => {
         ])}/>
       </li>
       <li className="run">
-        <p className="paragraph">The site’s own banner is fixed too. It is written last on the page, outside the tab’s
-          content. The content wears <code className="monospaced">isolation: isolate</code>,
-          as <PartLink part="what-else-forms-a-stacking-context"/> shows, so no card’s z-index is ever compared with
-          the banner’s. The banner’s 3 is compared with the content and with the header, the footer, the site’s
-          navigation and the tabs, none of them higher than 2. It stays at the window’s edge, over every card on the
-          page, card two included.
+        <p className="paragraph">The site’s own banner sets no z-index. It is a popover, so the browser shows it in
+          the top layer, above every stacking context on the page, as <PartLink part="why-the-popover-wins"/> shows.
+          No z-index on the page is compared with it. It stays over every card on the page, card two included.
         </p>
         <Snippet label="HTML"
-          lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners'")}/>
-        <Snippet label="CSS" lines={carve.between(bannersCss, '.banners {', 'z-index: 3;')}/>
+          lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners unfilled'")}/>
       </li>
       <li className="run">
         <p className="paragraph">To build this banner yourself, go to <Link className="signpost"
           to={carried(zIndexParts.addressOf('lets-build-this-feature'), topLayerStoryTitleId)}>
-          <cite>{zIndexParts.told('lets-build-this-feature').name}</cite></Link>. It opens at the step where the
-          panel is written at the page’s root.
+          <cite>{zIndexParts.told('lets-build-this-feature').name}</cite></Link>. It opens at the step that makes the
+          panel a popover.
         </p>
       </li>
     </ol>
