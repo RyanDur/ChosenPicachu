@@ -13,7 +13,6 @@ type Props<T extends string> = {
   choices: readonly Choice<T>[];
   chosen: T;
   onChosen: (value: T) => void;
-  // the two rows ask a size container (container-type: inline-size) around the pill; without one, wraps does nothing
   wraps?: boolean;
 };
 
