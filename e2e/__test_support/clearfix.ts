@@ -10,6 +10,7 @@ export const clearfixTray = (page: Page) => {
   const opener = exhibit.getByText('Show me the clearfix', {exact: true});
   const closer = exhibit.getByText('Close', {exact: true});
   return {
+    question: exhibit.getByText('Has a parent box collapsed on you?', {exact: true}),
     opener,
     closer,
     opens: async (): Promise<void> => {
