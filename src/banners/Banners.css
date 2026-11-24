@@ -124,3 +124,7 @@
     margin-block-end: calc(var(--foot-reach) + var(--base-x-2));
   }
 }
+
+:root:has(:modal) .banners {
+  display: none;
+}
