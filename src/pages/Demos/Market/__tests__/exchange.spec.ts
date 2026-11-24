@@ -99,6 +99,26 @@ describe('the exchange as middleware', () => {
       expect(marketReads.liveTrades(store.state).map(trade => trade.price)).toEqual([100, 101]));
   });
 
+  it('should hand over a full batch at once while the page paints nothing, as in a hidden tab', async () => {
+    const prices = Array.from({length: 1501}, (_, index) => index + 1);
+    server.use(coinbase.addEventListener('connection', ({client}) => {
+      client.addEventListener('message', event => {
+        if (typeof event.data === 'string' && event.data.includes('subscribe')) {
+          prices.forEach(price => client.send(tradeFrame(price)));
+        }
+      });
+    }));
+    const store = marketStore(exchange({tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, {
+      requestAnimationFrame: () => 1,
+      cancelAnimationFrame: () => undefined
+    }, () => undefined));
+
+    store.dispatch(marketActions.feedRequested());
+
+    await vi.waitFor(() =>
+      expect(marketReads.liveTrades(store.state).map(trade => trade.price)).toEqual(prices.slice(0, 1500)));
+  });
+
   it('hangs up when the feed is released', async () => {
     const hungUp: Client[] = [];
     coinbaseAnswering(hungUp);

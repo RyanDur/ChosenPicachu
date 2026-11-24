@@ -3,6 +3,7 @@ import type {Paints} from '@page';
 import {HTTPError} from '@transport';
 import {coinbase, Trade} from './coinbase';
 import {coinbaseHistory} from './coinbase-history';
+import {liveTrades} from './live-trades';
 import {Period} from './Period';
 import {recentTrades} from './recent-trades';
 import {MarketAction, marketActions} from './marketActions';
@@ -39,9 +40,9 @@ type FrameBatch = {
   readonly drop: () => void;
 };
 
-// A socket can deliver several trades between two paints.
+// A socket can deliver several trades between two paints, and a hidden tab doesn't paint at all.
 const batchedPerFrame = (paints: Paints, dispatch: Dispatch): FrameBatch => {
-  let held: readonly Trade[] = [];
+  let held: Trade[] = [];
   let pendingFrame: Maybe<number> = nothing();
   const deliver = (): void => {
     const trades = held;
@@ -49,18 +50,27 @@ const batchedPerFrame = (paints: Paints, dispatch: Dispatch): FrameBatch => {
     pendingFrame = nothing();
     dispatch(marketActions.tradesArrived(trades));
   };
+  const askForAPaint = (): Maybe<number> => {
+    const frame = paints.requestAnimationFrame(deliver);
+    return notEmpty(held) ? some(frame) : nothing();
+  };
+  const cancelThePaint = (): void => {
+    pendingFrame.map(frame => paints.cancelAnimationFrame(frame));
+    pendingFrame = nothing();
+  };
   return {
     hold: trade => {
-      held = [...held, trade];
-      pendingFrame = pendingFrame.or(() => {
-        const frame = paints.requestAnimationFrame(deliver);
-        return notEmpty(held) ? some(frame) : nothing();
-      });
+      held.push(trade);
+      if (held.length < liveTrades.cap) {
+        pendingFrame = pendingFrame.or(askForAPaint);
+      } else {
+        cancelThePaint();
+        deliver();
+      }
     },
     drop: () => {
-      pendingFrame.map(frame => paints.cancelAnimationFrame(frame));
+      cancelThePaint();
       held = [];
-      pendingFrame = nothing();
     }
   };
 };
