@@ -9,3 +9,4 @@ export {zIndexTab} from './tab';
 export {oldWayMenu} from './oldWayMenu';
 export {theTrap} from './trap';
 export {wayLabeled} from './ways';
+export {clearfixTray} from './clearfix';
