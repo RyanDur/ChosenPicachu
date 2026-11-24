@@ -7,7 +7,7 @@ export {Header, type Listing} from './Header';
 export {Main} from './Main';
 export {PageError} from './PageError';
 export {PageFocus} from './PageFocus';
-export {PagePaints, type Paints} from './PagePaints';
+export {PagePaints, paintsAtOnce, type Paints} from './PagePaints';
 export {popovers} from './popovers';
 export {phoneQuery} from './phoneQuery';
 export {typedValues} from './typedValues';
