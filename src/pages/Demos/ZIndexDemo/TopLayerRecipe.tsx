@@ -30,15 +30,15 @@ import typographyCss from '../../../styles/typography.css?sample';
 import '../Recipe/Recipe.css';
 
 const sideFact: Record<Side, string> = {
-  top: 'top sets the margin above the panel and leaves the one below at auto.',
-  middle: 'middle sets the margins above and below to auto again.',
-  bottom: 'bottom sets the margin below the panel and leaves the one above at auto.'
+  top: 'top sets the margin above the panel to a gap and the one below to auto.',
+  middle: 'middle sets the margins above and below to auto.',
+  bottom: 'bottom sets the margin below the panel to a gap and the one above to auto.'
 };
 
 const alignFact: Record<Align, string> = {
-  left: 'left sets the margin to the panel’s left and leaves the one to its right at auto.',
-  center: 'center sets the margins to the left and right to auto again.',
-  right: 'right sets the margin to the panel’s right and leaves the one to its left at auto.'
+  left: 'left sets the margin to the panel’s left to a gap and the one to its right to auto.',
+  center: 'center sets the margins to the left and right to auto.',
+  right: 'right sets the margin to the panel’s right to a gap and the one to its left to auto.'
 };
 
 const alignSheet: Record<Align, Sample> = {
@@ -110,18 +110,20 @@ export const TopLayerRecipe: FC = () => {
         </StepHeading>
         <Words>
           <Want>Nine places, and no arithmetic: auto margins center the panel.</Want>
-          <Says>The browser’s own rule for a popover gives it a fixed position, inset: 0, margin: auto and a size that
-            fits its content.
-            inset: 0 lets the panel reach each edge of the window. It takes only the room its content needs, and the
-            auto margins share the rest, which centers it in the window.</Says>
-          <Says>A class for an edge sets the margin on that edge to a fixed gap, so the auto margin opposite takes the
-            spare room and the panel holds to that
-            edge. <code className="monospaced">middle</code> and <code className="monospaced">center</code> set auto
-            again. They change nothing. I keep them so the choice shows in the class names.</Says>
+          <Says>The browser’s own rule for a popover gives it a fixed position, inset: 0 and a size that fits its
+            content. inset: 0 lets the panel reach each edge of the window, and it takes only the room its content
+            needs. The site’s reset sets every section’s margins to 0, so the banner’s own classes place it: one
+            class chooses the side and one the alignment.</Says>
+          <Says>A class for an edge sets the margin on that edge to a fixed gap and the margin opposite to auto, so
+            the auto margin takes the spare room and the panel holds to that
+            edge. <code className="monospaced">middle</code> and <code className="monospaced">center</code> set both
+            margins on their axis to auto, so the two share the spare room and the panel sits in the center.</Says>
           <Says>On this page margin-block is the margins above and below the panel, and margin-inline is the ones to
             its left and right. Here, {sideFact[side]} And {alignFact[align]}</Says>
           <Says>The sample is the component’s line: the two class names the dials choose arrive as side and align, and
-            the browser’s element reads, for this page’s choice, {side} {align}.</Says>
+            the browser’s element reads, for this page’s choice, {side} {align}. The class unfilled clears the
+            background the browser gives a popover. overflow: visible undoes the popover’s own overflow: auto, so a
+            banner can slide in from past the panel’s edge.</Says>
         </Words>
         <Codes>
           <Snippet label="HTML"
@@ -131,8 +133,8 @@ export const TopLayerRecipe: FC = () => {
             lines.plain('[popover] {'),
             lines.plain('  position: fixed;'),
             lines.plain('  inset: 0;'),
-            lines.plain('  margin: auto;'),
             lines.plain('}'), lines.blank,
+            ...carve.between(bannersCss, '.banners {', 'max-inline-size: min(60ch'), lines.blank,
             ...carve.unit(bannersCss, `.${side} {`), lines.blank,
             ...carve.unit(alignSheet[align], `.${align} {`)
           ]}/>
