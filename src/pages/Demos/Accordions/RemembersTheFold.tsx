@@ -45,14 +45,17 @@ const knownHeightBuilds: Record<FoldType, Build> = {
   exclusive: {Accordion: ExclusiveAccordion, sample: lines.fromTheExhibit(carve.between(exclusiveAccordionSource, '<li className="fold" key={heading}>', '</li>'))}
 };
 
+const exhibitNames: Record<FoldType, string> = {
+  inclusive: 'Accordion using checkboxes and a known height',
+  exclusive: 'Accordion using a radio group and a known height'
+};
+
 export const RemembersTheFold: FC = () => {
   const {foldType, foldMotion} = useControls();
   const input = foldInput.of(foldType);
   const {Accordion: KnownHeight, sample} = knownHeightBuilds[foldType];
   return <>
-    <Exhibit name={foldType === 'inclusive'
-      ? 'Accordion using checkboxes and a known height'
-      : 'Accordion using a radio group and a known height'}>
+    <Exhibit name={exhibitNames[foldType]}>
       <KnownHeight className={foldMotion} folds={dealtFolds.known[foldType]}/>
       <ExhibitFoot lead="No script:">HTML and CSS alone.</ExhibitFoot>
     </Exhibit>
