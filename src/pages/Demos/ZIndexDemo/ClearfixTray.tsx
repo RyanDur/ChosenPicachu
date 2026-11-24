@@ -60,7 +60,7 @@ const markup: Line[] = [
   '<p>more of the page</p>'
 ].map(lines.plain);
 
-const opened: Step = 'in-the-flow';
+const firstStep: Step = 'in-the-flow';
 
 export const ClearfixTray: FC = () => {
   const {clearfix: chosen, updateSearchParams, removeSearchParams} = useSearchParamsObject({
@@ -68,9 +68,9 @@ export const ClearfixTray: FC = () => {
   });
   const shown = maybe(chosen);
   const isOpen = shown.map(() => true).orElse(false);
-  const step = shown.orElse(opened);
+  const step = shown.orElse(firstStep);
   const {story, verdict, rules, parentLooks} = told[step];
-  const pageName = useId();
+  const pageLabelId = useId();
 
   return <section className="clearfix-offer">
     <p className="paragraph"><strong className="bold">Has a parent box collapsed on you?</strong> A box that leaves the
@@ -78,7 +78,7 @@ export const ClearfixTray: FC = () => {
     <details className="clearfix-tray" open={isOpen}
       onToggle={({currentTarget}) => {
         if (currentTarget.open === isOpen) return;
-        if (currentTarget.open) updateSearchParams({clearfix: opened});
+        if (currentTarget.open) updateSearchParams({clearfix: firstStep});
         else removeSearchParams(['clearfix']);
       }}>
       <summary className="tray-opener button primary reachable">{isOpen ? 'Close' : 'Show me the clearfix'}</summary>
@@ -95,8 +95,8 @@ export const ClearfixTray: FC = () => {
             <Snippet label="CSS" lines={rules}/>
           </section>
           <section className="little-window card hairline-outline rounded-corners">
-            <p className="little-bar caption uppercase trim" id={pageName}>The page</p>
-            <section className={classNames('lost-height', parentLooks)} aria-labelledby={pageName}>
+            <p className="little-bar caption uppercase trim" id={pageLabelId}>The page</p>
+            <section className={classNames('lost-height', parentLooks)} aria-labelledby={pageLabelId}>
               <section className="parent the-parent plan-sand ink-dashed-outline rounded-corners">
                 <p className="kid little-box plan-blue hairline-outline rounded-corners">First</p>
                 <p className="kid little-box plan-blue hairline-outline rounded-corners">Second</p>
