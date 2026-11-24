@@ -23,7 +23,8 @@ export const nestingExhibit = (page: Page) => {
       return listed.contains(hit) ? 'the list' : card.contains(hit) ? 'card B' : 'neither';
     }),
     css,
-    markedRules: async (): Promise<string[]> => [...(await css.ariaSnapshot()).matchAll(/- mark: "([^"]+)"/g)].map(([, line]) => line),
+    markedRules: (): Promise<string[]> =>
+      css.evaluate(sample => [...sample.querySelectorAll('mark')].map(marked => marked.textContent?.trim() ?? '')),
     verdict: exhibit.getByRole('status', {name: 'what the browser drew'})
   };
 };
