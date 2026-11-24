@@ -1,3 +1,4 @@
+import {maybe, not} from '@ryandur/sand';
 import {slices} from '@components/store';
 import {Arrangement, arrangements} from '@components/DragSortableTable/model';
 import {Trade} from './coinbase';
@@ -38,9 +39,9 @@ const noTrades: TradesState = {
 
 const settled = (trades: TradesState, history: readonly Trade[], streamed: readonly Trade[]): TradesState => {
   const held = recentTrades.hydrated(history, streamed);
-  const newest = held[held.length - 1]?.tradedAt ?? 0;
+  const newest = maybe(held[held.length - 1]).map(({tradedAt}) => tradedAt).orElse(0);
   const fresh = (trade: Trade): boolean => newest - trade.tradedAt < tradeTotals.held;
-  const agedOut = tradeTotals.joined(trades.agedOut, tradeTotals.tallied(held.filter(trade => !fresh(trade))));
+  const agedOut = tradeTotals.joined(trades.agedOut, tradeTotals.tallied(held.filter(trade => not(fresh(trade)))));
   return {
     ...trades,
     history: history.filter(fresh),
