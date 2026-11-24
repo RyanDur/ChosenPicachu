@@ -30,6 +30,11 @@ const measuredBuilds: Record<FoldType, Build> = {
   exclusive: {Accordion: ExclusiveMeasuredAccordion, sample: sharedOpenFolds(exclusiveMeasuredAccordionSource)}
 };
 
+const exhibitNames: Record<FoldType, string> = {
+  inclusive: 'Accordion using checkboxes and a measured height',
+  exclusive: 'Accordion using a radio group and a measured height'
+};
+
 export const MeasuredHeight: FC = () => {
   const {foldType, foldMotion} = useControls();
   const input = foldInput.of(foldType);
@@ -91,9 +96,7 @@ export const MeasuredHeight: FC = () => {
             state are as they come. What changes is the shape. The plain script listens for the press; the React
             build redraws the panel from its state, so the measuring runs in two steps React takes before the
             browser paints: the first pins where the motion starts, and the second sets where it ends.</p>
-          <Exhibit name={foldType === 'inclusive'
-            ? 'Accordion using checkboxes and a measured height'
-            : 'Accordion using a radio group and a measured height'}>
+          <Exhibit name={exhibitNames[foldType]}>
             <Measured className={foldMotion} folds={dealtFolds.measured[foldType]}/>
             <ExhibitFoot lead="Script:">A few lines measure each fold’s height.</ExhibitFoot>
           </Exhibit>
