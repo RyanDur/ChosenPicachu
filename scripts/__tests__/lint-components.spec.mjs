@@ -79,6 +79,7 @@ tester.run('no-forwarded-props', components.rules['no-forwarded-props'], {
     {name: 'should accept open handed to the fold inside', code: 'const Story = ({open}) => <Fold open={open}/>;'},
     {name: 'should accept the rest of the attributes spread onto an element', code: 'const Field = ({label, ...rest}) => <label>{label}<input {...rest}/></label>;'},
     {name: 'should accept the rest of a control\'s attributes spread onto the control inside', code: 'const ItemLink = ({className, ...link}) => <Link {...link} className={className}/>;'},
+    {name: 'should accept the rest spread onto the control a block body returns', code: 'function ItemLink({className, ...link}) { return <Link {...link} className={className}/>; }'},
     {name: 'should accept the rest spread onto the control either branch returns', code: 'const DateInput = ({readOnly, ...rest}) => readOnly ? <Input type="text" readOnly {...rest}/> : <Input type="date" {...rest}/>;'},
     {name: 'should accept an element spreading its own attributes', code: 'const Pill = props => <input {...props}/>;'}
   ],
@@ -107,6 +108,11 @@ tester.run('no-forwarded-props', components.rules['no-forwarded-props'], {
       name: 'should refuse a component that spreads all its props onto another',
       code: 'const Story = told => <StoryShell {...told}/>;',
       errors: [{messageId: 'spread', data: {name: 'told'}}]
+    },
+    {
+      name: 'should refuse the rest spread onto a component a nested function returns',
+      code: 'const Pills = ({label, items, ...rest}) => <ul>{items.map(item => { return <Pill key={item} {...rest}/>; })}{label}</ul>;',
+      errors: [{messageId: 'rest', data: {name: 'rest'}}]
     },
     {
       name: 'should refuse the rest of the props spread onto a component inside',
