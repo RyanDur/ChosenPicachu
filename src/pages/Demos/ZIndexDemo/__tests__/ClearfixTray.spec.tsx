@@ -8,7 +8,25 @@ const howPosition = 'z-index/how-position-places-a-box';
 const title = 'How position places a box';
 
 describe('the clearfix tray, in where Second goes', () => {
-  test('should mark in the CSS the rule each step adds', async () => {
+  test('should mark the float rule at the float step', async () => {
+    render(<TestApp at={demosAt(howPosition, '?second-position=absolute&clearfix=in-the-flow')}/>);
+    await explanation.part(title);
+
+    await clearfixTray.stepsTo('2 · Float');
+
+    expect(clearfixTray.markedRules()).toEqual(['.kid {', 'float: left;', '}']);
+  });
+
+  test('should mark the unseen box’s rule at the clearfix step', async () => {
+    render(<TestApp at={demosAt(howPosition, '?second-position=absolute&clearfix=float')}/>);
+    await explanation.part(title);
+
+    await clearfixTray.stepsTo('3 · The clearfix');
+
+    expect(clearfixTray.markedRules()).toEqual(['.parent::after {', 'content: "";', 'display: table;', 'clear: both;', '}']);
+  });
+
+  test('should mark flow-root at what we have now', async () => {
     render(<TestApp at={demosAt(howPosition, '?second-position=absolute&clearfix=the-clearfix')}/>);
     await explanation.part(title);
 
