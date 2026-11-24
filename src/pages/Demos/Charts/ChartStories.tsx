@@ -70,10 +70,9 @@ const PriceStory: FC = () =>
             a match has, each of the right kind. And its price, its size and its time have to turn into real numbers.
             What passes is a Trade. What fails never reaches the page’s state, the values the page holds and draws from,
             as taught in the z-index part <PartLink part="why-the-popover-wins"/>.</Says>
-          <Says>The page keeps only the newest 1,500 trades, because the feed never ends and the page must not grow with
-            it, so the live part of the price line and the candles reaches back as far as those trades do.</Says>
-          <Says>The trades reach the store in one batch per frame. The table beside the charts holds the last hour,
-            and <DemoLink to={liveTableAt}>the live table’s story</DemoLink> on the Tables tab teaches both.</Says>
+          <Says>The charts draw only the newest 1,500 trades.</Says>
+          <Says>The trades reach the store in one batch each time the browser paints, and the same store holds the last
+            hour for <DemoLink to={liveTableAt}>the Tables tab’s live table</DemoLink>, whose story teaches both.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
