@@ -33,7 +33,7 @@ const lookbacks = [
   {lookback: 'session', name: 'session', milliseconds: Number.POSITIVE_INFINITY}
 ] satisfies readonly NamedLookback[];
 
-const held = 60 * MINUTE;
+const heldFor = 60 * MINUTE;
 
 type OpenAndClose = {
   opened: number;
@@ -95,16 +95,16 @@ const perLookback = (trades: readonly Trade[], agedOut: Tally = noTally): readon
     const inside = maybe(trades[trades.length - 1])
       .map(({tradedAt: now}) => trades.filter(trade => now - trade.tradedAt < lookback.milliseconds))
       .orElse([]);
-    return totalsOf(lookback, lookback.milliseconds > held ? joined(agedOut, tallied(inside)) : tallied(inside));
+    return totalsOf(lookback, lookback.milliseconds > heldFor ? joined(agedOut, tallied(inside)) : tallied(inside));
   });
 
 type TradeTotals = {
   lookbacks: readonly NamedLookback[];
-  held: number;
+  heldFor: number;
   noTally: Tally;
   tallied: (trades: readonly Trade[]) => Tally;
   joined: (earlier: Tally, later: Tally) => Tally;
   perLookback: (trades: readonly Trade[], agedOut?: Tally) => readonly LookbackTotals[];
 };
 
-export const tradeTotals: TradeTotals = {lookbacks, held, noTally, tallied, joined, perLookback};
+export const tradeTotals: TradeTotals = {lookbacks, heldFor, noTally, tallied, joined, perLookback};

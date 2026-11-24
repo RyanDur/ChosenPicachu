@@ -40,7 +40,7 @@ const noTrades: TradesState = {
 const settled = (trades: TradesState, history: readonly Trade[], streamed: readonly Trade[]): TradesState => {
   const held = recentTrades.hydrated(history, streamed);
   const newest = maybe(held[held.length - 1]).map(({tradedAt}) => tradedAt).orElse(0);
-  const fresh = (trade: Trade): boolean => newest - trade.tradedAt < tradeTotals.held;
+  const fresh = (trade: Trade): boolean => newest - trade.tradedAt < tradeTotals.heldFor;
   const agedOut = tradeTotals.joined(trades.agedOut, tradeTotals.tallied(held.filter(trade => not(fresh(trade)))));
   return {
     ...trades,
