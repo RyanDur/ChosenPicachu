@@ -10,5 +10,5 @@ export const LetsBuildThisFeatureIntroduction: FC = () =>
     a banner button under them raises random nonsense so you can watch the mechanics. This part assumes
     what <PartLink part="why-third-is-on-top"/> through <PartLink part="why-a-fixed-banner-still-loses"/> give: what a
     z-index does and where it stops counting, and the component, state and
-    event that <PartLink part="why-the-popover-wins"/> explains. The banner sets a z-index, and where it sits decides
-    what that number is compared with.</p>;
+    event that <PartLink part="why-the-popover-wins"/> explains. The banner sets no z-index. It is a popover, and the
+    top layer keeps it over the page.</p>;

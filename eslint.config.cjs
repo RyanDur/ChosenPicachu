@@ -104,7 +104,7 @@ const journeys = Object.fromEntries([
 const vanilla = ['src/pages/Demos/Tables/Frame/**', 'src/pages/Demos/Accordions/Plain/**'];
 
 const refsWithAReason = [
-  'src/components/Modal/Modal.tsx', 'src/pages/Demos/Accordions/MeasuredPanel.tsx',
+  'src/banners/Banners.tsx', 'src/components/Modal/Modal.tsx', 'src/pages/Demos/Accordions/MeasuredPanel.tsx',
   'src/pages/Demos/Controls/DialGroup.tsx'
 ];
 

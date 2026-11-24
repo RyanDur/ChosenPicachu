@@ -233,13 +233,17 @@ export const BehaviorPractice: FC = () =>
     <p className="paragraph">ESLint refuses <code className="monospaced">useRef</code>, <code className="monospaced">createRef</code> and <code className="monospaced">forwardRef</code> in any file that
       is not on <a className="signpost" href={repository.file('eslint.config.cjs')}>a list in its configuration</a>.
       A ref keeps a value outside the state, where no reducer sees it and no test reads it. A file joins the list for
-      one of the two reasons AGENTS.md gives: <a className="signpost" href={repository.file('AGENTS.md')}>“A <code className="monospaced">useRef</code> is
+      one of the three reasons AGENTS.md gives: <a className="signpost" href={repository.file('AGENTS.md')}>“A <code className="monospaced">useRef</code> is
         allowed only (1) to hold a <code className="monospaced">dialog</code> the component shows as a modal
-        with <code className="monospaced">showModal()</code>, or (2) to read the element’s own details, such as its
-        measured size, when nothing else gives them, such as an event.”</a> Two files are on the list today, both for
-      the second reason. <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at,
-      and <code className="monospaced">DialGroup</code> reads whether each dial’s name and pills fit side by side. No
-      file needs the first: the feedback dialog’s buttons open and close it with invoker commands, and the two scripts
+        with <code className="monospaced">showModal()</code>, (2) to read the element’s own details, such as its
+        measured size, when nothing else gives them, such as an event, or (3) to show a popover the site raises with no
+        invoker, by <code className="monospaced">showPopover()</code>.”</a> Four files are on the list today.
+    <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at,
+      and <code className="monospaced">DialGroup</code> reads whether each dial’s name and pills fit side by side,
+      both for the second reason. <code className="monospaced">Banners</code>, for the third, shows the site’s banner
+      in the top layer when a trouble arrives. <code className="monospaced">Modal</code> holds the feedback dialog,
+      which opens as a modal, for the first: it closes the dialog when the page removes it. No other file needs the
+      first: the feedback dialog’s buttons open and close it with invoker commands, and the two scripts
       that close it each find it from their own event, a click on the veil in a browser
       without <code className="monospaced">closedby</code> and the form’s submit after a note is sent.</p>
   </>;
