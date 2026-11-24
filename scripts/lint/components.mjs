@@ -128,10 +128,16 @@ const branchTypes = new Set(['ConditionalExpression', 'LogicalExpression', ...wr
  * @param {any} declared a function
  * @returns {boolean} whether the function returns that element as its root, in any branch
  */
+/**
+ * @param {any} node
+ * @returns {any} the nearest function around the node
+ */
+const functionAround = node => functionTypes.has(node.parent.type) ? node.parent : functionAround(node.parent);
+
 const returnedBy = (element, declared) => {
   const {parent} = element;
   if (parent === declared && declared.body === element) return true;
-  if (parent.type === 'ReturnStatement') return true;
+  if (parent.type === 'ReturnStatement') return functionAround(parent) === declared;
   return branchTypes.has(parent.type) && returnedBy(parent, declared);
 };
 
