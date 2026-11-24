@@ -2,7 +2,7 @@ import {createContext} from 'react';
 
 export type Paints = Pick<Window, 'requestAnimationFrame' | 'cancelAnimationFrame'>;
 
-const unpainted: Paints = {
+export const paintsAtOnce: Paints = {
   requestAnimationFrame: paint => {
     paint(0);
     return 0;
@@ -10,4 +10,4 @@ const unpainted: Paints = {
   cancelAnimationFrame: () => undefined
 };
 
-export const PagePaints = createContext<Paints>(unpainted);
+export const PagePaints = createContext<Paints>(paintsAtOnce);

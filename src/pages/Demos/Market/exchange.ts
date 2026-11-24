@@ -1,4 +1,4 @@
-import {Maybe, has, maybe, nothing, some, streaming} from '@ryandur/sand';
+import {Maybe, has, maybe, nothing, notEmpty, some, streaming} from '@ryandur/sand';
 import type {Paints} from '@page';
 import {HTTPError} from '@transport';
 import {coinbase, Trade} from './coinbase';
@@ -52,7 +52,10 @@ const batchedPerFrame = (paints: Paints, dispatch: Dispatch): FrameBatch => {
   return {
     hold: trade => {
       held = [...held, trade];
-      pendingFrame = pendingFrame.or(() => some(paints.requestAnimationFrame(deliver)));
+      pendingFrame = pendingFrame.or(() => {
+        const frame = paints.requestAnimationFrame(deliver);
+        return notEmpty(held) ? some(frame) : nothing();
+      });
     },
     drop: () => {
       pendingFrame.map(frame => paints.cancelAnimationFrame(frame));

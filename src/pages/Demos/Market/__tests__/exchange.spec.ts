@@ -2,6 +2,7 @@ import {describe, expect, it, onTestFinished, vi} from 'vitest';
 import {http, HttpResponse, ws} from 'msw';
 import {WebSocketClientConnectionProtocol as Client} from '@mswjs/interceptors/WebSocket';
 import {HISTORY, server} from '@__test_support/server';
+import {paintsAtOnce} from '@page';
 import {tradeFrame} from '@pages/Demos/__test_support/feed';
 import {Period} from '../Period';
 import {periodHistory} from '../period-history';
@@ -78,6 +79,24 @@ describe('the exchange as middleware', () => {
     paints.forEach(paint => paint(0));
 
     expect(marketReads.liveTrades(store.state).map(trade => trade.price)).toEqual([100, 101]);
+  });
+
+  it('should hand over every batch when the page paints at once', async () => {
+    server.use(coinbase.addEventListener('connection', ({client}) => {
+      client.addEventListener('message', event => {
+        if (typeof event.data === 'string' && event.data.includes('subscribe')) {
+          client.send(tradeFrame(100));
+          client.send(tradeFrame(101));
+        }
+      });
+    }));
+    const store = marketStore(exchange(
+      {tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, paintsAtOnce, () => undefined));
+
+    store.dispatch(marketActions.feedRequested());
+
+    await vi.waitFor(() =>
+      expect(marketReads.liveTrades(store.state).map(trade => trade.price)).toEqual([100, 101]));
   });
 
   it('hangs up when the feed is released', async () => {
