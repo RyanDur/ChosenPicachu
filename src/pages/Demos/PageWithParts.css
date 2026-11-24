@@ -11,11 +11,16 @@
 :root:has(.parts-head) {
   --parts-inset: calc(var(--frame-reach, 0px) + var(--tab-bar-stuck-reach));
   --parts-button-reach: var(--base-x-4);
-  --parts-head-reach: calc(var(--parts-button-reach) + var(--base-x-2) + var(--hairline-x-2));
+  --parts-count-reach: calc(var(--parts-button-reach) + var(--base-x-2) + var(--hairline-x-2));
+  --parts-head-reach: var(--parts-count-reach);
   --parts-fold-span: var(--base-x-12);
 
   @media (pointer: coarse) {
     --parts-button-reach: var(--finger-reach);
+  }
+
+  @media (width < 16em) {
+    --parts-head-reach: calc(var(--parts-count-reach) + var(--parts-button-reach) + var(--base-x-2));
   }
 }
 
@@ -52,6 +57,7 @@
 }
 
 .parts-head {
+  container: parts-head / inline-size;
   pointer-events: none;
   z-index: 2;
   display: grid;
@@ -65,6 +71,10 @@
     grid-row: 1;
     grid-column: -2;
   }
+
+  @media (width < 16em) {
+    grid-template-rows: var(--parts-count-reach) auto;
+  }
 }
 
 .parts-head.parts-away {
@@ -75,9 +85,31 @@
 .parts-count {
   display: flex;
   align-items: center;
-  min-block-size: var(--parts-head-reach);
+  white-space: nowrap;
+  min-block-size: var(--parts-count-reach);
   padding-block: var(--base);
   padding-inline-end: calc(var(--parts-fold-span) + var(--base));
+
+  @media (width < 16em) {
+    grid-row: 1 / -1;
+    align-items: start;
+    padding-block-start: calc((var(--parts-count-reach) - 1lh) / 2);
+    padding-inline-end: var(--base);
+  }
+}
+
+.parts-count-in-brief {
+  display: none;
+}
+
+@container parts-head (width < 20em) {
+  .parts-count-in-full {
+    display: none;
+  }
+
+  .parts-count-in-brief {
+    display: inline;
+  }
 }
 
 .parts-fold {
@@ -86,6 +118,11 @@
   inline-size: var(--parts-fold-span);
   min-block-size: var(--parts-button-reach);
   padding-inline: var(--base);
+
+  @media (width < 16em) {
+    grid-row: 2;
+    margin-block: var(--base);
+  }
 }
 
 .parts-head.parts-away ~ .parts-panel {
