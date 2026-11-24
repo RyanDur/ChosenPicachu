@@ -18,7 +18,9 @@ export const positionExhibit = {
   parentPill: (parentPillWords: ParentPillWords): HTMLElement =>
     within(pillsOf('And its parent is')).getByRole('radio', {name: parentPillWords}),
   samples: (): {html: string; css: string} => {
-    const [html, css] = within(screen.getByRole('figure', {name: /^Where Second goes\./})).getAllByRole('figure');
+    const figures = within(screen.getByRole('region', {name: 'Where Second goes'})).getAllByRole('figure');
+    const [html] = figures.filter(sample => (sample.textContent ?? '').startsWith('HTML'));
+    const [css] = figures.filter(sample => (sample.textContent ?? '').startsWith('CSS'));
     return {html: codeIn(html), css: codeIn(css)};
   },
   measuredFrom: (): HTMLElement => screen.getByRole('status', {name: 'what Second is measured from'}),

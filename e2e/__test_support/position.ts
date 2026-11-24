@@ -24,7 +24,7 @@ const cornerIn = (holder: Box, box: Spot): Spot => ({
 const exactly = (text: string): RegExp => new RegExp(`^${text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
 
 export const positionExhibit = (page: Page) => {
-  const exhibit = page.getByRole('figure', {name: /^Where Second goes\./});
+  const exhibit = page.getByRole('region', {name: 'Where Second goes'});
   const littlePage = exhibit.getByRole('region', {name: 'The little page'});
   const positionPills = pillSwitch(page, 'Second’s position is');
   const parentPills = pillSwitch(page, 'And its parent is');

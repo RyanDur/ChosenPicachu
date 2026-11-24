@@ -66,7 +66,7 @@ test('a reader follows how position places a box from the z-index tab to its pag
   await zIndexTab(page).partLink(howPositionPlacesABox).click();
 
   await expect(page).toHaveURL(/demos\/z-index\/how-position-places-a-box\/$/);
-  await expect(page.getByRole('figure', {name: /^Where Second goes\./})).toBeVisible();
+  await expect(page.getByRole('region', {name: 'Where Second goes'})).toBeVisible();
 });
 
 test('a reader follows how position places a box’s foot on to the next part’s page, with the raised card kept in the address', async ({page}) => {
