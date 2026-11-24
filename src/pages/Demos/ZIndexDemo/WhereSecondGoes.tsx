@@ -7,6 +7,7 @@ import {carve, Line, lines, Snippet} from '../Recipe';
 import {useControls} from '../Controls';
 import whereSecondGoesCss from './WhereSecondGoes.css?sample';
 import {PartTermLink} from './PartTermLink';
+import {ClearfixTray} from './ClearfixTray';
 import {ParentPosition, Position} from '../ReaderSettings';
 import {MeasuredFrom, secondPosition} from './second-position';
 import './WhereSecondGoes.css';
@@ -183,6 +184,7 @@ export const WhereSecondGoes: FC = () => {
     <output aria-label="what Second is measured from" className="paragraph">
       {`Measured from: ${words.measuredFromWords}`}</output>
     <p className="paragraph">{words.stackingContext} Scroll the little page to see fixed and sticky at work.</p>
+    {chosenPosition === 'absolute' && <ClearfixTray/>}
     <figcaption className="caption"><strong className="bold">Where Second goes.</strong> Give Second each position in
       turn and see where it goes, and what First and Third do.</figcaption>
   </figure>;
