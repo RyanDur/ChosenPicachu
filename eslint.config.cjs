@@ -234,7 +234,7 @@ module.exports = [
     rules: {'no-restricted-imports': ['error', {paths: [{
       name: 'react',
       importNames: ['useRef', 'createRef', 'forwardRef'],
-      message: 'a ref holds a dialog shown as a modal, or reads an element\'s details nothing else gives; list the file in refsWithAReason'
+      message: 'a ref holds a dialog shown as a modal, reads an element\'s details nothing else gives, or shows a popover the site raises with no invoker; list the file in refsWithAReason'
     }]}]}
   },
   {
