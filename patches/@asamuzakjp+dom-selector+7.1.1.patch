@@ -1,0 +1,20 @@
+diff --git a/node_modules/@asamuzakjp/dom-selector/src/js/finder.js b/node_modules/@asamuzakjp/dom-selector/src/js/finder.js
+index cd94b9d..7224fd0 100644
+--- a/node_modules/@asamuzakjp/dom-selector/src/js/finder.js
++++ b/node_modules/@asamuzakjp/dom-selector/src/js/finder.js
+@@ -1668,13 +1668,10 @@ export class Finder {
+           break;
+         }
+         case 'popover-open': {
+-          // FIXME: not implemented in jsdom
+-          // @see https://github.com/jsdom/jsdom/issues/3721
+-          /*
+-          if (node.popover && isVisible(node)) {
++          // jsdom's showPopover marks the wrapper, since jsdom has no popover state of its own (jsdom#3721)
++          if (node[Symbol.for('jsdom.popoverShowing')]) {
+             matched.add(node);
+           }
+-          */
+           break;
+         }
+         // Ignore :host.
