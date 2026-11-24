@@ -22,7 +22,7 @@ const cardsFromTheTopWhereAllMeet = (drawing: Locator): Promise<string[]> => dra
 });
 
 export const pileSteps = (page: Page) => {
-  const exhibit = page.getByRole('figure', {name: 'The pile', exact: true});
+  const exhibit = page.getByRole('region', {name: 'The pile', exact: true});
   return {
     cardsFromTheTop: (): Promise<string[]> => cardsFromTheTopWhereAllMeet(exhibit.getByRole('region', {name: 'What the browser draws · one stacking context'})),
     stepsTo: (step: Step): Promise<void> => pillSwitch(page, 'Step').choose(step),

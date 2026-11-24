@@ -2,6 +2,7 @@ import {FC, useId} from 'react';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {classNames} from '@components';
 import {carve, Line, lines, Snippet, useExhibitStep} from '../Recipe';
+import {Exhibit, ExhibitFoot} from '../Exhibit';
 import sheet from './AContextInsideAContext.css?sample';
 import './AContextInsideAContext.css';
 
@@ -65,41 +66,39 @@ const TheList: FC = () => <ul className="list listed card hairline-edged rounded
 
 export const AContextInsideAContext: FC = () => {
   const {step, numberedSteps, choose: chooseStep} = useExhibitStep('nesting', steps, 'the-page');
-  const title = useId();
   const drawingName = useId();
   const isolating = step !== 'the-page';
   const {story, verdict, markup, rules} = told[step];
 
-  return <figure className="context-inside card rounded-corners lifted padded" aria-labelledby={title}>
-    <p className="caption uppercase" aria-hidden="true">Exhibit</p>
-    <p className="sub-title" id={title}>A context inside a context</p>
-    <p className="caption uppercase" aria-hidden="true">Step</p>
-    <section className="nesting-steps">
-      <PillGlider label="Step" name="nesting" choices={numberedSteps} chosen={step} onChosen={chooseStep} wraps/>
-    </section>
-    <p className="paragraph">{story}</p>
-    <section className="nesting-code">
-      <Snippet label="HTML" lines={markup}/>
-      <Snippet label="CSS" lines={rules}/>
-    </section>
-    <section className="nesting-code">
-      <p className="caption uppercase" id={drawingName}>What the browser draws</p>
-      <section className={classNames('nesting-drawing muted-dashed-outline rounded-corners', isolating && 'isolating')}
-        aria-labelledby={drawingName}>
-        <section className={classNames('card-a nested-card shorter card rounded-corners plan-blue',
-          isolating ? 'ink-dashed-outline' : 'hairline-edged')}>
-          {isolating ? 'Card A · a context of its own' : 'Card A'}
-          {step === 'the-list-inside' && <TheList/>}
-        </section>
-        <section className="card-b nested-card taller card hairline-edged rounded-corners plan-rose">
-          Card B · z-index: 1
-        </section>
-        {step === 'the-list-outside' && <TheList/>}
+  return <Exhibit name="A context inside a context">
+    <figure className="context-inside field">
+      <p className="caption uppercase" aria-hidden="true">Step</p>
+      <section className="nesting-steps">
+        <PillGlider label="Step" name="nesting" choices={numberedSteps} chosen={step} onChosen={chooseStep} wraps/>
       </section>
-      <output aria-label="what the browser drew" className="paragraph bold">{verdict}</output>
-    </section>
-    <figcaption className="caption"><strong className="bold">A context inside a context.</strong> Four steps: the
-      page, a context inside it, a list written inside, then the same list written outside. The numbers stay the
-      same.</figcaption>
-  </figure>;
+      <p className="paragraph">{story}</p>
+      <section className="nesting-code">
+        <Snippet label="HTML" lines={markup}/>
+        <Snippet label="CSS" lines={rules}/>
+      </section>
+      <section className="nesting-code">
+        <p className="caption uppercase" id={drawingName}>What the browser draws</p>
+        <section className={classNames('nesting-drawing muted-dashed-outline rounded-corners',
+          isolating && 'isolating')} aria-labelledby={drawingName}>
+          <section className={classNames('card-a nested-card shorter card rounded-corners plan-blue',
+            isolating ? 'ink-dashed-outline' : 'hairline-edged')}>
+            {isolating ? 'Card A · a context of its own' : 'Card A'}
+            {step === 'the-list-inside' && <TheList/>}
+          </section>
+          <section className="card-b nested-card taller card hairline-edged rounded-corners plan-rose">
+            Card B · z-index: 1
+          </section>
+          {step === 'the-list-outside' && <TheList/>}
+        </section>
+        <output aria-label="what the browser drew" className="paragraph bold">{verdict}</output>
+      </section>
+    </figure>
+    <ExhibitFoot lead="A context inside a context.">Four steps: the page, a context inside it, a list written
+      inside, then the same list written outside. The numbers stay the same.</ExhibitFoot>
+  </Exhibit>;
 };

@@ -4,7 +4,7 @@ import {pillSwitch} from './pills';
 export type NestingStep = '1 · The page' | '2 · A context inside' | '3 · The list inside' | '4 · The list outside';
 
 export const nestingExhibit = (page: Page) => {
-  const exhibit = page.getByRole('figure', {name: 'A context inside a context', exact: true});
+  const exhibit = page.getByRole('region', {name: 'A context inside a context', exact: true});
   const drawing = exhibit.getByRole('region', {name: 'What the browser draws'});
   const steps = pillSwitch(page, 'Step');
   const css = exhibit.getByRole('figure').filter({hasText: /^CSS/});
