@@ -26,7 +26,7 @@ export {heightOnceSettled} from './motion';
 export {accordions, type Build, type Part} from './accordions';
 export {pileSteps, stackingPile, type Card, type Step} from './stacking';
 export {nestingExhibit, type NestingStep} from './nesting';
-export {clearfixTray, type ClearfixStep} from './clearfix';
+export {clearfixTray} from './clearfix';
 export {positionExhibit} from './position';
 export {zIndexTab} from './z-index';
 export {partFoot} from './part-foot';
