@@ -26,7 +26,7 @@ type GrabEvent = {
 
 const claim = (event: GrabEvent, pressed: HTMLElement): void => {
   event.preventDefault();
-  pressed.focus({preventScroll: true});
+  pressed.focus({preventScroll: true, focusVisible: false});
   pressed.setPointerCapture(event.pointerId);
 };
 
