@@ -44,7 +44,7 @@ export const ContextChooser: FC = () => {
   return <figure className="context-chooser card rounded-corners lifted padded">
     <ol className="trap-steps">
       <li className="paragraph">Choose what card one wears.</li>
-      <li className="paragraph">Press Sort by, built the old way, and look where its list opens.</li>
+      <li className="paragraph">Press Sort by, and look where its list opens.</li>
       <li className="paragraph">Choose another, and press Sort by again.</li>
     </ol>
     <fieldset className="wears">
