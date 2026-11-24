@@ -12,7 +12,7 @@ const sizeLine = /^Seven parts, about \d+ minutes\.$/;
 
 export const zIndexTab = {
   opening: (): Promise<HTMLElement> => screen.findByText(/^A z-index moves a box/),
-  pile: (): Promise<HTMLElement> => screen.findByRole('figure', {name: 'The pile'}),
+  pile: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The pile'}),
   findStep: async (name: string): Promise<HTMLElement> =>
     within(await screen.findByRole('group', {name: 'Step'})).getByRole('radio', {name}),
   size: (): Promise<HTMLElement> => screen.findByText(sizeLine),

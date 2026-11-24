@@ -2,11 +2,10 @@ import {render, screen, within} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {contextInside, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const stillLoses = 'z-index/why-9999-still-loses';
 const title = 'Why 9999 still loses';
-const exhibitName = 'A context inside a context';
 
 describe('why 9999 still loses, on its own page', () => {
   test('should say its place in the z-index book', async () => {
@@ -86,6 +85,6 @@ describe('why 9999 still loses, on the tab', () => {
     render(<TestApp at={demosAt('z-index')}/>);
     await demoTabs.arrivedOn('Z-index');
 
-    expect(screen.queryByRole('figure', {name: exhibitName})).not.toBeInTheDocument();
+    expect(contextInside.query()).not.toBeInTheDocument();
   });
 });

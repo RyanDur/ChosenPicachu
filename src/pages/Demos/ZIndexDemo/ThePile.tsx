@@ -5,6 +5,7 @@ import * as schema from 'schemawax';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {carve, exhibitSteps, Line, lines, Snippet} from '../Recipe';
 import {inOrder, RaisedCard, readerSettings} from '../ReaderSettings';
+import {Exhibit, ExhibitFoot} from '../Exhibit';
 import sheet from './ThePile.css?sample';
 import './ThePile.css';
 
@@ -46,34 +47,32 @@ export const ThePile: FC = () => {
     ? removeSearchParams(['pile', 'raised'])
     : updateSearchParams({pile: next});
   const raised = step === 'z-index' ? chosen : 'none';
-  const title = useId();
   const drawingName = useId();
 
-  return <figure className="the-pile card rounded-corners lifted padded" aria-labelledby={title}>
-    <p className="caption uppercase" aria-hidden="true">Exhibit</p>
-    <h2 className="sub-title" id={title}>The pile</h2>
-    <p className="caption uppercase" aria-hidden="true">Step</p>
-    <PillGlider label="Step" name="pile" choices={steps} chosen={step} onChosen={chooseStep}/>
-    <p className="paragraph">{stories[step]}</p>
-    <section className="pile-code">
-      <Snippet label="HTML" lines={markupShown(raised)}/>
-      <Snippet label="CSS" lines={rulesShown(raised)}/>
-    </section>
-    <section className="pile-code">
-      <p className="caption uppercase" id={drawingName}>What the browser draws · one stacking context</p>
-      <section className="pile-drawing" aria-labelledby={drawingName}>
-        {cards.map(card => <p key={card} className={classNames(
-          'card piled hairline-edged rounded-corners floating', raised === card && 'raised')}>
-          {names[card]}</p>)}
+  return <Exhibit name="The pile">
+    <figure className="the-pile field">
+      <p className="caption uppercase" aria-hidden="true">Step</p>
+      <PillGlider label="Step" name="pile" choices={steps} chosen={step} onChosen={chooseStep}/>
+      <p className="paragraph">{stories[step]}</p>
+      <section className="pile-code">
+        <Snippet label="HTML" lines={markupShown(raised)}/>
+        <Snippet label="CSS" lines={rulesShown(raised)}/>
       </section>
-      <output className="paragraph bold">{verdicts[raised]}</output>
-    </section>
-    {step === 'z-index' && <>
-      <p className="caption uppercase" aria-hidden="true">Give a z-index to</p>
-      <PillGlider label="Give a z-index to" name="pile-raised" choices={cardsToRaise} chosen={chosen}
-        onChosen={next => updateSearchParams({pile: 'z-index', raised: next})}/>
-    </>}
-    <figcaption className="caption"><strong className="bold">Three cards.</strong> Two steps: an overlap, then a
-      z-index.</figcaption>
-  </figure>;
+      <section className="pile-code">
+        <p className="caption uppercase" id={drawingName}>What the browser draws · one stacking context</p>
+        <section className="pile-drawing" aria-labelledby={drawingName}>
+          {cards.map(card => <p key={card} className={classNames(
+            'card piled hairline-edged rounded-corners floating', raised === card && 'raised')}>
+            {names[card]}</p>)}
+        </section>
+        <output className="paragraph bold">{verdicts[raised]}</output>
+      </section>
+      {step === 'z-index' && <>
+        <p className="caption uppercase" aria-hidden="true">Give a z-index to</p>
+        <PillGlider label="Give a z-index to" name="pile-raised" choices={cardsToRaise} chosen={chosen}
+          onChosen={next => updateSearchParams({pile: 'z-index', raised: next})}/>
+      </>}
+    </figure>
+    <ExhibitFoot lead="Three cards.">Two steps: an overlap, then a z-index.</ExhibitFoot>
+  </Exhibit>;
 };
