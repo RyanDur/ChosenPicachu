@@ -1,7 +1,7 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/history-writes';
 import {
-  bannerTrap, boxOf, dialRow, hydration, pillSwitch, pressTab, siteFrame, tabsTo, wholeOnTop, zIndexTab
+  bannerTrap, boxOf, dialRow, feedbackOn, hydration, pillSwitch, pressTab, siteFrame, tabsTo, wholeOnTop, zIndexTab
 } from './__test_support';
 
 const fixedBannerPage = 'demos/z-index/why-a-fixed-banner-still-loses/';
@@ -166,6 +166,25 @@ test('a site banner raised while the site menu is open shows whole over the menu
   await expect(banners.siteBanner).toBeVisible();
   await expect(siteFrame(page).nav).toBeVisible();
   await expect.poll(() => wholeOnTop(banners.siteBanner)).toBe(true);
+});
+
+test('a site banner waits out the open Feedback dialog, which stays open, and shows again once it closes', async ({page}) => {
+  await page.goto(fixedBannerPage);
+  await siteFrame(page).hydrated();
+  const banners = bannerTrap(page);
+  const feedback = feedbackOn(page);
+  await banners.raiseSite.click();
+  await expect(banners.siteBanner).toBeVisible();
+
+  await feedback.open.click();
+
+  await expect(feedback.dialog).toBeVisible();
+  await expect(banners.siteBanner).toBeHidden();
+
+  await page.keyboard.press('Escape');
+
+  await expect(feedback.dialog).toBeHidden();
+  await expect(banners.siteBanner).toBeVisible();
 });
 
 test('a reader who dismisses one of two site banners is left with the other', async ({page}) => {
