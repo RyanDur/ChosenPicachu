@@ -78,6 +78,10 @@ const pressedOn = async (header: Locator, where: FingerPress): Promise<Point> =>
 export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
   const columnHeader = (name: string): Locator => holder.getByRole('columnheader', {name});
   const grip = (row: number): Locator => holder.getByRole('button', {name: `move row ${row}`, exact: true});
+  const holdColumn = (column: string): Promise<Hold> =>
+    held(page, columnHeader(column), 'x', header => pressedOn(header, 'name'));
+  const holdRow = (row: number): Promise<Hold> =>
+    held(page, grip(row), 'y', async rowGrip => centerOf(await boxOf(rowGrip)));
   const resizeHandle = (name: string): Locator => holder.getByRole('button', {name: new RegExp(`^resize ${name}`)});
   const centerOfHandle = async (name: string): Promise<Point> => {
     await siteFrame(page).hydrated();
@@ -176,12 +180,10 @@ export const dragSortTable = (page: Page, holder: Locator | FrameLocator) => {
     rowOrder: (): Promise<string[]> =>
       holder.getByRole('rowheader').evaluateAll(cells =>
         cells.map(cell => cell.getAttribute('aria-label') ?? (cell.textContent ?? '').trim())),
-    holdColumn: (column: string): Promise<Hold> => held(page, columnHeader(column), 'x', header => pressedOn(header, 'name')),
-    holdRow: (row: number): Promise<Hold> => held(page, grip(row), 'y', async rowGrip => centerOf(await boxOf(rowGrip))),
-    pressColumn: async (column: string): Promise<void> =>
-      (await held(page, columnHeader(column), 'x', header => pressedOn(header, 'name'))).drop(),
-    pressRow: async (row: number): Promise<void> =>
-      (await held(page, grip(row), 'y', async rowGrip => centerOf(await boxOf(rowGrip)))).drop(),
+    holdColumn,
+    holdRow,
+    pressColumn: async (column: string): Promise<void> => (await holdColumn(column)).drop(),
+    pressRow: async (row: number): Promise<void> => (await holdRow(row)).drop(),
     selectedText: (): Promise<string> =>
       holder.getByRole('table').evaluate(table => table.ownerDocument.getSelection()?.toString() ?? ''),
     reading: async (): Promise<string[]> => (await holder.getByRole('table').ariaSnapshot()).split('\n')
