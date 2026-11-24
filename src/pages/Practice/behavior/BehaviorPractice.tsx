@@ -237,8 +237,8 @@ export const BehaviorPractice: FC = () =>
         allowed only (1) to hold a <code className="monospaced">dialog</code> the component shows as a modal
         with <code className="monospaced">showModal()</code>, (2) to read the element’s own details, such as its
         measured size, when nothing else gives them, such as an event, or (3) to show a popover the site raises with no
-        invoker, by <code className="monospaced">showPopover()</code>.”</a> Four files are on the list today.
-    <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at,
+        invoker, by <code className="monospaced">showPopover()</code>.”</a> Four files are on the list
+      today. <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at,
       and <code className="monospaced">DialGroup</code> reads whether each dial’s name and pills fit side by side,
       both for the second reason. <code className="monospaced">Banners</code>, for the third, shows the site’s banner
       in the top layer when a trouble arrives. <code className="monospaced">Modal</code> holds the feedback dialog,
