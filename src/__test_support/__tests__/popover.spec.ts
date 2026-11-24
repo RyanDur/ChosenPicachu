@@ -24,4 +24,18 @@ describe('a popover in the test page', () => {
 
     expect(popover.matches(':popover-open')).toBe(false);
   });
+
+  test('should refuse to show an element that is not a popover', () => {
+    const plain = document.createElement('section');
+    document.body.append(plain);
+
+    expect(() => plain.showPopover()).toThrow(expect.objectContaining({name: 'NotSupportedError'}));
+  });
+
+  test('should refuse to show a popover that is not in the page', () => {
+    const popover = document.createElement('section');
+    popover.setAttribute('popover', 'manual');
+
+    expect(() => popover.showPopover()).toThrow(expect.objectContaining({name: 'NotSupportedError'}));
+  });
 });
