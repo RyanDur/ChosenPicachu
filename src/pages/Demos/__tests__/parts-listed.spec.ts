@@ -22,4 +22,13 @@ describe('the count line over a tab’s parts', () => {
   test('should say one minute when the parts take a minute', () => {
     expect(partsListed.counted([{entries: [{...anEntry('part'), minutes: 1}]}])).toBe('One part, about 1 minute.');
   });
+
+  test('should count briefly in figures and minutes', () => {
+    expect(partsListed.countedBriefly([{entries: entries(2)}, {label: 'tutorials', entries: entries(3)}]))
+      .toBe('5 parts, 10 min.');
+  });
+
+  test('should count one part briefly as one part', () => {
+    expect(partsListed.countedBriefly([{entries: [{...anEntry('part'), minutes: 1}]}])).toBe('1 part, 1 min.');
+  });
 });

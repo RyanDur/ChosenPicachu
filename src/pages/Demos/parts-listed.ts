@@ -23,17 +23,24 @@ const partsOf = (count: number): string => `${countOf(count)} ${count === 1 ? 'p
 
 const minutesOf = (minutes: number): string => `${minutes} ${minutes === 1 ? 'minute' : 'minutes'}`;
 
+const minutesIn = (entries: readonly PartsEntry[]): number => entries.reduce((sum, entry) => sum + entry.minutes, 0);
+
 const counted = (groups: readonly PartsGroup[]): string => {
   const entries = entriesIn(groups);
-  const minutes = entries.reduce((sum, entry) => sum + entry.minutes, 0);
-  return `${partsOf(entries.length)}, about ${minutesOf(minutes)}.`;
+  return `${partsOf(entries.length)}, about ${minutesOf(minutesIn(entries))}.`;
+};
+
+const countedBriefly = (groups: readonly PartsGroup[]): string => {
+  const entries = entriesIn(groups);
+  return `${entries.length} ${entries.length === 1 ? 'part' : 'parts'}, ${minutesIn(entries)} min.`;
 };
 
 const startOf = (groups: readonly PartsGroup[], at: number): number => entriesIn(groups.slice(0, at)).length + 1;
 
 type PartsListed = {
   counted: (groups: readonly PartsGroup[]) => string;
+  countedBriefly: (groups: readonly PartsGroup[]) => string;
   startOf: (groups: readonly PartsGroup[], at: number) => number;
 };
 
-export const partsListed: PartsListed = {counted, startOf};
+export const partsListed: PartsListed = {counted, countedBriefly, startOf};
