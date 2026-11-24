@@ -85,6 +85,44 @@ index e54f043..991605e 100644
      open: { enumerable: true },
      [Symbol.toStringTag]: { value: "HTMLDialogElement", configurable: true }
    });
+diff --git a/node_modules/jsdom/lib/generated/idl/HTMLElement.js b/node_modules/jsdom/lib/generated/idl/HTMLElement.js
+index 10cf4fb..2a952f3 100644
+--- a/node_modules/jsdom/lib/generated/idl/HTMLElement.js
++++ b/node_modules/jsdom/lib/generated/idl/HTMLElement.js
+@@ -111,6 +111,24 @@ exports.install = (globalObject, globalNames) => {
+       return esValue[implSymbol].click();
+     }
+ 
++    showPopover() {
++      const esValue = this !== null && this !== undefined ? this : globalObject;
++      if (!exports.is(esValue)) {
++        throw new globalObject.TypeError("'showPopover' called on an object that is not a valid instance of HTMLElement.");
++      }
++
++      return esValue[implSymbol].showPopover();
++    }
++
++    hidePopover() {
++      const esValue = this !== null && this !== undefined ? this : globalObject;
++      if (!exports.is(esValue)) {
++        throw new globalObject.TypeError("'hidePopover' called on an object that is not a valid instance of HTMLElement.");
++      }
++
++      return esValue[implSymbol].hidePopover();
++    }
++
+     attachInternals() {
+       const esValue = this !== null && this !== undefined ? this : globalObject;
+       if (!exports.is(esValue)) {
+@@ -3370,6 +3388,8 @@ exports.install = (globalObject, globalNames) => {
+   Object.defineProperties(HTMLElement.prototype, {
+     click: { enumerable: true },
+     attachInternals: { enumerable: true },
++    showPopover: { enumerable: true },
++    hidePopover: { enumerable: true },
+     focus: { enumerable: true },
+     blur: { enumerable: true },
+     title: { enumerable: true },
 diff --git a/node_modules/jsdom/lib/jsdom/living/helpers/create-element.js b/node_modules/jsdom/lib/jsdom/living/helpers/create-element.js
 index eef3a9a..0840168 100644
 --- a/node_modules/jsdom/lib/jsdom/living/helpers/create-element.js
@@ -176,3 +214,35 @@ index d020e3c..a1b38fa 100644
  
  module.exports = {
    implementation: HTMLDialogElementImpl
+diff --git a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLElement-impl.js b/node_modules/jsdom/lib/jsdom/living/nodes/HTMLElement-impl.js
+index aa91a74..d142f26 100644
+--- a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLElement-impl.js
++++ b/node_modules/jsdom/lib/jsdom/living/nodes/HTMLElement-impl.js
+@@ -1,5 +1,6 @@
+ "use strict";
+ const { mixin } = require("../../utils");
++const idlUtils = require("../../../generated/idl/utils");
+ const ElementImpl = require("./Element-impl").implementation;
+ const DOMException = require("../../../generated/idl/DOMException");
+ const PointerEvent = require("../../../generated/idl/PointerEvent");
+@@ -66,6 +67,20 @@ class HTMLElementImpl extends ElementImpl {
+     }
+   }
+ 
++  // dom-selector cannot reach this impl, so the wrapper carries the state for :popover-open (jsdom#3721)
++  showPopover() {
++    this._setPopoverShowing(true);
++  }
++
++  hidePopover() {
++    this._setPopoverShowing(false);
++  }
++
++  _setPopoverShowing(showing) {
++    idlUtils.wrapperForImpl(this)[Symbol.for("jsdom.popoverShowing")] = showing;
++    this._ownerDocument._clearDOMSelector();
++  }
++
+   click() {
+     // https://html.spec.whatwg.org/multipage/interaction.html#dom-click
+     // https://html.spec.whatwg.org/multipage/webappapis.html#fire-a-synthetic-pointer-event
