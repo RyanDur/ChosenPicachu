@@ -3,6 +3,7 @@ import {TabLink} from '@pages/Demos/TabLink';
 import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {DemoLink} from '@pages/Demos/DemoLink';
 import {accordionParts} from '@pages/Demos/Accordions/part-pages';
+import {tableParts} from '@pages/Demos/Tables';
 import {FC, ReactNode} from 'react';
 import {Link} from 'react-router';
 import {DemoTopics} from '@pages/Demos';
@@ -41,6 +42,7 @@ import '../Recipe/Recipe.css';
 const remembersTheFold = 'a-box-remembers-the-fold';
 const remembersTheFoldTitle = accordionParts.told(remembersTheFold).name;
 const remembersTheFoldAt = accordionParts.addressOf(remembersTheFold);
+const liveTableAt = tableParts.addressOf('the-live-table-and-the-store');
 
 const PriceStory: FC = () =>
   <Story titleId="graph-price-story"
@@ -70,13 +72,15 @@ const PriceStory: FC = () =>
             as taught in the z-index part <PartLink part="why-the-popover-wins"/>.</Says>
           <Says>The page keeps only the newest 1,500 trades, because the feed never ends and the page must not grow with
             it, so the live part of the price line and the candles reaches back as far as those trades do.</Says>
+          <Says>The trades reach the store in one batch per frame. The table beside the charts holds the last hour,
+            and <DemoLink to={liveTableAt}>the live table’s story</DemoLink> on the Tables tab teaches both.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
             ...carve.unit(coinbaseSource, 'const subscribeTo'), lines.blank,
             ...carve.unit(coinbaseSource, 'const decodeTrade'), lines.blank,
             ...carve.unit(liveTradesSource, 'export const liveTrades'), lines.blank,
-            ...carve.unit(marketSliceSource, 'const tradesReducer')
+            ...carve.between(marketSliceSource, "case 'tradesArrived'", '[...trades.streamed, ...action.trades]);')
           ]}/>
         </Codes>
       </Step>
