@@ -10,6 +10,7 @@ test('with Second absolute, the foot of the exhibit asks whether a parent box ha
 
   await positionExhibit(page).chooses('absolute');
 
+  await expect(tray.question).toBeVisible();
   await expect(tray.opener).toBeVisible();
 });
 
