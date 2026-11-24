@@ -10,6 +10,7 @@ import {PartTermLink} from './PartTermLink';
 import {ClearfixTray} from './ClearfixTray';
 import {ParentPosition, Position} from '../ReaderSettings';
 import {MeasuredFrom, secondPosition} from './second-position';
+import {Exhibit, ExhibitFoot} from '../Exhibit';
 import './WhereSecondGoes.css';
 
 type Words = {
@@ -139,53 +140,56 @@ export const WhereSecondGoes: FC = () => {
   const measuredFrom = secondPosition.measuredFrom(chosenPosition, chosenParentPosition);
   const words = wordsFor[measuredFrom];
 
-  return <figure className="where-second-goes">
-    <p className="caption uppercase" aria-hidden="true">Second’s position is</p>
-    <PillGlider label="Second’s position is" name="second-position" choices={positionChoices} chosen={chosenPosition}
-      onChosen={next => change({chosenPosition: next})}/>
-    {chosenPosition === 'absolute' && <>
-      <p className="caption uppercase" aria-hidden="true">And its parent is</p>
-      <PillGlider label="And its parent is" name="parent-position" choices={parentPositionChoices}
-        chosen={chosenParentPosition} onChosen={next => change({chosenParentPosition: next})}/>
-    </>}
-    <p className="paragraph">{words.story}</p>
-    <dl className="where-we-meet-it">
-      <dt className="caption uppercase">Where we meet it</dt>
-      <dd className="paragraph">{words.whereWeMeetIt}</dd>
-    </dl>
-    <Snippet label="HTML" lines={markupShown(chosenPosition, measuredFrom)}/>
-    <Snippet label="CSS" lines={rulesShown(chosenPosition, measuredFrom)}/>
-    <section className="little-window card hairline-outline rounded-corners">
-      <p className="little-bar caption uppercase trim">The window</p>
-      <section className="little-view transformed">
-        {measuredFrom === 'view' && <MeasuringDot/>}
-        {measuredFrom === 'scroll-edge' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
-        <section className="little-page focus-ringed" aria-label="The little page" tabIndex={0}>
-          {measuredFrom === 'little-page' && <MeasuringDot/>}
-          <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
-          <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
-            measuredFrom === 'parent' && 'positioned alarm-ringed')}>
-            {measuredFrom === 'parent' && <MeasuringDot/>}
-            <p className="little-box plan-blue hairline-outline rounded-corners">First</p>
-            <p className={classNames('second little-box plan-mint hairline-outline rounded-corners', chosenPosition)}>
-              Second
-              {measuredFrom === 'own-place' &&
-                <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
-            </p>
-            <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
-            {sixBoxes.map(box => <FillerBox key={box}>more inside the parent</FillerBox>)}
+  return <Exhibit name="Where Second goes">
+    <figure className="where-second-goes field">
+      <p className="caption uppercase" aria-hidden="true">Second’s position is</p>
+      <PillGlider label="Second’s position is" name="second-position" choices={positionChoices}
+        chosen={chosenPosition} onChosen={next => change({chosenPosition: next})}/>
+      {chosenPosition === 'absolute' && <>
+        <p className="caption uppercase" aria-hidden="true">And its parent is</p>
+        <PillGlider label="And its parent is" name="parent-position" choices={parentPositionChoices}
+          chosen={chosenParentPosition} onChosen={next => change({chosenParentPosition: next})}/>
+      </>}
+      <p className="paragraph">{words.story}</p>
+      <dl className="where-we-meet-it">
+        <dt className="caption uppercase">Where we meet it</dt>
+        <dd className="paragraph">{words.whereWeMeetIt}</dd>
+      </dl>
+      <Snippet label="HTML" lines={markupShown(chosenPosition, measuredFrom)}/>
+      <Snippet label="CSS" lines={rulesShown(chosenPosition, measuredFrom)}/>
+      <section className="little-window card hairline-outline rounded-corners">
+        <p className="little-bar caption uppercase trim">The window</p>
+        <section className="little-view transformed">
+          {measuredFrom === 'view' && <MeasuringDot/>}
+          {measuredFrom === 'scroll-edge' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
+          <section className="little-page focus-ringed" aria-label="The little page" tabIndex={0}>
+            {measuredFrom === 'little-page' && <MeasuringDot/>}
+            <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
+            <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
+              measuredFrom === 'parent' && 'positioned alarm-ringed')}>
+              {measuredFrom === 'parent' && <MeasuringDot/>}
+              <p className="little-box plan-blue hairline-outline rounded-corners">First</p>
+              <p className={classNames('second little-box plan-mint hairline-outline rounded-corners',
+                chosenPosition)}>
+                Second
+                {measuredFrom === 'own-place' &&
+                  <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
+              </p>
+              <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
+              {sixBoxes.map(box => <FillerBox key={box}>more inside the parent</FillerBox>)}
+            </section>
+            {fourBoxes.map(box => <FillerBox key={box}>more of the page</FillerBox>)}
           </section>
-          {fourBoxes.map(box => <FillerBox key={box}>more of the page</FillerBox>)}
+          {measuredFrom === 'little-page' && <span className="page-ring alarm-ringed" aria-hidden="true"/>}
         </section>
-        {measuredFrom === 'little-page' && <span className="page-ring alarm-ringed" aria-hidden="true"/>}
       </section>
-    </section>
-    <output aria-label="where Second went" className="paragraph">{words.verdict}</output>
-    <output aria-label="what Second is measured from" className="paragraph">
-      {`Measured from: ${words.measuredFromWords}`}</output>
-    <p className="paragraph">{words.stackingContext} Scroll the little page to see fixed and sticky at work.</p>
-    {chosenPosition === 'absolute' && <ClearfixTray/>}
-    <figcaption className="caption"><strong className="bold">Where Second goes.</strong> Give Second each position in
-      turn and see where it goes, and what First and Third do.</figcaption>
-  </figure>;
+      <output aria-label="where Second went" className="paragraph">{words.verdict}</output>
+      <output aria-label="what Second is measured from" className="paragraph">
+        {`Measured from: ${words.measuredFromWords}`}</output>
+      <p className="paragraph">{words.stackingContext} Scroll the little page to see fixed and sticky at work.</p>
+      {chosenPosition === 'absolute' && <ClearfixTray/>}
+    </figure>
+    <ExhibitFoot lead="Where Second goes.">Give Second each position in turn and see where it goes, and what First and
+      Third do.</ExhibitFoot>
+  </Exhibit>;
 };

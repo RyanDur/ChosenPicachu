@@ -5,7 +5,7 @@ import {siteFrame} from './site';
 type ClearfixStep = '1 · In the flow' | '2 · Float' | '3 · The clearfix' | '4 · What we have now';
 
 export const clearfixTray = (page: Page) => {
-  const exhibit = page.getByRole('figure', {name: /^Where Second goes\./});
+  const exhibit = page.getByRole('region', {name: 'Where Second goes'});
   const steps = pillSwitch(page, 'The parent that lost its height');
   const opener = exhibit.getByText('Show me the clearfix', {exact: true});
   const closer = exhibit.getByText('Close', {exact: true});
