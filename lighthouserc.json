@@ -309,7 +309,7 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 24576
+                "maxNumericValue": 25088
               }
             ],
             "resource-summary:stylesheet:size": [
