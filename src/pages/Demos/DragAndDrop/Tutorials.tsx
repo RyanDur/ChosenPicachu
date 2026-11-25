@@ -39,9 +39,10 @@ export const ListTutorials: FC = () => {
           verdict="Items whose position is the meaning are a list, and an ordered list is the element built for it: entries a reader and a screen reader both walk, in exactly the order the markup says."/>
       </Station>
       <Station at={2}>
-        <Design sketch={<Sketch/>}
-          answers="The design answers shape: how a card reads, where the hand grabs, how dense the stack. The exhibit lays the list across the page, so the grip’s arrows are left and right."
-          unanswered={unanswered}/>
+        <Design answers="The design answers shape: how a card reads, where the hand grabs, how dense the stack. The exhibit lays the list across the page, so the grip’s arrows are left and right."
+          unanswered={unanswered}>
+          <Sketch/>
+        </Design>
       </Station>
       <Station at={3}>
         <Slices can="The user can keep the list in the order they mean"

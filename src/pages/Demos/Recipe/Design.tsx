@@ -1,14 +1,13 @@
-import {FC, ReactNode, useId} from 'react';
+import {FC, PropsWithChildren, useId} from 'react';
 import {designHeading} from '@pages/Demos/headings';
 
-type DesignProps = {
-  sketch: ReactNode;
+type DesignProps = PropsWithChildren<{
   answers: string;
   unanswered: string[];
   headedByThePart?: boolean;
-};
+}>;
 
-export const Design: FC<DesignProps> = ({sketch, answers, unanswered, headedByThePart = false}) => {
+export const Design: FC<DesignProps> = ({answers, unanswered, headedByThePart = false, children}) => {
   const Subtitle: 'h3' | 'h4' = headedByThePart ? 'h3' : 'h4';
   const unansweredTitle = `unanswered${useId()}`;
   return <section className="phase card rounded-corners lifted"
@@ -20,7 +19,7 @@ export const Design: FC<DesignProps> = ({sketch, answers, unanswered, headedByTh
       questions, not guesses.
     </p>
     <figure className="design-still field rounded-corners muted-dashed-outline">
-      {sketch}
+      {children}
       <figcaption className="paragraph">{answers}</figcaption>
     </figure>
     <section aria-labelledby={unansweredTitle} className="unanswered field rounded-corners">
