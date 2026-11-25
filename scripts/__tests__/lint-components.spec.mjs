@@ -83,7 +83,9 @@ tester.run('no-forwarded-props', components.rules['no-forwarded-props'], {
     {name: 'should accept the rest of a control\'s attributes spread onto the control inside', code: 'const ItemLink = ({className, ...link}) => <Link {...link} className={className}/>;'},
     {name: 'should accept the rest spread onto the control a block body returns', code: 'function ItemLink({className, ...link}) { return <Link {...link} className={className}/>; }'},
     {name: 'should accept the rest spread onto the control either branch returns', code: 'const DateInput = ({readOnly, ...rest}) => readOnly ? <Input type="text" readOnly {...rest}/> : <Input type="date" {...rest}/>;'},
-    {name: 'should accept an element spreading its own attributes', code: 'const Pill = props => <input {...props}/>;'}
+    {name: 'should accept an element spreading its own attributes', code: 'const Pill = props => <input {...props}/>;'},
+    {name: 'should accept all the props spread onto the control it returns, as the rest is', code: 'const DateInput = props => <Input type="date" {...props}/>;'},
+    {name: 'should accept a drawing attribute handed to the line inside', code: 'const Arrow = ({markerEnd}) => <Line markerEnd={markerEnd}/>;'}
   ],
   invalid: [
     {
@@ -107,8 +109,8 @@ tester.run('no-forwarded-props', components.rules['no-forwarded-props'], {
       errors: [{messageId: 'forwarded', data: {name: 'can'}}]
     },
     {
-      name: 'should refuse a component that spreads all its props onto another',
-      code: 'const Story = told => <StoryShell {...told}/>;',
+      name: 'should refuse a component that spreads all its props onto a component inside',
+      code: 'const Story = told => <article><StoryShell {...told}/></article>;',
       errors: [{messageId: 'spread', data: {name: 'told'}}]
     },
     {
@@ -120,6 +122,11 @@ tester.run('no-forwarded-props', components.rules['no-forwarded-props'], {
       name: 'should refuse the rest of the props spread onto a component inside',
       code: 'const DialRow = ({label, ...pills}) => <li>{label}<PillGlider {...pills}/></li>;',
       errors: [{messageId: 'rest', data: {name: 'pills'}}]
+    },
+    {
+      name: 'should refuse a prop received only to be given on when the props have a default',
+      code: 'const Shell = ({can} = {}) => <Story can={can}/>;',
+      errors: [{messageId: 'forwarded', data: {name: 'can'}}]
     },
     {
       name: 'should refuse a member of the props received only to be given on',
