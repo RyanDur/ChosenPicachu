@@ -135,10 +135,15 @@ export const TopLayerRecipe: FC = () => {
           <Snippet label="HTML"
             lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners unfilled'")}/>
           <Snippet label="CSS" lines={[
-            lines.plain('/* the browser’s own rule */'),
+            lines.plain('/* part of the browser’s own rule for a popover */'),
             lines.plain('[popover] {'),
             lines.plain('  position: fixed;'),
             lines.plain('  inset: 0;'),
+            lines.plain('  width: fit-content;'),
+            lines.plain('  height: fit-content;'),
+            lines.plain('  margin: auto;'),
+            lines.plain('  overflow: auto;'),
+            lines.plain('  background-color: Canvas;'),
             lines.plain('}'), lines.blank,
             ...carve.between(bannersCss, '.banners {', 'max-inline-size: min(60ch'), lines.blank,
             ...carve.unit(bannersCss, `.${side} {`), lines.blank,
