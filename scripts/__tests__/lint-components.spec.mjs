@@ -85,7 +85,8 @@ tester.run('no-forwarded-props', components.rules['no-forwarded-props'], {
     {name: 'should accept the rest spread onto the control either branch returns', code: 'const DateInput = ({readOnly, ...rest}) => readOnly ? <Input type="text" readOnly {...rest}/> : <Input type="date" {...rest}/>;'},
     {name: 'should accept an element spreading its own attributes', code: 'const Pill = props => <input {...props}/>;'},
     {name: 'should accept all the props spread onto the control it returns, as the rest is', code: 'const DateInput = props => <Input type="date" {...props}/>;'},
-    {name: 'should accept a drawing attribute handed to the line inside', code: 'const Arrow = ({markerEnd}) => <Line markerEnd={markerEnd}/>;'}
+    {name: 'should accept a drawing attribute handed to the line inside', code: 'const Arrow = ({markerEnd}) => <Line markerEnd={markerEnd}/>;'},
+    {name: 'should accept a gradient stop\'s offset handed to the stop inside', code: 'const Band = ({offset}) => <svg><Stop offset={offset}/></svg>;'}
   ],
   invalid: [
     {
@@ -122,6 +123,11 @@ tester.run('no-forwarded-props', components.rules['no-forwarded-props'], {
       name: 'should refuse the rest of the props spread onto a component inside',
       code: 'const DialRow = ({label, ...pills}) => <li>{label}<PillGlider {...pills}/></li>;',
       errors: [{messageId: 'rest', data: {name: 'pills'}}]
+    },
+    {
+      name: 'should refuse all the props spread onto a component inside beside a member the component reads',
+      code: 'const Story = told => <article id={told.titleId}><StoryShell {...told}/></article>;',
+      errors: [{messageId: 'spread', data: {name: 'told'}}]
     },
     {
       name: 'should refuse a prop received only to be given on when the props have a default',
