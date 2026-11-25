@@ -42,6 +42,15 @@ describe('the exchange as middleware', () => {
       client.addEventListener('close', () => hungUp.push(client));
     }));
 
+  const coinbaseOnSubscribe = (answer: (client: Client) => void) =>
+    server.use(coinbase.addEventListener('connection', ({client}) => {
+      client.addEventListener('message', event => {
+        if (typeof event.data === 'string' && event.data.includes('subscribe')) {
+          answer(client);
+        }
+      });
+    }));
+
   it('opens the feed and dispatches what arrives when the feed is requested', async () => {
     coinbaseAnswering([]);
     const store = marketStore(exchange({
@@ -58,14 +67,10 @@ describe('the exchange as middleware', () => {
   });
 
   it('should hold the trades the socket delivers until the next paint, then hand them over together', async () => {
-    server.use(coinbase.addEventListener('connection', ({client}) => {
-      client.addEventListener('message', event => {
-        if (typeof event.data === 'string' && event.data.includes('subscribe')) {
-          client.send(tradeFrame(100));
-          client.send(tradeFrame(101));
-        }
-      });
-    }));
+    coinbaseOnSubscribe(client => {
+      client.send(tradeFrame(100));
+      client.send(tradeFrame(101));
+    });
     const paints: FrameRequestCallback[] = [];
     const store = marketStore(exchange({tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, {
       requestAnimationFrame: paint => paints.push(paint),
@@ -82,14 +87,10 @@ describe('the exchange as middleware', () => {
   });
 
   it('should hand over every batch when the page paints at once', async () => {
-    server.use(coinbase.addEventListener('connection', ({client}) => {
-      client.addEventListener('message', event => {
-        if (typeof event.data === 'string' && event.data.includes('subscribe')) {
-          client.send(tradeFrame(100));
-          client.send(tradeFrame(101));
-        }
-      });
-    }));
+    coinbaseOnSubscribe(client => {
+      client.send(tradeFrame(100));
+      client.send(tradeFrame(101));
+    });
     const store = marketStore(exchange(
       {tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, paintsAtOnce, () => undefined));
 
@@ -101,13 +102,7 @@ describe('the exchange as middleware', () => {
 
   it('should hand over a full batch at once while the page paints nothing, as in a hidden tab', async () => {
     const prices = Array.from({length: 1501}, (_, index) => index + 1);
-    server.use(coinbase.addEventListener('connection', ({client}) => {
-      client.addEventListener('message', event => {
-        if (typeof event.data === 'string' && event.data.includes('subscribe')) {
-          prices.forEach(price => client.send(tradeFrame(price)));
-        }
-      });
-    }));
+    coinbaseOnSubscribe(client => prices.forEach(price => client.send(tradeFrame(price))));
     const store = marketStore(exchange({tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, {
       requestAnimationFrame: () => 1,
       cancelAnimationFrame: () => undefined
@@ -117,6 +112,23 @@ describe('the exchange as middleware', () => {
 
     await vi.waitFor(() =>
       expect(marketReads.liveTrades(store.state).map(trade => trade.price)).toEqual(prices.slice(0, 1500)));
+  });
+
+  it('should hand over the trades it holds before the feed reads failed when the exchange hangs up', async () => {
+    coinbaseOnSubscribe(client => {
+      client.send(tradeFrame(100));
+      // msw drops a message sent in the same turn as close, where a real socket delivers it first
+      setTimeout(() => client.close());
+    });
+    const store = marketStore(exchange({tradeFeed: 'ws://exchange.test', tradeHistory: '', tradeProduct: 'BTC-USD'}, {
+      requestAnimationFrame: () => 1,
+      cancelAnimationFrame: () => undefined
+    }, () => undefined));
+
+    store.dispatch(marketActions.feedRequested());
+
+    await vi.waitFor(() => expect(marketReads.feedStatus(store.state)).toBe('failed'));
+    expect(marketReads.liveTrades(store.state).map(trade => trade.price)).toEqual([100]);
   });
 
   it('hangs up when the feed is released', async () => {
