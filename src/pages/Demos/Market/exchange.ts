@@ -37,6 +37,7 @@ type Trouble = (trouble: FeedTrouble) => void;
 
 type FrameBatch = {
   readonly hold: (trade: Trade) => void;
+  readonly handOver: () => void;
   readonly drop: () => void;
 };
 
@@ -58,16 +59,22 @@ const batchedPerFrame = (paints: Paints, dispatch: Dispatch): FrameBatch => {
     pendingFrame.map(frame => paints.cancelAnimationFrame(frame));
     pendingFrame = nothing();
   };
+  const handOver = (): void => {
+    pendingFrame.map(frame => {
+      paints.cancelAnimationFrame(frame);
+      deliver();
+    });
+  };
   return {
     hold: trade => {
       held.push(trade);
       if (held.length < liveTrades.cap) {
         pendingFrame = pendingFrame.or(askForAPaint);
       } else {
-        cancelThePaint();
-        deliver();
+        handOver();
       }
     },
+    handOver,
     drop: () => {
       cancelThePaint();
       held = [];
@@ -116,6 +123,7 @@ const streamOf = ({address, product}: Subscription, paints: Paints, dispatch: Di
     })
     .onMessage(event => coinbase.decodeTrade(event.data).map(arriving.hold))
     .onClose(() => {
+      arriving.handOver();
       dispatch(marketActions.feedFailed());
       onTrouble({type: 'hungUp'});
     })
