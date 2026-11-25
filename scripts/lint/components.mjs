@@ -198,9 +198,11 @@ const noForwardedProps = {
     /**
      * @param {any} props the whole props, taken as one name
      * @param {any[]} reads
+     * @param {any} declared the component
      */
-    const readWhole = (props, reads) => {
-      if (reads.every(spreadOntoAComponent)) refuse(props, 'spread', props.name);
+    const readWhole = (props, reads, declared) => {
+      const spreadInside = read => spreadOntoAComponent(read) && not(returnedBy(elementSpreadOnto(read), declared));
+      if (reads.every(spreadOntoAComponent) && reads.some(spreadInside)) refuse(props, 'spread', props.name);
       const members = reads.map(read => read.parent)
         .filter(member => member.type === 'MemberExpression' && not(member.computed) && member.property.type === 'Identifier');
       new Set(members.map(member => member.property.name)).forEach(name => {
@@ -212,13 +214,14 @@ const noForwardedProps = {
      * @param {any} declared
      */
     const read = declared => {
-      const [props] = declared.params;
+      const [first] = declared.params;
+      const props = has(first) && first.type === 'AssignmentPattern' ? first.left : first;
       if (empty(props) || not(/^[A-Z]/.test(declaredAs(declared)))) return;
       source.getDeclaredVariables(declared).forEach(variable => {
         const [definition] = variable.identifiers;
         const reads = readsOf(variable);
         if (empty(reads)) return;
-        if (definition === props) return readWhole(props, reads);
+        if (definition === props) return readWhole(props, reads, declared);
         if (props.type !== 'ObjectPattern') return;
         const {parent} = definition;
         const property = parent.type === 'AssignmentPattern' ? parent.parent : parent;

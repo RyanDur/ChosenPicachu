@@ -6,22 +6,23 @@ const everyElement = [
 
 const controlsAndForms = [
   'accept', 'action', 'autoComplete', 'checked', 'cols', 'command', 'commandFor', 'defaultChecked', 'defaultValue',
-  'disabled', 'encType', 'form', 'formAction', 'high', 'htmlFor', 'label', 'list', 'low', 'max', 'maxLength', 'method',
-  'min', 'minLength', 'multiple', 'name', 'noValidate', 'open', 'optimum', 'pattern', 'placeholder',
+  'disabled', 'encType', 'form', 'formAction', 'formMethod', 'formNoValidate', 'high', 'htmlFor', 'label', 'list', 'low', 'max', 'maxLength', 'method',
+  'min', 'minLength', 'multiple', 'name', 'noValidate', 'open', 'optimum', 'pattern', 'placeholder', 'reversed',
   'popoverTarget', 'popoverTargetAction', 'readOnly', 'required', 'rows', 'selected', 'size', 'step', 'type', 'value',
   'wrap'
 ];
 
 const linksAndMedia = [
-  'alt', 'cite', 'colSpan', 'controls', 'coords', 'crossOrigin', 'dateTime', 'decoding', 'download', 'end',
+  'allow', 'alt', 'autoPlay', 'cite', 'colSpan', 'content', 'controls', 'coords', 'crossOrigin', 'dateTime', 'decoding', 'download', 'end',
   'fetchPriority', 'headers', 'height', 'href', 'hrefLang', 'kind', 'loading', 'loop', 'media', 'muted', 'ping',
-  'playsInline', 'poster', 'preload', 'referrerPolicy', 'rel', 'rowSpan', 'sandbox', 'scope', 'sizes', 'span', 'src',
+  'playsInline', 'poster', 'preload', 'referrerPolicy', 'rel', 'rowSpan', 'sandbox', 'scope', 'shape', 'sizes', 'span', 'src',
   'srcSet', 'start', 'target', 'to', 'width'
 ];
 
 const drawings = [
-  'cx', 'cy', 'd', 'dx', 'dy', 'fill', 'fontSize', 'opacity', 'pathLength', 'points', 'preserveAspectRatio', 'r',
-  'rx', 'ry', 'stroke', 'strokeDasharray', 'strokeLinecap', 'strokeWidth', 'textAnchor', 'transform', 'viewBox',
+  'clipPath', 'cx', 'cy', 'd', 'dominantBaseline', 'dx', 'dy', 'fill', 'fillOpacity', 'fontSize', 'markerEnd',
+  'markerMid', 'markerStart', 'opacity', 'pathLength', 'points', 'preserveAspectRatio', 'r',
+  'rx', 'ry', 'stroke', 'strokeDasharray', 'strokeLinecap', 'strokeOpacity', 'strokeWidth', 'textAnchor', 'textLength', 'transform', 'vectorEffect', 'viewBox',
   'x', 'x1', 'x2', 'y', 'y1', 'y2'
 ];
 
