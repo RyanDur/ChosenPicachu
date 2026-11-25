@@ -215,7 +215,7 @@ index d020e3c..a1b38fa 100644
  module.exports = {
    implementation: HTMLDialogElementImpl
 diff --git a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLElement-impl.js b/node_modules/jsdom/lib/jsdom/living/nodes/HTMLElement-impl.js
-index aa91a74..879fce5 100644
+index aa91a74..7c70d40 100644
 --- a/node_modules/jsdom/lib/jsdom/living/nodes/HTMLElement-impl.js
 +++ b/node_modules/jsdom/lib/jsdom/living/nodes/HTMLElement-impl.js
 @@ -1,5 +1,6 @@
@@ -225,16 +225,22 @@ index aa91a74..879fce5 100644
  const ElementImpl = require("./Element-impl").implementation;
  const DOMException = require("../../../generated/idl/DOMException");
  const PointerEvent = require("../../../generated/idl/PointerEvent");
-@@ -66,6 +67,32 @@ class HTMLElementImpl extends ElementImpl {
+@@ -66,6 +67,38 @@ class HTMLElementImpl extends ElementImpl {
      }
    }
  
 +  // dom-selector cannot reach this impl, so the wrapper carries the state for :popover-open (jsdom#3721)
 +  showPopover() {
-+    if (!this.hasAttributeNS(null, "popover") || !this.isConnected) {
++    if (!this.hasAttributeNS(null, "popover")) {
 +      throw DOMException.create(this._globalObject, [
-+        "Failed to execute 'showPopover': the element is not a popover in the document.",
++        "Failed to execute 'showPopover': the element is not a popover.",
 +        "NotSupportedError"
++      ]);
++    }
++    if (!this.isConnected) {
++      throw DOMException.create(this._globalObject, [
++        "Failed to execute 'showPopover': the popover is not in the document.",
++        "InvalidStateError"
 +      ]);
 +    }
 +    this._setPopoverShowing(true);
