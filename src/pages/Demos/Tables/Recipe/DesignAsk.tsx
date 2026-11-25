@@ -33,6 +33,7 @@ const Sketch: FC = () =>
 
 export const DesignAsk: FC = () =>
   <Design headedByThePart
-    sketch={<Exhibit kind="Sketch" name="The sketch: periods down the side, measures across the top"><Sketch/></Exhibit>}
     answers="The design answers shape: which measures, which lookbacks, how much precision, how dense."
-    unanswered={unanswered}/>;
+    unanswered={unanswered}>
+    <Exhibit kind="Sketch" name="The sketch: periods down the side, measures across the top"><Sketch/></Exhibit>
+  </Design>;
