@@ -133,16 +133,16 @@ const elementSpreadOnto = read => wrapped(read).parent.parent.parent;
 const branchTypes = new Set(['ConditionalExpression', 'LogicalExpression', ...wrapperTypes]);
 
 /**
- * @param {any} element a JSX element
- * @param {any} declared a function
- * @returns {boolean} whether the function returns that element as its root, in any branch
- */
-/**
  * @param {any} node
  * @returns {any} the nearest function around the node
  */
 const functionAround = node => functionTypes.has(node.parent.type) ? node.parent : functionAround(node.parent);
 
+/**
+ * @param {any} element a JSX element
+ * @param {any} declared a function
+ * @returns {boolean} whether the function returns that element as its root, in any branch
+ */
 const returnedBy = (element, declared) => {
   const {parent} = element;
   if (parent === declared && declared.body === element) return true;
