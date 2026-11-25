@@ -31,9 +31,10 @@ const drawings = [
 
 const names = new Set([...everyElement, ...controlsAndForms, ...linksAndMedia, ...drawings, 'children']);
 
-/**
- * The attributes an HTML or SVG element takes, by the names React gives them, with a link component's `to` and `end`.
- * @param {string} attribute
- * @returns {boolean}
- */
-export const anElementTakes = attribute => names.has(attribute) || /^(aria-|data-|on[A-Z])/.test(attribute);
+export const elementAttributes = {
+  /**
+   * @param {string} attribute
+   * @returns {boolean}
+   */
+  takes: attribute => names.has(attribute) || /^(aria-|data-|on[A-Z])/.test(attribute)
+};
