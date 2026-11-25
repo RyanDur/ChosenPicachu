@@ -38,4 +38,11 @@ describe('a popover in the test page', () => {
 
     expect(() => popover.showPopover()).toThrow(expect.objectContaining({name: 'NotSupportedError'}));
   });
+
+  test('should refuse to hide an element that is not a popover', () => {
+    const plain = document.createElement('section');
+    document.body.append(plain);
+
+    expect(() => plain.hidePopover()).toThrow(expect.objectContaining({name: 'NotSupportedError'}));
+  });
 });
