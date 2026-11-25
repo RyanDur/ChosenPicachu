@@ -36,7 +36,7 @@ describe('a popover in the test page', () => {
     const popover = document.createElement('section');
     popover.setAttribute('popover', 'manual');
 
-    expect(() => popover.showPopover()).toThrow(expect.objectContaining({name: 'NotSupportedError'}));
+    expect(() => popover.showPopover()).toThrow(expect.objectContaining({name: 'InvalidStateError'}));
   });
 
   test('should refuse to hide an element that is not a popover', () => {
