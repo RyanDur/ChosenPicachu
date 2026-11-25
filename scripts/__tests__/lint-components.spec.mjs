@@ -66,6 +66,8 @@ tester.run('rendered-as-jsx', components.rules['rendered-as-jsx'], {
 tester.run('no-forwarded-props', components.rules['no-forwarded-props'], {
   valid: [
     {name: 'should accept a prop the component reads itself', code: 'const Count = ({parts}) => <p>{parts.length}</p>;'},
+    {name: 'should accept a callback handed to map, though its result is named in PascalCase', code: 'const Items = list.map(({item}) => <Item item={item}/>);'},
+    {name: 'should accept a callback handed to useCallback', code: 'const Render = useCallback(({row}) => <Row row={row}/>, []);'},
     {name: 'should accept a prop read here and also given to a component', code: 'const Part = ({part}) => <section><h2>{part.name}</h2><PartFoot part={part}/></section>;'},
     {name: 'should accept a class name handed to the component inside', code: 'const Plate = ({className}) => <Card className={className}/>;'},
     {name: 'should accept an id handed on under another prop name', code: 'const StoryCard = ({titleId}) => <Can id={titleId}/>;'},

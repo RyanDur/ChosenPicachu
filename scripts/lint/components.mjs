@@ -105,12 +105,21 @@ const providesAContext = name =>
 const wrapped = node => wrapperTypes.has(node.parent.type) ? wrapped(node.parent) : node;
 
 /**
+ * @param {any} callee what a call calls
+ * @returns {boolean} whether it is memo or forwardRef, bare or on React
+ */
+const wrapsAComponent = callee =>
+  ['memo', 'forwardRef'].includes(callee.type === 'MemberExpression' ? callee.property.name : callee.name);
+
+/**
  * @param {any} declared a function
  * @returns {string} the name it is declared under, through memo and forwardRef
  */
 const declaredAs = declared => {
   const {parent} = declared;
-  if (parent.type === 'CallExpression' && parent.callee !== declared) return declaredAs(parent);
+  if (parent.type === 'CallExpression' && parent.callee !== declared && wrapsAComponent(parent.callee)) {
+    return declaredAs(parent);
+  }
   const holder = parent.type === 'VariableDeclarator' ? parent.id : parent.type === 'Property' ? parent.key : declared.id;
   return has(holder) && holder.type === 'Identifier' ? holder.name : '';
 };
