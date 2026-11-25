@@ -1,29 +1,32 @@
 const everyElement = [
   'accessKey', 'autoCapitalize', 'autoFocus', 'className', 'contentEditable', 'dir', 'draggable', 'enterKeyHint',
-  'hidden', 'id', 'inert', 'inputMode', 'is', 'itemProp', 'key', 'lang', 'nonce', 'part', 'popover', 'ref', 'role',
-  'slot', 'spellCheck', 'style', 'tabIndex', 'title', 'translate'
+  'hidden', 'id', 'inert', 'inputMode', 'is', 'itemProp', 'itemScope', 'itemType', 'key', 'lang', 'nonce', 'part',
+  'popover', 'ref', 'role', 'slot', 'spellCheck', 'style', 'tabIndex', 'title', 'translate'
 ];
 
 const controlsAndForms = [
   'accept', 'action', 'autoComplete', 'checked', 'cols', 'command', 'commandFor', 'defaultChecked', 'defaultValue',
-  'disabled', 'encType', 'form', 'formAction', 'formMethod', 'formNoValidate', 'high', 'htmlFor', 'label', 'list', 'low', 'max', 'maxLength', 'method',
-  'min', 'minLength', 'multiple', 'name', 'noValidate', 'open', 'optimum', 'pattern', 'placeholder', 'reversed',
-  'popoverTarget', 'popoverTargetAction', 'readOnly', 'required', 'rows', 'selected', 'size', 'step', 'type', 'value',
-  'wrap'
+  'dirName', 'disabled', 'encType', 'form', 'formAction', 'formEncType', 'formMethod', 'formNoValidate', 'formTarget',
+  'high', 'htmlFor', 'label', 'list', 'low', 'max', 'maxLength', 'method', 'min', 'minLength', 'multiple', 'name',
+  'noValidate', 'open', 'optimum', 'pattern', 'placeholder', 'popoverTarget', 'popoverTargetAction', 'readOnly',
+  'required', 'reversed', 'rows', 'selected', 'size', 'step', 'type', 'value', 'wrap'
 ];
 
 const linksAndMedia = [
-  'allow', 'alt', 'autoPlay', 'cite', 'colSpan', 'content', 'controls', 'coords', 'crossOrigin', 'dateTime', 'decoding', 'download', 'end',
-  'fetchPriority', 'headers', 'height', 'href', 'hrefLang', 'kind', 'loading', 'loop', 'media', 'muted', 'ping',
-  'playsInline', 'poster', 'preload', 'referrerPolicy', 'rel', 'rowSpan', 'sandbox', 'scope', 'shape', 'sizes', 'span', 'src',
-  'srcSet', 'start', 'target', 'to', 'width'
+  'allow', 'alt', 'async', 'autoPlay', 'cite', 'colSpan', 'content', 'controls', 'coords', 'crossOrigin', 'dateTime',
+  'decoding', 'defer', 'download', 'end', 'fetchPriority', 'headers', 'height', 'href', 'hrefLang', 'integrity',
+  'kind', 'loading', 'loop', 'media', 'muted', 'ping', 'playsInline', 'poster', 'preload', 'referrerPolicy', 'rel',
+  'rowSpan', 'sandbox', 'scope', 'shape', 'sizes', 'span', 'src', 'srcDoc', 'srcLang', 'srcSet', 'start', 'target',
+  'to', 'useMap', 'width'
 ];
 
 const drawings = [
-  'clipPath', 'cx', 'cy', 'd', 'dominantBaseline', 'dx', 'dy', 'fill', 'fillOpacity', 'fontSize', 'markerEnd',
-  'markerMid', 'markerStart', 'opacity', 'pathLength', 'points', 'preserveAspectRatio', 'r',
-  'rx', 'ry', 'stroke', 'strokeDasharray', 'strokeLinecap', 'strokeOpacity', 'strokeWidth', 'textAnchor', 'textLength', 'transform', 'vectorEffect', 'viewBox',
-  'x', 'x1', 'x2', 'y', 'y1', 'y2'
+  'clipPath', 'clipRule', 'cx', 'cy', 'd', 'dominantBaseline', 'dx', 'dy', 'fill', 'fillOpacity', 'fillRule',
+  'filter', 'fontFamily', 'fontSize', 'fontWeight', 'fx', 'fy', 'gradientUnits', 'letterSpacing', 'markerEnd',
+  'markerHeight', 'markerMid', 'markerStart', 'markerWidth', 'mask', 'offset', 'opacity', 'orient', 'pathLength',
+  'points', 'preserveAspectRatio', 'r', 'refX', 'refY', 'rx', 'ry', 'stopColor', 'stopOpacity', 'stroke',
+  'strokeDasharray', 'strokeDashoffset', 'strokeLinecap', 'strokeLinejoin', 'strokeMiterlimit', 'strokeOpacity',
+  'strokeWidth', 'textAnchor', 'textLength', 'transform', 'vectorEffect', 'viewBox', 'x', 'x1', 'x2', 'y', 'y1', 'y2'
 ];
 
 const names = new Set([...everyElement, ...controlsAndForms, ...linksAndMedia, ...drawings, 'children']);

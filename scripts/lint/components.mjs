@@ -202,7 +202,7 @@ const noForwardedProps = {
      */
     const readWhole = (props, reads, declared) => {
       const spreadInside = read => spreadOntoAComponent(read) && not(returnedBy(elementSpreadOnto(read), declared));
-      if (reads.every(spreadOntoAComponent) && reads.some(spreadInside)) refuse(props, 'spread', props.name);
+      if (reads.some(spreadInside)) refuse(props, 'spread', props.name);
       const members = reads.map(read => read.parent)
         .filter(member => member.type === 'MemberExpression' && not(member.computed) && member.property.type === 'Identifier');
       new Set(members.map(member => member.property.name)).forEach(name => {
