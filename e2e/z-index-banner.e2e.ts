@@ -187,6 +187,21 @@ test('a site banner waits out the open Feedback dialog, which stays open, and sh
   await expect(banners.siteBanner).toBeVisible();
 });
 
+test('a site banner raised after Back from Let’s build this feature shows', async ({page}) => {
+  await page.goto(fixedBannerPage);
+  await siteFrame(page).hydrated();
+  const banners = bannerTrap(page);
+  await banners.raiseSite.click();
+  await expect(banners.siteBanner).toBeVisible();
+  await zIndexTab(page).linkToTheBannerStory().click();
+  await expect(page.getByText('Make the panel a popover', {exact: true})).toBeInViewport();
+
+  await page.goBack();
+  await banners.raiseSite.click();
+
+  await expect(banners.siteBanner).toBeVisible();
+});
+
 test('a reader who dismisses one of two site banners is left with the other', async ({page}) => {
   await page.goto(fixedBannerPage);
   const banners = bannerTrap(page);
