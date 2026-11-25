@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Design} from '../../Recipe';
-import {SketchFrame} from '../../Exhibit';
+import {Exhibit} from '../../Exhibit';
 
 const measures = ['trades', 'buys', 'sells', 'volume', 'vwap', 'change'];
 const lookbacks = ['this minute', 'last 5 minutes', 'last 15 minutes', 'this hour', 'session'];
@@ -33,6 +33,6 @@ const Sketch: FC = () =>
 
 export const DesignAsk: FC = () =>
   <Design headedByThePart
-    sketch={<SketchFrame name="The sketch: periods down the side, measures across the top"><Sketch/></SketchFrame>}
+    sketch={<Exhibit kind="Sketch" name="The sketch: periods down the side, measures across the top"><Sketch/></Exhibit>}
     answers="The design answers shape: which measures, which lookbacks, how much precision, how dense."
     unanswered={unanswered}/>;
