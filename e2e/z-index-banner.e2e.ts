@@ -187,6 +187,26 @@ test('a site banner waits out the open Feedback dialog, which stays open, and sh
   await expect(banners.siteBanner).toBeVisible();
 });
 
+test('a site banner dismissed just before the Feedback dialog opens is gone once it closes, and another can be raised', async ({page}) => {
+  await page.goto(fixedBannerPage);
+  await siteFrame(page).hydrated();
+  const banners = bannerTrap(page);
+  const feedback = feedbackOn(page);
+  await banners.raiseSite.click();
+  await expect(banners.siteBanner).toBeVisible();
+
+  await banners.siteBanner.getByRole('button', {name: /^dismiss /}).click();
+  await feedback.open.click();
+  await expect(feedback.dialog).toBeVisible();
+  await page.keyboard.press('Escape');
+
+  await expect(feedback.dialog).toBeHidden();
+  await expect(banners.siteNotes).toHaveCount(0);
+  await banners.raiseSite.click();
+  await expect(banners.siteNotes).toHaveCount(1);
+  await expect(banners.siteBanner).toBeVisible();
+});
+
 test('a site banner raised after Back from Let’s build this feature shows', async ({page}) => {
   await page.goto(fixedBannerPage);
   await siteFrame(page).hydrated();
