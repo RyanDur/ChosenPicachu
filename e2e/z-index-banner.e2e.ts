@@ -207,7 +207,7 @@ test('a site banner dismissed just before the Feedback dialog opens is gone once
   await expect(banners.siteBanner).toBeVisible();
 });
 
-test('a site banner raised after Back from Let’s build this feature shows', async ({page}) => {
+test('a site banner stays up through Back from Let’s build this feature, and one raised after Back shows', async ({page}) => {
   await page.goto(fixedBannerPage);
   await siteFrame(page).hydrated();
   const banners = bannerTrap(page);
@@ -217,8 +217,9 @@ test('a site banner raised after Back from Let’s build this feature shows', as
   await expect(page.getByText('Make the panel a popover', {exact: true})).toBeInViewport();
 
   await page.goBack();
-  await banners.raiseSite.click();
 
+  await expect(banners.siteNotes.first()).toBeVisible();
+  await banners.raiseSite.click();
   await expect(banners.siteBanner).toBeVisible();
 });
 
