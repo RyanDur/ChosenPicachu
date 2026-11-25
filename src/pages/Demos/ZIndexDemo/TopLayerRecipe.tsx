@@ -60,7 +60,7 @@ export const TopLayerRecipe: FC = () => {
       as <PartLink part="why-a-fixed-banner-still-loses"/> shows. Inside that context, the banner’s 9999 is compared
       with nothing outside it. So I make the panel a popover. The browser shows a popover in the top layer, above
       every stacking context on the page, so no z-index on the page is ever compared with it. The top layer stacks in
-      the order things are shown, so a dialog or menu opened after the banner goes over it.</Tell>
+      the order things are shown, so a menu opened after the banner goes over it.</Tell>
     <Steps>
       <Step>
         <StepHeading title="Make the panel a popover"/>
