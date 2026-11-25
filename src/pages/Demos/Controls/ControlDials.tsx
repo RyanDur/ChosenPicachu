@@ -1,37 +1,26 @@
 import {FC} from 'react';
 import type {Copy} from './Controls';
 import {DialGroup} from './DialGroup';
-import {PillGlider} from '@components/PillGlider';
 import {DialRow} from './DialRow';
 import {Reading} from './Reading';
 import {useControls} from './useControls';
-import {dialChoices} from './dial-choices';
+import {PaceDial} from './PaceDial';
+import {OriginDial} from './OriginDial';
+import {MotionDial} from './MotionDial';
 
 export const ControlDials: FC<{copy: Copy}> = ({copy}) => {
-  const {pace, origin, motion, change} = useControls();
+  const {pace, origin, motion} = useControls();
   return <DialGroup>
     <DialRow label="pace">
-      <PillGlider label="pace"
-        name={`${copy.kind}-pace`}
-        choices={dialChoices.pace}
-        chosen={pace}
-        onChosen={next => change({pace: next})}/>
+      <PaceDial name={`${copy.kind}-pace`}/>
       <Reading>{copy.pace[pace]}</Reading>
     </DialRow>
     <DialRow label="origin">
-      <PillGlider label="origin"
-        name={`${copy.kind}-origin`}
-        choices={dialChoices.origin}
-        chosen={origin}
-        onChosen={next => change({origin: next})}/>
+      <OriginDial name={`${copy.kind}-origin`}/>
       <Reading>{copy.origin[origin]}</Reading>
     </DialRow>
     <DialRow label="motion">
-      <PillGlider label="motion"
-        name={`${copy.kind}-motion`}
-        choices={dialChoices.motion}
-        chosen={motion}
-        onChosen={next => change({motion: next})}/>
+      <MotionDial name={`${copy.kind}-motion`}/>
       <Reading>{copy.motion[motion]}</Reading>
     </DialRow>
   </DialGroup>;

@@ -1,9 +1,11 @@
 import {FC} from 'react';
 import {not} from '@ryandur/sand';
 import {useHydrated} from '@components';
-import {Align, Entrance, Side, Stack} from '@banners';
-import {PillGlider} from '@components/PillGlider';
-import {DialGroup, DialRow, Reading} from '../Controls';
+import {decked, news} from '@components/fibs';
+import {Align, bannerChange, Entrance, Side, Stack, useBannerDispatch} from '@banners';
+import {
+  AlignDial, DialGroup, DialRow, EntranceDial, Reading, SideDial, StackDial, useControls
+} from '../Controls';
 import './BannerControls.css';
 
 type Copy = {
@@ -38,76 +40,32 @@ const copy: Copy = {
   }
 };
 
-export type BannerControlsProps = {
-  side: Side;
-  align: Align;
-  enter: Entrance;
-  stack: Stack;
-  onSideChosen: (side: Side) => void;
-  onAlignChosen: (align: Align) => void;
-  onEnterChosen: (enter: Entrance) => void;
-  onStackChosen: (stack: Stack) => void;
-  onRaise: () => void;
-};
+const nextNews = decked(news);
 
-export const BannerControls: FC<BannerControlsProps> = ({
-  side, align, enter, stack, onSideChosen, onAlignChosen, onEnterChosen, onStackChosen, onRaise
-}) => {
+export const BannerControls: FC = () => {
   const hydrated = useHydrated();
+  const {side, align, enter, stack} = useControls();
+  const dispatchBanner = useBannerDispatch();
   return <section aria-labelledby="banner-controls-heading" className="controls">
     <h3 id="banner-controls-heading" className="off-screen">banner controls</h3>
     <DialGroup>
       <DialRow label="side">
-        <PillGlider label="side"
-          name="banner-side"
-          choices={[
-            {words: 'Top', value: 'top'},
-            {words: 'Middle', value: 'middle'},
-            {words: 'Bottom', value: 'bottom'}
-          ]}
-          chosen={side}
-          onChosen={onSideChosen}/>
+        <SideDial name="banner-side"/>
         <Reading>{copy.side[side]}</Reading>
       </DialRow>
       <DialRow label="align">
-        <PillGlider label="align"
-          name="banner-align"
-          choices={[
-            {words: 'Left', value: 'left'},
-            {words: 'Center', value: 'center'},
-            {words: 'Right', value: 'right'}
-          ]}
-          chosen={align}
-          onChosen={onAlignChosen}/>
+        <AlignDial name="banner-align"/>
         <Reading>{copy.align[align]}</Reading>
       </DialRow>
       <DialRow label="entrance">
-        <PillGlider label="entrance"
-          name="banner-entrance"
-          choices={[
-            {words: 'Above', value: 'above'},
-            {words: 'Below', value: 'below'},
-            {words: 'Left', value: 'left'},
-            {words: 'Right', value: 'right'}
-          ]}
-          chosen={enter}
-          onChosen={onEnterChosen}/>
+        <EntranceDial name="banner-entrance"/>
         <Reading>
           <span className="when-motion-allowed">{copy.enter[enter]}</span> <span className="when-less-motion">If your system asks for less motion, a new banner appears in place,
             whichever entrance you choose.</span>
         </Reading>
       </DialRow>
       <DialRow label="stack">
-        <PillGlider label="stack"
-          name="banner-stack"
-          choices={[
-            {words: 'Down', value: 'down'},
-            {words: 'Up', value: 'up'},
-            {words: 'Left', value: 'left'},
-            {words: 'Right', value: 'right'}
-          ]}
-          chosen={stack}
-          onChosen={onStackChosen}/>
+        <StackDial name="banner-stack"/>
         <Reading>{copy.stack[stack]}</Reading>
       </DialRow>
     </DialGroup>
@@ -115,7 +73,7 @@ export const BannerControls: FC<BannerControlsProps> = ({
       <code className="monospaced">{`?side=${side}&align=${align}&enter=${enter}&stack=${stack}`}</code>
     </p>
     <button type="button" tabIndex={0} className="button primary reachable after-dials"
-      disabled={not(hydrated)} onClick={onRaise}>
+      disabled={not(hydrated)} onClick={() => dispatchBanner(bannerChange.raised(nextNews()))}>
       Raise a banner
     </button>
   </section>;
