@@ -57,7 +57,6 @@
 }
 
 .parts-head {
-  container: parts-head / inline-size;
   pointer-events: none;
   z-index: 2;
   display: grid;
@@ -83,6 +82,7 @@
 }
 
 .parts-count {
+  container: parts-count / inline-size;
   display: flex;
   align-items: center;
   white-space: nowrap;
@@ -102,7 +102,7 @@
   display: none;
 }
 
-@container parts-head (width < 20em) {
+@container parts-count (width < 14em) {
   .parts-count-in-full {
     display: none;
   }
