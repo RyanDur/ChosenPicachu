@@ -3,10 +3,12 @@ import {classNames} from '@components';
 import {useBanners} from './useBanners';
 import {useBannerDispatch} from './useBannerDispatch';
 import {Banner, bannerChange} from './bannerChange';
-import {has} from '@ryandur/sand';
+import {has, maybe} from '@ryandur/sand';
 import './Banners.css';
 
-const raisedOverThePage = (banner: HTMLElement | null) => banner?.showPopover();
+const raisedOverThePage = (banner: HTMLElement | null) => {
+  maybe(banner).map(panel => panel.showPopover());
+};
 
 export const Banners: FC = () => {
   const {banners, placement: {side, align, enter, stack}} = useBanners();
