@@ -365,7 +365,7 @@ const PressureStory: FC = () =>
       came and took it, and Coinbase marks each trade with the side of the one that was waiting. A trade marked sell is
       one a buyer took. The chart sums each minute into the size buyers took and the size sellers took.</Tell>
     <Tell>The fetched past is candles, and a candle doesn’t say who took a trade. So the chart counts only the trades
-      that arrive while the page is open, and the page keeps the newest 1,500 of those.</Tell>
+      that arrive while the page is open, and it draws the newest 1,500 of those.</Tell>
     <Steps>
       <Step>
         <StepHeading title="Sum each minute by who took the trade"/>
