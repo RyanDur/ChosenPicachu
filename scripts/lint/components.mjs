@@ -1,5 +1,5 @@
 import {empty, has, maybe, not} from '@ryandur/sand';
-import {anElementTakes} from './element-attributes.mjs';
+import {elementAttributes} from './element-attributes.mjs';
 
 const functionTypes = new Set(['ArrowFunctionExpression', 'FunctionExpression', 'FunctionDeclaration']);
 const wrapperTypes = new Set(['TSAsExpression', 'TSSatisfiesExpression', 'TSNonNullExpression', 'ParenthesizedExpression']);
@@ -172,7 +172,8 @@ const noForwardedProps = {
       if (container.type !== 'JSXExpressionContainer' || container.parent.type !== 'JSXAttribute') return false;
       const attribute = container.parent;
       const {name: tag} = attribute.parent;
-      return namesAComponent(tag) && not(providesAContext(tag)) && not(anElementTakes(source.getText(attribute.name)));
+      return namesAComponent(tag) && not(providesAContext(tag))
+        && not(elementAttributes.takes(source.getText(attribute.name)));
     };
     /**
      * @param {any} read
