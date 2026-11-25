@@ -126,5 +126,5 @@
 }
 
 :root:has(:modal) .banners {
-  display: none;
+  visibility: hidden;
 }
