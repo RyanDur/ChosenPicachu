@@ -38,7 +38,7 @@ type Trouble = (trouble: FeedTrouble) => void;
 type FrameBatch = {
   readonly hold: (trade: Trade) => void;
   readonly handOver: () => void;
-  readonly drop: () => void;
+  readonly discard: () => void;
 };
 
 // A socket can deliver several trades between two paints, and a hidden tab doesn't paint at all.
@@ -75,7 +75,7 @@ const batchedPerFrame = (paints: Paints, dispatch: Dispatch): FrameBatch => {
       }
     },
     handOver,
-    drop: () => {
+    discard: () => {
       cancelThePaint();
       held = [];
     }
@@ -132,7 +132,7 @@ const streamOf = ({address, product}: Subscription, paints: Paints, dispatch: Di
       onTrouble(trouble);
     });
   return () => {
-    arriving.drop();
+    arriving.discard();
     stream.close();
   };
 };
