@@ -234,8 +234,8 @@ export const BehaviorPractice: FC = () =>
       is not on <a className="signpost" href={repository.file('eslint.config.cjs')}>a list in its configuration</a>.
       A ref keeps a value outside the state, where no reducer sees it and no test reads it. A file joins the list for
       one of the three reasons AGENTS.md gives: <a className="signpost" href={repository.file('AGENTS.md')}>“A <code className="monospaced">useRef</code> is
-        allowed only (1) to hold a <code className="monospaced">dialog</code> the component shows as a modal
-        with <code className="monospaced">showModal()</code>, (2) to read the element’s own details, such as its
+        allowed only (1) to hold a <code className="monospaced">dialog</code> shown as a modal, to show it
+        with <code className="monospaced">showModal()</code> or to close it when the page removes it, (2) to read the element’s own details, such as its
         measured size, when nothing else gives them, such as an event, or (3) to show a popover the site raises with no
         invoker, by <code className="monospaced">showPopover()</code>.”</a> Four files are on the list
       today. <code className="monospaced">MeasuredPanel</code> reads the height its panel stands at,
