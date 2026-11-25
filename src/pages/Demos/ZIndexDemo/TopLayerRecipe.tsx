@@ -58,8 +58,9 @@ export const TopLayerRecipe: FC = () => {
       ways <PartLink part="what-else-forms-a-stacking-context"/> shows. <code className="monospaced">position:
         fixed</code>, which pins the banner to the window, does not lift it out of that context,
       as <PartLink part="why-a-fixed-banner-still-loses"/> shows. Inside that context, the banner’s 9999 is compared
-      with nothing outside it. So I make the panel a popover. The browser shows a popover in the top layer, a layer
-      it keeps above the whole page, so no z-index on the page is ever compared with it.</Tell>
+      with nothing outside it. So I make the panel a popover. The browser shows a popover in the top layer, above
+      every stacking context on the page, so no z-index on the page is ever compared with it. The top layer stacks in
+      the order things are shown, so a dialog or menu opened after the banner goes over it.</Tell>
     <Steps>
       <Step>
         <StepHeading title="Make the panel a popover"/>
@@ -72,11 +73,16 @@ export const TopLayerRecipe: FC = () => {
             a popover that stays open until we close it. Showing it closes no other popover, so a menu the reader has
             open stays open. A plain popover closes on the next click anywhere, and a banner has to wait for its
             reader.</Says>
+          <Says>A modal dialog shown after the banner goes over it, and makes the rest of the page take no clicks, the
+            banner included. So while a modal is open, the panel is hidden, and it shows again when the dialog
+            closes. <code className="monospaced">:modal</code> matches a dialog shown as a modal,
+            and <code className="monospaced">:root:has(:modal)</code> matches the page while it holds one.</Says>
         </Words>
         <Codes>
           <Snippet label="HTML" lines={[
             ...carve.between(bannersSource, '<section id="banners"', '</section>;')
           ]}/>
+          <Snippet label="CSS" lines={carve.unit(bannersCss, ':root:has(:modal) .banners {')}/>
         </Codes>
       </Step>
       <Step>
