@@ -71,8 +71,8 @@ export const TopLayerRecipe: FC = () => {
             is <Mdn path="Web/Accessibility/ARIA/Reference/Roles/alert_role">alert</Mdn>, so a screen reader
             announces what arrives without being asked. <code className="monospaced">popover="manual"</code> makes it
             a popover that stays open until we close it. Showing it closes no other popover, so a menu the reader has
-            open stays open. A plain popover closes on the next click anywhere, and a banner has to wait for its
-            reader.</Says>
+            open stays open. A plain popover closes on the next click outside it or on Escape, and a banner has to
+            wait for its reader.</Says>
           <Says>A modal dialog shown after the banner goes over it, and makes the rest of the page take no clicks, the
             banner included. So while a modal is open, the panel is hidden, and it shows again when the dialog
             closes. <code className="monospaced">:modal</code> matches a dialog shown as a modal,
