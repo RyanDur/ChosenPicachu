@@ -30,12 +30,12 @@ const introductions: Record<Tutorial, string> = {
   resize: 'The fifth story, built all the way through.'
 };
 
-type Shown = {
+type ExhibitWords = {
   name: string;
   says: string;
 };
 
-const exhibits: Record<Tutorial, Shown> = {
+const exhibits: Record<Tutorial, ExhibitWords> = {
   sort: {
     name: 'Columns and rows that move while the numbers keep arriving',
     says: 'The order of each lives in the store, and a drag is measured once.'
