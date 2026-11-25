@@ -154,7 +154,7 @@ test('a reader who dismisses the site’s only banner is left with no site banne
   await expect(banners.siteNotes).toHaveCount(0);
 });
 
-test('a site banner raised while the site menu is open shows whole over the menu, and the menu stays open', {tag: '@iPhone'}, async ({page}) => {
+test('the site’s banners, first shown while the site menu is open, go whole over the menu, and the menu stays open', {tag: '@iPhone'}, async ({page}) => {
   await page.goto(`${fixedBannerPage}?side=bottom`);
   await siteFrame(page).hydrated();
   const banners = bannerTrap(page);
