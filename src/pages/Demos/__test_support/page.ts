@@ -1,6 +1,6 @@
 import {computeAccessibleName} from 'dom-accessibility-api';
 import {is, maybe, not} from '@ryandur/sand';
-import {screen, within} from '@testing-library/react';
+import {isInaccessible, screen, within} from '@testing-library/react';
 import {DemoTopics} from '@pages/Demos/demo-topics';
 import {demoTab} from '@pages/Demos/demo-tab';
 
@@ -55,6 +55,8 @@ const missing = (stations: string[]): string[] => stations.filter(station => not
 export const demoPage = {
   assumedLinks: (): (string | null)[][] => assumedLinksIn(document.body),
   part: (name: string): HTMLElement => screen.getByRole('region', {name}),
+  findExhibit: (name: string): Promise<HTMLElement> => screen.findByRole('region', {name}, untilTheTabMounts),
+  kindHeardIn: (exhibit: HTMLElement, kind: string): boolean => not(isInaccessible(within(exhibit).getByText(kind))),
   title: (name: string): HTMLElement => screen.getByRole('heading', {name}),
   findTitle: (name: string): Promise<HTMLElement> => screen.findByRole('heading', {name}, untilTheTabMounts),
   partTitle: (name: string): HTMLElement => screen.getByRole('heading', {name, level: 2}),

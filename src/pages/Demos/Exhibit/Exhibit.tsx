@@ -13,7 +13,7 @@ export const Exhibit: FC<PropsWithChildren<{kind?: ExhibitKind; name: string}>> 
   const rank = useContext(ExhibitRank);
   return <section aria-labelledby={headingId} className="exhibit card rounded-corners lifted">
     <hgroup className="veiled-rule-below">
-      <p className="caption uppercase">{kind}</p>
+      <p className="caption uppercase" aria-hidden="true">{kind}</p>
       {rank === 3
         ? <h3 id={headingId} className="sub-title bold">{name}</h3>
         : <h2 id={headingId} className="sub-title bold">{name}</h2>}
