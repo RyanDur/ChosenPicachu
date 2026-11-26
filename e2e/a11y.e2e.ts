@@ -72,7 +72,7 @@ const thePriceCardHasNoViolations = async (page: Page, prices: number[], sign: R
   await expect(charts.priceDelta).toBeVisible({timeout: 30_000});
   await expect(charts.priceDelta).toHaveText(sign);
 
-  const results = await new AxeBuilder({page}).include(charts.priceCardScope).withTags(standards).analyze();
+  const results = await new AxeBuilder({page}).include(await charts.priceCardScope()).withTags(standards).analyze();
 
   expect(violationsOf(results)).toEqual([]);
 };
