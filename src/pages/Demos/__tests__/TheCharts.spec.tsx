@@ -112,16 +112,16 @@ describe('a list of charts', () => {
     expect(candles.compareDocumentPosition(price)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
-  test('each chart should be named for its kind', async () => {
+  test('each chart card names itself in the heading outline, under the desk', async () => {
     const feed = await listeningFeed();
 
     render(<TestApp at={demosAt('charts', '?charts=price,candles,pressure,pie')} feed={feed}/>);
     await feedIsSubscribed(feed);
 
-    expect(await chartsDesk.findChart('Candles')).toBeInTheDocument();
-    expect(chartsDesk.chart('Price line')).toBeInTheDocument();
-    expect(chartsDesk.chart('Pressure')).toBeInTheDocument();
-    expect(chartsDesk.chart('Pie')).toBeInTheDocument();
+    expect(chartsDesk.titleIn(await chartsDesk.findChart('Candles'), 'Candles', 3)).toBeInTheDocument();
+    expect(chartsDesk.titleIn(chartsDesk.chart('Price line'), 'Price line', 3)).toBeInTheDocument();
+    expect(chartsDesk.titleIn(chartsDesk.chart('Pressure'), 'Pressure', 3)).toBeInTheDocument();
+    expect(chartsDesk.titleIn(chartsDesk.chart('Pie'), 'Pie', 3)).toBeInTheDocument();
   });
 
   test('the trader can remove a chart', async () => {

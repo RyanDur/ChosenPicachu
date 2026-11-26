@@ -15,6 +15,7 @@ import '../chart-card.css';
 import './PriceChart.css';
 import {sideOf} from '../sides';
 import {chartKinds} from '../chart-kinds';
+import {ChartHeading} from '../ChartHeading';
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 60;
@@ -49,13 +50,15 @@ export const PriceChart: FC<PropsWithChildren<Props>> = ({id: given, children}) 
   const trades = useMarketRead(marketReads.liveTrades);
   const generated = useId();
   const id = maybe(given).orElse(`price${generated}`);
+  const headingId = `${id}-heading`;
   const {period, fetchedPast, bucketMilliseconds, candles} = useShownCandles('price');
   const view = viewOf(candles, trades[trades.length - 1]);
   const points =
     sparkline.points(view.map(({series}) => series).orElse([]), CHART_WIDTH, CHART_HEIGHT, 2 * bucketMilliseconds);
   const trendPoints = points.map(point => `${point.x},${point.y}`).join(' ');
   const side = view.map(trendOf).map(trend => sideOf[trend]).orElse('');
-  return <section aria-label={chartKinds.names.price} className={classNames('price-chart chart padded', side)}>
+  return <section aria-labelledby={headingId} className={classNames('price-chart chart padded', side)}>
+    <ChartHeading id={headingId}>{chartKinds.names.price}</ChartHeading>
     <header className="chart-header">
       {children}
       <PeriodMenu id={`${id}-period`} kind="price"/>

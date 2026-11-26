@@ -82,6 +82,14 @@ describe('a chart’s page', () => {
     expect(titleAbove(await chartsDesk.findTitle('A line through the closing prices', 3))).toBe('Price line tutorial');
   });
 
+  test('should name its chart in the heading outline, one level under the exhibit', async () => {
+    const feed = await listeningFeed();
+    render(<TestApp at={chartPageAt('price')} feed={feed}/>);
+    await feedIsSubscribed(feed);
+
+    expect(titleAbove(await chartsDesk.findTitle('Price line', 4))).toBe('A line through the closing prices');
+  });
+
   test('an address naming no chart should say there is no room there', async () => {
     render(<TestApp at={chartPageAt('bars')}/>);
 
