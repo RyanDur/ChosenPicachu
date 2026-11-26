@@ -83,7 +83,8 @@ export const chartsPage = (page: Page) => {
     stillSliding: (): Promise<number> => page.getByRole('listitem').evaluateAll(charts => charts.flatMap(chart => chart.getAnimations()).length),
     explainer: page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first(),
     priceCard,
-    priceCardScope: 'section.price-chart',
+    priceCardScope: async (): Promise<string> =>
+      `section[aria-labelledby="${await priceCard.getAttribute('aria-labelledby')}"]`,
     priceDelta: priceCard.getByText(/^[+-]\$/),
     periodToggle: page.getByRole('button', {name: 'price period'}),
     period: (name: string): Locator => periodMenu.getByRole('button', {name}),
