@@ -28,6 +28,6 @@ export const NaturalZIndex: FC = () => {
         <li className={pileCardClasses('third')}>Third</li>
       </ol>
     </figure>
-    <ExhibitFoot lead="Three cards.">Raise a card over the others with the pills above it.</ExhibitFoot>
+    <ExhibitFoot lead="The pile.">Raise a card over the others with the pills above it.</ExhibitFoot>
   </Exhibit>;
 };
