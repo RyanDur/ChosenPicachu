@@ -10,7 +10,7 @@ const tabAddresses = Object.values(DemoTopics).map(demoTab.address);
 
 const hrefOf = (link: HTMLElement): string => maybe(link.getAttribute('href')).orElse('');
 
-const addressOf = (link: HTMLElement): URL => new URL(hrefOf(link), 'http://site');
+const addressOf = (link: HTMLElement): URL => new URL(hrefOf(link), 'https://site');
 
 const toTabs = (links: HTMLElement[]): string[][] => links
   .map(link => [link.textContent, hrefOf(link)])
