@@ -83,7 +83,7 @@ export const chartsPage = (page: Page) => {
     stillSliding: (): Promise<number> => page.getByRole('listitem').evaluateAll(charts => charts.flatMap(chart => chart.getAnimations()).length),
     explainer: page.getByRole('group').filter({has: page.getByText('what am I looking at?', {exact: true})}).first(),
     priceCard,
-    priceCardScope: 'section[aria-label="Price line"]',
+    priceCardScope: 'section.price-chart',
     priceDelta: priceCard.getByText(/^[+-]\$/),
     periodToggle: page.getByRole('button', {name: 'price period'}),
     period: (name: string): Locator => periodMenu.getByRole('button', {name}),
