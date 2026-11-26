@@ -6,6 +6,14 @@ import {stackingPile} from '@pages/Demos/ZIndexDemo/__test_support';
 const partOne = 'z-index/why-third-is-on-top';
 
 describe('part one’s stacking pile', () => {
+  test('should be heard by its name alone, its kind written for the eye', async () => {
+    render(<TestApp at={demosAt(partOne)}/>);
+
+    const pile = await demoPage.findExhibit('The pile');
+
+    expect(demoPage.kindHeardIn(pile, 'Exhibit')).toBe(false);
+  });
+
   test('should open with no card raised', async () => {
     render(<TestApp at={demosAt(partOne)}/>);
 
