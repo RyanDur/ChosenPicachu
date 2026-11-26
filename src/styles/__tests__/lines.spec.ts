@@ -16,14 +16,14 @@ const ownLines: Record<string, string[]> = {
   '/src/pages/Home/Home.css': ['688px'],
   '/src/pages/Demos/Runs.css': ['92ch'],
   '/src/pages/Demos/TabSidecar.css': ['900px'],
-  '/src/pages/Demos/PageWithParts.css': ['900px'],
+  '/src/pages/Demos/PageWithParts.css': ['900px', '16em', '14em'],
   '/src/pages/Demos/PartsIndex.css': ['900px']
 };
 
 const asLine = (length: string): string => length.endsWith('rem') ? `${Math.round(parseFloat(length) * 10)}px` : length;
 
 const queriedLines = (css: string): string[] =>
-  [...css.matchAll(/\((?:width|height) [<>]=? ([\d.]+(?:px|rem|ch))\)|\(([\d.]+(?:px|rem|ch)) [<>]=? (?:width|height)\)/g)]
+  [...css.matchAll(/\((?:width|height) [<>]=? ([\d.]+(?:px|rem|ch|em))\)|\(([\d.]+(?:px|rem|ch|em)) [<>]=? (?:width|height)\)/g)]
     .map(([, after, before]) => asLine(after ?? before));
 
 describe('the lines the sheets break at', () => {
@@ -33,6 +33,10 @@ describe('the lines the sheets break at', () => {
 
   test('are read in ch, the unit a line set by a measure is written in', () => {
     expect(queriedLines('@container (width >= 92ch) {}')).toEqual(['92ch']);
+  });
+
+  test('are read in em, the unit a line sized to its type is written in', () => {
+    expect(queriedLines('@container (width < 14em) {}')).toEqual(['14em']);
   });
 
   test('are read in every range form a query can take', () => {
