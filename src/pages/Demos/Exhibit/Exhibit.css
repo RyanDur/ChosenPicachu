@@ -1,6 +1,5 @@
 .exhibit {
     display: grid;
-    overflow: clip;
 
     & > :not(.button) {
         padding: var(--base-x-2) var(--base-x-3);
