@@ -15,6 +15,7 @@ import './Candles.css';
 import {classNames} from '@components';
 import {sideOf} from '../sides';
 import {chartKinds} from '../chart-kinds';
+import {ChartHeading} from '../ChartHeading';
 
 const CHART_WIDTH = 240;
 const CANDLE_HEIGHT = 80;
@@ -27,6 +28,7 @@ type Props = {
 export const Candles: FC<PropsWithChildren<Props>> = ({id: given, children}) => {
   const generated = useId();
   const id = given ?? `candles${generated}`;
+  const headingId = `${id}-heading`;
   const {period, fetchedPast, bucketMilliseconds, candles} = useShownCandles('candles');
   const bodies = candleShapes.drawn(candles, CHART_WIDTH, CANDLE_HEIGHT, bucketMilliseconds);
   const bars = candleShapes.volumes(candles, CHART_WIDTH, VOLUME_HEIGHT, bucketMilliseconds);
@@ -35,7 +37,8 @@ export const Candles: FC<PropsWithChildren<Props>> = ({id: given, children}) => 
     Math.max(...candles.map(candle => candle.high)),
     Math.min(...candles.map(candle => candle.low))
   );
-  return <section aria-label={chartKinds.names.candles} className="candles chart padded">
+  return <section aria-labelledby={headingId} className="candles chart padded">
+    <ChartHeading id={headingId}>{chartKinds.names.candles}</ChartHeading>
     <header className="chart-header">
       {children}
       <PeriodMenu id={`${id}-period`} kind="candles"/>

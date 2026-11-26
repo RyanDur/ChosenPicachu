@@ -1,5 +1,5 @@
 import {Explainer} from '@components/Explainer';
-import {FC, PropsWithChildren} from 'react';
+import {FC, PropsWithChildren, useId} from 'react';
 import {notEmpty} from '@ryandur/sand';
 import {liveTrades, marketReads, money, Period, periods} from '../../Market';
 import {useMarketRead} from '../../Market/Trading';
@@ -10,6 +10,7 @@ import {pressureShapes} from './pressure-shapes';
 import '../chart-card.css';
 import './Pressure.css';
 import {chartKinds} from '../chart-kinds';
+import {ChartHeading} from '../ChartHeading';
 
 const CHART_WIDTH = 240;
 const CHART_HEIGHT = 104;
@@ -21,7 +22,9 @@ export const Pressure: FC<PropsWithChildren> = ({children}) => {
   const pressures = pressureShapes.buckets(trades, BUCKET_MILLISECONDS).slice(-MOST_BUCKETS_SHOWN);
   const bars = pressureShapes.drawn(pressures, CHART_WIDTH, CHART_HEIGHT, BUCKET_MILLISECONDS);
   const peak = pressureShapes.heaviestSide(pressures);
-  return <section aria-label={chartKinds.names.pressure} className="pressure chart padded">
+  const headingId = `pressure${useId()}`;
+  return <section aria-labelledby={headingId} className="pressure chart padded">
+    <ChartHeading id={headingId}>{chartKinds.names.pressure}</ChartHeading>
     <header className="chart-header">
       {children}
     </header>
