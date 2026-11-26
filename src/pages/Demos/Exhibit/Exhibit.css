@@ -1,5 +1,6 @@
 .exhibit {
     display: grid;
+    justify-self: stretch;
 
     & > :not(.button) {
         padding: var(--base-x-2) var(--base-x-3);
