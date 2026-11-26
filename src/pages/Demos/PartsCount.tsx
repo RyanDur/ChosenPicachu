@@ -4,8 +4,9 @@ import {partsListed} from './parts-listed';
 
 export const PartsCount: FC = () => {
   const groups = useListedParts();
+  const full = partsListed.counted(groups);
+  const brief = partsListed.countedBriefly(groups);
   return <p className="parts-count paragraph field ink-underline">
-    <span className="parts-count-in-full">{partsListed.counted(groups)}</span>
-    <span className="parts-count-in-brief">{partsListed.countedBriefly(groups)}</span>
+    <span className="parts-count-in-full">{full}</span> <span className="parts-count-in-brief">{brief}</span>
   </p>;
 };
