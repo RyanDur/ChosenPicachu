@@ -9,7 +9,6 @@ export type Track = 'pointer' | 'keyboard';
 export type FoldType = 'inclusive' | 'exclusive';
 export type FoldMotion = 'reveal' | 'drawer' | 'static';
 export type RaisedCard = typeof inOrder.raisedCards[number];
-export type CardOne = 'contained' | 'free';
 export type Worn = typeof inOrder.worn[number];
 export type PartsShown = 'shown' | 'hidden';
 export type Position = typeof inOrder.positions[number];
@@ -25,7 +24,6 @@ export type Address = Placement & {
   wears: Worn;
   type: FoldType;
   style: FoldMotion;
-  'card-one': CardOne;
   parts: PartsShown;
   'second-position': Position;
   'parent-position': ParentPosition;
@@ -44,7 +42,6 @@ const decoders: {[K in keyof Address]: schema.Decoder<Address[K]>} = {
   enter: schema.literalUnion('above', 'below', 'left', 'right'),
   stack: schema.literalUnion('down', 'up', 'left', 'right'),
   raised: schema.literalUnion(...inOrder.raisedCards),
-  'card-one': schema.literalUnion('contained', 'free'),
   wears: schema.literalUnion(...inOrder.worn),
   parts: schema.literalUnion('shown', 'hidden'),
   'second-position': schema.literalUnion(...inOrder.positions),
