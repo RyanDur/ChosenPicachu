@@ -65,6 +65,14 @@
         pointer-events: none;
     }
 
+    .keyed-to-the-dot::before {
+        content: '';
+        display: inline-block;
+        inline-size: var(--base-x-1_25);
+        block-size: var(--base-x-1_25);
+        margin-inline-end: var(--base);
+    }
+
     .page-ring {
         position: absolute;
         inset: 0;

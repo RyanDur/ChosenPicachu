@@ -66,6 +66,7 @@ export const positionExhibit = (page: Page) => {
       }
     },
     littlePage,
+    measuredFrom: exhibit.getByRole('status', {name: 'Measured from:', exact: true}),
     choosesParent: (position: ParentPosition): Promise<void> =>
       shownOnceChosen(parentPills.pill(position), () => parentPills.choose(position)),
     parentPill: (position: ParentPosition): Locator => parentPills.pill(position),

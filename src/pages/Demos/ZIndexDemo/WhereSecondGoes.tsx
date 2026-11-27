@@ -10,7 +10,7 @@ import {PartTermLink} from './PartTermLink';
 import {ClearfixTray} from './ClearfixTray';
 import {ParentPosition, Position} from '../ReaderSettings';
 import {MeasuredFrom, secondPosition} from './second-position';
-import {Exhibit, ExhibitFoot} from '../Exhibit';
+import {Exhibit, ExhibitFoot, ResultLine, Verdict} from '../Exhibit';
 import './WhereSecondGoes.css';
 
 type Words = {
@@ -41,7 +41,7 @@ const wordsFor: Record<MeasuredFrom, Words> = {
       className="monospaced">top</code> and <code className="monospaced">left</code>.</>,
     whereWeMeetIt: 'Every box, until we say otherwise.',
     verdict: 'Second sits between First and Third. The 16px and 24px do nothing.',
-    measuredFromWords: 'nowhere.',
+    measuredFromWords: 'nowhere. The browser ignores top and left.',
     stackingContext: formsNone
   },
   'own-place': {
@@ -72,7 +72,7 @@ const wordsFor: Record<MeasuredFrom, Words> = {
       a <code className="monospaced">filter</code>, the property that blurs or tints one.</>,
     whereWeMeetIt: whereWeMeetAnAbsoluteBox,
     verdict: 'Second sits 16px down and 24px in from the page’s corner, over the top of the page and outside its parent. It still scrolls with the page.',
-    measuredFromWords: 'the little page’s corner, at the red dot.',
+    measuredFromWords: 'the page’s corner, at the red dot. No ancestor is positioned, so the browser goes past the parent to the page.',
     stackingContext: formsNoneUnlessAZIndex
   },
   view: {
@@ -83,7 +83,7 @@ const wordsFor: Record<MeasuredFrom, Words> = {
       from the browser’s window. Out of the flow, it no longer stretches across its parent, so we give it a width.</>,
     whereWeMeetIt: 'A banner, a chat button, a header pinned to the window.',
     verdict: 'Second leaves the flow and stays put in the window while the page scrolls under it.',
-    measuredFromWords: 'the view’s corner, at the red dot.',
+    measuredFromWords: 'the window’s corner, at the red dot.',
     stackingContext: formsOneByItself
   },
   'scroll-edge': {
@@ -183,9 +183,10 @@ export const WhereSecondGoes: FC = () => {
           {measuredFrom === 'little-page' && <span className="page-ring alarm-ringed" aria-hidden="true"/>}
         </section>
       </section>
-      <output aria-label="where Second went" className="paragraph">{words.verdict}</output>
-      <output aria-label="what Second is measured from" className="paragraph">
-        {`Measured from: ${words.measuredFromWords}`}</output>
+      <Verdict aria-label="where Second went">{words.verdict}</Verdict>
+      <ResultLine className="keyed-to-the-dot badge-before alarm-badge-before" label="Measured from:">
+        {words.measuredFromWords}
+      </ResultLine>
       <p className="paragraph">{words.stackingContext} Scroll the little page to see fixed and sticky at work.</p>
       {chosenPosition === 'absolute' && <ClearfixTray/>}
     </figure>

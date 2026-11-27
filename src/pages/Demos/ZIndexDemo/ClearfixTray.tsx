@@ -5,6 +5,7 @@ import {Choice, PillGlider} from '@components/PillGlider';
 import {classNames} from '@components';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {carve, exhibitSteps, Line, lines, Snippet} from '../Recipe';
+import {Verdict} from '../Exhibit';
 import sheet from './ClearfixTray.css?sample';
 import './ClearfixTray.css';
 
@@ -105,7 +106,7 @@ export const ClearfixTray: FC = () => {
             </section>
           </section>
         </section>
-        <output aria-label="what the parent did" className="paragraph bold">{verdict}</output>
+        <Verdict aria-label="what the parent did">{verdict}</Verdict>
         <p className="paragraph">The dashed outline is the parent.</p>
       </section>
     </details>
