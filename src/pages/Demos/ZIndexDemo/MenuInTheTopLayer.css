@@ -34,7 +34,6 @@
     }
 
     .sort-list {
-        /* the reset zeroes a list's margin, and this gives back the browser's own centering */
         margin: auto;
         padding: var(--base-x-0_75);
 
