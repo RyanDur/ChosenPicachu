@@ -16,7 +16,7 @@ export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
 }) => {
   const [open, dispatch] = useReducer(openFolds.oneAtATime, []);
   return <OpenFolds.Provider value={open}>
-    <article className={classNames('exclusive-accordion', className)}>
+    <section className={classNames('exclusive-accordion', className)}>
       <fieldset>
         <legend className="off-screen">folds</legend>
         <ul className="accordion">
@@ -37,6 +37,6 @@ export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
             </li>)}
         </ul>
       </fieldset>
-    </article>
+    </section>
   </OpenFolds.Provider>;
 };

@@ -6,7 +6,7 @@ import './Accordions.css';
 export const ExclusiveToggleAccordion: FC<AccordionProps> = ({
   className,
   folds
-}) => <article className={classNames('exclusive-toggle-accordion', className)}>
+}) => <section className={classNames('exclusive-toggle-accordion', className)}>
   <ul className="new-accordion">
     {folds.map(({heading, story}) =>
       <li key={heading}>
@@ -16,4 +16,4 @@ export const ExclusiveToggleAccordion: FC<AccordionProps> = ({
         </details>
       </li>)}
   </ul>
-</article>;
+</section>;

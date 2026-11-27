@@ -6,7 +6,7 @@ import {partsIndex} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
 
 const choice = (dial: string): Promise<HTMLElement> => screen.findByRole('group', {name: dial});
-const buildIn = (part: HTMLElement): HTMLElement => within(part).getByRole('article');
+const buildIn = (part: HTMLElement, name: string): HTMLElement => within(part).getByRole('region', {name});
 const option = (holder: HTMLElement, name: string): HTMLElement => within(holder).getByRole('radio', {name});
 
 export const accordionsTab = {
@@ -21,8 +21,8 @@ export const accordionsTab = {
   choose: async (dial: string, name: string): Promise<void> => userEvent.click(option(await choice(dial), name)),
   readingIn: (row: HTMLElement): HTMLElement => within(row).getByRole('status'),
   openFold: (fold: HTMLElement): Promise<void> => userEvent.click(within(fold).getByText(computeAccessibleName(fold))),
-  openFirstFoldIn: async (part: HTMLElement): Promise<HTMLElement> => {
-    const fold = within(buildIn(part)).getAllByRole('group')[0];
+  openFirstFoldIn: async (part: HTMLElement, name: string): Promise<HTMLElement> => {
+    const fold = within(buildIn(part, name)).getAllByRole('group')[0];
     await userEvent.click(within(fold).getAllByText(/^\w+$/)[0]);
     return within(fold).getByRole('paragraph');
   },
@@ -31,10 +31,10 @@ export const accordionsTab = {
     return parts.filter((_, at) => holding[at]);
   },
   buildIn,
-  buildsIn: (part: HTMLElement): string[] =>
+  exhibitsIn: (part: HTMLElement): string[] =>
     within(part).getAllByRole('region')
-      .filter(region => is(within(region).queryByRole('article')))
-      .map(exhibit => computeAccessibleName(exhibit)),
+      .map(region => computeAccessibleName(region))
+      .filter(name => is(within(part).queryByRole('heading', {name}))),
   openPart: async (name: string): Promise<void> =>
     userEvent.click(within(await partsIndex.find()).getByRole('link', {name})),
   followInIntroduction: async (part: string, name: string): Promise<void> =>

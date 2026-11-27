@@ -39,7 +39,7 @@ const focusAndPress = async (page: Page, control: Locator, key: string, times = 
 
 type Controls = Omit<Part, 'showsText' | 'words'>;
 
-type Where = {page: Page; fold: Locator; article: Locator; index: number};
+type Where = {page: Page; fold: Locator; exhibit: Locator; index: number};
 
 const wordsIn = (fold: Locator): Locator => fold.getByRole('paragraph', {includeHidden: true});
 
@@ -79,11 +79,11 @@ const checkboxPart = (page: Page, fold: Locator): Controls => ({
   isOpen: () => fold.getByRole('checkbox').isChecked()
 });
 
-const radioPart = ({page, fold, article, index}: Where): Controls => ({
+const radioPart = ({page, fold, exhibit, index}: Where): Controls => ({
   fold,
   open: () => nameOn(fold).click(),
-  close: () => article.getByText('Close', {exact: true}).first().click(),
-  openByKeyboard: () => focusAndPress(page, article.getByRole('radio', {name: 'Close', exact: true}), 'ArrowDown', index + 1),
+  close: () => exhibit.getByText('Close', {exact: true}).first().click(),
+  openByKeyboard: () => focusAndPress(page, exhibit.getByRole('radio', {name: 'Close', exact: true}), 'ArrowDown', index + 1),
   isOpen: () => fold.getByRole('radio').isChecked()
 });
 
@@ -148,7 +148,7 @@ const tab = (page: Page) => {
   };
   const partOf = (build: Build, index: number): Part => {
     const fold = folds(build).nth(index + closeBarsBeforeTheParts(build));
-    return {...partIn[build]({page, fold, article: built(build), index}), ...readable(fold)};
+    return {...partIn[build]({page, fold, exhibit: built(build), index}), ...readable(fold)};
   };
   const htmlAloneFold = (name: string): Part & {closeByKeyboard: () => Promise<void>} => {
     const fold = page.getByRole('region', {name: 'Three folds in HTML alone', exact: true}).getByRole('group').filter({hasText: name});
@@ -170,7 +170,7 @@ const tab = (page: Page) => {
     htmlAloneFold,
     htmlAloneFolds: (): Part[] => ['basalt', 'cinder', 'meadow'].map(htmlAloneFold),
     holdsFocus: (build: Build): Promise<boolean> =>
-      built(build).evaluate(article => article.contains(document.activeElement)),
+      built(build).evaluate(exhibit => exhibit.contains(document.activeElement)),
     firstPartOf: (build: Build): Part => partOf(build, 0),
     opensTheFirstPartThenChoosesOnceItStartsMoving: async (build: Build, motion: 'Static'): Promise<void> => {
       await siteFrame(page).hydrated();

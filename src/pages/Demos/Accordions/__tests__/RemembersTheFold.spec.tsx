@@ -22,7 +22,10 @@ describe('a box remembers the fold, on its own page', () => {
 
     const part = await explanation.part(title);
 
-    expect(outOfReadingOrder([accordionsTab.buildIn(part), explanation.saying(part, /To open and close a fold/)])).toEqual([]);
+    expect(outOfReadingOrder([
+      accordionsTab.buildIn(part, 'Accordion using a radio group and a known height'),
+      explanation.saying(part, /To open and close a fold/)
+    ])).toEqual([]);
   });
 
   test('should build the known-height fold with checkboxes when inclusive is carried to it', async () => {
@@ -30,7 +33,7 @@ describe('a box remembers the fold, on its own page', () => {
 
     const part = await explanation.part(title);
 
-    expect(accordionsTab.buildsIn(part)).toEqual(['Accordion using checkboxes and a known height']);
+    expect(accordionsTab.exhibitsIn(part)).toEqual(['Accordion using checkboxes and a known height']);
   });
 
   test('should build the known-height fold with a radio group when exclusive is carried to it', async () => {
@@ -38,7 +41,7 @@ describe('a box remembers the fold, on its own page', () => {
 
     const part = await explanation.part(title);
 
-    expect(accordionsTab.buildsIn(part)).toEqual(['Accordion using a radio group and a known height']);
+    expect(accordionsTab.exhibitsIn(part)).toEqual(['Accordion using a radio group and a known height']);
   });
 
   test('a reader who arrives with inclusive can choose exclusive on the page, and gets the radio group build', async () => {
@@ -47,7 +50,7 @@ describe('a box remembers the fold, on its own page', () => {
 
     await accordionsTab.choose('fold type', 'Exclusive');
 
-    expect(accordionsTab.buildsIn(part)).toEqual(['Accordion using a radio group and a known height']);
+    expect(accordionsTab.exhibitsIn(part)).toEqual(['Accordion using a radio group and a known height']);
   });
 
   test('should lead back to part one on the tab and on to part three’s page, by number and title, with the fold choices carried', async () => {

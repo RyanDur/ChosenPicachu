@@ -19,7 +19,7 @@ export const InclusiveMeasuredAccordion: FC<AccordionProps> = ({
 }) => {
   const [open, dispatch] = useReducer(openFolds.together, []);
   return <OpenFolds.Provider value={open}>
-    <article className={classNames('inclusive-accordion', className)}>
+    <section className={classNames('inclusive-accordion', className)}>
       <fieldset>
         <legend className="off-screen">folds</legend>
         <ul className="accordion">
@@ -35,6 +35,6 @@ export const InclusiveMeasuredAccordion: FC<AccordionProps> = ({
             </li>)}
         </ul>
       </fieldset>
-    </article>
+    </section>
   </OpenFolds.Provider>;
 };

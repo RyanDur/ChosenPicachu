@@ -23,7 +23,7 @@ import '../Runs.css';
 import './PartDepth.css';
 
 const sharedOpenFolds = (source: Sample): Line[] =>
-  lines.fromTheExhibit(carve.elided(carve.between(source, 'const [open, dispatch] = useReducer(', '</OpenFolds.Provider>;'), '<article', '</OpenFolds.Provider>;', '{/* …the folds */}'));
+  lines.fromTheExhibit(carve.elided(carve.between(source, 'const [open, dispatch] = useReducer(', '</OpenFolds.Provider>;'), '<section', '</OpenFolds.Provider>;', '{/* …the folds */}'));
 
 const measuredBuilds: Record<FoldType, Build> = {
   inclusive: {Accordion: InclusiveMeasuredAccordion, sample: sharedOpenFolds(inclusiveMeasuredAccordionSource)},

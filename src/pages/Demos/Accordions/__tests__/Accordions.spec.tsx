@@ -19,7 +19,7 @@ describe('the accordion using checkboxes', () => {
   test('should make each fold an item of its list, with no article of its own', () => {
     render(<InclusiveAccordion folds={folds}/>);
 
-    expect(accordion.articles()).toHaveLength(1);
+    expect(accordion.articles()).toHaveLength(0);
     expect(accordion.items()).toHaveLength(folds.length);
   });
 });
@@ -36,7 +36,7 @@ describe('the accordion using a radio group', () => {
   test('should make each fold, and the Close bar, an item of its list, with no article of its own', () => {
     render(<ExclusiveAccordion folds={folds}/>);
 
-    expect(accordion.articles()).toHaveLength(1);
+    expect(accordion.articles()).toHaveLength(0);
     expect(accordion.items()).toHaveLength(folds.length + 1);
   });
 });
