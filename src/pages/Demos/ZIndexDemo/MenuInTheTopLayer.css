@@ -14,6 +14,14 @@
         justify-content: space-between;
         gap: var(--base);
         padding: var(--base-x-1_25) var(--base-x-1_75);
+
+        .button {
+            padding: 0 var(--base-x-1_25);
+
+            @media (pointer: fine) {
+                min-block-size: var(--base-x-4);
+            }
+        }
     }
 
     .one {
