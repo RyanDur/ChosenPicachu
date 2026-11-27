@@ -476,7 +476,8 @@
   }
 
   .alarm-dot,
-  .alarm-backed {
+  .alarm-backed,
+  .alarm-badge-before::before {
     forced-color-adjust: none;
     background: var(--highlight);
   }
