@@ -11,6 +11,7 @@ import {ClearfixTray} from './ClearfixTray';
 import {ParentPosition, Position} from '../ReaderSettings';
 import {MeasuredFrom, secondPosition} from './second-position';
 import {Exhibit, ExhibitFoot, ResultLine, Verdict} from '../Exhibit';
+import './LittleWindow.css';
 import './WhereSecondGoes.css';
 
 type Words = {

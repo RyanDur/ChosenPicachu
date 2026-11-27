@@ -5,6 +5,7 @@ import {classNames, useHydrated} from '@components';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {carve, Line, lines, Snippet} from '../Recipe';
 import sheet from './MenuInTheTopLayer.css?sample';
+import './LittleWindow.css';
 import './MenuInTheTopLayer.css';
 
 type Told = {verdict: string; comparedWith: string; rules: Line[]};
@@ -39,7 +40,7 @@ const leftAlone: Told = {
 const cardOneRaised: Told = {
   verdict: `${leftAlone.verdict} Card one now rises over card two’s edge, and the list stays above both.`,
   comparedWith: 'nothing. Card one’s 9999 is compared with card two, and the list is above them both in the top layer.',
-  rules: [...lines.marked(lines.fromTheExhibit(carve.unit(sheet, '.one {'))), ...theBrowsersOwnRule]
+  rules: [...lines.marked(lines.fromTheExhibit(carve.unit(sheet, '.one {\n            position: relative'))), ...theBrowsersOwnRule]
 };
 
 export const MenuInTheTopLayer: FC = () => {
