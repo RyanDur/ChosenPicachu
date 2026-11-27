@@ -118,8 +118,9 @@ const FlowStory: FC = () => {
             goes when the feed closes. The reducer holds the last hour of trades, the longest lookback short of the
             session; a trade older than that leaves the list, and its numbers join a running tally that only the
             session row reads. Each batch folds the rows once, and the reducer keeps the rows from before it, so the
-            rows mark everything that batch moved, which is everything that changed since the reader last saw them;
-            when history arrives, the rows before and after match and every mark clears.
+            marks show what the latest batch moved. In a visible tab a batch lands with each paint, so that is what
+            changed since the last paint. When history arrives, the rows before and after match and every mark
+            clears.
             A <Mdn path="Web/API/WebSocket/close_event">close</Mdn> marks the feed failed.</Says>
           <Codes>
             <Snippet label="TS" lines={[
