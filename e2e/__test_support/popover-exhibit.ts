@@ -1,7 +1,7 @@
 import type {Page} from '@playwright/test';
 
 export const popoverExhibit = (page: Page) => {
-  const exhibit = page.getByRole('figure', {name: 'The menu in the top layer', exact: true});
+  const exhibit = page.getByRole('region', {name: 'The menu in the top layer', exact: true});
   const sortBy = exhibit.getByRole('button', {name: 'Sort by', exact: true});
   const list = exhibit.getByRole('list', {name: 'Sort by', exact: true});
   return {
