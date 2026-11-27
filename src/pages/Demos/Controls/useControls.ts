@@ -2,8 +2,8 @@ import {useSearchParamsObject} from '@navigation/search-params';
 import {Motion, Origin} from '@components/DragSortableTable';
 import {Placement, unplaced} from '@banners';
 import {
-  Address, CardOne, FoldMotion, FoldType, Pace, ParentPosition, PartsShown, Position, RaisedCard, readerSettings,
-  Track, World, Worn
+  Address, FoldMotion, FoldType, Pace, ParentPosition, PartsShown, Position, RaisedCard, readerSettings, Track, World,
+  Worn
 } from '../ReaderSettings';
 
 export type {Motion, Origin};
@@ -16,7 +16,6 @@ export type Settings = Placement & {
   foldType: FoldType;
   foldMotion: FoldMotion;
   raised: RaisedCard;
-  cardOne: CardOne;
   wears: Worn;
   parts: PartsShown;
   chosenPosition: Position;
@@ -34,7 +33,6 @@ const defaults: Address = {
   type: 'exclusive',
   style: 'reveal',
   raised: 'none',
-  'card-one': 'contained',
   wears: 'nothing',
   parts: 'shown',
   'second-position': 'static',
@@ -44,19 +42,18 @@ const defaults: Address = {
 
 export const useControls = (): Controls => {
   const {
-    type, style, 'card-one': cardOne, 'second-position': chosenPosition, 'parent-position': chosenParentPosition, ...found
+    type, style, 'second-position': chosenPosition, 'parent-position': chosenParentPosition, ...found
   } = useSearchParamsObject(readerSettings.decoders, defaults);
   return {
     ...found,
     foldType: type,
     foldMotion: style,
-    cardOne,
     chosenPosition,
     chosenParentPosition,
     change: ({
-      foldType, foldMotion, cardOne: nextCardOne, chosenPosition: nextSecond, chosenParentPosition: nextParent, ...next
+      foldType, foldMotion, chosenPosition: nextSecond, chosenParentPosition: nextParent, ...next
     }) => found.updateSearchParams({
-      ...next, type: foldType, style: foldMotion, 'card-one': nextCardOne,
+      ...next, type: foldType, style: foldMotion,
       'second-position': nextSecond, 'parent-position': nextParent
     })
   };
