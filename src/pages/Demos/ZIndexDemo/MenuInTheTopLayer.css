@@ -55,6 +55,10 @@
         padding: var(--base-x-1_25) var(--base-x-1_75);
     }
 
+    .one {
+        padding-block-end: var(--base-x-3);
+    }
+
     .two {
         min-block-size: var(--base-x-19);
         margin-block-start: calc(-1 * var(--base-x-3));
