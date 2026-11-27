@@ -82,4 +82,13 @@ describe('the menu built the old way', () => {
 
     expect(oldWayMenu.queryMenu()).not.toBeInTheDocument();
   });
+
+  test('should name its button by the choice it shows, then its way', async () => {
+    render(<TestApp at={demosAt('z-index/what-else-forms-a-stacking-context')}/>);
+    await oldWayMenu.open();
+
+    await oldWayMenu.choose('date');
+
+    expect(oldWayMenu.button('Sort by: date, the old way')).toHaveTextContent(/^Sort by: date$/);
+  });
 });
