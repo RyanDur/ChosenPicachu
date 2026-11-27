@@ -151,7 +151,9 @@ describe('the arrangement', () => {
   });
 
   test('a foreign action leaves the arrangement as it was', () => {
-    expect(arrangements.reducer(arranged, {type: 'tradeArrived'})).toBe(arranged);
+    const aBatchOfTrades = {type: 'tradesArrived', trades: []};
+
+    expect(arrangements.reducer(arranged, aBatchOfTrades)).toBe(arranged);
   });
 });
 
