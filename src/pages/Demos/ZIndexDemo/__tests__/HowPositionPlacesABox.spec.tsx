@@ -142,23 +142,23 @@ describe('how position places a box, on its own page', () => {
     expect(positionExhibit.measuredFrom()).toHaveTextContent('the parent’s corner');
   });
 
-  test('should say an absolute Second with no positioned parent is measured from the page’s corner', async () => {
+  test('should say an absolute Second with no positioned parent is measured from the little page’s corner', async () => {
     render(<TestApp at={demosAt(howPosition)}/>);
     await explanation.part(title);
     await positionExhibit.choose('absolute');
 
     await positionExhibit.chooseParent('not positioned');
 
-    expect(positionExhibit.measuredFrom()).toHaveTextContent('the page’s corner');
+    expect(positionExhibit.measuredFrom()).toHaveTextContent('the little page’s corner');
   });
 
-  test('should say a fixed Second is measured from the window’s corner', async () => {
+  test('should say a fixed Second is measured from the corner of the window’s view', async () => {
     render(<TestApp at={demosAt(howPosition)}/>);
     await explanation.part(title);
 
     await positionExhibit.choose('fixed');
 
-    expect(positionExhibit.measuredFrom()).toHaveTextContent('the window’s corner');
+    expect(positionExhibit.measuredFrom()).toHaveTextContent('the corner of the window’s view, under its bar');
   });
 
   test('should say a sticky Second is measured from the top edge of the box that scrolls', async () => {

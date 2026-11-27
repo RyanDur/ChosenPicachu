@@ -10,7 +10,7 @@ test('a reader gives Second fixed and hears what it is measured from, under the 
 
   await exhibit.chooses('fixed');
 
-  await expect(exhibit.measuredFrom).toHaveText('the window’s corner, at the red dot.');
+  await expect(exhibit.measuredFrom).toHaveText('the corner of the window’s view, under its bar, at the red dot.');
 });
 
 test('a keyboard steps Second through all five positions, and the chosen one is the one checked', async ({page}) => {
@@ -70,7 +70,7 @@ test('a relative Second leaves its dashed outline exactly where it stood', async
   await expect.poll(() => exhibit.oldPlaceOf('Second')).toEqual([stood]);
 });
 
-test('an absolute Second whose parent has no position is measured from the page’s corner', async ({page}) => {
+test('an absolute Second whose parent has no position is measured from the little page’s corner', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
   await exhibit.chooses('absolute');
