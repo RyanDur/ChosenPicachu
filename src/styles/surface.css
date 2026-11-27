@@ -247,6 +247,8 @@
 
 .mint-badge-before::before { background: var(--mint); }
 
+.alarm-badge-before::before { background: var(--alarm-ink); }
+
 .muted-dashed-outline { border: var(--hairline-x-2) dashed var(--ink-muted); }
 
 .alarm-dashed-outline { border: var(--hairline-x-2) dashed var(--alarm-ink); }

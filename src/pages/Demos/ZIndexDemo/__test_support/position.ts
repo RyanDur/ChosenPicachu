@@ -23,7 +23,7 @@ export const positionExhibit = {
     const [css] = figures.filter(sample => (sample.textContent ?? '').startsWith('CSS'));
     return {html: codeIn(html), css: codeIn(css)};
   },
-  measuredFrom: (): HTMLElement => screen.getByRole('status', {name: 'what Second is measured from'}),
+  measuredFrom: (): HTMLElement => screen.getByRole('status', {name: 'Measured from:'}),
   whereSecondWent: (): HTMLElement => screen.getByRole('status', {name: 'where Second went'}),
   parentPills: (): HTMLElement => pillsOf('And its parent is'),
   queryParentPills: (): HTMLElement | null => screen.queryByRole('group', {name: 'And its parent is'})
