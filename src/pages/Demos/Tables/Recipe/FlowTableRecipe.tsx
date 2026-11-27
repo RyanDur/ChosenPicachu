@@ -114,7 +114,8 @@ const FlowStory: FC = () => {
             Every <Mdn path="Web/API/WebSocket/message_event">message</Mdn> decodes into a trade. The socket can
             deliver several trades between two paints, so the trades wait for
             the next <Mdn path="Web/API/Window/requestAnimationFrame">animation frame</Mdn> and reach the store as
-            one batch a frame. The reducer holds the last hour of trades, the longest lookback short of the
+            one batch. A hidden tab paints nothing, so there a batch goes every 1,500 trades, and whatever is left
+            goes when the feed closes. The reducer holds the last hour of trades, the longest lookback short of the
             session; a trade older than that leaves the list, and its numbers join a running tally that only the
             session row reads. Each batch folds the rows once, and the reducer keeps the rows from before it, so the
             rows mark everything that batch moved, which is everything that changed since the reader last saw them;

@@ -71,8 +71,9 @@ const PriceStory: FC = () =>
             What passes is a Trade. What fails never reaches the page’s state, the values the page holds and draws from,
             as taught in the z-index part <PartLink part="why-the-popover-wins"/>.</Says>
           <Says>The charts draw only the newest 1,500 trades.</Says>
-          <Says>The trades reach the store in one batch each time the browser paints, and the same store holds the last
-            hour for <DemoLink to={liveTableAt}>the Tables tab’s live table</DemoLink>, whose story teaches both.</Says>
+          <Says>The trades reach the store in batches: one each time the browser paints, one every 1,500 trades while
+            the tab is hidden, and one with whatever is left when the feed closes. The same store holds the last hour
+            for <DemoLink to={liveTableAt}>the Tables tab’s live table</DemoLink>, whose story teaches both.</Says>
         </Words>
         <Codes>
           <Snippet label="TS" lines={[
