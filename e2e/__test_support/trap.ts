@@ -2,7 +2,6 @@ import {maybe, not} from '@ryandur/sand';
 import {boxOf} from './box';
 import type {Locator, Page} from '@playwright/test';
 import {assertionPatience} from './patience';
-import {clickWhereItIs} from './scrolling';
 
 export type SortChoice = 'name' | 'date' | 'size';
 
@@ -26,27 +25,6 @@ const oldWaySortBy = (figure: Locator) => {
       }
       return cardTwo?.contains(topmost) ?? false ? 'card two' : 'something else';
     }, await figure.getByRole('listitem').filter({hasText: /^Card two has z-index/}).elementHandle())
-  };
-};
-
-export const trappedMenu = (page: Page) => {
-  const trap = page.getByRole('region', {name: 'The trap'});
-  const menu = oldWaySortBy(trap);
-  const focusSortBy = async (): Promise<void> => {
-    await untilPressable(menu.sortBy);
-    await menu.sortBy.focus();
-  };
-  return {
-    ...menu,
-    contextChoice: trap.getByRole('checkbox', {name: 'Card one has z-index: 1'}),
-    contextWords: trap.getByText('Card one has z-index: 1', {exact: true}),
-    caption: trap.getByText(/A list with z-index: 9999 opens under a card with z-index: 1/),
-    said: trap.getByRole('status', {name: 'where the list opened'}),
-    focusSortBy,
-    openByKeyboard: async (): Promise<void> => {
-      await focusSortBy();
-      await page.keyboard.press('Enter');
-    }
   };
 };
 
@@ -95,34 +73,6 @@ export const wearsReportedWrong = async (page: Page, whereTheListOpens: readonly
     await page.keyboard.press('Escape');
   }
   return wrong;
-};
-
-export const topLayerMenu = (page: Page) => {
-  const trap = page.getByRole('region', {name: 'The trap'});
-  const sortBy = trap.getByRole('button', {name: /^Sort by(: \w+)?, in the top layer$/});
-  const menu = trap.getByRole('list').filter({has: page.getByRole('button', {name: 'size', exact: true}), hasNot: page.getByRole('list')});
-  const choice = (name: SortChoice) => menu.getByRole('button', {name, exact: true});
-  return {
-    sortBy,
-    menu,
-    choice,
-    open: async (): Promise<void> => {
-      await sortBy.evaluate(button => button.scrollIntoView({block: 'center'}));
-      // Playwright's click retries a button it finds unstable by scrolling it to the view's edge, where the list opens
-      // upward
-      await clickWhereItIs(page, sortBy);
-    },
-    openFromTheBottomEdge: async (): Promise<void> => {
-      await sortBy.evaluate(button => button.scrollIntoView({block: 'end'}));
-      await clickWhereItIs(page, sortBy);
-    },
-    onTopAt: (name: SortChoice): Promise<boolean> => choice(name).evaluate(element => {
-      // WebKit scrolls even a choice already in view to the center, which moves Sort by off the edge it was pressed at
-      element.scrollIntoView({block: 'nearest'});
-      const {left, top, width, height} = element.getBoundingClientRect();
-      return element.contains(document.elementFromPoint(left + width / 2, top + height / 2));
-    })
-  };
 };
 
 export const bannerTrap = (page: Page) => {

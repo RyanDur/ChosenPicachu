@@ -2,7 +2,7 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {exhibit, theTrap, wearsChooser} from '@pages/Demos/ZIndexDemo/__test_support';
+import {exhibit, wearsChooser} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const heading = 'What else forms a stacking context';
 const whatElseForms = 'z-index/what-else-forms-a-stacking-context';
@@ -124,12 +124,6 @@ describe('the part on what else forms a stacking context', () => {
     render(<TestApp at={demosAt(whatElseForms, '?wears=transform')}/>);
 
     expect(wearsChooser.wear(await wearsChooser.find(), 'transform: rotate(-1deg)')).toBeChecked();
-  });
-
-  test('should leave the trap’s checkbox checked when the address names a wear', async () => {
-    render(<TestApp at={demosAt('z-index/why-the-popover-wins', '?wears=opacity')}/>);
-
-    expect(theTrap.cardOneHasZIndexBox(await theTrap.find())).toBeChecked();
   });
 
   test('should send position: relative to its page at MDN', async () => {

@@ -1,0 +1,88 @@
+.menu-in-the-top-layer {
+    display: grid;
+    gap: var(--base-x-2);
+
+    .where-we-meet-it {
+        display: grid;
+        gap: var(--base-x-0_5);
+    }
+
+    .little-window {
+        display: grid;
+        grid-template-rows: auto 1fr;
+        min-inline-size: 0;
+        min-block-size: var(--base-x-32_5);
+        overflow: hidden;
+    }
+
+    .little-bar {
+        padding: var(--base) var(--base-x-2);
+    }
+
+    .little-view {
+        position: relative;
+        min-block-size: 0;
+        overflow: hidden;
+    }
+
+    .little-page {
+        position: absolute;
+        inset: 0;
+        overflow: auto;
+        padding: 0 var(--base-x-1_5) var(--base-x-1_5);
+        display: flex;
+        flex-direction: column;
+        gap: var(--base-x-1_25);
+
+        &.card-one-raised {
+            .one {
+                position: relative;
+                z-index: 9999;
+            }
+        }
+    }
+
+    .little-box {
+        padding: var(--base-x-1_25) var(--base-x-1_75);
+    }
+
+    .little-card {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--base);
+        padding: var(--base-x-1_25) var(--base-x-1_75);
+    }
+
+    .two {
+        min-block-size: var(--base-x-19);
+        margin-block-start: calc(-1 * var(--base-x-3));
+        padding-block-start: var(--base-x-4);
+    }
+
+    .sort-list {
+        /* the reset zeroes a list's margin, and this gives back the browser's own centering */
+        margin: auto;
+        padding: var(--base-x-0_75);
+
+        &:popover-open {
+            display: grid;
+            gap: var(--base-x-0_5);
+        }
+    }
+
+    .raise-card-one {
+        display: flex;
+        align-items: center;
+        gap: var(--base);
+        justify-self: start;
+    }
+
+    .top-layer-code {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
+        gap: var(--base-x-2) var(--base-x-3);
+        align-items: start;
+    }
+}

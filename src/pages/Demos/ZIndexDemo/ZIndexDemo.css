@@ -75,7 +75,7 @@
     }
 }
 
-:is(.trapped-menu, .banner-trap, .context-chooser) {
+:is(.banner-trap, .context-chooser) {
     display: grid;
 
     & > :not(:first-child, :empty) {

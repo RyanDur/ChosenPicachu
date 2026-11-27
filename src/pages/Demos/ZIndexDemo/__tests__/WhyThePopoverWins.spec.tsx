@@ -2,7 +2,7 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demoPage, demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {theTrap, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {menuInTheTopLayer, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const popoverWins = 'z-index/why-the-popover-wins';
 const title = 'Why the popover wins';
@@ -23,13 +23,27 @@ describe('why the popover wins, on its own page', () => {
     expect(explanation.linkNamed(opener, 'Why 9999 still loses')).toHaveAttribute('href', demosAt('z-index/why-9999-still-loses', '?raised=second'));
   });
 
-  test('should show the two Sort by menus it explains, side by side', async () => {
+  test('should show the menu in the top layer, the exhibit it explains', async () => {
     render(<TestApp at={demosAt(popoverWins)}/>);
 
-    const trap = await theTrap.find();
+    expect(await menuInTheTopLayer.find()).toBeInTheDocument();
+  });
 
-    expect(theTrap.controlIn(trap, 'Sort by, the old way')).toBeInTheDocument();
-    expect(theTrap.controlIn(trap, 'Sort by, in the top layer')).toBeInTheDocument();
+  test('should link the run on the menu’s placement to card one’s list in What else forms a stacking context', async () => {
+    render(<TestApp at={demosAt(popoverWins)}/>);
+
+    const part = await explanation.part(title);
+    const run = explanation.saying(part, /The site’s Menu component places a menu/);
+
+    expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context'));
+  });
+
+  test('should link rule, at its first use, to part one’s page with the raised card carried', async () => {
+    render(<TestApp at={demosAt(popoverWins, '?raised=second')}/>);
+
+    const part = await explanation.part(title);
+
+    expect(explanation.linkNamed(part, 'rule')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 
   test('should lead back to part four’s page and on to part six’s page, by number and title, with the raised card carried', async () => {
