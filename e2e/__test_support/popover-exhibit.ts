@@ -10,6 +10,7 @@ export const popoverExhibit = (page: Page) => {
     newest: list.getByRole('button', {name: 'Newest', exact: true}),
     caption: exhibit.getByText(/^The menu in the top layer\. The list is a popover\./),
     nineThousand: exhibit.getByRole('checkbox', {name: /Give card one z-index: 9999\.$/}),
+    nineThousandWords: exhibit.getByText(/^Curious whether a z-index changes any of this\?/),
     cardOneUnderTheMiddle: (): Promise<void> => exhibit.getByText('Card one', {exact: true}).evaluate(card => {
       const {top, height} = card.getBoundingClientRect();
       window.scrollBy(0, top + height / 2 - document.documentElement.clientHeight / 2);

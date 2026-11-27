@@ -1,6 +1,6 @@
 import {Locator, Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {accordions, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, recordPage, siteFrame, tablesDemo} from './__test_support';
+import {accordions, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, popoverExhibit, recordPage, siteFrame, tablesDemo} from './__test_support';
 const opensFromAFingerOnItsName = async (page: Page, name: string): Promise<void> => {
   await page.goto('demos/accordions/');
   const fold = accordions.tab(page).htmlAloneFold(name);
@@ -28,6 +28,28 @@ const opensAndClosesTheExplainer = async (page: Page): Promise<void> => {
 
   await fingerTap(page, fold.getByText('what am I looking at?', {exact: true}));
   await expect(told).toBeHidden();
+};
+
+const choosesInTheMenuInTheTopLayer = async (page: Page): Promise<void> => {
+  await page.goto('demos/z-index/why-the-popover-wins/');
+  await siteFrame(page).hydrated();
+  const menu = popoverExhibit(page);
+
+  await fingerTap(page, menu.sortBy);
+  await expect(menu.list).toBeVisible();
+  await fingerTap(page, menu.newest);
+
+  await expect(menu.list).toBeHidden();
+};
+
+const givesCardOneItsNineThousand = async (page: Page): Promise<void> => {
+  await page.goto('demos/z-index/why-the-popover-wins/');
+  await siteFrame(page).hydrated();
+  const menu = popoverExhibit(page);
+
+  await fingerTap(page, menu.nineThousandWords);
+
+  await expect(menu.nineThousand).toBeChecked();
 };
 
 const raisesAndDismissesTheBanners = async (page: Page): Promise<void> => {
@@ -107,6 +129,10 @@ test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@ph
   test('opens and closes what am I looking at with a finger that lands just off the line', ({page}) => opensAndClosesTheExplainer(page));
 
   test('raises and dismisses the banners from a finger that lands just off their buttons', ({page}) => raisesAndDismissesTheBanners(page));
+
+  test('the menu in the top layer opens and chooses from a finger that lands just off its controls', ({page}) => choosesInTheMenuInTheTopLayer(page));
+
+  test('gives card one z-index 9999 with a finger that lands just off the checkbox’s words', ({page}) => givesCardOneItsNineThousand(page));
 
   test('opens every fold on the record from a finger that lands just off its bar', ({page}) => opensEveryFoldOnTheRecord(page));
 
