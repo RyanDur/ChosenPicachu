@@ -85,7 +85,6 @@
   container: parts-count / inline-size;
   display: flex;
   align-items: center;
-  white-space: nowrap;
   min-block-size: var(--parts-count-reach);
   padding-block: var(--base);
   padding-inline-end: calc(var(--parts-fold-span) + var(--base));
