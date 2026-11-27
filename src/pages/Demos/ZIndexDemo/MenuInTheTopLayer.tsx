@@ -74,21 +74,22 @@ export const MenuInTheTopLayer: FC = () => {
             aria-label="The little page" tabIndex={0}>
             <p className="little-box muted-dashed-outline rounded-corners caption">text on the page</p>
             <section className="one little-card plan-blue hairline-outline rounded-corners">
-              <button type="button" tabIndex={0} className="button primary reachable" id={sortBy}
+              <button type="button" tabIndex={0} className="button card hairline-outline rounded-corners paragraph ink attentive reachable" id={sortBy}
                 popoverTarget={list}>Sort by
               </button>
               <p className="paragraph">Card one</p>
               <ul id={list} popover="auto" aria-labelledby={sortBy}
                 className="sort-list card plan-mint hairline-outline rounded-corners lifted">
                 {['Newest', 'Oldest'].map(choice => <li key={choice}>
-                  <button type="button" tabIndex={0} className="button reachable" popoverTarget={list}
+                  <button type="button" tabIndex={0} className="button card hairline-outline rounded-corners paragraph ink attentive reachable"
+                    popoverTarget={list}
                     popoverTargetAction="hide">{choice}</button>
                 </li>)}
               </ul>
             </section>
             <section className="two little-card plan-rose hairline-outline rounded-corners">
               <p className="paragraph">Card two</p>
-              <button type="button" tabIndex={0} className="button reachable">Open</button>
+              <button type="button" tabIndex={0} className="button card hairline-outline rounded-corners paragraph ink attentive reachable">Open</button>
             </section>
           </section>
         </section>
