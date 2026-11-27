@@ -65,7 +65,7 @@ export const TutorialPage: FC = () => {
       <PartDemo className="tutorial-page">
         <Exhibit name={exhibit.name}>
           <Aggregations/>
-          <ExhibitFoot lead={`${exhibit.name}.`}>{exhibit.says}</ExhibitFoot>
+          <ExhibitFoot><strong className="bold">{`${exhibit.name}.`}</strong> {exhibit.says}</ExhibitFoot>
         </Exhibit>
         <p className="paragraph">
           This tutorial builds on the live table above. It starts where part {startingAt.ordinal} of the tables tab,

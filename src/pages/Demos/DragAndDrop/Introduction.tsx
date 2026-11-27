@@ -25,7 +25,9 @@ export const DragSortIntroduction: FC<PropsWithChildren> = ({children}) =>
       same moves as the pointer.</p>
     <Exhibit name="Three items to put in order">
       {children}
-      <ExhibitFoot lead="Three items.">Drag one by its grip, or focus the grip and use the left and right
-        arrows.</ExhibitFoot>
+      <ExhibitFoot>
+        <strong className="bold">Three items.</strong> Drag one by its grip, or focus the grip and use the left and
+        right arrows.
+      </ExhibitFoot>
     </Exhibit>
   </header>;

@@ -101,7 +101,9 @@ export const Workspace: FC<Props> = ({product}) => {
     })}
     </ol>
     <LeftOutLine/>
-    <ExhibitFoot lead="A desk of charts, kept in the address.">Add, move and remove charts, and the address changes
-      with them.</ExhibitFoot>
+    <ExhibitFoot>
+      <strong className="bold">A desk of charts, kept in the address.</strong> Add, move and remove charts, and the
+      address changes with them.
+    </ExhibitFoot>
   </Exhibit>;
 };

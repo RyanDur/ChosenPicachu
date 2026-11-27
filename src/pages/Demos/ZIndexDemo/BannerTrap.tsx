@@ -54,6 +54,9 @@ export const BannerTrap: FC = () => {
         </li>
       </ol>
     </figure>
-    <ExhibitFoot lead="The banners.">A fixed banner with z-index: 9999 is covered by a card with z-index: 1.</ExhibitFoot>
+    <ExhibitFoot>
+      <strong className="bold">The banners.</strong> A fixed banner with z-index: 9999 is covered by a card with
+      z-index: 1.
+    </ExhibitFoot>
   </Exhibit>;
 };

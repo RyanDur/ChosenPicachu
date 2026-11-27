@@ -98,7 +98,9 @@ export const AContextInsideAContext: FC = () => {
         <output aria-label="what the browser drew" className="paragraph bold">{verdict}</output>
       </section>
     </figure>
-    <ExhibitFoot lead="A context inside a context.">Four steps: the page, a context inside it, a list written
-      inside, then the same list written outside. The numbers stay the same.</ExhibitFoot>
+    <ExhibitFoot>
+      <strong className="bold">A context inside a context.</strong> Four steps: the page, a context inside it, a list
+      written inside, then the same list written outside. The numbers stay the same.
+    </ExhibitFoot>
   </Exhibit>;
 };

@@ -189,7 +189,9 @@ export const WhereSecondGoes: FC = () => {
       <p className="paragraph">{words.stackingContext} Scroll the little page to see fixed and sticky at work.</p>
       {chosenPosition === 'absolute' && <ClearfixTray/>}
     </figure>
-    <ExhibitFoot lead="Where Second goes.">Give Second each position in turn and see where it goes, and what First and
-      Third do.</ExhibitFoot>
+    <ExhibitFoot>
+      <strong className="bold">Where Second goes.</strong> Give Second each position in turn and see where it goes, and
+      what First and Third do.
+    </ExhibitFoot>
   </Exhibit>;
 };

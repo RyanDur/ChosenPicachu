@@ -57,7 +57,7 @@ export const RemembersTheFold: FC = () => {
   return <>
     <Exhibit name={exhibitNames[foldType]}>
       <KnownHeight className={foldMotion} folds={dealtFolds.known[foldType]}/>
-      <ExhibitFoot lead="No script:">HTML and CSS alone.</ExhibitFoot>
+      <ExhibitFoot><strong className="bold">No script:</strong> HTML and CSS alone.</ExhibitFoot>
     </Exhibit>
     <ol className={looks.runs}>
       <li className="run">

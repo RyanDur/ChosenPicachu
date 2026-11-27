@@ -75,7 +75,9 @@ export const BannerControls: FC = () => {
       disabled={not(hydrated)} onClick={() => dispatchBanner(bannerChange.raised(nextNews()))}>
       Raise a banner
     </button>
-    <ExhibitFoot lead="The banner, at the window’s edge.">Four settings: which side the banner lands on, how it lines up
-      there, where it comes from, and where a new banner goes.</ExhibitFoot>
+    <ExhibitFoot>
+      <strong className="bold">The banner, at the window’s edge.</strong> Four settings: which side the banner lands on,
+      how it lines up there, where it comes from, and where a new banner goes.
+    </ExhibitFoot>
   </Exhibit>;
 };
