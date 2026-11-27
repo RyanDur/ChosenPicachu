@@ -1,8 +1,7 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {
-  bannerTrap, contextChooser, nestingExhibit, partFoot, pileSteps, siteFrame, stackingPile, topLayerMenu, trappedMenu,
-  zIndexTab
+  bannerTrap, contextChooser, nestingExhibit, partFoot, pileSteps, popoverExhibit, siteFrame, stackingPile, zIndexTab
 } from './__test_support';
 
 const whyThirdIsOnTop = 'Why Third is on top';
@@ -112,7 +111,7 @@ test('a reader follows why 9999 still loses’s foot on to the next part’s pag
   await expect(zIndexTab(page).partTitle(whatElseForms)).toBeVisible();
 });
 
-test('a reader follows why the popover wins from the z-index tab to its page and finds the menus it explains', async ({page}) => {
+test('a reader follows why the popover wins from the z-index tab to its page and finds the menu it explains', async ({page}) => {
   await page.goto('demos/z-index/');
   await siteFrame(page).hydrated();
 
@@ -120,8 +119,7 @@ test('a reader follows why the popover wins from the z-index tab to its page and
 
   await expect(page).toHaveURL(/demos\/z-index\/why-the-popover-wins\/$/);
   await expect(page.getByText('Z-index · part 5 of 7', {exact: true})).toBeVisible();
-  await expect(trappedMenu(page).sortBy).toBeVisible();
-  await expect(topLayerMenu(page).sortBy).toBeVisible();
+  await expect(popoverExhibit(page).sortBy).toBeVisible();
 });
 
 test('a reader follows what else forms a stacking context’s foot on to the next part’s page, with the wear kept in the address', async ({page}) => {

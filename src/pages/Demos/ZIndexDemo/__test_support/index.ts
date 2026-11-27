@@ -8,6 +8,6 @@ export {positionExhibit} from './position';
 export {exhibit} from './steps';
 export {zIndexTab} from './tab';
 export {oldWayMenu} from './oldWayMenu';
-export {theTrap} from './trap';
 export {wayLabeled} from './ways';
 export {clearfixTray} from './clearfix';
+export {menuInTheTopLayer} from './menuInTheTopLayer';

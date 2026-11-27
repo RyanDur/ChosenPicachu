@@ -1,6 +1,6 @@
 import {Locator, Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {accordions, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, recordPage, siteFrame, tablesDemo, topLayerMenu, trappedMenu} from './__test_support';
+import {accordions, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, recordPage, siteFrame, tablesDemo} from './__test_support';
 const opensFromAFingerOnItsName = async (page: Page, name: string): Promise<void> => {
   await page.goto('demos/accordions/');
   const fold = accordions.tab(page).htmlAloneFold(name);
@@ -30,29 +30,6 @@ const opensAndClosesTheExplainer = async (page: Page): Promise<void> => {
   await expect(told).toBeHidden();
 };
 
-const choosesInTheTrappedMenu = async (page: Page): Promise<void> => {
-  await page.goto('demos/z-index/why-the-popover-wins/');
-  const menu = trappedMenu(page);
-
-  await fingerTap(page, menu.sortBy);
-  await expect(menu.choice('size')).toBeVisible();
-  await fingerTap(page, menu.choice('size'));
-
-  await expect(menu.sortBy).toHaveAccessibleName('Sort by: size, the old way');
-};
-
-const choosesInTheTopLayerMenu = async (page: Page): Promise<void> => {
-  await page.goto('demos/z-index/why-the-popover-wins/');
-  const menu = topLayerMenu(page);
-  await menu.sortBy.evaluate(button => button.scrollIntoView({block: 'center'}));
-
-  await fingerTap(page, menu.sortBy);
-  await expect(menu.menu).toBeVisible();
-  await fingerTap(page, menu.choice('size'));
-
-  await expect(menu.sortBy).toHaveAccessibleName('Sort by: size, in the top layer');
-};
-
 const raisesAndDismissesTheBanners = async (page: Page): Promise<void> => {
   await page.goto('demos/z-index/why-a-fixed-banner-still-loses/');
   const banners = bannerTrap(page);
@@ -65,15 +42,6 @@ const raisesAndDismissesTheBanners = async (page: Page): Promise<void> => {
   await fingerTap(page, banners.raiseSite);
 
   await expect(page.getByRole('alert').getByRole('button', {name: /^dismiss/})).toBeVisible();
-};
-
-const changesTheTrap = async (page: Page): Promise<void> => {
-  await page.goto('demos/z-index/why-the-popover-wins/');
-  const menu = trappedMenu(page);
-
-  await fingerTap(page, menu.contextWords);
-
-  await expect(menu.contextChoice).not.toBeChecked();
 };
 
 const opensEveryFoldOnTheRecord = async (page: Page): Promise<void> => {
@@ -138,13 +106,7 @@ test.describe('a reader on a phone held upright', {tag: '@iPhone'}, () => {
 test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@phoneSideways']}, () => {
   test('opens and closes what am I looking at with a finger that lands just off the line', ({page}) => opensAndClosesTheExplainer(page));
 
-  test('the trap\'s menu opens and chooses from a finger that lands just off its controls', ({page}) => choosesInTheTrappedMenu(page));
-
-  test('the menu in the top layer opens and chooses from a finger that lands just off its controls', ({page}) => choosesInTheTopLayerMenu(page));
-
   test('raises and dismisses the banners from a finger that lands just off their buttons', ({page}) => raisesAndDismissesTheBanners(page));
-
-  test('changes the trap with a finger that lands just off the checkbox\'s words', ({page}) => changesTheTrap(page));
 
   test('opens every fold on the record from a finger that lands just off its bar', ({page}) => opensEveryFoldOnTheRecord(page));
 

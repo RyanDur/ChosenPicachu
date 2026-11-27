@@ -1,5 +1,6 @@
 export {boxOf} from './box';
 export {wholeOnTop} from './whole-on-top';
+export {popoverExhibit} from './popover-exhibit';
 export {chartsPage} from './charts';
 export {practicePage} from './practice';
 export {recordPage} from './record';
@@ -30,7 +31,7 @@ export {clearfixTray} from './clearfix';
 export {positionExhibit} from './position';
 export {zIndexTab} from './z-index';
 export {partFoot} from './part-foot';
-export {bannerTrap, contextChooser, topLayerMenu, trappedMenu, wearsReportedWrong, type SortChoice, type Worn} from './trap';
+export {bannerTrap, contextChooser, wearsReportedWrong, type SortChoice, type Worn} from './trap';
 export {pressTab, tabsTo} from './keyboard';
 export {seedRandom} from './random';
 export {terms} from './terms';

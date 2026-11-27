@@ -8,6 +8,7 @@ const wear = (chooser: HTMLElement, worn: string): HTMLElement => within(chooser
 
 export const wearsChooser = {
   find: (): Promise<HTMLElement> => screen.findByRole('region', named),
+  region: (): HTMLElement => screen.getByRole('region', named),
   query: (): HTMLElement | null => screen.queryByRole('region', named),
   wearsOffered: (chooser: HTMLElement): string[] =>
     within(within(chooser).getByRole('group', {name: 'What card one wears'})).getAllByRole('radio').map(choice => computeAccessibleName(choice)),
