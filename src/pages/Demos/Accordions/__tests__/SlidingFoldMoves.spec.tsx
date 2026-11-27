@@ -21,7 +21,7 @@ describe('how a sliding fold moves, on its own page', () => {
 
     const part = await explanation.part(title);
 
-    expect(accordionsTab.buildsIn(part)).toEqual(['Inclusive accordion using details elements']);
+    expect(accordionsTab.exhibitsIn(part)).toEqual(['Inclusive accordion using details elements']);
   });
 
   test('should build part five’s details fold at its top, exclusive for a reader who arrives with exclusive', async () => {
@@ -29,7 +29,7 @@ describe('how a sliding fold moves, on its own page', () => {
 
     const part = await explanation.part(title);
 
-    expect(accordionsTab.buildsIn(part)).toEqual(['Exclusive accordion using details elements']);
+    expect(accordionsTab.exhibitsIn(part)).toEqual(['Exclusive accordion using details elements']);
   });
 
   test('a reader who arrives with inclusive can choose exclusive on the page, and gets the exclusive details build', async () => {
@@ -38,7 +38,7 @@ describe('how a sliding fold moves, on its own page', () => {
 
     await accordionsTab.choose('fold type', 'Exclusive');
 
-    expect(accordionsTab.buildsIn(part)).toEqual(['Exclusive accordion using details elements']);
+    expect(accordionsTab.exhibitsIn(part)).toEqual(['Exclusive accordion using details elements']);
   });
 
   test('should link the part where a transition first moves a fold to its page, with the fold choices carried', async () => {

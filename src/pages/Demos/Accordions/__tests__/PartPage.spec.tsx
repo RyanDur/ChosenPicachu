@@ -63,7 +63,8 @@ describe('the measured height, on its own page', () => {
 
     const measured = await explanation.part('The measured height');
 
-    expect(accordionsTab.buildsIn(measured)).toEqual(['Accordion using checkboxes and a measured height']);
+    expect(accordionsTab.exhibitsIn(measured))
+      .toEqual(['A fold measured by plain script', 'Accordion using checkboxes and a measured height']);
   });
 
   test('a reader who arrives with no fold type in the address can choose exclusive on the page, and gets the exclusive build', async () => {
@@ -72,7 +73,8 @@ describe('the measured height, on its own page', () => {
 
     await accordionsTab.choose('fold type', 'Exclusive');
 
-    expect(accordionsTab.buildsIn(measured)).toEqual(['Accordion using a radio group and a measured height']);
+    expect(accordionsTab.exhibitsIn(measured))
+      .toEqual(['A fold measured by plain script', 'Accordion using a radio group and a measured height']);
   });
 
   test('should lead back to part three’s page and on to part five’s, by number and title, with the fold choices carried', async () => {

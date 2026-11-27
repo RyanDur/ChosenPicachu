@@ -42,7 +42,7 @@ describe('what the platform gives now, on its own page', () => {
 
     await accordionsTab.choose('fold type', 'Exclusive');
 
-    expect(accordionsTab.buildsIn(part)).toEqual(['Exclusive accordion using details elements']);
+    expect(accordionsTab.exhibitsIn(part)).toEqual(['Exclusive accordion using details elements']);
   });
 
   test('should lead back to part four’s page and on to part six’s, by number and title, with the fold choices carried', async () => {
@@ -65,7 +65,7 @@ describe('what the platform gives now, on its own page', () => {
 
     const explained = await explanation.part(title);
 
-    expect(accordionsTab.buildsIn(explained)).toEqual(['Inclusive accordion using details elements']);
+    expect(accordionsTab.exhibitsIn(explained)).toEqual(['Inclusive accordion using details elements']);
   });
 
   test('should show, with exclusive chosen, the exclusive details build under the platform', async () => {
@@ -73,7 +73,7 @@ describe('what the platform gives now, on its own page', () => {
 
     const explained = await explanation.part(title);
 
-    expect(accordionsTab.buildsIn(explained)).toEqual(['Exclusive accordion using details elements']);
+    expect(accordionsTab.exhibitsIn(explained)).toEqual(['Exclusive accordion using details elements']);
   });
 
   test('should link, with inclusive chosen, the run that introduces details to the build’s source on GitHub', async () => {
@@ -104,7 +104,7 @@ describe('what the platform gives now, on its own page', () => {
   test('should still show the first platform fold’s text after the reader chooses another motion', async () => {
     render(<TestApp at={demosAt(platformWay)}/>);
     const platform = await explanation.part(title);
-    const text = await accordionsTab.openFirstFoldIn(platform);
+    const text = await accordionsTab.openFirstFoldIn(platform, 'Exclusive accordion using details elements');
 
     await accordionsTab.choose('fold motion', 'Drawer');
 

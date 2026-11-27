@@ -7,7 +7,7 @@ import './OldWayMotion.css';
 export const ExclusiveAccordion: FC<AccordionProps> = ({
   className,
   folds
-}) => <article className={classNames('exclusive-accordion', className)}>
+}) => <section className={classNames('exclusive-accordion', className)}>
   <fieldset>
     <legend className="off-screen">folds</legend>
     <ul className="accordion">
@@ -30,4 +30,4 @@ export const ExclusiveAccordion: FC<AccordionProps> = ({
         </li>)}
     </ul>
   </fieldset>
-</article>;
+</section>;

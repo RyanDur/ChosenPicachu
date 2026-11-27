@@ -7,7 +7,7 @@ import './OldWayMotion.css';
 export const InclusiveAccordion: FC<AccordionProps> = ({
   className,
   folds
-}) => <article className={classNames('inclusive-accordion', className)}>
+}) => <section className={classNames('inclusive-accordion', className)}>
   <fieldset>
     <legend className="off-screen">folds</legend>
     <ul className="accordion">
@@ -26,4 +26,4 @@ export const InclusiveAccordion: FC<AccordionProps> = ({
         </li>)}
     </ul>
   </fieldset>
-</article>;
+</section>;
