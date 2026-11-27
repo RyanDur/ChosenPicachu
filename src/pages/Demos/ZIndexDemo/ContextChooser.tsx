@@ -72,7 +72,9 @@ export const ContextChooser: FC = () => {
       </ol>
       <output aria-label="what card one formed" className="paragraph">{openedAsWorn.map(wearing => whatItFormed[wearing]).orElse('')}</output>
     </figure>
-    <ExhibitFoot lead="What card one wears.">Start with nothing, then give card one a property and see where its list
-      opens.</ExhibitFoot>
+    <ExhibitFoot>
+      <strong className="bold">What card one wears.</strong> Start with nothing, then give card one a property and see
+      where its list opens.
+    </ExhibitFoot>
   </Exhibit>;
 };

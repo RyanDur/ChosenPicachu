@@ -83,7 +83,7 @@ export const ChartPage: FC<{readonly kind: ChartKind}> = ({kind}) => {
     <PartDemo className="tutorials">
       <Exhibit name={exhibitName}>
         <Chart/>
-        <ExhibitFoot lead={`${exhibitName}.`}>{foot}</ExhibitFoot>
+        <ExhibitFoot><strong className="bold">{`${exhibitName}.`}</strong> {foot}</ExhibitFoot>
       </Exhibit>
       <h3 className="title">let’s build this feature</h3>
       <p className="overview paragraph">

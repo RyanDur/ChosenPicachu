@@ -15,6 +15,6 @@ export const PlatformExhibit: FC<{folds: Record<FoldType, Fold[]>}> = ({folds}) 
   const {Accordion: Platform} = platformBuilds[foldType];
   return <Exhibit name={exhibitNames[foldType]}>
     <Platform className={foldMotion} folds={folds[foldType]}/>
-    <ExhibitFoot lead="No script:">details elements, with HTML and CSS alone.</ExhibitFoot>
+    <ExhibitFoot><strong className="bold">No script:</strong> details elements, with HTML and CSS alone.</ExhibitFoot>
   </Exhibit>;
 };

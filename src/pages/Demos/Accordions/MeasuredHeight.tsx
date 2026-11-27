@@ -47,8 +47,10 @@ export const MeasuredHeight: FC = () => {
       <figure>
         <PlainFold/>
       </figure>
-      <ExhibitFoot lead="A fold measured by plain script.">It is a separate page, placed inside this one, so the
-        choices the address carries do not reach it.</ExhibitFoot>
+      <ExhibitFoot>
+        <strong className="bold">A fold measured by plain script.</strong> It is a separate page, placed inside this
+        one, so the choices the address carries do not reach it.
+      </ExhibitFoot>
     </Exhibit>
     <ol className={looks.runs}>
       <li className="run">
@@ -98,7 +100,7 @@ export const MeasuredHeight: FC = () => {
             browser paints: the first pins where the motion starts, and the second sets where it ends.</p>
           <Exhibit name={exhibitNames[foldType]}>
             <Measured className={foldMotion} folds={dealtFolds.measured[foldType]}/>
-            <ExhibitFoot lead="Script:">A few lines measure each fold’s height.</ExhibitFoot>
+            <ExhibitFoot><strong className="bold">Script:</strong> A few lines measure each fold’s height.</ExhibitFoot>
           </Exhibit>
           <ol className="runs">
             {foldType === 'exclusive' && <li className="run">
