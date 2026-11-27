@@ -72,7 +72,7 @@ const wordsFor: Record<MeasuredFrom, Words> = {
       a <code className="monospaced">filter</code>, the property that blurs or tints one.</>,
     whereWeMeetIt: whereWeMeetAnAbsoluteBox,
     verdict: 'Second sits 16px down and 24px in from the page’s corner, over the top of the page and outside its parent. It still scrolls with the page.',
-    measuredFromWords: 'the page’s corner, at the red dot. No ancestor is positioned, so the browser goes past the parent to the page.',
+    measuredFromWords: 'the little page’s corner, at the red dot. Nothing above Second in the HTML shown is positioned, so the browser measures from the page, and the little page stands in for it.',
     stackingContext: formsNoneUnlessAZIndex
   },
   view: {
@@ -83,7 +83,7 @@ const wordsFor: Record<MeasuredFrom, Words> = {
       from the browser’s window. Out of the flow, it no longer stretches across its parent, so we give it a width.</>,
     whereWeMeetIt: 'A banner, a chat button, a header pinned to the window.',
     verdict: 'Second leaves the flow and stays put in the window while the page scrolls under it.',
-    measuredFromWords: 'the window’s corner, at the red dot.',
+    measuredFromWords: 'the corner of the window’s view, under its bar, at the red dot.',
     stackingContext: formsOneByItself
   },
   'scroll-edge': {
