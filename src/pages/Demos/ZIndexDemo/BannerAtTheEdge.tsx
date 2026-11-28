@@ -8,11 +8,12 @@ import sheet from './BannerAtTheEdge.css?sample';
 import './LittleWindow.css';
 import './BannerAtTheEdge.css';
 
-type Step = 'written-in-a-card' | 'moved-to-the-page';
+type Step = 'written-in-a-card' | 'moved-to-the-page' | 'a-bigger-number-arrives';
 
 const steps: Choice<Step>[] = [
   {words: 'Written in a card', value: 'written-in-a-card'},
-  {words: 'Moved to the page', value: 'moved-to-the-page'}
+  {words: 'Moved to the page', value: 'moved-to-the-page'},
+  {words: 'A bigger number arrives', value: 'a-bigger-number-arrives'}
 ];
 
 type Told = {
@@ -22,6 +23,7 @@ type Told = {
   comparedWith: string;
   tabOrder: string;
   markup: Line[];
+  rules: Line[];
 };
 
 const theBanner = (indent: string): Line[] =>
@@ -38,9 +40,13 @@ const theCards = (inCardOne: Line[]): Line[] => [
   lines.plain('</section>')
 ];
 
-const rules: Line[] = lines.fromTheExhibit([
+const theRules: Line[] = lines.fromTheExhibit([
   ...carve.unit(sheet, '.little-card {'), lines.blank, ...carve.unit(sheet, '.banner {\n        position: fixed')
 ]);
+
+const theHelpButton: Line[] = lines.marked([lines.plain('<button class="help">Help</button>')]);
+
+const theHelpRule: Line[] = lines.marked(lines.fromTheExhibit(carve.unit(sheet, '.help {\n        position: fixed')));
 
 const told: Record<Step, Told> = {
   'written-in-a-card': {
@@ -52,7 +58,8 @@ const told: Record<Step, Told> = {
     verdict: 'Card two is drawn over the banner.',
     comparedWith: 'what else is inside card one. Card one, as one box, is then compared with card two.',
     tabOrder: 'Raise a banner, then the banner’s dismiss button, then Open.',
-    markup: theCards(theBanner('  '))
+    markup: theCards(theBanner('  ')),
+    rules: theRules
   },
   'moved-to-the-page': {
     story: <>Our fix was to write the banner somewhere else: last on the page, outside every card. Now the browser
@@ -64,7 +71,19 @@ const told: Record<Step, Told> = {
     verdict: 'The banner is drawn over card two, and its dismiss button is now the last stop for the Tab key.',
     comparedWith: 'everything written at the page’s level, card two included.',
     tabOrder: 'Raise a banner, then Open, then the banner’s dismiss button, last on the page.',
-    markup: [...theCards([]), ...theBanner('')]
+    markup: [...theCards([]), ...theBanner('')],
+    rules: theRules
+  },
+  'a-bigger-number-arrives': {
+    story: <>The page’s level has a second cost. The banner is compared with every other number written there. A
+      help button arrives with 10000 and covers the banner’s end. We answer with 10001, and the numbers keep climbing.
+      The next part shows what the browser gives us now.</>,
+    whereWeMeetIt: 'Style sheets with z-index values of 9999, 99999 and higher.',
+    verdict: 'The help button is drawn over the banner’s end.',
+    comparedWith: 'everything written at the page’s level, the help button included.',
+    tabOrder: 'Raise a banner, then Open, then the banner’s dismiss button, then Help.',
+    markup: [...theCards([]), ...theBanner(''), ...theHelpButton],
+    rules: [...theRules, lines.blank, ...theHelpRule]
   }
 };
 
@@ -84,9 +103,15 @@ const TheBanner: FC = () => <p className="banner plan-mint hairline-outline roun
   <LittleButton aria-label="Dismiss the banner">×</LittleButton>
 </p>;
 
+const TheHelpButton: FC = () =>
+  <button type="button" tabIndex={0}
+    className="help button inverse-filled rounded-corners caption attentive reachable badge-before alarm-badge-before">
+    Help · 10000
+  </button>;
+
 export const BannerAtTheEdge: FC = () => {
   const {step, numberedSteps, choose: chooseStep} = useExhibitStep('banner', steps, 'written-in-a-card');
-  const {story, whereWeMeetIt, verdict, comparedWith, tabOrder, markup} = told[step];
+  const {story, whereWeMeetIt, verdict, comparedWith, tabOrder, markup, rules} = told[step];
 
   return <Exhibit name="A fixed banner, in a card and on the page">
     <figure className="banner-at-the-edge code-beside-window field">
@@ -116,7 +141,8 @@ export const BannerAtTheEdge: FC = () => {
               <LittleButton>Open</LittleButton>
             </section>
             {fourTexts.map(text => <TextOnThePage key={text}/>)}
-            {step === 'moved-to-the-page' && <TheBanner/>}
+            {step !== 'written-in-a-card' && <TheBanner/>}
+            {step === 'a-bigger-number-arrives' && <TheHelpButton/>}
           </section>
         </section>
       </section>
@@ -127,8 +153,9 @@ export const BannerAtTheEdge: FC = () => {
       </ResultLine>
     </figure>
     <ExhibitFoot>
-      <strong className="bold">A fixed banner, in a card and on the page.</strong> Two steps: the banner written inside a
-      card, then the same banner written at the page’s level and what that does to the Tab order.
+      <strong className="bold">A fixed banner, in a card and on the page.</strong> Three steps: the banner written inside
+      a card, the same banner written at the page’s level and what that does to the Tab order, and what happens there
+      when a bigger number arrives.
     </ExhibitFoot>
   </Exhibit>;
 };

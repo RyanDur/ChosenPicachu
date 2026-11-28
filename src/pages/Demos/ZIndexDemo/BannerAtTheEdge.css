@@ -69,4 +69,17 @@
         inset-block-end: var(--base);
         z-index: 9999;
     }
+
+    .help {
+        position: fixed;
+        inset-inline-end: var(--base);
+        inset-block-end: var(--base);
+        z-index: 10000;
+        min-block-size: calc(var(--base-x-4) + var(--base-x-1_5));
+        padding-inline: var(--base-x-2);
+
+        @media (pointer: coarse) {
+            min-block-size: calc(var(--finger-reach) + var(--base-x-1_5));
+        }
+    }
 }
