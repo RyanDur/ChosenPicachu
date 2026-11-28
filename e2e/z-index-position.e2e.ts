@@ -4,13 +4,14 @@ import {positionExhibit} from './__test_support';
 
 const address = 'demos/z-index/how-position-places-a-box/';
 
-test('a reader gives Second fixed and hears what it is measured from, under the line’s own label', async ({page}) => {
+test('a reader gives Second fixed and hears what it is measured from, lead and all', async ({page}) => {
   const exhibit = positionExhibit(page);
   await page.goto(address);
 
   await exhibit.chooses('fixed');
 
-  await expect(exhibit.measuredFrom).toHaveText('the corner of the window’s view, under its bar, at the red dot.');
+  await expect(exhibit.measuredFrom)
+    .toHaveText('Measured from: the corner of the window’s view, under its bar, at the red dot.');
 });
 
 test('a keyboard steps Second through all five positions, and the chosen one is the one checked', async ({page}) => {
