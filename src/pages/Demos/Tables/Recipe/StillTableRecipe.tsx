@@ -210,8 +210,8 @@ const ListedCode: FC = () => {
   return <>
     {markupPieces[world]}
     {stylePieces}
-    <p className="paragraph"><strong className="bold">Script:</strong> none yet. Part 5 brings the numbers in from the
-      trades.</p>
+    <p className="paragraph"><strong className="bold">Script:</strong> the numbers are not read yet. Part 5 brings them
+      in from the trades.</p>
     <WorkingCode paths={workingCode[world]}/>
   </>;
 };
