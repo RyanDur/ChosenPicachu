@@ -71,4 +71,14 @@
       grid-template-columns: repeat(2, 1fr);
     }
   }
+
+  &.wraps:not(:has(.pill:nth-of-type(4)):not(:has(.pill:nth-of-type(5)))) {
+    display: flex;
+    flex-wrap: wrap;
+
+    .pill {
+      flex: 1 1 0;
+      min-inline-size: max-content;
+    }
+  }
 }

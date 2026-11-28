@@ -67,7 +67,7 @@ export const BannerAtTheEdge: FC = () => {
   return <Exhibit name="The banner at the window’s edge">
     <figure className="banner-at-the-edge field">
       <p className="caption uppercase" aria-hidden="true">Step</p>
-      <PillGlider label="Step" name="banner" choices={numberedSteps} chosen={step} onChosen={chooseStep}/>
+      <PillGlider label="Step" name="banner" choices={numberedSteps} chosen={step} onChosen={chooseStep} wraps/>
       <p className="paragraph">{story}</p>
       <dl className="where-we-meet-it">
         <dt className="caption uppercase">Where we meet it</dt>
