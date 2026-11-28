@@ -64,7 +64,7 @@ describe('the fold type in the exhibit’s foot', () => {
 
     await accordionsTab.choose('fold type', 'Inclusive');
 
-    expect(accordionsTab.readingIn(row)).toHaveTextContent('Each fold opens on its own.');
+    expect(accordionsTab.readingIn(row)).toHaveTextContent('Opening one fold leaves the others as they are.');
   });
 
   test('should sit in the exhibit, after its folds', async () => {
