@@ -123,6 +123,8 @@ export const BannerAtTheEdge: FC = () => {
       <ResultLine label="Tab order:">
         {tabOrder} The red numbers in the drawing show it. A screen reader reads the page in the same order.
       </ResultLine>
+      <p className="paragraph">The buttons in the drawing do nothing when pressed. They are there to show the Tab
+        stops.</p>
     </figure>
     <ExhibitFoot>
       <strong className="bold">The banner at the window’s edge.</strong> Two steps: the banner written inside a card,
