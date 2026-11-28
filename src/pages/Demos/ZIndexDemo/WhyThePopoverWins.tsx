@@ -47,7 +47,8 @@ export const WhyThePopoverWins: FC = () => <>
     <li className="run">
       <p className="paragraph">Script adds one thing, and it waits for an event. An event is the browser telling the
         page that something happened, such as a click, a key or a popover opening, and script can ask to hear it. When
-        the reader ticks or clears the checkbox, the browser sends a change event. Script writes card-one-z into the
+        the reader ticks or clears the checkbox, the browser sends a change event. That choice is the exhibit’s state,
+        and the address holds it, so a copied link opens with card one raised. Script writes card-one-z into the
         address, and the exhibit reads its words from there, so a copied link opens the same way.</p>
     </li>
     <li className="run">
