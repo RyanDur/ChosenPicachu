@@ -47,6 +47,20 @@ test('Escape closes the list and gives focus back to Sort by', async ({page}) =>
   await expect(menu.sortBy).toBeFocused();
 });
 
+test('a keyboard reader picks Newest, and the list closes with focus back on Sort by', async ({page}) => {
+  await page.goto(address);
+  await siteFrame(page).hydrated();
+  const menu = popoverExhibit(page);
+  await menu.sortBy.press('Enter');
+  await page.keyboard.press('Tab');
+  await expect(menu.newest).toBeFocused();
+
+  await page.keyboard.press('Enter');
+
+  await expect(menu.list).toBeHidden();
+  await expect(menu.sortBy).toBeFocused();
+});
+
 test('a click outside the list closes it', async ({page}) => {
   await page.goto(address);
   await siteFrame(page).hydrated();
