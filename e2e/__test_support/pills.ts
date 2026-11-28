@@ -5,20 +5,6 @@ import {demoSettings} from './demo-settings';
 import {fingerTap} from './finger';
 import {siteFrame} from './site';
 
-const highlightMissesTheChosenPill = (glider: Element): number => {
-  const pill = glider.querySelector('label:has(:checked)');
-  if (!(pill instanceof HTMLElement)) throw new Error('no step is chosen');
-  const highlight = getComputedStyle(glider, '::before');
-  const [width, height] = [parseFloat(highlight.width), parseFloat(highlight.height)];
-  const [across = '0px', down = '0px'] = highlight.translate === 'none' ? [] : highlight.translate.split(' ');
-  const moved = (by: string, size: number): number => by.endsWith('%') ? parseFloat(by) / 100 * size : parseFloat(by);
-  const left = parseFloat(highlight.left) + moved(across, width);
-  const top = parseFloat(highlight.top) + moved(down, height);
-  return Math.max(
-    Math.abs(left - pill.offsetLeft), Math.abs(left + width - pill.offsetLeft - pill.offsetWidth),
-    Math.abs(top - pill.offsetTop), Math.abs(top + height - pill.offsetTop - pill.offsetHeight));
-};
-
 export const pillSwitch = (page: Page, name: string) => {
   const group = page.getByRole('group', {name, exact: true}).first();
   return {
@@ -30,9 +16,7 @@ export const pillSwitch = (page: Page, name: string) => {
     wordsOf: (pill: string): Locator => group.getByText(pill, {exact: true}).first(),
     names: async (): Promise<string[]> => [...(await group.ariaSnapshot()).matchAll(/radio "([^"]+)"/g)].map(([, name]) => name),
     chosen: async (): Promise<string> =>
-      maybe(/radio "([^"]+)" \[checked]/.exec(await group.ariaSnapshot())).map(([, name]) => name).orElse(''),
-    highlightMissesTheChosenPillBy: async (): Promise<number> =>
-      Math.round(await group.evaluate(highlightMissesTheChosenPill))
+      maybe(/radio "([^"]+)" \[checked]/.exec(await group.ariaSnapshot())).map(([, name]) => name).orElse('')
   };
 };
 
