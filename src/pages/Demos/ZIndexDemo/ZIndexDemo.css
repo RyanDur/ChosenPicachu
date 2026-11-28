@@ -75,7 +75,7 @@
     }
 }
 
-:is(.banner-trap, .context-chooser) {
+.context-chooser {
     display: grid;
 
     & > :not(:first-child, :empty) {
@@ -87,27 +87,8 @@
         gap: var(--base-x-2_5);
     }
 
-    &.banner-trap .old-way-cards {
-        --below-the-window: 100lvh;
-
-        gap: var(--below-the-window);
-    }
-
     .old-way-cards:has(.sort-choices) {
         padding-block-end: var(--base-x-7);
-    }
-
-    .trap-ways {
-        flex-basis: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--base-x-2_5);
-    }
-
-    .trap-way {
-        display: grid;
-        gap: var(--base-x-0_5);
-        justify-items: start;
     }
 
     .old-way-card {
@@ -142,14 +123,12 @@
         inset-block-start: calc(100% - var(--base-x-1_25));
         inset-inline-start: var(--base-x-1_25);
     }
-}
 
-.context-chooser {
     .old-way-card .button {
         anchor-name: --sort-by;
     }
 
-    .sort-choices {
+    .old-way-card .sort-choices {
         position-anchor: --sort-by;
         inset-block-start: anchor(end);
         inset-inline-start: anchor(start);
@@ -165,26 +144,5 @@
 
     .isolated {
         isolation: isolate;
-    }
-}
-
-.old-banner {
-    position: fixed;
-    inset-inline: var(--base-x-2);
-    inset-block-end: var(--base-x-2);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    gap: var(--base);
-    padding: var(--base) var(--base-x-2);
-
-    .dismiss {
-        margin-inline-start: auto;
-    }
-}
-
-@media (width <= 600px), (width <= 1100px) and (height <= 600px) {
-    .old-banner {
-        inset-block-end: calc(var(--foot-reach) + var(--base-x-2));
     }
 }

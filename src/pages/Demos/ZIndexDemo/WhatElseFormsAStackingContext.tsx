@@ -33,7 +33,7 @@ export const WhatElseFormsAStackingContext: FC = () => <>
         between the list and the card is positioned.</p>
       <Snippet label="CSS" lines={lines.fromTheExhibit([
         ...carve.unit(zIndexCss, '.old-way-card .button {'), lines.blank,
-        ...carve.unit(zIndexCss, '.sort-choices {\n        position-anchor')
+        ...carve.unit(zIndexCss, '.old-way-card .sort-choices {')
       ])}/>
     </li>
     <li className="run">

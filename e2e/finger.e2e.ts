@@ -1,6 +1,6 @@
 import {Locator, Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {accordions, bannerTrap, chartsPage, contextChooser, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, popoverExhibit, recordPage, siteFrame, tablesDemo} from './__test_support';
+import {accordions, chartsPage, contextChooser, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, popoverExhibit, recordPage, siteFrame, tablesDemo, zIndexTab} from './__test_support';
 const opensFromAFingerOnItsName = async (page: Page, name: string): Promise<void> => {
   await page.goto('demos/accordions/');
   const fold = accordions.tab(page).htmlAloneFold(name);
@@ -64,16 +64,12 @@ const givesCardOneItsNineThousand = async (page: Page): Promise<void> => {
   await expect(menu.nineThousand).toBeChecked();
 };
 
-const raisesAndDismissesTheBanners = async (page: Page): Promise<void> => {
-  await page.goto('demos/z-index/why-a-fixed-banner-still-loses/');
-  const banners = bannerTrap(page);
-  await banners.untilRaisable();
+const raisesABanner = async (page: Page): Promise<void> => {
+  await page.goto('demos/z-index/lets-build-this-feature/');
+  const banners = zIndexTab(page);
+  await banners.raiser.click({trial: true});
 
-  await fingerTap(page, banners.raiseOld);
-  await expect(banners.oldBanner).toBeVisible();
-  await fingerTap(page, banners.dismissOld);
-  await expect(banners.oldBanner).toBeHidden();
-  await fingerTap(page, banners.raiseSite);
+  await fingerTap(page, banners.raiser);
 
   await expect(page.getByRole('alert').getByRole('button', {name: /^dismiss/})).toBeVisible();
 };
@@ -115,8 +111,8 @@ const opensEveryHowIBuiltItFold = async (page: Page): Promise<void> => {
 };
 
 const closesABanner = async (page: Page): Promise<void> => {
-  await page.goto('demos/z-index/why-a-fixed-banner-still-loses/');
-  await bannerTrap(page).raiseSite.tap();
+  await page.goto('demos/z-index/lets-build-this-feature/');
+  await zIndexTab(page).raiser.tap();
   const dismiss = page.getByRole('alert').getByRole('button', {name: /^dismiss/}).first();
   await expect(dismiss).toBeVisible();
 
@@ -140,7 +136,7 @@ test.describe('a reader on a phone held upright', {tag: '@iPhone'}, () => {
 test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@phoneSideways']}, () => {
   test('opens and closes what am I looking at with a finger that lands just off the line', ({page}) => opensAndClosesTheExplainer(page));
 
-  test('raises and dismisses the banners from a finger that lands just off their buttons', ({page}) => raisesAndDismissesTheBanners(page));
+  test('raises a banner from a finger that lands just off Raise a banner', ({page}) => raisesABanner(page));
 
   test('the old-way menu on part 4 opens and chooses from a finger that lands just off its controls', ({page}) => choosesInTheOldWayMenu(page));
 

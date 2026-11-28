@@ -15,6 +15,7 @@ export const zIndexTab = (page: Page) => {
       .getByRole('link', {name: 'Let’s build this feature', exact: true}),
     raiser,
     raisesABanner: (): Promise<void> => raiser.click(),
+    banners: page.getByRole('alert').getByRole('listitem'),
     newestBanner: (): Locator => page.getByRole('alert').getByRole('listitem').last()
   };
 };
