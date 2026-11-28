@@ -3,7 +3,8 @@ import userEvent from '@testing-library/user-event';
 
 type Step = '1 · Written in a card' | '2 · Moved to the page';
 
-const find = (): Promise<HTMLElement> => screen.findByRole('region', {name: 'The banner at the window’s edge'});
+const find = (): Promise<HTMLElement> =>
+  screen.findByRole('region', {name: 'A fixed banner, in a card and on the page'});
 
 const stepIn = (exhibit: HTMLElement, step: Step): HTMLElement =>
   within(within(exhibit).getByRole('group', {name: 'Step'})).getByRole('radio', {name: step});
