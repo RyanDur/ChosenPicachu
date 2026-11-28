@@ -17,20 +17,18 @@
     }
 
     .flow-drawing {
-        display: grid;
-        gap: var(--base-x-1_5);
-
         > * {
             padding: var(--base-x-1_75) var(--base-x-2_5);
+
+            + * {
+                margin-block-start: var(--base-x-1_5);
+            }
         }
 
         &.along-a-line {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: flex-start;
-
             > * {
                 padding: var(--base-x-1_25) var(--base-x-1_5);
+                margin-inline-end: var(--base);
             }
         }
     }

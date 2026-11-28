@@ -1,4 +1,4 @@
-import {FC, useId} from 'react';
+import {FC, Fragment, useId} from 'react';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {classNames} from '@components';
 import * as schema from 'schemawax';
@@ -32,13 +32,16 @@ const stories: Record<Step, string> = {
 
 const flowMarkup: Record<Flow, Line[]> = {
   block: cards.map(card => lines.plain(`<p>${names[card]}</p>`)),
-  inline: [...cards.map(card => lines.plain(`<span>${names[card]}</span>`)), lines.aside('<!-- more of the page -->')]
+  inline: [...cards.map(card => lines.plain(`<span>${names[card]}</span>`)),
+    lines.aside('<!-- more of the page -->')]
 };
 
 const flowRules: Record<Flow, Line[]> = {
   block: [lines.aside('/* none. A p is a block. */')],
   inline: [lines.aside('/* none. A span is inline. */')]
 };
+
+const moreOfThePage = 'more\u00a0of\u00a0the\u00a0page';
 
 const flowVerdicts: Record<Flow, string> = {
   block: 'First is at the top and Third is at the bottom.',
@@ -87,16 +90,17 @@ export const ThePile: FC = () => {
       {flowing(step)
         ? <section className="pile-code">
           <p className="caption uppercase" id={drawingName}>What the browser draws</p>
-          <section className={classNames('flow-drawing', step === 'inline' && 'along-a-line')}
+          <section className={classNames('flow-drawing', step === 'inline' && 'along-a-line lines-for-padded-boxes')}
             aria-labelledby={drawingName}>
-            {cards.map(card => <p key={card} className="card hairline-edged rounded-corners">
-              {names[card]}</p>)}
-            {step === 'inline' && <>
-              <p className="caption muted-ink muted-dashed-outline rounded-corners">
-                more of the page</p>
-              <p className="caption muted-ink muted-dashed-outline rounded-corners">
-                more of the page</p>
-            </>}
+            {step === 'block'
+              ? cards.map(card => <p key={card} className="card hairline-edged rounded-corners">{names[card]}</p>)
+              : <>
+                {cards.map(card => <Fragment key={card}>
+                  <span className="card hairline-edged rounded-corners">{names[card]}</span> </Fragment>)}
+                <span className="caption muted-ink muted-dashed-outline rounded-corners">
+                  {moreOfThePage}</span> <span className="caption muted-ink muted-dashed-outline rounded-corners">
+                  {moreOfThePage}</span>
+              </>}
           </section>
           <Verdict>{flowVerdicts[step]}</Verdict>
         </section>
