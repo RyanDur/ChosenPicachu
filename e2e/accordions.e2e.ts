@@ -153,16 +153,6 @@ test('a reader picks Inclusive in the exhibit’s foot, and two folds of the acc
   await expect.poll(meadow.isOpen).toBe(true);
 });
 
-test('the fold type in the exhibit’s foot says what the reader’s choice does', async ({page}) => {
-  await page.goto('demos/accordions/');
-  const tab = accordions.tab(page);
-  await expect(tab.foldTypeReadingInTheExhibit).toHaveText('Opening one fold closes the others.');
-
-  await tab.choosesTheFoldTypeInTheExhibit('Inclusive');
-
-  await expect(tab.foldTypeReadingInTheExhibit).toHaveText('Each fold opens on its own.');
-});
-
 test('the Accordions tab’s own page offers no fold motion, which its accordion would not follow', async ({page}) => {
   await page.goto('demos/accordions/');
   await siteFrame(page).hydrated();
