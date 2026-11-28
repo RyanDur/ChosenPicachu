@@ -4,9 +4,40 @@ import {type Card, hydration, pileSteps, siteFrame, stackingPile, whichCardIsOnT
 
 const partOne = 'demos/z-index/why-third-is-on-top/';
 
-test('the tab’s pile overlaps with Third on top, and says it is on top because it comes last in the code', async ({page}) => {
+test('the tab’s pile opens on its cards running down the page, none over another, with First at the top and Third at the bottom', async ({page}) => {
+  const pile = pileSteps(page);
+
+  await page.goto('demos/z-index/');
+
+  await expect(pile.step('1 · Block')).toBeChecked();
+  await expect.poll(pile.howTheCardsSit).toBe('down the page');
+  await expect(pile.verdict).toHaveText('First is at the top and Third is at the bottom.');
+});
+
+test('stepping the tab’s pile to inline sets its cards along one line, with the tag that changed in its HTML', async ({page}) => {
   const pile = pileSteps(page);
   await page.goto('demos/z-index/');
+
+  await pile.stepsTo('2 · Inline');
+
+  await expect.poll(pile.howTheCardsSit).toBe('along a line');
+  await expect(pile.verdict).toHaveText('First is first on the line and Third is last.');
+  await expect(pile.html).toContainText('<span>First</span>');
+});
+
+test('stepping the tab’s pile on from inline to the overlap draws the cards over one another, with Third on top', async ({page}) => {
+  const pile = pileSteps(page);
+  await page.goto('demos/z-index/?pile=inline');
+
+  await pile.stepsTo('3 · Overlap');
+
+  await expect.poll(pile.cardsFromTheTop).toEqual(['Third', 'Second', 'First']);
+  await expect(pile.verdict).toHaveText('Third is on top. It comes last in the code.');
+});
+
+test('the tab’s pile overlaps with Third on top, and says it is on top because it comes last in the code', async ({page}) => {
+  const pile = pileSteps(page);
+  await page.goto('demos/z-index/?pile=overlap');
 
   await expect.poll(pile.cardsFromTheTop).toEqual(['Third', 'Second', 'First']);
   await expect(pile.verdict).toHaveText('Third is on top. It comes last in the code.');
@@ -17,7 +48,7 @@ test('the tab’s pile overlaps with Third on top, and says it is on top because
 const givenAZIndexLandsOnTop = async (page: Page, giving: () => Promise<void>, fromTheTop: Card[]): Promise<void> => {
   const pile = pileSteps(page);
   await page.goto('demos/z-index/');
-  await pile.stepsTo('2 · Z-index');
+  await pile.stepsTo('4 · Z-index');
 
   await giving();
 
@@ -32,7 +63,7 @@ test('First given a z-index by a pointer comes to the top of the tab’s pile, w
 test('Third given a z-index stays on top of the tab’s pile, and the sentence says its z-index and its place in the code agree', async ({page}) => {
   const pile = pileSteps(page);
   await page.goto('demos/z-index/');
-  await pile.stepsTo('2 · Z-index');
+  await pile.stepsTo('4 · Z-index');
 
   await pile.givesAZIndexTo('Third');
 
@@ -45,19 +76,19 @@ test('a copied address opens the tab’s pile on the step it names', async ({pag
 
   await page.goto('demos/z-index/?pile=z-index');
 
-  await expect(pile.step('2 · Z-index')).toBeChecked();
+  await expect(pile.step('4 · Z-index')).toBeChecked();
   await expect(pile.verdict).toHaveText('Third is on top. It comes last in the code.');
 });
 
 test('Back steps the tab’s pile back to the step before', async ({page}) => {
   const pile = pileSteps(page);
-  await page.goto('demos/z-index/');
-  await pile.stepsTo('2 · Z-index');
-  await expect(pile.step('2 · Z-index')).toBeChecked();
+  await page.goto('demos/z-index/?pile=overlap');
+  await pile.stepsTo('4 · Z-index');
+  await expect(pile.step('4 · Z-index')).toBeChecked();
 
   await page.goBack();
 
-  await expect(pile.step('1 · Overlap')).toBeChecked();
+  await expect(pile.step('3 · Overlap')).toBeChecked();
 });
 
 test('Second given a z-index by the keyboard comes to the top of the tab’s pile, with the rule that did it', ({page}) =>

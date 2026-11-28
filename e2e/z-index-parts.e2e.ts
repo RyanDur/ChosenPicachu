@@ -27,7 +27,7 @@ test('a reader follows why Third is on top from the z-index tab to its page and 
 
 test('a card raised on the z-index tab is still raised on the page for why Third is on top', async ({page}) => {
   await page.goto('demos/z-index/');
-  await pileSteps(page).stepsTo('2 · Z-index');
+  await pileSteps(page).stepsTo('4 · Z-index');
   await pileSteps(page).givesAZIndexTo('Second');
   await expect(page).toHaveURL(/[?&]raised=second$/);
 
@@ -39,7 +39,7 @@ test('a card raised on the z-index tab is still raised on the page for why Third
 
 test('a reader who steps the tab’s pile back to the overlap finds no card raised on the page for why Third is on top', async ({page}) => {
   await page.goto('demos/z-index/?pile=z-index&raised=first');
-  await pileSteps(page).stepsTo('1 · Overlap');
+  await pileSteps(page).stepsTo('3 · Overlap');
   await expect(page).not.toHaveURL(/raised=/);
 
   await zIndexTab(page).partLink(whyThirdIsOnTop).click();

@@ -62,11 +62,11 @@ describe('the top layer', () => {
     expect(many).toHaveTextContent('the stack grows leftward, so the track is a column.');
   });
 
-  test('the pile starts on its overlap step', async () => {
+  test('the pile starts on its block step', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
     await demoTabs.open('Z-index');
 
-    expect(await zIndexTab.findStep('1 · Overlap')).toBeChecked();
+    expect(await zIndexTab.findStep('1 · Block')).toBeChecked();
   });
 
   test('the button on part one’s pile spreads the cards and offers to collapse them', async () => {

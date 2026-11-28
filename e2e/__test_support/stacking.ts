@@ -4,7 +4,8 @@ import {pillSwitch} from './pills';
 import {siteFrame} from './site';
 
 export type Card = 'First' | 'Second' | 'Third';
-export type Step = '1 · Overlap' | '2 · Z-index';
+export type Step = '1 · Block' | '2 · Inline' | '3 · Overlap' | '4 · Z-index';
+type HowTheCardsSit = 'down the page' | 'along a line' | 'overlapping' | 'neither';
 
 const order: ('None' | Card)[] = ['None', 'First', 'Second', 'Third'];
 
@@ -21,10 +22,24 @@ const cardsFromTheTopWhereAllMeet = (drawing: Locator): Promise<string[]> => dra
     .map(found => found.textContent ?? '');
 });
 
+const howTheCardsSitIn = (drawing: Locator): Promise<HowTheCardsSit> => drawing.evaluate((drawn): HowTheCardsSit => {
+  drawn.scrollIntoView({block: 'center'});
+  const boxes = [...drawn.children]
+    .filter(child => ['First', 'Second', 'Third'].includes(child.textContent ?? ''))
+    .map(card => card.getBoundingClientRect());
+  const overlap = (one: DOMRect, other: DOMRect): boolean =>
+    one.left < other.right && other.left < one.right && one.top < other.bottom && other.top < one.bottom;
+  if (boxes.some((box, at) => boxes.slice(at + 1).some(other => overlap(box, other)))) return 'overlapping';
+  if (boxes.every(box => Math.round(box.top) === Math.round(boxes[0].top))) return 'along a line';
+  if (boxes.every((box, at) => at === 0 || box.top >= boxes[at - 1].bottom)) return 'down the page';
+  return 'neither';
+});
+
 export const pileSteps = (page: Page) => {
   const exhibit = page.getByRole('region', {name: 'The pile', exact: true});
   return {
-    cardsFromTheTop: (): Promise<string[]> => cardsFromTheTopWhereAllMeet(exhibit.getByRole('region', {name: 'What the browser draws · one stacking context'})),
+    cardsFromTheTop: (): Promise<string[]> => cardsFromTheTopWhereAllMeet(exhibit.getByRole('region', {name: /^What the browser draws/})),
+    howTheCardsSit: (): Promise<HowTheCardsSit> => howTheCardsSitIn(exhibit.getByRole('region', {name: /^What the browser draws/})),
     stepsTo: (step: Step): Promise<void> => pillSwitch(page, 'Step').choose(step),
     step: (step: Step): Locator => pillSwitch(page, 'Step').pill(step),
     givesAZIndexTo: (card: 'None' | Card): Promise<void> => pillSwitch(page, 'Give a z-index to').choose(card),
