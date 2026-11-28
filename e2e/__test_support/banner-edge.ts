@@ -1,4 +1,4 @@
-import type {Locator, Page} from '@playwright/test';
+import type {Page} from '@playwright/test';
 import {pressTab} from './keyboard';
 import {siteFrame} from './site';
 import {pillSwitch} from './pills';
@@ -10,18 +10,9 @@ export const bannerAtTheEdge = (page: Page) => {
   const exhibit = page.getByRole('region', {name: 'The banner at the window’s edge', exact: true});
   const littlePage = exhibit.getByRole('region', {name: 'The little page'});
   const steps = pillSwitch(page, 'Step');
-  const panel = (label: string): Locator => exhibit.getByRole('figure').filter({hasText: new RegExp(`^${label}`)});
-  const linesOf = (label: string) => async (): Promise<string[]> =>
-    (await panel(label).getByRole('code').textContent() ?? '').split('\n').map(line => line.trim()).filter(Boolean);
-  const markedIn = (label: string) => (): Promise<string[]> => panel(label)
-    .evaluate(sample => [...sample.querySelectorAll('mark')].map(marked => marked.textContent?.trim() ?? ''));
   return {
     stepsTo: (step: BannerStep): Promise<void> => steps.choose(step),
-    step: (step: BannerStep): Locator => steps.pill(step),
     verdict: exhibit.getByRole('status', {name: 'what the browser drew'}),
-    html: linesOf('HTML'),
-    markedHtml: markedIn('HTML'),
-    css: linesOf('CSS'),
     tabStopsInTheLittlePage: async (): Promise<string[]> => {
       await siteFrame(page).hydrated();
       await littlePage.focus();

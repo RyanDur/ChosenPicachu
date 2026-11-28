@@ -91,6 +91,44 @@ describe('why a fixed banner still loses, on its own page', () => {
     expect(await bannerAtTheEdge.whereWeMeetIt()).not.toHaveTextContent(inACard ?? '');
   });
 
+  test('should open the banner exhibit on the step a copied address names', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=moved-to-the-page')}/>);
+
+    expect(await bannerAtTheEdge.step('2 · Moved to the page')).toBeChecked();
+  });
+
+  test('should show the banner’s HTML written inside card one, after the button that raised it, and mark it', async () => {
+    render(<TestApp at={demosAt(fixedBanner)}/>);
+
+    expect(await bannerAtTheEdge.htmlLines()).toEqual([
+      '<section class="little-card one">',
+      '<button>Raise a banner</button>',
+      '<p class="banner">… <button>×</button></p>',
+      '</section>',
+      '<p>text on the page</p>',
+      '<section class="little-card two">',
+      '<button>Open</button>',
+      '</section>'
+    ]);
+    expect(await bannerAtTheEdge.markedHtml()).toEqual(['<p class="banner">… <button>×</button></p>']);
+  });
+
+  test('should show the banner’s HTML moved to the end of the page, and mark it', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=moved-to-the-page')}/>);
+
+    expect(await bannerAtTheEdge.htmlLines()).toEqual([
+      '<section class="little-card one">',
+      '<button>Raise a banner</button>',
+      '</section>',
+      '<p>text on the page</p>',
+      '<section class="little-card two">',
+      '<button>Open</button>',
+      '</section>',
+      '<p class="banner">… <button>×</button></p>'
+    ]);
+    expect(await bannerAtTheEdge.markedHtml()).toEqual(['<p class="banner">… <button>×</button></p>']);
+  });
+
   test('should ask which card is on top', async () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
 
