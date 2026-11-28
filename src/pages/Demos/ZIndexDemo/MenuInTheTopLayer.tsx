@@ -1,6 +1,6 @@
 import {FC, useId} from 'react';
 import * as schema from 'schemawax';
-import {maybe, not} from '@ryandur/sand';
+import {is, not} from '@ryandur/sand';
 import {classNames, useHydrated} from '@components';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {carve, Line, lines, Snippet} from '../Recipe';
@@ -56,7 +56,7 @@ export const MenuInTheTopLayer: FC = () => {
   const {'card-one-z': cardOneZ, updateSearchParams, removeSearchParams} = useSearchParamsObject({
     'card-one-z': schema.literalUnion('9999')
   });
-  const raised = maybe(cardOneZ).map(() => true).orElse(false);
+  const raised = is(cardOneZ);
   const {verdict, comparedWith, rules} = raised ? cardOneRaised : leftAlone;
   const hydrated = useHydrated();
   const sortById = useId();
