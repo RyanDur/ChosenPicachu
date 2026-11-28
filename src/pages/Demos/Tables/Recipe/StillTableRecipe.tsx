@@ -99,8 +99,8 @@ const markupPieces: Record<World, ReactNode> = {
         carve.between(dealSource, '<table id="live-aggregations"', '</table>'),
         '<DraggableColumn column="buys"', '</Headers>', eachMeasure), '<Cell column="buys"', '</Row>;', eachMeasure)}/>
       </PieceCode>
-      <PieceNote when="Runs each time the page is drawn.">The table, written with components. A component is a function
-        that writes a piece of the page, as the z-index tab explains. <code className="monospaced">Headers</code> writes
+      <PieceNote when="Runs each time the page is drawn.">The table, written with
+        components. <code className="monospaced">Headers</code> writes
         the head’s row, <code className="monospaced">Column</code> a header cell, <code
         className="monospaced">Body</code> the body, <code className="monospaced">Row</code> a
         row, <code className="monospaced">RowHeader</code> the cell that names a row,
@@ -123,16 +123,15 @@ const markupPieces: Record<World, ReactNode> = {
       ]}/></PieceCode>
       <PieceNote when="Runs each time the page is drawn."><code className="monospaced">useDragSortable</code> makes
         the table’s store and returns <code className="monospaced">sortable</code>, and <code
-        className="monospaced">DragSortable</code> hands it to every part inside. After the table, the <code
-        className="monospaced">output</code> is the move report a screen reader hears, and its <code
-        className="monospaced">htmlFor</code> names the table it reports on.</PieceNote>
+        className="monospaced">DragSortable</code> hands it to every part inside. After the table comes the move report
+        the step above describes.</PieceNote>
     </Piece>
     <Piece>
       <PieceCode><InkedLines label="TS" lines={carve.unit(columnSource, 'export const Column')}/></PieceCode>
       <PieceNote when="Runs for lookback and change, each time the page is drawn.">What <code
         className="monospaced">Column</code> writes: one th, for the headers that don’t move, lookback and
-        change. <code className="monospaced">scope="col"</code> says the header names every cell under it, so a screen
-        reader can say “lookback” with each cell in that column. The
+        change. <code className="monospaced">scope="col"</code> makes it its column’s header, as the step above
+        says. The
         classes come from <code className="monospaced">looks</code>: <code className="monospaced">cell</code> and <code
         className="monospaced">header-cell</code>, then the rule after the cell, the bar below it and the focus
         ring. <code className="monospaced">aria-sort</code> and <code className="monospaced">--share</code> are for
@@ -158,8 +157,8 @@ const markupPieces: Record<World, ReactNode> = {
       'data-sort-toggle', '</th>', '<!-- … its sort menu and resize handle -->'),
       '<th scope="col" class="cell header-cell buys', '</tr>', '<!-- … one for each measure -->')}/></PieceCode>
       <PieceNote when="Never changes.">The head: one header cell for each column. <code
-        className="monospaced">scope="col"</code> says the header names every cell under it, so a screen reader can say
-        “trades” with each number in that column. The class <code className="monospaced">lookback</code> or <code
+        className="monospaced">scope="col"</code> makes it its column’s header, as the step above says. The
+        class <code className="monospaced">lookback</code> or <code
         className="monospaced">trades</code> names the column for the style sheet that sets its width. The two muted
         classes draw the rule after the cell and the bar below it. <code
         className="monospaced">focus-ringed</code>, <code className="monospaced">data-column</code> and <code
@@ -182,9 +181,8 @@ const markupPieces: Record<World, ReactNode> = {
     <Piece>
       <PieceCode><InkedLines label="HTML" lines={carve.between(frameTable, '<output class="off-screen"', '</section>')}/>
       </PieceCode>
-      <PieceNote when="Never changes. Part 6 writes into it when a row or column moves.">After the table, the <code
-        className="monospaced">output</code> is the move report a screen reader hears when a row or column moves.
-        Its <code className="monospaced">for</code> names the table it reports on.</PieceNote>
+      <PieceNote when="Never changes. Part 6 writes into it when a row or column moves.">After the table comes the move
+        report the step above describes.</PieceNote>
     </Piece>
   </AnnotatedListing>
 };
