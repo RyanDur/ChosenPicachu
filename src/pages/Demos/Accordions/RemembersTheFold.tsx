@@ -18,7 +18,6 @@ import accordionsCss from './Accordions.css?sample';
 import oldWayMotionCss from './OldWayMotion.css?sample';
 import placementCss from '../../../styles/placement.css?sample';
 import surfaceCss from '../../../styles/surface.css?sample';
-import drawingCss from '../../../styles/drawing.css?sample';
 import {Build} from './build';
 import '../Runs.css';
 import './PartDepth.css';
@@ -134,15 +133,20 @@ export const RemembersTheFold: FC = () => {
               <OffScreenNotGone/>
             </li>
             <li className="run">
-              <p className="paragraph">The bar looks like the site’s diagrams: a paper ground with a charcoal hairline
-                around it. The old way on the z-index tab wears that look too, so I keep it out of the bar’s own style
-                sheet.
-                It is a class in a shared style sheet, <code className="monospaced">drawn-piece</code>, and the bar
-                wears it: the class sits in the element’s class attribute, so its rules apply. The bar’s own style
-                sheet keeps the structure, the row, the padding and the height. The samples that follow show both, the
-                style sheet’s rule and then the shared class.</p>
+              <p className="paragraph">The bar wears the dark look every fold on this tab wears, so I keep that look
+                out of the bar’s own style sheet. It comes from shared classes, and the bar wears them: the classes
+                sit in the element’s class attribute, so their rules apply. <code
+                className="monospaced">inverse-filled</code> sets light words on a dark ground, <code
+                className="monospaced">field-outlined</code> draws the hairline between one bar and the next,
+                and <code className="monospaced">attentive</code> adds a glow while the bar is pressed. The bar’s own
+                style sheet keeps the structure, the row, the padding and the height. The samples that follow show
+                both, the style sheet’s rule and then the shared classes.</p>
               <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '&:not(.close) .info-label {'))}/>
-              <Snippet label="CSS" lines={carve.unit(drawingCss, '.drawn-piece {')}/>
+              <Snippet label="CSS" lines={[
+                ...carve.unit(surfaceCss, '.inverse-filled {'), lines.blank,
+                ...carve.unit(surfaceCss, '.field-outlined {'), lines.blank,
+                ...carve.unit(surfaceCss, '.attentive:where(:not(:disabled)) {')
+              ]}/>
             </li>
             <li className="run">
               <p className="paragraph">Each bar shows an arrow that points right while its fold is closed and down
@@ -209,10 +213,7 @@ export const RemembersTheFold: FC = () => {
             </li>
             <li className="run">
               <p className="paragraph">Inside it, a section of the same height holds the paragraph and scrolls what
-                does not fit. Whether a tall fold’s last line is cut off depends on where its lines fall, so the
-                section wears <code className="monospaced">foot-shadowed</code>. That class paints a shadow at the
-                section’s foot, and over it a cover in the panel’s color that scrolls with the text. The cover hides
-                the shadow when the text is at its end, or when the text fits.
+                does not fit, and the browser’s scrollbar shows that it does.
               {{
                 reveal: ' With reveal, the section sits at the panel’s top, so the text is uncovered from its first line down.',
                 drawer: ' With the drawer, the panel lays the section out as a column set at its end, so the section’s bottom stays on the fold’s edge.',
@@ -220,8 +221,7 @@ export const RemembersTheFold: FC = () => {
               }[foldMotion]}</p>
               <Snippet label="CSS" lines={[
                 ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info-text {\n      overflow-y')), lines.blank,
-                ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info-paragraph {')), lines.blank,
-                ...carve.unit(surfaceCss, '.foot-shadowed {'),
+                ...lines.fromTheExhibit(carve.unit(accordionsCss, '.info-paragraph {')),
                 ...{
                   reveal: [],
                   drawer: [
@@ -257,16 +257,14 @@ export const RemembersTheFold: FC = () => {
               <p className="paragraph">A checked radio stays checked when you press it again, so a fold cannot close
                 itself. So the list starts with a Close radio, checked at first, and choosing it unchecks
                 whichever fold was open.</p>
-              <Snippet label="HTML" lines={lines.fromTheExhibit(carve.between(exclusiveAccordionSource, '<li className="fold close drawn-piece">', '</li>'))}/>
+              <Snippet label="HTML" lines={lines.fromTheExhibit(carve.between(exclusiveAccordionSource, '<li className="fold close">', '</li>'))}/>
             </li>}
             {foldType === 'exclusive' && <li className="run">
               <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
                 gets its own rule: a flex row that centers its one word. Its label fills the whole bar,
-                so a press anywhere on the bar counts. It
-                wears <code className="monospaced">drawn-piece</code>, the class the other bars wear, which has no hover
-                or focus of its own.</p>
+                so a press anywhere on the bar counts. Its label wears the classes the other bars wear, so it looks
+                and answers the same.</p>
               <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '&.close {'))}/>
-              <Snippet label="CSS" lines={carve.unit(drawingCss, '.drawn-piece {')}/>
             </li>}
             <li className="run">
               <p className="paragraph">A screen reader announces each fold as what its markup says it is:

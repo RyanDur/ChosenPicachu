@@ -15,10 +15,10 @@ export const InclusiveAccordion: FC<AccordionProps> = ({
         <li key={heading} className="fold">
           <input id={`fold-${id}-checkbox`} className="info-toggle off-screen" type="checkbox"/>
           <label id={`fold-${id}-checkbox-label`}
-            className="info-label opening-arrow drawn-piece prior-approached corner-after"
+            className="info-label opening-arrow inverse-filled field-outlined attentive prior-approached corner-after"
             htmlFor={`fold-${id}-checkbox`}>{heading}</label>
           <div className="info">
-            <section className="info-text foot-shadowed focus-ringed" tabIndex={0}
+            <section className="info-text focus-ringed" tabIndex={0}
               aria-labelledby={`fold-${id}-checkbox-label`}>
               <p className="info-paragraph">{story}</p>
             </section>

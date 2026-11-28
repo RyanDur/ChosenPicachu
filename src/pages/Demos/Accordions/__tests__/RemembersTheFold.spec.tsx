@@ -199,14 +199,14 @@ describe('how the known height works', () => {
     expect(depth).toBeVisible();
   });
 
-  test('should show the bar’s own rule linked to its file, and its shared look apart from it, linked to the site’s drawing style sheet on GitHub', async () => {
+  test('should show the bar’s own rule linked to its file, and its shared look apart from it, linked to the site’s surface style sheet on GitHub', async () => {
     render(<TestApp at={demosAt(remembers)}/>);
 
     const folded = recipeFolds.story(await explanation.part(title), knownHeightWorks);
 
-    expect(explanation.sampleFilesBeside(folded, /The bar looks like the site’s diagrams/)).toEqual([
+    expect(explanation.sampleFilesBeside(folded, /The bar wears the dark look/)).toEqual([
       ['Accordions/Accordions.css on GitHub'],
-      ['styles/drawing.css on GitHub']
+      ['styles/surface.css on GitHub']
     ]);
   });
 
@@ -216,16 +216,6 @@ describe('how the known height works', () => {
     const folded = recipeFolds.story(await explanation.part(title), knownHeightWorks);
 
     expect(explanation.sampleFilesBeside(folded, threeParts)).toEqual([['Accordions/InclusiveAccordion.tsx on GitHub']]);
-  });
-
-  test('should link the foot shadow’s rule to the site’s surface style sheet, after the exhibit’s own file', async () => {
-    render(<TestApp at={demosAt(remembers)}/>);
-
-    const folded = recipeFolds.story(await explanation.part(title), knownHeightWorks);
-
-    expect(explanation.sampleCaptionsBeside(folded, /That class paints a shadow at the section’s foot/)).toEqual([
-      expect.stringMatching(/^Accordions\/Accordions\.css on GitHub\s+Taken from the exhibit on this page\.\s+styles\/surface\.css on GitHub$/)
-    ]);
   });
 
   test('should show, with exclusive chosen, the build’s source beside the fold’s run linked to its file', async () => {
