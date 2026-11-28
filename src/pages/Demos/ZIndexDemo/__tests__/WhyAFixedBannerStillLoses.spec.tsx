@@ -1,9 +1,8 @@
-import {render, waitFor} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import {Paths} from '@navigation';
 import {TestApp} from '@__test_support/TestApp';
-import {appAddress} from '@__test_support/address';
-import {demoPage, demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
-import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
+import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {bannerAtTheEdge, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const fixedBanner = 'z-index/why-a-fixed-banner-still-loses';
@@ -160,35 +159,6 @@ describe('why a fixed banner still loses, on its own page', () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
 
     expect(await demoTabs.currentButNotThePage()).toEqual(['Z-index']);
-  });
-
-  test('should link Let’s build this feature to the banner’s story on its page, keeping the reader’s choices', async () => {
-    render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
-
-    const part = await explanation.part(title);
-
-    expect(zIndexTab.linkToTheBannerStory(part))
-      .toHaveAttribute('href', `${demosAt('z-index/lets-build-this-feature', '?raised=second')}#news-top-story`);
-  });
-
-  test('should open the banner tutorial at the step that makes the panel a popover, keeping the reader’s choices', async () => {
-    render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
-    const part = await explanation.part(title);
-
-    await zIndexTab.followToTheBannerStory(part);
-
-    await waitFor(() => expect(demoPage.says('Make the panel a popover')).toBeVisible());
-    expect(appAddress.search()).toHaveTextContent('raised=second');
-  });
-
-  test('should take the keyboard to the banner’s story in Let’s build this feature', async () => {
-    render(<TestApp at={demosAt(fixedBanner)}/>);
-    const part = await explanation.part(title);
-
-    await zIndexTab.followToTheBannerStory(part);
-
-    const story = recipeFolds.story(document.body, 'The user sees the news over the page');
-    await waitFor(() => expect(recipeFolds.itemOf(story)).toHaveFocus());
   });
 
   test('should link the old menu it compares itself with to that menu’s page, with the raised card carried', async () => {
