@@ -139,9 +139,10 @@ const markupPieces: Record<World, ReactNode> = {
         className="monospaced">data-drag-sortable</code> arrive with part 6.</PieceNote>
     </Piece>
     <Piece>
-      <PieceCode><InkedLines label="HTML" lines={carve.elided(carve.elided(
+      <PieceCode><InkedLines label="HTML" lines={carve.elided(carve.elided(carve.elided(
         carve.between(frameTable, '<thead>', '</thead>'),
-        'data-sort-toggle', '</th>', '<!-- … its sort menu and resize handle -->'),
+        'data-resize-handle', '</th>', '<!-- … its resize handle -->'),
+      'data-sort-toggle', '</th>', '<!-- … its sort menu and resize handle -->'),
       '<th scope="col" class="cell header-cell buys', '</tr>', '<!-- … one for each measure -->')}/></PieceCode>
       <PieceNote when="Never changes.">The head: one header cell for each column. <code
         className="monospaced">scope="col"</code> says the header names every cell under it, so a screen reader can say
