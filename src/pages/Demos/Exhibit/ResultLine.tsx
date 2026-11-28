@@ -5,7 +5,7 @@ type Labeled = PropsWithChildren<{label: string; className?: string}>;
 
 export const ResultLine: FC<Labeled> = ({label, className, children}) => {
   const id = useId();
-  return <p className={classNames('paragraph', className)}>
-    <label htmlFor={id} className="bold">{label}</label> <output id={id}>{children}</output>
-  </p>;
+  return <output aria-labelledby={id} className={classNames('paragraph', className)}>
+    <span id={id} className="bold">{label}</span> {children}
+  </output>;
 };
