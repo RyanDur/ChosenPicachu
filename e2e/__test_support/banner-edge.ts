@@ -13,6 +13,7 @@ export const bannerAtTheEdge = (page: Page) => {
   const steps = pillSwitch(page, 'Step');
   const labelOf = {banner: littlePage.getByText('Banner · 9999', {exact: true}), cardTwo: littlePage.getByText('Card two · 1', {exact: true})};
   const dismiss = littlePage.getByRole('button', {name: 'Dismiss the banner'});
+  const help = littlePage.getByRole('button', {name: 'Help · 10000'});
   return {
     stepsTo: (step: BannerStep): Promise<void> => steps.choose(step),
     verdict: exhibit.getByRole('status', {name: 'what the browser drew'}),
@@ -32,14 +33,14 @@ export const bannerAtTheEdge = (page: Page) => {
     },
     onTopAtTheBannersEnd: async (): Promise<OnTheBannersEnd> => {
       if (await dismiss.count() !== 1) return 'not drawn yet';
+      const helpButton = await help.count() === 1 ? await help.elementHandle() : null;
       await littlePage.scrollIntoViewIfNeeded();
-      return dismiss.evaluate((button): OnTheBannersEnd => {
+      return dismiss.evaluate((button, helpDrawn): OnTheBannersEnd => {
         const box = button.getBoundingClientRect();
         const hit = document.elementFromPoint((box.left + box.right) / 2, (box.top + box.bottom) / 2);
-        const help = [...document.querySelectorAll('button')].find(({textContent}) => textContent === 'Help · 10000');
         const holds = (drawn?: Element | null): boolean => drawn?.contains(hit) ?? false;
-        return holds(button.parentElement) ? 'the banner' : holds(help) ? 'the help button' : 'neither';
-      });
+        return holds(button.parentElement) ? 'the banner' : holds(helpDrawn) ? 'the help button' : 'neither';
+      }, helpButton);
     },
     onTopWhereCardTwoMeetsTheBanner: async (): Promise<OnTop> => {
       if (await labelOf.banner.count() !== 1 || await labelOf.cardTwo.count() !== 1) return 'not drawn yet';
