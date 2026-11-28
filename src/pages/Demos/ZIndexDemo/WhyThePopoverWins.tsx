@@ -4,6 +4,8 @@ import {MenuInTheTopLayer} from './MenuInTheTopLayer';
 import exhibitSource from './MenuInTheTopLayer.tsx?sample';
 import menuCss from '@components/Menu/Menu.css?sample';
 import itemSource from '@components/Menu/Item.tsx?sample';
+import {TabLink} from '@pages/Demos/TabLink';
+import {DemoTopics} from '@pages/Demos';
 import {PartLink} from './PartLink';
 import '../Runs.css';
 
@@ -29,8 +31,10 @@ export const WhyThePopoverWins: FC = () => <>
     </li>
     <li className="run">
       <p className="paragraph">The site’s other menus are built from three components: Menu, Entry and Item. They
-        write one element each: a menu, an li, which is one item of a list, and a button. This list is not a Menu,
-        because Menu places its list under the button, and this exhibit shows a list with no placement.</p>
+        write one element each: a menu, an li, which is one item of a list, and a button.
+        The <TabLink to={DemoTopics.charts}>Charts tab</TabLink> builds its period menu, over the price chart, from
+        these three, so you can press one there. This list is not a Menu, because Menu places its list under the
+        button, and this exhibit shows a list with no placement.</p>
       <p className="paragraph"><code className="monospaced">Item</code> gives its button the site’s shared classes
         that set its look. I leave a menu’s look to the page that uses it.</p>
       <Snippet label="TS" lines={carve.unit(itemSource, 'export const Item')}/>
@@ -61,6 +65,7 @@ export const WhyThePopoverWins: FC = () => <>
       <p className="paragraph">The site’s Menu component places a menu
         with <Mdn path="Web/CSS/position-area">position-area</Mdn>, below the button that opened it or above it when
         there is no room below, and where a browser has no position-area, it centers the menu on the screen.
+        The <TabLink to={DemoTopics.charts}>Charts tab</TabLink>’s period menu is placed this way.
         In the style sheet the placement sits under <code className="monospaced">&amp;[popover]</code>, which reads as
         a menu that is also a popover. The placement is measured from an anchor, and a popover’s anchor is the button
         that opened it. A menu that is not a popover gets no anchor from the button that opens it, so
