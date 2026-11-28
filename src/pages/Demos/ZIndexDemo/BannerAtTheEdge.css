@@ -7,6 +7,19 @@
         gap: var(--base-x-0_5);
     }
 
+    .code-beside-window {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
+        gap: var(--base-x-2) var(--base-x-3);
+        align-items: start;
+    }
+
+    .code-column {
+        display: grid;
+        gap: var(--base-x-1_5);
+        align-content: start;
+    }
+
     .little-view {
         transform: translate(0);
     }
@@ -35,9 +48,10 @@
     .banner {
         display: flex;
         flex-wrap: wrap;
-        align-items: flex-start;
+        align-items: baseline;
         justify-content: space-between;
         gap: var(--base);
+        padding: var(--base-x-0_75) var(--base) var(--base-x-0_75) var(--base-x-1_75);
 
         .button {
             padding: 0 var(--base-x-1_25);
@@ -48,9 +62,8 @@
         }
     }
 
-    .little-card {
-        position: relative;
-        z-index: 1;
+    .one,
+    .two {
         flex-shrink: 0;
         padding: var(--base-x-1_25) var(--base-x-1_75);
     }
@@ -63,12 +76,15 @@
         min-block-size: var(--base-x-19);
     }
 
+    .little-card {
+        position: relative;
+        z-index: 1;
+    }
+
     .banner {
         position: fixed;
         inset-inline: var(--base);
         inset-block-end: var(--base);
         z-index: 9999;
-        align-items: center;
-        padding: var(--base-x-0_75) var(--base) var(--base-x-0_75) var(--base-x-1_75);
     }
 }

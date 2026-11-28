@@ -2,8 +2,9 @@ import {FC, PropsWithChildren, ReactNode} from 'react';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
-import {useExhibitStep} from '../Recipe';
+import {carve, Line, lines, Snippet, useExhibitStep} from '../Recipe';
 import {Exhibit, ExhibitFoot, ResultLine, Verdict} from '../Exhibit';
+import sheet from './BannerAtTheEdge.css?sample';
 import './LittleWindow.css';
 import './BannerAtTheEdge.css';
 
@@ -20,7 +21,26 @@ type Told = {
   verdict: string;
   comparedWith: string;
   tabOrder: string;
+  markup: Line[];
 };
+
+const theBanner = (indent: string): Line[] =>
+  lines.marked([lines.plain(`${indent}<p class="banner">… <button>×</button></p>`)]);
+
+const theCards = (inCardOne: Line[]): Line[] => [
+  lines.plain('<section class="little-card one">'),
+  lines.plain('  <button>Raise a banner</button>'),
+  ...inCardOne,
+  lines.plain('</section>'),
+  lines.plain('<p>text on the page</p>'),
+  lines.plain('<section class="little-card two">'),
+  lines.plain('  <button>Open</button>'),
+  lines.plain('</section>')
+];
+
+const rules: Line[] = lines.fromTheExhibit([
+  ...carve.unit(sheet, '.little-card {'), lines.blank, ...carve.unit(sheet, '.banner {\n        position: fixed')
+]);
 
 const told: Record<Step, Told> = {
   'written-in-a-card': {
@@ -31,7 +51,8 @@ const told: Record<Step, Told> = {
     whereWeMeetIt: 'A notice or a toast written inside the component that raised it.',
     verdict: 'Card two is drawn over the banner.',
     comparedWith: 'what else is inside card one. Card one, as one box, is then compared with card two.',
-    tabOrder: 'Raise a banner, then the banner’s dismiss button, then Open.'
+    tabOrder: 'Raise a banner, then the banner’s dismiss button, then Open.',
+    markup: theCards(theBanner('  '))
   },
   'moved-to-the-page': {
     story: <>Our fix was to write the banner somewhere else: last on the page, outside every card. Now the browser
@@ -42,7 +63,8 @@ const told: Record<Step, Told> = {
     whereWeMeetIt: 'Banners, toasts and dialogs moved to the end of the page, often by a library.',
     verdict: 'The banner is drawn over card two, and its dismiss button is now the last stop for the Tab key.',
     comparedWith: 'everything written at the page’s level, card two included.',
-    tabOrder: 'Raise a banner, then Open, then the banner’s dismiss button, last on the page.'
+    tabOrder: 'Raise a banner, then Open, then the banner’s dismiss button, last on the page.',
+    markup: [...theCards([]), ...theBanner('')]
   }
 };
 
@@ -64,7 +86,7 @@ const TheBanner: FC = () => <p className="banner plan-mint hairline-outline roun
 
 export const BannerAtTheEdge: FC = () => {
   const {step, numberedSteps, choose: chooseStep} = useExhibitStep('banner', steps, 'written-in-a-card');
-  const {story, whereWeMeetIt, verdict, comparedWith, tabOrder} = told[step];
+  const {story, whereWeMeetIt, verdict, comparedWith, tabOrder, markup} = told[step];
 
   return <Exhibit name="The banner at the window’s edge">
     <figure className="banner-at-the-edge field">
@@ -75,22 +97,28 @@ export const BannerAtTheEdge: FC = () => {
         <dt className="caption uppercase">Where we meet it</dt>
         <dd className="paragraph">{whereWeMeetIt}</dd>
       </dl>
-      <section className="little-window card hairline-outline rounded-corners">
-        <p className="little-bar caption uppercase field hairline-rule-below">The window</p>
-        <section className="little-view">
-          <section className="little-page focus-ringed" aria-label="The little page" tabIndex={0}>
-            <section className="one little-card plan-blue ink-dashed-outline rounded-corners">
-              <p className="paragraph">Card one</p>
-              <LittleButton>Raise a banner</LittleButton>
-              {step === 'written-in-a-card' && <TheBanner/>}
+      <section className="code-beside-window">
+        <section className="code-column">
+          <Snippet label="HTML" lines={markup}/>
+          <Snippet label="CSS" lines={rules}/>
+        </section>
+        <section className="little-window card hairline-outline rounded-corners">
+          <p className="little-bar caption uppercase field hairline-rule-below">The window</p>
+          <section className="little-view">
+            <section className="little-page focus-ringed" aria-label="The little page" tabIndex={0}>
+              <section className="one little-card plan-blue ink-dashed-outline rounded-corners">
+                <p className="paragraph">Card one</p>
+                <LittleButton>Raise a banner</LittleButton>
+                {step === 'written-in-a-card' && <TheBanner/>}
+              </section>
+              <TextOnThePage/>
+              <section className="two little-card plan-rose hairline-outline rounded-corners">
+                <p className="paragraph">Card two · 1</p>
+                <LittleButton>Open</LittleButton>
+              </section>
+              {fourTexts.map(text => <TextOnThePage key={text}/>)}
+              {step === 'moved-to-the-page' && <TheBanner/>}
             </section>
-            <TextOnThePage/>
-            <section className="two little-card plan-rose hairline-outline rounded-corners">
-              <p className="paragraph">Card two · 1</p>
-              <LittleButton>Open</LittleButton>
-            </section>
-            {fourTexts.map(text => <TextOnThePage key={text}/>)}
-            {step === 'moved-to-the-page' && <TheBanner/>}
           </section>
         </section>
       </section>
