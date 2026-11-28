@@ -103,6 +103,13 @@ describe('the Structure practice tab', () => {
     expect(practicePage.linkUnder('ARIA last', 'What else forms a stacking context')).toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context'));
   });
 
+  test('should send the popover menu that carries no role to the z-index page that shows it', async () => {
+    render(<TestApp at={practiceAt('structure')}/>);
+    await practicePage.arrivedOn('Structure');
+
+    expect(practicePage.linkUnder('ARIA last', 'Why the popover wins')).toHaveAttribute('href', demosAt('z-index/why-the-popover-wins'));
+  });
+
   test('should send the pile’s Expand button to the z-index page that draws the pile', async () => {
     render(<TestApp at={practiceAt('structure')}/>);
     await practicePage.arrivedOn('Structure');

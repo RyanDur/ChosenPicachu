@@ -202,7 +202,8 @@ export const StructurePractice: FC = () =>
       platform now does for free. That menu is a menu element holding a list of buttons, with
       role <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role <code className="monospaced">none</code> on each list item. A screen reader reads a menu element as a list, not as a menu, and
       the list item’s own
-      role would get in the way. The popover menu beside it carries no role at all. A term’s definition, the small card
+      role would get in the way. The popover menu in the z-index
+      part <PartLink part="why-the-popover-wins"/> carries no role at all. A term’s definition, the small card
       that opens from a word in a tutorial, has role <code className="monospaced">definition</code>. The Record’s period
       samples are a pre with
       role <code className="monospaced">group</code> and a name, so a screen reader can land on a sample as one thing.
