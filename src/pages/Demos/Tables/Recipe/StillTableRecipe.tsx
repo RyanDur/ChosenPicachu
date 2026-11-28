@@ -1,18 +1,17 @@
 import {ClassGloss} from '@pages/Demos/Accordions';
 import {PartLink} from '@pages/Demos/ZIndexDemo';
 import {FC, ReactNode} from 'react';
-import {Codes, Mdn, Reveal, Says, Snippet, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, lines, carve} from '../../Recipe';
+import {AnnotatedListing, InkedLines, Mdn, Piece, PieceCode, PieceNote, Reveal, Says, Step, StepHeading, Steps, Stories, Story, Tell, Want, Words, WorkingCode, lines, carve} from '../../Recipe';
 import {useControls} from '../../Controls';
 import type {World} from '../../ReaderSettings';
 import {TheImplementation} from './steps';
 import dealSource from '../Builds/EagerTable/EagerTable.tsx?sample';
-import headerSource from '@components/DragSortableTable/DraggableColumn.tsx?sample';
-import cellSource from '@components/DragSortableTable/Cell.tsx?sample';
+import columnSource from '@components/DragSortableTable/Column.tsx?sample';
+import tableCss from '@components/DragSortableTable/Table.css?sample';
 import widthsSource from '@pages/Demos/Tables/Aggregations.css?sample';
 import frameTable from '../Frame/table.html?sample';
 import '../../Recipe/Recipe.css';
 import {Term} from './Term';
-import {elidedHeaders} from './elidedHeaders';
 import {livingStories} from '../living-stories';
 
 const dealPlans: Record<World, ReactNode> = {
@@ -91,33 +90,119 @@ const suppliedBy: Record<World, ReactNode> = {
   </>
 };
 
-const dealCodes: Record<World, ReactNode> = {
-  react: <Codes>
-    <Snippet label="TS" lines={[
-      ...carve.between(dealSource, 'const sortable = useDragSortable(', 'const sortable = useDragSortable(')
-    ]}/>
-    <Snippet label="HTML" lines={[
-      ...elidedHeaders(carve.between(dealSource, 'DragSortable value={sortable}>', '</Headers>')), lines.blank,
-      ...carve.between(dealSource, '</table>', '</DragSortable>')
-    ]}/>
-    <Snippet label="CSS" lines={[
-      ...carve.unit(widthsSource, '.aggregations {')
-    ]}/>
-    <Snippet label="HTML" lines={[
-      ...carve.between(headerSource, 'return <th {...th}', 'scope="col"'), lines.blank,
-      ...carve.between(cellSource, 'return <td {...td}', '</td>;')
-    ]}/>
-  </Codes>,
-  vanilla: <Codes>
-    <Snippet label="HTML" lines={[
-      ...carve.between(frameTable, '<table class="fancy-table', '</th>'), lines.blank,
-      ...carve.between(frameTable, '<tbody class="body">', '</tr>')
-    ]}/>
-    <Snippet label="CSS" lines={[
-      ...carve.unit(widthsSource, '.aggregations {')
-    ]}/>
-  </Codes>
+const eachMeasure = '{/* … one for each measure */}';
+
+const markupPieces: Record<World, ReactNode> = {
+  react: <AnnotatedListing head="REACT · UNDER EACH PIECE, WHAT IT MEANS AND WHEN IT RUNS">
+    <Piece>
+      <PieceCode><InkedLines label="HTML" lines={carve.elided(carve.elided(
+        carve.between(dealSource, '<table id="live-aggregations"', '</table>'),
+        '<DraggableColumn column="buys"', '</Headers>', eachMeasure), '<Cell column="buys"', '</Row>;', eachMeasure)}/>
+      </PieceCode>
+      <PieceNote when="Runs each time the page is drawn.">The table, written with components. A component is a function
+        that writes a piece of the page, as the z-index tab explains. <code className="monospaced">Headers</code> writes
+        the head’s row, <code className="monospaced">Column</code> a header cell, <code
+        className="monospaced">Body</code> the body, <code className="monospaced">Row</code> a
+        row, <code className="monospaced">RowHeader</code> the cell that names a row,
+        and <code className="monospaced">Cell</code> a cell that holds a number. They are the same components the Users
+        page builds its table from. The rest arrive with later parts: <code
+        className="monospaced">DraggableColumn</code>, a header that can move, with part
+        6, <code className="monospaced">SortMenu</code> with part 7 and <code
+        className="monospaced">ResizeHandle</code> with part 8. No part
+        explains <code className="monospaced">DirectionWord</code> and <code
+        className="monospaced">data-ticked</code> yet.</PieceNote>
+    </Piece>
+    <Piece>
+      <PieceCode><InkedLines label="TS" lines={carve.unit(columnSource, 'export const Column')}/></PieceCode>
+      <PieceNote when="Runs for each column, each time the page is drawn.">What <code
+        className="monospaced">Column</code> writes: one th. <code className="monospaced">scope="col"</code> says the
+        header names every cell under it, so a screen reader can say “trades” with each number in that column. The
+        classes come from <code className="monospaced">looks</code>: <code className="monospaced">cell</code> and <code
+        className="monospaced">header-cell</code>, then the rule after the cell, the bar below it and the focus
+        ring. <code className="monospaced">aria-sort</code> and <code className="monospaced">--share</code> are for
+        part 7 and part 8: the first says whether the rows are ranked by this column, and the second is a width the
+        trader has set.</PieceNote>
+    </Piece>
+  </AnnotatedListing>,
+  vanilla: <AnnotatedListing head="HTML · UNDER EACH PIECE, WHAT IT MEANS AND WHEN IT CHANGES">
+    <Piece>
+      <PieceCode><InkedLines label="HTML" lines={carve.between(frameTable, '<section aria-label', '<caption')}/>
+      </PieceCode>
+      <PieceNote when="Never changes.">The table, inside a section the style sheet sizes it by. A screen reader says
+        the caption when its reader enters the table, and the class <code className="monospaced">off-screen</code> keeps
+        it out of sight. The class <code className="monospaced">apportioned</code> says the columns are given their
+        widths. The classes <code className="monospaced">sortable</code>, <code className="monospaced">hide</code> and <code
+        className="monospaced">animated</code> and the attribute <code
+        className="monospaced">data-drag-sortable</code> arrive with part 6.</PieceNote>
+    </Piece>
+    <Piece>
+      <PieceCode><InkedLines label="HTML" lines={carve.elided(carve.elided(
+        carve.between(frameTable, '<thead>', '</thead>'),
+        'data-sort-toggle', '</th>', '<!-- … its sort menu and resize handle -->'),
+      '<th scope="col" class="cell header-cell buys', '</tr>', '<!-- … one for each measure -->')}/></PieceCode>
+      <PieceNote when="Never changes.">The head: one header cell for each column. <code
+        className="monospaced">scope="col"</code> says the header names every cell under it, so a screen reader can say
+        “trades” with each number in that column. The class <code className="monospaced">lookback</code> or <code
+        className="monospaced">trades</code> names the column for the style sheet that sets its width. The two muted
+        classes draw the rule after the cell and the bar below it. <code
+        className="monospaced">focus-ringed</code>, <code className="monospaced">data-column</code> and <code
+        className="monospaced">aria-label</code> are for the later parts: part 6 moves the columns, part 7 sorts
+        them and part 8 resizes them.</PieceNote>
+    </Piece>
+    <Piece>
+      <PieceCode><InkedLines label="HTML" lines={[
+        ...carve.between(frameTable, '<tbody class="body">', '<td class'),
+        lines.aside('    <!-- … one for each measure -->'), lines.plain('</tr>'),
+        lines.aside('<!-- … one row for each lookback -->'), lines.plain('</tbody>')
+      ]}/></PieceCode>
+      <PieceNote when="The page is written with 0 in every cell. Part 5 fills the cells in from the trades.">The body:
+        one row for each lookback. Each row starts with a header cell of its own. <code
+        className="monospaced">scope="row"</code> says it names every cell beside it, so the lookback is said with
+        each number in the row. <code className="monospaced">hover-approached</code> tints the row under the pointer.
+        The row header also holds the grip of part 6, and an <code className="monospaced">aria-label</code> that names
+        the row.</PieceNote>
+    </Piece>
+  </AnnotatedListing>
 };
+
+const stylePieces = <AnnotatedListing head="CSS · UNDER EACH PIECE, WHAT IT MEANS AND WHEN IT CHANGES">
+  <Piece>
+    <PieceCode><InkedLines label="CSS" lines={[
+      ...carve.between(widthsSource, '.aggregations {', 'min-width: 75.3rem;'),
+      lines.aside('    /* … wider on a touch screen */'), lines.plain('  }')
+    ]}/></PieceCode>
+    <PieceNote when="Never changes."><code className="monospaced">table-layout: fixed</code> tells the browser to take
+      each column’s width from the header row and keep it. The columns then hold still while the numbers in them
+      change. The table is never narrower than <code className="monospaced">min-width</code>. In a narrower space the
+      section scrolls sideways.</PieceNote>
+  </Piece>
+  <Piece>
+    <PieceCode><InkedLines label="CSS" lines={[
+      ...carve.between(widthsSource, '.lookback { width', '.change { width'),
+      lines.aside('/* … other shares on a touch screen */')
+    ]}/></PieceCode>
+    <PieceNote when="Changes in part 8, when the trader widens a column.">The width each column opens at, as a share
+      of the table. The widths are in the style sheet because a width is layout, and the HTML holds only the
+      data.</PieceNote>
+  </Piece>
+  <Piece>
+    <PieceCode><InkedLines label="CSS" lines={[
+      ...carve.elided(carve.between(tableCss, '.fancy-table {', 'white-space: nowrap;'),
+        'border-collapse', '&.apportioned', '/* … */'),
+      lines.plain('  }'), lines.plain('}')
+    ]}/></PieceCode>
+    <PieceNote when="Never changes.">What a cell does with a number longer than its column: it keeps to one line and
+      cuts the number short, with three dots where it was cut.</PieceNote>
+  </Piece>
+</AnnotatedListing>;
+
+const ListedCode: FC<{world: World}> = ({world}) => <>
+  {markupPieces[world]}
+  {stylePieces}
+  <p className="paragraph"><strong className="bold">Script:</strong> none yet. Part 5 brings the numbers in from the
+    trades.</p>
+  <WorkingCode paths={[dealSource, columnSource, frameTable, widthsSource, tableCss].map(({path}) => path)}/>
+</>;
 
 const StillStory: FC = () => {
   const {world} = useControls();
@@ -154,7 +239,7 @@ const StillStory: FC = () => {
             the drags, the keyboard, builds on these roles instead of reinventing them. This is the
             first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: use the native element when one already has the
             behavior you need.</Says>
-          {dealCodes[world]}
+          <ListedCode world={world}/>
         </Reveal>
       </Step>
     </Steps>

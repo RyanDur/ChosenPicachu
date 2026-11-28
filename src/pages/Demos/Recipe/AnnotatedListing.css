@@ -1,0 +1,21 @@
+.annotated-listing {
+  margin: 0;
+  overflow: hidden;
+
+  .head {
+    padding: var(--base) var(--base-x-2);
+  }
+
+  .pieces,
+  .piece {
+    display: grid;
+  }
+
+  .note {
+    padding: var(--base-x-1_25) var(--base-x-2) 0;
+  }
+
+  .when {
+    padding: var(--base-x-0_5) var(--base-x-2) var(--base-x-1_25);
+  }
+}

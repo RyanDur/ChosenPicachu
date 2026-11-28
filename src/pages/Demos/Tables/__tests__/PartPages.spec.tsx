@@ -3,7 +3,7 @@ import {TestApp} from '@__test_support/TestApp';
 import {appAddress} from '@__test_support/address';
 import {demoPage, demosAt, demoTabs, pageFoot} from '@pages/Demos/__test_support';
 import {aggregations, tablesTab} from '@pages/Demos/Tables/__test_support';
-import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {explanation, listings, recipeFolds} from '@pages/Demos/Recipe/__test_support';
 import {titleAbove} from '@__test_support/title-above';
 
 const theNeed = 'Start with the need, and let it pick the element';
@@ -387,6 +387,42 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     expect(demoPage.linksToPageIn(await tablesTab().recipe('still table'), demosAt('z-index/why-the-popover-wins')))
       .toEqual([['Why the popover wins', demosAt('z-index/why-the-popover-wins')]]);
+  });
+
+  test('the still table’s page links each file of its working code to that file on GitHub', async () => {
+    render(<TestApp at={theStillTablesPage}/>);
+
+    const recipe = await tablesTab().recipe('still table');
+
+    expect(listings.workingCode(recipe)).toEqual([
+      ['EagerTable/EagerTable.tsx', 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/pages/Demos/Tables/Builds/EagerTable/EagerTable.tsx'],
+      ['DragSortableTable/Column.tsx', 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/components/DragSortableTable/Column.tsx'],
+      ['Frame/table.html', 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/pages/Demos/Tables/Frame/table.html'],
+      ['Tables/Aggregations.css', 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/pages/Demos/Tables/Aggregations.css'],
+      ['DragSortableTable/Table.css', 'https://github.com/RyanDur/ChosenPicachu/blob/main/src/components/DragSortableTable/Table.css']
+    ]);
+  });
+
+  test('the still table’s page shows the React build’s listings when React is chosen', async () => {
+    render(<TestApp at={demosAt('tables/the-still-table', '?world=react')}/>);
+
+    const recipe = await tablesTab().recipe('still table');
+
+    expect(listings.heads(recipe)).toEqual([
+      'REACT · UNDER EACH PIECE, WHAT IT MEANS AND WHEN IT RUNS',
+      'CSS · UNDER EACH PIECE, WHAT IT MEANS AND WHEN IT CHANGES'
+    ]);
+  });
+
+  test('the still table’s page shows the vanilla build’s listings when vanilla is chosen', async () => {
+    render(<TestApp at={demosAt('tables/the-still-table', '?world=vanilla')}/>);
+
+    const recipe = await tablesTab().recipe('still table');
+
+    expect(listings.heads(recipe)).toEqual([
+      'HTML · UNDER EACH PIECE, WHAT IT MEANS AND WHEN IT CHANGES',
+      'CSS · UNDER EACH PIECE, WHAT IT MEANS AND WHEN IT CHANGES'
+    ]);
   });
 
   test('the still table’s page says its place among the parts', async () => {
