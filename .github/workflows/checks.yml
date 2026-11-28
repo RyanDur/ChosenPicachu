@@ -3,7 +3,6 @@ on:
   pull_request:
     branches:
       - main
-  merge_group:
   workflow_dispatch:
 concurrency:
   group: checks-${{ github.event.pull_request.number || github.sha }}
@@ -22,19 +21,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL: ${{ github.event.pull_request.number }}
-          QUEUED_ONTO: ${{ github.event.merge_group.base_ref }}
-          QUEUED_TO: ${{ github.event.merge_group.head_sha }}
         run: |
           site=true
           if [ -n "$PULL" ]; then
             files=$(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PULL/files" -q '.[] | .filename, (.previous_filename // empty)') || files=
             # the files endpoint lists at most 3000 files and drops the rest without saying so
             [ "$(wc -l <<< "$files")" -ge 3000 ] && files=
-          elif [ -n "$QUEUED_ONTO" ]; then
-            # GitHub builds a queued entry on the entries ahead of it and can land them all in one push
-            files=$(gh api "repos/$GITHUB_REPOSITORY/compare/${QUEUED_ONTO#refs/heads/}...$QUEUED_TO" -q '.files[] | .filename, (.previous_filename // empty)') || files=
-            # the compare API lists at most 300 files and drops the rest without saying so
-            [ "$(wc -l <<< "$files")" -ge 300 ] && files=
           fi
           if [ -n "${files:-}" ]; then
             if ! grep -qvE '^docs/|\.md$' <<< "$files"; then
@@ -60,7 +52,9 @@ jobs:
     outputs:
       budgeted: ${{ steps.budgeted.outputs.matrix }}
     steps:
-      # GitHub checks out a temporary merge commit for a pull request, and the samples link to the commit they were built from
+      # the pull request's own head is built, never GitHub's temporary merge commit: the head stays on GitHub after the
+      # merge, so the samples' links to it keep working, and the branch is up to date with main, so its tree is the
+      # tree the rebase lands
       - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
