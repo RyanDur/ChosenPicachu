@@ -26,16 +26,13 @@ jobs:
         run: |
           run=
           pull=
-          # GitHub lists a queue's run and links a commit to its pull request a moment after the push, so both lookups wait
+          # GitHub lists a queue's run a moment after the push, so the lookup waits for it before taking the pull request's run
           for wait in 0 10 20 40; do
             sleep "$wait"
             run=$(gh run list -R "$GITHUB_REPOSITORY" --workflow checks.yml --commit "$GITHUB_SHA" --event merge_group --limit 1 \
               --json databaseId -q '.[0].databaseId // empty') || run=
             [ -n "$run" ] && break
             pull=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null and .base.ref == "main")][0].number // empty') || pull=
-            if [ -n "$pull" ]; then
-              break
-            fi
           done
           if [ -z "$run" ]; then
             if [ -z "$pull" ]; then
@@ -95,6 +92,8 @@ jobs:
   pages:
     needs: passed
     runs-on: ubuntu-26.04
+    outputs:
+      published: ${{ steps.tip.outputs.current }}
     concurrency:
       group: github-pages
       cancel-in-progress: false
@@ -107,17 +106,21 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      # queued merges land seconds apart, and their deploys can finish in either order; only main's tip is published
-      - name: Check this commit is still main's tip
+      # queued merges land seconds apart, and their deploys can finish in either order
+      - name: Check no later commit on main changed code
         id: tip
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tip=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" -q .sha)
-          if [ "$tip" = "$GITHUB_SHA" ]; then
+          later=$(gh api "repos/$GITHUB_REPOSITORY/compare/$GITHUB_SHA...main" \
+            -q '.files | length as $n | [.[] | .filename, (.previous_filename // empty) | select(test("^docs/|\\.md$") | not)] | "\($n) \(length)"') || {
+            echo "::error::main could not be compared with $GITHUB_SHA, so it is not known whether a later deploy publishes main"
+            exit 1
+          }
+          if [ "${later%% *}" -lt 300 ] && [ "${later##* }" = 0 ]; then
             echo "current=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::notice::main has moved on to $tip, whose own deploy publishes it, so $GITHUB_SHA is not deployed"
+            echo "::notice::a later commit on main changed code, and its own deploy publishes main, so $GITHUB_SHA is not deployed"
           fi
       - name: Take the site its checks built
         if: steps.tip.outputs.current == 'true'
@@ -139,6 +142,7 @@ jobs:
 
   smoke:
     needs: pages
+    if: needs.pages.outputs.published == 'true'
     runs-on: ubuntu-24.04
     container:
       image: mcr.microsoft.com/playwright:v1.64.1-noble
