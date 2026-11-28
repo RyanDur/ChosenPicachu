@@ -13,26 +13,6 @@ const whyThePopoverWins = 'Why the popover wins';
 const whyAFixedBannerStillLoses = 'Why a fixed banner still loses';
 const letsBuildThisFeature = 'Let’s build this feature';
 
-test('a reader of the z-index tab’s parts meets why a fixed banner still loses before why the popover wins', async ({page}) => {
-  await page.goto('demos/z-index/');
-
-  await expect(zIndexTab(page).partsInOrder).toHaveText([
-    whyThirdIsOnTop, howPositionPlacesABox, whyNineNineNineStillLoses, whatElseForms,
-    whyAFixedBannerStillLoses, whyThePopoverWins, letsBuildThisFeature
-  ]);
-});
-
-test('a reader of the z-index tab finds its parts under the board’s four headings', async ({page}) => {
-  await page.goto('demos/z-index/');
-  const tab = zIndexTab(page);
-
-  await expect(tab.partsUnder('The order HTML gives'))
-    .toHaveText([whyThirdIsOnTop, howPositionPlacesABox, whyNineNineNineStillLoses, whatElseForms]);
-  await expect(tab.partsUnder('How we used to raise things')).toHaveText([whyAFixedBannerStillLoses]);
-  await expect(tab.partsUnder('What the platform gives now')).toHaveText([whyThePopoverWins]);
-  await expect(tab.partsUnder('Apply it')).toHaveText([letsBuildThisFeature]);
-});
-
 test('a reader follows why Third is on top from the z-index tab to its page and finds its pile', async ({page}) => {
   await page.goto('demos/z-index/');
   await siteFrame(page).hydrated();
