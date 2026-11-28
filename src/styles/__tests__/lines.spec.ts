@@ -4,7 +4,7 @@ import {describe, expect, test} from 'vitest';
 const sheets: Record<string, string> = import.meta.glob('/src/**/*.css', {query: '?raw', import: 'default', eager: true});
 
 const namedLines = (): string[] =>
-  [...sheets['/src/styles/spacing.css'].matchAll(/--(?:no-gutters|nav-in-a-row|search-under-the-title|room-to-stand-open|phone-held-upright|phone-on-its-side):\s*(\d+)px/g)]
+  [...sheets['/src/styles/spacing.css'].matchAll(/(?:--no-gutters|--nav-in-a-row|--search-under-the-title|--room-to-stand-open|--phone-held-upright|--phone-on-its-side):\s*(\d+)px/g)]
     .map(([, px]) => `${px}px`);
 
 const ownLines: Record<string, string[]> = {

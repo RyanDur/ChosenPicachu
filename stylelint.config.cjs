@@ -1,5 +1,7 @@
 const {join} = require('node:path');
 const {motion} = require('./scripts/lint/motion.mjs');
+const {reducedMotionOnce} = require('./scripts/lint/reduced-motion.mjs');
+const {tokenRead} = require('./scripts/lint/tokens.mjs');
 
 const structure = [
   'display', '/^grid/', '/^flex/', 'gap', 'row-gap', 'column-gap', 'order',
@@ -38,11 +40,15 @@ module.exports = {
   extends: ['stylelint-config-recommended'],
   plugins: [
     motion,
+    reducedMotionOnce,
+    tokenRead,
     'stylelint-declaration-strict-value',
     'stylelint-value-no-unknown-custom-properties'
   ],
   rules: {
     'chosen/compositor-motion': true,
+    'chosen/reduced-motion-once': true,
+    'chosen/token-read': true,
     'selector-disallowed-list': [
       ['/(^|[\\s>+~,])(applet|acronym|big|blink|center|font|marquee|strike|tt)(?![\\w-])/'],
       {message: 'obsolete element — this is a strict html5 site'}
