@@ -200,6 +200,11 @@ const stylePieces = <AnnotatedListing heading="CSS · UNDER EACH PIECE, WHAT IT 
   </Piece>
 </AnnotatedListing>;
 
+const workingCode: Record<World, readonly string[]> = {
+  react: [dealSource, columnSource, widthsSource, tableCss].map(({path}) => path),
+  vanilla: [frameTable, widthsSource, tableCss].map(({path}) => path)
+};
+
 const ListedCode: FC = () => {
   const {world} = useControls();
   return <>
@@ -207,7 +212,7 @@ const ListedCode: FC = () => {
     {stylePieces}
     <p className="paragraph"><strong className="bold">Script:</strong> none yet. Part 5 brings the numbers in from the
       trades.</p>
-    <WorkingCode paths={[dealSource, columnSource, frameTable, widthsSource, tableCss].map(({path}) => path)}/>
+    <WorkingCode paths={workingCode[world]}/>
   </>;
 };
 
