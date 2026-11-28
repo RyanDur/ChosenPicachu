@@ -160,8 +160,10 @@ test('the Accordions tab’s own page offers no fold motion, which its accordion
   await expect(page.getByRole('group', {name: 'fold motion', exact: true, includeHidden: true})).toHaveCount(0);
 });
 
-const theFoldChoiceShowsItsName = async (page: Page, name: string): Promise<void> => {
-  await page.goto('demos/accordions/');
+const lessMotion = 'If your system asks for less motion, every fold here opens at once, whichever you choose.';
+
+const theFoldChoiceShowsItsName = async (page: Page, name: string, address: string): Promise<void> => {
+  await page.goto(address);
   const {row, shownNames} = dialRow(page, name);
 
   await row.scrollIntoViewIfNeeded();
@@ -177,7 +179,25 @@ const theFoldChoiceShowsItsName = async (page: Page, name: string): Promise<void
 
 test.describe('the fold choices', {tag: ['@iPhone', '@desktop']}, () => {
   test('the fold type choice shows its name, and a screen reader meets its named pills first, then the reading', ({page}) =>
-    theFoldChoiceShowsItsName(page, 'fold type'));
+    theFoldChoiceShowsItsName(page, 'fold type', 'demos/accordions/'));
+
+  test('the fold motion choice shows its name, and a screen reader meets its named pills first, then the reading', ({page}) =>
+    theFoldChoiceShowsItsName(page, 'fold motion', 'demos/accordions/the-measured-height/'));
+
+  test('the fold motion on a part’s page reads the chosen pill, and reads that no fold moves once the reader asks for less motion', async ({page}) => {
+    await page.emulateMedia({reducedMotion: 'no-preference'});
+    await page.goto('demos/accordions/the-measured-height/?style=drawer');
+    const {reading} = dialRow(page, 'fold motion');
+    await reading.scrollIntoViewIfNeeded();
+
+    await expect(reading).toHaveText('The text slides down from under its bar.', {useInnerText: true});
+    await expect(reading).toMatchAriaSnapshot('- status: The text slides down from under its bar.');
+
+    await page.emulateMedia({reducedMotion: 'reduce'});
+
+    await expect(reading).toHaveText(lessMotion, {useInnerText: true});
+    await expect(reading).toMatchAriaSnapshot(`- status: ${lessMotion}`);
+  });
 });
 
 test.describe('a reader with script turned off', () => {
