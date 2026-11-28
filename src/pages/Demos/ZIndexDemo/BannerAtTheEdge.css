@@ -13,6 +13,22 @@
 
     .little-page {
         padding-block: var(--base-x-1_5) var(--base-x-9);
+        counter-reset: tab-stop;
+
+        .button {
+            counter-increment: tab-stop;
+            display: inline-flex;
+            align-items: center;
+
+            &::before {
+                content: counter(tab-stop) / '';
+                display: inline-grid;
+                place-items: center;
+                inline-size: var(--base-x-2_5);
+                block-size: var(--base-x-2_5);
+                margin-inline-end: var(--base);
+            }
+        }
     }
 
     .little-card,

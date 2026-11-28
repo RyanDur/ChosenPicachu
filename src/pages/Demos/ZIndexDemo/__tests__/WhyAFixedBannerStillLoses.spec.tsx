@@ -81,6 +81,13 @@ describe('why a fixed banner still loses, on its own page', () => {
       /^Tab order: Raise a banner, then Open, then the banner’s dismiss button, last on the page\./);
   });
 
+  test('should say the red numbers in the drawing show the Tab order, and a screen reader reads in the same order', async () => {
+    render(<TestApp at={demosAt(fixedBanner)}/>);
+
+    expect(await bannerAtTheEdge.line('Tab order:')).toHaveTextContent(
+      /\. The red numbers in the drawing show it\. A screen reader reads the page in the same order\.$/);
+  });
+
   test('should say, with the banner written in a card, that we meet it in the component that raised it', async () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
 
