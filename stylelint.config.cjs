@@ -20,9 +20,6 @@ const structure = [
 
 const motionWithAReason = ['src/pages/Demos/Accordions/OldWayMotion.css'];
 
-// The engines the journeys run, at their two latest versions. A feature they all support passes, and so does partial
-// support, since the site leans on the browser and lets an older one degrade. Each ignored feature is one the browser
-// that lacks it has no use for, so leaving it out there costs that reader nothing.
 const supportedBrowsers = ['last 2 Chrome versions', 'last 2 Edge versions', 'last 2 Firefox versions',
   'last 2 Safari versions',
   'last 2 iOS versions', 'last 2 ChromeAndroid versions', 'last 2 FirefoxAndroid versions', 'last 2 Samsung versions'];
