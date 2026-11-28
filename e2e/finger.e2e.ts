@@ -1,6 +1,6 @@
 import {Locator, Page, expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {accordions, bannerTrap, chartsPage, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, popoverExhibit, recordPage, siteFrame, tablesDemo} from './__test_support';
+import {accordions, bannerTrap, chartsPage, contextChooser, demoSettings, fingerTap, foldsAFingerLeavesShut, galleryPage, popoverExhibit, recordPage, siteFrame, tablesDemo} from './__test_support';
 const opensFromAFingerOnItsName = async (page: Page, name: string): Promise<void> => {
   await page.goto('demos/accordions/');
   const fold = accordions.tab(page).htmlAloneFold(name);
@@ -28,6 +28,18 @@ const opensAndClosesTheExplainer = async (page: Page): Promise<void> => {
 
   await fingerTap(page, fold.getByText('what am I looking at?', {exact: true}));
   await expect(told).toBeHidden();
+};
+
+const choosesInTheOldWayMenu = async (page: Page): Promise<void> => {
+  await page.goto('demos/z-index/what-else-forms-a-stacking-context/');
+  await siteFrame(page).hydrated();
+  const menu = contextChooser(page);
+
+  await fingerTap(page, menu.sortBy);
+  await expect(menu.choice('size')).toBeVisible();
+  await fingerTap(page, menu.choice('size'));
+
+  await expect(menu.sortBy).toHaveAccessibleName('Sort by: size, the old way');
 };
 
 const choosesInTheMenuInTheTopLayer = async (page: Page): Promise<void> => {
@@ -129,6 +141,8 @@ test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@ph
   test('opens and closes what am I looking at with a finger that lands just off the line', ({page}) => opensAndClosesTheExplainer(page));
 
   test('raises and dismisses the banners from a finger that lands just off their buttons', ({page}) => raisesAndDismissesTheBanners(page));
+
+  test('the old-way menu on part 4 opens and chooses from a finger that lands just off its controls', ({page}) => choosesInTheOldWayMenu(page));
 
   test('the menu in the top layer opens and chooses from a finger that lands just off its controls', ({page}) => choosesInTheMenuInTheTopLayer(page));
 
