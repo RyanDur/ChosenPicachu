@@ -105,7 +105,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Take the site the pull request's checks built
+      - name: Take the site its checks built
         uses: actions/download-artifact@v7
         with:
           name: site
