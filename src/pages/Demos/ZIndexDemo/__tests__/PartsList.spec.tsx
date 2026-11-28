@@ -19,6 +19,24 @@ describe('the z-index parts list', () => {
     expect(partsIndex.titlesIn(index)).toEqual(titles);
   });
 
+  test('should file each part under its heading, from the order HTML gives to applying it', async () => {
+    render(<TestApp at={demosAt('z-index')}/>);
+    const index = await partsIndex.find();
+    const under = (heading: string): string[] => partsIndex.titlesIn(partsIndex.groupIn(index, heading));
+
+    expect({
+      'The order HTML gives': under('The order HTML gives'),
+      'How we used to raise things': under('How we used to raise things'),
+      'What the platform gives now': under('What the platform gives now'),
+      'Apply it': under('Apply it')
+    }).toEqual({
+      'The order HTML gives': titles.slice(0, 4),
+      'How we used to raise things': ['Why a fixed banner still loses'],
+      'What the platform gives now': ['Why the popover wins'],
+      'Apply it': ['Let’s build this feature']
+    });
+  });
+
   test('should come after the size line, and before the opening and the pile', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
 

@@ -5,6 +5,7 @@ export const partsIndex = {
   find: (): Promise<HTMLElement> => screen.findByRole('navigation', {name: 'Parts'}),
   list: async (): Promise<HTMLElement> => within(await screen.findByRole('navigation', {name: 'Parts'})).getAllByRole('list')[0],
   titlesIn: (index: HTMLElement): string[] => within(index).getAllByRole('link').map(link => link.textContent),
+  groupIn: (index: HTMLElement, heading: string): HTMLElement => within(index).getByRole('list', {name: heading}),
   currentIn: (index: HTMLElement): HTMLElement => within(index).getByRole('link', {current: 'page'}),
   addressesIn: (index: HTMLElement): (string | null)[] =>
     within(index).getAllByRole('link').map(link => link.getAttribute('href')),
