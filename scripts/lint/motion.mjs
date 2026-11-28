@@ -50,8 +50,8 @@ const layoutMotionWithAReason = [
 ];
 
 /**
- * @param {string} outer the enclosing rule's selector, written out, or '' at the top
- * @param {string} selector a nested rule's own selector
+ * @param {string} outer
+ * @param {string} selector
  */
 const nestedIn = (outer, selector) => {
   if (outer === '') return selector;
@@ -60,7 +60,7 @@ const nestedIn = (outer, selector) => {
 
 /**
  * @param {import('postcss').Container | import('postcss').Document | undefined} node
- * @returns {string[]} the node's selectors with every nesting level written out, as the browser reads them
+ * @returns {string[]}
  */
 const resolvedSelectors = node => {
   if (not(is(node)) || node.type === 'root' || node.type === 'document') return [''];
