@@ -185,7 +185,7 @@ const stylePieces = <AnnotatedListing heading="CSS · UNDER EACH PIECE, WHAT IT 
       ...carve.between(widthsSource, '.lookback { width', '.change { width'),
       lines.aside('/* … other shares on a touch screen */')
     ]}/></PieceCode>
-    <PieceNote when="Changes in part 8, when the trader widens a column.">The width each column opens at, as a share
+    <PieceNote when="Never changes. In part 8, a width the trader sets replaces it.">The width each column opens at, as a share
       of the table. The widths are in the style sheet because a width is layout, and the HTML holds only the
       data.</PieceNote>
   </Piece>
