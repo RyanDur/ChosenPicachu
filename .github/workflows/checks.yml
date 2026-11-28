@@ -30,6 +30,8 @@ jobs:
             files=$(gh pr diff "$PULL" -R "$GITHUB_REPOSITORY" --name-only) || files=
           elif [ -n "$QUEUED_FROM" ]; then
             files=$(gh api "repos/$GITHUB_REPOSITORY/compare/$QUEUED_FROM...$QUEUED_TO" -q '.files[].filename') || files=
+            # the compare API lists at most 300 files and drops the rest without saying so
+            [ "$(wc -l <<< "$files")" -ge 300 ] && files=
           fi
           if [ -n "${files:-}" ]; then
             if ! grep -qvE '^docs/|\.md$' <<< "$files"; then
