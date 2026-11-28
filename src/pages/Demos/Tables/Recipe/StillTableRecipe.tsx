@@ -147,8 +147,7 @@ const markupPieces: Record<World, ReactNode> = {
         the caption when its reader enters the table, and the class <code className="monospaced">off-screen</code> keeps
         it out of sight. The class <code className="monospaced">apportioned</code> says the columns are given their
         widths. The classes <code className="monospaced">sortable</code>, <code className="monospaced">hide</code> and <code
-        className="monospaced">animated</code> and the attribute <code
-        className="monospaced">data-drag-sortable</code> arrive with part 6.</PieceNote>
+        className="monospaced">animated</code> are used from part 6.</PieceNote>
     </Piece>
     <Piece>
       <PieceCode><InkedLines label="HTML" lines={carve.elided(carve.elided(carve.elided(
@@ -161,7 +160,8 @@ const markupPieces: Record<World, ReactNode> = {
         class <code className="monospaced">lookback</code> or <code
         className="monospaced">trades</code> names the column for the style sheet that sets its width. The two muted
         classes draw the rule after the cell and the bar below it. <code
-        className="monospaced">focus-ringed</code>, <code className="monospaced">data-column</code> and <code
+        className="monospaced">data-column</code> names the column for the script, as the step above says. <code
+        className="monospaced">focus-ringed</code> and <code
         className="monospaced">aria-label</code> are for the later parts: part 6 moves the columns, part 7 sorts
         them and part 8 resizes them.</PieceNote>
     </Piece>
