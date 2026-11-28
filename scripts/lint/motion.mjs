@@ -1,4 +1,4 @@
-import {has, maybe, not} from '@ryandur/sand';
+import {is, maybe, not} from '@ryandur/sand';
 import stylelint from 'stylelint';
 
 const name = 'chosen/compositor-motion';
@@ -45,19 +45,33 @@ const flips = item => maybe(item.split(/\s+/).find(measures))
 const allowed = property => property === 'none' || composited.has(property) || discrete.has(property) || tracks.has(property);
 
 const layoutMotionWithAReason = [
-  {property: 'block-size', file: 'src/styles/reset.css', part: '::details-content'},
-  {property: 'inset', file: 'src/components/PillGlider/PillGlider.css', part: '::before'}
+  {property: 'block-size', file: 'src/styles/reset.css', selector: 'details::details-content'},
+  {property: 'inset', file: 'src/components/PillGlider/PillGlider.css', selector: '.pill-glider::before'}
 ];
+
+/**
+ * @param {import('postcss').Container | import('postcss').Document | undefined} node
+ * @returns {string[]} the node's selectors with every nesting level written out, as the browser reads them
+ */
+const resolvedSelectors = node => {
+  if (not(is(node)) || node.type === 'root' || node.type === 'document') return [''];
+  const around = resolvedSelectors(node.parent);
+  if (!('selectors' in node)) return around;
+  return around.flatMap(outer => node.selectors.map(selector => {
+    if (outer === '') return selector;
+    return selector.includes('&') ? selector.replaceAll('&', outer) : `${outer} ${selector}`;
+  }));
+};
 
 /**
  * @param {import('postcss').Declaration} declaration
  * @param {string} property
  */
 const excused = (declaration, property) => {
-  const selectors = declaration.parent && 'selectors' in declaration.parent ? declaration.parent.selectors : [];
+  const selectors = resolvedSelectors(declaration.parent);
   const file = maybe(declaration.source).mBind(({input}) => maybe(input.file)).orElse('');
   return layoutMotionWithAReason.some(reason => reason.property === property && file.endsWith(reason.file)
-    && has(selectors) && selectors.every(selector => selector.includes(reason.part)));
+    && selectors.every(selector => selector === reason.selector));
 };
 
 /** @type {import('stylelint').Rule} */
