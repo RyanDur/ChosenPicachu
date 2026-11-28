@@ -142,7 +142,7 @@ export const WhereSecondGoes: FC = () => {
   const words = wordsFor[measuredFrom];
 
   return <Exhibit name="Where Second goes">
-    <figure className="where-second-goes field">
+    <figure className="where-second-goes code-beside-window field">
       <p className="caption uppercase" aria-hidden="true">Second’s position is</p>
       <PillGlider label="Second’s position is" name="second-position" choices={positionChoices}
         chosen={chosenPosition} onChosen={next => change({chosenPosition: next})}/>
