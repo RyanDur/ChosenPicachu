@@ -1,8 +1,9 @@
 import {render} from '@testing-library/react';
+import {Paths} from '@navigation';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {bannerExhibit, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {bannerAtTheEdge, bannerExhibit, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const fixedBanner = 'z-index/why-a-fixed-banner-still-loses';
 const title = 'Why a fixed banner still loses';
@@ -29,6 +30,69 @@ describe('why a fixed banner still loses, on its own page', () => {
 
     expect(explanation.linkNamed(opener, 'What else forms a stacking context'))
       .toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'));
+  });
+
+  test('should link stacking context, at its first use, to the tab’s page, which defines it', async () => {
+    render(<TestApp at={demosAt(fixedBanner)}/>);
+
+    const part = await explanation.part(title);
+
+    expect(explanation.linkNamed(part, 'stacking context')).toHaveAttribute('href', `${Paths.demos}z-index/`);
+  });
+
+  test('should say, with the banner written in a card, that card two is drawn over it', async () => {
+    render(<TestApp at={demosAt(fixedBanner)}/>);
+
+    expect(await bannerAtTheEdge.verdict()).toHaveTextContent(/^Card two is drawn over the banner\.$/);
+  });
+
+  test('should say, with the banner moved to the page, that it is drawn over card two and its dismiss button is the last stop', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=moved-to-the-page')}/>);
+
+    expect(await bannerAtTheEdge.verdict()).toHaveTextContent(
+      /^The banner is drawn over card two, and its dismiss button is now the last stop for the Tab key\.$/);
+  });
+
+  test('should say, with the banner written in a card, that it is compared with what else is inside card one', async () => {
+    render(<TestApp at={demosAt(fixedBanner)}/>);
+
+    expect(await bannerAtTheEdge.line('Compared with:')).toHaveTextContent(
+      /^Compared with: what else is inside card one\. Card one, as one box, is then compared with card two\.$/);
+  });
+
+  test('should say, with the banner moved to the page, that it is compared with everything at the page’s level', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=moved-to-the-page')}/>);
+
+    expect(await bannerAtTheEdge.line('Compared with:')).toHaveTextContent(
+      /^Compared with: everything written at the page’s level, card two included\.$/);
+  });
+
+  test('should say, with the banner written in a card, that Tab reaches its dismiss button between Raise a banner and Open', async () => {
+    render(<TestApp at={demosAt(fixedBanner)}/>);
+
+    expect(await bannerAtTheEdge.line('Tab order:')).toHaveTextContent(
+      /^Tab order: Raise a banner, then the banner’s dismiss button, then Open\./);
+  });
+
+  test('should say, with the banner moved to the page, that Tab reaches its dismiss button last', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=moved-to-the-page')}/>);
+
+    expect(await bannerAtTheEdge.line('Tab order:')).toHaveTextContent(
+      /^Tab order: Raise a banner, then Open, then the banner’s dismiss button, last on the page\./);
+  });
+
+  test('should say, with the banner written in a card, that we meet it in the component that raised it', async () => {
+    render(<TestApp at={demosAt(fixedBanner)}/>);
+
+    expect(await bannerAtTheEdge.whereWeMeetIt()).toHaveTextContent(
+      /^A notice or a toast written inside the component that raised it\.$/);
+  });
+
+  test('should say, with the banner moved to the page, that we meet it at the end of the page', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=moved-to-the-page')}/>);
+
+    expect(await bannerAtTheEdge.whereWeMeetIt()).toHaveTextContent(
+      /^Banners, toasts and dialogs moved to the end of the page, often by a library\.$/);
   });
 
   test('should show the two Raise a banner buttons it explains', async () => {

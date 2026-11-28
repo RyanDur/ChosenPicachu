@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {Link} from 'react-router';
 import {carve, lines, Snippet} from '../Recipe';
 import {useCarriedAddress} from '@pages/Demos/useCarriedAddress';
+import {BannerAtTheEdge} from './BannerAtTheEdge';
 import {BannerTrap} from './BannerTrap';
 import {topLayerStoryTitleId} from './top-layer-story-title-id';
 import zIndexCss from './ZIndexDemo.css?sample';
@@ -15,6 +16,7 @@ export const WhyAFixedBannerStillLoses: FC = () => {
   const carried = useCarriedAddress();
 
   return <>
+    <BannerAtTheEdge/>
     <BannerTrap/>
     <ol className="runs card rounded-corners lifted padded">
       <li className="run">

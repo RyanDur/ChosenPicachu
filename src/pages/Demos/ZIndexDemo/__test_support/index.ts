@@ -1,4 +1,5 @@
 export {bannerExhibit} from './bannerExhibit';
+export {bannerAtTheEdge} from './bannerAtTheEdge';
 export {contextInside} from './contextInside';
 export {oldBanner} from './oldBanner';
 export {siteBanners} from './banners';
