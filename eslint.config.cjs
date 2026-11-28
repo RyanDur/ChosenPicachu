@@ -12,6 +12,8 @@ const {prose} = require('./scripts/lint/prose.mjs');
 const {elements} = require('./scripts/lint/elements.mjs');
 const {tests} = require('./scripts/lint/tests.mjs');
 
+const lookInAJourney = 'a journey tests what a reader does and meets, and a computed style is a look, which is the lead’s measurement (AGENTS.md); e2e/looks reads looks';
+
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
   '@stylistic/quotes': ['error', 'single', {avoidEscape: true}],
@@ -200,7 +202,12 @@ module.exports = [
     files: ['e2e/**/*.ts'],
     ignores: ['e2e/looks/**', 'e2e/media/**'],
     plugins: {playwright},
-    rules: {...journeys, 'playwright/no-skipped-test': ['error', {allowConditional: true}]}
+    rules: {
+      ...journeys,
+      'playwright/no-skipped-test': ['error', {allowConditional: true}],
+      'no-restricted-globals': ['error', {name: 'getComputedStyle', message: lookInAJourney}],
+      'no-restricted-properties': ['error', {object: 'window', property: 'getComputedStyle', message: lookInAJourney}]
+    }
   },
   {
     files: ['e2e/**/*.ts'],
