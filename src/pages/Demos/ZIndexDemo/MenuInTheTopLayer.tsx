@@ -74,22 +74,21 @@ export const MenuInTheTopLayer: FC = () => {
             aria-label="The little page" tabIndex={0}>
             <p className="little-box muted-dashed-outline rounded-corners caption">text on the page</p>
             <section className="one little-card plan-blue hairline-outline rounded-corners">
-              <button type="button" tabIndex={0} className="button card hairline-outline rounded-corners paragraph ink attentive reachable" id={sortById}
-                popoverTarget={listId}>Sort by
-              </button>
+              <button type="button" tabIndex={0} id={sortById} popoverTarget={listId}
+                className="button card hairline-outline rounded-corners paragraph ink attentive reachable">Sort by</button>
               <p className="paragraph">Card one</p>
               <ul id={listId} popover="auto" aria-labelledby={sortById}
                 className="sort-list card plan-mint hairline-outline rounded-corners lifted">
                 {['Newest', 'Oldest'].map(choice => <li key={choice}>
-                  <button type="button" tabIndex={0} className="button card hairline-outline rounded-corners paragraph ink attentive reachable"
-                    popoverTarget={listId}
-                    popoverTargetAction="hide">{choice}</button>
+                  <button type="button" tabIndex={0} popoverTarget={listId} popoverTargetAction="hide"
+                    className="button card hairline-outline rounded-corners paragraph ink attentive reachable">{choice}</button>
                 </li>)}
               </ul>
             </section>
             <section className="two little-card plan-rose hairline-outline rounded-corners">
               <p className="paragraph">Card two</p>
-              <button type="button" tabIndex={0} className="button card hairline-outline rounded-corners paragraph ink attentive reachable">Open</button>
+              <button type="button" tabIndex={0}
+                className="button card hairline-outline rounded-corners paragraph ink attentive reachable">Open</button>
             </section>
           </section>
         </section>
