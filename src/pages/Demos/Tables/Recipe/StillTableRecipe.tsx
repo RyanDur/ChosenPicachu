@@ -196,13 +196,16 @@ const stylePieces = <AnnotatedListing heading="CSS · UNDER EACH PIECE, WHAT IT 
   </Piece>
 </AnnotatedListing>;
 
-const ListedCode: FC<{world: World}> = ({world}) => <>
-  {markupPieces[world]}
-  {stylePieces}
-  <p className="paragraph"><strong className="bold">Script:</strong> none yet. Part 5 brings the numbers in from the
-    trades.</p>
-  <WorkingCode paths={[dealSource, columnSource, frameTable, widthsSource, tableCss].map(({path}) => path)}/>
-</>;
+const ListedCode: FC = () => {
+  const {world} = useControls();
+  return <>
+    {markupPieces[world]}
+    {stylePieces}
+    <p className="paragraph"><strong className="bold">Script:</strong> none yet. Part 5 brings the numbers in from the
+      trades.</p>
+    <WorkingCode paths={[dealSource, columnSource, frameTable, widthsSource, tableCss].map(({path}) => path)}/>
+  </>;
+};
 
 const StillStory: FC = () => {
   const {world} = useControls();
@@ -239,7 +242,7 @@ const StillStory: FC = () => {
             the drags, the keyboard, builds on these roles instead of reinventing them. This is the
             first rule of <Mdn path="Web/Accessibility/ARIA">ARIA</Mdn>: use the native element when one already has the
             behavior you need.</Says>
-          <ListedCode world={world}/>
+          <ListedCode/>
         </Reveal>
       </Step>
     </Steps>
