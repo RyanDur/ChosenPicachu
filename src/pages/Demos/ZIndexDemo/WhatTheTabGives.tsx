@@ -17,6 +17,6 @@ export const WhatTheTabGives: FC = () =>
       attribute, <DemoLink to={accordionParts.addressOf('a-box-remembers-the-fold')}>a class</DemoLink>, a dial
       and <DemoLink to={accordionParts.addressOf('the-measured-height')}>a custom property</DemoLink>.</p>
     <p className="paragraph">Later tabs build on part {popoverPart}, <PartLink part="why-the-popover-wins"/>: React, a
-      component, its state, an event, and this site’s Menu component on a popover. The charts and tables tabs use all
+      component, its state, an event, a popover, and this site’s Menu component. The charts and tables tabs use all
       of these, and the drag sort tab uses all but the menu.</p>
   </section>;
