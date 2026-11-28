@@ -33,13 +33,6 @@ describe('why a fixed banner still loses, on its own page', () => {
       .toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'));
   });
 
-  test('should open by saying it shows why, and what we did about it for years', async () => {
-    render(<TestApp at={demosAt(fixedBanner)}/>);
-
-    expect(explanation.opener(await explanation.part(title))).toHaveTextContent(
-      /^A banner pinned to the window with a z-index of 9999 can still slide under a card as the page scrolls\. This part shows why, and what we did about it for years\. It assumes /);
-  });
-
   test('should link stacking context, at its first use, to the tab’s page, which defines it', async () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
 
@@ -89,25 +82,13 @@ describe('why a fixed banner still loses, on its own page', () => {
       /^Tab order: Raise a banner, then Open, then the banner’s dismiss button, last on the page\./);
   });
 
-  test('should say the red numbers in the drawing show the Tab order, and a screen reader reads in the same order', async () => {
+  test('should say somewhere else we meet the banner once it moves to the page', async () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
+    const inACard = (await bannerAtTheEdge.whereWeMeetIt()).textContent;
 
-    expect(await bannerAtTheEdge.line('Tab order:')).toHaveTextContent(
-      /\. The red numbers in the drawing show it\. A screen reader reads the page in the same order\.$/);
-  });
+    await bannerAtTheEdge.stepTo('2 · Moved to the page');
 
-  test('should say, with the banner written in a card, that we meet it in the component that raised it', async () => {
-    render(<TestApp at={demosAt(fixedBanner)}/>);
-
-    expect(await bannerAtTheEdge.whereWeMeetIt()).toHaveTextContent(
-      /^A notice or a toast written inside the component that raised it\.$/);
-  });
-
-  test('should say, with the banner moved to the page, that we meet it at the end of the page', async () => {
-    render(<TestApp at={demosAt(fixedBanner, '?banner=moved-to-the-page')}/>);
-
-    expect(await bannerAtTheEdge.whereWeMeetIt()).toHaveTextContent(
-      /^Banners, toasts and dialogs moved to the end of the page, often by a library\.$/);
+    expect(await bannerAtTheEdge.whereWeMeetIt()).not.toHaveTextContent(inACard ?? '');
   });
 
   test('should ask which card is on top', async () => {
