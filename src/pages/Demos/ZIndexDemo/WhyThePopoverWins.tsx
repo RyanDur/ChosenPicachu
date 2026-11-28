@@ -32,8 +32,7 @@ export const WhyThePopoverWins: FC = () => <>
         write one element each: a menu, an li, which is one item of a list, and a button. This list is not a Menu,
         because Menu places its list under the button, and this exhibit shows a list with no placement.</p>
       <p className="paragraph"><code className="monospaced">Item</code> gives its button the site’s shared classes
-        that set its look. I leave a menu’s look to the page that uses it, so the page
-        passes <code className="monospaced">Menu</code> those classes, as the sample shows.</p>
+        that set its look. I leave a menu’s look to the page that uses it.</p>
       <Snippet label="TS" lines={carve.unit(itemSource, 'export const Item')}/>
     </li>
     <li className="run">
