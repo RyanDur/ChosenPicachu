@@ -24,6 +24,18 @@ describe('chosen/reduced-motion-once', () => {
     expect(await warningsFor('@media (prefers-reduced-motion: reduce) { a { animation: none; } }')).toHaveLength(1);
   });
 
+  it('should refuse a component stopping its own animation under reduced motion', async () => {
+    expect(await warningsFor('@media (prefers-reduced-motion: reduce) { a { animation-name: none; } }')).toHaveLength(1);
+  });
+
+  it('should refuse a component pausing its own animation under reduced motion', async () => {
+    expect(await warningsFor('@media (prefers-reduced-motion: reduce) { a { animation-play-state: paused; } }')).toHaveLength(1);
+  });
+
+  it('should refuse a component naming no transition under reduced motion', async () => {
+    expect(await warningsFor('@media (prefers-reduced-motion: reduce) { a { transition-property: none; } }')).toHaveLength(1);
+  });
+
   it('should refuse scroll behavior under reduced motion', async () => {
     expect(await warningsFor('@media (prefers-reduced-motion: reduce) { a { scroll-behavior: auto; } }')).toHaveLength(1);
   });

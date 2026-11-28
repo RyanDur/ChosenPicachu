@@ -2,7 +2,11 @@ import {is, maybe, not} from '@ryandur/sand';
 import stylelint from 'stylelint';
 
 const name = 'chosen/reduced-motion-once';
-const theResetsOwn = new Set(['transition', 'transition-duration', 'animation', 'animation-duration', 'animation-iteration-count', 'scroll-behavior']);
+const theResetsOwn = new Set([
+  'transition', 'transition-property', 'transition-duration',
+  'animation', 'animation-name', 'animation-duration', 'animation-iteration-count', 'animation-play-state',
+  'scroll-behavior'
+]);
 
 const messages = stylelint.utils.ruleMessages(name, {
   /** @param {string} property */
@@ -14,7 +18,7 @@ const underReducedMotion = node => {
   if (not(is(node))) return false;
   if (node.type === 'atrule' && 'name' in node && node.name === 'media'
     && /prefers-reduced-motion\s*:\s*reduce/.test(String(node.params))
-    && !/\bnot\s*\(\s*prefers-reduced-motion/.test(String(node.params))) return true;
+    && not(/\bnot\s*\(\s*prefers-reduced-motion/.test(String(node.params)))) return true;
   return underReducedMotion(node.parent);
 };
 
