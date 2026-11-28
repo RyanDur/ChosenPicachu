@@ -105,7 +105,10 @@ const markupPieces: Record<World, ReactNode> = {
         className="monospaced">Body</code> the body, <code className="monospaced">Row</code> a
         row, <code className="monospaced">RowHeader</code> the cell that names a row,
         and <code className="monospaced">Cell</code> a cell that holds a number. They are the same components the Users
-        page builds its table from. The rest arrive with later parts: <code
+        page builds its table from. The table’s caption and rows come in as props,
+        and <code className="monospaced">sortable</code> is what <code
+        className="monospaced">useDragSortable</code> returns, as the step above says. The rest arrive with later
+        parts: <code
         className="monospaced">DraggableColumn</code>, a header that can move, with part
         6, <code className="monospaced">SortMenu</code> with part 7 and <code
         className="monospaced">ResizeHandle</code> with part 8. No part
