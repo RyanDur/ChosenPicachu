@@ -28,6 +28,7 @@ test.describe('the menu in the top layer', {tag: ['@iPhone', '@desktop']}, () =>
     await menu.sortBy.click();
 
     await expect(menu.list).toBeVisible();
+    await expect.poll(() => menu.centeredInTheWindow()).toBe(true);
     await expect.poll(() => wholeOnTop(menu.list)).toBe(true);
   });
 });
