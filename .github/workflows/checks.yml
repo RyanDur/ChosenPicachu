@@ -22,14 +22,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL: ${{ github.event.pull_request.number }}
-          QUEUED_FROM: ${{ github.event.merge_group.base_sha }}
+          QUEUED_ONTO: ${{ github.event.merge_group.base_ref }}
           QUEUED_TO: ${{ github.event.merge_group.head_sha }}
         run: |
           site=true
           if [ -n "$PULL" ]; then
             files=$(gh pr diff "$PULL" -R "$GITHUB_REPOSITORY" --name-only) || files=
-          elif [ -n "$QUEUED_FROM" ]; then
-            files=$(gh api "repos/$GITHUB_REPOSITORY/compare/$QUEUED_FROM...$QUEUED_TO" -q '.files[].filename') || files=
+          elif [ -n "$QUEUED_ONTO" ]; then
+            # GitHub builds a queued entry on the entries ahead of it and can land them all in one push
+            files=$(gh api "repos/$GITHUB_REPOSITORY/compare/${QUEUED_ONTO#refs/heads/}...$QUEUED_TO" -q '.files[].filename') || files=
             # the compare API lists at most 300 files and drops the rest without saying so
             [ "$(wc -l <<< "$files")" -ge 300 ] && files=
           fi
