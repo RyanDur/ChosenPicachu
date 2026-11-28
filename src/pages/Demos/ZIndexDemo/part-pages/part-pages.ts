@@ -4,29 +4,29 @@ import {demoTab, DemoTopics} from '@pages/Demos';
 
 export type ZIndexPart = keyof typeof names['z-index'];
 
-type Part = {title: string; minutes: number};
+const headings = [
+  'The order HTML gives', 'How we used to raise things', 'What the platform gives now', 'Apply it'
+] as const;
+
+type Heading = typeof headings[number];
+
+type Part = {title: string; minutes: number; heading: Heading};
 
 const book = {
-  'why-third-is-on-top': {title: 'Why Third is on top', minutes: 2},
-  'how-position-places-a-box': {title: 'How position places a box', minutes: 3},
-  'why-9999-still-loses': {title: 'Why 9999 still loses', minutes: 2},
-  'what-else-forms-a-stacking-context': {title: 'What else forms a stacking context', minutes: 3},
-  'why-the-popover-wins': {title: 'Why the popover wins', minutes: 4},
-  'why-a-fixed-banner-still-loses': {title: 'Why a fixed banner still loses', minutes: 3},
-  'lets-build-this-feature': {title: 'Let’s build this feature', minutes: 10}
+  'why-third-is-on-top': {title: 'Why Third is on top', minutes: 2, heading: 'The order HTML gives'},
+  'how-position-places-a-box': {title: 'How position places a box', minutes: 3, heading: 'The order HTML gives'},
+  'why-9999-still-loses': {title: 'Why 9999 still loses', minutes: 2, heading: 'The order HTML gives'},
+  'what-else-forms-a-stacking-context': {
+    title: 'What else forms a stacking context', minutes: 3, heading: 'The order HTML gives'
+  },
+  'why-a-fixed-banner-still-loses': {
+    title: 'Why a fixed banner still loses', minutes: 3, heading: 'How we used to raise things'
+  },
+  'why-the-popover-wins': {title: 'Why the popover wins', minutes: 4, heading: 'What the platform gives now'},
+  'lets-build-this-feature': {title: 'Let’s build this feature', minutes: 10, heading: 'Apply it'}
 } satisfies Record<ZIndexPart, Part>;
 
-type Group = {label: string; parts: readonly ZIndexPart[]};
-
-const groups: readonly Group[] = [
-  {
-    label: 'The order HTML gives',
-    parts: ['why-third-is-on-top', 'how-position-places-a-box', 'why-9999-still-loses', 'what-else-forms-a-stacking-context']
-  },
-  {label: 'How we used to raise things', parts: ['why-a-fixed-banner-still-loses']},
-  {label: 'What the platform gives now', parts: ['why-the-popover-wins']},
-  {label: 'Apply it', parts: ['lets-build-this-feature']}
-];
+type Group = {label: Heading; parts: readonly ZIndexPart[]};
 
 type Told = {name: string; minutes: number; ordinal: number; says: string};
 
@@ -43,7 +43,10 @@ type ZIndexParts = {
 
 const isPart = (name: string): name is ZIndexPart => Object.keys(book).includes(name);
 
-const bookOrder: readonly ZIndexPart[] = groups.flatMap(({parts}) => parts);
+const bookOrder: readonly ZIndexPart[] = Object.keys(book).filter(isPart);
+
+const groups: readonly Group[] = headings.map(label =>
+  ({label, parts: bookOrder.filter(part => book[part].heading === label)}));
 
 const tabAddress = demoTab.address(DemoTopics.zIndex);
 
