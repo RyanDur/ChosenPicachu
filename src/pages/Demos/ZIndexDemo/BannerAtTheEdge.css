@@ -6,4 +6,53 @@
         display: grid;
         gap: var(--base-x-0_5);
     }
+
+    .little-view {
+        transform: translate(0);
+    }
+
+    .little-page {
+        padding-block: var(--base-x-1_5) var(--base-x-9);
+    }
+
+    .little-card,
+    .banner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--base);
+
+        .button {
+            padding: 0 var(--base-x-1_25);
+
+            @media (pointer: fine) {
+                min-block-size: var(--base-x-4);
+            }
+        }
+    }
+
+    .little-card {
+        position: relative;
+        z-index: 1;
+        flex-shrink: 0;
+        padding: var(--base-x-1_25) var(--base-x-1_75);
+    }
+
+    .one {
+        min-block-size: var(--base-x-12);
+    }
+
+    .two {
+        min-block-size: var(--base-x-19);
+    }
+
+    .banner {
+        position: fixed;
+        inset-inline: var(--base);
+        inset-block-end: var(--base);
+        z-index: 9999;
+        align-items: center;
+        padding: var(--base-x-0_75) var(--base) var(--base-x-0_75) var(--base-x-1_75);
+    }
 }

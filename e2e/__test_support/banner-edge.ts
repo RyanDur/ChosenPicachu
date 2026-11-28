@@ -2,13 +2,29 @@ import type {Locator, Page} from '@playwright/test';
 import {pillSwitch} from './pills';
 
 type BannerStep = '1 · Written in a card' | '2 · Moved to the page';
+type OnTop = 'the banner' | 'card two' | 'neither' | 'not drawn yet';
 
 export const bannerAtTheEdge = (page: Page) => {
   const exhibit = page.getByRole('region', {name: 'The banner at the window’s edge', exact: true});
+  const littlePage = exhibit.getByRole('region', {name: 'The little page'});
   const steps = pillSwitch(page, 'Step');
   return {
     stepsTo: (step: BannerStep): Promise<void> => steps.choose(step),
     step: (step: BannerStep): Locator => steps.pill(step),
-    verdict: exhibit.getByRole('status', {name: 'what the browser drew'})
+    verdict: exhibit.getByRole('status', {name: 'what the browser drew'}),
+    onTopOnceCardTwoScrollsToTheBanner: (): Promise<OnTop> => littlePage.evaluate((scrolled): OnTop => {
+      scrolled.scrollIntoView({block: 'center'});
+      const named = (words: string): Element | undefined => [...scrolled.querySelectorAll('p, section')]
+        .find(box => box.firstElementChild?.textContent?.trim() === words);
+      const [banner, card] = [named('Banner · 9999'), named('Card two · 1')];
+      if (!banner || !card) return 'not drawn yet';
+      const middle = (box: DOMRect): number => (box.top + box.bottom) / 2;
+      scrolled.scrollBy({top: middle(card.getBoundingClientRect()) - middle(banner.getBoundingClientRect()), behavior: 'instant'});
+      const [bannerBox, cardBox] = [banner.getBoundingClientRect(), card.getBoundingClientRect()];
+      const hit = document.elementFromPoint(
+        (Math.max(bannerBox.left, cardBox.left) + Math.min(bannerBox.right, cardBox.right)) / 2,
+        (Math.max(bannerBox.top, cardBox.top) + Math.min(bannerBox.bottom, cardBox.bottom)) / 2);
+      return banner.contains(hit) ? 'the banner' : card.contains(hit) ? 'card two' : 'neither';
+    })
   };
 };
