@@ -18,7 +18,7 @@ const markup: Line[] = [
     lines.plain('  <button popovertarget="sort">'),
     lines.plain('    Sort by'),
     lines.plain('  </button>'),
-    lines.plain('  <ul id="sort" popover>…</ul>')
+    lines.plain('  <ul id="sort" class="sort-list" popover>…</ul>')
   ]),
   lines.plain('</section>'),
   lines.plain('<section class="card two">…</section>')
