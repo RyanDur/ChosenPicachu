@@ -99,30 +99,30 @@ openAndCloseJourneys(['the checkbox build', 'the radio build']);
 test('with exclusive chosen, opening a second fold of the accordion in HTML alone closes the first', async ({page}) => {
   await page.goto('demos/accordions/?type=exclusive');
   await siteFrame(page).hydrated();
-  const [basalt, cinder] = [accordions.tab(page).htmlAloneFold('basalt'), accordions.tab(page).htmlAloneFold('cinder')];
+  const [cinder, meadow] = [accordions.tab(page).htmlAloneFold('cinder'), accordions.tab(page).htmlAloneFold('meadow')];
 
-  await basalt.open();
   await cinder.open();
+  await meadow.open();
 
-  await expect.poll(cinder.isOpen).toBe(true);
-  await expect.poll(basalt.isOpen).toBe(false);
+  await expect.poll(meadow.isOpen).toBe(true);
+  await expect.poll(cinder.isOpen).toBe(false);
 });
 
 test('with inclusive chosen, the accordion in HTML alone keeps two folds open', async ({page}) => {
   await page.goto('demos/accordions/?type=inclusive');
   await siteFrame(page).hydrated();
-  const [basalt, cinder] = [accordions.tab(page).htmlAloneFold('basalt'), accordions.tab(page).htmlAloneFold('cinder')];
+  const [cinder, meadow] = [accordions.tab(page).htmlAloneFold('cinder'), accordions.tab(page).htmlAloneFold('meadow')];
 
-  await basalt.open();
   await cinder.open();
+  await meadow.open();
 
-  await expect.poll(basalt.isOpen).toBe(true);
   await expect.poll(cinder.isOpen).toBe(true);
+  await expect.poll(meadow.isOpen).toBe(true);
 });
 
 test('a fold of the accordion in HTML alone opens by pointer and closes by keyboard', async ({page}) => {
   await page.goto('demos/accordions/');
-  const fold = accordions.tab(page).htmlAloneFold('basalt');
+  const fold = accordions.tab(page).htmlAloneFold('cinder');
   await expect.poll(fold.showsText).toBe(false);
 
   await fold.open();
@@ -130,6 +130,44 @@ test('a fold of the accordion in HTML alone opens by pointer and closes by keybo
   await fold.closeByKeyboard();
 
   await expect.poll(fold.showsText).toBe(false);
+});
+
+test('the accordion in HTML alone opens on its first fold', async ({page}) => {
+  await page.goto('demos/accordions/');
+  const [basalt, cinder] = [accordions.tab(page).htmlAloneFold('basalt'), accordions.tab(page).htmlAloneFold('cinder')];
+
+  await expect.poll(basalt.showsText).toBe(true);
+  await expect.poll(cinder.showsText).toBe(false);
+});
+
+test('a reader picks Inclusive in the exhibit’s foot, and two folds of the accordion in HTML alone stay open', async ({page}) => {
+  await page.goto('demos/accordions/');
+  const tab = accordions.tab(page);
+  const [cinder, meadow] = [tab.htmlAloneFold('cinder'), tab.htmlAloneFold('meadow')];
+
+  await tab.choosesTheFoldTypeInTheExhibit('Inclusive');
+  await cinder.open();
+  await meadow.open();
+
+  await expect.poll(cinder.isOpen).toBe(true);
+  await expect.poll(meadow.isOpen).toBe(true);
+});
+
+test('the fold type in the exhibit’s foot says what the reader’s choice does', async ({page}) => {
+  await page.goto('demos/accordions/');
+  const tab = accordions.tab(page);
+  await expect(tab.foldTypeReadingInTheExhibit).toHaveText('Opening one fold closes the others.');
+
+  await tab.choosesTheFoldTypeInTheExhibit('Inclusive');
+
+  await expect(tab.foldTypeReadingInTheExhibit).toHaveText('Each fold opens on its own.');
+});
+
+test('the Accordions tab’s own page offers no fold motion, which its accordion would not follow', async ({page}) => {
+  await page.goto('demos/accordions/');
+  await siteFrame(page).hydrated();
+
+  await expect(page.getByRole('group', {name: 'fold motion', exact: true, includeHidden: true})).toHaveCount(0);
 });
 
 const theFoldChoiceShowsItsName = async (page: Page, name: string): Promise<void> => {
@@ -147,29 +185,9 @@ const theFoldChoiceShowsItsName = async (page: Page, name: string): Promise<void
   `);
 };
 
-const lessMotion = 'If your system asks for less motion, every fold on the part pages opens at once, whichever you choose.';
-
 test.describe('the fold choices', {tag: ['@iPhone', '@desktop']}, () => {
   test('the fold type choice shows its name, and a screen reader meets its named pills first, then the reading', ({page}) =>
     theFoldChoiceShowsItsName(page, 'fold type'));
-
-  test('the fold motion choice shows its name, and a screen reader meets its named pills first, then the reading', ({page}) =>
-    theFoldChoiceShowsItsName(page, 'fold motion'));
-
-  test('the fold motion on the tab reads the chosen pill for the part pages, and reads that no fold there moves once the reader asks for less motion', async ({page}) => {
-    await page.emulateMedia({reducedMotion: 'no-preference'});
-    await page.goto('demos/accordions/?style=drawer');
-    const {reading} = dialRow(page, 'fold motion');
-    await reading.scrollIntoViewIfNeeded();
-
-    await expect(reading).toHaveText('On the part pages, the text slides down from under its bar.', {useInnerText: true});
-    await expect(reading).toMatchAriaSnapshot('- status: On the part pages, the text slides down from under its bar.');
-
-    await page.emulateMedia({reducedMotion: 'reduce'});
-
-    await expect(reading).toHaveText(lessMotion, {useInnerText: true});
-    await expect(reading).toMatchAriaSnapshot(`- status: ${lessMotion}`);
-  });
 });
 
 test.describe('a reader with script turned off', () => {
@@ -187,7 +205,7 @@ test.describe('a reader with script turned off', () => {
   });
 });
 
-test('a reader follows part one from the tab\'s list of parts to its section under "Before you start"', async ({page}) => {
+test('a reader follows part one from the tab\'s list of parts to its exhibit on the tab', async ({page}) => {
   await page.goto('demos/accordions/');
 
   await page.getByRole('navigation', {name: 'Parts', exact: true}).getByRole('link', {name: 'An accordion in HTML alone'}).click();

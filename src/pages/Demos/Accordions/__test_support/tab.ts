@@ -42,7 +42,7 @@ export const accordionsTab = {
   place: (): Promise<HTMLElement> => screen.findByText(/part \d+ of \d+/),
   partsIndex: partsIndex.find,
   sizeIn: (holder: HTMLElement): Promise<HTMLElement> => within(holder).findByText(/^Six parts, about \d+ minutes\.$/),
-  htmlAlone: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'Three folds in HTML alone'}),
+  htmlAlone: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'An accordion in HTML alone'}),
   measuredByPlainScript: (): Promise<HTMLElement> => screen.findByRole('region', {name: 'A fold measured by plain script'}),
   firstFigure: async (): Promise<HTMLElement> =>
     within(await screen.findByRole('region', {name: 'Accordions'})).getAllByRole('figure')[0],

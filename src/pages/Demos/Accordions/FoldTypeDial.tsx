@@ -6,7 +6,7 @@ import {FoldType} from '../ReaderSettings';
 const foldTypes = [{words: 'Inclusive', value: 'inclusive'}, {words: 'Exclusive', value: 'exclusive'}] as const;
 
 const readings: Record<FoldType, string> = {
-  inclusive: 'Any number of folds can be open at once.',
+  inclusive: 'Each fold opens on its own.',
   exclusive: 'Opening one fold closes the others.'
 };
 

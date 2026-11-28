@@ -2,19 +2,9 @@
   gap: var(--base-x-2);
 }
 
-.before-you-start {
-  display: grid;
-  gap: var(--base-x-2);
-}
-
 .accordion-part {
   display: grid;
   gap: var(--base-x-3);
-}
-
-.fold-choices {
-  display: grid;
-  gap: var(--base-x-2);
 }
 
 .snapping ::details-content {

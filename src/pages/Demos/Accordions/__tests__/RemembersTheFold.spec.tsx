@@ -83,15 +83,6 @@ describe('a box remembers the fold, on its own page', () => {
       .toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#html-alone-heading`);
   });
 
-  test('should link the fold choices on the tab, with the fold choices carried', async () => {
-    render(<TestApp at={demosAt(remembers, '?type=inclusive&style=drawer')}/>);
-
-    const page = await demoTabs.arrivedOn('Accordions');
-
-    expect(explanation.linkNamed(page, 'the fold choices'))
-      .toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#fold-choices-heading`);
-  });
-
   test('should link React to the z-index part that defines it', async () => {
     render(<TestApp at={demosAt(remembers)}/>);
 

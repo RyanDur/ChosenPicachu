@@ -11,10 +11,10 @@ describe('the gloss of class', () => {
       .toHaveAttribute('href', demosAt('accordions/a-box-remembers-the-fold'));
   });
 
-  test('should send rules to the accordions tab’s fold choices, with the query carried', () => {
+  test('should send rules to the exhibit’s source on the accordions tab, where they are defined, with the query carried', () => {
     render(<TestApp at="/?type=inclusive"><p><ClassGloss/></p></TestApp>);
 
     expect(demoPage.signpost('rules'))
-      .toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive')}#fold-choices-heading`);
+      .toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive')}#exhibit-source-heading`);
   });
 });

@@ -152,3 +152,23 @@ describe('the measured height, on its own page', () => {
     expect(await site.roomSays('There is no room at this address.')).toBeVisible();
   });
 });
+
+describe('the fold motion on a part’s page', () => {
+  test('should open on the reveal', async () => {
+    render(<TestApp at={demosAt(measuredHeight)}/>);
+
+    const motions = await accordionsTab.choice('fold motion');
+
+    expect(accordionsTab.option(motions, 'Reveal')).toBeChecked();
+  });
+
+  test('should write the motion chosen into the address', async () => {
+    render(<TestApp at={demosAt(measuredHeight)}/>);
+    const motions = await accordionsTab.choice('fold motion');
+
+    await accordionsTab.choose('fold motion', 'Drawer');
+
+    expect(demoPage.urlSearch()).toHaveTextContent('style=drawer');
+    expect(accordionsTab.option(motions, 'Drawer')).toBeChecked();
+  });
+});

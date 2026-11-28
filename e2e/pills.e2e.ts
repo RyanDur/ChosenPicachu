@@ -9,8 +9,8 @@ test.describe('a finger that lands just off a pill\'s middle', {tag: ['@iPhone',
     expect(await pillsAFingerCannotChoose(page, 'fold type')).toEqual([]);
   });
 
-  test('every fold motion pill on the accordions demo is chosen by a finger that lands just off its middle', async ({page}) => {
-    await page.goto('demos/accordions/');
+  test('every fold motion pill on an accordions part is chosen by a finger that lands just off its middle', async ({page}) => {
+    await page.goto('demos/accordions/the-measured-height/');
 
     expect(await pillsAFingerCannotChoose(page, 'fold motion')).toEqual([]);
   });
