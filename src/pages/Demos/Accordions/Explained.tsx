@@ -56,6 +56,10 @@ export const AccordionsExplained: FC = () => {
           <Snippet label="HTML" lines={carve.between(htmlAloneSource, '<ul>', '</ul>')}/>
         </li>
         <li className="run">
+          <p className="paragraph">The fold type under the accordion is a dial: a control on the page that sets how a
+            build behaves.</p>
+        </li>
+        <li className="run">
           <p className="paragraph">An HTML page is made of elements. Most are a pair of tags, such
             as <code className="monospaced">{'<details>'}</code> and <code className="monospaced">{'</details>'}</code>,
             around what they hold. A few, such as <code className="monospaced">{'<input>'}</code>, are a single tag
