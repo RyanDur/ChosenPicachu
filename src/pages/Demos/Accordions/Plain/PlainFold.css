@@ -1,5 +1,5 @@
 .plain-fold {
-  --stage-block-size: var(--base-x-6_25);
+  --stage-block-size: calc(1lh + 2 * var(--base-x-2) + 3 * var(--hairline));
 
   block-size: var(--stage-block-size);
   display: block;
