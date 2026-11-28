@@ -25,7 +25,8 @@ export const WhyAFixedBannerStillLoses: FC = () => {
       <li className="run">
         <p className="paragraph">The site’s own banner sets no z-index. It is a popover, so the browser shows it in
           the top layer, above every stacking context on the page, as <PartLink part="why-the-popover-wins"/> shows.
-          No z-index on the page is compared with it, so it would stay over both cards in the little window.
+          No z-index on the page is compared with it, and the top layer sits outside the little window’s transform, so
+          it is pinned to the edge of your browser’s window, over every card.
         </p>
         <Snippet label="HTML"
           lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners unfilled'")}/>
