@@ -94,7 +94,7 @@ test('a keyboard reader tabs from an open radio part into its text and past the 
 });
 
 everyBuildJourneys(accordions.builds);
-openAndCloseJourneys(['the checkbox build', 'the radio build'], ['reveal', 'drawer', 'static']);
+openAndCloseJourneys(['the checkbox build', 'the radio build']);
 
 test('with exclusive chosen, opening a second fold of the accordion in HTML alone closes the first', async ({page}) => {
   await page.goto('demos/accordions/?type=exclusive');

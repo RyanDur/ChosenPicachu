@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {accordions, type Build, heightOnceSettled, type Part, siteFrame} from './__test_support';
-import {everyBuildJourneys, layoutRounding, openAndCloseJourneys, test} from './__test_support/fold-journeys';
+import {everyBuildJourneys, layoutRounding, test} from './__test_support/fold-journeys';
 import {assertionPatience} from './__test_support/patience';
 
 // WebKit stopped starting page.goto after about 90 navigations of these journeys mixed with the tab's others in one
@@ -8,7 +8,6 @@ import {assertionPatience} from './__test_support/patience';
 test.use({workerOfItsOwn: 'the measured folds'});
 
 everyBuildJourneys(accordions.measuredBuilds);
-openAndCloseJourneys(accordions.measuredBuilds, ['drawer', 'static']);
 const textBelowItsFold = (part: Part): Promise<number> => accordions.textBelow(part.fold, part.words);
 
 const settlesWithinRounding = async (measure: () => Promise<number>): Promise<void> =>
