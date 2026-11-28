@@ -173,7 +173,8 @@ const stylePieces = <AnnotatedListing heading="CSS · under each piece, what it 
   <Piece>
     <PieceCode><InkedLines label="CSS" lines={[
       ...carve.between(widthsSource, '.aggregations {', 'min-width: 75.3rem;'),
-      lines.aside('    /* … wider on a touch screen */'), lines.plain('  }')
+      lines.aside('    /* … wider on a touch screen */'), lines.plain('  }'),
+      lines.aside('  /* … the column widths, below */'), lines.plain('}')
     ]}/></PieceCode>
     <PieceNote when="Never changes."><code className="monospaced">table-layout: fixed</code> tells the browser to take
       each column’s width from the header row and keep it. The columns then hold still while the numbers in them
