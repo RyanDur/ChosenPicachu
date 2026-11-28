@@ -247,7 +247,10 @@
 
 .mint-badge-before::before { background: var(--mint); }
 
-.alarm-badge-before::before { background: var(--alarm-ink); }
+.alarm-badge-before::before {
+  background: var(--alarm-ink);
+  color: var(--ink-inverse);
+}
 
 .muted-dashed-outline { border: var(--hairline-x-2) dashed var(--ink-muted); }
 
@@ -482,6 +485,8 @@
     forced-color-adjust: none;
     background: var(--highlight);
   }
+
+  .alarm-badge-before::before { color: var(--highlight-ink); }
 
   .alarm-dot { box-shadow: none; }
 

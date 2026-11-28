@@ -1,4 +1,6 @@
 import type {Locator, Page} from '@playwright/test';
+import {pressTab} from './keyboard';
+import {siteFrame} from './site';
 import {pillSwitch} from './pills';
 
 type BannerStep = '1 · Written in a card' | '2 · Moved to the page';
@@ -12,6 +14,19 @@ export const bannerAtTheEdge = (page: Page) => {
     stepsTo: (step: BannerStep): Promise<void> => steps.choose(step),
     step: (step: BannerStep): Locator => steps.pill(step),
     verdict: exhibit.getByRole('status', {name: 'what the browser drew'}),
+    tabStopsInTheLittlePage: async (): Promise<string[]> => {
+      await siteFrame(page).hydrated();
+      await littlePage.focus();
+      const reached: string[] = [];
+      for (let stop = 0; stop < 3; stop += 1) {
+        await pressTab(page);
+        reached.push(await page.evaluate(() => {
+          const focused = document.activeElement;
+          return focused?.getAttribute('aria-label') ?? focused?.textContent?.trim() ?? '';
+        }));
+      }
+      return reached;
+    },
     onTopOnceCardTwoScrollsToTheBanner: (): Promise<OnTop> => littlePage.evaluate((scrolled): OnTop => {
       scrolled.scrollIntoView({block: 'center'});
       const named = (words: string): Element | undefined => [...scrolled.querySelectorAll('p, section')]

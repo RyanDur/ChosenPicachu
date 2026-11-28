@@ -50,7 +50,9 @@ const fourTexts = ['first', 'second', 'third', 'fourth'];
 
 const LittleButton: FC<PropsWithChildren<{'aria-label'?: string}>> = ({children, 'aria-label': named}) =>
   <button type="button" tabIndex={0} aria-label={named}
-    className="button card hairline-outline rounded-corners paragraph ink attentive reachable">{children}</button>;
+    className="button card hairline-outline rounded-corners paragraph ink attentive reachable badge-before alarm-badge-before">
+    {children}
+  </button>;
 
 const TextOnThePage: FC = () =>
   <p className="little-box muted-dashed-outline rounded-corners caption">text on the page</p>;
@@ -94,7 +96,9 @@ export const BannerAtTheEdge: FC = () => {
       </section>
       <Verdict aria-label="what the browser drew">{verdict}</Verdict>
       <ResultLine label="Compared with:">{comparedWith}</ResultLine>
-      <ResultLine label="Tab order:">{tabOrder}</ResultLine>
+      <ResultLine label="Tab order:">
+        {tabOrder} The red numbers in the drawing show it. A screen reader reads the page in the same order.
+      </ResultLine>
     </figure>
     <ExhibitFoot>
       <strong className="bold">The banner at the window’s edge.</strong> Two steps: the banner written inside a card,
