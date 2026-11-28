@@ -1,6 +1,6 @@
 import {expect, type Page} from '@playwright/test';
 import {accordions, dialRow, pillSwitch, pressTab, type Part, siteFrame} from './__test_support';
-import {everyBuildJourneys, test} from './__test_support/fold-journeys';
+import {everyBuildJourneys, openAndCloseJourneys, test} from './__test_support/fold-journeys';
 
 test('opening a second details fold closes the first, from the keyboard too', async ({page}) => {
   await page.goto(accordions.showing('the details build'));
@@ -94,6 +94,7 @@ test('a keyboard reader tabs from an open radio part into its text and past the 
 });
 
 everyBuildJourneys(accordions.builds);
+openAndCloseJourneys(['the checkbox build', 'the radio build'], ['reveal', 'drawer', 'static']);
 
 test('with exclusive chosen, opening a second fold of the accordion in HTML alone closes the first', async ({page}) => {
   await page.goto('demos/accordions/?type=exclusive');
@@ -202,4 +203,16 @@ test('a reader sets the fold type beside the demo to inclusive, follows part fou
 
   await expect(accordions.tab(page).partTitle('The measured height')).toBeVisible();
   await expect.poll(pillSwitch(page, 'fold type').chosen).toBe('Inclusive');
+});
+
+test('a keyboard reader scrolls the text of a tall part of the checkbox build inside its panel', async ({page}) => {
+  await accordions.tab(page).goTo('the checkbox build');
+  const part = accordions.tab(page).partOf('the checkbox build', 2);
+  await part.open();
+  const text = part.fold.getByRole('region');
+  await text.focus();
+
+  await page.keyboard.press('End');
+
+  await expect.poll(() => text.evaluate(section => section.scrollTop)).toBeGreaterThan(0);
 });
