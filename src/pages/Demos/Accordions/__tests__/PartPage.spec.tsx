@@ -171,4 +171,30 @@ describe('the fold motion on a part’s page', () => {
     expect(demoPage.urlSearch()).toHaveTextContent('style=drawer');
     expect(accordionsTab.option(motions, 'Drawer')).toBeChecked();
   });
+  test('should read Reveal as the fold motion once it is chosen over static', async () => {
+    render(<TestApp at={demosAt(measuredHeight, '?style=static')}/>);
+
+    const row = await accordionsTab.choiceRow('fold motion');
+    await accordionsTab.choose('fold motion', 'Reveal');
+
+    expect(accordionsTab.readingIn(row)).toHaveTextContent('The text is uncovered from its first line down.');
+  });
+
+  test('should read Drawer as the fold motion once it is chosen over static', async () => {
+    render(<TestApp at={demosAt(measuredHeight, '?style=static')}/>);
+
+    const row = await accordionsTab.choiceRow('fold motion');
+    await accordionsTab.choose('fold motion', 'Drawer');
+
+    expect(accordionsTab.readingIn(row)).toHaveTextContent('The text slides down from under its bar.');
+  });
+
+  test('should read Static as the fold motion once it is chosen over reveal', async () => {
+    render(<TestApp at={demosAt(measuredHeight, '?style=reveal')}/>);
+
+    const row = await accordionsTab.choiceRow('fold motion');
+    await accordionsTab.choose('fold motion', 'Static');
+
+    expect(accordionsTab.readingIn(row)).toHaveTextContent('The fold opens at once, with nothing moving.');
+  });
 });
