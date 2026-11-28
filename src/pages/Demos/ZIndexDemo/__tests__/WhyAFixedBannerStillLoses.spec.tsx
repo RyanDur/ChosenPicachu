@@ -205,7 +205,7 @@ describe('why a fixed banner still loses, on its own page', () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
     const part = await explanation.part(title);
-    const run = explanation.saying(part, /It is the old-way menu in/);
+    const run = explanation.saying(part, /^The banner in the exhibit is the old-way menu in/);
 
     expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'));
   });
