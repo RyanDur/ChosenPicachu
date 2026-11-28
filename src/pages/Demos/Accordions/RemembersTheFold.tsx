@@ -133,7 +133,7 @@ export const RemembersTheFold: FC = () => {
               <OffScreenNotGone/>
             </li>
             <li className="run">
-              <p className="paragraph">The bar wears the dark look every fold on this tab wears, so I keep that look
+              <p className="paragraph">The bar wears the dark look the built accordions on this tab wear, so I keep that look
                 out of the bar’s own style sheet. It comes from shared classes, and the bar wears them: the classes
                 sit in the element’s class attribute, so their rules apply. <code
                 className="monospaced">inverse-filled</code> sets light words on a dark ground, <code
