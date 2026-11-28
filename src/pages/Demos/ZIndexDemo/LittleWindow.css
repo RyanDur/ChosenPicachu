@@ -30,6 +30,11 @@
     padding: var(--base-x-1_25) var(--base-x-1_75);
 }
 
+.where-we-meet-it {
+    display: grid;
+    gap: var(--base-x-0_5);
+}
+
 .code-beside-window {
     grid-template-columns: repeat(auto-fit, minmax(min(100%, max(var(--base-x-30), (100% - var(--base-x-3)) / 2)), 1fr));
     grid-auto-flow: row dense;
