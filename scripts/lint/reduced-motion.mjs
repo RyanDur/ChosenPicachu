@@ -2,8 +2,10 @@ import {is, maybe, not} from '@ryandur/sand';
 import stylelint from 'stylelint';
 
 const name = 'chosen/reduced-motion-once';
-const theResetsOwn = (/** @type {string} */ property) =>
-  /^(transition|animation)(-|$)/.test(property) && not(property.endsWith('-delay')) || property === 'scroll-behavior';
+const theResetsOwn = (/** @type {string} */ written) => {
+  const property = written.replace(/^-[a-z]+-/, '');
+  return /^(transition|animation)(-|$)/.test(property) && not(property.endsWith('-delay')) || property === 'scroll-behavior';
+};
 
 const messages = stylelint.utils.ruleMessages(name, {
   /** @param {string} property */
@@ -11,12 +13,17 @@ const messages = stylelint.utils.ruleMessages(name, {
 });
 
 /**
- * Reduce is the query's value, or its boolean form; a query that starts with not,
- * or negates the feature, asks for motion.
- * @param {string} query
+ * Reduce is the query's value or its boolean form;
+ * a negated query asks for less motion only when it negates no-preference.
+ * @param {string} written
  */
-const asksForLessMotion = query => /\(\s*prefers-reduced-motion\s*(:\s*reduce\s*)?\)/.test(query)
-  && not(/^\s*not\b/.test(query)) && not(/\bnot\s*\(\s*prefers-reduced-motion/.test(query));
+const asksForLessMotion = written => {
+  const query = written.toLowerCase();
+  const negated = /^\s*not\b/.test(query) || /\bnot\s*\(\s*prefers-reduced-motion/.test(query);
+  return negated
+    ? /\(\s*prefers-reduced-motion\s*:\s*no-preference\s*\)/.test(query)
+    : /\(\s*prefers-reduced-motion\s*(:\s*reduce\s*)?\)/.test(query);
+};
 
 /** @param {import('postcss').Container | import('postcss').Document | undefined} node */
 const underReducedMotion = node => {

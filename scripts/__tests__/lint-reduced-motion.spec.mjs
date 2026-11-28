@@ -60,6 +60,18 @@ describe('chosen/reduced-motion-once', () => {
     expect(await warningsFor('@media (prefers-reduced-motion: no-preference) { a { transition: .3s; } }')).toEqual([]);
   });
 
+  it('should refuse a duration under a query written in capitals', async () => {
+    expect(await warningsFor('@media (PREFERS-REDUCED-MOTION: REDUCE) { a { transition: none; } }')).toHaveLength(1);
+  });
+
+  it('should refuse a duration under a query that negates no preference, which means reduce', async () => {
+    expect(await warningsFor('@media not (prefers-reduced-motion: no-preference) { a { transition: none; } }')).toHaveLength(1);
+  });
+
+  it('should refuse a vendor-prefixed transition under reduced motion', async () => {
+    expect(await warningsFor('@media (prefers-reduced-motion: reduce) { a { -webkit-transition: none; } }')).toHaveLength(1);
+  });
+
   it('should accept a delay zeroed beside the slide it times', async () => {
     expect(await warningsFor('a { transition: color 0s 75ms; @media (prefers-reduced-motion: reduce) { transition-delay: 0s; } }')).toEqual([]);
   });
