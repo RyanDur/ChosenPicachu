@@ -27,7 +27,7 @@ describe('what the platform gives now, on its own page', () => {
     expect(appAddress.fragment()).toBe('#html-alone-heading');
   });
 
-  test('should link the exhibit’s source, where details and summary are defined, to its heading on the tab', async () => {
+  test('should link the exhibit’s source, where details and summary are defined, to its heading on the tab, with the fold choices carried', async () => {
     const from = demosAt(platformWay, build);
     render(<TestApp at={from}/>);
 
