@@ -4,7 +4,7 @@ import {is, not} from '@ryandur/sand';
 import {classNames, useHydrated} from '@components';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {carve, Line, lines, Snippet} from '../Recipe';
-import {Exhibit, ExhibitFoot} from '../Exhibit';
+import {Exhibit, ExhibitFoot, ResultLine, Verdict} from '../Exhibit';
 import {PartTermLink} from './PartTermLink';
 import sheet from './MenuInTheTopLayer.css?sample';
 import './LittleWindow.css';
@@ -113,7 +113,7 @@ export const MenuInTheTopLayer: FC = () => {
         <Snippet label="HTML" lines={markup}/>
         <Snippet label="CSS" lines={rules}/>
       </section>
-      <output aria-label="what the list did" className="paragraph bold">{verdict}</output>
+      <Verdict aria-label="what the list did">{verdict}</Verdict>
       <p className="paragraph">We leave the placement alone, so the browser’s own rule centers the list in the
         window. This site’s reset zeroes a list’s margin and takes that centering away, so the list gets <code
         className="monospaced">margin: auto</code> back.</p>
@@ -121,8 +121,7 @@ export const MenuInTheTopLayer: FC = () => {
         <dt className="caption uppercase">Where we meet it</dt>
         <dd className="paragraph">A notice that belongs to the whole page.</dd>
       </dl>
-      <output aria-label="what the list is compared with" className="paragraph">
-        {`Compared with: ${comparedWith}`}</output>
+      <ResultLine label="Compared with:">{comparedWith}</ResultLine>
       <p className="paragraph">Tab order: the little page, Sort by, then Newest and Oldest while the list is open, then
         Open. The list never leaves its place in the code, so the order stays right.</p>
       <p className="paragraph">Opening and closing: the browser opens and closes the list with no script, closes it on
