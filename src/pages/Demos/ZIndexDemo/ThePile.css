@@ -7,11 +7,32 @@
         grid-column: 1 / -1;
     }
 
+    .pile-steps { container-type: inline-size; }
+
     > .pile-code {
         grid-column: auto;
         display: grid;
         gap: var(--base-x-1_5);
         align-self: start;
+    }
+
+    .flow-drawing {
+        display: grid;
+        gap: var(--base-x-1_5);
+
+        > * {
+            padding: var(--base-x-1_75) var(--base-x-2_5);
+        }
+
+        &.along-a-line {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+
+            > * {
+                padding: var(--base-x-1_25) var(--base-x-1_5);
+            }
+        }
     }
 
     .pile-drawing {
