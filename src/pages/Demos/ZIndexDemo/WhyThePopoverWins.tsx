@@ -44,7 +44,7 @@ export const WhyThePopoverWins: FC = () => <>
         React spells it. A tabindex of 0 asks the browser to stop on the element when
         Tab moves focus. A button stops Tab by itself in most browsers, but by default Safari moves Tab only to text
         fields and to elements that ask for it.</p>
-      <Snippet label="HTML" lines={carve.between(exhibitSource, '<button type="button" tabIndex={0} className="button card', '</button>')}/>
+      <Snippet label="HTML" lines={carve.between(exhibitSource, '<button type="button" tabIndex={0} id={sortById}', '</button>')}/>
     </li>
     <li className="run">
       <p className="paragraph">Script adds one thing, and it waits for an event. An event is the browser telling the
