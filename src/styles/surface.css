@@ -405,6 +405,8 @@
 
 .muted-rule-below { border-block-end: var(--hairline) solid var(--ink-muted); }
 
+.hairline-rule-below { border-block-end: var(--hairline) solid currentcolor; }
+
 .muted-rule-after { border-inline-end: var(--hairline) solid var(--ink-muted); }
 
 .muted-bar-below { border-block-end: var(--hairline-x-3) solid var(--ink-muted); }

@@ -76,7 +76,7 @@ export const MenuInTheTopLayer: FC = () => {
         with <code className="monospaced">inset: 0</code>, sizes it to its content, and <code
         className="monospaced">margin: auto</code> centers it between those edges. We can write over any of them.</p>
       <section className="little-window card hairline-outline rounded-corners">
-        <p className="little-bar caption uppercase trim">The window</p>
+        <p className="little-bar caption uppercase field hairline-rule-below">The window</p>
         <section className="little-view">
           <section className={classNames('little-page focus-ringed', raised && 'card-one-raised')}
             aria-label="The little page" tabIndex={0}>
@@ -122,10 +122,12 @@ export const MenuInTheTopLayer: FC = () => {
         <dd className="paragraph">A notice that belongs to the whole page.</dd>
       </dl>
       <ResultLine label="Compared with:">{comparedWith}</ResultLine>
-      <p className="paragraph">Tab order: the little page, Sort by, then Newest and Oldest while the list is open, then
-        Open. The list never leaves its place in the code, so the order stays right.</p>
-      <p className="paragraph">Opening and closing: the browser opens and closes the list with no script, closes it on
-        Escape or a click outside, and gives focus back to the button when focus was in the list.</p>
+      <p className="paragraph"><strong className="bold">Tab order:</strong> the little page, Sort by, then Newest and
+        Oldest while the list is open, then Open. The list never leaves its place in the code, so the order stays
+        right.</p>
+      <p className="paragraph"><strong className="bold">Opening and closing:</strong> the browser opens and closes the
+        list with no script, closes it on Escape or a click outside, and gives focus back to the button when focus was
+        in the list.</p>
     </figure>
     <ExhibitFoot>
       <strong className="bold">The menu in the top layer.</strong> The list is a popover, and the browser puts it in

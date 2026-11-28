@@ -1,10 +1,18 @@
 .where-second-goes {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
     gap: var(--base-x-2) var(--base-x-1_5);
 
-    > :not(.sample, .little-window) {
-        grid-column: 1 / -1;
+    .code-beside-window {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
+        gap: var(--base-x-2) var(--base-x-3);
+        align-items: start;
+    }
+
+    .code-column {
+        display: grid;
+        gap: var(--base-x-1_5);
+        align-content: start;
     }
 
     .where-we-meet-it {
