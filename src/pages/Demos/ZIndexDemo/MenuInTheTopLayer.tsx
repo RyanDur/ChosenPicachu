@@ -33,16 +33,21 @@ const theBrowsersOwnRule: Line[] = [
   '}'
 ].map(lines.plain);
 
+const theSitesMargin: Line[] = lines.marked(lines.fromTheExhibit(carve.unit(sheet, '.sort-list {')));
+
 const leftAlone: Told = {
   verdict: 'The list opens over both cards, with no z-index of its own. It sits in the middle of the window.',
   comparedWith: 'nothing. The top layer is above every stacking context on the page.',
-  rules: theBrowsersOwnRule
+  rules: [...theBrowsersOwnRule, lines.blank, ...theSitesMargin]
 };
 
 const cardOneRaised: Told = {
   verdict: `${leftAlone.verdict} Card one now rises over card two’s edge, and the list stays above both.`,
   comparedWith: 'nothing. Card one’s 9999 is compared with card two, and the list is above them both in the top layer.',
-  rules: [...lines.marked(lines.fromTheExhibit(carve.unit(sheet, '.one {\n            position: relative'))), ...theBrowsersOwnRule]
+  rules: [
+    ...lines.marked(lines.fromTheExhibit(carve.unit(sheet, '.one {\n            position: relative'))),
+    ...leftAlone.rules
+  ]
 };
 
 export const MenuInTheTopLayer: FC = () => {
@@ -109,7 +114,8 @@ export const MenuInTheTopLayer: FC = () => {
       </section>
       <output aria-label="what the list did" className="paragraph bold">{verdict}</output>
       <p className="paragraph">We leave the placement alone, so the browser’s own rule centers the list in the
-        window.</p>
+        window. This site’s reset zeroes a list’s margin and takes that centering away, so the list gets <code
+        className="monospaced">margin: auto</code> back.</p>
       <dl className="where-we-meet-it">
         <dt className="caption uppercase">Where we meet it</dt>
         <dd className="paragraph">A notice that belongs to the whole page.</dd>
