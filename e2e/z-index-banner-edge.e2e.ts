@@ -29,18 +29,18 @@ test('Tab reaches the banner’s dismiss button last once the banner is moved to
   expect(await banner.tabStopsInTheLittlePage()).toEqual(['Raise a banner', 'Open', 'Dismiss the banner']);
 });
 
-test('scrolling card two to the banner written in card one draws card two over the banner', async ({page}) => {
+test('where card two meets the banner written in card one, card two is drawn over the banner', async ({page}) => {
   const banner = bannerAtTheEdge(page);
 
   await page.goto(address);
 
-  await expect.poll(banner.onTopOnceCardTwoScrollsToTheBanner).toBe('card two');
+  await expect.poll(banner.onTopWhereCardTwoMeetsTheBanner).toBe('card two');
 });
 
-test('scrolling card two to the banner moved to the page draws the banner over card two', async ({page}) => {
+test('where card two meets the banner moved to the page, the banner is drawn over card two', async ({page}) => {
   const banner = bannerAtTheEdge(page);
 
   await page.goto(`${address}?banner=moved-to-the-page`);
 
-  await expect.poll(banner.onTopOnceCardTwoScrollsToTheBanner).toBe('the banner');
+  await expect.poll(banner.onTopWhereCardTwoMeetsTheBanner).toBe('the banner');
 });
