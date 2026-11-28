@@ -4,29 +4,29 @@ import {demoTab, DemoTopics} from '@pages/Demos';
 
 export type ZIndexPart = keyof typeof names['z-index'];
 
-const headings = [
+const labels = [
   'The order HTML gives', 'How we used to raise things', 'What the platform gives now', 'Apply it'
 ] as const;
 
-type Heading = typeof headings[number];
+type Label = typeof labels[number];
 
-type Part = {title: string; minutes: number; heading: Heading};
+type Part = {title: string; minutes: number; group: Label};
 
 const book = {
-  'why-third-is-on-top': {title: 'Why Third is on top', minutes: 2, heading: 'The order HTML gives'},
-  'how-position-places-a-box': {title: 'How position places a box', minutes: 3, heading: 'The order HTML gives'},
-  'why-9999-still-loses': {title: 'Why 9999 still loses', minutes: 2, heading: 'The order HTML gives'},
+  'why-third-is-on-top': {title: 'Why Third is on top', minutes: 2, group: 'The order HTML gives'},
+  'how-position-places-a-box': {title: 'How position places a box', minutes: 3, group: 'The order HTML gives'},
+  'why-9999-still-loses': {title: 'Why 9999 still loses', minutes: 2, group: 'The order HTML gives'},
   'what-else-forms-a-stacking-context': {
-    title: 'What else forms a stacking context', minutes: 3, heading: 'The order HTML gives'
+    title: 'What else forms a stacking context', minutes: 3, group: 'The order HTML gives'
   },
   'why-a-fixed-banner-still-loses': {
-    title: 'Why a fixed banner still loses', minutes: 3, heading: 'How we used to raise things'
+    title: 'Why a fixed banner still loses', minutes: 3, group: 'How we used to raise things'
   },
-  'why-the-popover-wins': {title: 'Why the popover wins', minutes: 4, heading: 'What the platform gives now'},
-  'lets-build-this-feature': {title: 'Let’s build this feature', minutes: 10, heading: 'Apply it'}
+  'why-the-popover-wins': {title: 'Why the popover wins', minutes: 4, group: 'What the platform gives now'},
+  'lets-build-this-feature': {title: 'Let’s build this feature', minutes: 10, group: 'Apply it'}
 } satisfies Record<ZIndexPart, Part>;
 
-type Group = {label: Heading; parts: readonly ZIndexPart[]};
+type Group = {label: Label; parts: readonly ZIndexPart[]};
 
 type Told = {name: string; minutes: number; ordinal: number; says: string};
 
@@ -43,8 +43,8 @@ type ZIndexParts = {
 
 const isPart = (name: string): name is ZIndexPart => Object.keys(book).includes(name);
 
-const groups: readonly Group[] = headings.map(label =>
-  ({label, parts: Object.keys(book).filter(isPart).filter(part => book[part].heading === label)}));
+const groups: readonly Group[] = labels.map(label =>
+  ({label, parts: Object.keys(book).filter(isPart).filter(part => book[part].group === label)}));
 
 const bookOrder: readonly ZIndexPart[] = groups.flatMap(({parts}) => parts);
 
