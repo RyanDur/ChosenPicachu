@@ -31,7 +31,7 @@
 }
 
 .code-beside-window {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, max(var(--base-x-30), (100% - var(--base-x-3)) / 2)), 1fr));
     grid-auto-flow: row dense;
     column-gap: var(--base-x-3);
 
