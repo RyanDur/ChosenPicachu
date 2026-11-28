@@ -33,6 +33,13 @@ describe('why a fixed banner still loses, on its own page', () => {
       .toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'));
   });
 
+  test('should open by saying it shows why, and what we did about it for years', async () => {
+    render(<TestApp at={demosAt(fixedBanner)}/>);
+
+    expect(explanation.opener(await explanation.part(title))).toHaveTextContent(
+      /^A banner pinned to the window with a z-index of 9999 can still slide under a card as the page scrolls\. This part shows why, and what we did about it for years\. It assumes /);
+  });
+
   test('should link stacking context, at its first use, to the tab’s page, which defines it', async () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
 
