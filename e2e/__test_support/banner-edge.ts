@@ -33,12 +33,12 @@ export const bannerAtTheEdge = (page: Page) => {
     },
     onTopAtTheBannersEnd: async (): Promise<OnTheBannersEnd> => {
       if (await dismiss.count() !== 1) return 'not drawn yet';
-      const helpButton = await help.count() === 1 ? await help.elementHandle() : null;
+      const [helpButton] = await help.elementHandles();
       await littlePage.scrollIntoViewIfNeeded();
       return dismiss.evaluate((button, helpDrawn): OnTheBannersEnd => {
         const box = button.getBoundingClientRect();
         const hit = document.elementFromPoint((box.left + box.right) / 2, (box.top + box.bottom) / 2);
-        const holds = (drawn?: Element | null): boolean => drawn?.contains(hit) ?? false;
+        const holds = (drawn?: Node | null): boolean => drawn?.contains(hit) ?? false;
         return holds(button.parentElement) ? 'the banner' : holds(helpDrawn) ? 'the help button' : 'neither';
       }, helpButton);
     },
