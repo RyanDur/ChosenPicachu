@@ -24,7 +24,7 @@ export {fingerTap, fingertipMiss, foldsAFingerLeavesShut} from './finger';
 export {dialRow, pillSwitch, pillsAFingerCannotChoose} from './pills';
 export {sortableList} from './lists';
 export {heightOnceSettled} from './motion';
-export {accordions, type Build, type Part} from './accordions';
+export {accordions, type Build, type Motion, type Part} from './accordions';
 export {pileSteps, stackingPile, type Card, type Step} from './stacking';
 export {nestingExhibit, type NestingStep} from './nesting';
 export {clearfixTray} from './clearfix';
