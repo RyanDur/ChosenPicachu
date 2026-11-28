@@ -133,7 +133,7 @@ test('a reader follows what else forms a stacking context’s foot on to the nex
   await expect(zIndexTab(page).partTitle(whyThePopoverWins)).toBeVisible();
 });
 
-test('a reader follows why a fixed banner still loses from the z-index tab to its page and finds the banners it explains', async ({page}) => {
+test('a reader follows why a fixed banner still loses from the z-index tab to its page and finds the fixed banner it explains, in a card and on the page', async ({page}) => {
   await page.goto('demos/z-index/');
   await siteFrame(page).hydrated();
 
