@@ -13,7 +13,7 @@ export const ExclusiveAccordion: FC<AccordionProps> = ({
     <ul className="accordion">
       <li className="fold close">
         <input id="close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio" name="group"/>
-        <label className="info-label inverse-filled field-outlined attentive prior-approached"
+        <label className="info-label inverse-filled field-outlined attentive prior-approached reachable"
           htmlFor="close-radio">Close</label>
       </li>
       {folds.map(({heading, story}, id) =>

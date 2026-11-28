@@ -262,9 +262,11 @@ export const RemembersTheFold: FC = () => {
             </li>}
             {foldType === 'exclusive' && <li className="run">
               <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
-                gets its own rule: a flex row that centers its one word. Its label fills the whole bar,
-                so a press anywhere on the bar counts. Its label wears the same dark look as the other bars, without
-                their arrow, so it answers a press the same way.</p>
+                gets its own rule: a flex row that centers its one word. Its label stretches to fill the bar, as a
+                flex row’s items do, so a press anywhere on the bar counts. On a touch screen
+                its <code className="monospaced">reachable</code> class makes it at least 44px tall, and the bar grows
+                with it. Its label wears the same dark look as the other bars, without their arrow, so it answers a
+                press the same way.</p>
               <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '&.close {'))}/>
             </li>}
             <li className="run">
