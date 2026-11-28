@@ -2,11 +2,6 @@
     display: grid;
     row-gap: var(--base-x-2);
 
-    .where-we-meet-it {
-        display: grid;
-        gap: var(--base-x-0_5);
-    }
-
     .page-top {
         margin-block-start: var(--base-x-1_5);
     }
