@@ -44,19 +44,21 @@ const flips = item => maybe(item.split(/\s+/).find(measures))
 /** @param {string} property */
 const allowed = property => property === 'none' || composited.has(property) || discrete.has(property) || tracks.has(property);
 
-/** @param {import('postcss').Declaration} declaration */
-const inTheResetsFold = declaration => {
-  const selectors = declaration.parent && 'selectors' in declaration.parent ? declaration.parent.selectors : [];
-  const file = maybe(declaration.source).mBind(({input}) => maybe(input.file)).orElse('');
-  return file.endsWith('src/styles/reset.css') && has(selectors)
-    && selectors.every(selector => selector.includes('::details-content'));
-};
+const layoutMotionWithAReason = [
+  {property: 'block-size', file: 'src/styles/reset.css', part: '::details-content'},
+  {property: 'inset', file: 'src/components/PillGlider/PillGlider.css', part: '::before'}
+];
 
 /**
  * @param {import('postcss').Declaration} declaration
  * @param {string} property
  */
-const foldHeightInTheReset = (declaration, property) => property === 'block-size' && inTheResetsFold(declaration);
+const excused = (declaration, property) => {
+  const selectors = declaration.parent && 'selectors' in declaration.parent ? declaration.parent.selectors : [];
+  const file = maybe(declaration.source).mBind(({input}) => maybe(input.file)).orElse('');
+  return layoutMotionWithAReason.some(reason => reason.property === property && file.endsWith(reason.file)
+    && has(selectors) && selectors.every(selector => selector.includes(reason.part)));
+};
 
 /** @type {import('stylelint').Rule} */
 const rule = primary => (root, result) => {
@@ -70,7 +72,7 @@ const rule = primary => (root, result) => {
   root.walkDecls(/^transition(-property)?$/, declaration => items(declaration.value)
     .filter(item => declaration.prop === 'transition-property' || not(flips(item)))
     .map(item => declaration.prop === 'transition' && item !== 'none' ? propertyIn(item) : item)
-    .filter(property => not(allowed(property)) && not(foldHeightInTheReset(declaration, property)))
+    .filter(property => not(allowed(property)) && not(excused(declaration, property)))
     .forEach(property => report(declaration, property)));
   root.walkAtRules('keyframes', keyframes => keyframes.walkDecls(declaration => {
     if (not(allowed(declaration.prop)) && declaration.prop !== 'animation-timing-function') report(declaration, declaration.prop);
