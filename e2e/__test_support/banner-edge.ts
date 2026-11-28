@@ -7,7 +7,7 @@ type BannerStep = '1 · Written in a card' | '2 · Moved to the page';
 type OnTop = 'the banner' | 'card two' | 'neither' | 'not drawn yet';
 
 export const bannerAtTheEdge = (page: Page) => {
-  const exhibit = page.getByRole('region', {name: 'The banner at the window’s edge', exact: true});
+  const exhibit = page.getByRole('region', {name: 'A fixed banner, in a card and on the page', exact: true});
   const littlePage = exhibit.getByRole('region', {name: 'The little page'});
   const steps = pillSwitch(page, 'Step');
   const labelOf = {banner: littlePage.getByText('Banner · 9999', {exact: true}), cardTwo: littlePage.getByText('Card two · 1', {exact: true})};

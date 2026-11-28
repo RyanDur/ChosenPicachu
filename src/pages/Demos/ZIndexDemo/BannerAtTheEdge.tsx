@@ -88,7 +88,7 @@ export const BannerAtTheEdge: FC = () => {
   const {step, numberedSteps, choose: chooseStep} = useExhibitStep('banner', steps, 'written-in-a-card');
   const {story, whereWeMeetIt, verdict, comparedWith, tabOrder, markup} = told[step];
 
-  return <Exhibit name="The banner at the window’s edge">
+  return <Exhibit name="A fixed banner, in a card and on the page">
     <figure className="banner-at-the-edge code-beside-window field">
       <p className="caption uppercase" aria-hidden="true">Step</p>
       <PillGlider label="Step" name="banner" choices={numberedSteps} chosen={step} onChosen={chooseStep} wraps/>
@@ -127,8 +127,8 @@ export const BannerAtTheEdge: FC = () => {
         stops.</p>
     </figure>
     <ExhibitFoot>
-      <strong className="bold">The banner at the window’s edge.</strong> Two steps: the banner written inside a card,
-      then the same banner written at the page’s level and what that does to the Tab order.
+      <strong className="bold">A fixed banner, in a card and on the page.</strong> Two steps: the banner written inside a
+      card, then the same banner written at the page’s level and what that does to the Tab order.
     </ExhibitFoot>
   </Exhibit>;
 };
