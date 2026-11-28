@@ -139,7 +139,7 @@ export const RemembersTheFold: FC = () => {
                 className="monospaced">inverse-filled</code> sets light words on a dark ground, <code
                 className="monospaced">field-outlined</code> draws the hairline between one bar and the next,
                 and <code className="monospaced">attentive</code> adds a glow while the bar is pressed. The bar’s own
-                style sheet keeps the structure, the row, the padding and the height. The samples that follow show
+                style sheet keeps the structure, the row and the padding. The samples that follow show
                 both, the style sheet’s rule and then the shared classes.</p>
               <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '&:not(.close) .info-label {'))}/>
               <Snippet label="CSS" lines={[
