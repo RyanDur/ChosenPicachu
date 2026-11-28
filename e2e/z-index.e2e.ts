@@ -36,6 +36,16 @@ test('stepping the tab’s pile on from inline to the overlap draws the cards ov
   await expect(pile.css).toContainText('position: absolute;');
 });
 
+test('stepping the tab’s pile back from a z-index to inline takes the card raised out of the address', async ({page}) => {
+  const pile = pileSteps(page);
+  await page.goto('demos/z-index/?pile=z-index&raised=first');
+
+  await pile.stepsTo('2 · Inline');
+
+  await expect(page).toHaveURL(/[?&]pile=inline$/);
+  await expect(page).not.toHaveURL(/raised=/);
+});
+
 const givenAZIndexLandsOnTop = async (page: Page, giving: () => Promise<void>, fromTheTop: Card[]): Promise<void> => {
   const pile = pileSteps(page);
   await page.goto('demos/z-index/');
