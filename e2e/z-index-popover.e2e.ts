@@ -54,7 +54,8 @@ test('a click outside the list closes it', async ({page}) => {
   await menu.sortBy.click();
   await expect(menu.list).toBeVisible();
 
-  await menu.caption.click();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.getByRole('heading', {level: 1}).click();
 
   await expect(menu.list).toBeHidden();
 });
