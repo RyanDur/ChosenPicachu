@@ -1,1 +1,2 @@
 .a { color: var(--read-by-a-sheet); }
+.b { --defined-in-a-sheet: 2rem; }

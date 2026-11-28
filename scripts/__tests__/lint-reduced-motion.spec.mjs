@@ -44,6 +44,22 @@ describe('chosen/reduced-motion-once', () => {
     expect(await warningsFor('a { &::before { @media (prefers-reduced-motion: reduce) { transition-duration: 0s; } } }')).toHaveLength(1);
   });
 
+  it('should refuse a timing function under reduced motion', async () => {
+    expect(await warningsFor('@media (prefers-reduced-motion: reduce) { a { transition-timing-function: linear; } }')).toHaveLength(1);
+  });
+
+  it('should refuse a duration under the boolean form of the query, which means reduce', async () => {
+    expect(await warningsFor('@media (prefers-reduced-motion) { a { transition: none; } }')).toHaveLength(1);
+  });
+
+  it('should accept a duration under a query that starts with not, which asks for motion', async () => {
+    expect(await warningsFor('@media not all and (prefers-reduced-motion: reduce) { a { transition: .3s; } }')).toEqual([]);
+  });
+
+  it('should accept a duration under no preference', async () => {
+    expect(await warningsFor('@media (prefers-reduced-motion: no-preference) { a { transition: .3s; } }')).toEqual([]);
+  });
+
   it('should accept a delay zeroed beside the slide it times', async () => {
     expect(await warningsFor('a { transition: color 0s 75ms; @media (prefers-reduced-motion: reduce) { transition-delay: 0s; } }')).toEqual([]);
   });

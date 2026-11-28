@@ -23,6 +23,14 @@ describe('chosen/token-read', () => {
     expect(await warningsFor(':root { --read-by-a-script: 500px; }')).toEqual([]);
   });
 
+  it('should accept a token markup reads with var()', async () => {
+    expect(await warningsFor(':root { --read-by-markup: 1rem; }')).toEqual([]);
+  });
+
+  it('should refuse a token a style sheet only defines', async () => {
+    expect(await warningsFor(':root { --defined-in-a-sheet: 1rem; }')).toHaveLength(1);
+  });
+
   it('should refuse a token a script names only as a plain word', async () => {
     expect(await warningsFor(':root { --plain-word: 1rem; }')).toHaveLength(1);
   });

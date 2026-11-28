@@ -5,12 +5,12 @@ import {join} from 'node:path';
 import stylelint from 'stylelint';
 
 const name = 'chosen/token-read';
-const sources = /\.(css|ts|tsx)$/;
+const sources = /\.(css|ts|tsx|html|svg)$/;
 const theSite = join(import.meta.dirname, '..', '..', 'src');
 
 const messages = stylelint.utils.ruleMessages(name, {
   /** @param {string} token */
-  unread: token => `"${token}" is defined, and nothing in src reads it, by var() or spelled with its dashes in a script; delete it`
+  unread: token => `"${token}" is defined, and nothing in src reads it, by var(), or spelled with its dashes in a script; delete it`
 });
 
 /**
@@ -27,7 +27,7 @@ const filesIn = folder => readdirSync(folder, {withFileTypes: true}).flatMap(ent
 const readsIn = file => {
   const text = readFileSync(file, 'utf8');
   const byVar = [...text.matchAll(/var\(\s*(--[\w-]+)/g)].map(([, token]) => token);
-  return file.endsWith('.css') ? byVar : [...byVar, ...text.match(/--[\w-]+/g) ?? []];
+  return /\.(css|html|svg)$/.test(file) ? byVar : [...byVar, ...text.match(/--[\w-]+/g) ?? []];
 };
 
 /** @type {import('stylelint').Rule} */

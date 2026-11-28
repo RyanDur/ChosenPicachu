@@ -12,7 +12,7 @@ const {prose} = require('./scripts/lint/prose.mjs');
 const {elements} = require('./scripts/lint/elements.mjs');
 const {tests} = require('./scripts/lint/tests.mjs');
 
-const lookInAJourney = 'a journey tests what a reader does and meets, and a computed style is a look, which is the lead’s measurement (AGENTS.md); e2e/looks reads looks';
+const lookInAJourney = 'a journey tests what a reader does and meets, and a computed style is a look, which is the designer’s measurement (AGENTS.md); e2e/looks reads looks';
 
 const shape = {
   '@stylistic/indent': ['error', 2, {SwitchCase: 1}],
@@ -206,7 +206,8 @@ module.exports = [
       ...journeys,
       'playwright/no-skipped-test': ['error', {allowConditional: true}],
       'no-restricted-globals': ['error', {name: 'getComputedStyle', message: lookInAJourney}],
-      'no-restricted-properties': ['error', {object: 'window', property: 'getComputedStyle', message: lookInAJourney}]
+      'no-restricted-properties': ['error', ...['getComputedStyle', 'computedStyleMap', 'toHaveCSS']
+        .map(property => ({property, message: lookInAJourney}))]
     }
   },
   {
