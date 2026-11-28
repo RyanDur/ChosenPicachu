@@ -92,6 +92,16 @@ describe('chosen/compositor-motion', () => {
       {codeFilename: 'src/components/PillGlider/PillGlider.css'})).toHaveLength(1);
   });
 
+  it('should refuse an inset sliding on a pill’s own ::before in the pill glider', async () => {
+    expect(await warningsFor('.pill-glider { .pill::before { transition: inset .15s; } }',
+      {codeFilename: 'src/components/PillGlider/PillGlider.css'})).toHaveLength(1);
+  });
+
+  it('should refuse an inset sliding on a hovered pill’s ::before in the pill glider', async () => {
+    expect(await warningsFor('.pill-glider { .pill { &:hover::before { transition: inset .15s; } } }',
+      {codeFilename: 'src/components/PillGlider/PillGlider.css'})).toHaveLength(1);
+  });
+
   it('should refuse all', async () => {
     expect(await warningsFor('a { transition: all .3s; }')).toHaveLength(1);
   });
