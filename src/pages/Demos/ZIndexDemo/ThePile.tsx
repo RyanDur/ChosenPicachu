@@ -33,7 +33,7 @@ const stories: Record<Step, string> = {
 const flowMarkup: Record<Flow, Line[]> = {
   block: cards.map(card => lines.plain(`<p>${names[card]}</p>`)),
   inline: [...cards.map(card => lines.plain(`<span>${names[card]}</span>`)),
-    lines.aside('<!-- more of the page -->')]
+    lines.aside('<!-- more of the page -->'), lines.aside('<!-- more of the page -->')]
 };
 
 const flowRules: Record<Flow, Line[]> = {
@@ -97,8 +97,8 @@ export const ThePile: FC = () => {
               : <>
                 {cards.map(card => <Fragment key={card}>
                   <span className="card hairline-edged rounded-corners">{names[card]}</span> </Fragment>)}
-                <span className="caption muted-ink muted-dashed-outline rounded-corners">
-                  {moreOfThePage}</span> <span className="caption muted-ink muted-dashed-outline rounded-corners">
+                <span className="caption muted-ink muted-dashed-outline rounded-corners" aria-hidden="true">
+                  {moreOfThePage}</span> <span className="caption muted-ink muted-dashed-outline rounded-corners" aria-hidden="true">
                   {moreOfThePage}</span>
               </>}
           </section>
