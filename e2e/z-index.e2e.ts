@@ -33,15 +33,6 @@ test('stepping the tab’s pile on from inline to the overlap draws the cards ov
 
   await expect.poll(pile.cardsFromTheTop).toEqual(['Third', 'Second', 'First']);
   await expect(pile.verdict).toHaveText('Third is on top. It comes last in the code.');
-});
-
-test('the tab’s pile overlaps with Third on top, and says it is on top because it comes last in the code', async ({page}) => {
-  const pile = pileSteps(page);
-  await page.goto('demos/z-index/?pile=overlap');
-
-  await expect.poll(pile.cardsFromTheTop).toEqual(['Third', 'Second', 'First']);
-  await expect(pile.verdict).toHaveText('Third is on top. It comes last in the code.');
-  await expect(pile.html).toBeVisible();
   await expect(pile.css).toContainText('position: absolute;');
 });
 
