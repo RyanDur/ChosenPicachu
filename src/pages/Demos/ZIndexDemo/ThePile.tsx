@@ -5,7 +5,7 @@ import * as schema from 'schemawax';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {carve, exhibitSteps, Line, lines, Snippet} from '../Recipe';
 import {inOrder, RaisedCard, readerSettings} from '../ReaderSettings';
-import {Exhibit, ExhibitFoot} from '../Exhibit';
+import {Exhibit, ExhibitFoot, Verdict} from '../Exhibit';
 import sheet from './ThePile.css?sample';
 import './ThePile.css';
 
@@ -65,7 +65,7 @@ export const ThePile: FC = () => {
             'card piled hairline-edged rounded-corners floating', raised === card && 'raised')}>
             {names[card]}</p>)}
         </section>
-        <output className="paragraph bold">{verdicts[raised]}</output>
+        <Verdict>{verdicts[raised]}</Verdict>
       </section>
       {step === 'z-index' && <>
         <p className="caption uppercase" aria-hidden="true">Give a z-index to</p>
