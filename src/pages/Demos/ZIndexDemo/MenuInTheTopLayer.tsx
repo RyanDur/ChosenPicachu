@@ -129,8 +129,8 @@ export const MenuInTheTopLayer: FC = () => {
         Escape or a click outside, and gives focus back to the button when focus was in the list.</p>
     </figure>
     <ExhibitFoot>
-      <strong className="bold">The menu in the top layer.</strong> The list is a popover. Leave it where the browser
-      puts it, or place it in the window with inset, with margin, or with one edge at a time.
+      <strong className="bold">The menu in the top layer.</strong> The list is a popover, and the browser puts it in
+      the middle of the window.
     </ExhibitFoot>
   </Exhibit>;
 };
