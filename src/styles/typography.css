@@ -49,6 +49,8 @@
   line-height: 1.8;
 }
 
+.lines-for-padded-boxes { line-height: var(--base-x-7); }
+
 .large-body { font-size: var(--text-large-body); }
 
 .balanced { text-wrap: balance; }
