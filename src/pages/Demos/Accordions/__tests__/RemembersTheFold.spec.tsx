@@ -83,6 +83,15 @@ describe('a box remembers the fold, on its own page', () => {
       .toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#html-alone-heading`);
   });
 
+  test('should link the exhibit’s source on the tab, where style sheets and rules are defined, with the fold choices carried', async () => {
+    render(<TestApp at={demosAt(remembers, '?type=inclusive&style=drawer')}/>);
+
+    const part = await explanation.part(title);
+
+    expect(explanation.linkNamed(explanation.opener(part), 'The exhibit’s source'))
+      .toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#exhibit-source-heading`);
+  });
+
   test('should link React to the z-index part that defines it', async () => {
     render(<TestApp at={demosAt(remembers)}/>);
 
