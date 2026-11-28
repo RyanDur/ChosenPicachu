@@ -85,13 +85,13 @@ export const AccordionsExplained: FC = () => {
             it slide, each on a page of its own, starting with how we did it before the browser could.</p>
         </li>
         <li className="run">
-          <p className="paragraph">The site’s reset, the style sheet that sets every element’s defaults, slides every
-            details where the browser can. This accordion turns that off, so you see what HTML alone does.</p>
-        </li>
-        <li className="run">
           <p className="paragraph">A style sheet is a file of rules. A rule has a selector, which names the elements it
             applies to. It also has properties. A property is one aspect of a look, like a height or a color, given a
             value.</p>
+        </li>
+        <li className="run">
+          <p className="paragraph">The site’s reset, the style sheet that sets every element’s defaults, slides every
+            details where the browser can. This accordion turns that off, so you see what HTML alone does.</p>
         </li>
       </ol>
     </section>
