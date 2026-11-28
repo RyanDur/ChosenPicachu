@@ -1,6 +1,6 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {popoverExhibit, siteFrame, wholeOnTop} from './__test_support';
+import {hydration, popoverExhibit, siteFrame, wholeOnTop} from './__test_support';
 
 const address = 'demos/z-index/why-the-popover-wins/';
 
@@ -77,4 +77,17 @@ test('a keyboard reader tabs from the little page to Sort by, through Newest and
   await page.keyboard.press('Tab');
 
   await expect(menu.open).toBeFocused();
+});
+
+test('given the page before its script runs, the 9999 checkbox is disabled; once the script runs, a press ticks it', async ({page}) => {
+  await hydration(page).holdBack(address);
+  await page.goto(address);
+  const menu = popoverExhibit(page);
+
+  await expect(menu.nineThousand).toBeDisabled();
+  await hydration(page).release();
+
+  await menu.nineThousand.click();
+
+  await expect(menu.nineThousand).toBeChecked();
 });
