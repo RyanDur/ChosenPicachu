@@ -7,7 +7,10 @@ export const popoverExhibit = (page: Page) => {
   return {
     sortBy,
     list,
+    littlePage: exhibit.getByRole('region', {name: 'The little page', exact: true}),
     newest: list.getByRole('button', {name: 'Newest', exact: true}),
+    oldest: list.getByRole('button', {name: 'Oldest', exact: true}),
+    open: exhibit.getByRole('button', {name: 'Open', exact: true}),
     nineThousand: exhibit.getByRole('checkbox', {name: /Give card one z-index: 9999\.$/}),
     nineThousandWords: exhibit.getByText(/^Curious whether a z-index changes any of this\?/),
     cardOneUnderTheMiddle: (): Promise<void> => exhibit.getByText('Card one', {exact: true}).evaluate(card => {

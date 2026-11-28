@@ -59,3 +59,22 @@ test('a click outside the list closes it', async ({page}) => {
 
   await expect(menu.list).toBeHidden();
 });
+
+test('a keyboard reader tabs from the little page to Sort by, through Newest and Oldest while the list is open, then to Open', async ({page}) => {
+  await page.goto(address);
+  await siteFrame(page).hydrated();
+  const menu = popoverExhibit(page);
+  await menu.littlePage.focus();
+  await page.keyboard.press('Tab');
+  await expect(menu.sortBy).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(menu.list).toBeVisible();
+
+  await page.keyboard.press('Tab');
+  await expect(menu.newest).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(menu.oldest).toBeFocused();
+  await page.keyboard.press('Tab');
+
+  await expect(menu.open).toBeFocused();
+});
