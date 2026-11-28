@@ -239,6 +239,14 @@ describe('the accordion in HTML alone', () => {
     expect(explanation.foldLabelsIn(folds)).toEqual(['basalt', 'cinder', 'meadow']);
   });
 
+  test('should say beside its name that it is written in HTML, with no CSS and no script', async () => {
+    render(<TestApp at={demosAt('accordions')}/>);
+
+    const exhibit = await accordionsTab.htmlAlone();
+
+    expect(accordionsTab.writtenInOf(exhibit)).toEqual(['HTML', 'no CSS', 'no script']);
+  });
+
   test('should open its source with its HTML', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
