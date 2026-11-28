@@ -1,4 +1,6 @@
 import {FC, PropsWithChildren} from 'react';
 
-export const Verdict: FC<PropsWithChildren<{'aria-label': string}>> = ({'aria-label': name, children}) =>
-  <output aria-label={name} className="paragraph bold">{children}</output>;
+type Named = PropsWithChildren<{'aria-label'?: string}>;
+
+export const Verdict: FC<Named> = props =>
+  <output aria-label={props['aria-label']} className="paragraph bold">{props.children}</output>;
