@@ -24,30 +24,37 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          run=$(gh run list -R "$GITHUB_REPOSITORY" --workflow checks.yml --commit "$GITHUB_SHA" --event merge_group --limit 1 \
+            --json databaseId -q '.[0].databaseId // empty')
+          pull=queue
           # GitHub links a commit to its pull request a moment after the merge, so the lookup waits for it
           for wait in 0 10 20 40; do
+            [ -n "$run" ] && break
             sleep "$wait"
             pull=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null and .base.ref == "main")][0].number // empty')
             if [ -n "$pull" ]; then
               break
             fi
           done
-          if [ -z "$pull" ]; then
-            echo "::error::$GITHUB_SHA came from no merged pull request, so no passing checks built it"
-            exit 1
-          fi
-          head=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$pull" -q .head.sha)
-          tree_of() { gh api "repos/$GITHUB_REPOSITORY/commits/$1" -q .commit.tree.sha; }
-          if [ "$(tree_of "$head")" != "$(tree_of "$GITHUB_SHA")" ]; then
-            echo "::error::#$pull's head $head holds a different tree from $GITHUB_SHA, so its site is not this commit's"
-            exit 1
-          fi
-          run=$(gh run list -R "$GITHUB_REPOSITORY" --workflow checks.yml --commit "$head" --event pull_request --limit 1 \
-            --json databaseId -q '.[0].databaseId // empty')
           if [ -z "$run" ]; then
-            echo "::error::#$pull's head $head has no checks run to take the site from"
-            exit 1
+            if [ -z "$pull" ] || [ "$pull" = queue ]; then
+              echo "::error::$GITHUB_SHA came from no merged pull request, so no passing checks built it"
+              exit 1
+            fi
+            head=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$pull" -q .head.sha)
+            tree_of() { gh api "repos/$GITHUB_REPOSITORY/commits/$1" -q .commit.tree.sha; }
+            if [ "$(tree_of "$head")" != "$(tree_of "$GITHUB_SHA")" ]; then
+              echo "::error::#$pull's head $head holds a different tree from $GITHUB_SHA, so its site is not this commit's"
+              exit 1
+            fi
+            run=$(gh run list -R "$GITHUB_REPOSITORY" --workflow checks.yml --commit "$head" --event pull_request --limit 1 \
+              --json databaseId -q '.[0].databaseId // empty')
+            if [ -z "$run" ]; then
+              echo "::error::#$pull's head $head has no checks run to take the site from"
+              exit 1
+            fi
           fi
+          head=${head:-$GITHUB_SHA}
           misses=0
           while true; do
             if seen=$(gh run view "$run" -R "$GITHUB_REPOSITORY" --json status,jobs \
