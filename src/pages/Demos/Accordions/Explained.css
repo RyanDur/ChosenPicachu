@@ -2,7 +2,7 @@
   gap: var(--base-x-2);
 }
 
-.accordion-part {
+.exhibit-source {
   display: grid;
   gap: var(--base-x-3);
 }
