@@ -21,7 +21,7 @@ export const WhyAFixedBannerStillLoses: FC = () => {
         </p>
       </li>
       <li className="run">
-        <p className="paragraph">To build this banner yourself, go to <Link className="signpost"
+        <p className="paragraph">To build the site’s own banner, which doesn’t lose, go to <Link className="signpost"
           to={carried(zIndexParts.addressOf('lets-build-this-feature'), topLayerStoryTitleId)}>
           <cite>{zIndexParts.told('lets-build-this-feature').name}</cite></Link>.
         </p>
