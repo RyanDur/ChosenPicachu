@@ -3,6 +3,7 @@ on:
   pull_request:
     branches:
       - main
+  merge_group:
   workflow_dispatch:
 concurrency:
   group: checks-${{ github.event.pull_request.number || github.sha }}
