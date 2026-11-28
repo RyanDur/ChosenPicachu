@@ -97,6 +97,8 @@ export const BannerAtTheEdge: FC = () => {
         <dt className="caption uppercase">Where we meet it</dt>
         <dd className="paragraph">{whereWeMeetIt}</dd>
       </dl>
+      <p className="paragraph">The buttons in the drawing do nothing when pressed. They are there to show the Tab
+        stops.</p>
       <Snippet label="HTML" lines={markup}/>
       <Snippet label="CSS" lines={rules}/>
       <section className="little-window card hairline-outline rounded-corners">
@@ -123,8 +125,6 @@ export const BannerAtTheEdge: FC = () => {
       <ResultLine label="Tab order:">
         {tabOrder} The red numbers in the drawing show it. A screen reader reads the page in the same order.
       </ResultLine>
-      <p className="paragraph">The buttons in the drawing do nothing when pressed. They are there to show the Tab
-        stops.</p>
     </figure>
     <ExhibitFoot>
       <strong className="bold">A fixed banner, in a card and on the page.</strong> Two steps: the banner written inside a
