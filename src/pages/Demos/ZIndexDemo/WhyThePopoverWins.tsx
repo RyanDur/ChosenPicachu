@@ -40,8 +40,8 @@ export const WhyThePopoverWins: FC = () => <>
       <Snippet label="TS" lines={carve.unit(itemSource, 'export const Item')}/>
     </li>
     <li className="run">
-      <p className="paragraph">The button that opens the menu carries a tabIndex of 0, as its sample shows, and so
-        does each choice in the menu. That is the HTML
+      <p className="paragraph">The button that opens the list carries a tabIndex of 0, as its sample shows, and so
+        does each choice in the list. That is the HTML
         attribute <Mdn path="Web/HTML/Global_attributes/tabindex">tabindex</Mdn>, spelled the way
         React spells it. A tabindex of 0 asks the browser to stop on the element when
         Tab moves focus. A button stops Tab by itself in most browsers, but by default Safari moves Tab only to text
