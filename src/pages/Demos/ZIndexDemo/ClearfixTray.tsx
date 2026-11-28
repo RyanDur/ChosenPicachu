@@ -96,7 +96,7 @@ export const ClearfixTray: FC = () => {
             <Snippet label="CSS" lines={rules}/>
           </section>
           <section className="little-window card hairline-outline rounded-corners">
-            <p className="little-bar caption uppercase trim" id={pageLabelId}>The page</p>
+            <p className="little-bar caption uppercase field hairline-rule-below" id={pageLabelId}>The page</p>
             <section className={classNames('lost-height', parentLooks)} aria-labelledby={pageLabelId}>
               <section className="parent the-parent plan-sand ink-dashed-outline rounded-corners">
                 <p className="kid little-box plan-blue hairline-outline rounded-corners">First</p>
