@@ -116,6 +116,18 @@ const markupPieces: Record<World, ReactNode> = {
         className="monospaced">data-ticked</code> yet.</PieceNote>
     </Piece>
     <Piece>
+      <PieceCode><InkedLines label="TS" lines={[
+        ...carve.between(dealSource, 'const sortable = useDragSortable(', 'DragSortable value={sortable}'),
+        lines.aside('  {/* … the table above */}'),
+        ...carve.between(dealSource, '<output className="off-screen"', '</DragSortable>;')
+      ]}/></PieceCode>
+      <PieceNote when="Runs each time the page is drawn."><code className="monospaced">useDragSortable</code> makes
+        the table’s store and returns <code className="monospaced">sortable</code>, and <code
+        className="monospaced">DragSortable</code> hands it to every part inside. After the table, the <code
+        className="monospaced">output</code> is the move report a screen reader hears, and its <code
+        className="monospaced">htmlFor</code> names the table it reports on.</PieceNote>
+    </Piece>
+    <Piece>
       <PieceCode><InkedLines label="TS" lines={carve.unit(columnSource, 'export const Column')}/></PieceCode>
       <PieceNote when="Runs for each column, each time the page is drawn.">What <code
         className="monospaced">Column</code> writes: one th. <code className="monospaced">scope="col"</code> says the
@@ -165,6 +177,13 @@ const markupPieces: Record<World, ReactNode> = {
         each number in the row. <code className="monospaced">hover-approached</code> tints the row under the pointer.
         The row header also holds the grip of part 6, and an <code className="monospaced">aria-label</code> that names
         the row.</PieceNote>
+    </Piece>
+    <Piece>
+      <PieceCode><InkedLines label="HTML" lines={carve.between(frameTable, '<output class="off-screen"', '</section>')}/>
+      </PieceCode>
+      <PieceNote when="Never changes. Part 6 writes into it when a row or column moves.">After the table, the <code
+        className="monospaced">output</code> is the move report a screen reader hears when a row or column moves.
+        Its <code className="monospaced">for</code> names the table it reports on.</PieceNote>
     </Piece>
   </AnnotatedListing>
 };
