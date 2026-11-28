@@ -27,6 +27,16 @@ describe('what the platform gives now, on its own page', () => {
     expect(appAddress.fragment()).toBe('#html-alone-heading');
   });
 
+  test('should link the exhibit’s source, where details and summary are defined, to its heading on the tab', async () => {
+    const from = demosAt(platformWay, build);
+    render(<TestApp at={from}/>);
+
+    await accordionsTab.followInIntroduction(title, 'The exhibit’s source');
+
+    expect(await appAddress.movedOnFrom(from)).toBe(demosAt('accordions', build));
+    expect(appAddress.fragment()).toBe('#exhibit-source-heading');
+  });
+
   test('should link the build it replaces to part 2’s page, with the fold choices carried', async () => {
     const from = demosAt(platformWay, build);
     render(<TestApp at={from}/>);
