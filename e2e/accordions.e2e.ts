@@ -203,7 +203,7 @@ test('a reader follows part one from the tab\'s list of parts to its exhibit on 
   await expect(page).toHaveURL(/#html-alone-heading$/);
 });
 
-test('a reader sets the fold type beside the demo to inclusive, follows part four, and its page shows inclusive', async ({page}) => {
+test('a reader sets the fold type in the exhibit’s foot to inclusive, follows part four, and its page shows inclusive', async ({page}) => {
   await page.goto('demos/accordions/');
 
   await pillSwitch(page, 'fold type').choose('Inclusive');

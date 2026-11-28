@@ -231,7 +231,7 @@ describe('the parts index', () => {
 });
 
 describe('the accordion in HTML alone', () => {
-  test('should hold three folds above the parts index, basalt, cinder and meadow, in that order', async () => {
+  test('should hold three folds, basalt, cinder and meadow, in that order', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const folds = await accordionsTab.firstFigure();
