@@ -18,10 +18,6 @@
         justify-content: space-between;
         gap: var(--base-x-0_5) var(--base-x-1_5);
 
-        & > :first-child {
-            flex-basis: 100%;
-        }
-
         & > .written-in {
             display: flex;
             flex-wrap: wrap;
