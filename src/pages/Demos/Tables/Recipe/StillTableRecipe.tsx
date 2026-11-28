@@ -155,7 +155,7 @@ const markupPieces: Record<World, ReactNode> = {
         lines.aside('    <!-- … one for each measure -->'), lines.plain('</tr>'),
         lines.aside('<!-- … one row for each lookback -->'), lines.plain('</tbody>')
       ]}/></PieceCode>
-      <PieceNote when="The page is written with 0 in every cell. Part 5 fills the cells in from the trades.">The body:
+      <PieceNote when="The page is written with zeros and dashes in the cells, and part 5 fills them in from the trades.">The body:
         one row for each lookback. Each row starts with a header cell of its own. <code
         className="monospaced">scope="row"</code> says it names every cell beside it, so the lookback is said with
         each number in the row. <code className="monospaced">hover-approached</code> tints the row under the pointer.
