@@ -113,9 +113,7 @@ const pageOf: Record<Build, string> = {
   'the details build': platformPage
 };
 
-export type Motion = 'reveal' | 'drawer' | 'static';
-
-const showing = (build: Build, style: Motion = 'reveal'): string =>
+const showing = (build: Build, style: 'reveal' | 'drawer' | 'static' = 'reveal'): string =>
   `${pageOf[build]}?type=${exclusiveBuilds.includes(build) ? 'exclusive' : 'inclusive'}&style=${style}`;
 
 const detailsBuilds: Build[] = ['the inclusive details build', 'the details build'];
@@ -161,8 +159,8 @@ const tab = (page: Page) => {
   return {
     partLink: (name: string): Locator => page.getByRole('region', {name: 'Accordions'}).getByRole('link', {name, exact: true}),
     partTitle: (name: string): Locator => page.getByRole('heading', {level: 2, name, exact: true}),
-    goTo: async (build: Build, motion?: Motion): Promise<void> => {
-      await page.goto(showing(build, motion));
+    goTo: async (build: Build): Promise<void> => {
+      await page.goto(showing(build));
       await siteFrame(page).hydrated();
       if (measuredBuilds.includes(build)) {
         await page.getByText('How this page builds it', {exact: true}).click();
