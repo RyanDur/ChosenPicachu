@@ -8,6 +8,8 @@ export const zIndexTab = (page: Page) => {
   const banners = page.getByRole('alert').getByRole('listitem');
   return {
     partLink: (name: string): Locator => partsNavigation.getByRole('link', {name, exact: true}),
+    partsInOrder: partsNavigation.getByRole('link'),
+    partsUnder: (group: string): Locator => partsNavigation.getByRole('list', {name: group, exact: true}).getByRole('link'),
     partTitle: (name: string): Locator => page.getByRole('heading', {level: 2, name, exact: true}),
     followsTheFoot: (name: string): Promise<void> =>
       partFoot(page).link(name).click(),

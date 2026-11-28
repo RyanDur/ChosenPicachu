@@ -16,6 +16,18 @@ const book = {
   'lets-build-this-feature': {title: 'Let’s build this feature', minutes: 10}
 } satisfies Record<ZIndexPart, Part>;
 
+type Group = {label: string; parts: readonly ZIndexPart[]};
+
+const groups: readonly Group[] = [
+  {
+    label: 'The order HTML gives',
+    parts: ['why-third-is-on-top', 'how-position-places-a-box', 'why-9999-still-loses', 'what-else-forms-a-stacking-context']
+  },
+  {label: 'How we used to raise things', parts: ['why-a-fixed-banner-still-loses']},
+  {label: 'What the platform gives now', parts: ['why-the-popover-wins']},
+  {label: 'Apply it', parts: ['lets-build-this-feature']}
+];
+
 type Told = {name: string; minutes: number; ordinal: number; says: string};
 
 type ZIndexParts = {
@@ -26,12 +38,12 @@ type ZIndexParts = {
   previousOf: (part: ZIndexPart) => Maybe<ZIndexPart>;
   nextOf: (part: ZIndexPart) => Maybe<ZIndexPart>;
   inTheBook: number;
-  inOrder: ZIndexPart[];
+  groups: readonly Group[];
 };
 
 const isPart = (name: string): name is ZIndexPart => Object.keys(book).includes(name);
 
-const bookOrder: ZIndexPart[] = Object.keys(book).filter(isPart);
+const bookOrder: readonly ZIndexPart[] = groups.flatMap(({parts}) => parts);
 
 const tabAddress = demoTab.address(DemoTopics.zIndex);
 
@@ -57,5 +69,5 @@ export const zIndexParts: ZIndexParts = {
   previousOf: part => besidePart(part, -1),
   nextOf: part => besidePart(part, 1),
   inTheBook: bookOrder.length,
-  inOrder: bookOrder
+  groups
 };

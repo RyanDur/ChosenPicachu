@@ -7,7 +7,7 @@ import {explanation} from '@pages/Demos/Recipe/__test_support';
 import {zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const titles = ['Why Third is on top', 'How position places a box', 'Why 9999 still loses',
-  'What else forms a stacking context', 'Why the popover wins', 'Why a fixed banner still loses',
+  'What else forms a stacking context', 'Why a fixed banner still loses', 'Why the popover wins',
   'Let’s build this feature'];
 
 describe('the z-index parts list', () => {
