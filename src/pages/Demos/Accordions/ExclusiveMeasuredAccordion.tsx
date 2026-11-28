@@ -23,7 +23,7 @@ export const ExclusiveMeasuredAccordion: FC<AccordionProps> = ({
           <li className="fold close" onChange={() => dispatch(foldChange.allClosed())}>
             <input id="measured-close-radio" defaultChecked={true} className="info-toggle off-screen" type="radio"
               name="measured-group"/>
-            <label className="info-label inverse-filled field-outlined attentive prior-approached"
+            <label className="info-label inverse-filled field-outlined attentive prior-approached reachable"
               htmlFor="measured-close-radio">Close</label>
           </li>
           {folds.map(({heading, story}, id) =>
