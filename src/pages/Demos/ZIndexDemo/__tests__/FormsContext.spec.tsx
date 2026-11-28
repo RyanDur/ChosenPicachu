@@ -2,7 +2,7 @@ import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demoPage, demosAt} from '@pages/Demos/__test_support';
 import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {exhibit, wearsChooser} from '@pages/Demos/ZIndexDemo/__test_support';
+import {exhibit, oldWayMenu, wearsChooser} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const heading = 'What else forms a stacking context';
 const whatElseForms = 'z-index/what-else-forms-a-stacking-context';
@@ -70,6 +70,17 @@ describe('the part on what else forms a stacking context', () => {
     await wearsChooser.putOn(chooser, 'z-index: 1');
 
     await wearsChooser.pressSortBy(chooser);
+
+    expect(wearsChooser.formed(chooser)).toHaveTextContent('The list opened under card two. z-index: 1 formed a stacking context, so the 9999 counts only inside card one.');
+  });
+
+  test('should say the list opened under card two once card one wears z-index: 1 and ArrowDown opens Sort by', async () => {
+    render(<TestApp at={demosAt(whatElseForms)}/>);
+    const chooser = await wearsChooser.find();
+    await wearsChooser.putOn(chooser, 'z-index: 1');
+    await oldWayMenu.focusButton();
+
+    await oldWayMenu.openWithArrowDown();
 
     expect(wearsChooser.formed(chooser)).toHaveTextContent('The list opened under card two. z-index: 1 formed a stacking context, so the 9999 counts only inside card one.');
   });
