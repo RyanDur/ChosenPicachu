@@ -2,6 +2,7 @@ import {FC} from 'react';
 import {PartTermLink} from '@pages/Demos/ZIndexDemo';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
+import {tabHeadings} from './tab-headings';
 import {useControls} from '../Controls';
 import {Exhibit, ExhibitFoot} from '../Exhibit';
 import {FoldType} from '../ReaderSettings';
@@ -69,8 +70,8 @@ export const RemembersTheFold: FC = () => {
             A <Mdn path="Web/HTML/Element/input/checkbox">checkbox</Mdn> remembers: it is either
             checked or not, and pressing it switches between the two. So each fold is a list item
             holding three things, in this order: the checkbox, its label, and the text. An id is
-            an <TabLink to={DemoTopics.accordions} heading="html-alone-heading">attribute</TabLink> whose value is one no
-            other element on the page shares. The
+            an <TabLink to={DemoTopics.accordions} heading={tabHeadings.exhibitSource}>attribute</TabLink> whose
+            value is one no other element on the page shares. The
             label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the checkbox’s
             id. That link makes a press anywhere on the label press the checkbox. Each id includes
             the fold’s place in the list, so no two checkboxes share one.</p>
@@ -79,8 +80,8 @@ export const RemembersTheFold: FC = () => {
             not. Radios that share a name form a group, and checking one unchecks the others. So each
             fold is a list item holding three things, in this order: the radio, its label, and the
             text. An id is
-            an <TabLink to={DemoTopics.accordions} heading="html-alone-heading">attribute</TabLink> whose value is one no
-            other element on the page shares. The
+            an <TabLink to={DemoTopics.accordions} heading={tabHeadings.exhibitSource}>attribute</TabLink> whose
+            value is one no other element on the page shares. The
             label’s <Mdn path="Web/HTML/Attributes/for">for</Mdn> attribute names the radio’s id. That link makes
             a press anywhere on the label press the radio. Each id includes the fold’s place in the list, so no two
             radios share one.</p>}

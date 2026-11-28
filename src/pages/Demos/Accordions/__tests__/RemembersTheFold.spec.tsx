@@ -120,7 +120,7 @@ describe('the attribute part 2 leans on', () => {
 
     const part = await explanation.part(title);
 
-    expect(explanation.linkNamed(part, 'attribute')).toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#html-alone-heading`);
+    expect(explanation.linkNamed(part, 'attribute')).toHaveAttribute('href', `${demosAt('accordions', '?type=inclusive&style=drawer')}#exhibit-source-heading`);
   });
 
   test('should, with exclusive chosen, link attribute to where the tab defines it, with the fold choices carried', async () => {
@@ -128,7 +128,7 @@ describe('the attribute part 2 leans on', () => {
 
     const part = await explanation.part(title);
 
-    expect(explanation.linkNamed(part, 'attribute')).toHaveAttribute('href', `${demosAt('accordions', '?type=exclusive&style=drawer')}#html-alone-heading`);
+    expect(explanation.linkNamed(part, 'attribute')).toHaveAttribute('href', `${demosAt('accordions', '?type=exclusive&style=drawer')}#exhibit-source-heading`);
   });
 });
 
