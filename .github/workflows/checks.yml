@@ -22,10 +22,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PULL: ${{ github.event.pull_request.number }}
+          QUEUED_FROM: ${{ github.event.merge_group.base_sha }}
+          QUEUED_TO: ${{ github.event.merge_group.head_sha }}
         run: |
           site=true
-          if [ -n "$PULL" ] && files=$(gh pr diff "$PULL" -R "$GITHUB_REPOSITORY" --name-only); then
-            if [ -n "$files" ] && ! grep -qvE '^docs/|\.md$' <<< "$files"; then
+          if [ -n "$PULL" ]; then
+            files=$(gh pr diff "$PULL" -R "$GITHUB_REPOSITORY" --name-only) || files=
+          elif [ -n "$QUEUED_FROM" ]; then
+            files=$(gh api "repos/$GITHUB_REPOSITORY/compare/$QUEUED_FROM...$QUEUED_TO" -q '.files[].filename') || files=
+          fi
+          if [ -n "${files:-}" ]; then
+            if ! grep -qvE '^docs/|\.md$' <<< "$files"; then
               site=false
             fi
           fi
@@ -48,9 +55,8 @@ jobs:
     outputs:
       budgeted: ${{ steps.budgeted.outputs.matrix }}
     steps:
-      # the pull request's own head is built, never GitHub's temporary merge commit: the head stays on GitHub after the
-      # merge, so the samples' links to it keep working, and the branch is up to date with main, so its tree is the
-      # tree the rebase lands
+      # a pull request's run builds its own head, never GitHub's temporary merge commit, and the merge queue's run
+      # builds the queue's commit, which becomes main: either way the samples' links to the built commit keep working
       - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
