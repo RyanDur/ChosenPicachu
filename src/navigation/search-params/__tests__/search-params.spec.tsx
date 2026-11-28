@@ -32,14 +32,14 @@ describe('search params are decoded, never trusted', () => {
   });
 });
 
-const Mover: FC = () => {
+const HarvardWithoutThePage: FC = () => {
   const {updateSearchParams} = useSearchParamsObject({page: numberParam, tab: schema.string});
   return <button type="button" onClick={() => updateSearchParams({tab: 'harvard'}, {without: ['page']})}>Harvard</button>;
 };
 
 describe('search params change in one step', () => {
   it('sets one param and drops another in a single move, so one Back returns to the address before it', async () => {
-    render(<TestApp cameFrom="/" at="/?page=3&tab=aic"><Mover/></TestApp>);
+    render(<TestApp cameFrom="/" at="/?page=3&tab=aic"><HarvardWithoutThePage/></TestApp>);
 
     await userEvent.click(screen.getByRole('button', {name: 'Harvard'}));
     expect(appAddress.search()).toHaveTextContent(/^\?tab=harvard$/);
