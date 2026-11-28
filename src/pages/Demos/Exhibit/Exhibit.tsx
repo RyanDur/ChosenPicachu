@@ -15,7 +15,7 @@ const WrittenIn: FC<{languages: readonly Language[]}> = ({languages: used}) =>
     {languages.map(language => used.includes(language)
       ? <span key={language} className="language-mark inverse-ink field-inverse-filled field-inverse-outlined rounded-corners">
         {namesOf[language]}</span>
-      : <span key={language} className="language-mark muted-ink gray-dashed-outline rounded-corners">
+      : <span key={language} className="language-mark muted-ink muted-dashed-outline rounded-corners">
         no {namesOf[language]}</span>)}
   </p>;
 
