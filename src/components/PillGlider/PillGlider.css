@@ -20,7 +20,7 @@
     z-index: -2;
   }
 
-  @supports (anchor-name: --x) {
+  @supports (anchor-scope: --x) {
     &::before {
       content: '';
       position-anchor: --chosen-pill;

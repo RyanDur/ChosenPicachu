@@ -463,7 +463,7 @@
 
 .choice-inverse-ink:has(:checked) { color: var(--ink-inverse); }
 
-@supports not (anchor-name: --x) {
+@supports not (anchor-scope: --x) {
   .choice-filled-without-anchors:has(:checked) { background: var(--field-inverse); }
 }
 
@@ -473,7 +473,7 @@
     background: var(--highlight);
   }
 
-  @supports not (anchor-name: --x) {
+  @supports not (anchor-scope: --x) {
     .choice-filled-without-anchors:has(:checked) {
       forced-color-adjust: none;
       background: var(--highlight);
