@@ -18,8 +18,8 @@ type Props<T extends string> = {
 
 export const PillGlider = <T extends string>({label, name, choices, chosen, onChosen, wraps = false}: Props<T>) => {
   const hydrated = useHydrated();
-  return <fieldset className={classNames('pill-glider rounded-corners ringed hover-veiled choice-filled-before',
-    wraps && 'wraps')}>
+  return <fieldset key={String(hydrated)}
+    className={classNames('pill-glider rounded-corners ringed hover-veiled choice-filled-before', wraps && 'wraps')}>
     <legend className="off-screen">{label}</legend>
     {choices.map(({words, value}) =>
       <label className="pill rounded-corners reachable unfilled focus-haloed hover-inverse-ink choice-inverse-ink choice-filled-without-anchors"
