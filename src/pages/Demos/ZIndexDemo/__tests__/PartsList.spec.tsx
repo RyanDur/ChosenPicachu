@@ -19,10 +19,10 @@ describe('the z-index parts list', () => {
     expect(partsIndex.titlesIn(index)).toEqual(titles);
   });
 
-  test('should file each part under its heading, from the order HTML gives to applying it', async () => {
+  test('should file each part under its group’s label, from the order HTML gives to applying it', async () => {
     render(<TestApp at={demosAt('z-index')}/>);
     const index = await partsIndex.find();
-    const under = (heading: string): string[] => partsIndex.titlesIn(partsIndex.groupIn(index, heading));
+    const under = (label: string): string[] => partsIndex.titlesIn(partsIndex.groupIn(index, label));
 
     expect({
       'The order HTML gives': under('The order HTML gives'),
