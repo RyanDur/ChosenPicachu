@@ -13,7 +13,7 @@ describe('why a fixed banner still loses, on its own page', () => {
   test('should say its place in the z-index book', async () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
 
-    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 6 of 7');
+    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 5 of 7');
   });
 
   test('should link why 9999 still loses, which it builds on, to its page with the raised card carried', async () => {
@@ -141,12 +141,12 @@ describe('why a fixed banner still loses, on its own page', () => {
     expect(explanation.sectionTitles(await explanation.part(title))).toContain('Which card is on top?');
   });
 
-  test('should lead back to part five’s page and on to part seven’s page, by number and title, with the raised card carried', async () => {
+  test('should lead back to part four’s page and on to part six’s page, by number and title, with the raised card carried', async () => {
     render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
 
     expect(await pageFoot.leadsOn()).toEqual([
-      ['Previous: 5. Why the popover wins', demosAt('z-index/why-the-popover-wins', '?raised=second')],
-      ['Next: 7. Let’s build this feature', demosAt('z-index/lets-build-this-feature', '?raised=second')]
+      ['Previous: 4. What else forms a stacking context', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second')],
+      ['Next: 6. Why the popover wins', demosAt('z-index/why-the-popover-wins', '?raised=second')]
     ]);
   });
 

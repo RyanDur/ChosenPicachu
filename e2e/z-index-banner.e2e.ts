@@ -191,8 +191,8 @@ test('a site banner stays up through Back from the part before Let’s build thi
   const banners = zIndexTab(page);
   await banners.raisesABanner();
   await expect(banners.newestBanner()).toBeVisible();
-  await banners.followsTheFoot('Previous: 6. Why a fixed banner still loses');
-  await expect(page).toHaveURL(/why-a-fixed-banner-still-loses\/$/);
+  await banners.followsTheFoot('Previous: 6. Why the popover wins');
+  await expect(page).toHaveURL(/why-the-popover-wins\/$/);
 
   await page.goBack();
 

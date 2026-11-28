@@ -106,8 +106,8 @@ describe('a z-index part’s page', () => {
     const index = await partsIndex.find();
 
     expect(partsIndex.titlesIn(index)).toEqual(['Why Third is on top', 'How position places a box',
-      'Why 9999 still loses', 'What else forms a stacking context', 'Why the popover wins',
-      'Why a fixed banner still loses', 'Let’s build this feature']);
+      'Why 9999 still loses', 'What else forms a stacking context', 'Why a fixed banner still loses',
+      'Why the popover wins', 'Let’s build this feature']);
   });
 
   test('marks the part the reader is on as the current page', async () => {
@@ -136,8 +136,8 @@ describe('a z-index part’s page', () => {
       demosAt('z-index/how-position-places-a-box', '?raised=second'),
       demosAt('z-index/why-9999-still-loses', '?raised=second'),
       demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'),
-      demosAt('z-index/why-the-popover-wins', '?raised=second'),
       demosAt('z-index/why-a-fixed-banner-still-loses', '?raised=second'),
+      demosAt('z-index/why-the-popover-wins', '?raised=second'),
       demosAt('z-index/lets-build-this-feature', '?raised=second')
     ]);
   });

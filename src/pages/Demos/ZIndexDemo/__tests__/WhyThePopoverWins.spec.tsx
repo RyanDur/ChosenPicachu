@@ -11,7 +11,7 @@ describe('why the popover wins, on its own page', () => {
   test('should say its place in the z-index book', async () => {
     render(<TestApp at={demosAt(popoverWins)}/>);
 
-    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 5 of 7');
+    expect(await zIndexTab.place()).toHaveTextContent('Z-index · part 6 of 7');
   });
 
   test('should link why 9999 still loses, which it builds on, to its page with the raised card carried', async () => {
@@ -64,12 +64,12 @@ describe('why the popover wins, on its own page', () => {
     expect(explanation.linkNamed(part, 'rule')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 
-  test('should lead back to part four’s page and on to part six’s page, by number and title, with the raised card carried', async () => {
+  test('should lead back to part five’s page and on to part seven’s page, by number and title, with the raised card carried', async () => {
     render(<TestApp at={demosAt(popoverWins, '?raised=second')}/>);
 
     expect(await pageFoot.leadsOn()).toEqual([
-      ['Previous: 4. What else forms a stacking context', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second')],
-      ['Next: 6. Why a fixed banner still loses', demosAt('z-index/why-a-fixed-banner-still-loses', '?raised=second')]
+      ['Previous: 5. Why a fixed banner still loses', demosAt('z-index/why-a-fixed-banner-still-loses', '?raised=second')],
+      ['Next: 7. Let’s build this feature', demosAt('z-index/lets-build-this-feature', '?raised=second')]
     ]);
   });
 
@@ -99,7 +99,7 @@ describe('why the popover wins, on the tab', () => {
     render(<TestApp at={demosAt('z-index', '?raised=second')}/>);
     await demoTabs.arrivedOn('Z-index');
 
-    const introduction = demoPage.says(/^Later tabs build on part 5, /);
+    const introduction = demoPage.says(/^Later tabs build on part 6, /);
 
     expect(explanation.linkNamed(introduction, title)).toHaveAttribute('href', demosAt(popoverWins, '?raised=second'));
   });

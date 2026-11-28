@@ -44,7 +44,7 @@ describe('what else forms a stacking context, on its own page', () => {
 
     expect(await pageFoot.leadsOn()).toEqual([
       ['Previous: 3. Why 9999 still loses', demosAt('z-index/why-9999-still-loses', '?wears=opacity')],
-      ['Next: 5. Why the popover wins', demosAt('z-index/why-the-popover-wins', '?wears=opacity')]
+      ['Next: 5. Why a fixed banner still loses', demosAt('z-index/why-a-fixed-banner-still-loses', '?wears=opacity')]
     ]);
   });
 
