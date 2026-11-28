@@ -101,9 +101,9 @@ const markupPieces: Record<World, ReactNode> = {
         ...carve.between(dealSource, '<output className="off-screen"', '</DragSortable>;')
       ]}/></PieceCode>
       <PieceNote when="Runs each time the page is drawn."><code className="monospaced">useDragSortable</code> makes
-        the table’s store and returns <code className="monospaced">sortable</code>, and <code
-        className="monospaced">DragSortable</code> hands it to every part inside. After the table comes the move report
-        the step above describes.</PieceNote>
+        the table’s store on the first draw and keeps it after, and returns <code
+        className="monospaced">sortable</code>; <code className="monospaced">DragSortable</code> hands it to every part
+        inside. After the table comes the move report the step above describes.</PieceNote>
     </Piece>
     <Piece>
       <PieceCode><InkedLines label="TS" lines={carve.elided(carve.elided(
