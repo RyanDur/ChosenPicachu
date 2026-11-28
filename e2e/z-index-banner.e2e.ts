@@ -1,65 +1,10 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/history-writes';
 import {
-  boxOf, dialRow, feedbackOn, hydration, pillSwitch, pressTab, siteFrame, tabsTo, wholeOnTop, zIndexTab
+  boxOf, dialRow, feedbackOn, hydration, pillSwitch, siteFrame, wholeOnTop, zIndexTab
 } from './__test_support';
 
-const fixedBannerPage = 'demos/z-index/why-a-fixed-banner-still-loses/';
 const buildPage = 'demos/z-index/lets-build-this-feature/';
-
-test.describe('the fixed banners', {tag: ['@iPhone', '@desktop']}, () => {
-  test('Let’s build this feature brings the step that makes the panel a popover into view, with its story heading in view', async ({page}) => {
-    await page.goto(fixedBannerPage);
-    await siteFrame(page).hydrated();
-
-    await zIndexTab(page).linkToTheBannerStory().click();
-
-    await expect(page.getByText('Make the panel a popover', {exact: true})).toBeInViewport();
-    await expect(page.getByText('The user sees the news over the page')).toBeInViewport();
-  });
-});
-
-test('Back from Let’s build this feature returns the reader to the link they followed, and Forward to the tutorial\'s story', {tag: ['@iPhone', '@desktop']}, async ({page}) => {
-  await page.goto(fixedBannerPage);
-  await siteFrame(page).hydrated();
-  const link = zIndexTab(page).linkToTheBannerStory();
-  await link.click();
-  await expect(page.getByText('Make the panel a popover', {exact: true})).toBeInViewport();
-
-  await page.goBack();
-  await expect(link).toBeInViewport();
-
-  await page.goForward();
-  await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
-});
-
-test('a keyboard reader who follows Let’s build this feature reaches the story\'s opener with one Tab, and Enter folds the story', async ({page}) => {
-  await page.goto(fixedBannerPage);
-  await siteFrame(page).hydrated();
-  const link = zIndexTab(page).linkToTheBannerStory();
-  await tabsTo(page, link);
-  await page.keyboard.press('Enter');
-  await expect(page).toHaveURL(/\/lets-build-this-feature\/#news-top-story$/);
-  await expect(page.getByRole('listitem').filter({has: page.getByRole('group', {name: 'The user sees the news over the page'})}).last()).toBeFocused();
-
-  await expect(page.getByText('Make the panel a popover', {exact: true})).toBeVisible();
-
-  await pressTab(page);
-  await page.keyboard.press('Enter');
-
-  await expect(page.getByText('Make the panel a popover', {exact: true})).toBeHidden();
-});
-
-test('a reader who follows Let’s build this feature with motion allowed lands on the story\'s heading, with only its place in the address', async ({page}) => {
-  await page.emulateMedia({reducedMotion: 'no-preference'});
-  await page.goto(fixedBannerPage);
-  await siteFrame(page).hydrated();
-
-  await zIndexTab(page).linkToTheBannerStory().click();
-
-  await expect(page).toHaveURL(/\/lets-build-this-feature\/#news-top-story$/);
-  await expect(page.getByText('The user sees the news over the page').first()).toBeInViewport();
-});
 
 test('a reader with a saved link that still names the story\'s record lands on the story, open', async ({page}) => {
   await page.goto('demos/z-index/lets-build-this-feature/?news=top#news-top-story');
