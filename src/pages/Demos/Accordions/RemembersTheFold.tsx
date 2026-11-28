@@ -145,7 +145,8 @@ export const RemembersTheFold: FC = () => {
               <Snippet label="CSS" lines={[
                 ...carve.unit(surfaceCss, '.inverse-filled {'), lines.blank,
                 ...carve.unit(surfaceCss, '.field-outlined {'), lines.blank,
-                ...carve.unit(surfaceCss, '.attentive:where(:not(:disabled)) {')
+                ...carve.elided(carve.unit(surfaceCss, '.attentive:where(:not(:disabled)) {'), '&:focus-visible,',
+                  '&:active {', '/* …its focus and hover rules */')
               ]}/>
             </li>
             <li className="run">
