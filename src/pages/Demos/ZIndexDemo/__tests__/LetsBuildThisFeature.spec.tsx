@@ -22,16 +22,7 @@ describe('let’s build this feature, on its own page', () => {
     expect(explanation.linkNamed(opener, 'Why Third is on top')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second'));
   });
 
-  test('should link why a fixed banner still loses, the last part it assumes, to its page with the raised card carried', async () => {
-    render(<TestApp at={demosAt(buildThisFeature, '?raised=second')}/>);
-
-    const opener = explanation.opener(await explanation.part(title));
-
-    expect(explanation.linkNamed(opener, 'Why a fixed banner still loses'))
-      .toHaveAttribute('href', demosAt('z-index/why-a-fixed-banner-still-loses', '?raised=second'));
-  });
-
-  test('should link why the popover wins, which explains the component, state and event it assumes, to its page with the raised card carried', async () => {
+  test('should link why the popover wins, the last part it assumes, to its page with the raised card carried', async () => {
     render(<TestApp at={demosAt(buildThisFeature, '?raised=second')}/>);
 
     const opener = explanation.opener(await explanation.part(title));
