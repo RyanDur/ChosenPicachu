@@ -1,9 +1,9 @@
 import {FC, PropsWithChildren} from 'react';
 import {has, maybe, not} from '@ryandur/sand';
-import {classNames} from '@components';
-import {Kind, Label} from './highlight';
-import {excerpts} from './excerpts';
+import {Label} from './highlight';
 import {Line} from './sample';
+import {InkedLines} from './InkedLines';
+import {fileNames} from './fileNames';
 import './Snippet.css';
 
 type Props = {
@@ -28,32 +28,6 @@ const sourcesOf = (lines: readonly Line[]): Source[] =>
       : [...sources, {path, url, owner, first: line, last: line, fromTheExhibit: kind === 'exhibit'}];
   }).orElse(sources), []);
 
-const roots = ['src', 'lib'];
-
-const shortName = (path: string): string => {
-  const [file, folder, parent] = path.split('/').reverse();
-  const insideAComponent = /^[a-z]/.test(folder) && has(parent) && not(roots.includes(parent));
-  return (insideAComponent ? [parent, folder, file] : [folder, file]).join('/');
-};
-
-const nameOf = (path: string, owner?: string): string => has(owner) ? `${owner}’s ${shortName(path)}` : shortName(path);
-
-const splitIndent = (text: string): {indent: string; code: string} => {
-  const code = text.trimStart();
-  return {indent: text.slice(0, text.length - code.length), code};
-};
-
-const inkOf: Record<Exclude<Kind, 'plain'>, string> = {
-  keyword: 'keyword-ink bold',
-  string: 'string-ink',
-  number: 'number-ink',
-  comment: 'comment-ink italic',
-  tag: 'tag-ink',
-  attribute: 'attribute-ink',
-  type: 'type-ink',
-  call: 'call-ink'
-};
-
 const FileLink: FC<PropsWithChildren<{href: string}>> = ({href, children}) =>
   <a className="signpost reachable" href={href} target="_blank" rel="noreferrer">{children}</a>;
 
@@ -63,29 +37,17 @@ export const Snippet: FC<Props> = ({label, lines}) => {
   const sources = sourcesOf(lines);
   const exhibitFiles = sources.filter(({fromTheExhibit}) => fromTheExhibit);
   const sharedFiles = sources.filter(({fromTheExhibit}) => not(fromTheExhibit));
-  const indented = lines.map(({text}) => splitIndent(text));
-  const inked = excerpts.tokensOf(label, lines.map((line, at) => ({...line, text: indented[at].code})));
   return <figure className="sample">
     <pre className="snippet code-paper-filled code-ink listing rounded-corners monospaced">
       <span className="lang caption uppercase comment-ink" aria-hidden="true">{label}</span>
-      <code>{lines.map(({dim = false, marked = false}, at) => {
-        const {indent} = indented[at];
-        const Holder = marked ? 'mark' : 'span';
-        return <Holder className={classNames('line', dim && inkOf.comment, marked && 'code-marked-filled inverse-ink')}
-          key={at}>
-          {has(indent) && <span className="indent">{indent}</span>}
-          {marked ? indented[at].code : inked[at].map(({text: piece, kind}, part) =>
-            kind === 'plain' ? piece : <span className={inkOf[kind]} key={part}>{piece}</span>)}
-          {'\n'}
-        </Holder>;
-      })}</code>
+      <code><InkedLines label={label} lines={lines}/></code>
     </pre>
     <figcaption className="sources caption ink">
       {exhibitFiles.map(source => <FileLink href={linesOnGitHub(source)} key={source.path}>
-        {nameOf(source.path, source.owner)} on GitHub</FileLink>)}
+        {fileNames.of(source.path, source.owner)} on GitHub</FileLink>)}
       {has(exhibitFiles) && <p>Taken from the exhibit on this page.</p>}
       {sharedFiles.map(source => <FileLink href={linesOnGitHub(source)} key={source.path}>
-        {nameOf(source.path, source.owner)} on GitHub</FileLink>)}
+        {fileNames.of(source.path, source.owner)} on GitHub</FileLink>)}
       {not(has(sources)) && 'Written for this page, not taken from the site’s code.'}
     </figcaption>
   </figure>;
