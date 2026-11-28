@@ -14,8 +14,8 @@ export const WhatTheTabGives: FC = () =>
       of its parts. First we place boxes, then put one stacking context inside another, where a menu at z-index 9999
       can still open under a card, and see what else forms one. Then we raise a banner the way we did for years, with a
       bigger number, and watch where that stops working. Then we use what the browser gives now: the top layer, a layer
-      it draws above the whole page, and the popover, an element the browser itself shows and hides there. The last
-      part builds this site’s banner the new way.</p>
+      it draws above the whole page, and the popover attribute, which puts an element in that layer while it shows.
+      The last part builds this site’s banner the new way.</p>
     <p className="paragraph">By the end you can say why the browser draws one box over another, why 9999 can still
       lose, and how a popover gets over everything on the page.</p>
     <p className="paragraph">This tab assumes what the <TabLink to={DemoTopics.accordions}>accordions
