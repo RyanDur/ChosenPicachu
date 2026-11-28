@@ -27,15 +27,13 @@ export const bannerAtTheEdge = (page: Page) => {
       }
       return reached;
     },
-    onTopOnceCardTwoScrollsToTheBanner: async (): Promise<OnTop> => {
+    onTopWhereCardTwoMeetsTheBanner: async (): Promise<OnTop> => {
       if (await labelOf.banner.count() !== 1 || await labelOf.cardTwo.count() !== 1) return 'not drawn yet';
       const labels = await Promise.all([labelOf.banner.elementHandle(), labelOf.cardTwo.elementHandle()]);
-      return littlePage.evaluate((scrolled, [bannerLabel, cardLabel]): OnTop => {
+      await littlePage.scrollIntoViewIfNeeded();
+      return littlePage.evaluate((_, [bannerLabel, cardLabel]): OnTop => {
         const [banner, card] = [bannerLabel?.parentElement, cardLabel?.parentElement];
         if (!banner || !card) return 'not drawn yet';
-        scrolled.scrollIntoView({block: 'center'});
-        const middle = (box: DOMRect): number => (box.top + box.bottom) / 2;
-        scrolled.scrollBy({top: middle(card.getBoundingClientRect()) - middle(banner.getBoundingClientRect()), behavior: 'instant'});
         const [bannerBox, cardBox] = [banner.getBoundingClientRect(), card.getBoundingClientRect()];
         const hit = document.elementFromPoint(
           (Math.max(bannerBox.left, cardBox.left) + Math.min(bannerBox.right, cardBox.right)) / 2,
