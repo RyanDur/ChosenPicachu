@@ -10,15 +10,6 @@ const languages: readonly Language[] = ['html', 'css', 'script'];
 
 const namesOf: Record<Language, string> = {html: 'HTML', css: 'CSS', script: 'script'};
 
-const WrittenIn: FC<{languages: readonly Language[]}> = ({languages: used}) =>
-  <p className="written-in caption">
-    {languages.map(language => used.includes(language)
-      ? <span key={language} className="language-mark inverse-ink field-inverse-filled field-inverse-outlined rounded-corners">
-        {namesOf[language]}</span>
-      : <span key={language} className="language-mark muted-ink muted-dashed-outline rounded-corners">
-        no {namesOf[language]}</span>)}
-  </p>;
-
 type Exhibited = PropsWithChildren<{
   kind?: ExhibitKind;
   name: string;
@@ -42,7 +33,13 @@ export const Exhibit: FC<Exhibited> = ({
       {rank === 3
         ? <h3 id={headingId} className="sub-title bold">{name}</h3>
         : <h2 id={headingId} className="sub-title bold">{name}</h2>}
-      {writtenIn && <WrittenIn languages={writtenIn}/>}
+      {writtenIn && <p className="written-in caption">
+        {languages.map(language => writtenIn.includes(language)
+          ? <span key={language} className="language-mark inverse-ink field-inverse-filled field-inverse-outlined rounded-corners">
+            {namesOf[language]}</span>
+          : <span key={language} className="language-mark muted-ink muted-dashed-outline rounded-corners">
+            no {namesOf[language]}</span>)}
+      </p>}
     </hgroup>
     {children}
   </section>;
