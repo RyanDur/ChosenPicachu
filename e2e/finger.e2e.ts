@@ -11,6 +11,16 @@ const opensFromAFingerOnItsName = async (page: Page, name: string): Promise<void
   await expect.poll(fold.isOpen).toBe(true);
 };
 
+const closesBasaltFromAFingerOnItsName = async (page: Page): Promise<void> => {
+  await page.goto('demos/accordions/');
+  const basalt = accordions.tab(page).htmlAloneFold('basalt');
+  await expect.poll(basalt.isOpen).toBe(true);
+
+  await fingerTap(page, accordions.nameOn(basalt.fold));
+
+  await expect.poll(basalt.isOpen).toBe(false);
+};
+
 const opensFromAFinger = async (page: Page, fold: Locator): Promise<void> => {
   await fingerTap(page, fold.getByText(/\S/).first());
   await expect(fold).toHaveAttribute('open', '');
@@ -152,7 +162,7 @@ test.describe('a reader on a phone, upright or sideways', {tag: ['@iPhone', '@ph
 
   test('opens every how I built it fold in an open story on the live table’s page from a finger that lands just off its bar', ({page}) => opensEveryHowIBuiltItFold(page));
 
-  test('opens basalt, in the accordion in HTML alone, from a finger that lands just off its name', ({page}) => opensFromAFingerOnItsName(page, 'basalt'));
+  test('closes basalt, open at load in the accordion in HTML alone, from a finger that lands just off its name', ({page}) => closesBasaltFromAFingerOnItsName(page));
 
   test('opens cinder, in the accordion in HTML alone, from a finger that lands just off its name', ({page}) => opensFromAFingerOnItsName(page, 'cinder'));
 

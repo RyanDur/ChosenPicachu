@@ -137,6 +137,8 @@ const pressedOnceItStartsMoving = async (fold: Locator, first: Locator, second: 
   }), {firstPress: await first.elementHandle(), secondPress: await second.elementHandle()});
 
 const tab = (page: Page) => {
+  const htmlAlone = page.getByRole('region', {name: 'An accordion in HTML alone', exact: true}).first();
+  const foldType = page.getByRole('group', {name: 'fold type', exact: true});
   const built = (build: Build): Locator =>
     page.getByRole('region', {name: headings[build], exact: true}).first();
   const folds = (build: Build): Locator =>
@@ -151,7 +153,7 @@ const tab = (page: Page) => {
     return {...partIn[build]({page, fold, exhibit: built(build), index}), ...readable(fold)};
   };
   const htmlAloneFold = (name: string): Part & {closeByKeyboard: () => Promise<void>} => {
-    const fold = page.getByRole('region', {name: 'Three folds in HTML alone', exact: true}).getByRole('group').filter({hasText: name});
+    const fold = htmlAlone.getByRole('group').filter({hasText: name});
     return {...detailsPart(page, fold), ...readable(fold), closeByKeyboard: () => focusAndPress(page, nameOn(fold), 'Enter')};
   };
   const partsOf = async (build: Build): Promise<Part[]> =>
@@ -169,6 +171,11 @@ const tab = (page: Page) => {
     partOf,
     htmlAloneFold,
     htmlAloneFolds: (): Part[] => ['basalt', 'cinder', 'meadow'].map(htmlAloneFold),
+    choosesTheFoldTypeInTheExhibit: async (pill: 'Inclusive' | 'Exclusive'): Promise<void> => {
+      await siteFrame(page).hydrated();
+      await htmlAlone.getByRole('group', {name: 'fold type', exact: true}).getByText(pill, {exact: true}).click();
+    },
+    foldTypeReadingInTheExhibit: htmlAlone.getByRole('listitem').filter({has: foldType}).getByRole('status'),
     holdsFocus: (build: Build): Promise<boolean> =>
       built(build).evaluate(exhibit => exhibit.contains(document.activeElement)),
     firstPartOf: (build: Build): Part => partOf(build, 0),

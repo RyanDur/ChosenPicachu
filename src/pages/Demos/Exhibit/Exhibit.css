@@ -10,4 +10,26 @@
         justify-self: start;
         margin: 0 var(--base-x-3) var(--base-x-2);
     }
+
+    & > :has(> .written-in) {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--base-x-0_5) var(--base-x-1_5);
+
+        & > :first-child {
+            flex-basis: 100%;
+        }
+
+        & > .written-in {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--base-x-0_75);
+
+            & > .language-mark {
+                padding: var(--base-x-0_75) var(--base);
+            }
+        }
+    }
 }

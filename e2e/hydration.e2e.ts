@@ -20,9 +20,9 @@ test('a reader whose room fails to load keeps the built page, its words, its fol
     message.type() === 'error' && message.text().includes('/demos/accordions/ did not load'));
   await page.goto('demos/accordions/');
   await roomRefused;
-  const fold = accordions.tab(page).htmlAloneFold('basalt');
+  const fold = accordions.tab(page).htmlAloneFold('cinder');
 
-  await expect(page.getByRole('heading', {name: 'Before you start'})).toBeVisible();
+  await expect(page.getByRole('heading', {name: 'The exhibit’s source'})).toBeVisible();
   await fold.open();
   await expect.poll(fold.showsText).toBe(true);
   await expect(siteFrame(page).feedback).toHaveAttribute('inert');

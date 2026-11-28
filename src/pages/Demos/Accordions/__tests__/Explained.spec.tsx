@@ -9,6 +9,7 @@ import {accordionsTab} from '@pages/Demos/Accordions/__test_support/tab';
 import {accordionParts} from '@pages/Demos/Accordions/part-pages';
 
 const htmlAlone = 'An accordion in HTML alone';
+const source = 'The exhibit’s source';
 
 const titles = [htmlAlone, 'A box remembers the fold, and a rule reads it', 'The max-height guess', 'The measured height',
   'What the platform gives now', 'How a sliding fold moves'];
@@ -32,20 +33,12 @@ describe('the accordions tab', () => {
     expect(names.filter((name, at) => names.indexOf(name) !== at)).toEqual([]);
   });
 
-  test('should title the exhibit, then before you start', async () => {
+  test('should title the exhibit, then its source', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const tab = await explanation.part('Accordions');
 
-    expect(explanation.partTitles(tab)).toEqual(['Three folds in HTML alone', 'Before you start']);
-  });
-
-  test('should title the fold choices after part 1, before you start', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    const start = await explanation.part('Before you start');
-
-    expect(explanation.sectionTitles(start)).toEqual([accordionParts.titleOf('html-alone-heading'), 'The fold choices']);
+    expect(explanation.partTitles(tab)).toEqual([htmlAlone, source]);
   });
 
   test('should open on the exclusive type, and write the type chosen into the address', async () => {
@@ -61,16 +54,7 @@ describe('the accordions tab', () => {
 
 });
 
-describe('the fold choices', () => {
-  test('should answer the drawer, through the fold motion dial, with what it does on the part pages and what a reader who asks for less motion gets there', async () => {
-    render(<TestApp at={demosAt('accordions', '?style=drawer')}/>);
-
-    const reading = accordionsTab.readingIn(await accordionsTab.choiceRow('fold motion'));
-
-    expect(reading).toHaveTextContent('On the part pages, the text slides down from under its bar.');
-    expect(reading).toHaveTextContent('If your system asks for less motion, every fold on the part pages opens at once, whichever you choose.');
-  });
-
+describe('the fold type in the exhibit’s foot', () => {
   test('should read the chosen fold type, and read the other once it is chosen', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
@@ -80,70 +64,17 @@ describe('the fold choices', () => {
 
     await accordionsTab.choose('fold type', 'Inclusive');
 
-    expect(accordionsTab.readingIn(row)).toHaveTextContent('Any number of folds can be open at once.');
+    expect(accordionsTab.readingIn(row)).toHaveTextContent('Each fold opens on its own.');
   });
 
-  test('should read Reveal as the fold motion on the part pages once it is chosen over static', async () => {
-    render(<TestApp at={demosAt('accordions', '?style=static')}/>);
-
-    const row = await accordionsTab.choiceRow('fold motion');
-    await accordionsTab.choose('fold motion', 'Reveal');
-
-    expect(accordionsTab.readingIn(row)).toHaveTextContent('On the part pages, the text is uncovered from its first line down.');
-  });
-
-  test('should read Drawer as the fold motion on the part pages once it is chosen over static', async () => {
-    render(<TestApp at={demosAt('accordions', '?style=static')}/>);
-
-    const row = await accordionsTab.choiceRow('fold motion');
-    await accordionsTab.choose('fold motion', 'Drawer');
-
-    expect(accordionsTab.readingIn(row)).toHaveTextContent('On the part pages, the text slides down from under its bar.');
-  });
-
-  test('should read Static as the fold motion on the part pages once it is chosen over reveal', async () => {
-    render(<TestApp at={demosAt('accordions', '?style=reveal')}/>);
-
-    const row = await accordionsTab.choiceRow('fold motion');
-    await accordionsTab.choose('fold motion', 'Static');
-
-    expect(accordionsTab.readingIn(row)).toHaveTextContent('On the part pages, the fold opens at once, with nothing moving.');
-  });
-});
-
-describe('the fold motion', () => {
-  test('should sit after the parts index, right after the fold type, ahead of the Before you start section, and in neither', async () => {
+  test('should sit in the exhibit, after its folds', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const tab = await explanation.part('Accordions');
-    const partsIndex = await accordionsTab.partsIndex();
-    const beforeYouStart = explanation.partIn(tab, 'Before you start');
-    const foldType = accordionsTab.choiceIn(tab, 'fold type');
-    const foldMotion = accordionsTab.choiceIn(tab, 'fold motion');
+    const exhibit = await accordionsTab.htmlAlone();
+    const foldType = accordionsTab.choiceIn(exhibit, 'fold type');
 
-    expect(outOfReadingOrder([partsIndex, foldType, foldMotion, beforeYouStart])).toEqual([]);
-    expect(partsIndex).not.toContainElement(foldMotion);
-    expect(await accordionsTab.partsHolding(foldMotion, ['Before you start'])).toEqual([]);
+    expect(outOfReadingOrder([await accordionsTab.firstFigure(), foldType])).toEqual([]);
   });
-
-  test('should open on the reveal', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-
-    const motions = await accordionsTab.choice('fold motion');
-
-    expect(accordionsTab.option(motions, 'Reveal')).toBeChecked();
-  });
-
-  test('should write the motion chosen into the address', async () => {
-    render(<TestApp at={demosAt('accordions')}/>);
-    const motions = await accordionsTab.choice('fold motion');
-
-    await accordionsTab.choose('fold motion', 'Drawer');
-
-    expect(demoPage.urlSearch()).toHaveTextContent('style=drawer');
-    expect(accordionsTab.option(motions, 'Drawer')).toBeChecked();
-  });
-
 });
 
 describe('the parts index', () => {
@@ -171,14 +102,14 @@ describe('the parts index', () => {
     expect(accordionsTab.titlesUnder(partsIndex, 'What the platform gives now')).toEqual(titles.slice(4));
   });
 
-  test('should come before the accordion in HTML alone and the Before you start section', async () => {
+  test('should come before the accordion in HTML alone and the exhibit’s source', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
     const partsIndex = await accordionsTab.partsIndex();
     const accordion = await accordionsTab.htmlAlone();
-    const beforeYouStart = await explanation.part('Before you start');
+    const itsSource = await explanation.part(source);
 
-    expect(outOfReadingOrder([partsIndex, accordion, beforeYouStart])).toEqual([]);
+    expect(outOfReadingOrder([partsIndex, accordion, itsSource])).toEqual([]);
   });
 
   test('should mark no part as the current page on the tab, though the accordion in HTML alone stands on it', async () => {
@@ -303,15 +234,15 @@ describe('the accordion in HTML alone', () => {
   test('should hold three folds above the parts index, basalt, cinder and meadow, in that order', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const exhibit = await accordionsTab.htmlAlone();
+    const folds = await accordionsTab.firstFigure();
 
-    expect(explanation.foldLabelsIn(exhibit)).toEqual(['basalt', 'cinder', 'meadow']);
+    expect(explanation.foldLabelsIn(folds)).toEqual(['basalt', 'cinder', 'meadow']);
   });
 
-  test('should open its part with its HTML', async () => {
+  test('should open its source with its HTML', async () => {
     render(<TestApp at={demosAt('accordions')}/>);
 
-    const firstRun = explanation.runsIn(await explanation.part(htmlAlone))[0];
+    const firstRun = explanation.runsIn(await explanation.part(source))[0];
 
     expect(explanation.samplesIn(firstRun)[0]).toHaveTextContent('<summary>basalt</summary>');
   });
@@ -321,8 +252,8 @@ describe('the name that makes the first accordion exclusive', () => {
   test('should, with exclusive chosen, link name to MDN beside the first accordion', async () => {
     render(<TestApp at={demosAt('accordions', '?type=exclusive')}/>);
 
-    const first = await explanation.part(htmlAlone);
+    const itsSource = await explanation.part(source);
 
-    expect(explanation.linksBeside(first, /^Each of these details carries/)).toEqual([['name', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details#name']]);
+    expect(explanation.linksBeside(itsSource, /^Each of these details carries/)).toEqual([['name', 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details#name']]);
   });
 });

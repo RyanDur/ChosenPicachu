@@ -3,7 +3,7 @@ import {FC} from 'react';
 export const ExclusiveHtmlAloneAccordion: FC = () => (
   <ul>
     <li>
-      <details name="html-alone">
+      <details name="html-alone" open>
         <summary>basalt</summary>
         <p>Opens and closes with no CSS and no script.</p>
       </details>
