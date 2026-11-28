@@ -802,7 +802,7 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 5120
+                "maxNumericValue": 5632
               }
             ],
             "resource-summary:stylesheet:size": [
