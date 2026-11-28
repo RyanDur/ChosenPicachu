@@ -89,7 +89,7 @@ export const BannerAtTheEdge: FC = () => {
   const {story, whereWeMeetIt, verdict, comparedWith, tabOrder, markup} = told[step];
 
   return <Exhibit name="The banner at the window’s edge">
-    <figure className="banner-at-the-edge field">
+    <figure className="banner-at-the-edge code-beside-window field">
       <p className="caption uppercase" aria-hidden="true">Step</p>
       <PillGlider label="Step" name="banner" choices={numberedSteps} chosen={step} onChosen={chooseStep} wraps/>
       <p className="paragraph">{story}</p>
@@ -97,28 +97,24 @@ export const BannerAtTheEdge: FC = () => {
         <dt className="caption uppercase">Where we meet it</dt>
         <dd className="paragraph">{whereWeMeetIt}</dd>
       </dl>
-      <section className="code-beside-window">
-        <section className="code-column">
-          <Snippet label="HTML" lines={markup}/>
-          <Snippet label="CSS" lines={rules}/>
-        </section>
-        <section className="little-window card hairline-outline rounded-corners">
-          <p className="little-bar caption uppercase field hairline-rule-below">The window</p>
-          <section className="little-view">
-            <section className="little-page focus-ringed" aria-label="The little page" tabIndex={0}>
-              <section className="one little-card plan-blue ink-dashed-outline rounded-corners">
-                <p className="paragraph">Card one</p>
-                <LittleButton>Raise a banner</LittleButton>
-                {step === 'written-in-a-card' && <TheBanner/>}
-              </section>
-              <TextOnThePage/>
-              <section className="two little-card plan-rose hairline-outline rounded-corners">
-                <p className="paragraph">Card two · 1</p>
-                <LittleButton>Open</LittleButton>
-              </section>
-              {fourTexts.map(text => <TextOnThePage key={text}/>)}
-              {step === 'moved-to-the-page' && <TheBanner/>}
+      <Snippet label="HTML" lines={markup}/>
+      <Snippet label="CSS" lines={rules}/>
+      <section className="little-window card hairline-outline rounded-corners">
+        <p className="little-bar caption uppercase field hairline-rule-below">The window</p>
+        <section className="little-view">
+          <section className="little-page focus-ringed" aria-label="The little page" tabIndex={0}>
+            <section className="one little-card plan-blue ink-dashed-outline rounded-corners">
+              <p className="paragraph">Card one</p>
+              <LittleButton>Raise a banner</LittleButton>
+              {step === 'written-in-a-card' && <TheBanner/>}
             </section>
+            <TextOnThePage/>
+            <section className="two little-card plan-rose hairline-outline rounded-corners">
+              <p className="paragraph">Card two · 1</p>
+              <LittleButton>Open</LittleButton>
+            </section>
+            {fourTexts.map(text => <TextOnThePage key={text}/>)}
+            {step === 'moved-to-the-page' && <TheBanner/>}
           </section>
         </section>
       </section>

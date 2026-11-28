@@ -1,23 +1,10 @@
 .banner-at-the-edge {
     display: grid;
-    gap: var(--base-x-2) var(--base-x-1_5);
+    row-gap: var(--base-x-2);
 
     .where-we-meet-it {
         display: grid;
         gap: var(--base-x-0_5);
-    }
-
-    .code-beside-window {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
-        gap: var(--base-x-2) var(--base-x-3);
-        align-items: start;
-    }
-
-    .code-column {
-        display: grid;
-        gap: var(--base-x-1_5);
-        align-content: start;
     }
 
     .little-view {

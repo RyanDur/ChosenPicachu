@@ -29,3 +29,23 @@
 .little-box {
     padding: var(--base-x-1_25) var(--base-x-1_75);
 }
+
+.code-beside-window {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--base-x-30)), 1fr));
+    grid-auto-flow: row dense;
+    column-gap: var(--base-x-3);
+
+    > :not(.sample, .little-window) {
+        grid-column: 1 / -1;
+    }
+
+    > .sample {
+        grid-column: 1;
+    }
+
+    > .little-window {
+        grid-column: -2;
+        grid-row: span 2;
+        align-self: start;
+    }
+}
