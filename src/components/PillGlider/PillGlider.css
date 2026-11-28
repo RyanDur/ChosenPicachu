@@ -54,8 +54,6 @@
 
   &:has(.pill:nth-of-type(5)):not(:has(.pill:nth-of-type(6))) {
     .pill {
-      transition-delay: 0s;
-
       @media (width < 430px) {
         padding: 0 var(--base-x-0_5);
       }
