@@ -9,9 +9,8 @@ import {tabHeadings} from './tab-headings';
 
 export const PlatformGivesNowIntroduction: FC = () => {
   const input = foldInput.of(useControls().foldType);
-  return <p className="paragraph">This part builds on two before it:
-    “<HeadingLink heading="html-alone-heading"/>” and
+  return <p className="paragraph">This part builds on “<HeadingLink heading="html-alone-heading"/>”, with
     “<TabLink to={DemoTopics.accordions} heading={tabHeadings.exhibitSource}>The exhibit’s source</TabLink>” under
-    it, for details and summary, and “<PartLink part="a-box-remembers-the-fold"/>”, for the {input} build it
+    it, for details and summary, and on “<PartLink part="a-box-remembers-the-fold"/>”, for the {input} build it
     replaces.</p>;
 };
