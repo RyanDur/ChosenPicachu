@@ -47,7 +47,7 @@ const cardOneRaised: Told = {
   verdict: `${leftAlone.verdict} Card one now rises over card two’s edge, and the list stays above both.`,
   comparedWith: 'nothing. Card two has no z-index, so card one’s 9999 has nothing to be compared with. Position alone lifts card one over card two’s edge, and the list is above both in the top layer.',
   rules: [
-    ...lines.marked(lines.fromTheExhibit(carve.unit(sheet, '.one {\n            position: relative'))),
+    ...lines.marked(lines.fromTheExhibit(carve.unit(sheet, '.one {\n            position: relative'))), lines.blank,
     ...leftAlone.rules
   ]
 };
