@@ -39,7 +39,8 @@ export const AccordionsExplained: FC = () => {
       <p className="paragraph">You don’t always need all three. HTML does some jobs alone, and HTML with CSS does more,
         before you need script. If you know how each one works, you can choose the one the job needs. By the end you
         can build an accordion in HTML alone, make it slide with CSS, keep one fold open at a time, and say which
-        language each job needed and why. The accordion on this page is HTML alone.</p>
+        language each job needed and why. The accordion on this page is HTML alone. Nothing here leans on another
+        tab.</p>
     </header>
     <Exhibit name={accordionParts.titleOf('html-alone-heading')} heading="html-alone-heading" writtenIn={['html']}>
       <figure className="snapping">
