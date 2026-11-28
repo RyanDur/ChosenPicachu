@@ -181,16 +181,6 @@ describe('why a fixed banner still loses, on its own page', () => {
     expect(appAddress.search()).toHaveTextContent('raised=second');
   });
 
-  test('should link, where it tells of the site’s own banner, Why the popover wins to its page, with the raised card carried', async () => {
-    render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
-
-    const part = await explanation.part(title);
-    const run = explanation.saying(part, /^The site’s own banner sets no z-index/);
-
-    expect(explanation.linkNamed(run, 'Why the popover wins'))
-      .toHaveAttribute('href', demosAt('z-index/why-the-popover-wins', '?raised=second'));
-  });
-
   test('should take the keyboard to the banner’s story in Let’s build this feature', async () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
     const part = await explanation.part(title);

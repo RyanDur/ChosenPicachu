@@ -4,6 +4,7 @@ import {MenuInTheTopLayer} from './MenuInTheTopLayer';
 import exhibitSource from './MenuInTheTopLayer.tsx?sample';
 import menuCss from '@components/Menu/Menu.css?sample';
 import itemSource from '@components/Menu/Item.tsx?sample';
+import bannersSource from '@banners/Banners.tsx?sample';
 import {TabLink} from '@pages/Demos/TabLink';
 import {DemoTopics} from '@pages/Demos';
 import {PartLink} from './PartLink';
@@ -76,6 +77,12 @@ export const WhyThePopoverWins: FC = () => <>
         ...carve.between(menuCss, '.menu {', 'position-try-fallbacks: flip-block;'), lines.blank,
         ...carve.unit(menuCss, '@supports not (position-area: block-end) {')
       ]}/>
+    </li>
+    <li className="run">
+      <p className="paragraph">The site’s own banner sets no z-index. It is a popover, so the browser shows it in the
+        top layer, above every stacking context on the page. No z-index on the page is compared with it.</p>
+      <Snippet label="HTML"
+        lines={carve.between(bannersSource, '<section id="banners"', "className={classNames('banners unfilled'")}/>
     </li>
   </ol>
 </>;
