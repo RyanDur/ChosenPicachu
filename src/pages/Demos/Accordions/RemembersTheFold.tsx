@@ -137,8 +137,9 @@ export const RemembersTheFold: FC = () => {
                 out of the bar’s own style sheet. It comes from shared classes, and the bar wears them: the classes
                 sit in the element’s class attribute, so their rules apply. <code
                 className="monospaced">inverse-filled</code> sets light words on a dark ground, <code
-                className="monospaced">field-outlined</code> draws the hairline between one bar and the next,
-                and <code className="monospaced">attentive</code> adds a glow while the bar is pressed. The bar’s own
+                className="monospaced">field-outlined</code> draws a hairline in the light ground’s color around each
+                bar, and <code className="monospaced">attentive</code> adds a glow while the bar is pressed. The fold’s
+                margin holds the bars a hairline apart. The bar’s own
                 style sheet keeps the structure, the row and the padding. The samples that follow show
                 both, the style sheet’s rule and then the shared classes.</p>
               <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '&:not(.close) .info-label {'))}/>
