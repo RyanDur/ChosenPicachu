@@ -138,7 +138,6 @@ const pressedOnceItStartsMoving = async (fold: Locator, first: Locator, second: 
 
 const tab = (page: Page) => {
   const htmlAlone = page.getByRole('region', {name: 'An accordion in HTML alone', exact: true}).first();
-  const foldType = page.getByRole('group', {name: 'fold type', exact: true});
   const built = (build: Build): Locator =>
     page.getByRole('region', {name: headings[build], exact: true}).first();
   const folds = (build: Build): Locator =>
@@ -175,7 +174,6 @@ const tab = (page: Page) => {
       await siteFrame(page).hydrated();
       await htmlAlone.getByRole('group', {name: 'fold type', exact: true}).getByText(pill, {exact: true}).click();
     },
-    foldTypeReadingInTheExhibit: htmlAlone.getByRole('listitem').filter({has: foldType}).getByRole('status'),
     holdsFocus: (build: Build): Promise<boolean> =>
       built(build).evaluate(exhibit => exhibit.contains(document.activeElement)),
     firstPartOf: (build: Build): Part => partOf(build, 0),
