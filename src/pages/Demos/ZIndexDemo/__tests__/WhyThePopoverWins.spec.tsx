@@ -38,6 +38,24 @@ describe('why the popover wins, on its own page', () => {
     expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context'));
   });
 
+  test('should link the run on Menu, Entry and Item to the Charts tab, whose period menu is built from them', async () => {
+    render(<TestApp at={demosAt(popoverWins)}/>);
+
+    const part = await explanation.part(title);
+    const run = explanation.runTelling(part, /built from three components: Menu, Entry and Item/);
+
+    expect(explanation.linkNamed(run, 'Charts tab')).toHaveAttribute('href', demosAt('charts'));
+  });
+
+  test('should link the run on the menu’s placement to the Charts tab, whose period menu is placed that way', async () => {
+    render(<TestApp at={demosAt(popoverWins)}/>);
+
+    const part = await explanation.part(title);
+    const run = explanation.runTelling(part, /The site’s Menu component places a menu/);
+
+    expect(explanation.linkNamed(run, 'Charts tab')).toHaveAttribute('href', demosAt('charts'));
+  });
+
   test('should link rule, at its first use, to part one’s page with the raised card carried', async () => {
     render(<TestApp at={demosAt(popoverWins, '?raised=second')}/>);
 
