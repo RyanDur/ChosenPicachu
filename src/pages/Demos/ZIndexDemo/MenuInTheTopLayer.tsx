@@ -29,6 +29,8 @@ const theBrowsersOwnRule: Line[] = [
   '[popover] {',
   '  position: fixed;',
   '  inset: 0;',
+  '  width: fit-content;',
+  '  height: fit-content;',
   '  margin: auto;',
   '}'
 ].map(lines.plain);
@@ -70,10 +72,9 @@ export const MenuInTheTopLayer: FC = () => {
         page. No stacking context holds the top layer, so no z-index on the page competes with it. The list stays where
         we wrote it, inside its card, so the Tab key reaches it right after its button.</p>
       <p className="paragraph">The top layer changes where the list sits. It no longer sits under its button. The
-        browser’s own <PartTermLink part="why-third-is-on-top">rule</PartTermLink> stretches a popover’s box over the
-        whole window with <code
-        className="monospaced">inset: 0</code>, and <code className="monospaced">margin: auto</code> centers the list
-        inside it. We can write over either one.</p>
+        browser’s own <PartTermLink part="why-third-is-on-top">rule</PartTermLink> pins a popover to the window’s edges
+        with <code className="monospaced">inset: 0</code>, sizes it to its content, and <code
+        className="monospaced">margin: auto</code> centers it between those edges. We can write over any of them.</p>
       <section className="little-window card hairline-outline rounded-corners">
         <p className="little-bar caption uppercase trim">The window</p>
         <section className="little-view">
