@@ -93,7 +93,7 @@
         gap: var(--below-the-window);
     }
 
-    .old-way-cards:has(.sort-choices, :popover-open) {
+    .old-way-cards:has(.sort-choices) {
         padding-block-end: var(--base-x-7);
     }
 
