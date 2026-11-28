@@ -81,6 +81,35 @@ describe('why a fixed banner still loses, on its own page', () => {
       /^Tab order: Raise a banner, then Open, then the banner’s dismiss button, last on the page\./);
   });
 
+  test('should say, once a bigger number arrives, that the help button is drawn over the banner’s end', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=a-bigger-number-arrives')}/>);
+
+    expect(await bannerAtTheEdge.verdict()).toHaveTextContent(/^The help button is drawn over the banner’s end\.$/);
+  });
+
+  test('should say, once a bigger number arrives, that the banner is compared with the help button too', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=a-bigger-number-arrives')}/>);
+
+    expect(await bannerAtTheEdge.line('Compared with:')).toHaveTextContent(
+      /^Compared with: everything written at the page’s level, the help button included\.$/);
+  });
+
+  test('should say, once a bigger number arrives, that Tab reaches Help after the banner’s dismiss button', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=a-bigger-number-arrives')}/>);
+
+    expect(await bannerAtTheEdge.line('Tab order:')).toHaveTextContent(
+      /^Tab order: Raise a banner, then Open, then the banner’s dismiss button, then Help\./);
+  });
+
+  test('should say somewhere else we meet the banner once a bigger number arrives', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=moved-to-the-page')}/>);
+    const onThePage = (await bannerAtTheEdge.whereWeMeetIt()).textContent;
+
+    await bannerAtTheEdge.stepTo('3 · A bigger number arrives');
+
+    expect(await bannerAtTheEdge.whereWeMeetIt()).not.toHaveTextContent(onThePage ?? '');
+  });
+
   test('should say somewhere else we meet the banner once it moves to the page', async () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
     const inACard = (await bannerAtTheEdge.whereWeMeetIt()).textContent;
@@ -110,6 +139,38 @@ describe('why a fixed banner still loses, on its own page', () => {
       '</section>'
     ]);
     expect(await bannerAtTheEdge.markedHtml()).toEqual(['<p class="banner">… <button>×</button></p>']);
+  });
+
+  test('should show the help button’s HTML after the banner’s, and mark both', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=a-bigger-number-arrives')}/>);
+
+    expect(await bannerAtTheEdge.htmlLines()).toEqual([
+      '<section class="little-card one">',
+      '<button>Raise a banner</button>',
+      '</section>',
+      '<p>text on the page</p>',
+      '<section class="little-card two">',
+      '<button>Open</button>',
+      '</section>',
+      '<p class="banner">… <button>×</button></p>',
+      '<button class="help">Help</button>'
+    ]);
+    expect(await bannerAtTheEdge.markedHtml()).toEqual([
+      '<p class="banner">… <button>×</button></p>',
+      '<button class="help">Help</button>'
+    ]);
+  });
+
+  test('should mark the help button’s 10000 in the CSS once a bigger number arrives', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=a-bigger-number-arrives')}/>);
+
+    expect((await bannerAtTheEdge.markedCss()).join('\n')).toMatch(/^\.help \{[^}]*z-index: 10000;/);
+  });
+
+  test('should mark nothing in the CSS while the banner stays the only number at the page’s level', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?banner=moved-to-the-page')}/>);
+
+    expect(await bannerAtTheEdge.markedCss()).toEqual([]);
   });
 
   test('should show the banner’s HTML moved to the end of the page, and mark it', async () => {
