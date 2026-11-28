@@ -93,7 +93,7 @@ const suppliedBy: Record<World, ReactNode> = {
 const eachMeasure = '{/* … one for each measure */}';
 
 const markupPieces: Record<World, ReactNode> = {
-  react: <AnnotatedListing heading="REACT · UNDER EACH PIECE, WHAT IT MEANS AND WHEN IT RUNS">
+  react: <AnnotatedListing heading="React · under each piece, what it means and when it runs">
     <Piece>
       <PieceCode><InkedLines label="TS" lines={carve.elided(carve.elided(
         carve.between(dealSource, '<table id="live-aggregations"', '</table>'),
@@ -127,7 +127,7 @@ const markupPieces: Record<World, ReactNode> = {
         trader has set.</PieceNote>
     </Piece>
   </AnnotatedListing>,
-  vanilla: <AnnotatedListing heading="HTML · UNDER EACH PIECE, WHAT IT MEANS AND WHEN IT CHANGES">
+  vanilla: <AnnotatedListing heading="HTML · under each piece, what it means and when it changes">
     <Piece>
       <PieceCode><InkedLines label="HTML" lines={carve.between(frameTable, '<section aria-label', '<caption')}/>
       </PieceCode>
@@ -169,7 +169,7 @@ const markupPieces: Record<World, ReactNode> = {
   </AnnotatedListing>
 };
 
-const stylePieces = <AnnotatedListing heading="CSS · UNDER EACH PIECE, WHAT IT MEANS AND WHEN IT CHANGES">
+const stylePieces = <AnnotatedListing heading="CSS · under each piece, what it means and when it changes">
   <Piece>
     <PieceCode><InkedLines label="CSS" lines={[
       ...carve.between(widthsSource, '.aggregations {', 'min-width: 75.3rem;'),
