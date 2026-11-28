@@ -11,6 +11,10 @@ const keepingThePlace: NavigateOptions = {preventScrollReset: true};
 
 type ParamDecoders<T> = {[K in keyof T]: schema.Decoder<T[K]>};
 
+type UpdateOptions = NavigateOptions & {
+  without?: string[];
+};
+
 const decodeParams = <T>(decoders: ParamDecoders<T>, raw: Record<string, unknown>): Partial<T> => {
   const decoded: Partial<T> = {};
   for (const key in decoders) {
@@ -24,7 +28,7 @@ const decodeParams = <T>(decoders: ParamDecoders<T>, raw: Record<string, unknown
 type Given<T, D> = Partial<T> & Required<Pick<T, keyof D & keyof T>>;
 
 type SearchParamsObject<T extends {[key: string]: unknown}, D> = Given<T, D> & {
-  updateSearchParams: (params: Partial<T>, options?: NavigateOptions) => void;
+  updateSearchParams: (params: Partial<T>, options?: UpdateOptions) => void;
   removeSearchParams: (params: string[], options?: NavigateOptions) => void;
   searchFromShown: (params: Partial<T>) => string;
   searchFromAddress: (params: Partial<T>) => string;
@@ -61,8 +65,8 @@ export function useSearchParamsObject<T extends Params>(
   const removeSearchParams = (params: string[], options?: NavigateOptions) =>
     setSearchParams(without(params), {...keepingThePlace, ...options});
 
-  const updateSearchParams = (params = {}, options?: NavigateOptions) =>
-    setSearchParams({...Object.fromEntries(searchParams.entries()), ...filterEmpty(params)},
+  const updateSearchParams = (params = {}, {without: dropped = [], ...options}: UpdateOptions = {}) =>
+    setSearchParams({...Object.fromEntries(without(dropped)), ...filterEmpty(params)},
       {...keepingThePlace, ...options});
 
   return {
