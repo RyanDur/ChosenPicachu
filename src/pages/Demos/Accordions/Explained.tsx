@@ -49,7 +49,7 @@ export const AccordionsExplained: FC = () => {
         <FoldTypeDial/>
       </ExhibitDials>
     </Exhibit>
-    <section aria-labelledby={exhibitSource} className="accordion-part">
+    <section aria-labelledby={exhibitSource} className="exhibit-source">
       <h2 id={exhibitSource} className="sub-title bold">The exhibit’s source</h2>
       <ol className={looks.runs}>
         <li className="run">
