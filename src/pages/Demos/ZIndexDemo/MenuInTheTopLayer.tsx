@@ -86,7 +86,7 @@ export const MenuInTheTopLayer: FC = () => {
                 className="button card hairline-outline rounded-corners paragraph ink attentive reachable">Sort by</button>
               <p className="paragraph">Card one</p>
               <ul id={listId} popover="auto" aria-labelledby={sortById}
-                className="sort-list card plan-mint hairline-outline rounded-corners lifted">
+                className="sort-list plan-mint hairline-outline rounded-corners lifted">
                 {['Newest', 'Oldest'].map(choice => <li key={choice}>
                   <button type="button" tabIndex={0} popoverTarget={listId} popoverTargetAction="hide"
                     className="button card hairline-outline rounded-corners paragraph ink attentive reachable">{choice}</button>
