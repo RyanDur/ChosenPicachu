@@ -30,8 +30,15 @@ const oldWaySortBy = (figure: Locator) => {
 
 export const contextChooser = (page: Page) => {
   const chooser = page.getByRole('region', {name: 'What card one wears'});
+  const menu = oldWaySortBy(chooser);
   return {
-    ...oldWaySortBy(chooser),
+    ...menu,
+    heading: chooser.getByRole('heading', {name: 'What card one wears'}),
+    openByKeyboard: async (): Promise<void> => {
+      await untilPressable(menu.sortBy);
+      await menu.sortBy.focus();
+      await page.keyboard.press('Enter');
+    },
     wearing: (worn: Worn) => chooser.getByRole('radio', {name: worn, exact: true}),
     chosen: (worn: Worn) => chooser.getByRole('radio', {name: worn, exact: true, checked: true}),
     said: chooser.getByRole('status', {name: 'what card one formed'})
