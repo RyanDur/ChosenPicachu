@@ -102,6 +102,16 @@ describe('chosen/compositor-motion', () => {
       {codeFilename: 'src/components/PillGlider/PillGlider.css'})).toHaveLength(1);
   });
 
+  it('should accept the pill glider’s highlight sliding its inset inside an at-rule', async () => {
+    expect(await warningsFor('.pill-glider { @supports (anchor-scope: --x) { &::before { transition: inset .15s; } } }',
+      {codeFilename: 'src/components/PillGlider/PillGlider.css'})).toEqual([]);
+  });
+
+  it('should refuse an inset sliding on a list that names the pill glider beside something else', async () => {
+    expect(await warningsFor('.pill-glider, .a { &::before { transition: inset .15s; } }',
+      {codeFilename: 'src/components/PillGlider/PillGlider.css'})).toHaveLength(1);
+  });
+
   it('should refuse all', async () => {
     expect(await warningsFor('a { transition: all .3s; }')).toHaveLength(1);
   });
