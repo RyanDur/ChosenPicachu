@@ -116,10 +116,10 @@ export const MenuInTheTopLayer: FC = () => {
       </dl>
       <output aria-label="what the list is compared with" className="paragraph">
         {`Compared with: ${comparedWith}`}</output>
-      <p className="paragraph">Tab order: Sort by, then Newest and Oldest, then Open. The list never leaves its place in
-        the code, so the order stays right.</p>
+      <p className="paragraph">Tab order: the little page, Sort by, then Newest and Oldest while the list is open, then
+        Open. The list never leaves its place in the code, so the order stays right.</p>
       <p className="paragraph">Opening and closing: the browser opens and closes the list with no script, closes it on
-        Escape or a click outside, and gives focus back to the button.</p>
+        Escape or a click outside, and gives focus back to the button when focus was in the list.</p>
     </figure>
     <ExhibitFoot>
       <strong className="bold">The menu in the top layer.</strong> The list is a popover. Leave it where the browser
