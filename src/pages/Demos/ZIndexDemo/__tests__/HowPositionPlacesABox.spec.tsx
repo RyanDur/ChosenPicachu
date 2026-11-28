@@ -149,7 +149,7 @@ describe('how position places a box, on its own page', () => {
 
     await positionExhibit.chooseParent('not positioned');
 
-    expect(positionExhibit.measuredFrom()).toHaveTextContent('Measured from: the little page’s corner');
+    expect(positionExhibit.measuredFrom().textContent).toBe('Measured from: the little page’s corner, at the red dot.');
   });
 
   test('should say a fixed Second is measured from the corner of the window’s view', async () => {
