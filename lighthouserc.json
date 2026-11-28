@@ -756,7 +756,7 @@
             "resource-summary:script:size": [
               "error",
               {
-                "maxNumericValue": 180224
+                "maxNumericValue": 180736
               }
             ]
           }
@@ -785,7 +785,7 @@
             "resource-summary:script:size": [
               "error",
               {
-                "maxNumericValue": 180224
+                "maxNumericValue": 180736
               }
             ]
           }
@@ -843,7 +843,7 @@
             "resource-summary:script:size": [
               "error",
               {
-                "maxNumericValue": 180224
+                "maxNumericValue": 180736
               }
             ]
           }
@@ -872,7 +872,7 @@
             "resource-summary:script:size": [
               "error",
               {
-                "maxNumericValue": 180224
+                "maxNumericValue": 180736
               }
             ]
           }
@@ -901,7 +901,7 @@
             "resource-summary:script:size": [
               "error",
               {
-                "maxNumericValue": 180224
+                "maxNumericValue": 180736
               }
             ]
           }
@@ -918,7 +918,7 @@
             "resource-summary:document:size": [
               "error",
               {
-                "maxNumericValue": 6144
+                "maxNumericValue": 7168
               }
             ],
             "resource-summary:stylesheet:size": [
@@ -930,7 +930,7 @@
             "resource-summary:script:size": [
               "error",
               {
-                "maxNumericValue": 180224
+                "maxNumericValue": 180736
               }
             ]
           }
@@ -959,7 +959,7 @@
             "resource-summary:script:size": [
               "error",
               {
-                "maxNumericValue": 180224
+                "maxNumericValue": 180736
               }
             ]
           }

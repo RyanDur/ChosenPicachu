@@ -27,6 +27,7 @@ export {heightOnceSettled} from './motion';
 export {accordions, type Build, type Part} from './accordions';
 export {pileSteps, stackingPile, type Card, type Step} from './stacking';
 export {nestingExhibit, type NestingStep} from './nesting';
+export {bannerAtTheEdge} from './banner-edge';
 export {clearfixTray} from './clearfix';
 export {positionExhibit} from './position';
 export {zIndexTab} from './z-index';

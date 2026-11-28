@@ -1,0 +1,9 @@
+.banner-at-the-edge {
+    display: grid;
+    gap: var(--base-x-2) var(--base-x-1_5);
+
+    .where-we-meet-it {
+        display: grid;
+        gap: var(--base-x-0_5);
+    }
+}
