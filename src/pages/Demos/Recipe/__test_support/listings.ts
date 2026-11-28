@@ -2,7 +2,7 @@ import {within} from '@testing-library/react';
 import {computeAccessibleName} from 'dom-accessibility-api';
 
 export const listings = {
-  heads: (holder: HTMLElement): string[] => within(holder).getAllByRole('figure')
+  headings: (holder: HTMLElement): string[] => within(holder).getAllByRole('figure')
     .map(figure => computeAccessibleName(figure))
     .filter(name => name.includes(' · ')),
   workingCode: (holder: HTMLElement): (string | null)[][] =>

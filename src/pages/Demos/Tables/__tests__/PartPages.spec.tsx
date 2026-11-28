@@ -419,7 +419,7 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     const recipe = await tablesTab().recipe('still table');
 
-    expect(listings.heads(recipe)).toEqual([
+    expect(listings.headings(recipe)).toEqual([
       'React · under each piece, what it means and when it runs',
       'CSS · under each piece, what it means and when it changes'
     ]);
@@ -430,7 +430,7 @@ describe('the tables tab’s parts, each on its own page', () => {
 
     const recipe = await tablesTab().recipe('still table');
 
-    expect(listings.heads(recipe)).toEqual([
+    expect(listings.headings(recipe)).toEqual([
       'HTML · under each piece, what it means and when it changes',
       'CSS · under each piece, what it means and when it changes'
     ]);
