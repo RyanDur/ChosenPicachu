@@ -43,10 +43,10 @@ type ZIndexParts = {
 
 const isPart = (name: string): name is ZIndexPart => Object.keys(book).includes(name);
 
-const bookOrder: readonly ZIndexPart[] = Object.keys(book).filter(isPart);
-
 const groups: readonly Group[] = headings.map(label =>
-  ({label, parts: bookOrder.filter(part => book[part].heading === label)}));
+  ({label, parts: Object.keys(book).filter(isPart).filter(part => book[part].heading === label)}));
+
+const bookOrder: readonly ZIndexPart[] = groups.flatMap(({parts}) => parts);
 
 const tabAddress = demoTab.address(DemoTopics.zIndex);
 
