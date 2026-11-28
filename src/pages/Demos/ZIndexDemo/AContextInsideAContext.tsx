@@ -2,7 +2,7 @@ import {FC, useId} from 'react';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {classNames} from '@components';
 import {carve, Line, lines, Snippet, useExhibitStep} from '../Recipe';
-import {Exhibit, ExhibitFoot} from '../Exhibit';
+import {Exhibit, ExhibitFoot, Verdict} from '../Exhibit';
 import sheet from './AContextInsideAContext.css?sample';
 import './AContextInsideAContext.css';
 
@@ -95,7 +95,7 @@ export const AContextInsideAContext: FC = () => {
           </section>
           {step === 'the-list-outside' && <TheList/>}
         </section>
-        <output aria-label="what the browser drew" className="paragraph bold">{verdict}</output>
+        <Verdict aria-label="what the browser drew">{verdict}</Verdict>
       </section>
     </figure>
     <ExhibitFoot>
