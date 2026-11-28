@@ -7,5 +7,7 @@ const standingIn = (pile: HTMLElement): HTMLElement[] =>
 export const siteBanners = {
   pile: (): Promise<HTMLElement> => screen.findByRole('alert'),
   standingIn,
-  raise: async (): Promise<void> => userEvent.click(await screen.findByRole('button', {name: 'Raise a banner, the site’s own'}))
+  raise: async (): Promise<void> => userEvent.click(within(
+    await screen.findByRole('region', {name: 'The banner, at the window’s edge'})
+  ).getByRole('button', {name: 'Raise a banner'}))
 };

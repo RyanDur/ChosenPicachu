@@ -1,35 +1,13 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/history-writes';
 import {
-  bannerTrap, boxOf, dialRow, feedbackOn, hydration, pillSwitch, pressTab, siteFrame, tabsTo, wholeOnTop, zIndexTab
+  boxOf, dialRow, feedbackOn, hydration, pillSwitch, pressTab, siteFrame, tabsTo, wholeOnTop, zIndexTab
 } from './__test_support';
 
 const fixedBannerPage = 'demos/z-index/why-a-fixed-banner-still-loses/';
+const buildPage = 'demos/z-index/lets-build-this-feature/';
 
 test.describe('the fixed banners', {tag: ['@iPhone', '@desktop']}, () => {
-  test('the old banner stays on the window, and card two passes over it while its edge still shows', async ({page}) => {
-    await page.goto(fixedBannerPage);
-    const banners = bannerTrap(page);
-    await banners.raiseOld.click();
-    await expect(banners.oldBanner).toBeVisible();
-
-    await banners.scrollCardTwoOnto(banners.oldBanner);
-
-    await expect.poll(() => banners.onTopOf(banners.oldBanner, 'middle')).toBe('card two');
-    await expect.poll(() => banners.onTopOf(banners.oldBanner, 'start')).toBe('the banner');
-  });
-
-  test('the site’s banner stays over card two as it passes', async ({page}) => {
-    await page.goto(fixedBannerPage);
-    const banners = bannerTrap(page);
-    await banners.raiseSite.click();
-    await expect(banners.siteBanner).toBeVisible();
-
-    await banners.scrollCardTwoOnto(banners.siteBanner);
-
-    await expect.poll(() => banners.onTopOf(banners.siteBanner, 'middle')).toBe('the banner');
-  });
-
   test('Let’s build this feature brings the step that makes the panel a popover into view, with its story heading in view', async ({page}) => {
     await page.goto(fixedBannerPage);
     await siteFrame(page).hydrated();
@@ -130,157 +108,131 @@ test('the entrance reads the chosen side, and reads that a new banner appears in
 });
 
 test('a link that holds the panel to the window’s bottom edge raises the site’s banner there', async ({page}) => {
-  await page.goto(`${fixedBannerPage}?side=bottom`);
-  const banners = bannerTrap(page);
+  await page.goto(`${buildPage}?side=bottom`);
+  const banners = zIndexTab(page);
 
-  await banners.raiseSite.click();
-  await expect(banners.siteBanner).toBeVisible();
+  await banners.raisesABanner();
+  await expect(banners.newestBanner()).toBeVisible();
 
   const {height} = page.viewportSize() ?? {height: 0};
   await expect.poll(async () => {
-    const {y, height: tall} = await boxOf(banners.siteBanner);
+    const {y, height: tall} = await boxOf(banners.newestBanner());
     return y + tall > height / 2;
   }).toBe(true);
 });
 
 test('a reader who dismisses the site’s only banner is left with no site banner', async ({page}) => {
-  await page.goto(fixedBannerPage);
-  const banners = bannerTrap(page);
-  await banners.raiseSite.click();
-  await expect(banners.siteNotes).toHaveCount(1);
+  await page.goto(buildPage);
+  const banners = zIndexTab(page);
+  await banners.raisesABanner();
+  await expect(banners.banners).toHaveCount(1);
 
-  await banners.siteBanner.getByRole('button', {name: /^dismiss /}).click();
+  await banners.newestBanner().getByRole('button', {name: /^dismiss /}).click();
 
-  await expect(banners.siteNotes).toHaveCount(0);
+  await expect(banners.banners).toHaveCount(0);
 });
 
 test('the site’s banners, first shown while the site menu is open, go whole over the menu, and the menu stays open', {tag: '@iPhone'}, async ({page}) => {
-  await page.goto(`${fixedBannerPage}?side=bottom`);
+  await page.goto(`${buildPage}?side=bottom`);
   await siteFrame(page).hydrated();
-  const banners = bannerTrap(page);
+  const banners = zIndexTab(page);
   await siteFrame(page).menu.tap();
   await expect(siteFrame(page).nav).toBeVisible();
 
-  await banners.raiseSite.press('Enter');
+  await banners.raiser.press('Enter');
 
-  await expect(banners.siteBanner).toBeVisible();
+  await expect(banners.newestBanner()).toBeVisible();
   await expect(siteFrame(page).nav).toBeVisible();
-  await expect.poll(() => wholeOnTop(banners.siteBanner)).toBe(true);
+  await expect.poll(() => wholeOnTop(banners.newestBanner())).toBe(true);
 });
 
 test('a site banner waits out the open Feedback dialog, which stays open, and shows again once it closes', async ({page}) => {
-  await page.goto(fixedBannerPage);
+  await page.goto(buildPage);
   await siteFrame(page).hydrated();
-  const banners = bannerTrap(page);
+  const banners = zIndexTab(page);
   const feedback = feedbackOn(page);
-  await banners.raiseSite.click();
-  await expect(banners.siteBanner).toBeVisible();
+  await banners.raisesABanner();
+  await expect(banners.newestBanner()).toBeVisible();
 
   await feedback.open.click();
 
   await expect(feedback.dialog).toBeVisible();
-  await expect(banners.siteBanner).toBeHidden();
+  await expect(banners.newestBanner()).toBeHidden();
 
   await page.keyboard.press('Escape');
 
   await expect(feedback.dialog).toBeHidden();
-  await expect(banners.siteBanner).toBeVisible();
+  await expect(banners.newestBanner()).toBeVisible();
 });
 
 test('a site banner dismissed just before the Feedback dialog opens is gone once it closes, and another can be raised', async ({page}) => {
-  await page.goto(fixedBannerPage);
+  await page.goto(buildPage);
   await siteFrame(page).hydrated();
-  const banners = bannerTrap(page);
+  const banners = zIndexTab(page);
   const feedback = feedbackOn(page);
-  await banners.raiseSite.click();
-  await expect(banners.siteBanner).toBeVisible();
+  await banners.raisesABanner();
+  await expect(banners.newestBanner()).toBeVisible();
 
-  await banners.siteBanner.getByRole('button', {name: /^dismiss /}).click();
+  await banners.newestBanner().getByRole('button', {name: /^dismiss /}).click();
   await feedback.open.click();
   await expect(feedback.dialog).toBeVisible();
   await page.keyboard.press('Escape');
 
   await expect(feedback.dialog).toBeHidden();
-  await expect(banners.siteNotes).toHaveCount(0);
-  await banners.raiseSite.click();
-  await expect(banners.siteNotes).toHaveCount(1);
-  await expect(banners.siteBanner).toBeVisible();
+  await expect(banners.banners).toHaveCount(0);
+  await banners.raisesABanner();
+  await expect(banners.banners).toHaveCount(1);
+  await expect(banners.newestBanner()).toBeVisible();
 });
 
-test('a site banner stays up through Back from Let’s build this feature, and one raised after Back shows', async ({page}) => {
-  await page.goto(fixedBannerPage);
+test('a site banner stays up through Back from the part before Let’s build this feature, and one raised after Back shows', async ({page}) => {
+  await page.goto(buildPage);
   await siteFrame(page).hydrated();
-  const banners = bannerTrap(page);
-  await banners.raiseSite.click();
-  await expect(banners.siteBanner).toBeVisible();
-  await zIndexTab(page).linkToTheBannerStory().click();
-  await expect(page.getByText('Make the panel a popover', {exact: true})).toBeInViewport();
+  const banners = zIndexTab(page);
+  await banners.raisesABanner();
+  await expect(banners.newestBanner()).toBeVisible();
+  await banners.followsTheFoot('Previous: 6. Why a fixed banner still loses');
+  await expect(page).toHaveURL(/why-a-fixed-banner-still-loses\/$/);
 
   await page.goBack();
 
-  await expect(banners.siteNotes.first()).toBeVisible();
-  await banners.raiseSite.click();
-  await expect(banners.siteBanner).toBeVisible();
+  await expect(banners.banners.first()).toBeVisible();
+  await banners.raisesABanner();
+  await expect(banners.newestBanner()).toBeVisible();
 });
 
 test('a reader who dismisses one of two site banners is left with the other', async ({page}) => {
-  await page.goto(fixedBannerPage);
-  const banners = bannerTrap(page);
-  await banners.raiseSite.click();
-  await banners.raiseSite.click();
-  await expect(banners.siteNotes).toHaveCount(2);
-  const kept = await banners.siteNotes.last().textContent();
+  await page.goto(buildPage);
+  const banners = zIndexTab(page);
+  await banners.raisesABanner();
+  await banners.raisesABanner();
+  await expect(banners.banners).toHaveCount(2);
+  const kept = await banners.banners.last().textContent();
 
-  await banners.siteNotes.first().getByRole('button', {name: /^dismiss /}).click();
+  await banners.banners.first().getByRole('button', {name: /^dismiss /}).click();
 
-  await expect(banners.siteNotes).toHaveCount(1);
-  await expect(banners.siteBanner).toHaveText(kept ?? '');
+  await expect(banners.banners).toHaveCount(1);
+  await expect(banners.newestBanner()).toHaveText(kept ?? '');
 });
 
 test('in a stack that grows sideways, a dismissed banner leaves', async ({page}) => {
-  await page.goto(`${fixedBannerPage}?stack=left`);
-  const banners = bannerTrap(page);
-  await banners.raiseSite.click();
-  await expect(banners.siteNotes).toHaveCount(1);
+  await page.goto(`${buildPage}?stack=left`);
+  const banners = zIndexTab(page);
+  await banners.raisesABanner();
+  await expect(banners.banners).toHaveCount(1);
 
-  await banners.siteBanner.getByRole('button', {name: /^dismiss /}).click();
+  await banners.newestBanner().getByRole('button', {name: /^dismiss /}).click();
 
-  await expect(banners.siteNotes).toHaveCount(0);
+  await expect(banners.banners).toHaveCount(0);
 });
 
 test('a raised note is announced: the browser finds it in the page’s alert', async ({page}) => {
-  await page.goto(fixedBannerPage);
-  const banners = bannerTrap(page);
+  await page.goto(buildPage);
+  const banners = zIndexTab(page);
 
-  await banners.raiseSite.click();
+  await banners.raisesABanner();
 
-  await expect(banners.siteNotes).toHaveCount(1);
-});
-
-test('given the page before its script runs, the old way’s Raise a banner is disabled; once the script runs, the first press raises the old banner', async ({page}) => {
-  await hydration(page).holdBack(fixedBannerPage);
-  await page.goto(fixedBannerPage);
-  const banners = bannerTrap(page);
-
-  await expect(banners.raiseOld).toBeDisabled();
-  await hydration(page).release();
-
-  await banners.raiseOld.click();
-
-  await expect(banners.oldBanner).toBeVisible();
-});
-
-test('given the page before its script runs, the site’s own Raise a banner is disabled; once the script runs, the first press raises the site’s banner', async ({page}) => {
-  await hydration(page).holdBack(fixedBannerPage);
-  await page.goto(fixedBannerPage);
-  const banners = bannerTrap(page);
-
-  await expect(banners.raiseSite).toBeDisabled();
-  await hydration(page).release();
-
-  await banners.raiseSite.click();
-
-  await expect(banners.siteBanner).toBeVisible();
+  await expect(banners.banners).toHaveCount(1);
 });
 
 test('given let’s build this feature’s page before its script runs, Raise a banner is disabled; once the script runs, the first press raises a banner', async ({page}) => {

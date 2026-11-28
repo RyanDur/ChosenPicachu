@@ -1,9 +1,10 @@
-import {render} from '@testing-library/react';
+import {render, waitFor} from '@testing-library/react';
 import {Paths} from '@navigation';
 import {TestApp} from '@__test_support/TestApp';
-import {demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
-import {explanation} from '@pages/Demos/Recipe/__test_support';
-import {bannerAtTheEdge, bannerExhibit, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
+import {appAddress} from '@__test_support/address';
+import {demoPage, demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
+import {explanation, recipeFolds} from '@pages/Demos/Recipe/__test_support';
+import {bannerAtTheEdge, zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const fixedBanner = 'z-index/why-a-fixed-banner-still-loses';
 const title = 'Why a fixed banner still loses';
@@ -102,14 +103,6 @@ describe('why a fixed banner still loses, on its own page', () => {
       /^Banners, toasts and dialogs moved to the end of the page, often by a library\.$/);
   });
 
-  test('should show the two Raise a banner buttons it explains', async () => {
-    render(<TestApp at={demosAt(fixedBanner)}/>);
-    const banners = await bannerExhibit.find();
-
-    expect(bannerExhibit.button(banners, 'Raise a banner, the old way')).toBeInTheDocument();
-    expect(bannerExhibit.button(banners, 'Raise a banner, the site’s own')).toBeInTheDocument();
-  });
-
   test('should ask which card is on top', async () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
 
@@ -141,6 +134,54 @@ describe('why a fixed banner still loses, on its own page', () => {
     render(<TestApp at={demosAt(fixedBanner)}/>);
 
     expect(await demoTabs.currentButNotThePage()).toEqual(['Z-index']);
+  });
+
+  test('should link Let’s build this feature to the banner’s story on its page, keeping the reader’s choices', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
+
+    const part = await explanation.part(title);
+
+    expect(zIndexTab.linkToTheBannerStory(part))
+      .toHaveAttribute('href', `${demosAt('z-index/lets-build-this-feature', '?raised=second')}#news-top-story`);
+  });
+
+  test('should open the banner tutorial at the step that makes the panel a popover, keeping the reader’s choices', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
+    const part = await explanation.part(title);
+
+    await zIndexTab.followToTheBannerStory(part);
+
+    await waitFor(() => expect(demoPage.says('Make the panel a popover')).toBeVisible());
+    expect(appAddress.search()).toHaveTextContent('raised=second');
+  });
+
+  test('should link, where it tells of the site’s own banner, Why the popover wins to its page, with the raised card carried', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
+
+    const part = await explanation.part(title);
+    const run = explanation.saying(part, /^The site’s own banner sets no z-index/);
+
+    expect(explanation.linkNamed(run, 'Why the popover wins'))
+      .toHaveAttribute('href', demosAt('z-index/why-the-popover-wins', '?raised=second'));
+  });
+
+  test('should take the keyboard to the banner’s story in Let’s build this feature', async () => {
+    render(<TestApp at={demosAt(fixedBanner)}/>);
+    const part = await explanation.part(title);
+
+    await zIndexTab.followToTheBannerStory(part);
+
+    const story = recipeFolds.story(document.body, 'The user sees the news over the page');
+    await waitFor(() => expect(recipeFolds.itemOf(story)).toHaveFocus());
+  });
+
+  test('should link the old menu it compares itself with to that menu’s page, with the raised card carried', async () => {
+    render(<TestApp at={demosAt(fixedBanner, '?raised=second')}/>);
+
+    const part = await explanation.part(title);
+    const run = explanation.saying(part, /It is the old-way menu in/);
+
+    expect(explanation.linkNamed(run, 'What else forms a stacking context')).toHaveAttribute('href', demosAt('z-index/what-else-forms-a-stacking-context', '?raised=second'));
   });
 });
 

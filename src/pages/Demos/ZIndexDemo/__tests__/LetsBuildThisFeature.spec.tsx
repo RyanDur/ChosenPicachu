@@ -1,7 +1,7 @@
 import {render} from '@testing-library/react';
 import {TestApp} from '@__test_support/TestApp';
 import {demosAt, demoTabs, pageFoot, partsIndex} from '@pages/Demos/__test_support';
-import {explanation} from '@pages/Demos/Recipe/__test_support';
+import {explanation, recipeSteps} from '@pages/Demos/Recipe/__test_support';
 import {zIndexTab} from '@pages/Demos/ZIndexDemo/__test_support';
 
 const buildThisFeature = 'z-index/lets-build-this-feature';
@@ -74,5 +74,23 @@ describe('let’s build this feature, on the tab', () => {
     const listing = partsIndex.entryOf(await partsIndex.find(), title);
 
     expect(explanation.linkNamed(listing, title)).toHaveAttribute('href', demosAt(buildThisFeature, '?raised=second'));
+  });
+});
+
+describe('the gap step, on a term part one defines', () => {
+  test('should link selector, with the stack growing downward, to part one’s page with the raised card carried', async () => {
+    render(<TestApp at={demosAt(buildThisFeature, '?raised=second&stack=down')}/>);
+
+    const step = await recipeSteps.findWords('Open a gap in the stack first');
+
+    expect(explanation.linkNamed(step, 'selector')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second&stack=down'));
+  });
+
+  test('should link selector, with the stack growing leftward, to part one’s page with the raised card carried', async () => {
+    render(<TestApp at={demosAt(buildThisFeature, '?raised=second&stack=left')}/>);
+
+    const step = await recipeSteps.findWords('Open a gap in the stack first');
+
+    expect(explanation.linkNamed(step, 'selector')).toHaveAttribute('href', demosAt('z-index/why-third-is-on-top', '?raised=second&stack=left'));
   });
 });

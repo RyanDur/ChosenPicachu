@@ -1,7 +1,8 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
 import {
-  bannerTrap, contextChooser, nestingExhibit, partFoot, pileSteps, popoverExhibit, siteFrame, stackingPile, zIndexTab
+  bannerAtTheEdge, contextChooser, nestingExhibit, partFoot, pileSteps, popoverExhibit, siteFrame, stackingPile,
+  zIndexTab
 } from './__test_support';
 
 const whyThirdIsOnTop = 'Why Third is on top';
@@ -140,7 +141,7 @@ test('a reader follows why a fixed banner still loses from the z-index tab to it
 
   await expect(page).toHaveURL(/demos\/z-index\/why-a-fixed-banner-still-loses\/$/);
   await expect(page.getByText('Z-index · part 6 of 7', {exact: true})).toBeVisible();
-  await expect(bannerTrap(page).raiseSite).toBeVisible();
+  await expect(bannerAtTheEdge(page).verdict).toBeVisible();
 });
 
 test('a reader follows why the popover wins’s foot on to the next part’s page, with the wear kept in the address', async ({page}) => {

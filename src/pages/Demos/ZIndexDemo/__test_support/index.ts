@@ -1,7 +1,5 @@
-export {bannerExhibit} from './bannerExhibit';
 export {bannerAtTheEdge} from './bannerAtTheEdge';
 export {contextInside} from './contextInside';
-export {oldBanner} from './oldBanner';
 export {siteBanners} from './banners';
 export {wearsChooser} from './chooser';
 export {stackingPile} from './pile';
@@ -9,6 +7,5 @@ export {positionExhibit} from './position';
 export {exhibit} from './steps';
 export {zIndexTab} from './tab';
 export {oldWayMenu} from './oldWayMenu';
-export {wayLabeled} from './ways';
 export {clearfixTray} from './clearfix';
 export {menuInTheTopLayer} from './menuInTheTopLayer';

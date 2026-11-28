@@ -32,7 +32,7 @@ export {clearfixTray} from './clearfix';
 export {positionExhibit} from './position';
 export {zIndexTab} from './z-index';
 export {partFoot} from './part-foot';
-export {bannerTrap, contextChooser, wearsReportedWrong, type SortChoice, type Worn} from './trap';
+export {contextChooser, wearsReportedWrong, type SortChoice, type Worn} from './trap';
 export {pressTab, tabsTo} from './keyboard';
 export {seedRandom} from './random';
 export {terms} from './terms';

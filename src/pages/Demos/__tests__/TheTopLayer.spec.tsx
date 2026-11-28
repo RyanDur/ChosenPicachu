@@ -14,7 +14,7 @@ const buildThisFeature = 'z-index/lets-build-this-feature';
 
 describe('the top layer', () => {
   test('the user raises a banner from the demo', async () => {
-    render(<TestApp at={demosAt('z-index/why-a-fixed-banner-still-loses')}/>);
+    render(<TestApp at={demosAt(buildThisFeature)}/>);
 
     await siteBanners.raise();
 
@@ -22,7 +22,7 @@ describe('the top layer', () => {
   });
 
   test('every press stacks another banner', async () => {
-    render(<TestApp at={demosAt('z-index/why-a-fixed-banner-still-loses')}/>);
+    render(<TestApp at={demosAt(buildThisFeature)}/>);
 
     await siteBanners.raise();
     await siteBanners.raise();
