@@ -129,9 +129,10 @@ const markupPieces: Record<World, ReactNode> = {
     </Piece>
     <Piece>
       <PieceCode><InkedLines label="TS" lines={carve.unit(columnSource, 'export const Column')}/></PieceCode>
-      <PieceNote when="Runs for each column, each time the page is drawn.">What <code
-        className="monospaced">Column</code> writes: one th. <code className="monospaced">scope="col"</code> says the
-        header names every cell under it, so a screen reader can say “trades” with each number in that column. The
+      <PieceNote when="Runs for lookback and change, each time the page is drawn.">What <code
+        className="monospaced">Column</code> writes: one th, for the headers that don’t move, lookback and
+        change. <code className="monospaced">scope="col"</code> says the header names every cell under it, so a screen
+        reader can say “lookback” with each cell in that column. The
         classes come from <code className="monospaced">looks</code>: <code className="monospaced">cell</code> and <code
         className="monospaced">header-cell</code>, then the rule after the cell, the bar below it and the focus
         ring. <code className="monospaced">aria-sort</code> and <code className="monospaced">--share</code> are for
