@@ -27,4 +27,20 @@ describe('the menu in the top layer, in why the popover wins', () => {
 
     expect(await menuInTheTopLayer.raiseCardOne()).toBeChecked();
   });
+
+  test('should say card one now rises over card two, with the list above both, once the reader gives it z-index 9999', async () => {
+    render(<TestApp at={demosAt(popoverWins)}/>);
+
+    await menuInTheTopLayer.togglesCardOne();
+
+    expect(await menuInTheTopLayer.whatTheListDid()).toHaveTextContent('Card one now rises over card two’s edge, and the list stays above both.');
+  });
+
+  test('should say card one’s 9999 is compared with card two, and the list with nothing, once the reader gives it z-index 9999', async () => {
+    render(<TestApp at={demosAt(popoverWins)}/>);
+
+    await menuInTheTopLayer.togglesCardOne();
+
+    expect(await menuInTheTopLayer.comparedWith()).toHaveTextContent('Compared with: nothing. Card one’s 9999 is compared with card two');
+  });
 });
