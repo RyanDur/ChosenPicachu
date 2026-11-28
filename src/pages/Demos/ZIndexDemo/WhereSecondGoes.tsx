@@ -72,7 +72,7 @@ const wordsFor: Record<MeasuredFrom, Words> = {
       a <code className="monospaced">filter</code>, the property that blurs or tints one.</>,
     whereWeMeetIt: whereWeMeetAnAbsoluteBox,
     verdict: 'Second sits 16px down and 24px in from the page’s corner, over the top of the page and outside its parent. It still scrolls with the page.',
-    measuredFromWords: 'the little page’s corner, at the red dot. Nothing above Second in the HTML shown is positioned, so the browser measures from the page, and the little page stands in for it.',
+    measuredFromWords: 'the little page’s corner, at the red dot.',
     stackingContext: formsNoneUnlessAZIndex
   },
   view: {
