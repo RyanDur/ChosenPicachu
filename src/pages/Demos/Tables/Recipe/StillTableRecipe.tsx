@@ -95,7 +95,7 @@ const eachMeasure = '{/* … one for each measure */}';
 const markupPieces: Record<World, ReactNode> = {
   react: <AnnotatedListing heading="REACT · UNDER EACH PIECE, WHAT IT MEANS AND WHEN IT RUNS">
     <Piece>
-      <PieceCode><InkedLines label="HTML" lines={carve.elided(carve.elided(
+      <PieceCode><InkedLines label="TS" lines={carve.elided(carve.elided(
         carve.between(dealSource, '<table id="live-aggregations"', '</table>'),
         '<DraggableColumn column="buys"', '</Headers>', eachMeasure), '<Cell column="buys"', '</Row>;', eachMeasure)}/>
       </PieceCode>
