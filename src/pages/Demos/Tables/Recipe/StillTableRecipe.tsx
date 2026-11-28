@@ -226,13 +226,17 @@ const workingCode: Record<World, readonly string[]> = {
   vanilla: [frameTable, widthsSource, tableCss].map(({path}) => path)
 };
 
+const scriptSays: Record<World, string> = {
+  react: 'the rows are whatever trades the page holds when it is drawn. Part 5 updates them as trades arrive.',
+  vanilla: 'the numbers are not read yet. Part 5 brings them in from the trades.'
+};
+
 const ListedCode: FC = () => {
   const {world} = useControls();
   return <>
     {markupPieces[world]}
     {stylePieces}
-    <p className="paragraph"><strong className="bold">Script:</strong> the numbers are not read yet. Part 5 brings them
-      in from the trades.</p>
+    <p className="paragraph"><strong className="bold">Script:</strong> {scriptSays[world]}</p>
     <WorkingCode paths={workingCode[world]}/>
   </>;
 };
