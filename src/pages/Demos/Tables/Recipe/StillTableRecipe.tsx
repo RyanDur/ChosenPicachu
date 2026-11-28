@@ -181,7 +181,7 @@ const markupPieces: Record<World, ReactNode> = {
     <Piece>
       <PieceCode><InkedLines label="HTML" lines={carve.between(frameTable, '<output class="off-screen"', '</section>')}/>
       </PieceCode>
-      <PieceNote when="Never changes. Part 6 writes into it when a row or column moves.">After the table comes the move
+      <PieceNote when="Empty on this part’s page. Part 6 writes into it when a row or column moves.">After the table comes the move
         report the step above describes.</PieceNote>
     </Piece>
   </AnnotatedListing>
