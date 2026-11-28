@@ -1,8 +1,18 @@
 import {expect} from '@playwright/test';
 import {test} from './__test_support/journey';
-import {nestingExhibit} from './__test_support';
+import {nestingExhibit, pillSwitch} from './__test_support';
 
 const address = 'demos/z-index/why-9999-still-loses/';
+
+test('at 1728 wide, the dark highlight covers the fourth step edge to edge and no part of the third', async ({page}) => {
+  await page.setViewportSize({width: 1728, height: 1000});
+  const steps = pillSwitch(page, 'Step');
+  await page.goto(address);
+
+  await steps.choose('4 · The list outside');
+
+  await expect.poll(steps.highlightMissesTheChosenPillBy).toBeLessThanOrEqual(1);
+});
 
 test('stepping to a context inside marks the one rule that makes card A a context, and says what changed', async ({page}) => {
   const exhibit = nestingExhibit(page);

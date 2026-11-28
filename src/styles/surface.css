@@ -463,10 +463,21 @@
 
 .choice-inverse-ink:has(:checked) { color: var(--ink-inverse); }
 
+@supports not (anchor-name: --x) {
+  .choice-filled-without-anchors:has(:checked) { background: var(--field-inverse); }
+}
+
 @media (forced-colors: active) {
   .choice-filled-before::before {
     forced-color-adjust: none;
     background: var(--highlight);
+  }
+
+  @supports not (anchor-name: --x) {
+    .choice-filled-without-anchors:has(:checked) {
+      forced-color-adjust: none;
+      background: var(--highlight);
+    }
   }
 
   .choice-inverse-ink:has(:checked) {

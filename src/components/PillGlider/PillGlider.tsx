@@ -22,8 +22,9 @@ export const PillGlider = <T extends string>({label, name, choices, chosen, onCh
     wraps && 'wraps')}>
     <legend className="off-screen">{label}</legend>
     {choices.map(({words, value}) =>
-      <label className="pill rounded-corners reachable unfilled focus-haloed hover-inverse-ink choice-inverse-ink"
-        key={value}>
+      <label className={classNames('pill rounded-corners reachable unfilled focus-haloed hover-inverse-ink',
+        'choice-inverse-ink choice-filled-without-anchors')}
+      key={value}>
         {words}
         <input type="radio"
           className="off-screen"
