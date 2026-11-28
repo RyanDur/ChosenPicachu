@@ -21,8 +21,8 @@ export const WhyAFixedBannerStillLoses: FC = () => {
         <p className="paragraph">The old banner’s position is fixed. It is placed against the window and kept there as
           the page scrolls, here along the window’s bottom edge. Its z-index is 9999, but it is written inside card one,
           and card one forms a stacking context. So as the page scrolls, plain text passes under the banner, but card
-          two, later in the code with its own z-index of 1, passes over it. It is the old menu
-          in <PartLink part="why-the-popover-wins"/> again, at the window’s edge.
+          two, later in the code with its own z-index of 1, passes over it. It is the old-way menu
+          in <PartLink part="what-else-forms-a-stacking-context"/> again, at the window’s edge.
         </p>
         <Snippet label="CSS" lines={lines.fromTheExhibit([
           ...carve.unit(zIndexCss, '.old-banner {'), lines.blank,
