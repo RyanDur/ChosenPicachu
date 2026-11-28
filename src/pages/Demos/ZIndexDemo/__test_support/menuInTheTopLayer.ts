@@ -13,7 +13,7 @@ export const menuInTheTopLayer = {
   whatTheListDid: async (): Promise<HTMLElement> =>
     within(await exhibitRegion()).getByRole('status', {name: 'what the list did'}),
   comparedWith: async (): Promise<HTMLElement> =>
-    within(await exhibitRegion()).getByRole('status', {name: 'what the list is compared with'}),
+    within(await exhibitRegion()).getByRole('status', {name: 'Compared with:'}),
   markedRules: async (): Promise<string[]> => {
     const [css] = within(await exhibitRegion()).getAllByRole('figure')
       .filter(sample => (sample.textContent ?? '').startsWith('CSS'));
