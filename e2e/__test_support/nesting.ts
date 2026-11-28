@@ -15,7 +15,7 @@ export const nestingExhibit = (page: Page) => {
       shown.scrollIntoView({block: 'center'});
       const listed = shown.querySelector('ul');
       const card = [...shown.children].find(child => child.textContent?.trim() === 'Card B · z-index: 1');
-      if (!listed || !card) throw new Error('the drawing holds no list beside card B');
+      if (!listed || !card) return 'no list beside card B yet';
       const [listBox, cardBox] = [listed.getBoundingClientRect(), card.getBoundingClientRect()];
       const hit = document.elementFromPoint(
         (Math.max(listBox.left, cardBox.left) + Math.min(listBox.right, cardBox.right)) / 2,
