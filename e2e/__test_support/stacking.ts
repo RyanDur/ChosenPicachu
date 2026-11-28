@@ -29,6 +29,7 @@ const howTheCardsSitIn = (drawing: Locator): Promise<HowTheCardsSit> => drawing.
     .map(card => card.getBoundingClientRect());
   const overlap = (one: DOMRect, other: DOMRect): boolean =>
     one.left < other.right && other.left < one.right && one.top < other.bottom && other.top < one.bottom;
+  if (boxes.length !== 3) return 'neither';
   if (boxes.some((box, at) => boxes.slice(at + 1).some(other => overlap(box, other)))) return 'overlapping';
   if (boxes.every(box => Math.round(box.top) === Math.round(boxes[0].top))) return 'along a line';
   if (boxes.every((box, at) => at === 0 || box.top >= boxes[at - 1].bottom)) return 'down the page';
