@@ -38,6 +38,7 @@ const chosenWithinAMoment = (page: Page, group: string, name: string): Promise<b
   .then(() => true, () => false);
 
 export const pillsAFingerCannotChoose = async (page: Page, group: string): Promise<string[]> => {
+  await siteFrame(page).hydrated();
   await shownGroup(page, group);
   const pills = pillSwitch(page, group);
   const [names, startedOn] = [await pills.names(), await pills.chosen()];
