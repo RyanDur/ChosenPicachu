@@ -20,6 +20,25 @@ const structure = [
 
 const motionWithAReason = ['src/pages/Demos/Accordions/OldWayMotion.css'];
 
+const supportedBrowsers = ['last 2 Chrome versions', 'last 2 Edge versions', 'last 2 Firefox versions',
+  'last 2 Safari versions',
+  'last 2 iOS versions', 'last 2 ChromeAndroid versions', 'last 2 FirefoxAndroid versions', 'last 2 Samsung versions'];
+const unneededWhereUnsupported = [
+  'css3-cursors', 'css3-cursors-grab', // a phone has no pointer to draw a cursor for
+  'css-resize', // iOS gives no resize handle; the field still scrolls
+  'css-touch-action', // desktop Safari has no touch screen
+  'css-overflow-anchor', // Safari 26.6 has no scroll anchoring, so it already does what `none` asks; Safari 27 has it
+  // partly supported, and the part a browser lacks is one the site never uses:
+  'multicolumn', // column breaks; the site uses only column-gap, in grids and flex rows
+  'css-relative-colors', // Samsung Internet lacks currentcolor as the origin; every origin here is a token
+  'intrinsic-width', // Firefox lacks stretch; the site uses fit-content and max-content
+  'css-text-indent', // Samsung Internet lacks each-line and hanging; the site indents by length
+  'css-display-contents', // buttons lose their role; the site sets it on a section and a form
+  // caniuse's note says Safari lacks text-decoration-style, but WebKit 27.2 draws `underline dotted` unprefixed
+  // (checked 2026-11-27); where a style is missing, the underline is solid
+  'text-decoration'
+];
+
 module.exports = {
   overrides: [
     {
@@ -39,10 +58,15 @@ module.exports = {
   plugins: [
     motion,
     'stylelint-declaration-strict-value',
-    'stylelint-value-no-unknown-custom-properties'
+    'stylelint-value-no-unknown-custom-properties',
+    'stylelint-no-unsupported-browser-features'
   ],
   rules: {
     'chosen/compositor-motion': true,
+    'plugin/no-unsupported-browser-features': [true, {
+      browsers: supportedBrowsers,
+      ignore: unneededWhereUnsupported
+    }],
     'selector-disallowed-list': [
       ['/(^|[\\s>+~,])(applet|acronym|big|blink|center|font|marquee|strike|tt)(?![\\w-])/'],
       {message: 'obsolete element — this is a strict html5 site'}
