@@ -262,8 +262,8 @@ export const RemembersTheFold: FC = () => {
             {foldType === 'exclusive' && <li className="run">
               <p className="paragraph">The Close bar is shorter than the others and has no text beneath it, so it
                 gets its own rule: a flex row that centers its one word. Its label fills the whole bar,
-                so a press anywhere on the bar counts. Its label wears the classes the other bars wear, so it looks
-                and answers the same.</p>
+                so a press anywhere on the bar counts. Its label wears the same dark look as the other bars, without
+                their arrow, so it answers a press the same way.</p>
               <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '&.close {'))}/>
             </li>}
             <li className="run">
