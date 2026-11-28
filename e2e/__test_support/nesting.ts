@@ -1,6 +1,8 @@
 import type {Locator, Page} from '@playwright/test';
 import {pillSwitch} from './pills';
 
+type OnTop = 'the list' | 'card B' | 'neither' | 'not drawn yet';
+
 export type NestingStep = '1 · The page' | '2 · A context inside' | '3 · The list inside' | '4 · The list outside';
 
 export const nestingExhibit = (page: Page) => {
@@ -11,11 +13,11 @@ export const nestingExhibit = (page: Page) => {
   return {
     stepsTo: (step: NestingStep): Promise<void> => steps.choose(step),
     step: (step: NestingStep): Locator => steps.pill(step),
-    onTopWhereTheListMeetsCardB: (): Promise<string> => drawing.evaluate(shown => {
+    onTopWhereTheListMeetsCardB: (): Promise<OnTop> => drawing.evaluate((shown): OnTop => {
       shown.scrollIntoView({block: 'center'});
       const listed = shown.querySelector('ul');
       const card = [...shown.children].find(child => child.textContent?.trim() === 'Card B · z-index: 1');
-      if (!listed || !card) return 'no list beside card B yet';
+      if (!listed || !card) return 'not drawn yet';
       const [listBox, cardBox] = [listed.getBoundingClientRect(), card.getBoundingClientRect()];
       const hit = document.elementFromPoint(
         (Math.max(listBox.left, cardBox.left) + Math.min(listBox.right, cardBox.right)) / 2,
