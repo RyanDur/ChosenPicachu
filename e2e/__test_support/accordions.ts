@@ -172,7 +172,9 @@ const tab = (page: Page) => {
     htmlAloneFolds: (): Part[] => ['basalt', 'cinder', 'meadow'].map(htmlAloneFold),
     choosesTheFoldTypeInTheExhibit: async (pill: 'Inclusive' | 'Exclusive'): Promise<void> => {
       await siteFrame(page).hydrated();
-      await htmlAlone.getByRole('group', {name: 'fold type', exact: true}).getByText(pill, {exact: true}).click();
+      const foldType = htmlAlone.getByRole('group', {name: 'fold type', exact: true});
+      await foldType.getByText(pill, {exact: true}).click();
+      await foldType.getByRole('radio', {name: pill, exact: true, checked: true, includeHidden: true}).waitFor({state: 'attached'});
     },
     holdsFocus: (build: Build): Promise<boolean> =>
       built(build).evaluate(exhibit => exhibit.contains(document.activeElement)),
