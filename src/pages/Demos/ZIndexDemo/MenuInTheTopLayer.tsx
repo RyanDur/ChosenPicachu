@@ -51,8 +51,8 @@ export const MenuInTheTopLayer: FC = () => {
   const raised = maybe(cardOneZ).map(() => true).orElse(false);
   const {verdict, comparedWith, rules} = raised ? cardOneRaised : leftAlone;
   const hydrated = useHydrated();
-  const sortBy = useId();
-  const list = useId();
+  const sortById = useId();
+  const listId = useId();
 
   return <Exhibit name="The menu in the top layer">
     <figure className="menu-in-the-top-layer field">
@@ -74,15 +74,15 @@ export const MenuInTheTopLayer: FC = () => {
             aria-label="The little page" tabIndex={0}>
             <p className="little-box muted-dashed-outline rounded-corners caption">text on the page</p>
             <section className="one little-card plan-blue hairline-outline rounded-corners">
-              <button type="button" tabIndex={0} className="button card hairline-outline rounded-corners paragraph ink attentive reachable" id={sortBy}
-                popoverTarget={list}>Sort by
+              <button type="button" tabIndex={0} className="button card hairline-outline rounded-corners paragraph ink attentive reachable" id={sortById}
+                popoverTarget={listId}>Sort by
               </button>
               <p className="paragraph">Card one</p>
-              <ul id={list} popover="auto" aria-labelledby={sortBy}
+              <ul id={listId} popover="auto" aria-labelledby={sortById}
                 className="sort-list card plan-mint hairline-outline rounded-corners lifted">
                 {['Newest', 'Oldest'].map(choice => <li key={choice}>
                   <button type="button" tabIndex={0} className="button card hairline-outline rounded-corners paragraph ink attentive reachable"
-                    popoverTarget={list}
+                    popoverTarget={listId}
                     popoverTargetAction="hide">{choice}</button>
                 </li>)}
               </ul>
