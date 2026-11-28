@@ -119,7 +119,7 @@ export const ThePile: FC = () => {
           onChosen={next => updateSearchParams({pile: 'z-index', raised: next})}/>
       </>}
     </figure>
-    <ExhibitFoot><strong className="bold">Three cards.</strong> Four steps, each adding one thing: block, inline,
-      overlap, then a z-index.</ExhibitFoot>
+    <ExhibitFoot><strong className="bold">The pile.</strong> Four steps: block, inline, overlap, then a
+      z-index.</ExhibitFoot>
   </Exhibit>;
 };
