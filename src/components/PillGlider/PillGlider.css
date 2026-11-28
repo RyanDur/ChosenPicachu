@@ -60,10 +60,6 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    &::before { transition: none; }
-  }
-
   @media (forced-colors: active) {
     &::before,
     .pill { transition: none; }
