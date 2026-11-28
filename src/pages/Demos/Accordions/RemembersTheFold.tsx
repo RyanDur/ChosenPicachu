@@ -213,7 +213,7 @@ export const RemembersTheFold: FC = () => {
             </li>
             <li className="run">
               <p className="paragraph">Inside it, a section of the same height holds the paragraph and scrolls what
-                does not fit, and the browser’s scrollbar shows that it does.
+                does not fit.
               {{
                 reveal: ' With reveal, the section sits at the panel’s top, so the text is uncovered from its first line down.',
                 drawer: ' With the drawer, the panel lays the section out as a column set at its end, so the section’s bottom stays on the fold’s edge.',
