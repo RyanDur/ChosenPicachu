@@ -95,6 +95,17 @@ const eachMeasure = '{/* … one for each measure */}';
 const markupPieces: Record<World, ReactNode> = {
   react: <AnnotatedListing heading="React · under each piece, what it means and when it runs">
     <Piece>
+      <PieceCode><InkedLines label="TS" lines={[
+        ...carve.between(dealSource, 'const sortable = useDragSortable(', 'DragSortable value={sortable}'),
+        lines.aside('  {/* … the table, below */}'),
+        ...carve.between(dealSource, '<output className="off-screen"', '</DragSortable>;')
+      ]}/></PieceCode>
+      <PieceNote when="Runs each time the page is drawn."><code className="monospaced">useDragSortable</code> makes
+        the table’s store and returns <code className="monospaced">sortable</code>, and <code
+        className="monospaced">DragSortable</code> hands it to every part inside. After the table comes the move report
+        the step above describes.</PieceNote>
+    </Piece>
+    <Piece>
       <PieceCode><InkedLines label="TS" lines={carve.elided(carve.elided(
         carve.between(dealSource, '<table id="live-aggregations"', '</table>'),
         '<DraggableColumn column="buys"', '</Headers>', eachMeasure), '<Cell column="buys"', '</Row>;', eachMeasure)}/>
@@ -107,24 +118,13 @@ const markupPieces: Record<World, ReactNode> = {
         and <code className="monospaced">Cell</code> a cell that holds a number. They are the same components the Users
         page builds its table from. The table’s caption and rows come in as props,
         and <code className="monospaced">sortable</code> is what <code
-        className="monospaced">useDragSortable</code> returns, as the step above says. The rest arrive with later
+        className="monospaced">useDragSortable</code> returns, as the piece above shows. The rest arrive with later
         parts: <code
         className="monospaced">DraggableColumn</code>, a header that can move, with part
         6, <code className="monospaced">SortMenu</code> with part 7 and <code
         className="monospaced">ResizeHandle</code> with part 8. No part
         explains <code className="monospaced">DirectionWord</code> and <code
         className="monospaced">data-ticked</code> yet.</PieceNote>
-    </Piece>
-    <Piece>
-      <PieceCode><InkedLines label="TS" lines={[
-        ...carve.between(dealSource, 'const sortable = useDragSortable(', 'DragSortable value={sortable}'),
-        lines.aside('  {/* … the table above */}'),
-        ...carve.between(dealSource, '<output className="off-screen"', '</DragSortable>;')
-      ]}/></PieceCode>
-      <PieceNote when="Runs each time the page is drawn."><code className="monospaced">useDragSortable</code> makes
-        the table’s store and returns <code className="monospaced">sortable</code>, and <code
-        className="monospaced">DragSortable</code> hands it to every part inside. After the table comes the move report
-        the step above describes.</PieceNote>
     </Piece>
     <Piece>
       <PieceCode><InkedLines label="TS" lines={carve.unit(columnSource, 'export const Column')}/></PieceCode>
