@@ -70,7 +70,8 @@ export const AccordionsExplained: FC = () => {
             a <Mdn path="Web/HTML/Element/summary">summary</Mdn> and the content it hides. The summary is the bar.
             Press one in the accordion at the top of this tab, and the browser shows the rest. Press it again and
             the browser hides it. When a details is open, the browser marks it with an open attribute. An attribute
-            is a name, often with a value, written inside an element’s opening tag.</p>
+            is a name, often with a value, written inside an element’s opening tag. Write open on the details, as
+            basalt has it, and the fold starts open.</p>
         </li>
         {foldType === 'exclusive' && <li className="run">
           <p className="paragraph">Each of these details carries
