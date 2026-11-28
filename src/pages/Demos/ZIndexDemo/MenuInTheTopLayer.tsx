@@ -5,6 +5,7 @@ import {classNames, useHydrated} from '@components';
 import {useSearchParamsObject} from '@navigation/search-params';
 import {carve, Line, lines, Snippet} from '../Recipe';
 import {Exhibit, ExhibitFoot} from '../Exhibit';
+import {PartTermLink} from './PartTermLink';
 import sheet from './MenuInTheTopLayer.css?sample';
 import './LittleWindow.css';
 import './MenuInTheTopLayer.css';
@@ -64,7 +65,8 @@ export const MenuInTheTopLayer: FC = () => {
         page. No stacking context holds the top layer, so no z-index on the page competes with it. The list stays where
         we wrote it, inside its card, so the Tab key reaches it right after its button.</p>
       <p className="paragraph">The top layer changes where the list sits. It no longer sits under its button. The
-        browser’s own rule stretches a popover’s box over the whole window with <code
+        browser’s own <PartTermLink part="why-third-is-on-top">rule</PartTermLink> stretches a popover’s box over the
+        whole window with <code
         className="monospaced">inset: 0</code>, and <code className="monospaced">margin: auto</code> centers the list
         inside it. We can write over either one.</p>
       <section className="little-window card hairline-outline rounded-corners">
