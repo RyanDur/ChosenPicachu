@@ -11,7 +11,7 @@ import {looks} from './looks';
 import {accordionParts} from './part-pages';
 import {PageWithParts} from '../PageWithParts';
 import {FoldTypeDial} from './FoldTypeDial';
-import {exhibitSource} from './tab-headings';
+import {tabHeadings} from './tab-headings';
 import '../Runs.css';
 import './Explained.css';
 
@@ -49,8 +49,8 @@ export const AccordionsExplained: FC = () => {
         <FoldTypeDial/>
       </ExhibitDials>
     </Exhibit>
-    <section aria-labelledby={exhibitSource} className="exhibit-source">
-      <h2 id={exhibitSource} className="sub-title bold">The exhibit’s source</h2>
+    <section aria-labelledby={tabHeadings.exhibitSource} className="exhibit-source">
+      <h2 id={tabHeadings.exhibitSource} className="sub-title bold">The exhibit’s source</h2>
       <ol className={looks.runs}>
         <li className="run">
           <Snippet label="HTML" lines={carve.between(htmlAloneSource, '<ul>', '</ul>')}/>
