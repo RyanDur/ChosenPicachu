@@ -35,7 +35,10 @@ jobs:
           for wait in 0 10 20 40; do
             sleep "$wait"
             run=$(gh run list -R "$GITHUB_REPOSITORY" --workflow checks.yml --commit "$GITHUB_SHA" --event merge_group --limit 1 \
-              --json databaseId -q '.[0].databaseId // empty')
+              --json databaseId -q '.[0].databaseId // empty' 2> "$RUNNER_TEMP/unlisted") || {
+              echo "::warning::the merge queue's run for $GITHUB_SHA could not be listed: $(cat "$RUNNER_TEMP/unlisted")"
+              run=
+            }
             [ -n "$run" ] && break
             pull=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null and .base.ref == "main")][0].number // empty') || pull=
           done
