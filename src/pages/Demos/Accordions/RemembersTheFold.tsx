@@ -143,7 +143,8 @@ export const RemembersTheFold: FC = () => {
                 both, the style sheet’s rule and then the shared classes.</p>
               <Snippet label="CSS" lines={lines.fromTheExhibit(carve.unit(accordionsCss, '&:not(.close) .info-label {'))}/>
               <Snippet label="CSS" lines={[
-                ...carve.unit(surfaceCss, '.inverse-filled {'), lines.blank,
+                ...carve.between(surfaceCss, '.inverse-filled {', 'background: var(--field-inverse);'),
+                lines.aside('  /* …its focus, hover and disabled rules */'), lines.plain('}'), lines.blank,
                 ...carve.unit(surfaceCss, '.field-outlined {'), lines.blank,
                 ...carve.elided(carve.unit(surfaceCss, '.attentive:where(:not(:disabled)) {'), '&:focus-visible,',
                   '&:active {', '/* …its focus and hover rules */')
