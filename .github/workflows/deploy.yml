@@ -24,14 +24,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          run=$(gh run list -R "$GITHUB_REPOSITORY" --workflow checks.yml --commit "$GITHUB_SHA" --event merge_group --limit 1 \
-            --json databaseId -q '.[0].databaseId // empty')
+          run=
           pull=
-          # GitHub links a commit to its pull request a moment after the merge, so the lookup waits for it
+          # GitHub lists a queue's run and links a commit to its pull request a moment after the push, so both lookups wait
           for wait in 0 10 20 40; do
-            [ -n "$run" ] && break
             sleep "$wait"
-            pull=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null and .base.ref == "main")][0].number // empty')
+            run=$(gh run list -R "$GITHUB_REPOSITORY" --workflow checks.yml --commit "$GITHUB_SHA" --event merge_group --limit 1 \
+              --json databaseId -q '.[0].databaseId // empty') || run=
+            [ -n "$run" ] && break
+            pull=$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/pulls" -q '[.[] | select(.merged_at != null and .base.ref == "main")][0].number // empty') || pull=
             if [ -n "$pull" ]; then
               break
             fi
@@ -98,6 +99,7 @@ jobs:
       group: github-pages
       cancel-in-progress: false
     permissions:
+      contents: read
       pages: write
       id-token: write
       actions: read
@@ -105,7 +107,20 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      # queued merges land seconds apart, and their deploys can finish in either order; only main's tip is published
+      - name: Check this commit is still main's tip
+        id: tip
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tip=$(gh api "repos/$GITHUB_REPOSITORY/commits/main" -q .sha)
+          if [ "$tip" = "$GITHUB_SHA" ]; then
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::main has moved on to $tip, whose own deploy publishes it, so $GITHUB_SHA is not deployed"
+          fi
       - name: Take the site its checks built
+        if: steps.tip.outputs.current == 'true'
         uses: actions/download-artifact@v7
         with:
           name: site
@@ -113,10 +128,12 @@ jobs:
           run-id: ${{ needs.passed.outputs.run }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload pages artifact
+        if: steps.tip.outputs.current == 'true'
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./build/client
       - name: Deploy to GitHub Pages
+        if: steps.tip.outputs.current == 'true'
         id: deployment
         uses: actions/deploy-pages@v5
 
