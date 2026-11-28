@@ -22,3 +22,19 @@ test('a copied address opens the banner exhibit on the step it names', async ({p
 
   await expect(banner.step('2 · Moved to the page')).toBeChecked();
 });
+
+test('scrolling card two to the banner written in card one draws card two over the banner', async ({page}) => {
+  const banner = bannerAtTheEdge(page);
+
+  await page.goto(address);
+
+  await expect.poll(banner.onTopOnceCardTwoScrollsToTheBanner).toBe('card two');
+});
+
+test('scrolling card two to the banner moved to the page draws the banner over card two', async ({page}) => {
+  const banner = bannerAtTheEdge(page);
+
+  await page.goto(`${address}?banner=moved-to-the-page`);
+
+  await expect.poll(banner.onTopOnceCardTwoScrollsToTheBanner).toBe('the banner');
+});

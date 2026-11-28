@@ -1,9 +1,10 @@
-import {FC, ReactNode} from 'react';
+import {FC, PropsWithChildren, ReactNode} from 'react';
 import {Choice, PillGlider} from '@components/PillGlider';
 import {DemoTopics} from '@pages/Demos';
 import {TabLink} from '@pages/Demos/TabLink';
 import {useExhibitStep} from '../Recipe';
 import {Exhibit, ExhibitFoot, ResultLine, Verdict} from '../Exhibit';
+import './LittleWindow.css';
 import './BannerAtTheEdge.css';
 
 type Step = 'written-in-a-card' | 'moved-to-the-page';
@@ -45,6 +46,20 @@ const told: Record<Step, Told> = {
   }
 };
 
+const fourTexts = ['first', 'second', 'third', 'fourth'];
+
+const LittleButton: FC<PropsWithChildren<{'aria-label'?: string}>> = ({children, 'aria-label': named}) =>
+  <button type="button" tabIndex={0} aria-label={named}
+    className="button card hairline-outline rounded-corners paragraph ink attentive reachable">{children}</button>;
+
+const TextOnThePage: FC = () =>
+  <p className="little-box muted-dashed-outline rounded-corners caption">text on the page</p>;
+
+const TheBanner: FC = () => <p className="banner plan-mint hairline-outline rounded-corners caption">
+  <span>Banner · 9999</span>
+  <LittleButton aria-label="Dismiss the banner">×</LittleButton>
+</p>;
+
 export const BannerAtTheEdge: FC = () => {
   const {step, numberedSteps, choose: chooseStep} = useExhibitStep('banner', steps, 'written-in-a-card');
   const {story, whereWeMeetIt, verdict, comparedWith, tabOrder} = told[step];
@@ -58,6 +73,25 @@ export const BannerAtTheEdge: FC = () => {
         <dt className="caption uppercase">Where we meet it</dt>
         <dd className="paragraph">{whereWeMeetIt}</dd>
       </dl>
+      <section className="little-window card hairline-outline rounded-corners">
+        <p className="little-bar caption uppercase field hairline-rule-below">The window</p>
+        <section className="little-view">
+          <section className="little-page focus-ringed" aria-label="The little page" tabIndex={0}>
+            <section className="one little-card plan-blue ink-dashed-outline rounded-corners">
+              <p className="paragraph">Card one</p>
+              <LittleButton>Raise a banner</LittleButton>
+              {step === 'written-in-a-card' && <TheBanner/>}
+            </section>
+            <TextOnThePage/>
+            <section className="two little-card plan-rose hairline-outline rounded-corners">
+              <p className="paragraph">Card two · 1</p>
+              <LittleButton>Open</LittleButton>
+            </section>
+            {fourTexts.map(text => <TextOnThePage key={text}/>)}
+            {step === 'moved-to-the-page' && <TheBanner/>}
+          </section>
+        </section>
+      </section>
       <Verdict aria-label="what the browser drew">{verdict}</Verdict>
       <ResultLine label="Compared with:">{comparedWith}</ResultLine>
       <ResultLine label="Tab order:">{tabOrder}</ResultLine>
