@@ -198,8 +198,8 @@ export const StructurePractice: FC = () =>
       minute. The banners are a section with role <code className="monospaced">alert</code>, and the old-style banner,
       a paragraph, carries the same role, because there is no alert element. The reader raises that banner in the
       z-index part <PartLink part="why-a-fixed-banner-still-loses"/>. In the z-index
-      part <PartLink part="why-the-popover-wins"/>, script opens an old-way menu to show what the platform now does for
-      free. That menu is a menu element holding a list of buttons, with
+      part <PartLink part="what-else-forms-a-stacking-context"/>, script opens an old-way menu to show what the
+      platform now does for free. That menu is a menu element holding a list of buttons, with
       role <code className="monospaced">menu</code> and <code className="monospaced">menuitem</code>, and role <code className="monospaced">none</code> on each list item. A screen reader reads a menu element as a list, not as a menu, and
       the list item’s own
       role would get in the way. The popover menu beside it carries no role at all. A term’s definition, the small card
