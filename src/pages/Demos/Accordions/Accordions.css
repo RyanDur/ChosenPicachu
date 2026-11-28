@@ -106,7 +106,7 @@
     .info-paragraph {
       box-sizing: border-box;
       min-height: 100%;
-      padding: var(--base-x-4);
+      padding: var(--base-x-2);
     }
 
     .drawer & .info {
