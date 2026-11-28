@@ -5,6 +5,7 @@ export const zIndexTab = (page: Page) => {
   const partsNavigation = page.getByRole('navigation', {name: 'Parts', exact: true});
   const raiser = page.getByRole('region', {name: 'The banner, at the window’s edge'})
     .getByRole('button', {name: 'Raise a banner', exact: true});
+  const banners = page.getByRole('alert').getByRole('listitem');
   return {
     partLink: (name: string): Locator => partsNavigation.getByRole('link', {name, exact: true}),
     partTitle: (name: string): Locator => page.getByRole('heading', {level: 2, name, exact: true}),
@@ -15,7 +16,7 @@ export const zIndexTab = (page: Page) => {
       .getByRole('link', {name: 'Let’s build this feature', exact: true}),
     raiser,
     raisesABanner: (): Promise<void> => raiser.click(),
-    banners: page.getByRole('alert').getByRole('listitem'),
-    newestBanner: (): Locator => page.getByRole('alert').getByRole('listitem').last()
+    banners,
+    newestBanner: (): Locator => banners.last()
   };
 };
