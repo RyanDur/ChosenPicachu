@@ -10,6 +10,10 @@ export const menuInTheTopLayer = {
   find: exhibitRegion,
   raiseCardOne,
   togglesCardOne: async (): Promise<void> => userEvent.click(await raiseCardOne()),
+  whatTheListDid: async (): Promise<HTMLElement> =>
+    within(await exhibitRegion()).getByRole('status', {name: 'what the list did'}),
+  comparedWith: async (): Promise<HTMLElement> =>
+    within(await exhibitRegion()).getByRole('status', {name: 'what the list is compared with'}),
   markedRules: async (): Promise<string[]> => {
     const [css] = within(await exhibitRegion()).getAllByRole('figure')
       .filter(sample => (sample.textContent ?? '').startsWith('CSS'));
