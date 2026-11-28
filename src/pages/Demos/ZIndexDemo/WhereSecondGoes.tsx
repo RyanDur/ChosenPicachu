@@ -156,36 +156,32 @@ export const WhereSecondGoes: FC = () => {
         <dt className="caption uppercase">Where we meet it</dt>
         <dd className="paragraph">{words.whereWeMeetIt}</dd>
       </dl>
-      <section className="code-beside-window">
-        <section className="code-column">
-          <Snippet label="HTML" lines={markupShown(chosenPosition, measuredFrom)}/>
-          <Snippet label="CSS" lines={rulesShown(chosenPosition, measuredFrom)}/>
-        </section>
-        <section className="little-window card hairline-outline rounded-corners">
-          <p className="little-bar caption uppercase field hairline-rule-below">The window</p>
-          <section className="little-view transformed">
-            {measuredFrom === 'view' && <MeasuringDot/>}
-            {measuredFrom === 'scroll-edge' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
-            <section className="little-page focus-ringed" aria-label="The little page" tabIndex={0}>
-              {measuredFrom === 'little-page' && <MeasuringDot/>}
-              <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
-              <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
-                measuredFrom === 'parent' && 'positioned alarm-ringed')}>
-                {measuredFrom === 'parent' && <MeasuringDot/>}
-                <p className="little-box plan-blue hairline-outline rounded-corners">First</p>
-                <p className={classNames('second little-box plan-mint hairline-outline rounded-corners',
-                  chosenPosition)}>
-                  Second
-                  {measuredFrom === 'own-place' &&
+      <Snippet label="HTML" lines={markupShown(chosenPosition, measuredFrom)}/>
+      <Snippet label="CSS" lines={rulesShown(chosenPosition, measuredFrom)}/>
+      <section className="little-window card hairline-outline rounded-corners">
+        <p className="little-bar caption uppercase field hairline-rule-below">The window</p>
+        <section className="little-view transformed">
+          {measuredFrom === 'view' && <MeasuringDot/>}
+          {measuredFrom === 'scroll-edge' && <span className="sticking-edge alarm-backed" aria-hidden="true"/>}
+          <section className="little-page focus-ringed" aria-label="The little page" tabIndex={0}>
+            {measuredFrom === 'little-page' && <MeasuringDot/>}
+            <p className="page-top little-box muted-dashed-outline rounded-corners caption">the top of the page</p>
+            <section className={classNames('parent little-parent plan-sand muted-dashed-outline rounded-corners',
+              measuredFrom === 'parent' && 'positioned alarm-ringed')}>
+              {measuredFrom === 'parent' && <MeasuringDot/>}
+              <p className="little-box plan-blue hairline-outline rounded-corners">First</p>
+              <p className={classNames('second little-box plan-mint hairline-outline rounded-corners',
+                chosenPosition)}>
+                Second
+                {measuredFrom === 'own-place' &&
                   <span className="old-place alarm-dashed-outline rounded-corners" aria-hidden="true"/>}
-                </p>
-                <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
-                {sixBoxes.map(box => <FillerBox key={box}>more inside the parent</FillerBox>)}
-              </section>
-              {fourBoxes.map(box => <FillerBox key={box}>more of the page</FillerBox>)}
+              </p>
+              <p className="little-box plan-blue hairline-outline rounded-corners">Third</p>
+              {sixBoxes.map(box => <FillerBox key={box}>more inside the parent</FillerBox>)}
             </section>
-            {measuredFrom === 'little-page' && <span className="page-ring alarm-ringed" aria-hidden="true"/>}
+            {fourBoxes.map(box => <FillerBox key={box}>more of the page</FillerBox>)}
           </section>
+          {measuredFrom === 'little-page' && <span className="page-ring alarm-ringed" aria-hidden="true"/>}
         </section>
       </section>
       <Verdict aria-label="where Second went">{words.verdict}</Verdict>
