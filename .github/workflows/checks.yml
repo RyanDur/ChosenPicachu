@@ -29,6 +29,8 @@ jobs:
           if [ -n "$PULL" ]; then
             # a rename lists its old path too, so a code file moved under docs/ still counts as code
             files=$(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PULL/files" -q '.[] | .filename, (.previous_filename // empty)') || files=
+            # the files endpoint lists at most 3000 files and drops the rest without saying so
+            [ "$(wc -l <<< "$files")" -ge 3000 ] && files=
           elif [ -n "$QUEUED_ONTO" ]; then
             # GitHub builds a queued entry on the entries ahead of it and can land them all in one push
             files=$(gh api "repos/$GITHUB_REPOSITORY/compare/${QUEUED_ONTO#refs/heads/}...$QUEUED_TO" -q '.files[] | .filename, (.previous_filename // empty)') || files=
